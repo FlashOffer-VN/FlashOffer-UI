@@ -1,0 +1,22 @@
+<svg viewBox="0 0 260 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icon -->
+  <g transform="translate(0, 0)">
+    <path d="M30 6 L60 6 L60 30 L30 54 L6 30 L6 6 Z" 
+          fill="none" 
+          stroke="#FFFFFF" 
+          stroke-width="3" 
+          rx="8"/>
+    <path d="M36 18 L24 34 L34 34 L28 48 L44 28 L36 28 L36 18 Z" 
+          fill="#FFFFFF"/>
+    <circle cx="52" cy="14" r="5" fill="#EC4899"/>
+    <text x="52" y="17" font-size="6" fill="white" text-anchor="middle" font-weight="bold">%</text>
+  </g>
+  
+  <!-- Text -->
+  <text x="75" y="35" font-family="Inter, sans-serif" font-size="28" font-weight="800" fill="#FFFFFF">
+    Flash
+  </text>
+  <text x="145" y="35" font-family="Inter, sans-serif" font-size="28" font-weight="800" fill="#FFFFFF">
+    Offer
+  </text>
+</svg>

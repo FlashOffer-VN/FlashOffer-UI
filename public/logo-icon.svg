@@ -1,0 +1,16 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Thẻ giảm giá -->
+  <path d="M50 6 L94 6 L94 50 L50 94 L6 50 L6 6 Z" 
+        fill="none" 
+        stroke="#7C3AED" 
+        stroke-width="4" 
+        rx="12"/>
+  
+  <!-- Tia chớp -->
+  <path d="M56 20 L36 56 L52 56 L44 80 L68 44 L52 44 L56 20 Z" 
+        fill="#7C3AED"/>
+  
+  <!-- Dấu % -->
+  <circle cx="78" cy="20" r="8" fill="#EC4899"/>
+  <text x="78" y="24" font-size="9" fill="white" text-anchor="middle" font-weight="bold">%</text>
+</svg>

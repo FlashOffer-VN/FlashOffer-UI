@@ -1,0 +1,25 @@
+<svg viewBox="0 0 250 50" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icon - Tia chớp cách điệu -->
+  <g transform="translate(0, 2)">
+    <rect x="4" y="4" width="36" height="36" rx="8" fill="#7C3AED"/>
+    <path d="M16 24 L22 18 L19 24 L26 18 L23 24 L30 18 L25 30 L18 30 L16 24 Z" fill="white"/>
+  </g>
+  
+  <!-- Text - Flash nghiêng -->
+  <text x="48" y="33" font-family="Inter, sans-serif" font-size="28" font-weight="900" fill="#1F2937" 
+        font-style="italic" letter-spacing="-0.5">
+    Flash
+  </text>
+  
+  <!-- Text - Offer đậm + cách điệu -->
+  <text x="115" y="33" font-family="Inter, sans-serif" font-size="28" font-weight="900" fill="#7C3AED" 
+        letter-spacing="0.5">
+    Offer
+  </text>
+  
+  <!-- Dấu % - nổi bật, xa hơn -->
+  <text x="195" y="33" font-family="Inter, sans-serif" font-size="22" font-weight="900" fill="#EC4899" 
+        letter-spacing="0" font-style="italic">
+    %
+  </text>
+</svg>

@@ -1,0 +1,80 @@
+<div class="flex h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <aside class="bg-secondary text-white w-64 flex-shrink-0 transition-all duration-300 overflow-y-auto"
+        [class.-ml-64]="!isSidebarOpen">
+
+        <!-- Logo -->
+        <div class="p-4 border-b border-secondary-light">
+            <!-- Logo -->
+            <a routerLink="/" class="flex items-center">
+                <img src="logo-white.svg" alt="FlashOffer" class="h-8">
+            </a>
+            <p class="text-gray-400 text-sm mt-1">Admin Panel</p>
+        </div>
+
+        <!-- Menu -->
+        <nav class="p-4 space-y-1">
+            <a routerLink="/demo" routerLinkActive="bg-primary"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-secondary-light transition">
+                <i class="fa-solid fa-layer-group w-5"></i> Demo
+            </a>
+            <a routerLink="/" routerLinkActive="bg-primary"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-secondary-light transition">
+                <i class="fa-solid fa-house w-5"></i> Dashboard
+            </a>
+            <a routerLink="/" routerLinkActive="bg-primary"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-secondary-light transition">
+                <i class="fa-solid fa-tags w-5"></i> Offers
+            </a>
+            <a routerLink="/" routerLinkActive="bg-primary"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-secondary-light transition">
+                <i class="fa-solid fa-users w-5"></i> CTV
+            </a>
+            <a routerLink="/" routerLinkActive="bg-primary"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-secondary-light transition">
+                <i class="fa-solid fa-cog w-5"></i> Settings
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col min-w-0">
+        <!-- Header -->
+        <header class="bg-white shadow-sm px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <!-- Hamburger -->
+                <button (click)="toggleSidebar()" class="text-secondary hover:text-primary transition text-xl">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <!-- Logo -->
+                <a routerLink="/" class="flex items-center gap-2">
+                    <img src="logo-full.svg" alt="FlashOffer" class="w-50 h-10">
+                    <span class="text-xl font-bold text-white">FlashOffer</span>
+                </a>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="text-gray-400 hover:text-secondary transition text-lg">
+                    <i class="fa-regular fa-bell"></i>
+                </button>
+                <div class="flex items-center gap-2">
+                    <div
+                        class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-medium">
+                        A
+                    </div>
+                    <span class="text-secondary text-sm hidden sm:block">Admin</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <main class="flex-1 p-6 overflow-y-auto">
+            <router-outlet></router-outlet>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-white border-t border-gray-200 px-6 py-4 text-center text-sm text-gray-500">
+            © 2026 FlashOffer. All rights reserved.
+        </footer>
+    </div>
+</div>

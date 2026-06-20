@@ -1,0 +1,26 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./src/**/*.{html,ts}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          DEFAULT: '#7C3AED',
+          light: '#A78BFA',
+          dark: '#5B21B6',
+        },
+        secondary: {
+          DEFAULT: '#1F2937',
+          light: '#374151',
+          dark: '#111827',
+        },
+        accent: '#EC4899',
+      }
+    },
+  },
+  plugins: [
+    require('@tailwindcss/forms'),
+  ],
+}

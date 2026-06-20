@@ -1,0 +1,161 @@
+<div class="min-h-screen bg-gray-50 p-8">
+    <div class="max-w-4xl mx-auto space-y-6">
+        <!-- Header -->
+        <div class="flex items-center gap-3 mb-6">
+            <img src="logo-icon.svg" alt="FlashOffer" class="w-10 h-10">
+            <h1 class="text-3xl font-bold text-primary">FlashOffer UI - Shared Components</h1>
+        </div>
+
+        <!-- Bảng màu -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-lg font-semibold text-secondary mb-3">🎨 Bảng màu</h2>
+            <div class="flex gap-3 flex-wrap">
+                <span class="px-4 py-2 bg-primary text-white rounded">Primary</span>
+                <span class="px-4 py-2 bg-primary-light text-white rounded">Light</span>
+                <span class="px-4 py-2 bg-primary-dark text-white rounded">Dark</span>
+                <span class="px-4 py-2 bg-secondary text-white rounded">Secondary</span>
+                <span class="px-4 py-2 bg-accent text-white rounded">Accent</span>
+                <span class="px-4 py-2 bg-offer text-white rounded">Offer</span>
+                <span class="px-4 py-2 bg-premium text-secondary rounded">Premium</span>
+                <span class="px-4 py-2 bg-community text-white rounded">Community</span>
+                <span class="px-4 py-2 bg-success text-white rounded">Success</span>
+                <span class="px-4 py-2 bg-warning text-white rounded">Warning</span>
+                <span class="px-4 py-2 bg-danger text-white rounded">Danger</span>
+                <span class="px-4 py-2 bg-info text-white rounded">Info</span>
+            </div>
+        </div>
+
+        <!-- Button Test -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-lg font-semibold text-secondary mb-4">Button</h2>
+            <div class="flex flex-wrap gap-3">
+                <app-button variant="primary">Primary</app-button>
+                <app-button variant="success">Success</app-button>
+                <app-button variant="danger">Danger</app-button>
+                <app-button variant="warning">Warning</app-button>
+                <app-button variant="offer">Offer</app-button>
+                <app-button variant="premium">Premium</app-button>
+                <app-button variant="outline">Outline</app-button>
+                <app-button variant="ghost">Ghost</app-button>
+                <app-button variant="secondary">Secondary</app-button>
+                <app-button [loading]="true">Loading</app-button>
+                <app-button [disabled]="true">Disabled</app-button>
+            </div>
+        </div>
+
+        <!-- Loading Test -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-lg font-semibold text-secondary mb-4">Loading</h2>
+
+            <!-- Các nút chọn loại loading -->
+            <div class="flex flex-wrap gap-3 mb-4">
+                <app-button variant="primary" (onClick)="showLoading('dots')">Dots</app-button>
+                <app-button variant="success" (onClick)="showLoading('spinner')">Spinner</app-button>
+                <app-button variant="warning" (onClick)="showLoading('skeleton')">Skeleton</app-button>
+                <app-button variant="offer" (onClick)="showLoading('pulse')">Pulse</app-button>
+                <app-button variant="danger" (onClick)="showFullscreenLoading()">Fullscreen</app-button>
+                <app-button variant="secondary" (onClick)="hideLoading()">Ẩn</app-button>
+            </div>
+
+            <!-- Khu vực hiển thị loading -->
+            <div
+                class="border-2 border-dashed border-gray-200 rounded-lg p-8 min-h-[120px] flex items-center justify-center relative">
+                <!-- Loading hiển thị trong khung -->
+                <app-loading *ngIf="currentLoading" [type]="currentLoading" size="lg" color="primary"
+                    text="Đang tải...">
+                </app-loading>
+
+                <p *ngIf="!currentLoading && !isFullscreen" class="text-gray-400 text-sm">Click vào các nút để xem
+                    loading</p>
+            </div>
+
+            <!-- Fullscreen loading (phủ toàn màn hình) -->
+            <app-loading *ngIf="isFullscreen" type="spinner" size="lg" color="primary" text="Đang tải dữ liệu..."
+                [fullScreen]="true">
+            </app-loading>
+        </div>
+
+        <!-- Toast Test -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-lg font-semibold text-secondary mb-4">Toast</h2>
+            <div class="space-y-3">
+                <p class="text-sm text-gray-500">Click buttons để hiện toast (tự động biến mất sau 3s)</p>
+                <div class="flex flex-wrap gap-3">
+                    <app-button variant="success" (onClick)="showToast('success')">Success</app-button>
+                    <app-button variant="danger" (onClick)="showToast('error')">Error</app-button>
+                    <app-button variant="warning" (onClick)="showToast('warning')">Warning</app-button>
+                    <app-button variant="primary" (onClick)="showToast('info')">Info</app-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Test -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-lg font-semibold text-secondary mb-4">Modal</h2>
+            <app-button (onClick)="openModal()">Open Modal</app-button>
+        </div>
+
+        <div class="bg-white rounded-xl shadow p-6">
+            <h2 class="mb-6 text-lg font-semibold">
+                Input Component Demo
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <!-- Text -->
+                <app-input type="text" label="Họ và tên" placeholder="Nhập họ và tên" icon="fa-regular fa-user">
+                </app-input>
+
+                <!-- Email -->
+                <app-input type="email" label="Email" placeholder="example@email.com" icon="fa-regular fa-envelope">
+                </app-input>
+
+                <!-- Phone -->
+                <app-input type="tel" label="Số điện thoại" placeholder="0901234567" icon="fa-solid fa-phone">
+                </app-input>
+
+                <!-- Password -->
+                <app-input type="password" label="Mật khẩu" placeholder="Nhập mật khẩu" icon="fa-solid fa-lock">
+                </app-input>
+
+                <!-- Number -->
+                <app-input type="number" label="Tuổi" placeholder="Nhập tuổi" icon="fa-solid fa-hashtag">
+                </app-input>
+
+                <!-- Search -->
+                <app-input type="search" label="Tìm kiếm" placeholder="Nhập từ khóa..."
+                    icon="fa-solid fa-magnifying-glass">
+                </app-input>
+
+                <!-- Readonly -->
+                <app-input label="Readonly" placeholder="Readonly" [readonly]="true" icon="fa-solid fa-eye">
+                </app-input>
+
+                <!-- Disabled -->
+                <app-input label="Disabled" placeholder="Disabled" [isDisabled]="true" icon="fa-solid fa-ban">
+                </app-input>
+
+                <!-- Hint -->
+                <app-input label="Username" placeholder="Nhập username" hint="Username phải duy nhất"
+                    icon="fa-regular fa-user">
+                </app-input>
+
+                <!-- Error -->
+                <app-input label="Email" placeholder="Nhập email" error="Email không hợp lệ"
+                    icon="fa-regular fa-envelope">
+                </app-input>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<app-toast *ngIf="toastVisible" [type]="toastType" [message]="toastMessage" [title]="toastTitle"
+    (closed)="toastVisible = false"></app-toast>
+
+<!-- Modal -->
+<app-modal [(visible)]="modalVisible" title="Xác nhận" confirmText="Đồng ý" cancelText="Hủy bỏ"
+    (confirm)="onModalConfirm()">
+    <p class="text-gray-600">Bạn có chắc chắn muốn thực hiện hành động này không?</p>
+</app-modal>

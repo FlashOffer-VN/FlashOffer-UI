@@ -1,0 +1,33 @@
+<div class="w-full input-wrap">
+    <label *ngIf="label" [for]="id" class="mb-1.5 block text-sm font-medium text-secondary">
+        {{ label }}
+        <span *ngIf="required" class="ml-0.5 text-danger">*</span>
+    </label>
+
+    <div class="relative flex items-center rounded-xl border-2 bg-white transition-all duration-200" [ngClass]="{
+             'border-gray-200 hover:border-gray-300 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10': !isInvalid,
+             'border-danger focus-within:border-danger focus-within:ring-4 focus-within:ring-danger/10': isInvalid,
+             'bg-gray-50 opacity-60 cursor-not-allowed': disabled || isDisabled
+           }">
+        <input [id]="id" [type]="type" [value]="value" [placeholder]="placeholder" [disabled]="disabled || isDisabled"
+            [readonly]="readonly" (input)="onInput($event)" (blur)="onTouched()"
+            class="w-full rounded-xl bg-transparent px-4 py-2.5 text-sm text-secondary outline-none placeholder:text-gray-400 border-none"
+            [class.pr-14]="icon" [class.pr-11]="!icon" />
+
+        <!-- Icon ở bên phải cùng -->
+        <span *ngIf="icon" class="pointer-events-none absolute right-4 text-gray-400 transition-colors duration-200"
+            [class.text-primary]="!isInvalid && value">
+            <i [class]="icon"></i>
+        </span>
+    </div>
+
+    <p *ngIf="isInvalid" class="mt-1 flex items-center gap-1 text-xs text-danger">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        {{ errorMessage }}
+    </p>
+
+    <p *ngIf="!isInvalid && hint" class="mt-1 flex items-center gap-1 text-xs text-gray-500">
+        <i class="fa-regular fa-lightbulb"></i>
+        {{ hint }}
+    </p>
+</div>
