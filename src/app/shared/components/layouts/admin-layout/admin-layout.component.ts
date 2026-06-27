@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink } from '@angular/router';
 
 @Component({
-    selector: 'app-layout',
+    selector: 'app-admin-layout',
     standalone: true,
     imports: [CommonModule, RouterOutlet, RouterLink],
-    templateUrl: './layout.component.html',
-    styleUrls: ['./layout.component.css']
+    templateUrl: './admin-layout.component.html',
+    styleUrls: ['./admin-layout.component.css']
 })
-export class LayoutComponent {
+export class AdminLayoutComponent {
     isSidebarOpen = true;
 
     toggleSidebar() {

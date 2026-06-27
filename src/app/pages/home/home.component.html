@@ -1,0 +1,191 @@
+<!-- Hero -->
+<section class="sme-hero">
+    <div class="sme-hero__copy">
+        <p class="sme-pill">{{ 'HOME_PILL' | translate }}</p>
+        <h1>{{ 'HOME_TITLE' | translate }}</h1>
+        <p class="sme-hero__text">{{ 'HOME_DESC' | translate }}</p>
+        <div class="sme-hero__actions">
+            <a class="sme-button sme-button--primary sme-button--large" routerLink="/register">{{ 'BUTTON_START' |
+                translate }}</a>
+            <a class="sme-button sme-button--light sme-button--large" href="#stories">{{ 'BUTTON_STORIES' | translate
+                }}</a>
+        </div>
+    </div>
+    <div class="sme-hero__visual">
+        <div class="sme-dashboard">
+            <!-- Header -->
+            <div class="sme-dashboard__header">
+                <div class="sme-dashboard__dots">
+                    <span></span><span></span><span></span>
+                </div>
+                <div class="sme-dashboard__badge">LIVE</div>
+            </div>
+
+            <!-- Body -->
+            <div class="sme-dashboard__body">
+                <!-- Left Sidebar -->
+                <div class="sme-sidebar">
+                    <div class="sme-sidebar__item active"></div>
+                    <div class="sme-sidebar__item"></div>
+                    <div class="sme-sidebar__item"></div>
+                    <div class="sme-sidebar__item"></div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="sme-panel">
+                    <!-- Chart -->
+                    <div class="sme-chart">
+                        <div class="sme-chart__bar" style="height:28%">
+                            <span class="sme-chart__tooltip">28%</span>
+                        </div>
+                        <div class="sme-chart__bar" style="height:48%">
+                            <span class="sme-chart__tooltip">48%</span>
+                        </div>
+                        <div class="sme-chart__bar" style="height:34%">
+                            <span class="sme-chart__tooltip">34%</span>
+                        </div>
+                        <div class="sme-chart__bar" style="height:58%">
+                            <span class="sme-chart__tooltip">58%</span>
+                        </div>
+                        <div class="sme-chart__bar" style="height:44%">
+                            <span class="sme-chart__tooltip">44%</span>
+                        </div>
+                        <div class="sme-chart__bar" style="height:70%">
+                            <span class="sme-chart__tooltip">70%</span>
+                        </div>
+                        <div class="sme-chart__bar" style="height:38%">
+                            <span class="sme-chart__tooltip">38%</span>
+                        </div>
+                        <div class="sme-chart__bar" style="height:86%">
+                            <span class="sme-chart__tooltip">86%</span>
+                        </div>
+                        <div class="sme-chart__bar" style="height:52%">
+                            <span class="sme-chart__tooltip">52%</span>
+                        </div>
+                        <div class="sme-chart__bar" style="height:64%">
+                            <span class="sme-chart__tooltip">64%</span>
+                        </div>
+                        <div class="sme-chart__bar" style="height:45%">
+                            <span class="sme-chart__tooltip">45%</span>
+                        </div>
+                        <div class="sme-chart__bar" style="height:79%">
+                            <span class="sme-chart__tooltip">79%</span>
+                        </div>
+                    </div>
+
+                    <!-- Graph line -->
+                    <div class="sme-graph">
+                        <svg viewBox="0 0 400 80" preserveAspectRatio="none">
+                            <polyline
+                                points="0,60 33,45 66,50 100,30 133,55 166,20 200,40 233,10 266,35 300,25 333,50 366,15 400,5"
+                                fill="none" stroke="#24c7d7" stroke-width="3" stroke-linecap="round" />
+                            <polyline
+                                points="0,60 33,45 66,50 100,30 133,55 166,20 200,40 233,10 266,35 300,25 333,50 366,15 400,5"
+                                fill="none" stroke="rgba(36,199,215,0.2)" stroke-width="8" stroke-linecap="round">
+                                <animate attributeName="stroke-dashoffset" from="800" to="0" dur="2s" fill="freeze" />
+                            </polyline>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats -->
+<section class="sme-stats">
+    <div><strong>40%</strong><span>{{ 'STATS_SAVING' | translate }}</span></div>
+    <div><strong>12k+</strong><span>{{ 'STATS_SME' | translate }}</span></div>
+    <div><strong>$2.4B</strong><span>{{ 'STATS_VOLUME' | translate }}</span></div>
+    <div><strong>98%</strong><span>{{ 'STATS_RETENTION' | translate }}</span></div>
+</section>
+
+<!-- Solutions -->
+<section class="sme-section" id="solutions">
+    <div class="sme-section__intro">
+        <h2>{{ 'SOLUTIONS_TITLE' | translate }}</h2>
+        <p>{{ 'SOLUTIONS_DESC' | translate }}</p>
+    </div>
+    <div class="sme-solution-grid">
+        <article class="sme-card sme-card--wide">
+            <div class="sme-icon">♔</div>
+            <h3>{{ 'SOLUTION_GROUP_BUY' | translate }}</h3>
+            <p>{{ 'SOLUTION_GROUP_BUY_DESC' | translate }}</p>
+            <ul>
+                <li>{{ 'SOLUTION_GROUP_BUY_1' | translate }}</li>
+                <li>{{ 'SOLUTION_GROUP_BUY_2' | translate }}</li>
+            </ul>
+            <div class="sme-card__media sme-card__media--savings"></div>
+        </article>
+
+        <article class="sme-card sme-card--dark">
+            <div class="sme-icon sme-icon--dark">⚁</div>
+            <h3>{{ 'SOLUTION_TALENT' | translate }}</h3>
+            <p>{{ 'SOLUTION_TALENT_DESC' | translate }}</p>
+            <div class="sme-talent-list"><span></span><span></span><em>Interviewed</em><span></span><span></span></div>
+        </article>
+
+        <article class="sme-card">
+            <div class="sme-icon">▵</div>
+            <h3>{{ 'SOLUTION_SUPPLY' | translate }}</h3>
+            <p>{{ 'SOLUTION_SUPPLY_DESC' | translate }}</p>
+            <div class="sme-card__photo"></div>
+        </article>
+
+        <article class="sme-card">
+            <div class="sme-icon">☶</div>
+            <h3>{{ 'SOLUTION_COMMUNITY' | translate }}</h3>
+            <p>{{ 'SOLUTION_COMMUNITY_DESC' | translate }}</p>
+            <div class="sme-avatar-stack"><span>M</span><span>S</span><span>+25</span></div>
+        </article>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="sme-section sme-section--testimonials" id="stories">
+    <div class="sme-section__intro">
+        <h2>{{ 'TESTIMONIALS_TITLE' | translate }}</h2>
+    </div>
+    <div class="sme-testimonials">
+        <article class="sme-testimonial">
+            <div class="sme-stars">★★★★★</div>
+            <blockquote>"{{ 'TESTIMONIAL_1' | translate }}"</blockquote>
+            <div class="sme-author"><span>MM</span>
+                <div><strong>{{ 'TESTIMONIAL_1_NAME' | translate }}</strong><small>{{ 'TESTIMONIAL_1_ROLE' | translate
+                        }}</small></div>
+            </div>
+        </article>
+        <article class="sme-testimonial">
+            <div class="sme-stars">★★★★★</div>
+            <blockquote>"{{ 'TESTIMONIAL_2' | translate }}"</blockquote>
+            <div class="sme-author"><span>SK</span>
+                <div><strong>{{ 'TESTIMONIAL_2_NAME' | translate }}</strong><small>{{ 'TESTIMONIAL_2_ROLE' | translate
+                        }}</small></div>
+            </div>
+        </article>
+        <article class="sme-testimonial">
+            <div class="sme-stars">★★★★★</div>
+            <blockquote>"{{ 'TESTIMONIAL_3' | translate }}"</blockquote>
+            <div class="sme-author"><span>DN</span>
+                <div><strong>{{ 'TESTIMONIAL_3_NAME' | translate }}</strong><small>{{ 'TESTIMONIAL_3_ROLE' | translate
+                        }}</small></div>
+            </div>
+        </article>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="sme-cta" id="join">
+    <div class="sme-cta__content">
+        <h2>{{ 'CTA_TITLE' | translate }}</h2>
+        <p>{{ 'CTA_DESC' | translate }}</p>
+        <div class="sme-cta__actions">
+            <a class="sme-button sme-button--primary sme-button--large" routerLink="/register">
+                {{ 'BUTTON_JOIN_SME' | translate }}
+            </a>
+            <a class="sme-button sme-button--outline sme-button--large" routerLink="/register">
+                {{ 'BUTTON_JOIN_CTV' | translate }}
+            </a>
+        </div>
+    </div>
+</section>
