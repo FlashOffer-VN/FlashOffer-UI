@@ -1,0 +1,74 @@
+<div class="get-offer-container">
+    <div class="get-offer-card">
+        <div class="get-offer-header">
+            <h1>{{ 'GET_OFFER_TITLE' | translate }}</h1>
+            <p>{{ 'GET_OFFER_DESC' | translate }}</p>
+        </div>
+
+        <form [formGroup]="offerForm" (ngSubmit)="onSubmit()" class="get-offer-form">
+            <div class="form-grid">
+                <!-- Selected Offer -->
+                <div class="form-group full-width">
+                    <label>{{ 'GET_OFFER_SELECTED_OFFER' | translate }} <span class="required">*</span></label>
+                    <input type="text" formControlName="selectedOffer"
+                        placeholder="{{ 'GET_OFFER_SELECTED_OFFER_PLACEHOLDER' | translate }}" />
+                    <div class="error-message" *ngIf="f['selectedOffer'].invalid && f['selectedOffer'].touched">
+                        {{ 'GET_OFFER_SELECTED_OFFER_ERROR' | translate }}
+                    </div>
+                </div>
+
+                <!-- Full Name -->
+                <div class="form-group">
+                    <label>{{ 'GET_OFFER_FULL_NAME' | translate }} <span class="required">*</span></label>
+                    <input type="text" formControlName="fullName"
+                        placeholder="{{ 'GET_OFFER_FULL_NAME_PLACEHOLDER' | translate }}" />
+                    <div class="error-message" *ngIf="f['fullName'].invalid && f['fullName'].touched">
+                        {{ 'GET_OFFER_FULL_NAME_ERROR' | translate }}
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="form-group">
+                    <label>{{ 'GET_OFFER_PHONE' | translate }} <span class="required">*</span></label>
+                    <input type="text" formControlName="phone"
+                        placeholder="{{ 'GET_OFFER_PHONE_PLACEHOLDER' | translate }}" />
+                    <div class="error-message" *ngIf="f['phone'].invalid && f['phone'].touched">
+                        {{ 'GET_OFFER_PHONE_ERROR' | translate }}
+                    </div>
+                </div>
+
+                <!-- Zalo -->
+                <div class="form-group">
+                    <label>{{ 'GET_OFFER_ZALO' | translate }}</label>
+                    <input type="text" formControlName="zalo"
+                        placeholder="{{ 'GET_OFFER_ZALO_PLACEHOLDER' | translate }}" />
+                </div>
+
+                <!-- Email -->
+                <div class="form-group full-width">
+                    <label>{{ 'GET_OFFER_EMAIL' | translate }} <span class="required">*</span></label>
+                    <input type="email" formControlName="email"
+                        placeholder="{{ 'GET_OFFER_EMAIL_PLACEHOLDER' | translate }}" />
+                    <div class="error-message" *ngIf="f['email'].invalid && f['email'].touched">
+                        {{ 'GET_OFFER_EMAIL_ERROR' | translate }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit" [disabled]="isSubmitting">
+                    <span *ngIf="!isSubmitting">{{ 'GET_OFFER_SUBMIT' | translate }}</span>
+                    <span *ngIf="isSubmitting">{{ 'GET_OFFER_SUBMITTING' | translate }}</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" [class.show]="showToast" [class.success]="toastType === 'success'"
+    [class.error]="toastType === 'error'">
+    <span class="toast-icon">{{ toastType === 'success' ? '✓' : '✕' }}</span>
+    <span class="toast-message">{{ toastMessage }}</span>
+    <button class="toast-close" (click)="closeToast()">×</button>
+</div>
