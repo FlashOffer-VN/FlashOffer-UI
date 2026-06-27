@@ -1,3 +1,55 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    :root {
+        --primary: #007f94;
+        --primary-light: #24c7d7;
+        --primary-dark: #006b80;
+    }
+
+    /* Admin role - giữ màu tím */
+    body.admin-role {
+        --primary: #7C3AED;
+        --primary-light: #A78BFA;
+        --primary-dark: #5B21B6;
+    }
+
+    /* User role - màu hồng (hoặc giữ teal) */
+    body.user-role {
+        --primary: #EC4899;
+        --primary-light: #F472B6;
+        --primary-dark: #BE185D;
+    }
+}
+
+@layer utilities {
+    .bg-primary {
+        background-color: var(--primary) !important;
+    }
+
+    .text-primary {
+        color: var(--primary) !important;
+    }
+
+    .border-primary {
+        border-color: var(--primary) !important;
+    }
+
+    .bg-primary-light {
+        background-color: var(--primary-light) !important;
+    }
+
+    .text-primary-dark {
+        color: var(--primary-dark) !important;
+    }
+
+    .hover\:bg-primary-dark:hover {
+        background-color: var(--primary-dark) !important;
+    }
+
+    .hover\:text-primary:hover {
+        color: var(--primary) !important;
+    }
+}

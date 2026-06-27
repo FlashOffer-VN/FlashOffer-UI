@@ -1,0 +1,7 @@
+.lang-btn {
+    cursor: pointer;
+}
+
+.lang-btn svg {
+    flex-shrink: 0;
+}
