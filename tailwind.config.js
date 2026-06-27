@@ -6,9 +6,9 @@ module.exports = {
             colors: {
                 // Brand - Màu thương hiệu
                 primary: {
-                    DEFAULT: '#7C3AED',
-                    light: '#A78BFA',
-                    dark: '#5B21B6',
+                    DEFAULT: '#007f94',  // ← Đổi thành #007f94 cho guest
+                    light: '#24c7d7',
+                    dark: '#006b80',
                 },
                 secondary: {
                     DEFAULT: '#1F2937',

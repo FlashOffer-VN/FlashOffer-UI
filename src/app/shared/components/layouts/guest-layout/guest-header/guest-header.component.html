@@ -1,0 +1,17 @@
+<header class="sme-header">
+    <a class="sme-logo" routerLink="/">
+        <span class="logo-text">{{ 'APP_NAME' | translate }}</span>
+        <span class="logo-dot"></span>
+    </a>
+    <nav class="sme-nav">
+        <a routerLink="/solutions">{{ 'NAV_SOLUTIONS' | translate }}</a>
+        <a routerLink="/suppliers">{{ 'NAV_SUPPLIERS' | translate }}</a>
+        <a routerLink="/talent">{{ 'NAV_TALENT' | translate }}</a>
+        <a routerLink="/community">{{ 'NAV_COMMUNITY' | translate }}</a>
+    </nav>
+    <div class="sme-header-actions">
+        <app-language-switcher></app-language-switcher>
+        <a class="sme-button sme-button--ghost" routerLink="/register">{{ 'BUTTON_JOIN_CTV' | translate }}</a>
+        <a class="sme-button sme-button--primary" routerLink="/register">{{ 'BUTTON_JOIN_SME' | translate }}</a>
+    </div>
+</header>
