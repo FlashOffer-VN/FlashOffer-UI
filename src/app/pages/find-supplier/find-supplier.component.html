@@ -1,0 +1,91 @@
+<div class="find-supplier-container">
+    <div class="find-supplier-card">
+        <div class="find-supplier-header">
+            <h1>{{ 'FIND_SUPPLIER_TITLE' | translate }}</h1>
+            <p>{{ 'FIND_SUPPLIER_DESC' | translate }}</p>
+        </div>
+
+        <form [formGroup]="findForm" (ngSubmit)="onSubmit()" class="find-supplier-form">
+            <div class="form-grid">
+                <!-- Product Name -->
+                <div class="form-group">
+                    <label>{{ 'FIND_SUPPLIER_PRODUCT_NAME' | translate }} <span class="required">*</span></label>
+                    <input type="text" formControlName="productName"
+                        placeholder="{{ 'FIND_SUPPLIER_PRODUCT_NAME_PLACEHOLDER' | translate }}" />
+                    <div class="error-message" *ngIf="f['productName'].invalid && f['productName'].touched">
+                        {{ 'FIND_SUPPLIER_PRODUCT_NAME_ERROR' | translate }}
+                    </div>
+                </div>
+
+                <!-- Quantity -->
+                <div class="form-group">
+                    <label>{{ 'FIND_SUPPLIER_QUANTITY' | translate }} <span class="required">*</span></label>
+                    <input type="number" formControlName="quantity"
+                        placeholder="{{ 'FIND_SUPPLIER_QUANTITY_PLACEHOLDER' | translate }}" />
+                    <div class="error-message" *ngIf="f['quantity'].invalid && f['quantity'].touched">
+                        {{ 'FIND_SUPPLIER_QUANTITY_ERROR' | translate }}
+                    </div>
+                </div>
+
+                <!-- Expected Price -->
+                <div class="form-group">
+                    <label>{{ 'FIND_SUPPLIER_EXPECTED_PRICE' | translate }}</label>
+                    <input type="number" formControlName="expectedPrice"
+                        placeholder="{{ 'FIND_SUPPLIER_EXPECTED_PRICE_PLACEHOLDER' | translate }}" />
+                </div>
+
+                <!-- Full Name -->
+                <div class="form-group">
+                    <label>{{ 'FIND_SUPPLIER_FULL_NAME' | translate }} <span class="required">*</span></label>
+                    <input type="text" formControlName="fullName"
+                        placeholder="{{ 'FIND_SUPPLIER_FULL_NAME_PLACEHOLDER' | translate }}" />
+                    <div class="error-message" *ngIf="f['fullName'].invalid && f['fullName'].touched">
+                        {{ 'FIND_SUPPLIER_FULL_NAME_ERROR' | translate }}
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="form-group">
+                    <label>{{ 'FIND_SUPPLIER_PHONE' | translate }} <span class="required">*</span></label>
+                    <input type="text" formControlName="phone"
+                        placeholder="{{ 'FIND_SUPPLIER_PHONE_PLACEHOLDER' | translate }}" />
+                    <div class="error-message" *ngIf="f['phone'].invalid && f['phone'].touched">
+                        {{ 'FIND_SUPPLIER_PHONE_ERROR' | translate }}
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label>{{ 'FIND_SUPPLIER_EMAIL' | translate }} <span class="required">*</span></label>
+                    <input type="email" formControlName="email"
+                        placeholder="{{ 'FIND_SUPPLIER_EMAIL_PLACEHOLDER' | translate }}" />
+                    <div class="error-message" *ngIf="f['email'].invalid && f['email'].touched">
+                        {{ 'FIND_SUPPLIER_EMAIL_ERROR' | translate }}
+                    </div>
+                </div>
+
+                <!-- Note -->
+                <div class="form-group full-width">
+                    <label>{{ 'FIND_SUPPLIER_NOTE' | translate }}</label>
+                    <textarea formControlName="note" rows="3"
+                        placeholder="{{ 'FIND_SUPPLIER_NOTE_PLACEHOLDER' | translate }}"></textarea>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit" [disabled]="isSubmitting">
+                    <span *ngIf="!isSubmitting">{{ 'FIND_SUPPLIER_SUBMIT' | translate }}</span>
+                    <span *ngIf="isSubmitting">{{ 'FIND_SUPPLIER_SUBMITTING' | translate }}</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" [class.show]="showToast" [class.success]="toastType === 'success'"
+    [class.error]="toastType === 'error'">
+    <span class="toast-icon">{{ toastType === 'success' ? '✓' : '✕' }}</span>
+    <span class="toast-message">{{ toastMessage }}</span>
+    <button class="toast-close" (click)="closeToast()">×</button>
+</div>
