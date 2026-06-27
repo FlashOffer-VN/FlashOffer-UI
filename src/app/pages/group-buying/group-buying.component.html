@@ -1,0 +1,84 @@
+<div class="group-buying-container">
+    <div class="group-buying-card">
+        <div class="group-buying-header">
+            <h1>{{ 'GROUP_BUYING_TITLE' | translate }}</h1>
+            <p>{{ 'GROUP_BUYING_DESC' | translate }}</p>
+        </div>
+
+        <form [formGroup]="groupForm" (ngSubmit)="onSubmit()" class="group-buying-form">
+            <div class="form-grid">
+                <!-- Product Name -->
+                <div class="form-group full-width">
+                    <label>{{ 'GROUP_BUYING_PRODUCT_NAME' | translate }} <span class="required">*</span></label>
+                    <input type="text" formControlName="productName"
+                        placeholder="{{ 'GROUP_BUYING_PRODUCT_NAME_PLACEHOLDER' | translate }}" />
+                    <div class="error-message" *ngIf="f['productName'].invalid && f['productName'].touched">
+                        {{ 'GROUP_BUYING_PRODUCT_NAME_ERROR' | translate }}
+                    </div>
+                </div>
+
+                <!-- Target People Count -->
+                <div class="form-group">
+                    <label>{{ 'GROUP_BUYING_TARGET_PEOPLE' | translate }} <span class="required">*</span></label>
+                    <input type="number" formControlName="targetPeopleCount"
+                        placeholder="{{ 'GROUP_BUYING_TARGET_PEOPLE_PLACEHOLDER' | translate }}" />
+                    <div class="error-message" *ngIf="f['targetPeopleCount'].invalid && f['targetPeopleCount'].touched">
+                        {{ 'GROUP_BUYING_TARGET_PEOPLE_ERROR' | translate }}
+                    </div>
+                </div>
+
+                <!-- Target Price -->
+                <div class="form-group">
+                    <label>{{ 'GROUP_BUYING_TARGET_PRICE' | translate }} <span class="required">*</span></label>
+                    <input type="number" formControlName="targetPrice"
+                        placeholder="{{ 'GROUP_BUYING_TARGET_PRICE_PLACEHOLDER' | translate }}" />
+                    <div class="error-message" *ngIf="f['targetPrice'].invalid && f['targetPrice'].touched">
+                        {{ 'GROUP_BUYING_TARGET_PRICE_ERROR' | translate }}
+                    </div>
+                </div>
+
+                <!-- Full Name -->
+                <div class="form-group">
+                    <label>{{ 'GROUP_BUYING_FULL_NAME' | translate }} <span class="required">*</span></label>
+                    <input type="text" formControlName="fullName"
+                        placeholder="{{ 'GROUP_BUYING_FULL_NAME_PLACEHOLDER' | translate }}" />
+                    <div class="error-message" *ngIf="f['fullName'].invalid && f['fullName'].touched">
+                        {{ 'GROUP_BUYING_FULL_NAME_ERROR' | translate }}
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="form-group">
+                    <label>{{ 'GROUP_BUYING_PHONE' | translate }} <span class="required">*</span></label>
+                    <input type="text" formControlName="phone"
+                        placeholder="{{ 'GROUP_BUYING_PHONE_PLACEHOLDER' | translate }}" />
+                    <div class="error-message" *ngIf="f['phone'].invalid && f['phone'].touched">
+                        {{ 'GROUP_BUYING_PHONE_ERROR' | translate }}
+                    </div>
+                </div>
+
+                <!-- Note -->
+                <div class="form-group full-width">
+                    <label>{{ 'GROUP_BUYING_NOTE' | translate }}</label>
+                    <textarea formControlName="note" rows="3"
+                        placeholder="{{ 'GROUP_BUYING_NOTE_PLACEHOLDER' | translate }}"></textarea>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit" [disabled]="isSubmitting">
+                    <span *ngIf="!isSubmitting">{{ 'GROUP_BUYING_SUBMIT' | translate }}</span>
+                    <span *ngIf="isSubmitting">{{ 'GROUP_BUYING_SUBMITTING' | translate }}</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" [class.show]="showToast" [class.success]="toastType === 'success'"
+    [class.error]="toastType === 'error'">
+    <span class="toast-icon">{{ toastType === 'success' ? '✓' : '✕' }}</span>
+    <span class="toast-message">{{ toastMessage }}</span>
+    <button class="toast-close" (click)="closeToast()">×</button>
+</div>
