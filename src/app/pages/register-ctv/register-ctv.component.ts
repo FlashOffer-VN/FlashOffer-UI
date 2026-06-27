@@ -7,7 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
     selector: 'app-register-ctv',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, RouterLink, TranslateModule],
+    imports: [CommonModule, ReactiveFormsModule, TranslateModule],
     templateUrl: './register-ctv.component.html',
     styleUrls: ['./register-ctv.component.css']
 })
