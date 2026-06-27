@@ -9,6 +9,7 @@ export const routes: Routes = [
         path: '',
         component: GuestLayoutComponent,
         children: [
+            { path: '', loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent) },
             { path: 'home', loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent) },
             { path: 'login', loadComponent: () => import('./features/auth/pages/login/login.component').then(m => m.LoginComponent) },
             { path: 'register', loadComponent: () => import('./features/auth/pages/register/register.component').then(m => m.RegisterComponent) },
@@ -18,6 +19,7 @@ export const routes: Routes = [
             { path: 'group-buying', loadComponent: () => import('./pages/group-buying/group-buying.component').then(m => m.GroupBuyingComponent) },
             { path: 'get-offer', loadComponent: () => import('./pages/get-offer/get-offer.component').then(m => m.GetOfferComponent) },
             { path: 'suppliers', loadComponent: () => import('./pages/suppliers/suppliers.component').then(m => m.SuppliersComponent) },
+            { path: 'talent', loadComponent: () => import('./pages/talent/talent.component').then(m => m.TalentComponent) },
         ]
     },
     // Admin routes
@@ -38,5 +40,5 @@ export const routes: Routes = [
         ]
     },
     // Fallback - redirect về guest home
-    { path: '**', redirectTo: 'home' }
+    { path: '**', redirectTo: '' }
 ];

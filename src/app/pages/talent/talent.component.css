@@ -1,0 +1,606 @@
+:host {
+    display: block;
+    min-height: 100vh;
+    background: #f8fafc;
+}
+
+.talent-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+}
+
+/* ===== Hero ===== */
+.talent-hero {
+    text-align: center;
+    padding: 40px 0 32px;
+    animation: heroFadeIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    opacity: 0;
+}
+
+@keyframes heroFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.96);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.talent-badge {
+    display: inline-block;
+    background: rgba(236, 72, 153, 0.1);
+    color: #ec4899;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+}
+
+.talent-hero h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #0a1a2b;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+}
+
+.talent-hero p {
+    color: #5a6c7e;
+    font-size: 18px;
+    max-width: 560px;
+    margin: 0 auto 28px;
+}
+
+.talent-hero__actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-primary {
+    background: #ec4899;
+    color: #fff;
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: #db2777;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(236, 72, 153, 0.3);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #1a2a3a;
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 2px solid #dce3eb;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    border-color: #ec4899;
+    color: #ec4899;
+    transform: translateY(-2px);
+}
+
+/* ===== Stats ===== */
+.talent-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 720px;
+    margin: 0 auto 48px;
+    padding: 24px 32px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e8edf3;
+}
+
+.stat-item {
+    text-align: center;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: statsSlideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.stat-item:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.stat-item:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.stat-item:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes statsSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.stat-item strong {
+    display: block;
+    font-size: 28px;
+    font-weight: 700;
+    color: #ec4899;
+}
+
+.stat-item span {
+    font-size: 13px;
+    color: #5a6c7e;
+}
+
+/* ===== Section Header ===== */
+.section-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.section-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0a1a2b;
+    margin-bottom: 8px;
+}
+
+.section-header p {
+    color: #5a6c7e;
+    font-size: 16px;
+}
+
+/* ===== CTV List ===== */
+.talent-ctv {
+    margin-bottom: 64px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.2s forwards;
+}
+
+@keyframes fadeUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ctv-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.ctv-card {
+    background: #fff;
+    border: 1px solid #e8edf3;
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: cardPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.ctv-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.ctv-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.ctv-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.ctv-card:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+@keyframes cardPop {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.ctv-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+    border-color: #ec4899;
+}
+
+.ctv-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.ctv-avatar {
+    font-size: 40px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fce7f3;
+    border-radius: 50%;
+}
+
+.ctv-status {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.ctv-status.available {
+    background: #d1fae5;
+    color: #10b981;
+}
+
+.ctv-status.busy {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.ctv-card__body h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0a1a2b;
+    margin: 0 0 2px;
+}
+
+.ctv-role {
+    font-size: 13px;
+    color: #5a6c7e;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.ctv-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 10px;
+}
+
+.ctv-rating .stars {
+    color: #f59e0b;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.ctv-rating .rating-number {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0a1a2b;
+}
+
+.ctv-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.skill-tag {
+    font-size: 11px;
+    color: #1a2a3a;
+    background: #f0f4f8;
+    padding: 4px 10px;
+    border-radius: 999px;
+}
+
+.ctv-experience {
+    font-size: 12px;
+    color: #5a6c7e;
+}
+
+.ctv-card__footer {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #e8edf3;
+}
+
+.ctv-contact {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ec4899;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.ctv-contact:hover {
+    color: #db2777;
+    transform: translateX(2px);
+}
+
+/* ===== Packages ===== */
+.talent-packages {
+    margin-bottom: 64px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.4s forwards;
+}
+
+.packages-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.package-card {
+    background: #fff;
+    border: 1px solid #e8edf3;
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.package-card.popular {
+    border-color: #ec4899;
+    box-shadow: 0 4px 24px rgba(236, 72, 153, 0.1);
+    transform: scale(1.02);
+}
+
+.package-card.popular:hover {
+    transform: scale(1.04);
+    box-shadow: 0 8px 40px rgba(236, 72, 153, 0.15);
+}
+
+.package-card:hover:not(.popular) {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.package-badge {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    background: #ec4899;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 16px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.package-card h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0a1a2b;
+    margin-bottom: 8px;
+}
+
+.package-price {
+    font-size: 28px;
+    font-weight: 700;
+    color: #ec4899;
+    margin-bottom: 16px;
+}
+
+.package-period {
+    font-size: 14px;
+    font-weight: 400;
+    color: #5a6c7e;
+}
+
+.package-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    text-align: left;
+}
+
+.package-features li {
+    padding: 6px 0;
+    font-size: 14px;
+    color: #1a2a3a;
+}
+
+.package-features li::before {
+    content: '✓ ';
+    color: #ec4899;
+    font-weight: 700;
+}
+
+.package-cta {
+    display: inline-block;
+    padding: 10px 32px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.package-cta.btn-primary {
+    background: #ec4899;
+    color: #fff;
+}
+
+.package-cta.btn-primary:hover {
+    background: #db2777;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(236, 72, 153, 0.3);
+}
+
+.package-cta.btn-outline {
+    border: 2px solid #dce3eb;
+    color: #1a2a3a;
+}
+
+.package-cta.btn-outline:hover {
+    border-color: #ec4899;
+    color: #ec4899;
+    transform: translateY(-2px);
+}
+
+/* ===== CTA ===== */
+.talent-cta {
+    background: linear-gradient(135deg, #0a1a2b 0%, #1a2a3a 100%);
+    border-radius: 16px;
+    padding: 48px 32px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.6s forwards;
+}
+
+.talent-cta__content h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+.talent-cta__content p {
+    color: #a0b8c8;
+    font-size: 16px;
+    margin-bottom: 24px;
+}
+
+.talent-cta .btn-cta {
+    display: inline-block;
+    background: #ec4899;
+    color: #fff;
+    padding: 12px 40px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.talent-cta .btn-cta:hover {
+    background: #db2777;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(236, 72, 153, 0.3);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 992px) {
+    .ctv-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .packages-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .package-card.popular {
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 768px) {
+    .talent-container {
+        padding: 20px 16px 60px;
+    }
+
+    .talent-hero h1 {
+        font-size: 26px;
+    }
+
+    .talent-hero p {
+        font-size: 16px;
+    }
+
+    .talent-stats {
+        grid-template-columns: 1fr 1fr 1fr;
+        padding: 16px 20px;
+        gap: 12px;
+    }
+
+    .stat-item strong {
+        font-size: 20px;
+    }
+
+    .ctv-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .packages-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .package-card.popular {
+        transform: none;
+    }
+
+    .talent-cta {
+        padding: 32px 20px;
+    }
+
+    .talent-cta__content h2 {
+        font-size: 22px;
+    }
+
+    .talent-hero__actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .talent-stats {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .ctv-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ctv-card {
+        padding: 20px;
+    }
+}

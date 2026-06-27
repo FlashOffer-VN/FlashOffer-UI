@@ -1,0 +1,101 @@
+<div class="talent-container">
+    <!-- Hero Section -->
+    <div class="talent-hero">
+        <div class="talent-hero__content">
+            <span class="talent-badge">{{ 'TALENT_BADGE' | translate }}</span>
+            <h1>{{ 'TALENT_TITLE' | translate }}</h1>
+            <p>{{ 'TALENT_DESC' | translate }}</p>
+            <div class="talent-hero__actions">
+                <a class="btn-primary" routerLink="/register-ctv">{{ 'TALENT_JOIN_CTV' | translate }}</a>
+                <a class="btn-secondary" routerLink="/connect-sme">{{ 'TALENT_HIRE_CTV' | translate }}</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="talent-stats">
+        <div class="stat-item">
+            <strong>500+</strong>
+            <span>{{ 'TALENT_STATS_CTV' | translate }}</span>
+        </div>
+        <div class="stat-item">
+            <strong>98%</strong>
+            <span>{{ 'TALENT_STATS_SATISFACTION' | translate }}</span>
+        </div>
+        <div class="stat-item">
+            <strong>200+</strong>
+            <span>{{ 'TALENT_STATS_COMPANIES' | translate }}</span>
+        </div>
+    </div>
+
+    <!-- CTV List -->
+    <section class="talent-ctv">
+        <div class="section-header">
+            <h2>{{ 'TALENT_CTV_LIST' | translate }}</h2>
+            <p>{{ 'TALENT_CTV_DESC' | translate }}</p>
+        </div>
+        <div class="ctv-grid">
+            <div class="ctv-card" *ngFor="let ctv of ctvList">
+                <div class="ctv-card__header">
+                    <div class="ctv-avatar">{{ ctv.avatar }}</div>
+                    <div class="ctv-status" [class.available]="ctv.status === 'available'"
+                        [class.busy]="ctv.status === 'busy'">
+                        {{ ctv.status === 'available' ? 'Sẵn sàng' : 'Đang bận' }}
+                    </div>
+                </div>
+                <div class="ctv-card__body">
+                    <h3>{{ ctv.name }}</h3>
+                    <span class="ctv-role">{{ ctv.role }}</span>
+                    <div class="ctv-rating">
+                        <span class="stars">
+                            <span *ngFor="let star of getStars(ctv.rating)">★</span>
+                        </span>
+                        <span class="rating-number">{{ ctv.rating }}</span>
+                    </div>
+                    <div class="ctv-skills">
+                        <span class="skill-tag" *ngFor="let skill of ctv.skills">{{ skill }}</span>
+                    </div>
+                    <span class="ctv-experience">{{ ctv.experience }} năm kinh nghiệm</span>
+                </div>
+                <div class="ctv-card__footer">
+                    <a class="ctv-contact" routerLink="/connect-sme">{{ 'TALENT_CONTACT' | translate }}</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Packages -->
+    <section class="talent-packages">
+        <div class="section-header">
+            <h2>{{ 'TALENT_PACKAGES_TITLE' | translate }}</h2>
+            <p>{{ 'TALENT_PACKAGES_DESC' | translate }}</p>
+        </div>
+        <div class="packages-grid">
+            <div class="package-card" *ngFor="let pkg of packages" [class.popular]="pkg.popular">
+                <div class="package-badge" *ngIf="pkg.popular">{{ 'TALENT_POPULAR' | translate }}</div>
+                <h3>{{ pkg.name }}</h3>
+                <div class="package-price">
+                    <span *ngIf="pkg.price !== 'Liên hệ'">{{ pkg.price | number }}đ</span>
+                    <span *ngIf="pkg.price === 'Liên hệ'">{{ pkg.price }}</span>
+                    <span class="package-period" *ngIf="pkg.price !== 'Liên hệ'">/tháng</span>
+                </div>
+                <ul class="package-features">
+                    <li *ngFor="let feature of pkg.features">✓ {{ feature }}</li>
+                </ul>
+                <a class="package-cta" [class.btn-primary]="pkg.popular" [class.btn-outline]="!pkg.popular"
+                    routerLink="/connect-sme">
+                    {{ 'TALENT_PACKAGE_CHOOSE' | translate }}
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="talent-cta">
+        <div class="talent-cta__content">
+            <h2>{{ 'TALENT_CTA_TITLE' | translate }}</h2>
+            <p>{{ 'TALENT_CTA_DESC' | translate }}</p>
+            <a class="btn-cta" routerLink="/register-ctv">{{ 'TALENT_CTA_BUTTON' | translate }}</a>
+        </div>
+    </section>
+</div>
