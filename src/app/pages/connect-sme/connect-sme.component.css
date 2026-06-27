@@ -404,3 +404,16 @@
         font-size: 12px;
     }
 }
+
+.connect-card--offer:hover {
+    border-color: #8B5CF6;
+    box-shadow: 0 12px 40px rgba(139, 92, 246, 0.12);
+}
+
+.connect-card--offer .connect-card__arrow {
+    color: #8B5CF6;
+}
+
+.connect-card--offer:hover h3 {
+    color: #8B5CF6;
+}
