@@ -1,0 +1,77 @@
+<div class="register-ctv-container">
+    <div class="register-ctv-card">
+        <div class="register-ctv-header">
+            <h1>{{ 'REGISTER_CTV_TITLE' | translate }}</h1>
+            <p>{{ 'REGISTER_CTV_DESC' | translate }}</p>
+        </div>
+
+        <form [formGroup]="ctvForm" (ngSubmit)="onSubmit()" class="register-ctv-form">
+            <div class="form-grid">
+                <!-- Full Name -->
+                <div class="form-group">
+                    <label>{{ 'REGISTER_CTV_FULL_NAME' | translate }} <span class="required">*</span></label>
+                    <input type="text" formControlName="fullName"
+                        placeholder="{{ 'REGISTER_CTV_FULL_NAME_PLACEHOLDER' | translate }}" />
+                    <div class="error-message" *ngIf="f['fullName'].invalid && f['fullName'].touched">
+                        {{ 'REGISTER_CTV_FULL_NAME_ERROR' | translate }}
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="form-group">
+                    <label>{{ 'REGISTER_CTV_PHONE' | translate }} <span class="required">*</span></label>
+                    <input type="text" formControlName="phone"
+                        placeholder="{{ 'REGISTER_CTV_PHONE_PLACEHOLDER' | translate }}" />
+                    <div class="error-message" *ngIf="f['phone'].invalid && f['phone'].touched">
+                        {{ 'REGISTER_CTV_PHONE_ERROR' | translate }}
+                    </div>
+                </div>
+
+                <!-- Zalo -->
+                <div class="form-group">
+                    <label>{{ 'REGISTER_CTV_ZALO' | translate }}</label>
+                    <input type="text" formControlName="zalo"
+                        placeholder="{{ 'REGISTER_CTV_ZALO_PLACEHOLDER' | translate }}" />
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label>{{ 'REGISTER_CTV_EMAIL' | translate }} <span class="required">*</span></label>
+                    <input type="email" formControlName="email"
+                        placeholder="{{ 'REGISTER_CTV_EMAIL_PLACEHOLDER' | translate }}" />
+                    <div class="error-message" *ngIf="f['email'].invalid && f['email'].touched">
+                        {{ 'REGISTER_CTV_EMAIL_ERROR' | translate }}
+                    </div>
+                </div>
+
+                <!-- Sales Channel -->
+                <div class="form-group full-width">
+                    <label>{{ 'REGISTER_CTV_SALES_CHANNEL' | translate }} <span class="required">*</span></label>
+                    <select formControlName="salesChannel">
+                        <option value="">{{ 'REGISTER_CTV_SALES_CHANNEL_PLACEHOLDER' | translate }}</option>
+                        <option *ngFor="let channel of salesChannels" [value]="channel.value">
+                            {{ channel.label }}
+                        </option>
+                    </select>
+                    <div class="error-message" *ngIf="f['salesChannel'].invalid && f['salesChannel'].touched">
+                        {{ 'REGISTER_CTV_SALES_CHANNEL_ERROR' | translate }}
+                    </div>
+                </div>
+
+                <!-- Experience -->
+                <div class="form-group full-width">
+                    <label>{{ 'REGISTER_CTV_EXPERIENCE' | translate }}</label>
+                    <textarea formControlName="experience" rows="3"
+                        placeholder="{{ 'REGISTER_CTV_EXPERIENCE_PLACEHOLDER' | translate }}"></textarea>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit" [disabled]="isSubmitting">
+                    <span *ngIf="!isSubmitting">{{ 'REGISTER_CTV_SUBMIT' | translate }}</span>
+                    <span *ngIf="isSubmitting">{{ 'REGISTER_CTV_SUBMITTING' | translate }}</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
