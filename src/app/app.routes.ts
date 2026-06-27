@@ -9,7 +9,7 @@ export const routes: Routes = [
         path: '',
         component: GuestLayoutComponent,
         children: [
-            { path: '', loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent) },
+            { path: 'home', loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent) },
             { path: 'login', loadComponent: () => import('./features/auth/pages/login/login.component').then(m => m.LoginComponent) },
             { path: 'register', loadComponent: () => import('./features/auth/pages/register/register.component').then(m => m.RegisterComponent) },
             { path: 'register-ctv', loadComponent: () => import('./pages/register-ctv/register-ctv.component').then(m => m.RegisterCtvComponent) },
@@ -17,6 +17,7 @@ export const routes: Routes = [
             { path: 'find-supplier', loadComponent: () => import('./pages/find-supplier/find-supplier.component').then(m => m.FindSupplierComponent) },
             { path: 'group-buying', loadComponent: () => import('./pages/group-buying/group-buying.component').then(m => m.GroupBuyingComponent) },
             { path: 'get-offer', loadComponent: () => import('./pages/get-offer/get-offer.component').then(m => m.GetOfferComponent) },
+            { path: 'suppliers', loadComponent: () => import('./pages/suppliers/suppliers.component').then(m => m.SuppliersComponent) },
         ]
     },
     // Admin routes
@@ -37,5 +38,5 @@ export const routes: Routes = [
         ]
     },
     // Fallback - redirect về guest home
-    { path: '**', redirectTo: '' }
+    { path: '**', redirectTo: 'home' }
 ];

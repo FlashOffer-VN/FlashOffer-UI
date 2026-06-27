@@ -155,5 +155,20 @@
     "GET_OFFER_EMAIL_PLACEHOLDER": "Enter email",
     "GET_OFFER_EMAIL_ERROR": "Please enter a valid email",
     "GET_OFFER_SUBMIT": "Submit Request",
-    "GET_OFFER_SUBMITTING": "Submitting..."
+    "GET_OFFER_SUBMITTING": "Submitting...",
+    "SUPPLIERS_BADGE": "🏢 Strategic Partners",
+    "SUPPLIERS_TITLE": "Reliable Supply Sources",
+    "SUPPLIERS_DESC": "Connect with top suppliers and quality products",
+    "SUPPLIERS_STATS_PARTNERS": "Active Partners",
+    "SUPPLIERS_STATS_PRODUCTS": "Available Products",
+    "SUPPLIERS_STATS_SATISFACTION": "Customer Satisfaction",
+    "SUPPLIERS_FEATURED_PRODUCTS": "Featured Products",
+    "SUPPLIERS_FEATURED_DESC": "The most popular products from our partners",
+    "SUPPLIERS_LIST_TITLE": "Supplier List",
+    "SUPPLIERS_LIST_DESC": "Partners collaborating with FlashOffer",
+    "SUPPLIERS_VERIFIED": "Verified",
+    "SUPPLIERS_CONTACT": "Contact",
+    "SUPPLIERS_CTA_TITLE": "Want to become a supplier?",
+    "SUPPLIERS_CTA_DESC": "Partner with FlashOffer to connect with thousands of SMEs",
+    "SUPPLIERS_CTA_BUTTON": "Get started"
 }
