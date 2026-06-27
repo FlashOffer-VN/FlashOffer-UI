@@ -1,0 +1,55 @@
+<div class="connect-sme-container">
+    <!-- Hero Section -->
+    <div class="connect-sme-hero">
+        <div class="connect-sme-hero__content">
+            <span class="connect-sme-badge">{{ 'CONNECT_SME_BADGE' | translate }}</span>
+            <h1>{{ 'CONNECT_SME_TITLE' | translate }}</h1>
+            <p>{{ 'CONNECT_SME_DESC' | translate }}</p>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="connect-sme-stats">
+        <div class="stat-item">
+            <strong>1,200+</strong>
+            <span>{{ 'CONNECT_SME_STATS_SME' | translate }}</span>
+        </div>
+        <div class="stat-item">
+            <strong>₫50B+</strong>
+            <span>{{ 'CONNECT_SME_STATS_VALUE' | translate }}</span>
+        </div>
+        <div class="stat-item">
+            <strong>98%</strong>
+            <span>{{ 'CONNECT_SME_STATS_SATISFACTION' | translate }}</span>
+        </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="connect-sme-grid">
+        <!-- Card 1: Tìm hàng -->
+        <a routerLink="/find-supplier" class="connect-card connect-card--find">
+            <div class="connect-card__icon">🔍</div>
+            <h3>{{ 'CONNECT_SME_FIND_SUPPLIER' | translate }}</h3>
+            <p>{{ 'CONNECT_SME_FIND_SUPPLIER_DESC' | translate }}</p>
+            <ul class="connect-card__features">
+                <li>✓ {{ 'CONNECT_SME_FIND_FEATURE_1' | translate }}</li>
+                <li>✓ {{ 'CONNECT_SME_FIND_FEATURE_2' | translate }}</li>
+                <li>✓ {{ 'CONNECT_SME_FIND_FEATURE_3' | translate }}</li>
+            </ul>
+            <span class="connect-card__arrow">{{ 'CONNECT_SME_START' | translate }} →</span>
+        </a>
+
+        <!-- Card 2: Mua chung -->
+        <a routerLink="/group-buying" class="connect-card connect-card--group">
+            <div class="connect-card__icon">🛒</div>
+            <h3>{{ 'CONNECT_SME_GROUP_BUYING' | translate }}</h3>
+            <p>{{ 'CONNECT_SME_GROUP_BUYING_DESC' | translate }}</p>
+            <ul class="connect-card__features">
+                <li>✓ {{ 'CONNECT_SME_GROUP_FEATURE_1' | translate }}</li>
+                <li>✓ {{ 'CONNECT_SME_GROUP_FEATURE_2' | translate }}</li>
+                <li>✓ {{ 'CONNECT_SME_GROUP_FEATURE_3' | translate }}</li>
+            </ul>
+            <span class="connect-card__arrow">{{ 'CONNECT_SME_START' | translate }} →</span>
+        </a>
+    </div>
+</div>

@@ -1,0 +1,389 @@
+:host {
+    display: block;
+    min-height: 100vh;
+    background: #f8fafc;
+}
+
+.register-ctv-container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 60px 20px 80px;
+}
+
+/* ===== Card Animation ===== */
+.register-ctv-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    padding: 48px;
+    border: 1px solid #e8edf3;
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+    animation: cardSlideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Card glow effect */
+.register-ctv-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 70% 20%, rgba(0, 127, 148, 0.03), transparent 50%);
+    pointer-events: none;
+}
+
+@keyframes cardSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ===== Header Animation ===== */
+.register-ctv-header {
+    text-align: center;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: headerFade 0.6s ease 0.2s forwards;
+}
+
+@keyframes headerFade {
+    0% {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.register-ctv-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0a1a2b;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+}
+
+.register-ctv-header p {
+    color: #5a6c7e;
+    font-size: 16px;
+}
+
+/* ===== Form Animation ===== */
+.register-ctv-form {
+    opacity: 0;
+    animation: formFade 0.6s ease 0.3s forwards;
+}
+
+@keyframes formFade {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.register-ctv-form .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 24px;
+}
+
+/* ===== Form Group Animation ===== */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    opacity: 0;
+    transform: translateY(15px);
+    animation: groupSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.form-group:nth-child(1) {
+    animation-delay: 0.35s;
+}
+
+.form-group:nth-child(2) {
+    animation-delay: 0.40s;
+}
+
+.form-group:nth-child(3) {
+    animation-delay: 0.45s;
+}
+
+.form-group:nth-child(4) {
+    animation-delay: 0.50s;
+}
+
+.form-group:nth-child(5) {
+    animation-delay: 0.55s;
+}
+
+.form-group:nth-child(6) {
+    animation-delay: 0.60s;
+}
+
+@keyframes groupSlide {
+    0% {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-group.full-width {
+    grid-column: span 2;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a2a3a;
+}
+
+.form-group label .required {
+    color: #ef4444;
+}
+
+/* ===== Input Animation ===== */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 10px 14px;
+    border: 1.5px solid #dce3eb;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: #fafbfc;
+    font-family: inherit;
+    position: relative;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #007f94;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(0, 127, 148, 0.08);
+    transform: translateY(-1px);
+}
+
+.form-group input.ng-invalid.ng-touched,
+.form-group select.ng-invalid.ng-touched {
+    border-color: #ef4444;
+    animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-6px);
+    }
+
+    40% {
+        transform: translateX(6px);
+    }
+
+    60% {
+        transform: translateX(-4px);
+    }
+
+    80% {
+        transform: translateX(4px);
+    }
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* ===== Error Message ===== */
+.error-message {
+    font-size: 12px;
+    color: #ef4444;
+    margin-top: 2px;
+    opacity: 0;
+    animation: errorFade 0.3s ease forwards;
+}
+
+@keyframes errorFade {
+    0% {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== Form Actions ===== */
+.form-actions {
+    grid-column: span 2;
+    margin-top: 28px;
+    text-align: center;
+    opacity: 0;
+    animation: actionFade 0.6s ease 0.7s forwards;
+}
+
+@keyframes actionFade {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== Submit Button ===== */
+.btn-submit {
+    background: #007f94;
+    color: #fff;
+    border: none;
+    padding: 12px 48px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    min-width: 200px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Button shimmer effect */
+.btn-submit::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: rotate(45deg);
+    transition: all 0.6s ease;
+    pointer-events: none;
+}
+
+.btn-submit:hover:not(:disabled)::after {
+    left: 100%;
+}
+
+.btn-submit:hover:not(:disabled) {
+    background: #006b7e;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(0, 127, 148, 0.3);
+}
+
+.btn-submit:active:not(:disabled) {
+    transform: translateY(0) scale(0.97);
+}
+
+.btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: scale(0.98);
+}
+
+/* Button loading animation */
+.btn-submit:disabled span {
+    display: inline-block;
+    animation: dots 1.2s ease-in-out infinite;
+}
+
+@keyframes dots {
+
+    0%,
+    20% {
+        content: '';
+    }
+
+    40% {
+        content: '.';
+    }
+
+    60% {
+        content: '..';
+    }
+
+    80% {
+        content: '...';
+    }
+
+    100% {
+        content: '';
+    }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .register-ctv-container {
+        padding: 32px 16px 60px;
+    }
+
+    .register-ctv-card {
+        padding: 28px 20px;
+    }
+
+    .register-ctv-header h1 {
+        font-size: 22px;
+    }
+
+    .register-ctv-form .form-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .form-group.full-width {
+        grid-column: span 1;
+    }
+
+    .form-actions {
+        grid-column: span 1;
+    }
+
+    .btn-submit {
+        width: 100%;
+        min-width: unset;
+    }
+
+    /* Reset animation trên mobile */
+    .register-ctv-card,
+    .register-ctv-header,
+    .register-ctv-form,
+    .form-group,
+    .form-actions {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
