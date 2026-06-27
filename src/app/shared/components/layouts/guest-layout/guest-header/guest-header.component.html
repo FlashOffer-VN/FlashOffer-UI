@@ -4,10 +4,18 @@
         <span class="logo-dot"></span>
     </a>
     <nav class="sme-nav">
-        <a routerLink="/solutions">{{ 'NAV_SOLUTIONS' | translate }}</a>
-        <a routerLink="/suppliers">{{ 'NAV_SUPPLIERS' | translate }}</a>
-        <a routerLink="/talent">{{ 'NAV_TALENT' | translate }}</a>
-        <a routerLink="/community">{{ 'NAV_COMMUNITY' | translate }}</a>
+        <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            {{ 'NAV_SOLUTIONS' | translate }}
+        </a>
+        <a routerLink="/suppliers" routerLinkActive="active">
+            {{ 'NAV_SUPPLIERS' | translate }}
+        </a>
+        <a routerLink="/register-ctv" routerLinkActive="active">
+            {{ 'NAV_TALENT' | translate }}
+        </a>
+        <a routerLink="/connect-sme" routerLinkActive="active">
+            {{ 'NAV_COMMUNITY' | translate }}
+        </a>
     </nav>
     <div class="sme-header-actions">
         <app-language-switcher></app-language-switcher>

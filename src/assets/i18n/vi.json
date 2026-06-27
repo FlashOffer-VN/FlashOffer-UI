@@ -155,5 +155,20 @@
     "GET_OFFER_EMAIL_PLACEHOLDER": "Nhập email",
     "GET_OFFER_EMAIL_ERROR": "Vui lòng nhập email hợp lệ",
     "GET_OFFER_SUBMIT": "Gửi yêu cầu",
-    "GET_OFFER_SUBMITTING": "Đang gửi..."
+    "GET_OFFER_SUBMITTING": "Đang gửi...",
+    "SUPPLIERS_BADGE": "🏢 Đối tác chiến lược",
+    "SUPPLIERS_TITLE": "Nguồn cung đáng tin cậy",
+    "SUPPLIERS_DESC": "Kết nối với các nhà cung cấp hàng đầu và mặt hàng chất lượng",
+    "SUPPLIERS_STATS_PARTNERS": "Đối tác đang hợp tác",
+    "SUPPLIERS_STATS_PRODUCTS": "Mặt hàng sẵn có",
+    "SUPPLIERS_STATS_SATISFACTION": "Hài lòng khách hàng",
+    "SUPPLIERS_FEATURED_PRODUCTS": "Mặt hàng nổi bật",
+    "SUPPLIERS_FEATURED_DESC": "Những sản phẩm được ưa chuộng nhất từ đối tác của chúng tôi",
+    "SUPPLIERS_LIST_TITLE": "Danh sách nhà cung cấp",
+    "SUPPLIERS_LIST_DESC": "Các đối tác đang hợp tác cùng FlashOffer",
+    "SUPPLIERS_VERIFIED": "Đã xác minh",
+    "SUPPLIERS_CONTACT": "Liên hệ",
+    "SUPPLIERS_CTA_TITLE": "Bạn muốn trở thành nhà cung cấp?",
+    "SUPPLIERS_CTA_DESC": "Hợp tác cùng FlashOffer để kết nối với hàng ngàn SME",
+    "SUPPLIERS_CTA_BUTTON": "Bắt đầu ngay"
 }
