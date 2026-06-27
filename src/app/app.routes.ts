@@ -20,6 +20,7 @@ export const routes: Routes = [
             { path: 'get-offer', loadComponent: () => import('./pages/get-offer/get-offer.component').then(m => m.GetOfferComponent) },
             { path: 'suppliers', loadComponent: () => import('./pages/suppliers/suppliers.component').then(m => m.SuppliersComponent) },
             { path: 'talent', loadComponent: () => import('./pages/talent/talent.component').then(m => m.TalentComponent) },
+            { path: 'community', loadComponent: () => import('./pages/community/community.component').then(m => m.CommunityComponent) },
         ]
     },
     // Admin routes
