@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { AppService } from '../../core/services/app.service';
 
 @Component({
     selector: 'app-find-supplier',
@@ -17,7 +18,10 @@ export class FindSupplierComponent {
     toastMessage = '';
     toastType: 'success' | 'error' = 'success';
 
-    constructor(private fb: FormBuilder) {
+    constructor(
+        private fb: FormBuilder,
+        private _appService: AppService
+    ) {
         this.findForm = this.fb.group({
             productName: ['', [Validators.required, Validators.minLength(2)]],
             quantity: ['', [Validators.required, Validators.min(1)]],
@@ -34,6 +38,10 @@ export class FindSupplierComponent {
     onSubmit() {
         if (this.findForm.invalid) {
             this.findForm.markAllAsTouched();
+            this.showToastMessage(
+                this._appService.instant('FIND_SUPPLIER.ERROR.INVALID_FORM'),
+                'error'
+            );
             return;
         }
 
@@ -42,7 +50,10 @@ export class FindSupplierComponent {
 
         setTimeout(() => {
             this.isSubmitting = false;
-            this.showToastMessage('Gửi yêu cầu tìm hàng thành công!', 'success');
+            this.showToastMessage(
+                this._appService.instant('FIND_SUPPLIER.SUCCESS.SUBMIT'),
+                'success'
+            );
             this.findForm.reset();
         }, 1500);
     }

@@ -1,25 +1,31 @@
-<svg viewBox="0 0 250 50" xmlns="http://www.w3.org/2000/svg">
-  <!-- Icon - Tia chớp cách điệu -->
-  <g transform="translate(0, 2)">
-    <rect x="4" y="4" width="36" height="36" rx="8" fill="#7C3AED"/>
-    <path d="M16 24 L22 18 L19 24 L26 18 L23 24 L30 18 L25 30 L18 30 L16 24 Z" fill="white"/>
+<svg viewBox="0 0 300 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icon - Tia sét -->
+  <g transform="translate(0, 4)">
+    <rect x="2" y="2" width="44" height="44" rx="12" fill="#007f94"/>
+    <path d="M26 16 L18 32 L28 32 L22 46 L36 28 L26 28 L30 16 L26 16 Z" fill="white"/>
   </g>
-  
-  <!-- Text - Flash nghiêng -->
-  <text x="48" y="33" font-family="Inter, sans-serif" font-size="28" font-weight="900" fill="#1F2937" 
-        font-style="italic" letter-spacing="-0.5">
+
+  <!-- Flash -->
+  <text x="56" y="38" font-family="Inter, sans-serif" font-size="32" font-weight="700" fill="#1E293B" 
+        letter-spacing="-0.5">
     Flash
   </text>
-  
-  <!-- Text - Offer đậm + cách điệu -->
-  <text x="115" y="33" font-family="Inter, sans-serif" font-size="28" font-weight="900" fill="#7C3AED" 
+
+  <!-- Offer -->
+  <text x="128" y="38" font-family="Inter, sans-serif" font-size="32" font-weight="700" fill="#007f94" 
         letter-spacing="0.5">
     Offer
   </text>
-  
-  <!-- Dấu % - nổi bật, xa hơn -->
-  <text x="195" y="33" font-family="Inter, sans-serif" font-size="22" font-weight="900" fill="#EC4899" 
-        letter-spacing="0" font-style="italic">
-    %
+
+  <!-- Divider -->
+  <text x="218" y="38" font-family="Inter, sans-serif" font-size="16" font-weight="300" fill="#CBD5E1" 
+        letter-spacing="1">
+    |
+  </text>
+
+  <!-- SME -->
+  <text x="234" y="38" font-family="Inter, sans-serif" font-size="16" font-weight="600" fill="#007f94" 
+        letter-spacing="1">
+    SME
   </text>
 </svg>

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { AppService } from '../../core/services/app.service';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -10,4 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
     templateUrl: './community.component.html',
     styleUrls: ['./community.component.css']
 })
-export class CommunityComponent { }
+export class CommunityComponent {
+    constructor(private _appService: AppService) {
+    }
+}

@@ -1,0 +1,50 @@
+<div class="admin-login-container">
+    <div class="admin-login-card">
+        <div class="admin-login-header">
+            <h1>{{ 'ADMIN_LOGIN.TITLE' | translate }}</h1>
+            <p>{{ 'ADMIN_LOGIN.SUBTITLE' | translate }}</p>
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="admin-login-form">
+            <div class="form-group">
+                <label for="username">{{ 'ADMIN_LOGIN.USERNAME' | translate }}</label>
+                <input id="username" type="text" formControlName="username"
+                    placeholder="{{ 'ADMIN_LOGIN.USERNAME_PLACEHOLDER' | translate }}"
+                    [class.is-invalid]="f['username'].invalid && f['username'].touched">
+                <div class="error-message" *ngIf="f['username'].invalid && f['username'].touched">
+                    {{ 'ADMIN_LOGIN.ERROR.USERNAME_REQUIRED' | translate }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">{{ 'ADMIN_LOGIN.PASSWORD' | translate }}</label>
+                <input id="password" type="password" formControlName="password"
+                    placeholder="{{ 'ADMIN_LOGIN.PASSWORD_PLACEHOLDER' | translate }}"
+                    [class.is-invalid]="f['password'].invalid && f['password'].touched">
+                <div class="error-message" *ngIf="f['password'].invalid && f['password'].touched">
+                    {{ 'ADMIN_LOGIN.ERROR.PASSWORD_REQUIRED' | translate }}
+                </div>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <label>
+                    <input type="checkbox" formControlName="rememberMe">
+                    {{ 'ADMIN_LOGIN.REMEMBER_ME' | translate }}
+                </label>
+            </div>
+
+            <div class="text-center mb-1 error-message" *ngIf="errorMessage">
+                {{ errorMessage }}
+            </div>
+
+            <button type="submit" class="btn-login" [disabled]="isLoading">
+                <span *ngIf="!isLoading">{{ 'ADMIN_LOGIN.BUTTON_LOGIN' | translate }}</span>
+                <span *ngIf="isLoading">{{ 'ADMIN_LOGIN.LOADING' | translate }}</span>
+            </button>
+
+            <div class="admin-login-footer">
+                <a routerLink="/login">{{ 'ADMIN_LOGIN.BACK_TO_USER' | translate }}</a>
+            </div>
+        </form>
+    </div>
+</div>
