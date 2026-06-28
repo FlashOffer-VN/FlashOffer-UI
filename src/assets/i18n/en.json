@@ -209,5 +209,51 @@
     "COMMUNITY_BENEFIT_4_DESC": "Build a strong business ecosystem",
     "COMMUNITY_CTA_TITLE": "Ready to join the community?",
     "COMMUNITY_CTA_DESC": "Sign up now to become a member and connect with thousands of SMEs",
-    "COMMUNITY_CTA_BUTTON": "Join Now"
+    "COMMUNITY_CTA_BUTTON": "Join Now",
+    "FIND_SUPPLIER": {
+        "SUCCESS": {
+            "SUBMIT": "Submit supplier request successfully!"
+        },
+        "ERROR": {
+            "INVALID_FORM": "Please check your information again!"
+        }
+    },
+    "GET_OFFER": {
+        "SUCCESS": {
+            "SUBMIT": "Submit offer request successfully!"
+        },
+        "ERROR": {
+            "INVALID_FORM": "Please check your information again!"
+        }
+    },
+    "GROUP_BUYING": {
+        "SUCCESS": {
+            "SUBMIT": "Create group buying request successfully!"
+        },
+        "ERROR": {
+            "INVALID_FORM": "Please check your information again!"
+        }
+    },
+    "ADMIN_LOGIN": {
+        "TITLE": "Admin Login",
+        "SUBTITLE": "Please enter your login credentials",
+        "USERNAME": "Username",
+        "USERNAME_PLACEHOLDER": "Enter username",
+        "PASSWORD": "Password",
+        "PASSWORD_PLACEHOLDER": "Enter password",
+        "REMEMBER_ME": "Remember me",
+        "BUTTON_LOGIN": "Login",
+        "LOADING": "Processing...",
+        "BACK_TO_USER": "← Back to user login",
+        "ERROR": {
+            "NOT_ADMIN": "This account does not have admin privileges!",
+            "INVALID_CREDENTIALS": "Invalid username or password!",
+            "USERNAME_REQUIRED": "Please enter your username",
+            "PASSWORD_REQUIRED": "Please enter your password (minimum 6 characters)"
+        }
+    },
+    "BUTTON_ADMIN": "Owner",
+    "ERROR": {
+        "GENERAL": "An error occurred!"
+    }
 }

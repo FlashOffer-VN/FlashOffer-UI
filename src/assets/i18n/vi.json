@@ -209,5 +209,51 @@
     "COMMUNITY_BENEFIT_4_DESC": "Xây dựng hệ sinh thái kinh doanh vững mạnh",
     "COMMUNITY_CTA_TITLE": "Sẵn sàng tham gia cộng đồng?",
     "COMMUNITY_CTA_DESC": "Đăng ký ngay để trở thành thành viên và kết nối với hàng ngàn SME",
-    "COMMUNITY_CTA_BUTTON": "Đăng ký tham gia"
+    "COMMUNITY_CTA_BUTTON": "Đăng ký tham gia",
+    "FIND_SUPPLIER": {
+        "SUCCESS": {
+            "SUBMIT": "Gửi yêu cầu tìm hàng thành công!"
+        },
+        "ERROR": {
+            "INVALID_FORM": "Vui lòng kiểm tra lại thông tin đã nhập!"
+        }
+    },
+    "GET_OFFER": {
+        "SUCCESS": {
+            "SUBMIT": "Gửi yêu cầu nhận offer thành công!"
+        },
+        "ERROR": {
+            "INVALID_FORM": "Vui lòng kiểm tra lại thông tin đã nhập!"
+        }
+    },
+    "GROUP_BUYING": {
+        "SUCCESS": {
+            "SUBMIT": "Tạo yêu cầu mua chung thành công!"
+        },
+        "ERROR": {
+            "INVALID_FORM": "Vui lòng kiểm tra lại thông tin đã nhập!"
+        }
+    },
+    "ADMIN_LOGIN": {
+        "TITLE": "Đăng nhập Admin",
+        "SUBTITLE": "Vui lòng nhập thông tin đăng nhập",
+        "USERNAME": "Tên đăng nhập",
+        "USERNAME_PLACEHOLDER": "Nhập username",
+        "PASSWORD": "Mật khẩu",
+        "PASSWORD_PLACEHOLDER": "Nhập mật khẩu",
+        "REMEMBER_ME": "Ghi nhớ đăng nhập",
+        "BUTTON_LOGIN": "Đăng nhập",
+        "LOADING": "Đang xử lý...",
+        "BACK_TO_USER": "← Quay lại đăng nhập user",
+        "ERROR": {
+            "NOT_ADMIN": "Tài khoản này không có quyền admin!",
+            "INVALID_CREDENTIALS": "Tên đăng nhập hoặc mật khẩu không đúng!",
+            "USERNAME_REQUIRED": "Vui lòng nhập tên đăng nhập",
+            "PASSWORD_REQUIRED": "Vui lòng nhập mật khẩu (tối thiểu 6 ký tự)"
+        }
+    },
+    "BUTTON_ADMIN": "Owner",
+    "ERROR": {
+        "GENERAL": "Đã có lỗi xảy ra!"
+    }
 }

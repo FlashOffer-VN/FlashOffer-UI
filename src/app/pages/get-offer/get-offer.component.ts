@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { AppService } from '../../core/services/app.service';
 
 @Component({
     selector: 'app-get-offer',
@@ -17,7 +18,10 @@ export class GetOfferComponent {
     toastMessage = '';
     toastType: 'success' | 'error' = 'success';
 
-    constructor(private fb: FormBuilder) {
+    constructor(
+        private fb: FormBuilder,
+        private _appService: AppService
+    ) {
         this.offerForm = this.fb.group({
             selectedOffer: ['', [Validators.required, Validators.minLength(2)]],
             fullName: ['', [Validators.required, Validators.minLength(2)]],
@@ -32,6 +36,10 @@ export class GetOfferComponent {
     onSubmit() {
         if (this.offerForm.invalid) {
             this.offerForm.markAllAsTouched();
+            this.showToastMessage(
+                this._appService.instant('GET_OFFER.ERROR.INVALID_FORM'),
+                'error'
+            );
             return;
         }
 
@@ -40,7 +48,10 @@ export class GetOfferComponent {
 
         setTimeout(() => {
             this.isSubmitting = false;
-            this.showToastMessage('Gửi yêu cầu nhận offer thành công!', 'success');
+            this.showToastMessage(
+                this._appService.instant('GET_OFFER.SUCCESS.SUBMIT'),
+                'success'
+            );
             this.offerForm.reset();
         }, 1500);
     }

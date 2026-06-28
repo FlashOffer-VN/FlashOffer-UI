@@ -3,14 +3,17 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "build:production": "ng build --configuration production",
-    "build:vercel": "ng build --configuration production",
-    "watch": "ng build --watch --configuration development",
+    "start": "npm run env && ng serve",
+    "start-vite": "npm run env && ng serve --hmr=false",
+    "build": "npm run env && ng build",
+    "build:production": "npm run env:prod && ng build --configuration production",
+    "build:vercel": "npm run env:prod && ng build --configuration production",
+    "watch": "npm run env && ng build --watch --configuration development",
     "test": "ng test --watch=false --browsers=ChromeHeadless",
     "test:ci": "ng test --watch=false --browsers=ChromeHeadless --code-coverage",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "env": "node generate-env.js",
+    "env:prod": "NODE_ENV=production node generate-env.js"
   },
   "prettier": {
     "printWidth": 100,
@@ -46,6 +49,7 @@
     "@angular/compiler-cli": "^20.3.0",
     "@tailwindcss/forms": "^0.5.7",
     "@types/jasmine": "~5.1.0",
+    "@types/node": "^26.0.1",
     "autoprefixer": "^10.4.20",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",
