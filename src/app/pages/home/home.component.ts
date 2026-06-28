@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { AppService } from '../../core/services/app.service';
 
 @Component({
     selector: 'app-home',
@@ -10,4 +11,12 @@ import { TranslateModule } from '@ngx-translate/core';
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css']
 })
-export class HomeComponent { }
+export class HomeComponent implements OnInit {
+
+    constructor(private _appService: AppService) { }
+
+    ngOnInit(): void {
+        console.log('Current user:', this._appService.auth.getCurrentUser());
+        console.log('Is authenticated:', this._appService.auth.isAuthenticated());
+    }
+}

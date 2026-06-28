@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { AppService } from '../../core/services/app.service';
 
 @Component({
     selector: 'app-group-buying',
@@ -17,7 +18,10 @@ export class GroupBuyingComponent {
     toastMessage = '';
     toastType: 'success' | 'error' = 'success';
 
-    constructor(private fb: FormBuilder) {
+    constructor(
+        private fb: FormBuilder,
+        private _appService: AppService
+    ) {
         this.groupForm = this.fb.group({
             productName: ['', [Validators.required, Validators.minLength(2)]],
             targetPeopleCount: ['', [Validators.required, Validators.min(2)]],
@@ -33,6 +37,10 @@ export class GroupBuyingComponent {
     onSubmit() {
         if (this.groupForm.invalid) {
             this.groupForm.markAllAsTouched();
+            this.showToastMessage(
+                this._appService.instant('GROUP_BUYING.ERROR.INVALID_FORM'),
+                'error'
+            );
             return;
         }
 
@@ -41,7 +49,10 @@ export class GroupBuyingComponent {
 
         setTimeout(() => {
             this.isSubmitting = false;
-            this.showToastMessage('Tạo yêu cầu mua chung thành công!', 'success');
+            this.showToastMessage(
+                this._appService.instant('GROUP_BUYING.SUCCESS.SUBMIT'),
+                'success'
+            );
             this.groupForm.reset();
         }, 1500);
     }
