@@ -18,8 +18,12 @@
         </a>
     </nav>
     <div class="sme-header-actions">
-        <app-language-switcher></app-language-switcher><a *ngIf="showAdminButton" class="sme-button sme-button--ghost"
-            routerLink="/admin-login">
+        <!-- Language Switcher -->
+        <app-language-switcher></app-language-switcher>
+
+        <!-- ✅ Secret Admin Button -->
+        <a *ngIf="showAdminButton" (click)="goToAdmin()"
+            class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors cursor-pointer text-sm font-medium">
             {{ 'BUTTON_ADMIN' | translate }}
         </a>
         <a class="sme-button sme-button--ghost" routerLink="/register-ctv">{{ 'BUTTON_JOIN_CTV' | translate }}</a>
