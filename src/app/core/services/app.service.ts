@@ -28,4 +28,8 @@ export class AppService {
     get(key: string): Observable<string> {
         return this.translate.get(key);
     }
+
+    onLanguageChange(): Observable<any> {
+        return this.translate.onLangChange;
+    }
 }

@@ -1,22 +1,27 @@
-<svg viewBox="0 0 260 60" xmlns="http://www.w3.org/2000/svg">
-  <!-- Icon -->
-  <g transform="translate(0, 0)">
-    <path d="M30 6 L60 6 L60 30 L30 54 L6 30 L6 6 Z" 
-          fill="none" 
-          stroke="#007f94" 
-          stroke-width="3.5" 
-          rx="8"/>
-    <path d="M36 18 L24 34 L34 34 L28 48 L44 28 L36 28 L36 18 Z" 
-          fill="#007f94"/>
-    <circle cx="52" cy="14" r="5" fill="#007f94"/>
-    <text x="52" y="17" font-size="6" fill="white" text-anchor="middle" font-weight="bold">%</text>
+<svg viewBox="0 0 240 50" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icon - Chữ K trắng trên nền trong suốt -->
+  <g transform="translate(0, 3)">
+    <rect x="2" y="2" width="38" height="38" rx="10" fill="#7C3AED" opacity="0.9"/>
+    <text x="21" y="30" font-family="Inter, sans-serif" font-size="24" font-weight="700" fill="white" text-anchor="middle">
+      K
+    </text>
   </g>
-  
-  <!-- Text -->
-  <text x="75" y="35" font-family="Inter, sans-serif" font-size="28" font-weight="800" fill="#007f94">
-    Flash
+
+  <!-- Kindi - Brand Name trắng -->
+  <text x="48" y="32" font-family="Inter, sans-serif" font-size="22" font-weight="600" fill="white" 
+        letter-spacing="-0.3">
+    Kindi
   </text>
-  <text x="145" y="35" font-family="Inter, sans-serif" font-size="28" font-weight="800" fill="#007f94">
-    Offer
+
+  <!-- Divider -->
+  <text x="112" y="32" font-family="Inter, sans-serif" font-size="12" font-weight="300" fill="#64748B" 
+        letter-spacing="1">
+    |
+  </text>
+
+  <!-- Tagline xám nhạt -->
+  <text x="126" y="32" font-family="Inter, sans-serif" font-size="11" font-weight="400" fill="#94A3B8" 
+        letter-spacing="0.3">
+    Admin
   </text>
 </svg>

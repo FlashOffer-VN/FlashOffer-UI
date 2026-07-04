@@ -1,0 +1,27 @@
+<svg viewBox="0 0 320 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icon - Chữ K cách điệu -->
+  <g transform="translate(0, 4)">
+    <rect x="2" y="2" width="44" height="44" rx="12" fill="#007f94"/>
+    <text x="24" y="36" font-family="Inter, sans-serif" font-size="28" font-weight="700" fill="white" text-anchor="middle">
+      K
+    </text>
+  </g>
+
+  <!-- Kindi - Brand Name -->
+  <text x="56" y="38" font-family="Inter, sans-serif" font-size="32" font-weight="700" fill="#1E293B" 
+        letter-spacing="-0.5">
+    Kindi
+  </text>
+
+  <!-- Divider -->
+  <text x="134" y="38" font-family="Inter, sans-serif" font-size="16" font-weight="300" fill="#CBD5E1" 
+        letter-spacing="1">
+    |
+  </text>
+
+  <!-- Tagline English -->
+  <text x="152" y="38" font-family="Inter, sans-serif" font-size="14" font-weight="500" fill="#007f94" 
+        letter-spacing="0.5">
+    Connect to Grow
+  </text>
+</svg>
