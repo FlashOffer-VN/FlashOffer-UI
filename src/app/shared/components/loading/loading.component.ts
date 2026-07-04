@@ -36,7 +36,7 @@ export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | '
         
         <!-- Text -->
         <h1 class="text-2xl md:text-3xl font-bold text-secondary">
-          FlashOffer
+          Kindi
         </h1>
         <p class="text-gray-500 text-sm">{{ text || 'Đang kết nối cộng đồng...' }}</p>
         

@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
     constructor(private _appService: AppService) { }
 
     ngOnInit(): void {
-        console.log('Current user:', this._appService.auth.getCurrentUser());
-        console.log('Is authenticated:', this._appService.auth.isAuthenticated());
+        // console.log('Current user:', this._appService.auth.getCurrentUser());
+        // console.log('Is authenticated:', this._appService.auth.isAuthenticated());
     }
 }

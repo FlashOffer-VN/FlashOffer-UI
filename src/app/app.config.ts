@@ -1,5 +1,7 @@
+// app.config.ts
 import { ApplicationConfig, importProvidersFrom, APP_INITIALIZER } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withViewTransitions } from '@angular/router';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -34,11 +36,13 @@ function appInitializer(translate: TranslateService) {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
-
-    // ✅ Thêm withInterceptorsFromDi để hỗ trợ Interceptor cũ
+    provideRouter(
+      routes,
+      withViewTransitions()
+      // ❌ Xóa withScrollPositionRestoration - không có trong Angular 17+
+    ),
+    provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
-
     importProvidersFrom(TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -46,16 +50,12 @@ export const appConfig: ApplicationConfig = {
         deps: [HttpClient]
       }
     })),
-
-    // ✅ Thêm APP_INITIALIZER
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializer,
       deps: [TranslateService],
       multi: true
     },
-
-    // ✅ THÊM MỚI: Đăng ký AuthInterceptor
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

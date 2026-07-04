@@ -1,30 +1,13 @@
-<div class="flex gap-1 bg-gray-100 p-1 rounded-lg border border-gray-200">
-    <button
-        class="lang-btn px-4 py-1.5 rounded-md text-sm font-semibold transition-all duration-200 flex items-center gap-2"
-        [class]="currentLang === 'vi' ? 'bg-primary text-white shadow-md' : 'text-gray-500 hover:bg-primary/10 hover:text-gray-800'"
-        (click)="switchLanguage('vi')">
-        <svg class="w-5 h-4 rounded-sm" viewBox="0 0 36 24">
-            <rect width="36" height="24" fill="#DA251D" />
-            <polygon points="18,2 22.5,10 31.2,10 24.3,15 26.8,23.5 18,18.5 9.2,23.5 11.7,15 4.8,10 13.5,10"
-                fill="#FFCD00" />
-        </svg>
-        VI
-    </button>
-    <button
-        class="lang-btn px-4 py-1.5 rounded-md text-sm font-semibold transition-all duration-200 flex items-center gap-2"
-        [class]="currentLang === 'en' ? 'bg-primary text-white shadow-md' : 'text-gray-500 hover:bg-primary/10 hover:text-gray-800'"
-        (click)="switchLanguage('en')">
-        <svg class="w-5 h-4 rounded-sm" viewBox="0 0 36 24">
-            <rect width="36" height="24" fill="#012169" />
-            <path d="M0,0 L36,24 M36,0 L0,24" stroke="#FFFFFF" stroke-width="4" />
-            <path d="M0,0 L36,24 M36,0 L0,24" stroke="#C8102E" stroke-width="2" />
-            <rect x="0" y="8" width="36" height="8" fill="#FFFFFF" />
-            <rect x="0" y="10" width="36" height="4" fill="#C8102E" />
-            <rect x="12" y="0" width="12" height="24" fill="#FFFFFF" />
-            <rect x="14" y="0" width="8" height="24" fill="#C8102E" />
-            <path d="M12,0 L24,12 M24,0 L12,12" stroke="#FFFFFF" stroke-width="4" />
-            <path d="M12,0 L24,12 M24,0 L12,12" stroke="#C8102E" stroke-width="2" />
-        </svg>
-        EN
-    </button>
-</div>
+<!-- shared/components/language-switcher/language-switcher.component.html -->
+<button class="lang-toggle" (click)="toggleLanguage()"
+    [title]="currentLang === 'vi' ? 'Switch to English' : 'Chuyển sang Tiếng Việt'">
+    <!-- Icon Global -->
+    <svg class="lang-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="2" y1="12" x2="22" y2="12" />
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+    </svg>
+    <!-- Chữ nhỏ VI/EN -->
+    <span class="lang-text">{{ currentLang === 'vi' ? 'VI' : 'EN' }}</span>
+</button>

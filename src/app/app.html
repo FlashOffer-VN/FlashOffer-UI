@@ -1,2 +1,7 @@
-<router-outlet></router-outlet>
+<!-- app.html -->
+<div [@routeAnimation]="prepareRoute(outlet)">
+    <router-outlet #outlet="outlet"></router-outlet>
+</div>
+
+<!-- Scroll to Top -->
 <app-scroll-to-top></app-scroll-to-top>

@@ -1,9 +1,11 @@
+// shared/components/input/input.component.ts
 import {
     Component,
     Input,
     Optional,
     Self,
-    forwardRef
+    forwardRef,
+    OnInit
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -29,7 +31,7 @@ import {
     templateUrl: './input.component.html',
     styleUrl: './input.component.css'
 })
-export class InputComponent implements ControlValueAccessor {
+export class InputComponent implements ControlValueAccessor, OnInit {
     @Input() id = '';
     @Input() label = '';
     @Input() placeholder = '';
@@ -51,11 +53,13 @@ export class InputComponent implements ControlValueAccessor {
 
     value = '';
 
-    constructor(
-        @Optional()
-        @Self()
-        public ngControl: NgControl
-    ) {
+    @Optional()
+    @Self()
+    public ngControl?: NgControl;
+
+    constructor() { }
+
+    ngOnInit(): void {
         if (this.ngControl) {
             this.ngControl.valueAccessor = this;
         }
@@ -115,9 +119,19 @@ export class InputComponent implements ControlValueAccessor {
 
     onInput(event: Event): void {
         const input = event.target as HTMLInputElement;
-
         this.value = input.value;
         this.onChange(this.value);
+
+        if (this.ngControl?.control) {
+            this.ngControl.control.markAsDirty();
+        }
+    }
+
+    onBlur(): void {
+        this.onTouched();
+        if (this.ngControl?.control) {
+            this.ngControl.control.markAsTouched();
+        }
     }
 
     writeValue(value: string): void {
