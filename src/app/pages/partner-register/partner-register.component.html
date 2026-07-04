@@ -1,0 +1,239 @@
+<!-- pages/partner-register/partner-register.component.html -->
+<div class="partner-register-container">
+    <!-- Hero Section -->
+    <section class="partner-hero">
+        <div class="partner-hero__content">
+            <span class="partner-badge">{{ 'PARTNER.BADGE' | translate }}</span>
+            <h1>{{ 'PARTNER.TITLE' | translate }}</h1>
+            <p>{{ 'PARTNER.DESC' | translate }}</p>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section class="partner-form-section">
+        <div class="partner-form-wrapper">
+            <!-- Progress Steps -->
+            <div class="partner-steps">
+                <div class="partner-steps__bar">
+                    <div class="partner-steps__progress" [style.width.%]="((currentStep - 1) / (totalSteps - 1)) * 100">
+                    </div>
+                </div>
+                <div class="partner-steps__items">
+                    @for (step of [1, 2, 3]; track step) {
+                    <div class="partner-step" [class.active]="isStepActive(step)"
+                        [class.completed]="isStepCompleted(step)">
+                        <div class="partner-step__circle">
+                            @if (isStepCompleted(step)) {
+                            <i class="fa-solid fa-check"></i>
+                            } @else {
+                            <i [class]="getStepIcon(step)"></i>
+                            }
+                        </div>
+                        <span class="partner-step__label">{{ getStepLabel(step) }}</span>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Form -->
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                <!-- Step 1: Personal Info -->
+                @if (currentStep === 1) {
+                <div class="partner-step-content">
+                    <h2 class="step-title">{{ 'PARTNER.STEP_1_TITLE' | translate }}</h2>
+                    <p class="step-desc">{{ 'PARTNER.STEP_1_DESC' | translate }}</p>
+
+                    <div class="form-grid">
+                        <!-- Full Name -->
+                        <div class="form-group">
+                            <app-input formControlName="fullName" [label]="'PARTNER.FULL_NAME' | translate"
+                                [placeholder]="'PARTNER.FULL_NAME_PLACEHOLDER' | translate" [id]="'fullName'">
+                            </app-input>
+                            <!-- Lỗi tự động hiển thị qua InputComponent -->
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group">
+                            <app-input formControlName="email" type="email" [label]="'PARTNER.EMAIL' | translate"
+                                [placeholder]="'PARTNER.EMAIL_PLACEHOLDER' | translate" [id]="'email'">
+                            </app-input>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="form-group">
+                            <app-input formControlName="phone" type="tel" [label]="'PARTNER.PHONE' | translate"
+                                [placeholder]="'PARTNER.PHONE_PLACEHOLDER' | translate" [id]="'phone'">
+                            </app-input>
+                        </div>
+
+                        <!-- Position -->
+                        <div class="form-group">
+                            <app-input formControlName="position" [label]="'PARTNER.POSITION' | translate"
+                                [placeholder]="'PARTNER.POSITION_PLACEHOLDER' | translate" [id]="'position'">
+                            </app-input>
+                        </div>
+                    </div>
+                </div>
+                }
+
+                <!-- Step 2: Business Info -->
+                @if (currentStep === 2) {
+                <div class="partner-step-content">
+                    <h2 class="step-title">{{ 'PARTNER.STEP_2_TITLE' | translate }}</h2>
+                    <p class="step-desc">{{ 'PARTNER.STEP_2_DESC' | translate }}</p>
+
+                    <div class="form-grid">
+                        <!-- Company Name -->
+                        <div class="form-group">
+                            <app-input formControlName="companyName" [label]="'PARTNER.COMPANY_NAME' | translate"
+                                [placeholder]="'PARTNER.COMPANY_NAME_PLACEHOLDER' | translate" [id]="'companyName'">
+                            </app-input>
+                        </div>
+
+                        <!-- Company Tax -->
+                        <div class="form-group">
+                            <app-input formControlName="companyTax" [label]="'PARTNER.COMPANY_TAX' | translate"
+                                [placeholder]="'PARTNER.COMPANY_TAX_PLACEHOLDER' | translate" [id]="'companyTax'">
+                            </app-input>
+                        </div>
+
+                        <!-- Business Type -->
+                        <div class="form-group">
+                            <label>{{ 'PARTNER.BUSINESS_TYPE' | translate }} <span class="required">*</span></label>
+                            <select formControlName="businessType" class="form-select"
+                                [class.error]="registerForm.get('businessType')?.invalid && registerForm.get('businessType')?.touched">
+                                <option value="">{{ 'PARTNER.BUSINESS_TYPE_PLACEHOLDER' | translate }}</option>
+                                @for (type of businessTypes; track type.value) {
+                                <option [value]="type.value">{{ type.label }}</option>
+                                }
+                            </select>
+                            @if (registerForm.get('businessType')?.invalid && registerForm.get('businessType')?.touched)
+                            {
+                            <span class="error-text">{{ 'PARTNER.BUSINESS_TYPE_ERROR' | translate }}</span>
+                            }
+                        </div>
+
+                        <!-- Company Size -->
+                        <div class="form-group">
+                            <label>{{ 'PARTNER.COMPANY_SIZE' | translate }} <span class="required">*</span></label>
+                            <select formControlName="companySize" class="form-select"
+                                [class.error]="registerForm.get('companySize')?.invalid && registerForm.get('companySize')?.touched">
+                                <option value="">{{ 'PARTNER.COMPANY_SIZE_PLACEHOLDER' | translate }}</option>
+                                <option value="1-10">1 - 10 nhân viên</option>
+                                <option value="11-50">11 - 50 nhân viên</option>
+                                <option value="51-200">51 - 200 nhân viên</option>
+                                <option value="200+">200+ nhân viên</option>
+                            </select>
+                            @if (registerForm.get('companySize')?.invalid && registerForm.get('companySize')?.touched) {
+                            <span class="error-text">{{ 'PARTNER.COMPANY_SIZE_ERROR' | translate }}</span>
+                            }
+                        </div>
+
+                        <!-- Company Address -->
+                        <div class="form-group full-width">
+                            <app-input formControlName="companyAddress" [label]="'PARTNER.COMPANY_ADDRESS' | translate"
+                                [placeholder]="'PARTNER.COMPANY_ADDRESS_PLACEHOLDER' | translate"
+                                [id]="'companyAddress'">
+                            </app-input>
+                        </div>
+
+                        <!-- Company Website -->
+                        <div class="form-group">
+                            <app-input formControlName="companyWebsite" [label]="'PARTNER.COMPANY_WEBSITE' | translate"
+                                [placeholder]="'PARTNER.COMPANY_WEBSITE_PLACEHOLDER' | translate"
+                                [id]="'companyWebsite'">
+                            </app-input>
+                        </div>
+                    </div>
+                </div>
+                }
+
+                <!-- Step 3: Confirmation -->
+                @if (currentStep === 3) {
+                <div class="partner-step-content">
+                    <h2 class="step-title">{{ 'PARTNER.STEP_3_TITLE' | translate }}</h2>
+                    <p class="step-desc">{{ 'PARTNER.STEP_3_DESC' | translate }}</p>
+
+                    <div class="summary-box">
+                        <h3>{{ 'PARTNER.SUMMARY_TITLE' | translate }}</h3>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <span class="summary-label">{{ 'PARTNER.FULL_NAME' | translate }}</span>
+                                <span class="summary-value">{{ registerForm.get('fullName')?.value || '---' }}</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">{{ 'PARTNER.EMAIL' | translate }}</span>
+                                <span class="summary-value">{{ registerForm.get('email')?.value || '---' }}</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">{{ 'PARTNER.PHONE' | translate }}</span>
+                                <span class="summary-value">{{ registerForm.get('phone')?.value || '---' }}</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">{{ 'PARTNER.COMPANY_NAME' | translate }}</span>
+                                <span class="summary-value">{{ registerForm.get('companyName')?.value || '---' }}</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">{{ 'PARTNER.BUSINESS_TYPE' | translate }}</span>
+                                <span class="summary-value">{{
+                                    getBusinessTypeLabel(registerForm.get('businessType')?.value) }}</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">{{ 'PARTNER.COMPANY_SIZE' | translate }}</span>
+                                <span class="summary-value">{{ registerForm.get('companySize')?.value || '---' }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Terms -->
+                    <div class="form-group terms-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" formControlName="agreeTerms">
+                            <span>{{ 'PARTNER.AGREE_TERMS' | translate }}</span>
+                        </label>
+                        @if (registerForm.get('agreeTerms')?.invalid && registerForm.get('agreeTerms')?.touched) {
+                        <span class="error-text">{{ 'PARTNER.AGREE_TERMS_ERROR' | translate }}</span>
+                        }
+                    </div>
+
+                    <!-- Note -->
+                    <div class="form-group">
+                        <app-input formControlName="note" [label]="'PARTNER.NOTE' | translate"
+                            [placeholder]="'PARTNER.NOTE_PLACEHOLDER' | translate" [id]="'note'">
+                        </app-input>
+                    </div>
+                </div>
+                }
+
+                <!-- Navigation Buttons -->
+                <div class="form-actions">
+                    <!-- Nút Back -->
+                    @if (currentStep > 1) {
+                    <app-button type="button" variant="secondary" size="md" (click)="prevStep()" class="gap-2">
+                        <i class="fa-solid fa-arrow-left mr-2"></i>
+                        {{ 'PARTNER.BACK' | translate }}
+                    </app-button>
+                    }
+
+                    <!-- Nút Continue -->
+                    @if (currentStep < totalSteps) { <app-button type="button" variant="primary" size="md" class="gap-2"
+                        (click)="nextStep()">
+                        {{ 'PARTNER.CONTINUE' | translate }}
+                        <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </app-button>
+                        }
+
+                        <!-- Nút Submit -->
+                        @if (currentStep === totalSteps) {
+                        <app-button type="submit" variant="primary" size="lg" [loading]="isLoading" class="gap-2"
+                            [disabled]="isLoading">
+                            @if (!isLoading) {
+                            <i class="fa-regular fa-paper-plane mr-2"></i>
+                            }
+                            {{ 'PARTNER.SUBMIT' | translate }}
+                        </app-button>
+                        }
+            </form>
+        </div>
+    </section>
+</div>
