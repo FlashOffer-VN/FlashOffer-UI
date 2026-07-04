@@ -7,6 +7,10 @@
     "NAV_COMMUNITY": "Community",
     "BUTTON_JOIN_CTV": "Join as Collaborator",
     "BUTTON_JOIN_SME": "Connect with SME",
+    "ERROR": {
+        "ADMIN_ACCESS_DENIED": "You don't have permission to access Admin!",
+        "GENERAL": "An error occurred!"
+    },
     "FOOTER_DESC": "Empowering independence through collective power.",
     "FOOTER_SOLUTIONS": "SOLUTIONS",
     "FOOTER_BUY_GROUP": "Group buying",

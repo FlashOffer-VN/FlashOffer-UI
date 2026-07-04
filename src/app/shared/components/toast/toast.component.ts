@@ -1,3 +1,4 @@
+// shared/components/toast/toast.component.ts
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -55,6 +56,7 @@ export class ToastComponent implements OnInit, OnDestroy {
   @Input() duration = 3000;
   @Output() closed = new EventEmitter<void>();
 
+  // ✅ Đổi thành public để có thể set từ bên ngoài
   visible = true;
   private timer: any;
 
@@ -98,5 +100,13 @@ export class ToastComponent implements OnInit, OnDestroy {
   close() {
     this.visible = false;
     this.closed.emit();
+  }
+
+  // ✅ Thêm method để reset và show lại
+  show() {
+    this.visible = true;
+    if (this.duration > 0) {
+      this.timer = setTimeout(() => this.close(), this.duration);
+    }
   }
 }

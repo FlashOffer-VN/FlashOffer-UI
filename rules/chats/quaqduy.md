@@ -1,4 +1,6 @@
-## 📋 BẢN FULL QUY TẮC DỰ ÁN FLASHOFFER UI (ĐẦY ĐỦ)
+---
+
+## 📋 BẢN FULL QUY TẮC DỰ ÁN FLASHOFFER UI (ĐẦY ĐỦ - CẬP NHẬT)
 
 ---
 
@@ -10,6 +12,7 @@ src/app/
 │   ├── services/
 │   │   ├── api.service.ts          # Base HTTP
 │   │   ├── auth.service.ts         # Auth logic
+│   │   ├── toast.service.ts        # Toast/Notification logic ⭐ THÊM MỚI
 │   │   ├── product.service.ts      # Product logic
 │   │   ├── order.service.ts        # Order logic
 │   │   └── app.service.ts          # Tổng hợp tất cả service
@@ -59,6 +62,7 @@ src/app/
 |------------|-------|
 | **ApiService** | Chỉ gọi HTTP, không xử lý logic |
 | **{Tên}Service** | Xử lý logic nghiệp vụ, gọi ApiService |
+| **ToastService** | Quản lý hiển thị toast/notification |
 | **AppService** | Tập trung tất cả service, dùng 1 lần inject |
 | **Không inject service lẻ** | Luôn qua AppService trong component |
 | **Không circular dependency** | Service con KHÔNG inject AppService |
@@ -67,7 +71,7 @@ src/app/
 ```
 Bước 1: Tạo Model trong core/models/{tên}.model.ts
 Bước 2: Tạo Service trong core/services/{tên}.service.ts
-Bước 3: Inject ApiService vào Service
+Bước 3: Inject ApiService vào Service (nếu cần)
 Bước 4: Viết methods (get, post, put, delete)
 Bước 5: Import Service vào AppService
 Bước 6: Export public property trong AppService
@@ -230,6 +234,16 @@ protected baseUrl = environment.apiUrl;
 - **Thống nhất UI** toàn bộ dự án
 - **Không tự viết button, input, loading, toast** nếu đã có sẵn
 - Nếu cần style khác, extend từ component hiện có
+
+**ToastService - Quản lý thông báo: ⭐ THÊM MỚI**
+| Method | Mô tả |
+|--------|-------|
+| `showToast(message, type, duration)` | Hiển thị toast với type |
+| `showSuccess(message, duration)` | Toast success |
+| `showError(message, duration)` | Toast error |
+| `showWarning(message, duration)` | Toast warning |
+| `showInfo(message, duration)` | Toast info |
+| `dismiss()` | Đóng toast |
 
 **Auth Pages:**
 | Component | Path | Mô tả |
@@ -459,65 +473,89 @@ export const routes: Routes = [
 | 14 | **Guard** | Luôn có guard cho route cần bảo vệ |
 | 15 | **Standalone components** | Tất cả component đều standalone |
 | 16 | **Dùng component chung** | Ưu tiên dùng Button, Input, Toast, Modal, Loading có sẵn |
+| 17 | **Toast qua AppService** ⭐ | Luôn dùng `this._appService.showSuccess()` hoặc `this._appService.showError()` để hiển thị toast, KHÔNG tự new ToastComponent() |
 
 ---
 
 ### 11. VÍ DỤ CHUẨN
 
+**✅ ĐÚNG - Dùng Toast qua AppService:**
 ```typescript
-// ✅ ĐÚNG
 import { AppService } from '@core/services/app.service';
 import { ButtonComponent } from '@shared/components/button/button.component';
-import { ToastComponent } from '@shared/components/toast/toast.component';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, ButtonComponent, ToastComponent],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, ButtonComponent],
   templateUrl: './login.component.html'
 })
 export class LoginComponent {
-  constructor(private _appService: AppService) {}
+  constructor(private _appService: AppService, private router: Router) {}
   
   login() {
     this._appService.auth.login(data).subscribe({
       next: (response) => {
-        // ✅ Dùng ToastComponent
-        this.showToast(this._appService.instant('SUCCESS.LOGIN'), 'success');
+        // ✅ Dùng showSuccess
+        this._appService.showSuccess(
+          this._appService.instant('SUCCESS.LOGIN')
+        );
         if (response?.data?.role === 'Admin') {
           this.router.navigate(['/admin/dashboard']);
         }
       },
       error: (err) => {
-        const msg = err.error?.errors?.[0] || err.error?.message || this._appService.instant('ERROR.LOGIN_FAILED');
-        // ✅ Dùng ToastComponent
-        this.showToast(msg, 'error');
+        const msg = err.error?.errors?.[0] || 
+                   err.error?.message || 
+                   this._appService.instant('ERROR.LOGIN_FAILED');
+        // ✅ Dùng showError
+        this._appService.showError(msg);
       }
     });
   }
 }
 ```
 
+**✅ ĐÚNG - Dùng showToast với type:**
 ```typescript
-// ❌ SAI
+this._appService.showToast('Cảnh báo!', 'warning');
+this._appService.showToast('Thông tin', 'info');
+this._appService.showToast('Thành công!', 'success');
+this._appService.showToast('Lỗi!', 'error');
+```
+
+**❌ SAI - Tự new ToastComponent:**
+```typescript
+import { ToastComponent } from '@shared/components/toast/toast.component';
+
+@Component({...})
+export class LoginComponent {
+  login() {
+    // ❌ KHÔNG được new Component
+    const toast = new ToastComponent();  // SAI
+    toast.message = 'Hello';
+    toast.show();
+  }
+}
+```
+
+**❌ SAI - Inject service lẻ:**
+```typescript
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '@core/services/auth.service';
+import { ToastService } from '@core/services/toast.service';  // ❌ SAI
 
 @Component({...})
 export class LoginComponent {
   constructor(
-    private translate: TranslateService,  // ❌ Không dùng direct
-    private auth: AuthService             // ❌ Không dùng direct
+    private translate: TranslateService,  // ❌ SAI
+    private auth: AuthService,            // ❌ SAI
+    private toast: ToastService           // ❌ SAI
   ) {}
-  
-  login() {
-    this.auth.login(data).subscribe({
-      next: () => {
-        // ❌ Hardcode + không dùng ToastComponent
-        this.showToast('Đăng nhập thành công!', 'success');
-      }
-    });
-  }
 }
 ```
 
@@ -540,6 +578,7 @@ export class LoginComponent {
 | 11 | Error handling + Translate | ✅ |
 | 12 | Guest Header + Secret Admin Button | ✅ |
 | 13 | Shared Components (Button, Input, Toast, Modal, Loading) | ✅ |
+| 14 | ToastService | ✅ |
 
 ---
 
@@ -552,3 +591,16 @@ export class LoginComponent {
 | 3 | Admin - User Management | Thấp |
 | 4 | Admin - Product Management | Thấp |
 | 5 | Admin - Order Management | Thấp |
+
+---
+
+## 📝 TÓM TẮT CẬP NHẬT:
+
+| Mục | Nội dung |
+|-----|----------|
+| **Phần 1** | Thêm `toast.service.ts` vào cấu trúc thư mục |
+| **Phần 2** | Thêm ToastService vào nguyên tắc service |
+| **Phần 7** | Thêm bảng mô tả ToastService methods |
+| **Phần 10** | Thêm rule #17: Toast qua AppService |
+| **Phần 11** | Cập nhật ví dụ đúng/sai về toast |
+| **Phần 12** | Thêm ToastService vào danh sách hoàn thành |
