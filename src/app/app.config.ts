@@ -1,10 +1,11 @@
 import { ApplicationConfig, importProvidersFrom, APP_INITIALIZER } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { routes } from './app.routes';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -13,12 +14,12 @@ export function HttpLoaderFactory(http: HttpClient) {
 function appInitializer(translate: TranslateService) {
   return () => {
     translate.addLangs(['en', 'vi']);
-    translate.setDefaultLang('vi'); // Primary default
+    translate.setDefaultLang('vi');
 
     const browserLang = translate.getBrowserLang();
     const savedLang = localStorage.getItem('language');
 
-    let langToUse = 'vi'; // Final fallback
+    let langToUse = 'vi';
 
     if (savedLang) {
       langToUse = savedLang;
@@ -26,15 +27,18 @@ function appInitializer(translate: TranslateService) {
       langToUse = browserLang.includes('vi') ? 'vi' : 'en';
     }
 
-    translate.use(langToUse); // Set initial language
-    localStorage.setItem('language', langToUse); // Persist initial determined language
+    translate.use(langToUse);
+    localStorage.setItem('language', langToUse);
   };
 }
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(),
+
+    // ✅ Thêm withInterceptorsFromDi để hỗ trợ Interceptor cũ
+    provideHttpClient(withInterceptorsFromDi()),
+
     importProvidersFrom(TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -42,10 +46,19 @@ export const appConfig: ApplicationConfig = {
         deps: [HttpClient]
       }
     })),
+
+    // ✅ Thêm APP_INITIALIZER
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializer,
       deps: [TranslateService],
+      multi: true
+    },
+
+    // ✅ THÊM MỚI: Đăng ký AuthInterceptor
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
       multi: true
     }
   ]

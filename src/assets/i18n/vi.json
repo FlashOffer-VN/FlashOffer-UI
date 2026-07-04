@@ -7,6 +7,10 @@
     "NAV_COMMUNITY": "Cộng Đồng",
     "BUTTON_JOIN_CTV": "Tham gia CTV",
     "BUTTON_JOIN_SME": "Kết nối với SME",
+    "ERROR": {
+        "ADMIN_ACCESS_DENIED": "Bạn không có quyền truy cập Admin!",
+        "GENERAL": "Đã có lỗi xảy ra!"
+    },
     "FOOTER_DESC": "Trao quyền cho sự độc lập của tất cả thông qua sức mạnh tập thể.",
     "FOOTER_SOLUTIONS": "GIẢI PHÁP",
     "FOOTER_BUY_GROUP": "Mua hàng nhóm",

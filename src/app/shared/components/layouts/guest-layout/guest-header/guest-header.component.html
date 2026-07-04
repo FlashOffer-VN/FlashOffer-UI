@@ -1,8 +1,12 @@
+<!-- shared/components/layouts/guest-layout/guest-header/guest-header.component.html -->
 <header class="sme-header">
+    <!-- Logo -->
     <a class="sme-logo" routerLink="/home">
         <span class="logo-text">{{ 'APP_NAME' | translate }}</span>
         <span class="logo-dot"></span>
     </a>
+
+    <!-- Navigation -->
     <nav class="sme-nav">
         <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
             {{ 'NAV_SOLUTIONS' | translate }}
@@ -17,16 +21,34 @@
             {{ 'NAV_COMMUNITY' | translate }}
         </a>
     </nav>
+
+    <!-- Actions -->
     <div class="sme-header-actions">
         <!-- Language Switcher -->
         <app-language-switcher></app-language-switcher>
 
-        <!-- ✅ Secret Admin Button -->
-        <a *ngIf="showAdminButton" (click)="goToAdmin()"
+        <!-- ✅ Secret Admin Button (hiện khi gõ "admin") -->
+        <a *ngIf="showAdminButton && !isLoggedIn" (click)="goToAdmin()"
             class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors cursor-pointer text-sm font-medium">
             {{ 'BUTTON_ADMIN' | translate }}
         </a>
-        <a class="sme-button sme-button--ghost" routerLink="/register-ctv">{{ 'BUTTON_JOIN_CTV' | translate }}</a>
-        <a class="sme-button sme-button--primary" routerLink="/connect-sme">{{ 'BUTTON_JOIN_SME' | translate }}</a>
+
+        <!-- CTV & SME Buttons -->
+        <a class="sme-button sme-button--ghost" routerLink="/register-ctv">
+            {{ 'BUTTON_JOIN_CTV' | translate }}
+        </a>
+        <a class="sme-button sme-button--primary" routerLink="/connect-sme">
+            {{ 'BUTTON_JOIN_SME' | translate }}
+        </a>
+
+        <!-- ✅ User Info (hiện khi đã login) -->
+        <span *ngIf="isLoggedIn" class="text-sm text-gray-600 cursor-pointer" (click)="goToAdmin()">
+            <i class="fa-regular fa-user mr-1"></i>
+            {{ username }}
+        </span>
+        <!-- ✅ Logout Button (hiện khi đã login + đã gõ admin) -->
+        <!-- <a *ngIf="isLoggedIn" (click)="logout()" class="text-sm text-gray-600 cursor-pointer">
+            <i class="fa-solid fa-right-from-bracket mr-1"></i>
+        </a> -->
     </div>
 </header>
