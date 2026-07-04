@@ -53,3 +53,8 @@
         color: var(--primary) !important;
     }
 }
+
+.cursor-pointer {
+    cursor: pointer !important;
+    user-select: none !important;
+}

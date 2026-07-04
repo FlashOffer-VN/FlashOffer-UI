@@ -1,25 +1,35 @@
+// shared/components/layouts/admin-layout/admin-layout.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink } from '@angular/router';
-import { AppService } from '../../../../core/services/app.service';
+import { RouterOutlet } from '@angular/router';
 import { Subscription } from 'rxjs';
+
+import { AppService } from '../../../../core/services/app.service';
+import { AdminSidebarComponent } from './admin-sidebar/admin-sidebar.component';
+import { AdminHeaderComponent } from './admin-header/admin-header.component';
+import { AdminFooterComponent } from './admin-footer/admin-footer.component';
 
 @Component({
     selector: 'app-admin-layout',
     standalone: true,
-    imports: [CommonModule, RouterOutlet, RouterLink],
+    imports: [
+        CommonModule,
+        RouterOutlet,
+        AdminSidebarComponent,
+        AdminHeaderComponent,
+        AdminFooterComponent
+    ],
     templateUrl: './admin-layout.component.html',
     styleUrls: ['./admin-layout.component.css']
 })
 export class AdminLayoutComponent implements OnInit, OnDestroy {
     isSidebarOpen = true;
-    logoPath: string = 'assets/logos/kindi-logo-dark-vi.svg';
-    logoAlt: string = 'Kindi Admin';
+    logoPath = 'logo-full-vn.svg';
     private langSubscription: Subscription | null = null;
 
     constructor(private _appService: AppService) { }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.updateLogo();
 
         this.langSubscription = this._appService.onLanguageChange().subscribe(() => {
@@ -27,16 +37,18 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
         });
     }
 
-    private updateLogo() {
+    private updateLogo(): void {
         const lang = this._appService.getCurrentLang();
-        this.logoPath = lang === 'en' ? 'logo-full-en.svg' : 'logo-full-vn.svg';
+        this.logoPath = lang === 'en'
+            ? 'logo-full-en.svg'
+            : 'logo-full-vn.svg';
     }
 
-    toggleSidebar() {
+    toggleSidebar(): void {
         this.isSidebarOpen = !this.isSidebarOpen;
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         if (this.langSubscription) {
             this.langSubscription.unsubscribe();
         }

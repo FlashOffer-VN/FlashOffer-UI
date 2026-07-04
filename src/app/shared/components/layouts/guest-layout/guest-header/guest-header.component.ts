@@ -1,24 +1,37 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+// shared/components/layouts/guest-layout/guest-header/guest-header.component.ts
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+
 import { LanguageSwitcherComponent } from '../../../language-switcher/language-switcher.component';
 import { AppService } from '../../../../../core/services/app.service';
 import { UserRole } from '../../../../../core/models/auth.model';
-import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-guest-header',
     standalone: true,
-    imports: [CommonModule, RouterLink, RouterLinkActive, TranslateModule, LanguageSwitcherComponent],
+    imports: [
+        CommonModule,
+        RouterLink,
+        RouterLinkActive,
+        TranslateModule,
+        LanguageSwitcherComponent
+    ],
     templateUrl: './guest-header.component.html',
     styleUrls: ['./guest-header.component.css']
 })
 export class GuestHeaderComponent implements OnInit, OnDestroy {
+    // ✅ Secret Admin Button
     showAdminButton = false;
+
+    // ✅ Auth state
     isLoggedIn = false;
     isAdmin = false;
     username = '';
+
+    // ✅ Secret code
     private keySequence: string[] = [];
     private readonly SECRET_CODE = ['a', 'd', 'm', 'i', 'n'];
     private authSubscription: Subscription | null = null;
@@ -29,80 +42,86 @@ export class GuestHeaderComponent implements OnInit, OnDestroy {
         private _router: Router
     ) { }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.checkAuth();
-        this.initSecretListener();
     }
 
     // ✅ Kiểm tra trạng thái đăng nhập
-    checkAuth() {
+    checkAuth(): void {
         this.authSubscription = this._appService.auth.currentUser$.subscribe(user => {
             this.isLoggedIn = !!user;
-            this.isAdmin = user?.role === UserRole.ADMIN;
+            this.isAdmin = user?.role?.toLowerCase() === UserRole.ADMIN.toLowerCase();
             this.username = user?.username || '';
         });
     }
 
-    // ✅ Xử lý khi bấm nút Admin
-    goToAdmin() {
+    // ✅ Secret code listener - gõ "admin" để hiện nút
+    @HostListener('document:keydown', ['$event'])
+    onKeyDown(event: KeyboardEvent): void {
+        const key = event?.key?.trim().toLowerCase();
+        if (!key) return;
+
+        this.keySequence.push(key);
+
+        // Giữ tối đa 5 ký tự
+        if (this.keySequence.length > 5) {
+            this.keySequence.shift();
+        }
+
+        // Kiểm tra secret code "admin"
+        const typed = this.keySequence.join('');
+        if (typed.includes('admin')) {
+            this.showAdminButton = true;
+            this.keySequence = [];
+
+            // Clear timeout cũ nếu có
+            if (this.timeoutId) {
+                clearTimeout(this.timeoutId);
+            }
+
+            // Tự động ẩn sau 10 giây
+            this.timeoutId = setTimeout(() => {
+                this.showAdminButton = false;
+            }, 10000);
+        }
+    }
+
+    // ✅ Xử lý khi bấm nút Admin (đã gộp, không duplicate)
+    goToAdmin(): void {
         if (this.isLoggedIn && this.isAdmin) {
-            // ✅ Đã login + là Admin → vào thẳng Dashboard
+            // Đã login + là Admin → vào thẳng Dashboard
             this._router.navigate(['/admin/dashboard']);
         } else if (this.isLoggedIn && !this.isAdmin) {
-            // ✅ Đã login nhưng không phải Admin → thông báo
-            // this._appService.showToast?.('Bạn không có quyền truy cập Admin!', 'error');
-            alert('Bạn không có quyền truy cập Admin!');
+            // ✅ Dùng translate cho message error
+            this._appService.showError(
+                this._appService.instant('ERROR.ADMIN_ACCESS_DENIED')
+            );
         } else {
-            // ✅ Chưa login → vào trang Admin Login
+            // Chưa login → vào trang Admin Login
             this._router.navigate(['/admin-login']);
         }
     }
 
-    // ✅ Secret code listener
-    initSecretListener() {
-        document.addEventListener('keydown', (event) => {
-            const key = event?.key?.trim().toLowerCase();
-            if (!key) return;
-
-            this.keySequence.push(key);
-
-            // Giữ tối đa 5 ký tự
-            if (this.keySequence.length > 5) {
-                this.keySequence.shift();
-            }
-
-            // Kiểm tra secret code "admin"
-            const typed = this.keySequence.join('');
-            if (typed.includes('admin')) {
-                this.showAdminButton = true;
-                this.keySequence = [];
-
-                // Clear timeout cũ nếu có
-                if (this.timeoutId) {
-                    clearTimeout(this.timeoutId);
-                }
-
-                // Tự động ẩn sau 10 giây
-                this.timeoutId = setTimeout(() => {
-                    this.showAdminButton = false;
-                }, 10000);
-            }
-        });
-    }
-
     // ✅ Logout
-    logout() {
+    logout(): void {
         this._appService.auth.logout();
     }
 
-    ngOnDestroy() {
+    // ✅ Helper để lấy text đã dịch trong HTML (nếu cần)
+    getTranslated(key: string): string {
+        return this._appService.instant(key);
+    }
+
+    ngOnDestroy(): void {
+        // Cleanup subscriptions
         if (this.authSubscription) {
             this.authSubscription.unsubscribe();
         }
+
+        // Clear timeout
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
+            this.timeoutId = null;
         }
-        // Remove event listener
-        document.removeEventListener('keydown', this.initSecretListener);
     }
 }

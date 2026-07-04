@@ -17,4 +17,17 @@ export class AppComponent {
         // Translate đã được init trong app.config, AppService chỉ dùng để gọi
         console.log('Current lang:', this.app.getCurrentLang());
     }
+
+    // ngOnInit() {
+    //     // ✅ Xử lý BFCache - Reload lại khi quay lại trang
+    //     this.router.events.pipe(
+    //         filter(event => event instanceof NavigationStart)
+    //     ).subscribe((event: NavigationStart) => {
+    //         // Kiểm tra nếu là back/forward
+    //         if (event.navigationTrigger === 'popstate') {
+    //             // Reload nhẹ để refresh state
+    //             // window.location.reload(); // Có thể gây loop, không khuyến khích
+    //         }
+    //     });
+    // }
 }

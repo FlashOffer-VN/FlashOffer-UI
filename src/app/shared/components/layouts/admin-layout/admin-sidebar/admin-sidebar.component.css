@@ -1,0 +1,36 @@
+/* shared/components/layouts/admin-layout/admin-sidebar/admin-sidebar.component.css */
+:host {
+    display: block;
+}
+
+.bg-secondary {
+    background-color: #1F2937;
+}
+
+.bg-secondary-light {
+    background-color: #374151;
+}
+
+.bg-primary {
+    background-color: #7C3AED;
+}
+
+.text-gray-300 {
+    color: #D1D5DB;
+}
+
+.text-gray-400 {
+    color: #9CA3AF;
+}
+
+.text-red-400 {
+    color: #F87171;
+}
+
+.hover\:bg-red-500\/10:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+.hover\:text-red-300:hover {
+    color: #FCA5A5;
+}

@@ -1,0 +1,16 @@
+/* shared/components/layouts/admin-layout/admin-header/admin-header.component.css */
+:host {
+    display: block;
+}
+
+.text-secondary {
+    color: #1F2937;
+}
+
+.bg-danger {
+    background-color: #EF4444;
+}
+
+.bg-primary {
+    background-color: #7C3AED;
+}
