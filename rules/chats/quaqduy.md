@@ -1,6 +1,4 @@
----
-
-## 📋 BẢN FULL QUY TẮC DỰ ÁN FLASHOFFER UI (ĐẦY ĐỦ - CẬP NHẬT)
+## 📋 BẢN FULL QUY TẮC DỰ ÁN KINDI UI (ĐẦY ĐỦ - CẬP NHẬT)
 
 ---
 
@@ -12,7 +10,7 @@ src/app/
 │   ├── services/
 │   │   ├── api.service.ts          # Base HTTP
 │   │   ├── auth.service.ts         # Auth logic
-│   │   ├── toast.service.ts        # Toast/Notification logic ⭐ THÊM MỚI
+│   │   ├── toast.service.ts        # Toast/Notification logic
 │   │   ├── product.service.ts      # Product logic
 │   │   ├── order.service.ts        # Order logic
 │   │   └── app.service.ts          # Tổng hợp tất cả service
@@ -33,6 +31,9 @@ src/app/
 │       │   │   ├── guest-header/
 │       │   │   └── guest-footer/
 │       │   ├── admin-layout/
+│       │   │   ├── admin-sidebar/
+│       │   │   ├── admin-header/
+│       │   │   └── admin-footer/
 │       │   └── user-layout/
 │       ├── language-switcher/
 │       ├── toast/
@@ -122,7 +123,7 @@ export interface ApiResponse<T> {
 
 ---
 
-### 4. TRANSLATE
+### 4. TRANSLATE (I18N)
 
 **Cấu hình (app.config.ts):**
 ```typescript
@@ -156,6 +157,36 @@ export const appConfig: ApplicationConfig = {
 - **TS**: `this._appService.instant('key')` hoặc `this._appService.get('key').subscribe()`
 - **Chỉ cần import AppService** là đủ dùng translate
 - **KHÔNG inject TranslateService trực tiếp vào component**
+
+**⭐ QUY TẮC TỔ CHỨC KEY I18N:**
+
+| Quy tắc | Mô tả | Ví dụ |
+|---------|-------|-------|
+| **Gom nhóm theo module** | Nhóm các key theo module/trang | `CONNECT_SME.*`, `ADMIN.*`, `AUTH.*` |
+| **Gom nhóm theo component** | Nhóm key theo component | `CONNECT_SME_CARD.*`, `LOGIN_FORM.*` |
+| **Key viết hoa + underscore** | Tất cả key viết hoa, cách nhau bằng `_` | `BUTTON_JOIN_CTV`, `ERROR.LOGIN_FAILED` |
+| **Dùng dấu chấm phân cấp** | Phân cấp bằng dấu chấm `.` | `CONNECT_SME.BADGE`, `ERROR.GENERAL` |
+| **Không hardcode text** | Tất cả text hiển thị đều qua translate | `{{ 'BUTTON_ADMIN' \| translate }}` |
+| **File riêng cho mỗi ngôn ngữ** | `vi.json` cho tiếng Việt, `en.json` cho tiếng Anh | `assets/i18n/vi.json`, `assets/i18n/en.json` |
+
+**Cấu trúc file i18n chuẩn:**
+```json
+{
+  "APP_NAME": "Kindi",
+  "MODULE_NAME": {
+    "KEY_1": "Giá trị 1",
+    "KEY_2": "Giá trị 2",
+    "SUB_GROUP": {
+      "SUB_KEY_1": "Giá trị con 1"
+    }
+  },
+  "COMPONENT_CARD": {
+    "CARD_1": "Tên card 1",
+    "CARD_1_DESC": "Mô tả card 1",
+    "CARD_1_FEATURE_1": "Tính năng 1"
+  }
+}
+```
 
 ---
 
@@ -216,6 +247,9 @@ protected baseUrl = environment.apiUrl;
 | `GuestHeaderComponent` | `shared/components/layouts/guest-layout/guest-header/` | Header guest có secret admin button |
 | `GuestFooterComponent` | `shared/components/layouts/guest-layout/guest-footer/` | Footer guest |
 | `AdminLayoutComponent` | `shared/components/layouts/admin-layout/` | Layout cho admin |
+| `AdminSidebarComponent` | `shared/components/layouts/admin-layout/admin-sidebar/` | Sidebar admin (menu + logout) |
+| `AdminHeaderComponent` | `shared/components/layouts/admin-layout/admin-header/` | Header admin (logo + user info) |
+| `AdminFooterComponent` | `shared/components/layouts/admin-layout/admin-footer/` | Footer admin |
 | `UserLayoutComponent` | `shared/components/layouts/user-layout/` | Layout cho user thường |
 
 **Shared Components (Helper):**
@@ -235,7 +269,7 @@ protected baseUrl = environment.apiUrl;
 - **Không tự viết button, input, loading, toast** nếu đã có sẵn
 - Nếu cần style khác, extend từ component hiện có
 
-**ToastService - Quản lý thông báo: ⭐ THÊM MỚI**
+**ToastService - Quản lý thông báo: ⭐**
 | Method | Mô tả |
 |--------|-------|
 | `showToast(message, type, duration)` | Hiển thị toast với type |
@@ -258,6 +292,7 @@ protected baseUrl = environment.apiUrl;
 | `HomeComponent` | `pages/home/` | Trang chủ |
 | `DashboardComponent` | `pages/admin/dashboard/` | Admin dashboard |
 | `ProfileComponent` | `pages/profile/` | User profile |
+| `ConnectSmeComponent` | `pages/connect-sme/` | Kết nối doanh nghiệp |
 
 ---
 
@@ -424,6 +459,7 @@ export const routes: Routes = [
       { path: 'suppliers', component: SuppliersComponent },
       { path: 'talent', component: TalentComponent },
       { path: 'community', component: CommunityComponent },
+      { path: 'partner', component: PartnerComponent },
     ]
   },
   // Admin routes (chỉ admin)
@@ -474,6 +510,9 @@ export const routes: Routes = [
 | 15 | **Standalone components** | Tất cả component đều standalone |
 | 16 | **Dùng component chung** | Ưu tiên dùng Button, Input, Toast, Modal, Loading có sẵn |
 | 17 | **Toast qua AppService** ⭐ | Luôn dùng `this._appService.showSuccess()` hoặc `this._appService.showError()` để hiển thị toast, KHÔNG tự new ToastComponent() |
+| 18 | **i18n gom nhóm** ⭐ | Gom nhóm key translate theo module/component, dùng dấu chấm phân cấp, viết hoa + underscore |
+| 19 | **Animation** ⭐ | Sử dụng `@angular/animations` cho hiệu ứng chuyển trang, fade, slide, stagger list |
+| 20 | **Number pipe với string** ⭐ | Khi dùng `| number` pipe, kiểm tra giá trị là number, nếu string thì hiển thị trực tiếp |
 
 ---
 
@@ -520,12 +559,55 @@ export class LoginComponent {
 }
 ```
 
-**✅ ĐÚNG - Dùng showToast với type:**
+**✅ ĐÚNG - Gom nhóm key i18n:**
+```json
+// vi.json
+{
+  "APP_NAME": "Kindi",
+  "CONNECT_SME": {
+    "BADGE": "Kết nối doanh nghiệp",
+    "TITLE": "Kết nối SME - Phát triển bền vững"
+  },
+  "CONNECT_SME_CARD": {
+    "FIND_SUPPLIER": "Tìm nhà cung cấp",
+    "GROUP_BUYING": "Mua chung - Tiết kiệm"
+  }
+}
+```
+
+```html
+<!-- HTML -->
+<h1>{{ 'CONNECT_SME.TITLE' | translate }}</h1>
+<h3>{{ 'CONNECT_SME_CARD.FIND_SUPPLIER' | translate }}</h3>
+```
+
+**✅ ĐÚNG - Xử lý number pipe với string:**
+```html
+<div class="package-price">
+  <span *ngIf="isNumeric(pkg.price)">{{ pkg.price | number }}đ</span>
+  <span *ngIf="!isNumeric(pkg.price)">{{ pkg.price }}</span>
+  <span class="package-period" *ngIf="isNumeric(pkg.price)">/tháng</span>
+</div>
+```
+
 ```typescript
-this._appService.showToast('Cảnh báo!', 'warning');
-this._appService.showToast('Thông tin', 'info');
-this._appService.showToast('Thành công!', 'success');
-this._appService.showToast('Lỗi!', 'error');
+isNumeric(value: any): boolean {
+  return !isNaN(parseFloat(value)) && isFinite(value);
+}
+```
+
+**✅ ĐÚNG - Animation:**
+```typescript
+import { routeAnimation } from './shared/animations/animations';
+
+@Component({
+  animations: [routeAnimation]
+})
+export class AppComponent {
+  prepareRoute(outlet: RouterOutlet) {
+    return outlet?.activatedRouteData?.['animation'] || 'default';
+  }
+}
 ```
 
 **❌ SAI - Tự new ToastComponent:**
@@ -541,6 +623,23 @@ export class LoginComponent {
     toast.show();
   }
 }
+```
+
+**❌ SAI - Key i18n phẳng, khó quản lý:**
+```json
+// vi.json - ❌ KHÔNG NÊN DÙNG
+{
+  "CONNECT_SME_TITLE": "Kết nối SME - Phát triển bền vững",
+  "CONNECT_SME_CARD_FIND_SUPPLIER": "Tìm nhà cung cấp",
+  "CONNECT_SME_CARD_GROUP_BUYING": "Mua chung - Tiết kiệm"
+}
+```
+
+**❌ SAI - Dùng number pipe với string:**
+```html
+<!-- ❌ SAI - Lỗi khi pkg.price là string "2.000.000" -->
+<span>{{ pkg.price | number }}đ</span>
+<!-- Lỗi: NG02100: InvalidPipeArgument: '2.000.000 is not a number' -->
 ```
 
 **❌ SAI - Inject service lẻ:**
@@ -579,6 +678,10 @@ export class LoginComponent {
 | 12 | Guest Header + Secret Admin Button | ✅ |
 | 13 | Shared Components (Button, Input, Toast, Modal, Loading) | ✅ |
 | 14 | ToastService | ✅ |
+| 15 | Admin Layout (tách component con) | ✅ |
+| 16 | Connect SME Page | ✅ |
+| 17 | Animation (route, fade, slide, stagger) | ✅ |
+| 18 | Scroll to top khi chuyển trang | ✅ |
 
 ---
 
@@ -598,9 +701,12 @@ export class LoginComponent {
 
 | Mục | Nội dung |
 |-----|----------|
-| **Phần 1** | Thêm `toast.service.ts` vào cấu trúc thư mục |
+| **Phần 1** | Thêm cấu trúc admin-layout con (sidebar, header, footer) |
 | **Phần 2** | Thêm ToastService vào nguyên tắc service |
-| **Phần 7** | Thêm bảng mô tả ToastService methods |
-| **Phần 10** | Thêm rule #17: Toast qua AppService |
-| **Phần 11** | Cập nhật ví dụ đúng/sai về toast |
-| **Phần 12** | Thêm ToastService vào danh sách hoàn thành |
+| **Phần 4** | ⭐ Thêm "QUY TẮC TỔ CHỨC KEY I18N" + đổi tên app thành Kindi |
+| **Phần 7** | Thêm bảng mô tả ToastService methods + Admin sub-components |
+| **Phần 10** | Thêm rule #17 (Toast), #18 (i18n), #19 (Animation), #20 (Number pipe) |
+| **Phần 11** | Thêm ví dụ đúng/sai về i18n, number pipe, animation |
+| **Phần 12** | Thêm ToastService + Admin Layout + Connect SME + Animation + Scroll to top |
+
+---

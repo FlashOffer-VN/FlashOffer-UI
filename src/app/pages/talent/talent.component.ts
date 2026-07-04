@@ -83,4 +83,8 @@ export class TalentComponent {
     getStars(rating: number): number[] {
         return Array(Math.floor(rating)).fill(0);
     }
+
+    isNumeric(value: any): boolean {
+        return !isNaN(parseFloat(value)) && isFinite(value);
+    }
 }

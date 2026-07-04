@@ -1,32 +1,27 @@
+// shared/components/language-switcher/language-switcher.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { AppService } from '../../../core/services/app.service';
 
 @Component({
     selector: 'app-language-switcher',
     standalone: true,
-    imports: [CommonModule, TranslateModule],
+    imports: [CommonModule],
     templateUrl: './language-switcher.component.html',
     styleUrls: ['./language-switcher.component.css']
 })
 export class LanguageSwitcherComponent implements OnInit {
-    currentLang: string = 'vi';
+    currentLang = 'vi';
 
-    constructor(private translate: TranslateService) { }
+    constructor(private _appService: AppService) { }
 
-    ngOnInit() {
-        // The initial language should already be set by appInitializer
-        this.currentLang = this.translate.currentLang;
-
-        // Subscribe to language changes from other parts of the app (e.g., appInitializer)
-        this.translate.onLangChange.subscribe(event => {
-            this.currentLang = event.lang;
-        });
+    ngOnInit(): void {
+        this.currentLang = this._appService.getCurrentLang();
     }
 
-    switchLanguage(lang: string) {
-        this.currentLang = lang;
-        this.translate.use(lang);
-        localStorage.setItem('language', lang);
+    toggleLanguage(): void {
+        const newLang = this.currentLang === 'vi' ? 'en' : 'vi';
+        this.currentLang = newLang;
+        this._appService.changeLanguage(newLang);
     }
 }

@@ -1,33 +1,39 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+// app.component.ts
+import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { ScrollToTopComponent } from './shared/components/scroll-to-top/scroll-to-top.component';
 import { AppService } from './core/services/app.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { routeAnimation } from './shared/animations/animations';
 
 @Component({
     selector: 'app-root',
     standalone: true,
     imports: [CommonModule, RouterOutlet, ScrollToTopComponent, TranslateModule],
     templateUrl: './app.html',
-    styleUrls: ['./app.css']
+    styleUrls: ['./app.css'],
+    animations: [routeAnimation]
 })
-export class AppComponent {
-    constructor(private app: AppService) {
-        // Translate đã được init trong app.config, AppService chỉ dùng để gọi
+export class AppComponent implements OnInit {
+    constructor(
+        private app: AppService,
+        private router: Router
+    ) {
         console.log('Current lang:', this.app.getCurrentLang());
     }
 
-    // ngOnInit() {
-    //     // ✅ Xử lý BFCache - Reload lại khi quay lại trang
-    //     this.router.events.pipe(
-    //         filter(event => event instanceof NavigationStart)
-    //     ).subscribe((event: NavigationStart) => {
-    //         // Kiểm tra nếu là back/forward
-    //         if (event.navigationTrigger === 'popstate') {
-    //             // Reload nhẹ để refresh state
-    //             // window.location.reload(); // Có thể gây loop, không khuyến khích
-    //         }
-    //     });
-    // }
+    ngOnInit() {
+        // ✅ Cuộn lên đầu khi chuyển trang
+        this.router.events.pipe(
+            filter(event => event instanceof NavigationEnd)
+        ).subscribe(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    prepareRoute(outlet: RouterOutlet) {
+        return outlet?.activatedRouteData?.['animation'] || 'default';
+    }
 }

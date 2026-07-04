@@ -1,33 +1,46 @@
-/* APP-INPUT */
+/* shared/components/input/input.component.css */
+
+/* ✅ Chỉ giữ lại CSS đặc biệt không có trong Tailwind */
 :host {
-    border: none !important;
     display: block;
     width: 100%;
 }
 
-/* Fix focus ring cho input */
-:host .focus-within\:ring-primary\/10:focus-within {
-    --tw-ring-color: rgba(124, 58, 237, 0.1) !important;
-}
-
-:host input:focus {
-    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2) !important;
-}
-
-/* Tắt border của input bên trong */
-:host input {
-    border: none !important;
-    border-width: 0 !important;
-}
-
-/* Dịch spinner sang trái */
-:host input[type="number"]::-webkit-inner-spin-button {
+/* Fix cho input number - spinner */
+input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: auto !important;
     margin-right: -2.5rem !important;
     margin-left: 0.5rem !important;
     opacity: 1 !important;
 }
 
-:host input[type="number"] {
+input[type="number"] {
     padding-right: 5rem !important;
+}
+
+/* Đảm bảo font inherit */
+.font-inherit {
+    font-family: inherit;
+}
+
+/* shared/components/input/input.component.css */
+:host,
+:host * {
+    border: none !important;
+}
+
+:host .flex {
+    border: none !important;
+}
+
+:host {
+    display: block;
+    width: 100%;
+    padding: 0 !important;
+    border: none !important;
+}
+
+:host .flex {
+    padding: 0 !important;
+    border: none !important;
 }

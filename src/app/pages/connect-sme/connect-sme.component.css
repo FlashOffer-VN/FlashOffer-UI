@@ -417,3 +417,56 @@
 .connect-card--offer:hover h3 {
     color: #8B5CF6;
 }
+
+/* ⭐ Card Partner - Màu vàng/ cam đặc trưng */
+.connect-card--partner {
+    background: linear-gradient(145deg, #FFF8E1, #FFF3CD);
+    border-color: #F59E0B;
+}
+
+.connect-card--partner:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px -12px rgba(245, 158, 11, 0.4);
+}
+
+.connect-card--partner .connect-card__icon {
+    background: #F59E0B;
+    color: white;
+}
+
+.connect-card--partner .connect-card__arrow {
+    color: #F59E0B;
+}
+
+.connect-card--partner:hover .connect-card__arrow {
+    color: #D97706;
+}
+
+/* Grid - 4 cards */
+.connect-sme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+}
+
+/* Responsive */
+@media (min-width: 1024px) {
+    .connect-sme-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 1023px) and (min-width: 768px) {
+    .connect-sme-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .connect-sme-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -75,9 +75,10 @@
                 <div class="package-badge" *ngIf="pkg.popular">{{ 'TALENT_POPULAR' | translate }}</div>
                 <h3>{{ pkg.name }}</h3>
                 <div class="package-price">
-                    <span *ngIf="pkg.price !== 'Liên hệ'">{{ pkg.price | number }}đ</span>
-                    <span *ngIf="pkg.price === 'Liên hệ'">{{ pkg.price }}</span>
-                    <span class="package-period" *ngIf="pkg.price !== 'Liên hệ'">/tháng</span>
+                    <!-- ✅ Kiểm tra nếu price là number thì dùng pipe, nếu là string thì hiển thị trực tiếp -->
+                    <span *ngIf="isNumeric(pkg.price)">{{ pkg.price | number }}đ</span>
+                    <span *ngIf="!isNumeric(pkg.price)">{{ pkg.price }}</span>
+                    <span class="package-period" *ngIf="isNumeric(pkg.price)">/tháng</span>
                 </div>
                 <ul class="package-features">
                     <li *ngFor="let feature of pkg.features">✓ {{ feature }}</li>
