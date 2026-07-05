@@ -7,10 +7,8 @@ import {
     forwardRef,
     OnInit
 } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 import { Validators } from '@angular/forms';
-
 import {
     ControlValueAccessor,
     NG_VALUE_ACCESSOR,
@@ -29,7 +27,7 @@ import {
         }
     ],
     templateUrl: './input.component.html',
-    styleUrl: './input.component.css'
+    styleUrls: ['./input.component.css']
 })
 export class InputComponent implements ControlValueAccessor, OnInit {
     @Input() id = '';
@@ -77,37 +75,15 @@ export class InputComponent implements ControlValueAccessor, OnInit {
 
     get errorMessage(): string {
         const errors = this.ngControl?.errors;
-
         if (!errors) return '';
 
-        if (errors['required']) {
-            return 'Trường này là bắt buộc';
-        }
-
-        if (errors['email']) {
-            return 'Email không hợp lệ';
-        }
-
-        if (errors['minlength']) {
-            return `Tối thiểu ${errors['minlength'].requiredLength} ký tự`;
-        }
-
-        if (errors['maxlength']) {
-            return `Tối đa ${errors['maxlength'].requiredLength} ký tự`;
-        }
-
-        if (errors['min']) {
-            return `Giá trị tối thiểu là ${errors['min'].min}`;
-        }
-
-        if (errors['max']) {
-            return `Giá trị tối đa là ${errors['max'].max}`;
-        }
-
-        if (errors['pattern']) {
-            return 'Định dạng không hợp lệ';
-        }
-
+        if (errors['required']) return 'Trường này là bắt buộc';
+        if (errors['email']) return 'Email không hợp lệ';
+        if (errors['minlength']) return `Tối thiểu ${errors['minlength'].requiredLength} ký tự`;
+        if (errors['maxlength']) return `Tối đa ${errors['maxlength'].requiredLength} ký tự`;
+        if (errors['min']) return `Giá trị tối thiểu là ${errors['min'].min}`;
+        if (errors['max']) return `Giá trị tối đa là ${errors['max'].max}`;
+        if (errors['pattern']) return 'Định dạng không hợp lệ';
         return 'Dữ liệu không hợp lệ';
     }
 
@@ -121,7 +97,6 @@ export class InputComponent implements ControlValueAccessor, OnInit {
         const input = event.target as HTMLInputElement;
         this.value = input.value;
         this.onChange(this.value);
-
         if (this.ngControl?.control) {
             this.ngControl.control.markAsDirty();
         }

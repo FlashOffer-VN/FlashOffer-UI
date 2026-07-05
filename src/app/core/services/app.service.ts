@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from './auth.service';
 import { ToastService } from './toast.service';
-import { ToastType } from './toast.service';  // ✅ Import từ toast.service
+import { ToastType } from './toast.service';
 import { Observable } from 'rxjs';
+import { PartnerRegisterService } from './partner-register.service';
 
 @Injectable({
     providedIn: 'root'
@@ -12,10 +13,12 @@ import { Observable } from 'rxjs';
 export class AppService {
     constructor(
         public auth: AuthService,
-        public toast: ToastService,  // ✅ Export toast
+        public toast: ToastService,
+        public partner: PartnerRegisterService,
         private translate: TranslateService
     ) { }
 
+    // ========== Language ==========
     changeLanguage(lang: string): void {
         localStorage.setItem('language', lang);
         this.translate.use(lang);
@@ -37,7 +40,7 @@ export class AppService {
         return this.translate.onLangChange;
     }
 
-    // ✅ Các method toast
+    // ========== Toast ==========
     showToast(message: string, type: ToastType = 'info', duration?: number): void {
         this.toast.show(message, type, duration);
     }

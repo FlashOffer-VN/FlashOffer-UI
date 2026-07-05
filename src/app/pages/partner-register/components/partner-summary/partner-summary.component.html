@@ -1,0 +1,65 @@
+<div class="summary-box">
+    <h3>{{ 'PARTNER.SUMMARY_TITLE' | translate }}</h3>
+    <div class="summary-grid">
+        <div class="summary-item">
+            <span class="summary-label">{{ 'PARTNER.FULL_NAME' | translate }}</span>
+            <span class="summary-value">{{ formData.fullName || '---' }}</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">{{ 'PARTNER.EMAIL' | translate }}</span>
+            <span class="summary-value">{{ formData.email || '---' }}</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">{{ 'PARTNER.PHONE' | translate }}</span>
+            <span class="summary-value">{{ formData.phone || '---' }}</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">{{ 'PARTNER.POSITION' | translate }}</span>
+            <span class="summary-value">{{ formData.position || '---' }}</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">{{ 'PARTNER.COMPANY_NAME' | translate }}</span>
+            <span class="summary-value">{{ formData.companyName || '---' }}</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">{{ 'PARTNER.COMPANY_TAX' | translate }}</span>
+            <span class="summary-value">{{ formData.companyTax || '---' }}</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">{{ 'PARTNER.BUSINESS_TYPE' | translate }}</span>
+            <span class="summary-value">{{ getBusinessTypeLabel(formData.businessType) }}</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">{{ 'PARTNER.COMPANY_SIZE' | translate }}</span>
+            <span class="summary-value">{{ getCompanySizeLabel(formData.companySize) }}</span>
+        </div>
+        <div class="summary-item full-width">
+            <span class="summary-label">{{ 'PARTNER.COMPANY_ADDRESS' | translate }}</span>
+            <span class="summary-value">{{ formData.companyAddress || '---' }}</span>
+        </div>
+        @if (formData.companyWebsite) {
+        <div class="summary-item">
+            <span class="summary-label">{{ 'PARTNER.COMPANY_WEBSITE' | translate }}</span>
+            <span class="summary-value">{{ formData.companyWebsite }}</span>
+        </div>
+        }
+        @if (formData.products?.length) {
+        <div class="summary-item full-width">
+            <span class="summary-label">{{ 'PARTNER.PRODUCTS_TITLE' | translate }}</span>
+            <span class="summary-value">{{ formData.products.length }} sản phẩm</span>
+        </div>
+        }
+        @if (formData.commissionRate) {
+        <div class="summary-item">
+            <span class="summary-label">{{ 'PARTNER.COMMISSION_RATE' | translate }}</span>
+            <span class="summary-value">{{ formData.commissionRate }}%</span>
+        </div>
+        }
+        @if (formData.referralCode) {
+        <div class="summary-item">
+            <span class="summary-label">{{ 'PARTNER.REFERRAL_CODE' | translate }}</span>
+            <span class="summary-value">{{ formData.referralCode }}</span>
+        </div>
+        }
+    </div>
+</div>

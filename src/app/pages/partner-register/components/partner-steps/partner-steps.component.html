@@ -1,0 +1,22 @@
+<!-- partner-steps/partner-steps.component.html -->
+<div class="partner-steps">
+    <div class="partner-steps__bar">
+        <div class="partner-steps__progress" [style.width.%]="((currentStep - 1) / (totalSteps - 1)) * 100">
+        </div>
+    </div>
+    <div class="partner-steps__items">
+        @for (step of steps; track $index) {
+        <div class="partner-step" [class.active]="isStepActive($index + 1)"
+            [class.completed]="isStepCompleted($index + 1)">
+            <div class="partner-step__circle">
+                @if (isStepCompleted($index + 1)) {
+                <i class="fa-solid fa-check"></i>
+                } @else {
+                <i [class]="step.icon"></i>
+                }
+            </div>
+            <span class="partner-step__label">{{ step.label | translate }}</span>
+        </div>
+        }
+    </div>
+</div>

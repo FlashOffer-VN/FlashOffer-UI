@@ -1,354 +1,44 @@
-<!-- pages/partner-register/components/partner-form/partner-form.component.html -->
-
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-
-    <!-- ✅ Step 1: Personal Info -->
+    <!-- Step 1 -->
     @if (currentStep === 1) {
-    <div class="partner-step-content">
-        <h2 class="step-title">{{ 'PARTNER.STEP_1_TITLE' | translate }}</h2>
-        <p class="step-desc">{{ 'PARTNER.STEP_1_DESC' | translate }}</p>
-
-        <div class="form-grid">
-            <!-- Full Name -->
-            <div class="form-group">
-                <app-input formControlName="fullName" [label]="'PARTNER.FULL_NAME' | translate"
-                    [placeholder]="'PARTNER.FULL_NAME_PLACEHOLDER' | translate" [id]="'fullName'">
-                </app-input>
-                @if (isFieldInvalid('fullName')) {
-                <span class="error-text">{{ getErrorMessage('fullName') }}</span>
-                }
-            </div>
-
-            <!-- Email -->
-            <div class="form-group">
-                <app-input formControlName="email" type="email" [label]="'PARTNER.EMAIL' | translate"
-                    [placeholder]="'PARTNER.EMAIL_PLACEHOLDER' | translate" [id]="'email'">
-                </app-input>
-                @if (isFieldInvalid('email')) {
-                <span class="error-text">{{ getErrorMessage('email') }}</span>
-                }
-            </div>
-
-            <!-- Phone -->
-            <div class="form-group">
-                <app-input formControlName="phone" type="tel" [label]="'PARTNER.PHONE' | translate"
-                    [placeholder]="'PARTNER.PHONE_PLACEHOLDER' | translate" [id]="'phone'">
-                </app-input>
-                @if (isFieldInvalid('phone')) {
-                <span class="error-text">{{ getErrorMessage('phone') }}</span>
-                }
-            </div>
-
-            <!-- Position -->
-            <div class="form-group">
-                <app-input formControlName="position" [label]="'PARTNER.POSITION' | translate"
-                    [placeholder]="'PARTNER.POSITION_PLACEHOLDER' | translate" [id]="'position'">
-                </app-input>
-                @if (isFieldInvalid('position')) {
-                <span class="error-text">{{ getErrorMessage('position') }}</span>
-                }
-            </div>
-        </div>
-    </div>
+    <app-step-personal [formGroup]="registerForm"></app-step-personal>
     }
 
-    <!-- ✅ Step 2: Business Info -->
+    <!-- Step 2 -->
     @if (currentStep === 2) {
-    <div class="partner-step-content">
-        <h2 class="step-title">{{ 'PARTNER.STEP_2_TITLE' | translate }}</h2>
-        <p class="step-desc">{{ 'PARTNER.STEP_2_DESC' | translate }}</p>
-
-        <div class="form-grid">
-            <!-- Company Name -->
-            <div class="form-group">
-                <app-input formControlName="companyName" [label]="'PARTNER.COMPANY_NAME' | translate"
-                    [placeholder]="'PARTNER.COMPANY_NAME_PLACEHOLDER' | translate" [id]="'companyName'">
-                </app-input>
-                @if (isFieldInvalid('companyName')) {
-                <span class="error-text">{{ getErrorMessage('companyName') }}</span>
-                }
-            </div>
-
-            <!-- Company Tax -->
-            <div class="form-group">
-                <app-input formControlName="companyTax" [label]="'PARTNER.COMPANY_TAX' | translate"
-                    [placeholder]="'PARTNER.COMPANY_TAX_PLACEHOLDER' | translate" [id]="'companyTax'">
-                </app-input>
-                @if (isFieldInvalid('companyTax')) {
-                <span class="error-text">{{ getErrorMessage('companyTax') }}</span>
-                }
-            </div>
-
-            <!-- Business Type -->
-            <div class="form-group">
-                <label>{{ 'PARTNER.BUSINESS_TYPE' | translate }} <span class="required">*</span></label>
-                <select formControlName="businessType" class="form-select"
-                    [class.is-invalid]="isFieldInvalid('businessType')">
-                    <option value="">{{ 'PARTNER.BUSINESS_TYPE_PLACEHOLDER' | translate }}</option>
-                    @for (type of businessTypes; track type.value) {
-                    <option [value]="type.value">{{ type.label }}</option>
-                    }
-                </select>
-                @if (isFieldInvalid('businessType')) {
-                <span class="error-text">{{ getErrorMessage('businessType') }}</span>
-                }
-            </div>
-
-            <!-- Company Size -->
-            <div class="form-group">
-                <label>{{ 'PARTNER.COMPANY_SIZE' | translate }} <span class="required">*</span></label>
-                <select formControlName="companySize" class="form-select"
-                    [class.is-invalid]="isFieldInvalid('companySize')">
-                    <option value="">{{ 'PARTNER.COMPANY_SIZE_PLACEHOLDER' | translate }}</option>
-                    @for (size of companySizes; track size.value) {
-                    <option [value]="size.value">{{ size.label }}</option>
-                    }
-                </select>
-                @if (isFieldInvalid('companySize')) {
-                <span class="error-text">{{ getErrorMessage('companySize') }}</span>
-                }
-            </div>
-
-            <!-- Company Address -->
-            <div class="form-group full-width">
-                <app-input formControlName="companyAddress" [label]="'PARTNER.COMPANY_ADDRESS' | translate"
-                    [placeholder]="'PARTNER.COMPANY_ADDRESS_PLACEHOLDER' | translate" [id]="'companyAddress'">
-                </app-input>
-                @if (isFieldInvalid('companyAddress')) {
-                <span class="error-text">{{ getErrorMessage('companyAddress') }}</span>
-                }
-            </div>
-
-            <!-- Company Website -->
-            <div class="form-group">
-                <app-input formControlName="companyWebsite" [label]="'PARTNER.COMPANY_WEBSITE' | translate"
-                    [placeholder]="'PARTNER.COMPANY_WEBSITE_PLACEHOLDER' | translate" [id]="'companyWebsite'">
-                </app-input>
-                @if (isFieldInvalid('companyWebsite')) {
-                <span class="error-text">{{ getErrorMessage('companyWebsite') }}</span>
-                }
-            </div>
-
-            <!-- Referral Code (đưa lên Step 2 cho gọn) -->
-            <div class="form-group">
-                <app-input formControlName="referralCode" [label]="'PARTNER.REFERRAL_CODE' | translate"
-                    [placeholder]="'PARTNER.REFERRAL_CODE_PLACEHOLDER' | translate" [id]="'referralCode'">
-                </app-input>
-                @if (registerForm.get('referralCode')?.value && !isReferralValid) {
-                <span class="error-text">{{ 'PARTNER.REFERRAL_CODE_INVALID' | translate }}</span>
-                }
-                @if (isReferralValid && registerForm.get('referralCode')?.value) {
-                <span class="success-text">{{ 'PARTNER.REFERRAL_CODE_VALID' | translate }}</span>
-                }
-            </div>
-        </div>
-    </div>
+    <app-step-business [formGroup]="registerForm" [isReferralValid]="isReferralValid">
+    </app-step-business>
     }
 
-    <!-- Step 3: Sales Info -->
+    <!-- Step 3 -->
     @if (currentStep === 3) {
-    <div class="partner-step-content">
-        <h2 class="step-title">{{ 'PARTNER.STEP_3_TITLE' | translate }}</h2>
-        <p class="step-desc">{{ 'PARTNER.STEP_3_DESC' | translate }}</p>
-
-        <!-- Danh sách sản phẩm -->
-        <div class="products-section">
-            <h3 class="section-title">{{ 'PARTNER.PRODUCTS_TITLE' | translate }}</h3>
-
-            @for (product of products.controls; track $index) {
-            <div class="product-item" [formGroup]="$any(product)">
-                <div class="product-header">
-                    <h4>{{ 'PARTNER.PRODUCT' | translate }} #{{ $index + 1 }}</h4>
-                    @if (products.length > 1) {
-                    <button type="button" class="btn-remove" (click)="removeProduct($index)">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                    }
-                </div>
-
-                <div class="form-grid">
-                    <!-- Tên sản phẩm -->
-                    <div class="form-group">
-                        <app-input formControlName="name" [label]="'PARTNER.PRODUCT_NAME' | translate"
-                            [placeholder]="'PARTNER.PRODUCT_NAME_PLACEHOLDER' | translate"
-                            [id]="'product_name_' + $index">
-                        </app-input>
-                        @if (product.get('name')?.invalid && product.get('name')?.touched) {
-                        <span class="error-text">{{ getErrorMessage('name') }}</span>
-                        }
-                    </div>
-
-                    <!-- Danh mục -->
-                    <div class="form-group">
-                        <label>{{ 'PARTNER.PRODUCT_CATEGORY' | translate }} <span class="required">*</span></label>
-                        <select formControlName="category" class="form-select"
-                            [class.is-invalid]="product.get('category')?.invalid && product.get('category')?.touched">
-                            <option value="">{{ 'PARTNER.PRODUCT_CATEGORY_PLACEHOLDER' | translate }}</option>
-                            @for (cat of productCategories; track cat.value) {
-                            <option [value]="cat.value">{{ cat.label }}</option>
-                            }
-                        </select>
-                    </div>
-
-                    <!-- Giá bán lẻ -->
-                    <div class="form-group">
-                        <app-input formControlName="retailPrice" type="number"
-                            [label]="'PARTNER.RETAIL_PRICE' | translate"
-                            [placeholder]="'PARTNER.RETAIL_PRICE_PLACEHOLDER' | translate"
-                            [id]="'retail_price_' + $index">
-                        </app-input>
-                        @if (product.get('retailPrice')?.invalid && product.get('retailPrice')?.touched) {
-                        <span class="error-text">{{ getErrorMessage('retailPrice') }}</span>
-                        }
-                    </div>
-
-                    <!-- Giá bán sỉ -->
-                    <div class="form-group">
-                        <app-input formControlName="wholesalePrice" type="number"
-                            [label]="'PARTNER.WHOLESALE_PRICE' | translate"
-                            [placeholder]="'PARTNER.WHOLESALE_PRICE_PLACEHOLDER' | translate"
-                            [id]="'wholesale_price_' + $index">
-                        </app-input>
-                        @if (product.get('wholesalePrice')?.invalid && product.get('wholesalePrice')?.touched) {
-                        <span class="error-text">{{ getErrorMessage('wholesalePrice') }}</span>
-                        }
-                    </div>
-
-                    <!-- Số lượng tối thiểu -->
-                    <div class="form-group">
-                        <app-input formControlName="minOrderQuantity" type="number"
-                            [label]="'PARTNER.MIN_ORDER_QUANTITY' | translate"
-                            [placeholder]="'PARTNER.MIN_ORDER_QUANTITY_PLACEHOLDER' | translate"
-                            [id]="'min_order_' + $index">
-                        </app-input>
-                        @if (product.get('minOrderQuantity')?.invalid && product.get('minOrderQuantity')?.touched) {
-                        <span class="error-text">{{ getErrorMessage('minOrderQuantity') }}</span>
-                        }
-                    </div>
-
-                    <!-- Mô tả -->
-                    <div class="form-group full-width">
-                        <app-input formControlName="description" [label]="'PARTNER.PRODUCT_DESC' | translate"
-                            [placeholder]="'PARTNER.PRODUCT_DESC_PLACEHOLDER' | translate"
-                            [id]="'product_desc_' + $index">
-                        </app-input>
-                    </div>
-                </div>
-            </div>
-            }
-
-            <button type="button" class="btn-add-product" (click)="addProduct()">
-                <i class="fa-solid fa-plus"></i>
-                {{ 'PARTNER.ADD_PRODUCT' | translate }}
-            </button>
-        </div>
-
-        <!-- Chính sách hoa hồng -->
-        <div class="commission-section">
-            <h3 class="section-title">{{ 'PARTNER.COMMISSION_POLICY' | translate }}</h3>
-
-            <div class="form-grid">
-                <!-- Loại hoa hồng -->
-                <div class="form-group">
-                    <label>{{ 'PARTNER.COMMISSION_TYPE' | translate }} <span class="required">*</span></label>
-                    <select formControlName="commissionType" class="form-select"
-                        [class.is-invalid]="isFieldInvalid('commissionType')">
-                        @for (type of commissionTypes; track type.value) {
-                        <option [value]="type.value">{{ type.label }}</option>
-                        }
-                    </select>
-                    @if (isFieldInvalid('commissionType')) {
-                    <span class="error-text">{{ getErrorMessage('commissionType') }}</span>
-                    }
-                </div>
-
-                <!-- Tỷ lệ hoa hồng -->
-                <div class="form-group">
-                    <app-input formControlName="commissionRate" type="number"
-                        [label]="'PARTNER.COMMISSION_RATE' | translate"
-                        [placeholder]="'PARTNER.COMMISSION_RATE_PLACEHOLDER' | translate" [id]="'commission_rate'">
-                    </app-input>
-                    @if (isFieldInvalid('commissionRate')) {
-                    <span class="error-text">{{ getErrorMessage('commissionRate') }}</span>
-                    }
-                </div>
-
-                <!-- Giá trị đơn hàng tối thiểu -->
-                <div class="form-group">
-                    <app-input formControlName="minOrderValue" type="number"
-                        [label]="'PARTNER.MIN_ORDER_VALUE' | translate"
-                        [placeholder]="'PARTNER.MIN_ORDER_VALUE_PLACEHOLDER' | translate" [id]="'min_order_value'">
-                    </app-input>
-                </div>
-
-                <!-- Hoa hồng tối đa -->
-                <div class="form-group">
-                    <app-input formControlName="maxCommission" type="number"
-                        [label]="'PARTNER.MAX_COMMISSION' | translate"
-                        [placeholder]="'PARTNER.MAX_COMMISSION_PLACEHOLDER' | translate" [id]="'max_commission'">
-                    </app-input>
-                </div>
-
-                <!-- Điều kiện đặc biệt -->
-                <div class="form-group full-width">
-                    <app-input formControlName="specialConditions" [label]="'PARTNER.SPECIAL_CONDITIONS' | translate"
-                        [placeholder]="'PARTNER.SPECIAL_CONDITIONS_PLACEHOLDER' | translate"
-                        [id]="'special_conditions'">
-                    </app-input>
-                </div>
-            </div>
-        </div>
-    </div>
+    <app-step-sales [formGroup]="registerForm" (addProductEvent)="addProduct()"
+        (removeProductEvent)="removeProduct($event)">
+    </app-step-sales>
     }
 
-    <!-- Step 4: Confirmation -->
+    <!-- Step 4 -->
     @if (currentStep === 4) {
-    <div class="partner-step-content">
-        <h2 class="step-title">{{ 'PARTNER.STEP_4_TITLE' | translate }}</h2>
-        <p class="step-desc">{{ 'PARTNER.STEP_4_DESC' | translate }}</p>
-
-        <!-- Summary -->
-        <app-partner-summary [formData]="registerForm.value"></app-partner-summary>
-
-        <!-- Terms -->
-        <div class="form-group terms-group">
-            <label class="checkbox-label">
-                <input type="checkbox" formControlName="agreeTerms">
-                <span>{{ 'PARTNER.AGREE_TERMS' | translate }}</span>
-            </label>
-            @if (isFieldInvalid('agreeTerms')) {
-            <span class="error-text">{{ getErrorMessage('agreeTerms') }}</span>
-            }
-        </div>
-
-        <!-- Note -->
-        <div class="form-group">
-            <app-input formControlName="note" [label]="'PARTNER.NOTE' | translate"
-                [placeholder]="'PARTNER.NOTE_PLACEHOLDER' | translate" [id]="'note'">
-            </app-input>
-        </div>
-    </div>
+    <app-step-confirmation [formGroup]="registerForm"></app-step-confirmation>
     }
 
     <!-- Navigation Buttons -->
     <div class="form-actions">
         @if (currentStep > 1) {
-        <app-button type="button" variant="secondary" size="md" (click)="prevStep()" class="gap-2">
+        <app-button type="button" variant="secondary" size="md" (click)="prevStep()">
             <i class="fa-solid fa-arrow-left mr-2"></i>
             {{ 'PARTNER.BACK' | translate }}
         </app-button>
         }
 
-        @if (currentStep < totalSteps) { <app-button type="button" variant="primary" size="md" class="gap-2"
-            (click)="nextStep()">
+        @if (currentStep < totalSteps) { <app-button type="button" variant="primary" size="md" (click)="nextStep()">
             {{ 'PARTNER.CONTINUE' | translate }}
             <i class="fa-solid fa-arrow-right ml-2"></i>
             </app-button>
             }
 
             @if (currentStep === totalSteps) {
-            <app-button type="submit" variant="primary" size="lg" [loading]="isLoading" class="gap-2"
-                [disabled]="isLoading">
+            <app-button type="submit" variant="primary" size="lg" [loading]="isLoading" [disabled]="isLoading">
                 @if (!isLoading) {
                 <i class="fa-regular fa-paper-plane mr-2"></i>
                 }
