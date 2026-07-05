@@ -1,4 +1,4 @@
-## 📋 BẢN FULL QUY TẮC DỰ ÁN KINDI UI (ĐẦY ĐỦ - CẬP NHẬT)
+## 📋 BẢN FULL QUY TẮC DỰ ÁN KINDI UI (ĐẦY ĐỦ - CẬP NHẬT HOÀN CHỈNH)
 
 ---
 
@@ -41,6 +41,7 @@ src/app/
 │       ├── loading/
 │       ├── button/
 │       ├── input/
+│       ├── select/                  # ✅ Shared Select Component
 │       └── scroll-to-top/
 ├── features/
 │   └── auth/
@@ -188,6 +189,15 @@ export const appConfig: ApplicationConfig = {
 }
 ```
 
+**Key format cho select options:**
+
+| Loại | Format | Ví dụ |
+|------|--------|-------|
+| Business Type | `PARTNER.BUSINESS_TYPE_{KEY}` | `PARTNER.BUSINESS_TYPE_SME` |
+| Company Size | `PARTNER.COMPANY_SIZE_{KEY}` | `PARTNER.COMPANY_SIZE_1_10` |
+| Product Category | `PARTNER.PRODUCT_CATEGORY_{KEY}` | `PARTNER.PRODUCT_CATEGORY_ELECTRONICS` |
+| Commission Type | `PARTNER.COMMISSION_TYPE_{KEY}` | `PARTNER.COMMISSION_TYPE_PERCENTAGE` |
+
 ---
 
 ### 5. AUTH
@@ -261,12 +271,13 @@ protected baseUrl = environment.apiUrl;
 | `LoadingComponent` | `shared/components/loading/` | Loading (dots, spinner, skeleton, pulse, logo, community) |
 | `ButtonComponent` | `shared/components/button/` | Nút với các variant |
 | `InputComponent` | `shared/components/input/` | Input form có validation |
+| `SelectComponent` | `shared/components/select/` | Select dropdown hỗ trợ Reactive Forms |
 | `ScrollToTopComponent` | `shared/components/scroll-to-top/` | Nút cuộn lên đầu trang |
 
 **⚠️ Quy tắc dùng Helper Components:**
 - **Ưu tiên dùng component chung** thay vì viết lại HTML/CSS mới
 - **Thống nhất UI** toàn bộ dự án
-- **Không tự viết button, input, loading, toast** nếu đã có sẵn
+- **Không tự viết button, input, loading, toast, select** nếu đã có sẵn
 - Nếu cần style khác, extend từ component hiện có
 
 **ToastService - Quản lý thông báo: ⭐**
@@ -508,11 +519,15 @@ export const routes: Routes = [
 | 13 | **Refresh token** | Tự động refresh khi token sắp hết hạn |
 | 14 | **Guard** | Luôn có guard cho route cần bảo vệ |
 | 15 | **Standalone components** | Tất cả component đều standalone |
-| 16 | **Dùng component chung** | Ưu tiên dùng Button, Input, Toast, Modal, Loading có sẵn |
-| 17 | **Toast qua AppService** ⭐ | Luôn dùng `this._appService.showSuccess()` hoặc `this._appService.showError()` để hiển thị toast, KHÔNG tự new ToastComponent() |
-| 18 | **i18n gom nhóm** ⭐ | Gom nhóm key translate theo module/component, dùng dấu chấm phân cấp, viết hoa + underscore |
-| 19 | **Animation** ⭐ | Sử dụng `@angular/animations` cho hiệu ứng chuyển trang, fade, slide, stagger list |
-| 20 | **Number pipe với string** ⭐ | Khi dùng `| number` pipe, kiểm tra giá trị là number, nếu string thì hiển thị trực tiếp |
+| 16 | **Dùng component chung** | Ưu tiên dùng Button, Input, Toast, Modal, Loading, Select có sẵn |
+| 17 | **Toast qua AppService** ⭐ | Luôn dùng `this._appService.showSuccess()` hoặc `this._appService.showError()` để hiển thị toast |
+| 18 | **i18n gom nhóm** ⭐ | Gom nhóm key translate theo module/component, dùng dấu chấm phân cấp |
+| 19 | **Animation** ⭐ | Sử dụng `@angular/animations` cho hiệu ứng chuyển trang |
+| 20 | **Number pipe với string** ⭐ | Kiểm tra giá trị là number trước khi dùng pipe |
+| 21 | **Dùng app-select thay select thường** ⭐ | Luôn dùng `app-select` thay vì `<select>` native |
+| 22 | **Select items format** ⭐ | Items format `{ value: number/string, label: string }` |
+| 23 | **app-select validation** ⭐ | Truyền `[isInvalid]`, `[errorMessage]`, `[touched]` |
+| 24 | **app-select với Reactive Forms** ⭐ | Dùng `formControlName` như input bình thường |
 
 ---
 
@@ -520,42 +535,38 @@ export const routes: Routes = [
 
 **✅ ĐÚNG - Dùng Toast qua AppService:**
 ```typescript
-import { AppService } from '@core/services/app.service';
-import { ButtonComponent } from '@shared/components/button/button.component';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+this._appService.showSuccess('Thành công!');
+this._appService.showError('Lỗi rồi!');
+```
 
-@Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, ButtonComponent],
-  templateUrl: './login.component.html'
-})
-export class LoginComponent {
-  constructor(private _appService: AppService, private router: Router) {}
-  
-  login() {
-    this._appService.auth.login(data).subscribe({
-      next: (response) => {
-        // ✅ Dùng showSuccess
-        this._appService.showSuccess(
-          this._appService.instant('SUCCESS.LOGIN')
-        );
-        if (response?.data?.role === 'Admin') {
-          this.router.navigate(['/admin/dashboard']);
-        }
-      },
-      error: (err) => {
-        const msg = err.error?.errors?.[0] || 
-                   err.error?.message || 
-                   this._appService.instant('ERROR.LOGIN_FAILED');
-        // ✅ Dùng showError
-        this._appService.showError(msg);
-      }
-    });
-  }
+**✅ ĐÚNG - Dùng app-select với Reactive Forms:**
+```html
+<app-select
+    formControlName="businessType"
+    [items]="businessTypes"
+    [label]="'PARTNER.BUSINESS_TYPE' | translate"
+    [placeholder]="'PARTNER.BUSINESS_TYPE_PLACEHOLDER' | translate"
+    [required]="true"
+    [touched]="true"
+    [isInvalid]="isFieldInvalid('businessType')"
+    [errorMessage]="getErrorMessage('businessType')">
+</app-select>
+```
+
+```typescript
+businessTypes = [
+    { value: 1, label: 'SME - Doanh nghiệp vừa và nhỏ' },
+    { value: 2, label: 'Hộ kinh doanh cá thể' }
+];
+
+getErrorMessage(fieldName: string): string {
+    const control = this.formGroup.get(fieldName);
+    if (!control || !control.errors) return '';
+    if (control.errors['required']) {
+        if (fieldName === 'businessType') return 'Vui lòng chọn loại hình doanh nghiệp';
+        return 'Trường này là bắt buộc';
+    }
+    return 'Dữ liệu không hợp lệ';
 }
 ```
 
@@ -563,99 +574,34 @@ export class LoginComponent {
 ```json
 // vi.json
 {
-  "APP_NAME": "Kindi",
-  "CONNECT_SME": {
-    "BADGE": "Kết nối doanh nghiệp",
-    "TITLE": "Kết nối SME - Phát triển bền vững"
-  },
-  "CONNECT_SME_CARD": {
-    "FIND_SUPPLIER": "Tìm nhà cung cấp",
-    "GROUP_BUYING": "Mua chung - Tiết kiệm"
-  }
+    "PARTNER": {
+        "BUSINESS_TYPE_SME": "SME - Doanh nghiệp vừa và nhỏ",
+        "COMPANY_SIZE_1_10": "1 - 10 nhân viên",
+        "PRODUCT_CATEGORY_ELECTRONICS": "Điện tử"
+    }
 }
 ```
 
+**❌ SAI - Dùng select thường:**
 ```html
-<!-- HTML -->
-<h1>{{ 'CONNECT_SME.TITLE' | translate }}</h1>
-<h3>{{ 'CONNECT_SME_CARD.FIND_SUPPLIER' | translate }}</h3>
+<select formControlName="businessType">
+    <option value="1">SME</option>
+</select>
 ```
 
-**✅ ĐÚNG - Xử lý number pipe với string:**
+**❌ SAI - Thiếu label cho app-select:**
 ```html
-<div class="package-price">
-  <span *ngIf="isNumeric(pkg.price)">{{ pkg.price | number }}đ</span>
-  <span *ngIf="!isNumeric(pkg.price)">{{ pkg.price }}</span>
-  <span class="package-period" *ngIf="isNumeric(pkg.price)">/tháng</span>
-</div>
+<app-select formControlName="category" [items]="categories"></app-select>
 ```
 
-```typescript
-isNumeric(value: any): boolean {
-  return !isNaN(parseFloat(value)) && isFinite(value);
-}
-```
-
-**✅ ĐÚNG - Animation:**
-```typescript
-import { routeAnimation } from './shared/animations/animations';
-
-@Component({
-  animations: [routeAnimation]
-})
-export class AppComponent {
-  prepareRoute(outlet: RouterOutlet) {
-    return outlet?.activatedRouteData?.['animation'] || 'default';
-  }
-}
-```
-
-**❌ SAI - Tự new ToastComponent:**
-```typescript
-import { ToastComponent } from '@shared/components/toast/toast.component';
-
-@Component({...})
-export class LoginComponent {
-  login() {
-    // ❌ KHÔNG được new Component
-    const toast = new ToastComponent();  // SAI
-    toast.message = 'Hello';
-    toast.show();
-  }
-}
-```
-
-**❌ SAI - Key i18n phẳng, khó quản lý:**
-```json
-// vi.json - ❌ KHÔNG NÊN DÙNG
-{
-  "CONNECT_SME_TITLE": "Kết nối SME - Phát triển bền vững",
-  "CONNECT_SME_CARD_FIND_SUPPLIER": "Tìm nhà cung cấp",
-  "CONNECT_SME_CARD_GROUP_BUYING": "Mua chung - Tiết kiệm"
-}
-```
-
-**❌ SAI - Dùng number pipe với string:**
+**❌ SAI - Thiếu validation props:**
 ```html
-<!-- ❌ SAI - Lỗi khi pkg.price là string "2.000.000" -->
-<span>{{ pkg.price | number }}đ</span>
-<!-- Lỗi: NG02100: InvalidPipeArgument: '2.000.000 is not a number' -->
-```
-
-**❌ SAI - Inject service lẻ:**
-```typescript
-import { TranslateService } from '@ngx-translate/core';
-import { AuthService } from '@core/services/auth.service';
-import { ToastService } from '@core/services/toast.service';  // ❌ SAI
-
-@Component({...})
-export class LoginComponent {
-  constructor(
-    private translate: TranslateService,  // ❌ SAI
-    private auth: AuthService,            // ❌ SAI
-    private toast: ToastService           // ❌ SAI
-  ) {}
-}
+<app-select
+    formControlName="category"
+    [items]="categories"
+    [isInvalid]="isFieldInvalid('category')">
+    <!-- Thiếu errorMessage và touched -->
+</app-select>
 ```
 
 ---
@@ -676,12 +622,13 @@ export class LoginComponent {
 | 10 | Route phân quyền | ✅ |
 | 11 | Error handling + Translate | ✅ |
 | 12 | Guest Header + Secret Admin Button | ✅ |
-| 13 | Shared Components (Button, Input, Toast, Modal, Loading) | ✅ |
+| 13 | Shared Components (Button, Input, Toast, Modal, Loading, Select) | ✅ |
 | 14 | ToastService | ✅ |
 | 15 | Admin Layout (tách component con) | ✅ |
 | 16 | Connect SME Page | ✅ |
 | 17 | Animation (route, fade, slide, stagger) | ✅ |
 | 18 | Scroll to top khi chuyển trang | ✅ |
+| 19 | Partner Register (tách component + app-select) | ✅ |
 
 ---
 
@@ -701,12 +648,11 @@ export class LoginComponent {
 
 | Mục | Nội dung |
 |-----|----------|
-| **Phần 1** | Thêm cấu trúc admin-layout con (sidebar, header, footer) |
-| **Phần 2** | Thêm ToastService vào nguyên tắc service |
-| **Phần 4** | ⭐ Thêm "QUY TẮC TỔ CHỨC KEY I18N" + đổi tên app thành Kindi |
-| **Phần 7** | Thêm bảng mô tả ToastService methods + Admin sub-components |
-| **Phần 10** | Thêm rule #17 (Toast), #18 (i18n), #19 (Animation), #20 (Number pipe) |
-| **Phần 11** | Thêm ví dụ đúng/sai về i18n, number pipe, animation |
-| **Phần 12** | Thêm ToastService + Admin Layout + Connect SME + Animation + Scroll to top |
+| **Phần 1** | Thêm `select/` vào cấu trúc thư mục |
+| **Phần 7** | Thêm `SelectComponent` vào bảng components đã viết sẵn |
+| **Phần 10** | Thêm rule #21, #22, #23, #24 về app-select |
+| **Phần 11** | Thêm ví dụ đúng/sai cho app-select |
+| **Phần 12** | Thêm Partner Register vào danh sách đã hoàn thành |
+| **Phần 4** | Thêm key format cho select options |
 
 ---
