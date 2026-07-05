@@ -1,100 +1,137 @@
 // pages/partner-register/partner-register.component.ts
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http'; // ✅ Import HttpErrorResponse
 
 import { AppService } from '../../core/services/app.service';
-import { PartnerRegisterService } from './services/partner-register.service';
 import { PartnerHeroComponent } from './components/partner-hero/partner-hero.component';
 import { PartnerStepsComponent } from './components/partner-steps/partner-steps.component';
 import { PartnerFormComponent } from './components/partner-form/partner-form.component';
+import { PartnerRegisterService } from '../../core/services/partner-register.service';
 
 @Component({
-    selector: 'app-partner-register',
-    standalone: true,
-    imports: [
-        CommonModule,
-        PartnerHeroComponent,
-        PartnerStepsComponent,
-        PartnerFormComponent
-    ],
-    template: `
-    <div class="partner-register-container">
-      <app-partner-hero></app-partner-hero>
-
-      <section class="partner-form-section">
-        <div class="partner-form-wrapper">
-          <app-partner-steps
-            [currentStep]="currentStep"
-            [totalSteps]="totalSteps">
-          </app-partner-steps>
-
-          <app-partner-form
-            [currentStep]="currentStep"
-            [totalSteps]="totalSteps"
-            [isLoading]="isLoading"
-            (stepChange)="onStepChange($event)"
-            (submit)="onSubmit()">
-          </app-partner-form>
-        </div>
-      </section>
-    </div>
-  `,
-    styles: [`
-    .partner-register-container {
-      min-height: 100vh;
-      background: #f8fafc;
-    }
-
-    .partner-form-section {
-      max-width: 900px;
-      margin: -2rem auto 4rem;
-      padding: 0 1.5rem;
-      position: relative;
-      z-index: 2;
-    }
-
-    .partner-form-wrapper {
-      background: white;
-      border-radius: 1.5rem;
-      padding: 2.5rem;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
-      border: 1px solid rgba(0, 0, 0, 0.05);
-    }
-
-    @media (max-width: 768px) {
-      .partner-form-wrapper {
-        padding: 1.5rem;
-      }
-    }
-  `]
+  selector: 'app-partner-register',
+  standalone: true,
+  imports: [
+    CommonModule,
+    PartnerHeroComponent,
+    PartnerStepsComponent,
+    PartnerFormComponent
+  ],
+  templateUrl: './partner-register.component.html',
+  styleUrls: ['./partner-register.component.css']
 })
 export class PartnerRegisterComponent {
-    currentStep = 1;
-    totalSteps = 3;
-    isLoading = false;
+  @ViewChild(PartnerFormComponent) formComponent!: PartnerFormComponent;
 
-    constructor(
-        private _appService: AppService,
-        private partnerService: PartnerRegisterService,
-        private router: Router
-    ) { }
+  currentStep = 1;
+  totalSteps = 4;
+  isLoading = false;
 
-    onStepChange(step: number): void {
-        this.currentStep = step;
+  constructor(
+    private _appService: AppService,
+    private partnerService: PartnerRegisterService,
+    private router: Router
+  ) { }
+
+  onStepChange(step: number): void {
+    this.currentStep = step;
+  }
+
+  // partner-register/partner-register.component.ts
+  onSubmit(): void {
+    // ✅ Kiểm tra form component tồn tại
+    if (!this.formComponent) {
+      // console.log('❌ No form component');
+      return;
     }
 
-    onSubmit(): void {
-        this.isLoading = true;
+    // ✅ KIỂM TRA FORM VALID TRƯỚC KHI GỌI API
+    if (this.formComponent.registerForm.invalid) {
+      // console.log('❌ Form invalid - blocking API call');
 
-        // Lấy dữ liệu từ form (sẽ được emit từ PartnerFormComponent)
-        // Ở đây giả định form data được lấy từ service hoặc event
+      // Đánh dấu tất cả fields là touched để hiển thị lỗi
+      Object.keys(this.formComponent.registerForm.controls).forEach(key => {
+        this.formComponent.registerForm.get(key)?.markAsTouched();
+      });
 
-        // Giả lập API call
-        setTimeout(() => {
-            this.isLoading = false;
-            this._appService.showSuccess('Đăng ký đối tác thành công!');
-            this.router.navigate(['/home']);
-        }, 2000);
+      // Scroll đến field invalid đầu tiên
+      const firstInvalid = Object.keys(this.formComponent.registerForm.controls).find(key => {
+        const control = this.formComponent.registerForm.get(key);
+        return control?.invalid;
+      });
+
+      if (firstInvalid === 'agreeTerms') {
+        const termsElement = document.querySelector('.terms-group');
+        if (termsElement) {
+          termsElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          termsElement.classList.add('highlight-error');
+          setTimeout(() => termsElement.classList.remove('highlight-error'), 2000);
+        }
+      } else if (firstInvalid) {
+        const element = document.querySelector(`[formcontrolname="${firstInvalid}"]`);
+        if (element) {
+          (element as HTMLElement).focus();
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+      return;
     }
+
+    // ✅ Form valid - proceed with API call
+    this.isLoading = true;
+    const formData = this.formComponent.registerForm.value;
+
+    const requestData = {
+      fullName: formData.fullName,
+      email: formData.email,
+      phone: formData.phone,
+      position: formData.position,
+      companyName: formData.companyName,
+      companyTax: formData.companyTax,
+      companyAddress: formData.companyAddress,
+      businessType: Number(formData.businessType),
+      companyWebsite: formData.companyWebsite || '',
+      companySize: Number(formData.companySize),
+      referralCode: formData.referralCode || '',
+      products: formData.products.map((p: any) => ({
+        name: p.name,
+        category: Number(p.category),
+        retailPrice: Number(p.retailPrice),
+        wholesalePrice: Number(p.wholesalePrice),
+        minOrderQuantity: Number(p.minOrderQuantity),
+        description: p.description || ''
+      })),
+      commissionType: Number(formData.commissionType),
+      commissionRate: Number(formData.commissionRate),
+      minOrderValue: Number(formData.minOrderValue) || 0,
+      maxCommission: Number(formData.maxCommission) || 0,
+      specialConditions: formData.specialConditions || '',
+      agreeTerms: formData.agreeTerms,
+      note: formData.note || ''
+    };
+
+    // console.log('📝 Sending request:', requestData);
+
+    this.partnerService.register(requestData).subscribe({
+      next: (response: any) => {
+        this.isLoading = false;
+        if (response.success) {
+          this._appService.showSuccess(
+            response.message || this._appService.instant('PARTNER.REGISTER_SUCCESS')
+          );
+          this.router.navigate(['/home']);
+        }
+      },
+      error: (err: HttpErrorResponse) => {
+        this.isLoading = false;
+        const msg = err.error?.errors?.[0] ||
+          err.error?.message ||
+          this._appService.instant('PARTNER.REGISTER_ERROR');
+        this._appService.showError(msg);
+        // console.error('❌ Register partner error:', err);
+      }
+    });
+  }
 }

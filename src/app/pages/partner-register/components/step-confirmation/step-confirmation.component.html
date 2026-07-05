@@ -1,0 +1,26 @@
+<!-- step-confirmation/step-confirmation.component.html -->
+<div class="partner-step-content" [formGroup]="formGroup">
+    <h2 class="step-title">{{ 'PARTNER.STEP_4_TITLE' | translate }}</h2>
+    <p class="step-desc">{{ 'PARTNER.STEP_4_DESC' | translate }}</p>
+
+    <!-- Summary -->
+    <app-partner-summary [formData]="formGroup.value"></app-partner-summary>
+
+    <!-- Terms -->
+    <div class="form-group terms-group">
+        <label class="checkbox-label">
+            <input type="checkbox" formControlName="agreeTerms">
+            <span>{{ 'PARTNER.AGREE_TERMS' | translate }}</span>
+        </label>
+        @if (isFieldInvalid('agreeTerms')) {
+        <span class="error-text">{{ getErrorMessage('agreeTerms') }}</span>
+        }
+    </div>
+
+    <!-- Note -->
+    <div class="form-group">
+        <app-input formControlName="note" [label]="'PARTNER.NOTE' | translate"
+            [placeholder]="'PARTNER.NOTE_PLACEHOLDER' | translate" [id]="'note'">
+        </app-input>
+    </div>
+</div>

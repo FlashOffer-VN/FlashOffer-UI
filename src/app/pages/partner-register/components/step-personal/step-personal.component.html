@@ -1,0 +1,47 @@
+<!-- step-personal/step-personal.component.html -->
+<div class="partner-step-content">
+    <h2 class="step-title">{{ 'PARTNER.STEP_1_TITLE' | translate }}</h2>
+    <p class="step-desc">{{ 'PARTNER.STEP_1_DESC' | translate }}</p>
+
+    <div class="form-grid" [formGroup]="formGroup">
+        <!-- Full Name -->
+        <div class="form-group">
+            <app-input formControlName="fullName" [label]="'PARTNER.FULL_NAME' | translate"
+                [placeholder]="'PARTNER.FULL_NAME_PLACEHOLDER' | translate" [id]="'fullName'">
+            </app-input>
+            @if (isFieldInvalid('fullName')) {
+            <span class="error-text">{{ getErrorMessage('fullName') }}</span>
+            }
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+            <app-input formControlName="email" type="email" [label]="'PARTNER.EMAIL' | translate"
+                [placeholder]="'PARTNER.EMAIL_PLACEHOLDER' | translate" [id]="'email'">
+            </app-input>
+            @if (isFieldInvalid('email')) {
+            <span class="error-text">{{ getErrorMessage('email') }}</span>
+            }
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+            <app-input formControlName="phone" type="tel" [label]="'PARTNER.PHONE' | translate"
+                [placeholder]="'PARTNER.PHONE_PLACEHOLDER' | translate" [id]="'phone'">
+            </app-input>
+            @if (isFieldInvalid('phone')) {
+            <span class="error-text">{{ getErrorMessage('phone') }}</span>
+            }
+        </div>
+
+        <!-- Position -->
+        <div class="form-group">
+            <app-input formControlName="position" [label]="'PARTNER.POSITION' | translate"
+                [placeholder]="'PARTNER.POSITION_PLACEHOLDER' | translate" [id]="'position'">
+            </app-input>
+            @if (isFieldInvalid('position')) {
+            <span class="error-text">{{ getErrorMessage('position') }}</span>
+            }
+        </div>
+    </div>
+</div>
