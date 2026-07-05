@@ -1,33 +1,33 @@
 <!-- shared/components/input/input.component.html -->
-<!-- ✅ Thêm p-0 để bỏ padding -->
-<div class="flex flex-col gap-1.5 w-full border-0 border-none p-0" style="border: none !important;">
+<div class="app-input">
+    <!-- Label -->
     @if (label) {
-    <label [for]="id" class="text-sm font-semibold text-gray-700">
+    <label [for]="id" class="app-input__label">
         {{ label }}
         @if (required) {
-        <span class="text-red-500 ml-1">*</span>
+        <span class="app-input__required">*</span>
         }
     </label>
     }
 
-    <div class="relative w-full">
+    <!-- Input wrapper -->
+    <div class="app-input__wrapper">
         @if (icon) {
-        <i [class]="icon"
-            class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg pointer-events-none"></i>
+        <i [class]="icon" class="app-input__icon"></i>
         }
         <input [id]="id" [type]="type" [placeholder]="placeholder" [readonly]="readonly"
             [disabled]="disabled || isDisabled" [value]="value" (input)="onInput($event)" (blur)="onBlur()"
-            class="w-full px-4 py-3 rounded-xl text-sm transition-all bg-white text-gray-800 font-inherit outline-none box-border focus:ring-4 focus:ring-purple-600/10 disabled:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60 read-only:bg-gray-50 read-only:cursor-default placeholder:text-gray-400"
-            [class.border-2]="!isInvalid" [class.border-gray-200]="!isInvalid" [class.border-2]="isInvalid"
-            [class.border-red-500]="isInvalid" [class.focus:border-red-500]="isInvalid"
-            [class.focus:ring-red-500/10]="isInvalid" [class.pl-11]="icon" />
+            class="app-input__control" [class.has-icon]="icon" [class.is-invalid]="isInvalid"
+            [class.is-disabled]="disabled || isDisabled" [class.is-readonly]="readonly" />
     </div>
 
+    <!-- Hint -->
     @if (hint && !isInvalid) {
-    <small class="text-xs text-gray-500">{{ hint }}</small>
+    <small class="app-input__hint">{{ hint }}</small>
     }
 
+    <!-- Error -->
     @if (isInvalid && errorMessage) {
-    <small class="text-xs text-red-500 mt-1 block">{{ errorMessage }}</small>
+    <small class="app-input__error">{{ errorMessage }}</small>
     }
 </div>

@@ -1,46 +1,166 @@
 /* shared/components/input/input.component.css */
 
-/* ✅ Chỉ giữ lại CSS đặc biệt không có trong Tailwind */
+/* ✅ Reset host */
 :host {
     display: block;
     width: 100%;
+    padding: 0 !important;
+    border: none !important;
 }
 
-/* Fix cho input number - spinner */
-input[type="number"]::-webkit-inner-spin-button {
+/* ✅ Container chính */
+.app-input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    width: 100%;
+    padding: 0 !important;
+    border: none !important;
+}
+
+/* ✅ Label */
+.app-input__label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    transition: color 0.2s ease;
+}
+
+.app-input__required {
+    color: #EF4444;
+    margin-left: 0.25rem;
+}
+
+/* ✅ Wrapper */
+.app-input__wrapper {
+    position: relative;
+    width: 100%;
+}
+
+/* ✅ Icon */
+.app-input__icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9CA3AF;
+    font-size: 1.125rem;
+    pointer-events: none;
+    transition: color 0.2s ease;
+}
+
+/* ✅ Input control - Đồng bộ với toàn dự án */
+.app-input__control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-family: inherit;
+    background: #ffffff;
+    color: #1F2937;
+    transition: all 0.2s ease;
+    outline: none;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+/* ✅ Có icon thì thêm padding trái */
+.app-input__control.has-icon {
+    padding-left: 2.75rem;
+}
+
+/* ✅ Focus state */
+.app-input__control:focus {
+    border-color: #7C3AED;
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+}
+
+/* ✅ Invalid state */
+.app-input__control.is-invalid {
+    border-color: #EF4444 !important;
+}
+
+.app-input__control.is-invalid:focus {
+    border-color: #EF4444 !important;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1) !important;
+}
+
+/* ✅ Disabled state */
+.app-input__control.is-disabled {
+    background: #f3f4f6;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* ✅ Readonly state */
+.app-input__control.is-readonly {
+    background: #f9fafb;
+    cursor: default;
+}
+
+/* ✅ Placeholder */
+.app-input__control::placeholder {
+    color: #9CA3AF;
+}
+
+/* ✅ Hint */
+.app-input__hint {
+    font-size: 0.75rem;
+    color: #6B7280;
+}
+
+/* ✅ Error message */
+.app-input__error {
+    font-size: 0.75rem;
+    color: #EF4444;
+    animation: shake 0.3s ease;
+}
+
+/* ✅ Number input - spinner */
+.app-input__control[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: auto !important;
-    margin-right: -2.5rem !important;
+    margin-right: -0.5rem !important;
     margin-left: 0.5rem !important;
     opacity: 1 !important;
 }
 
-input[type="number"] {
-    padding-right: 5rem !important;
+.app-input__control[type="number"] {
+    padding-right: 3.5rem !important;
 }
 
-/* Đảm bảo font inherit */
-.font-inherit {
-    font-family: inherit;
+/* ✅ Animation shake */
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-4px);
+    }
+
+    75% {
+        transform: translateX(4px);
+    }
 }
 
-/* shared/components/input/input.component.css */
-:host,
-:host * {
-    border: none !important;
-}
+/* ✅ Responsive */
+@media (max-width: 640px) {
+    .app-input__control {
+        padding: 0.625rem 0.875rem;
+        font-size: 0.8125rem;
+        border-radius: 0.625rem;
+    }
 
-:host .flex {
-    border: none !important;
-}
+    .app-input__control.has-icon {
+        padding-left: 2.25rem;
+    }
 
-:host {
-    display: block;
-    width: 100%;
-    padding: 0 !important;
-    border: none !important;
-}
-
-:host .flex {
-    padding: 0 !important;
-    border: none !important;
+    .app-input__icon {
+        font-size: 1rem;
+        left: 0.625rem;
+    }
 }

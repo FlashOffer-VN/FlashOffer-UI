@@ -4,18 +4,20 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { InputComponent } from '../../../../shared/components/input/input.component';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
-import { PartnerSummaryComponent } from '../partner-summary/partner-summary.component';
+import { StepPersonalComponent } from '../step-personal/step-personal.component';
+import { StepBusinessComponent } from '../step-business/step-business.component';
+import { StepSalesComponent } from '../step-sales/step-sales.component';
+import { StepConfirmationComponent } from '../step-confirmation/step-confirmation.component';
+
 import {
     BUSINESS_TYPES,
     COMPANY_SIZES,
     PRODUCT_CATEGORIES,
     COMMISSION_TYPES,
-    CommissionType,
-    CommissionTier
-} from '../../models/partner.model';
-import { PartnerRegisterService } from '../../services/partner-register.service';
+    CommissionType
+} from '../../../../core/models/partner.model';
+import { PartnerRegisterService } from '../../../../core/services/partner-register.service';
 
 @Component({
     selector: 'app-partner-form',
@@ -24,36 +26,25 @@ import { PartnerRegisterService } from '../../services/partner-register.service'
         CommonModule,
         ReactiveFormsModule,
         TranslateModule,
-        InputComponent,
         ButtonComponent,
-        PartnerSummaryComponent
+        StepPersonalComponent,
+        StepBusinessComponent,
+        StepSalesComponent,
+        StepConfirmationComponent
     ],
     templateUrl: './partner-form.component.html',
     styleUrls: ['./partner-form.component.css']
 })
 export class PartnerFormComponent implements OnInit {
     @Input() currentStep = 1;
-    @Input() totalSteps = 4;  // ✅ Đổi thành 4
+    @Input() totalSteps = 4;
     @Input() isLoading = false;
     @Output() stepChange = new EventEmitter<number>();
     @Output() submit = new EventEmitter<void>();
 
     registerForm!: FormGroup;
-    businessTypes = BUSINESS_TYPES;
-    companySizes = COMPANY_SIZES;
-    productCategories = PRODUCT_CATEGORIES;
-    commissionTypes = COMMISSION_TYPES;
     isReferralValid = false;
     private referralCheckTimeout: any;
-
-    // ✅ Commission tiers mẫu
-    commissionTiers: CommissionTier[] = [
-        { from: 0, to: 1000000, rate: 5, label: 'Dưới 1 triệu' },
-        { from: 1000000, to: 5000000, rate: 8, label: '1 - 5 triệu' },
-        { from: 5000000, to: 10000000, rate: 12, label: '5 - 10 triệu' },
-        { from: 10000000, to: 50000000, rate: 15, label: '10 - 50 triệu' },
-        { from: 50000000, to: Infinity, rate: 20, label: 'Trên 50 triệu' }
-    ];
 
     constructor(
         private fb: FormBuilder,
@@ -77,13 +68,13 @@ export class PartnerFormComponent implements OnInit {
             companyName: ['', [Validators.required, Validators.minLength(2)]],
             companyTax: ['', [Validators.required, Validators.pattern(/^[0-9]{10,14}$/)]],
             companyAddress: ['', [Validators.required, Validators.minLength(5)]],
-            businessType: ['', Validators.required],
+            businessType: [null, Validators.required],
             companyWebsite: ['', Validators.pattern(/^https?:\/\/.+\..+$/)],
-            companySize: ['', Validators.required],
+            companySize: [null, Validators.required],
 
-            // ✅ Step 3: Sales Info (Thêm mới)
+            // Step 3: Sales Info
             products: this.fb.array([]),
-            commissionType: [CommissionType.PERCENTAGE, Validators.required],
+            commissionType: [1, Validators.required],
             commissionRate: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
             minOrderValue: [''],
             maxCommission: [''],
@@ -95,11 +86,10 @@ export class PartnerFormComponent implements OnInit {
             agreeTerms: [false, Validators.requiredTrue]
         });
 
-        // ✅ Thêm 1 sản phẩm mặc định
+        // Add default product
         this.addProduct();
     }
 
-    // ✅ FormArray cho sản phẩm
     get products(): FormArray {
         return this.registerForm.get('products') as FormArray;
     }
@@ -107,7 +97,7 @@ export class PartnerFormComponent implements OnInit {
     addProduct(): void {
         const productForm = this.fb.group({
             name: ['', [Validators.required, Validators.minLength(2)]],
-            category: ['', Validators.required],
+            category: [null, Validators.required],
             retailPrice: ['', [Validators.required, Validators.min(0)]],
             wholesalePrice: ['', [Validators.required, Validators.min(0)]],
             minOrderQuantity: [1, [Validators.required, Validators.min(1)]],
@@ -144,44 +134,40 @@ export class PartnerFormComponent implements OnInit {
         });
     }
 
-    isFieldInvalid(fieldName: string): boolean {
-        const control = this.registerForm.get(fieldName);
-        return !!(control?.invalid && (control?.touched || control?.dirty));
-    }
-
-    getErrorMessage(fieldName: string): string {
-        const control = this.registerForm.get(fieldName);
-        if (!control || !control.errors) return '';
-
-        const errors = control.errors;
-        if (errors['required']) return 'Trường này là bắt buộc';
-        if (errors['email']) return 'Email không hợp lệ';
-        if (errors['minlength']) return `Tối thiểu ${errors['minlength'].requiredLength} ký tự`;
-        if (errors['maxlength']) return `Tối đa ${errors['maxlength'].requiredLength} ký tự`;
-        if (errors['pattern']) {
-            if (fieldName === 'phone') return 'Số điện thoại không hợp lệ (VD: 0912345678)';
-            if (fieldName === 'companyTax') return 'Mã số thuế không hợp lệ (10-14 số)';
-            if (fieldName === 'companyWebsite') return 'Website không hợp lệ (VD: https://example.com)';
-            return 'Định dạng không hợp lệ';
-        }
-        if (errors['min']) return `Giá trị tối thiểu là ${errors['min'].min}`;
-        if (errors['max']) return `Giá trị tối đa là ${errors['max'].max}`;
-        return 'Dữ liệu không hợp lệ';
-    }
-
-    // ✅ Next Step với validation
+    // ✅ THÊM DEBUG
     nextStep(): void {
+        // console.log('🔍 Next Step Called - Current Step:', this.currentStep);
+
         if (this.currentStep === 1) {
             const controls = ['fullName', 'email', 'phone', 'position'];
-            if (!this.validateStep(controls)) return;
+            // console.log('📋 Validating Step 1 controls:', controls);
+            if (!this.validateStep(controls)) {
+                // console.log('❌ Step 1 validation failed');
+                return;
+            }
+            // console.log('✅ Step 1 validation passed');
         } else if (this.currentStep === 2) {
             const controls = ['companyName', 'companyTax', 'companyAddress', 'businessType', 'companySize'];
-            if (!this.validateStep(controls)) return;
+            // console.log('📋 Validating Step 2 controls:', controls);
+            // Log giá trị hiện tại của các field
+            controls.forEach(control => {
+                const value = this.registerForm.get(control)?.value;
+                const valid = this.registerForm.get(control)?.valid;
+                // console.log(`  🔍 ${control}: value = ${value}, valid = ${valid}`);
+            });
+            if (!this.validateStep(controls)) {
+                // console.log('❌ Step 2 validation failed');
+                return;
+            }
+            // console.log('✅ Step 2 validation passed');
         } else if (this.currentStep === 3) {
-            // ✅ Validate Step 3: Products + Commission
+            // console.log('📋 Validating Step 3...');
             const productsValid = this.products.controls.every(ctrl => ctrl.valid);
             const commissionValid = this.registerForm.get('commissionType')?.valid &&
                 this.registerForm.get('commissionRate')?.valid;
+
+            // console.log(`  🔍 Products valid: ${productsValid}`);
+            // console.log(`  🔍 Commission valid: ${commissionValid}`);
 
             if (!productsValid) {
                 this.products.controls.forEach(ctrl => {
@@ -189,22 +175,27 @@ export class PartnerFormComponent implements OnInit {
                         ctrl.get(key)?.markAsTouched();
                     });
                 });
+                // console.log('❌ Products invalid');
                 return;
             }
             if (!commissionValid) {
                 this.registerForm.get('commissionType')?.markAsTouched();
                 this.registerForm.get('commissionRate')?.markAsTouched();
+                // console.log('❌ Commission invalid');
                 return;
             }
+            // console.log('✅ Step 3 validation passed');
         }
 
         this.currentStep++;
+        // console.log(`➡️ Moving to step ${this.currentStep}`);
         this.stepChange.emit(this.currentStep);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     validateStep(controls: string[]): boolean {
         let isValid = true;
+
         controls.forEach(control => {
             const ctrl = this.registerForm.get(control);
             if (ctrl) {
@@ -212,9 +203,12 @@ export class PartnerFormComponent implements OnInit {
                 ctrl.markAsDirty();
                 if (ctrl.invalid) {
                     isValid = false;
+                    // console.log(`❌ ${control} is invalid:`, ctrl.errors);
                 }
             }
         });
+
+        // console.log(`📊 Validation result: ${isValid ? '✅ PASS' : '❌ FAIL'}`);
 
         if (!isValid) {
             const firstInvalid = controls.find(control => {
@@ -222,10 +216,13 @@ export class PartnerFormComponent implements OnInit {
                 return ctrl?.invalid;
             });
             if (firstInvalid) {
+                // console.log(`🎯 First invalid field: ${firstInvalid}`);
                 const element = document.querySelector(`[formcontrolname="${firstInvalid}"]`);
                 if (element) {
                     (element as HTMLElement).focus();
                     element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    // console.log(`⚠️ Cannot find element for: ${firstInvalid}`);
                 }
             }
         }
@@ -240,7 +237,14 @@ export class PartnerFormComponent implements OnInit {
         }
     }
 
+    // partner-form/partner-form.component.ts
     onSubmit(): void {
+        // console.log('🔥 SUBMIT TRIGGERED!');
+        // console.log('📊 Form valid?', this.registerForm.valid);
+        // console.log('📊 AgreeTerms value:', this.registerForm.get('agreeTerms')?.value);
+        // console.log('📊 AgreeTerms valid:', this.registerForm.get('agreeTerms')?.valid);
+
+        // ✅ Mark all fields as touched
         Object.keys(this.registerForm.controls).forEach(key => {
             const control = this.registerForm.get(key);
             if (control) {
@@ -249,41 +253,30 @@ export class PartnerFormComponent implements OnInit {
             }
         });
 
+        // ✅ KIỂM TRA INVALID - PHẢI RETURN
         if (this.registerForm.invalid) {
+            // console.log('❌ Form is INVALID - BLOCKING submit');
+
+            // Scroll đến first invalid field
             const firstInvalid = Object.keys(this.registerForm.controls).find(key => {
                 const control = this.registerForm.get(key);
                 return control?.invalid;
             });
-            if (firstInvalid) {
-                const element = document.querySelector(`[formcontrolname="${firstInvalid}"]`);
-                if (element) {
-                    (element as HTMLElement).focus();
-                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            if (firstInvalid === 'agreeTerms') {
+                const termsElement = document.querySelector('.terms-group');
+                if (termsElement) {
+                    termsElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    termsElement.classList.add('highlight-error');
+                    setTimeout(() => termsElement.classList.remove('highlight-error'), 2000);
                 }
             }
+
+            // ✅ QUAN TRỌNG: PHẢI RETURN ĐỂ KHÔNG GỌI EMIT
             return;
         }
 
+        // console.log('✅ Form is VALID - Emitting submit');
         this.submit.emit();
-    }
-
-    getBusinessTypeLabel(value: string): string {
-        const found = this.businessTypes.find(t => t.value === value);
-        return found ? found.label : '---';
-    }
-
-    getCompanySizeLabel(value: string): string {
-        const found = this.companySizes.find(t => t.value === value);
-        return found ? found.label : '---';
-    }
-
-    getProductCategoryLabel(value: string): string {
-        const found = this.productCategories.find(t => t.value === value);
-        return found ? found.label : '---';
-    }
-
-    getCommissionTypeLabel(value: string): string {
-        const found = this.commissionTypes.find(t => t.value === value);
-        return found ? found.label : '---';
     }
 }
