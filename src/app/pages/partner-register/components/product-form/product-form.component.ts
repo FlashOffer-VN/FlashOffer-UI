@@ -3,10 +3,9 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-
-import { InputComponent } from '../../../../shared/components/input/input.component';
-import { SelectComponent } from '../../../../shared/components/select/select.component';  // ✅ Thêm SelectComponent
-import { PRODUCT_CATEGORIES } from '../../../../core/models/partner.model';
+import { SelectComponent } from '@shared/components/select/select.component';
+import { InputComponent } from '@shared/components/input/input.component';
+import { PRODUCT_CATEGORIES } from '@core/models/partner.model';
 
 @Component({
   selector: 'app-product-form',
@@ -16,10 +15,10 @@ import { PRODUCT_CATEGORIES } from '../../../../core/models/partner.model';
     ReactiveFormsModule,
     TranslateModule,
     InputComponent,
-    SelectComponent  
+    SelectComponent
   ],
   templateUrl: './product-form.component.html',
-  styleUrls: ['./product-form.component.css']    
+  styleUrls: ['./product-form.component.css']
 })
 export class ProductFormComponent {
   @Input() productForm!: FormGroup;

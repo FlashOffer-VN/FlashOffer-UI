@@ -4,10 +4,9 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
-
-import { LanguageSwitcherComponent } from '../../../language-switcher/language-switcher.component';
 import { AppService } from '../../../../../core/services/app.service';
 import { UserRole } from '../../../../../core/models/auth.model';
+import { LanguageSwitcherComponent } from '../../../language-switcher/language-switcher.component';
 
 @Component({
     selector: 'app-guest-header',

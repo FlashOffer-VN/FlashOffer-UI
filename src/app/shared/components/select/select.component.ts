@@ -3,6 +3,9 @@ import { Component, Input, Output, EventEmitter, forwardRef, OnInit, ChangeDetec
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { StringHelper } from '@core/utils/string-helper';
+import { AppService } from '@core/services/app.service';
 
 export interface SelectItem {
     value: any;
@@ -14,7 +17,7 @@ export interface SelectItem {
 @Component({
     selector: 'app-select',
     standalone: true,
-    imports: [CommonModule, FormsModule, TranslateModule],
+    imports: [CommonModule, FormsModule, TranslateModule, NgSelectModule],
     templateUrl: './select.component.html',
     styleUrls: ['./select.component.css'],
     providers: [
@@ -28,11 +31,9 @@ export interface SelectItem {
 export class SelectComponent implements ControlValueAccessor, OnInit {
     @Input() items: SelectItem[] = [];
     @Input() label: string = '';
-    @Input() bindLabel = 'label';
-    @Input() bindValue = 'value';
-    @Input() placeholder = 'Chọn...';
+    @Input() placeholder = StringHelper.empty();
     @Input() required = false;
-    @Input() errorMessage = '';
+    @Input() errorMessage = StringHelper.empty();
     @Input() isInvalid = false;
     @Input() touched = false;
     @Input() disabled = false;
@@ -43,28 +44,30 @@ export class SelectComponent implements ControlValueAccessor, OnInit {
 
     value: any = null;
 
-    // ControlValueAccessor
     onChange: any = () => { };
     onTouched: any = () => { };
 
-    constructor(private cdr: ChangeDetectorRef) { }  // ✅ Thêm ChangeDetectorRef
+    constructor(private cdr: ChangeDetectorRef, private _appService: AppService) { }
 
     ngOnInit(): void {
+        // Map items nếu cần
         if (this.items.length > 0 && !this.items[0].hasOwnProperty('label')) {
             this.items = this.items.map(item => ({
-                value: item[this.bindValue] ?? item.value,
-                label: item[this.bindLabel] ?? item.label ?? String(item)
+                value: item.value,
+                label: item.label ?? String(item)
             }));
         }
     }
 
     onValueChange(newValue: any): void {
-        console.log('🔄 Select changed:', newValue);
+        // Auto convert number
+        if (typeof newValue === 'string' && !isNaN(Number(newValue)) && newValue !== '') {
+            newValue = Number(newValue);
+        }
         this.value = newValue;
         this.onChange(newValue);
-        this.onTouched();
         this.valueChange.emit(newValue);
-        this.cdr.detectChanges();  // ✅ Force re-render
+        this.cdr.detectChanges();
     }
 
     onBlur(): void {
@@ -72,10 +75,10 @@ export class SelectComponent implements ControlValueAccessor, OnInit {
         this.blur.emit();
     }
 
+    // ControlValueAccessor
     writeValue(value: any): void {
-        console.log('📝 Select writeValue:', value);
         this.value = value;
-        this.cdr.detectChanges();  // ✅ Force re-render
+        this.cdr.detectChanges();
     }
 
     registerOnChange(fn: any): void {
@@ -88,11 +91,5 @@ export class SelectComponent implements ControlValueAccessor, OnInit {
 
     setDisabledState(isDisabled: boolean): void {
         this.disabled = isDisabled;
-    }
-
-    get selectedLabel(): string {
-        if (!this.items || this.items.length === 0) return this.placeholder;
-        const found = this.items.find(item => item[this.bindValue] === this.value);
-        return found ? found[this.bindLabel] : this.placeholder;
     }
 }

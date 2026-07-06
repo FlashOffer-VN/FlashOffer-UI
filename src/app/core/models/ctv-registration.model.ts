@@ -29,3 +29,8 @@ export enum SalesChannel {
     SALES_CHANNEL_OFFLINE = 4,
     SALES_CHANNEL_OTHER = 5
 }
+
+export interface SalesChannelOption {
+    value: SalesChannel;
+    label: string;
+}

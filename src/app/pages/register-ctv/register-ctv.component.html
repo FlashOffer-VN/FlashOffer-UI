@@ -46,16 +46,12 @@
 
                 <!-- Sales Channel -->
                 <div class="form-group full-width">
-                    <label>{{ 'REGISTER_CTV_SALES_CHANNEL' | translate }} <span class="required">*</span></label>
-                    <select formControlName="salesChannel">
-                        <option value="">{{ 'REGISTER_CTV_SALES_CHANNEL_PLACEHOLDER' | translate }}</option>
-                        <option *ngFor="let channel of salesChannels" [value]="channel.value">
-                            {{ channel.label }}
-                        </option>
-                    </select>
-                    <div class="error-message" *ngIf="f['salesChannel'].invalid && f['salesChannel'].touched">
-                        {{ 'REGISTER_CTV_SALES_CHANNEL_ERROR' | translate }}
-                    </div>
+                    <app-select formControlName="salesChannel" [items]="salesChannels"
+                        [label]="'CTV_FORM.SALES_CHANNEL' | translate"
+                        [placeholder]="'CTV_FORM.SALES_CHANNEL_PLACEHOLDER' | translate" [required]="true"
+                        [touched]="true" [isInvalid]="isFieldInvalid('salesChannel')"
+                        [errorMessage]="getErrorMessage('salesChannel')">
+                    </app-select>
                 </div>
 
                 <!-- Experience -->

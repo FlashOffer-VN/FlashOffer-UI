@@ -426,5 +426,9 @@
         "ERROR_INVALID": "Dữ liệu không hợp lệ",
         "ERROR_FORM_INVALID": "Vui lòng kiểm tra lại thông tin",
         "ERROR_REGISTER_FAILED": "Đăng ký thất bại, vui lòng thử lại"
+    },
+    "SELECT_COMPONENT": {
+        "PLACEHOLDER": "Chọn một tùy chọn",
+        "NO_OPTIONS": "Không có tùy chọn nào"
     }
 }

@@ -416,5 +416,9 @@
         "ERROR_INVALID": "Invalid data",
         "ERROR_FORM_INVALID": "Please check your information",
         "ERROR_REGISTER_FAILED": "Registration failed, please try again"
+    },
+    "SELECT_COMPONENT": {
+        "PLACEHOLDER": "Select an option",
+        "NO_OPTIONS": "No options available"
     }
 }

@@ -3,9 +3,7 @@ import { Routes } from '@angular/router';
 import { AdminLayoutComponent } from './shared/components/layouts/admin-layout/admin-layout.component';
 import { GuestLayoutComponent } from './shared/components/layouts/guest-layout/guest-layout.component';
 import { UserLayoutComponent } from './shared/components/layouts/user-layout/user-layout.component';
-import { AuthGuard } from './core/guards/auth.guard';
-import { AdminGuard } from './core/guards/admin.guard';
-import { GuestGuard } from './core/guards/guest.guard';
+import { AdminGuard, AuthGuard, GuestGuard } from './core/guards';
 
 export const routes: Routes = [
     // Guest routes (chưa đăng nhập)

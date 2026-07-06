@@ -3,13 +3,9 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-
-import { InputComponent } from '../../../../shared/components/input/input.component';
-import { SelectComponent } from '../../../../shared/components/select/select.component';  // ✅ Thêm SelectComponent
-import {
-  BUSINESS_TYPES,
-  COMPANY_SIZES
-} from '../../../../core/models/partner.model';
+import { InputComponent } from '@shared/components/input/input.component';
+import { SelectComponent } from '@shared/components/select/select.component';
+import { BUSINESS_TYPES, COMPANY_SIZES } from '@core/models/partner.model';
 
 @Component({
   selector: 'app-step-business',
@@ -21,8 +17,8 @@ import {
     InputComponent,
     SelectComponent
   ],
-  templateUrl: './step-business.component.html',  
-  styleUrls: ['./step-business.component.css']  
+  templateUrl: './step-business.component.html',
+  styleUrls: ['./step-business.component.css']
 })
 export class StepBusinessComponent {
   @Input() formGroup!: FormGroup;

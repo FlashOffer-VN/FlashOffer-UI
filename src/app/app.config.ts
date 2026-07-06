@@ -5,6 +5,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import { routes } from './app.routes';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
@@ -39,17 +40,18 @@ export const appConfig: ApplicationConfig = {
     provideRouter(
       routes,
       withViewTransitions()
-      // ❌ Xóa withScrollPositionRestoration - không có trong Angular 17+
     ),
     provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
-    importProvidersFrom(TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
-    })),
+    importProvidersFrom(
+      NgSelectModule,
+      TranslateModule.forRoot({
+        loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
+        }
+      })),
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializer,

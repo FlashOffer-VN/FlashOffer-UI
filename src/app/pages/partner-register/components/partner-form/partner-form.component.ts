@@ -10,13 +10,6 @@ import { StepBusinessComponent } from '../step-business/step-business.component'
 import { StepSalesComponent } from '../step-sales/step-sales.component';
 import { StepConfirmationComponent } from '../step-confirmation/step-confirmation.component';
 
-import {
-    BUSINESS_TYPES,
-    COMPANY_SIZES,
-    PRODUCT_CATEGORIES,
-    COMMISSION_TYPES,
-    CommissionType
-} from '../../../../core/models/partner.model';
 import { PartnerRegisterService } from '../../../../core/services/partner-register.service';
 
 @Component({

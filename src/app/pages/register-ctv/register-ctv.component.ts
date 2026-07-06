@@ -4,11 +4,9 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { AppService } from '../../core/services/app.service';
-import { ButtonComponent } from '../../shared/components/button/button.component';
-import { InputComponent } from '../../shared/components/input/input.component';
-import { SelectComponent } from '../../shared/components/select/select.component';
-import { CtvRegistrationRequest } from '../../core/models/ctv-registration.model';
+import { AppService } from '@core/services/app.service';
+import { CtvRegistrationRequest, SalesChannelOption } from '@core/models/ctv-registration.model';
+import { SelectComponent } from '@shared/components/select/select.component';
 
 @Component({
     selector: 'app-register-ctv',
@@ -17,6 +15,7 @@ import { CtvRegistrationRequest } from '../../core/models/ctv-registration.model
         CommonModule,
         ReactiveFormsModule,
         TranslateModule,
+        SelectComponent,
     ],
     templateUrl: './register-ctv.component.html',
     styleUrls: ['./register-ctv.component.css']
@@ -24,7 +23,7 @@ import { CtvRegistrationRequest } from '../../core/models/ctv-registration.model
 export class RegisterCtvComponent implements OnInit {
     ctvForm!: FormGroup;
     isSubmitting = false;
-    salesChannels: any[] = [];
+    salesChannels: SalesChannelOption[] = [];
 
     constructor(
         private fb: FormBuilder,
@@ -82,15 +81,14 @@ export class RegisterCtvComponent implements OnInit {
         const request: CtvRegistrationRequest = this.ctvForm.value;
 
         this._appService.ctvRegistration.register(request).subscribe({
-            next: (response) => {
+            next: (response: any) => {
                 this.isSubmitting = false;
                 this._appService.showSuccess(this._appService.instant('CTV_FORM.SUCCESS_REGISTER'));
                 this.ctvForm.reset();
             },
-            error: (error) => {
+            error: (error: any) => {
                 this.isSubmitting = false;
-                const errorMsg = error.errors?.[0] || error.message ||
-                    this._appService.instant('CTV_FORM.ERROR_REGISTER_FAILED');
+                const errorMsg = this._appService.instant('CTV_FORM.ERROR_REGISTER_FAILED');
                 this._appService.showError(errorMsg);
             }
         });

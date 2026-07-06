@@ -1,6 +1,5 @@
 <!-- shared/components/select/select.component.html -->
-<div class="app-select" [class.is-invalid]="isInvalid && touched" [class.is-disabled]="disabled">
-    <!-- Label -->
+<div class="app-select" [class.is-invalid]="isInvalid && touched">
     @if (label) {
     <label class="app-select__label">
         {{ label }}
@@ -10,41 +9,11 @@
     </label>
     }
 
-    <!-- Select -->
-    <div class="app-select__wrapper">
-        <!-- ✅ Dùng [(ngModel)] thay vì [value] + (change) -->
-        <select class="app-select__control" [ngModel]="value" (ngModelChange)="onValueChange($event)" (blur)="onBlur()"
-            [disabled]="disabled || loading" [required]="required">
+    <ng-select [items]="items" bindLabel="label" bindValue="value" [placeholder]="placeholder" [(ngModel)]="value"
+        (ngModelChange)="onValueChange($event)" (blur)="onBlur()" [disabled]="disabled" [searchable]="false"
+        [clearable]="false" [required]="required" [class.ng-invalid]="isInvalid" [class.ng-touched]="touched">
+    </ng-select>
 
-            <!-- Placeholder option -->
-            @if (placeholder) {
-            <option [value]="null" disabled>{{ placeholder }}</option>
-            }
-
-            <!-- Options -->
-            @for (item of items; track item.value) {
-            <option [value]="item.value" [disabled]="item.disabled">
-                {{ item.label }}
-            </option>
-            }
-        </select>
-
-        <!-- Loading indicator -->
-        @if (loading) {
-        <div class="app-select__loading">
-            <i class="fa-solid fa-spinner fa-spin"></i>
-        </div>
-        }
-
-        <!-- Arrow icon -->
-        @if (!loading) {
-        <div class="app-select__arrow">
-            <i class="fa-solid fa-chevron-down"></i>
-        </div>
-        }
-    </div>
-
-    <!-- Error message -->
     @if (isInvalid && touched && errorMessage) {
     <div class="app-select__error">{{ errorMessage }}</div>
     }
