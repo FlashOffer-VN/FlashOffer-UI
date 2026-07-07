@@ -17,7 +17,33 @@
     "moduleResolution": "node",
     "types": [
       "node"
-    ]
+    ],
+    "paths": {
+      "@core/*": [
+        "./src/app/core/*"
+      ],
+      "@shared/*": [
+        "./src/app/shared/*"
+      ],
+      "@features/*": [
+        "./src/app/features/*"
+      ],
+      "@pages/*": [
+        "./src/app/pages/*"
+      ],
+      "@env/*": [
+        "./src/environments/*"
+      ],
+      "@models/*": [
+        "./src/app/core/models/*"
+      ],
+      "@services/*": [
+        "./src/app/core/services/*"
+      ],
+      "@utils/*": [
+        "./src/app/core/utils/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

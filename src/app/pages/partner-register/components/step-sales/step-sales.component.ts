@@ -1,13 +1,14 @@
 // step-sales/step-sales.component.ts
+
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormArray } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-
-import { InputComponent } from '../../../../shared/components/input/input.component';
-import { SelectComponent } from '../../../../shared/components/select/select.component';
+import { InputComponent } from '@shared/components/input/input.component';
 import { ProductFormComponent } from '../product-form/product-form.component';
-import { COMMISSION_TYPES } from '../../../../core/models/partner.model';
+import { COMMISSION_TYPES } from '@core/models/partner.model';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { AppService } from '@core/services/app.service';  // ✅ Thêm import
 
 @Component({
   selector: 'app-step-sales',
@@ -17,8 +18,8 @@ import { COMMISSION_TYPES } from '../../../../core/models/partner.model';
     ReactiveFormsModule,
     TranslateModule,
     InputComponent,
-    SelectComponent,
-    ProductFormComponent
+    ProductFormComponent,
+    NgSelectWrapperComponent,
   ],
   templateUrl: './step-sales.component.html',
   styleUrls: ['./step-sales.component.css']
@@ -29,6 +30,8 @@ export class StepSalesComponent {
   @Output() removeProductEvent = new EventEmitter<number>();
 
   commissionTypes = COMMISSION_TYPES;
+
+  constructor(private _appService: AppService) { }  // ✅ Inject AppService
 
   get products(): FormArray {
     return this.formGroup.get('products') as FormArray;
@@ -52,9 +55,27 @@ export class StepSalesComponent {
     if (!control || !control.errors) return '';
 
     const errors = control.errors;
-    if (errors['required']) return 'Trường này là bắt buộc';
-    if (errors['min']) return `Giá trị tối thiểu là ${errors['min'].min}`;
-    if (errors['max']) return `Giá trị tối đa là ${errors['max'].max}`;
-    return 'Dữ liệu không hợp lệ';
+
+    // ✅ Thay hardcode bằng i18n
+    if (errors['required']) {
+      return this._appService.instant('VALIDATION.REQUIRED');
+    }
+    if (errors['min']) {
+      return this._appService.instant('VALIDATION.MIN', {
+        min: errors['min'].min
+      });
+    }
+    if (errors['max']) {
+      return this._appService.instant('VALIDATION.MAX', {
+        max: errors['max'].max
+      });
+    }
+    if (errors['minlength']) {
+      return this._appService.instant('VALIDATION.MIN_LENGTH', {
+        length: errors['minlength'].requiredLength
+      });
+    }
+
+    return this._appService.instant('VALIDATION.INVALID');
   }
 }

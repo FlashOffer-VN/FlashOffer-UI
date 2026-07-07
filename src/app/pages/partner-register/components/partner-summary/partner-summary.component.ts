@@ -20,7 +20,7 @@ export class PartnerSummaryComponent {
   }
 
   getCompanySizeLabel(value: number): string {
-    const found = COMPANY_SIZES.find(t => t.value === value);
+    const found = COMPANY_SIZES.find((t: any) => t.value === value);
     return found ? found.label : '---';
   }
 }

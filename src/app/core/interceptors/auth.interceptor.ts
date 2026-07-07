@@ -4,36 +4,48 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, take, switchMap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
     private isRefreshing = false;
     private refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
-    constructor(private authService: AuthService) { }
+    constructor(
+        private authService: AuthService,
+        private translateService: TranslateService
+    ) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        // ✅ Lấy token
         const token = this.authService.getToken();
+        const currentLang = this.translateService.currentLang || 'vi';
 
-        // ✅ Clone request và thêm Authorization header nếu có token
-        let authReq = req;
+        let authReq = req.clone({
+            setHeaders: {
+                'Accept-Language': currentLang
+            }
+        });
+
         if (token) {
-            authReq = this.addTokenToRequest(req, token);
+            authReq = authReq.clone({
+                setHeaders: {
+                    ...authReq.headers.keys().reduce((acc, key) => {
+                        acc[key] = authReq.headers.get(key)!;
+                        return acc;
+                    }, {} as Record<string, string>),
+                    Authorization: `Bearer ${token}`
+                }
+            });
         }
 
         return next.handle(authReq).pipe(
             catchError((error: HttpErrorResponse) => {
-                // Nếu 401 (Unauthorized) - thử refresh token
                 if (error.status === 401 && !authReq.url.includes('auth/refresh')) {
                     return this.handle401Error(authReq, next);
                 }
-
-                // Nếu 403 (Forbidden) - logout luôn
                 if (error.status === 403) {
                     this.authService.logout();
                 }
-
                 return throwError(() => error);
             })
         );
@@ -57,8 +69,6 @@ export class AuthInterceptor implements HttpInterceptor {
                     this.isRefreshing = false;
                     const newToken = response?.data?.token || response?.token;
                     this.refreshTokenSubject.next(newToken);
-
-                    // ✅ Retry request với token mới
                     return next.handle(this.addTokenToRequest(request, newToken));
                 }),
                 catchError((error) => {

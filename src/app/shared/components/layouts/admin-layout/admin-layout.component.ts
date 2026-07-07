@@ -4,10 +4,10 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { AppService } from '../../../../core/services/app.service';
 import { AdminSidebarComponent } from './admin-sidebar/admin-sidebar.component';
-import { AdminHeaderComponent } from './admin-header/admin-header.component';
 import { AdminFooterComponent } from './admin-footer/admin-footer.component';
+import { AppService } from '../../../../core/services/app.service';
+import { AdminHeaderComponent } from './admin-header/admin-header.component';
 
 @Component({
     selector: 'app-admin-layout',

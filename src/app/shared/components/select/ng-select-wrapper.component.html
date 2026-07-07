@@ -1,0 +1,26 @@
+<!-- select/ng-select-wrapper.component.html -->
+
+<div class="ng-select-wrapper" [style.--select-primary]="primaryColorFinal || undefined"
+    [style.--select-primary-dark]="primaryDarkFinal || undefined">
+
+    @if (label) {
+    <label [for]="id" class="ng-select-wrapper__label">
+        {{ label }}
+        @if (required) {
+        <span class="ng-select-wrapper__required">*</span>
+        }
+    </label>
+    }
+
+    <ng-select [id]="id" [items]="items" bindLabel="label" bindValue="value" [(ngModel)]="value"
+        (ngModelChange)="onValueChange($event)" (blur)="onBlur()" [placeholder]="placeholder" [disabled]="disabled"
+        [required]="required" [searchable]="searchable" [clearable]="clearable" [closeOnSelect]="closeOnSelect"
+        [appendTo]="appendTo || ''" dropdownPosition="bottom" [class.is-invalid]="showInvalid" (open)="onOpen()"
+        (close)="onClose()" [style.--select-primary]="primaryColorFinal || undefined"
+        [style.--select-primary-dark]="primaryDarkFinal || undefined">
+    </ng-select>
+
+    @if (showInvalid && errorMessage) {
+    <div class="ng-select-wrapper__error">{{ errorMessage }}</div>
+    }
+</div>

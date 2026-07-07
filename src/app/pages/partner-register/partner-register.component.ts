@@ -2,13 +2,13 @@
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http'; // ✅ Import HttpErrorResponse
+import { HttpErrorResponse } from '@angular/common/http';
 
-import { AppService } from '../../core/services/app.service';
 import { PartnerHeroComponent } from './components/partner-hero/partner-hero.component';
 import { PartnerStepsComponent } from './components/partner-steps/partner-steps.component';
-import { PartnerFormComponent } from './components/partner-form/partner-form.component';
+import { AppService } from '../../core/services/app.service';
 import { PartnerRegisterService } from '../../core/services/partner-register.service';
+import { PartnerFormComponent } from './components/partner-form/partner-form.component';
 
 @Component({
   selector: 'app-partner-register',
