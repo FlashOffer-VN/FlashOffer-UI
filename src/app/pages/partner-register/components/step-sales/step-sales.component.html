@@ -26,11 +26,12 @@
         <div class="form-grid" [formGroup]="formGroup">
             <!-- Commission Type -->
             <div class="form-group">
-                <app-select formControlName="commissionType" [items]="commissionTypes"
+                <app-ng-select-wrapper formControlName="commissionType" [items]="commissionTypes"
                     [label]="'PARTNER.COMMISSION_TYPE' | translate"
                     [placeholder]="'PARTNER.COMMISSION_TYPE_PLACEHOLDER' | translate" [required]="true"
-                    [isInvalid]="isFieldInvalid('commissionType')" [errorMessage]="getErrorMessage('commissionType')">
-                </app-select>
+                    [primaryColor]="'#7C3AED'" [primaryDark]="'#5B21B6'" [isInvalid]="isFieldInvalid('commissionType')"
+                    [errorMessage]="getErrorMessage('commissionType')">
+                </app-ng-select-wrapper>
             </div>
 
             <!-- Commission Rate -->

@@ -3,10 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ScrollToTopComponent } from './shared/components/scroll-to-top/scroll-to-top.component';
-import { AppService } from './core/services/app.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { routeAnimation } from './shared/animations/animations';
+import { AppService } from './core/services/app.service';
 
 @Component({
     selector: 'app-root',

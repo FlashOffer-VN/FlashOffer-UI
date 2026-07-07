@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: process.env['API_URL'] || 'http://localhost:7298/api/v1'
+    apiUrl: process.env['API_URL'] || 'https://flashoffer-api.onrender.com/api/v1'
 };

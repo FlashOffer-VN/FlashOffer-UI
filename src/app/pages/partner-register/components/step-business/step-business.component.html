@@ -26,20 +26,22 @@
 
         <!-- Business Type -->
         <div class="form-group">
-            <app-select formControlName="businessType" [items]="businessTypes"
+            <app-ng-select-wrapper formControlName="businessType" [items]="businessTypes"
                 [label]="'PARTNER.BUSINESS_TYPE' | translate"
-                [placeholder]="'PARTNER.BUSINESS_TYPE_PLACEHOLDER' | translate" [required]="true" [touched]="true"
-                [isInvalid]="isFieldInvalid('businessType')" [errorMessage]="getErrorMessage('businessType')">
-            </app-select>
+                [placeholder]="'PARTNER.BUSINESS_TYPE_PLACEHOLDER' | translate" [required]="true"
+                [primaryColor]="'#7C3AED'" [isInvalid]="isFieldInvalid('businessType')"
+                [errorMessage]="getErrorMessage('businessType')" [primaryColor]="'#7C3AED'" [primaryDark]="'#5B21B6'">
+            </app-ng-select-wrapper>
         </div>
 
         <!-- Company Size -->
         <div class="form-group">
-            <app-select formControlName="companySize" [items]="companySizes"
+            <app-ng-select-wrapper formControlName="companySize" [items]="companySizes"
                 [label]="'PARTNER.COMPANY_SIZE' | translate"
-                [placeholder]="'PARTNER.COMPANY_SIZE_PLACEHOLDER' | translate" [required]="true" [touched]="true"
-                [isInvalid]="isFieldInvalid('companySize')" [errorMessage]="getErrorMessage('companySize')">
-            </app-select>
+                [placeholder]="'PARTNER.COMPANY_SIZE_PLACEHOLDER' | translate" [required]="true"
+                [primaryColor]="'#7C3AED'" [isInvalid]="isFieldInvalid('companySize')"
+                [errorMessage]="getErrorMessage('companySize')" [primaryColor]="'#7C3AED'" [primaryDark]="'#5B21B6'">
+            </app-ng-select-wrapper>
         </div>
 
         <!-- Company Address -->
