@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { InputComponent } from '@shared/components/input/input.component';
 import { PRODUCT_CATEGORIES } from '@core/models/partner.model';
 import { NgSelectWrapperComponent } from "@shared/components/select/ng-select-wrapper.component";
+import { AppService } from '@core/services/app.service';
 
 @Component({
   selector: 'app-product-form',
@@ -30,6 +31,10 @@ export class ProductFormComponent {
 
   categories = PRODUCT_CATEGORIES;
 
+  constructor(
+    private _appService: AppService
+  ) { }
+
   isFieldInvalid(fieldName: string): boolean {
     const control = this.productForm.get(fieldName);
     if (!control?.invalid) return this.touched = true;
@@ -46,9 +51,29 @@ export class ProductFormComponent {
     if (!control || !control.errors) return '';
 
     const errors = control.errors;
-    if (errors['required']) return 'Trường này là bắt buộc';
-    if (errors['min']) return `Giá trị tối thiểu là ${errors['min'].min}`;
-    if (errors['max']) return `Giá trị tối đa là ${errors['max'].max}`;
-    return 'Dữ liệu không hợp lệ';
+
+    if (errors['required']) {
+      return this._appService.instant('VALIDATION.REQUIRED');
+    }
+    if (errors['min']) {
+      return this._appService.instant('VALIDATION.MIN', { min: errors['min'].min });
+    }
+    if (errors['max']) {
+      return this._appService.instant('VALIDATION.MAX', { max: errors['max'].max });
+    }
+    if (errors['minlength']) {
+      return this._appService.instant('VALIDATION.MIN_LENGTH', { length: errors['minlength'].requiredLength });
+    }
+    if (errors['maxlength']) {
+      return this._appService.instant('VALIDATION.MAX_LENGTH', { length: errors['maxlength'].requiredLength });
+    }
+    if (errors['email']) {
+      return this._appService.instant('VALIDATION.EMAIL');
+    }
+    if (errors['pattern']) {
+      return this._appService.instant('VALIDATION.PATTERN');
+    }
+
+    return this._appService.instant('VALIDATION.INVALID');
   }
 }

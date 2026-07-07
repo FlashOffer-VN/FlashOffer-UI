@@ -430,5 +430,19 @@
     "SELECT_COMPONENT": {
         "PLACEHOLDER": "Chọn một tùy chọn",
         "NO_OPTIONS": "Không có tùy chọn nào"
+    },
+    "VALIDATION": {
+        "REQUIRED": "Trường này là bắt buộc",
+        "MIN": "Giá trị tối thiểu là {{min}}",
+        "MAX": "Giá trị tối đa là {{max}}",
+        "MIN_LENGTH": "Tối thiểu {{length}} ký tự",
+        "MAX_LENGTH": "Tối đa {{length}} ký tự",
+        "EMAIL": "Email không hợp lệ",
+        "PATTERN": "Định dạng không hợp lệ",
+        "PATTERN_TAX": "Mã số thuế không hợp lệ (10-14 số)",
+        "PATTERN_WEBSITE": "Website không hợp lệ (VD: https://example.com)",
+        "INVALID": "Dữ liệu không hợp lệ",
+        "REQUIRED_TRUE": "Bạn phải đồng ý với điều khoản",
+        "PATTERN_PHONE": "Số điện thoại không hợp lệ (10-11 số; VD: 0901234567)"
     }
 }
