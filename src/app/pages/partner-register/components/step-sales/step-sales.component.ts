@@ -4,9 +4,9 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormArray } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { InputComponent } from '@shared/components/input/input.component';
-import { SelectComponent } from '@shared/components/select/select.component';
 import { ProductFormComponent } from '../product-form/product-form.component';
 import { COMMISSION_TYPES } from '@core/models/partner.model';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 
 @Component({
   selector: 'app-step-sales',
@@ -16,8 +16,8 @@ import { COMMISSION_TYPES } from '@core/models/partner.model';
     ReactiveFormsModule,
     TranslateModule,
     InputComponent,
-    SelectComponent,
-    ProductFormComponent
+    ProductFormComponent,
+    NgSelectWrapperComponent,
   ],
   templateUrl: './step-sales.component.html',
   styleUrls: ['./step-sales.component.css']

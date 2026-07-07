@@ -3,9 +3,9 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { SelectComponent } from '@shared/components/select/select.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { PRODUCT_CATEGORIES } from '@core/models/partner.model';
+import { NgSelectWrapperComponent } from "@shared/components/select/ng-select-wrapper.component";
 
 @Component({
   selector: 'app-product-form',
@@ -15,7 +15,7 @@ import { PRODUCT_CATEGORIES } from '@core/models/partner.model';
     ReactiveFormsModule,
     TranslateModule,
     InputComponent,
-    SelectComponent
+    NgSelectWrapperComponent
   ],
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.css']
@@ -26,11 +26,19 @@ export class ProductFormComponent {
   @Input() canRemove = false;
   @Output() onRemove = new EventEmitter<number>();
 
+  touched = false;
+
   categories = PRODUCT_CATEGORIES;
 
   isFieldInvalid(fieldName: string): boolean {
     const control = this.productForm.get(fieldName);
+    if (!control?.invalid) return this.touched = true;
     return !!(control?.invalid && (control?.touched || control?.dirty));
+  }
+
+  isFieldTouched(fieldName: string): boolean {
+    const control = this.productForm.get(fieldName);
+    return !!(control?.touched || control?.dirty);
   }
 
   getErrorMessage(fieldName: string): string {

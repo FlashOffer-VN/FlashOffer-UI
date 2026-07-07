@@ -46,12 +46,13 @@
 
                 <!-- Sales Channel -->
                 <div class="form-group full-width">
-                    <app-select formControlName="salesChannel" [items]="salesChannels"
+                    <app-ng-select-wrapper formControlName="salesChannel" [items]="salesChannels"
                         [label]="'CTV_FORM.SALES_CHANNEL' | translate"
                         [placeholder]="'CTV_FORM.SALES_CHANNEL_PLACEHOLDER' | translate" [required]="true"
-                        [touched]="true" [isInvalid]="isFieldInvalid('salesChannel')"
-                        [errorMessage]="getErrorMessage('salesChannel')">
-                    </app-select>
+                        [touched]="ctvForm.get('category')?.touched || false"
+                        [isInvalid]="isFieldInvalid('salesChannel')" [errorMessage]="getErrorMessage('salesChannel')"
+                        appendTo="body">
+                    </app-ng-select-wrapper>
                 </div>
 
                 <!-- Experience -->

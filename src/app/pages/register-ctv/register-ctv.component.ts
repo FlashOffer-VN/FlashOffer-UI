@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { CtvRegistrationRequest, SalesChannelOption } from '@core/models/ctv-registration.model';
-import { SelectComponent } from '@shared/components/select/select.component';
+import { NgSelectWrapperComponent } from "@shared/components/select/ng-select-wrapper.component";
 
 @Component({
     selector: 'app-register-ctv',
@@ -15,7 +15,7 @@ import { SelectComponent } from '@shared/components/select/select.component';
         CommonModule,
         ReactiveFormsModule,
         TranslateModule,
-        SelectComponent,
+        NgSelectWrapperComponent
     ],
     templateUrl: './register-ctv.component.html',
     styleUrls: ['./register-ctv.component.css']
@@ -24,6 +24,7 @@ export class RegisterCtvComponent implements OnInit {
     ctvForm!: FormGroup;
     isSubmitting = false;
     salesChannels: SalesChannelOption[] = [];
+    touched = false;
 
     constructor(
         private fb: FormBuilder,
@@ -74,6 +75,7 @@ export class RegisterCtvComponent implements OnInit {
         if (this.ctvForm.invalid) {
             this.ctvForm.markAllAsTouched();
             this._appService.showError(this._appService.instant('CTV_FORM.ERROR_FORM_INVALID'));
+            this.touched = true;
             return;
         }
 

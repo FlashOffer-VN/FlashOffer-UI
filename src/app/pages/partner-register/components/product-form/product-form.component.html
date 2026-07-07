@@ -22,10 +22,12 @@
 
         <!-- Category - ✅ ĐÃ THÊM LABEL -->
         <div class="form-group">
-            <app-select formControlName="category" [items]="categories" [label]="'PARTNER.PRODUCT_CATEGORY' | translate"
-                [placeholder]="'PARTNER.PRODUCT_CATEGORY_PLACEHOLDER' | translate" [required]="true" [touched]="true"
-                [isInvalid]="isFieldInvalid('category')" [errorMessage]="getErrorMessage('category')">
-            </app-select>
+            <app-ng-select-wrapper formControlName="category" [items]="categories"
+                [label]="'PARTNER.PRODUCT_CATEGORY' | translate"
+                [placeholder]="'PARTNER.PRODUCT_CATEGORY_PLACEHOLDER' | translate" [required]="true"
+                [isInvalid]="isFieldInvalid('category')" [errorMessage]="getErrorMessage('category')"
+                [primaryColor]="'#7C3AED'" [primaryDark]="'#5B21B6'">
+            </app-ng-select-wrapper>
         </div>
 
         <!-- Retail Price -->

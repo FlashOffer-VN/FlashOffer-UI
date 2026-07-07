@@ -4,8 +4,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { InputComponent } from '@shared/components/input/input.component';
-import { SelectComponent } from '@shared/components/select/select.component';
 import { BUSINESS_TYPES, COMPANY_SIZES } from '@core/models/partner.model';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 
 @Component({
   selector: 'app-step-business',
@@ -15,7 +15,7 @@ import { BUSINESS_TYPES, COMPANY_SIZES } from '@core/models/partner.model';
     ReactiveFormsModule,
     TranslateModule,
     InputComponent,
-    SelectComponent
+    NgSelectWrapperComponent
   ],
   templateUrl: './step-business.component.html',
   styleUrls: ['./step-business.component.css']
