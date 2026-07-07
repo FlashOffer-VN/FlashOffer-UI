@@ -30,12 +30,15 @@ export class AppService {
         return this.translate.currentLang || 'vi';
     }
 
-    instant(key: string): string {
+    instant(key: string, params?: any): string {
+        if (params) {
+            return this.translate.instant(key, params);
+        }
         return this.translate.instant(key);
     }
 
-    get(key: string): Observable<string> {
-        return this.translate.get(key);
+    get(key: string, params?: any): Observable<string> {
+        return this.translate.get(key, params);
     }
 
     onLanguageChange(): Observable<any> {

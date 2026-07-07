@@ -1,4 +1,5 @@
 // step-business/step-business.component.ts
+
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
@@ -6,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { InputComponent } from '@shared/components/input/input.component';
 import { BUSINESS_TYPES, COMPANY_SIZES } from '@core/models/partner.model';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { AppService } from '@core/services/app.service';
 
 @Component({
   selector: 'app-step-business',
@@ -27,6 +29,8 @@ export class StepBusinessComponent {
   businessTypes = BUSINESS_TYPES;
   companySizes = COMPANY_SIZES;
 
+  constructor(private _appService: AppService) { }
+
   isFieldInvalid(fieldName: string): boolean {
     const control = this.formGroup.get(fieldName);
     return !!(control?.invalid && (control?.touched || control?.dirty));
@@ -37,14 +41,41 @@ export class StepBusinessComponent {
     if (!control || !control.errors) return '';
 
     const errors = control.errors;
-    if (errors['required']) return 'Trường này là bắt buộc';
-    if (errors['email']) return 'Email không hợp lệ';
-    if (errors['minlength']) return `Tối thiểu ${errors['minlength'].requiredLength} ký tự`;
-    if (errors['pattern']) {
-      if (fieldName === 'companyTax') return 'Mã số thuế không hợp lệ (10-14 số)';
-      if (fieldName === 'companyWebsite') return 'Website không hợp lệ (VD: https://example.com)';
-      return 'Định dạng không hợp lệ';
+
+    // ✅ Dùng AppService để dịch
+    if (errors['required']) {
+      return this._appService.instant('VALIDATION.REQUIRED');
     }
-    return 'Dữ liệu không hợp lệ';
+    if (errors['email']) {
+      return this._appService.instant('VALIDATION.EMAIL');
+    }
+    if (errors['minlength']) {
+      return this._appService.instant('VALIDATION.MIN_LENGTH', {
+        length: errors['minlength'].requiredLength
+      });
+    }
+    if (errors['maxlength']) {
+      return this._appService.instant('VALIDATION.MAX_LENGTH', {
+        length: errors['maxlength'].requiredLength
+      });
+    }
+    if (errors['pattern']) {
+      // Pattern specific messages
+      if (fieldName === 'companyTax') {
+        return this._appService.instant('VALIDATION.PATTERN_TAX');
+      }
+      if (fieldName === 'companyWebsite') {
+        return this._appService.instant('VALIDATION.PATTERN_WEBSITE');
+      }
+      return this._appService.instant('VALIDATION.PATTERN');
+    }
+    if (errors['min']) {
+      return this._appService.instant('VALIDATION.MIN', { min: errors['min'].min });
+    }
+    if (errors['max']) {
+      return this._appService.instant('VALIDATION.MAX', { max: errors['max'].max });
+    }
+
+    return this._appService.instant('VALIDATION.INVALID');
   }
 }

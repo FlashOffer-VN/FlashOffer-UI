@@ -420,5 +420,19 @@
     "SELECT_COMPONENT": {
         "PLACEHOLDER": "Select an option",
         "NO_OPTIONS": "No options available"
+    },
+    "VALIDATION": {
+        "REQUIRED": "This field is required",
+        "MIN": "Minimum value is {{min}}",
+        "MAX": "Maximum value is {{max}}",
+        "MIN_LENGTH": "Minimum {{length}} characters",
+        "MAX_LENGTH": "Maximum {{length}} characters",
+        "EMAIL": "Invalid email",
+        "PATTERN": "Invalid format",
+        "INVALID": "Invalid data",
+        "PATTERN_TAX": "Invalid tax code (10-14 digits)",
+        "PATTERN_WEBSITE": "Invalid website (e.g: https://example.com)",
+        "PATTERN_PHONE": "Phone is invalid (10-11 digits; For example: 0901234567)",
+        "REQUIRED_TRUE": "Please agree to the terms to continue"
     }
 }
