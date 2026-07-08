@@ -656,5 +656,25 @@
             "EXPERIENCE_REQUIRED": "Vui lòng chọn số năm kinh nghiệm",
             "AGREE_TERMS_REQUIRED": "Vui lòng đồng ý với điều khoản"
         }
+    },
+    "SOCIAL": {
+        "TITLE": "Mạng xã hội Ecomecial",
+        "DESC": "Kết nối, chia sẻ và phát triển cùng cộng đồng doanh nhân",
+        "STATS_MEMBERS": "Thành viên",
+        "STATS_POSTS": "Bài viết",
+        "STATS_EVENTS": "Sự kiện",
+        "FEED": "Bảng tin",
+        "MEMBERS": "Thành viên",
+        "EVENTS": "Sự kiện",
+        "GROUPS": "Nhóm",
+        "WHATS_NEW": "Bạn đang nghĩ gì?",
+        "LOADING": "Đang tải...",
+        "TRENDING": "Thịnh hành",
+        "ONLINE": "Đang online",
+        "UPCOMING_EVENTS": "Sự kiện sắp tới",
+        "POPULAR_GROUPS": "Nhóm phổ biến",
+        "LIKE": "Thích",
+        "COMMENT": "Bình luận",
+        "SHARE": "Chia sẻ"
     }
 }

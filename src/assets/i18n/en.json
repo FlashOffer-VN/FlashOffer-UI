@@ -701,5 +701,25 @@
             "EXPERIENCE_REQUIRED": "Please select years of experience",
             "AGREE_TERMS_REQUIRED": "Please agree to the terms"
         }
+    },
+    "SOCIAL": {
+        "TITLE": "Ecomecial Social Network",
+        "DESC": "Connect, share and grow with the entrepreneur community",
+        "STATS_MEMBERS": "Members",
+        "STATS_POSTS": "Posts",
+        "STATS_EVENTS": "Events",
+        "FEED": "Feed",
+        "MEMBERS": "Members",
+        "EVENTS": "Events",
+        "GROUPS": "Groups",
+        "WHATS_NEW": "What's on your mind?",
+        "LOADING": "Loading...",
+        "TRENDING": "Trending",
+        "ONLINE": "Online",
+        "UPCOMING_EVENTS": "Upcoming events",
+        "POPULAR_GROUPS": "Popular groups",
+        "LIKE": "Like",
+        "COMMENT": "Comment",
+        "SHARE": "Share"
     }
 }
