@@ -17,17 +17,17 @@
         }
         <input [id]="id" [type]="type" [placeholder]="placeholder" [readonly]="readonly"
             [disabled]="disabled || isDisabled" [value]="value" (input)="onInput($event)" (blur)="onBlur()"
-            class="app-input__control" [class.has-icon]="icon" [class.is-invalid]="isInvalid"
+            class="app-input__control" [class.has-icon]="icon" [class.is-invalid]="invalid"
             [class.is-disabled]="disabled || isDisabled" [class.is-readonly]="readonly" />
     </div>
 
     <!-- Hint -->
-    @if (hint && !isInvalid) {
+    @if (hint && !invalid) {
     <small class="app-input__hint">{{ hint }}</small>
     }
 
     <!-- Error -->
-    @if (isInvalid && errorMessage) {
-    <small class="app-input__error">{{ errorMessage }}</small>
+    @if (invalid && error) {
+    <small class="app-input__error">{{ error }}</small>
     }
 </div>

@@ -1,28 +1,64 @@
+<!-- register-ctv.component.html -->
 <div class="register-ctv-container">
     <div class="register-ctv-card">
+        <!-- ====== Decorative elements ====== -->
+        <div class="register-ctv-deco register-ctv-deco-1"></div>
+        <div class="register-ctv-deco register-ctv-deco-2"></div>
+
+        <!-- ====== Header with icon ====== -->
         <div class="register-ctv-header">
+            <div class="register-ctv-icon-wrapper">
+                <i class="fas fa-user-plus"></i>
+            </div>
             <h1>{{ 'REGISTER_CTV_TITLE' | translate }}</h1>
             <p>{{ 'REGISTER_CTV_DESC' | translate }}</p>
+            <div class="register-ctv-steps">
+                <span class="step active">1</span>
+                <span class="step-line"></span>
+                <span class="step">2</span>
+                <span class="step-line"></span>
+                <span class="step">3</span>
+            </div>
         </div>
 
+        <!-- ====== Form ====== -->
         <form [formGroup]="ctvForm" (ngSubmit)="onSubmit()" class="register-ctv-form">
+            <!-- ====== Progress bar ====== -->
+            <div class="register-ctv-progress">
+                <div class="progress-bar" [style.width.%]="formProgress"></div>
+            </div>
+
             <div class="form-grid">
                 <!-- Full Name -->
                 <div class="form-group">
-                    <label>{{ 'REGISTER_CTV_FULL_NAME' | translate }} <span class="required">*</span></label>
-                    <input type="text" formControlName="fullName"
-                        placeholder="{{ 'REGISTER_CTV_FULL_NAME_PLACEHOLDER' | translate }}" />
+                    <label>
+                        {{ 'REGISTER_CTV_FULL_NAME' | translate }}
+                        <span class="required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" formControlName="fullName"
+                            placeholder="{{ 'REGISTER_CTV_FULL_NAME_PLACEHOLDER' | translate }}" />
+                    </div>
                     <div class="error-message" *ngIf="f['fullName'].invalid && f['fullName'].touched">
+                        <i class="fas fa-exclamation-circle"></i>
                         {{ 'REGISTER_CTV_FULL_NAME_ERROR' | translate }}
                     </div>
                 </div>
 
                 <!-- Phone -->
                 <div class="form-group">
-                    <label>{{ 'REGISTER_CTV_PHONE' | translate }} <span class="required">*</span></label>
-                    <input type="text" formControlName="phone"
-                        placeholder="{{ 'REGISTER_CTV_PHONE_PLACEHOLDER' | translate }}" />
+                    <label>
+                        {{ 'REGISTER_CTV_PHONE' | translate }}
+                        <span class="required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-phone input-icon"></i>
+                        <input type="text" formControlName="phone"
+                            placeholder="{{ 'REGISTER_CTV_PHONE_PLACEHOLDER' | translate }}" />
+                    </div>
                     <div class="error-message" *ngIf="f['phone'].invalid && f['phone'].touched">
+                        <i class="fas fa-exclamation-circle"></i>
                         {{ 'REGISTER_CTV_PHONE_ERROR' | translate }}
                     </div>
                 </div>
@@ -30,16 +66,26 @@
                 <!-- Zalo -->
                 <div class="form-group">
                     <label>{{ 'REGISTER_CTV_ZALO' | translate }}</label>
-                    <input type="text" formControlName="zalo"
-                        placeholder="{{ 'REGISTER_CTV_ZALO_PLACEHOLDER' | translate }}" />
+                    <div class="input-wrapper">
+                        <i class="fab fa-zalo input-icon"></i>
+                        <input type="text" formControlName="zalo"
+                            placeholder="{{ 'REGISTER_CTV_ZALO_PLACEHOLDER' | translate }}" />
+                    </div>
                 </div>
 
                 <!-- Email -->
                 <div class="form-group">
-                    <label>{{ 'REGISTER_CTV_EMAIL' | translate }} <span class="required">*</span></label>
-                    <input type="email" formControlName="email"
-                        placeholder="{{ 'REGISTER_CTV_EMAIL_PLACEHOLDER' | translate }}" />
+                    <label>
+                        {{ 'REGISTER_CTV_EMAIL' | translate }}
+                        <span class="required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" formControlName="email"
+                            placeholder="{{ 'REGISTER_CTV_EMAIL_PLACEHOLDER' | translate }}" />
+                    </div>
                     <div class="error-message" *ngIf="f['email'].invalid && f['email'].touched">
+                        <i class="fas fa-exclamation-circle"></i>
                         {{ 'REGISTER_CTV_EMAIL_ERROR' | translate }}
                     </div>
                 </div>
@@ -58,16 +104,49 @@
                 <!-- Experience -->
                 <div class="form-group full-width">
                     <label>{{ 'REGISTER_CTV_EXPERIENCE' | translate }}</label>
-                    <textarea formControlName="experience" rows="3"
-                        placeholder="{{ 'REGISTER_CTV_EXPERIENCE_PLACEHOLDER' | translate }}"></textarea>
+                    <div class="input-wrapper">
+                        <i class="fas fa-briefcase input-icon textarea-icon"></i>
+                        <textarea formControlName="experience" rows="3"
+                            placeholder="{{ 'REGISTER_CTV_EXPERIENCE_PLACEHOLDER' | translate }}"></textarea>
+                    </div>
+                    <small class="hint-text">
+                        <i class="fas fa-info-circle"></i>
+                        {{ 'REGISTER_CTV_EXPERIENCE_HINT' | translate }}
+                    </small>
+                </div>
+
+                <!-- Terms -->
+                <div class="form-group full-width terms-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" formControlName="agreeTerms" />
+                        <span class="checkmark"></span>
+                        {{ 'REGISTER_CTV_AGREE_TERMS' | translate }}
+                        <a routerLink="/terms" target="_blank">{{ 'REGISTER_CTV_TERMS_LINK' | translate }}</a>
+                        <span class="required">*</span>
+                    </label>
+                    <div class="error-message" *ngIf="f['agreeTerms'].invalid && f['agreeTerms'].touched">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ 'REGISTER_CTV_AGREE_TERMS_ERROR' | translate }}
+                    </div>
                 </div>
             </div>
 
+            <!-- ====== Form Actions ====== -->
             <div class="form-actions">
-                <button type="submit" class="btn-submit" [disabled]="isSubmitting">
-                    <span *ngIf="!isSubmitting">{{ 'REGISTER_CTV_SUBMIT' | translate }}</span>
-                    <span *ngIf="isSubmitting">{{ 'REGISTER_CTV_SUBMITTING' | translate }}</span>
+                <button type="submit" class="btn-submit" [disabled]="isSubmitting || ctvForm.invalid">
+                    <span *ngIf="!isSubmitting">
+                        <i class="fas fa-paper-plane"></i>
+                        {{ 'REGISTER_CTV_SUBMIT' | translate }}
+                    </span>
+                    <span *ngIf="isSubmitting">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        {{ 'REGISTER_CTV_SUBMITTING' | translate }}
+                    </span>
                 </button>
+                <p class="form-note">
+                    <i class="fas fa-lock"></i>
+                    {{ 'REGISTER_CTV_SECURE_NOTE' | translate }}
+                </p>
             </div>
         </form>
     </div>

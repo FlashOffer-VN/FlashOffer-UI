@@ -28,44 +28,72 @@ export class AuthService {
         this.loadStoredUser();
     }
 
-    login(data: LoginRequest): Observable<AuthResponse> {
+    /**
+     * Đăng nhập
+     * @param data - LoginRequest có thể chứa isAdmin flag
+     */
+    login(data: LoginRequest & { isAdmin?: boolean }): Observable<AuthResponse> {
         return this.api.post<AuthResponse>('auth/login', data).pipe(
-            tap(response => this.handleAuthResponse(response))
+            tap(response => this.handleAuthResponse(response, data.isAdmin))
         );
     }
 
+    /**
+     * Đăng ký
+     */
     register(data: RegisterRequest): Observable<AuthResponse> {
         return this.api.post<AuthResponse>('auth/register', data).pipe(
-            tap(response => this.handleAuthResponse(response))
+            tap(response => this.handleAuthResponse(response, false))
         );
     }
 
+    /**
+     * Đăng xuất user thường -> redirect về /login
+     */
     logout(): void {
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
-        this.currentUserSubject.next(null);
-        this.clearBodyRoleClass();
-        this.stopRefreshTokenTimer();
+        this.clearSession();
         this.router.navigate(['/login']);
     }
 
+    /**
+     * Đăng xuất admin -> redirect về /admin-login
+     */
+    logoutToAdmin(): void {
+        this.clearSession();
+        this.router.navigate(['/admin-login']);
+    }
+
+    /**
+     * Lấy token từ localStorage
+     */
     getToken(): string | null {
         return localStorage.getItem('token');
     }
 
+    /**
+     * Lấy refresh token từ localStorage
+     */
     getRefreshToken(): string | null {
         return localStorage.getItem('refreshToken');
     }
 
+    /**
+     * Kiểm tra đã đăng nhập chưa
+     */
     isAuthenticated(): boolean {
         return !!this.getToken();
     }
 
+    /**
+     * Lấy user hiện tại
+     */
     getCurrentUser(): User | null {
         return this.currentUserSubject.value;
     }
 
+    /**
+     * Gọi API lấy thông tin user
+     */
     getMe(): Observable<ApiResponse<User>> {
         return this.api.get<ApiResponse<User>>('auth/me').pipe(
             tap(response => {
@@ -79,6 +107,9 @@ export class AuthService {
         );
     }
 
+    /**
+     * Refresh token
+     */
     refreshToken(): Observable<any> {
         const refreshToken = this.getRefreshToken();
         if (!refreshToken) {
@@ -95,6 +126,37 @@ export class AuthService {
         );
     }
 
+    /**
+     * Trích xuất message lỗi từ response
+     */
+    extractErrorMessage(error: any): string {
+        if (error?.error?.errors && Array.isArray(error.error.errors)) {
+            return error.error.errors[0];
+        }
+        if (error?.error?.message) {
+            return error.error.message;
+        }
+        if (error?.message) {
+            return error.message;
+        }
+        return this.translate.instant('ERROR.GENERAL');
+    }
+
+    /**
+     * Xóa session và reset state
+     */
+    private clearSession(): void {
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('user');
+        this.currentUserSubject.next(null);
+        this.clearBodyRoleClass();
+        this.stopRefreshTokenTimer();
+    }
+
+    /**
+     * Bắt đầu timer refresh token
+     */
     private startRefreshTokenTimer(): void {
         const token = this.getToken();
         if (!token) return;
@@ -112,6 +174,9 @@ export class AuthService {
         }, expiresIn);
     }
 
+    /**
+     * Dừng timer refresh token
+     */
     private stopRefreshTokenTimer(): void {
         if (this.refreshTokenTimeout) {
             clearTimeout(this.refreshTokenTimeout);
@@ -119,7 +184,12 @@ export class AuthService {
         }
     }
 
-    private handleAuthResponse(response: AuthResponse): void {
+    /**
+     * Xử lý response auth, lưu token và redirect theo role
+     * @param response - AuthResponse từ API
+     * @param isAdmin - Flag xác định login từ trang admin
+     */
+    private handleAuthResponse(response: AuthResponse, isAdmin: boolean = false): void {
         const data = response?.data;
 
         if (!data) {
@@ -127,13 +197,12 @@ export class AuthService {
             return;
         }
 
-        // ✅ Xử lý role an toàn - ép kiểu rõ ràng
         const roleValue = data.role || 'GUEST';
 
         const user: User = {
-            id: 0,
+            id: data.id || 0,
             username: data.username || '',
-            email: data.username || '',
+            email: data.email || data.username || '',
             role: roleValue as UserRole,
             fullName: data.fullName || ''
         };
@@ -150,8 +219,24 @@ export class AuthService {
         this.currentUserSubject.next(user);
         this.setBodyRoleClass(user.role);
         this.startRefreshTokenTimer();
+
+        this.redirectAfterLogin(user, isAdmin);
     }
 
+    /**
+     * Redirect sau login dựa trên role và flag isAdmin
+     */
+    private redirectAfterLogin(user: User, isAdmin: boolean): void {
+        if (isAdmin || user.role === UserRole.ADMIN) {
+            this.router.navigate(['/admin/dashboard']);
+        } else {
+            this.router.navigate(['/']);
+        }
+    }
+
+    /**
+     * Load user từ localStorage khi app khởi động
+     */
     private loadStoredUser(): void {
         const userStr = localStorage.getItem('user');
         if (userStr) {
@@ -168,18 +253,22 @@ export class AuthService {
         }
     }
 
-    // ✅ Fix: Xử lý role an toàn, không dùng toString() gây lỗi
+    /**
+     * Chuẩn hóa role về string
+     */
     private normalizeRole(role: string | UserRole): string {
         if (typeof role === 'string') {
             return role;
         }
-        // UserRole là enum, có thể so sánh trực tiếp
         if (role === UserRole.ADMIN) return 'ADMIN';
         if (role === UserRole.USER) return 'USER';
         if (role === UserRole.GUEST) return 'GUEST';
-        return String(role); // fallback an toàn
+        return String(role);
     }
 
+    /**
+     * Set class cho body dựa trên role
+     */
     private setBodyRoleClass(role: string | UserRole): void {
         this.clearBodyRoleClass();
         const roleStr = this.normalizeRole(role);
@@ -191,20 +280,10 @@ export class AuthService {
         }
     }
 
+    /**
+     * Xóa class role trên body
+     */
     private clearBodyRoleClass(): void {
         document.body.classList.remove('admin-role', 'user-role');
-    }
-
-    extractErrorMessage(error: any): string {
-        if (error?.error?.errors && Array.isArray(error.error.errors)) {
-            return error.error.errors[0];
-        }
-        if (error?.error?.message) {
-            return error.error.message;
-        }
-        if (error?.message) {
-            return error.message;
-        }
-        return this.translate.instant('ERROR.GENERAL');
     }
 }

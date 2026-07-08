@@ -1,82 +1,106 @@
-<!-- pages/connect-sme/connect-sme.component.html -->
+<!-- src/app/pages/connect-sme/connect-sme.component.html -->
 <div class="connect-sme-container">
     <!-- Hero Section -->
     <div class="connect-sme-hero">
         <div class="connect-sme-hero__content">
-            <span class="connect-sme-badge">{{ 'CONNECT_SME_BADGE' | translate }}</span>
-            <h1>{{ 'CONNECT_SME_TITLE' | translate }}</h1>
-            <p>{{ 'CONNECT_SME_DESC' | translate }}</p>
+            <span class="connect-sme-badge">
+                🚀 {{ 'CONNECT_SME.BADGE' | translate }}
+            </span>
+            <h1>
+                {{ 'CONNECT_SME.TITLE' | translate }}
+                <span class="highlight">{{ 'CONNECT_SME.TITLE_HIGHLIGHT' | translate }}</span>
+            </h1>
+            <p>{{ 'CONNECT_SME.DESC' | translate }}</p>
         </div>
     </div>
 
     <!-- Stats -->
     <div class="connect-sme-stats">
         <div class="stat-item">
+            <span class="stat-icon">🏢</span>
             <strong>1,200+</strong>
-            <span>{{ 'CONNECT_SME_STATS_SME' | translate }}</span>
+            <span>{{ 'CONNECT_SME.STATS_SME' | translate }}</span>
         </div>
         <div class="stat-item">
-            <strong>₫50B+</strong>
-            <span>{{ 'CONNECT_SME_STATS_VALUE' | translate }}</span>
+            <span class="stat-icon">💰</span>
+            <strong>50<span class="currency">B</span>+</strong>
+            <span>{{ 'CONNECT_SME.STATS_VALUE' | translate }}</span>
         </div>
         <div class="stat-item">
+            <span class="stat-icon">⭐</span>
             <strong>98%</strong>
-            <span>{{ 'CONNECT_SME_STATS_SATISFACTION' | translate }}</span>
+            <span>{{ 'CONNECT_SME.STATS_SATISFACTION' | translate }}</span>
         </div>
     </div>
 
-    <!-- Cards -->
+    <!-- Cards Grid -->
     <div class="connect-sme-grid">
         <!-- Card 1: Tìm hàng -->
         <a routerLink="/find-supplier" class="connect-card connect-card--find">
-            <div class="connect-card__icon">🔍</div>
-            <h3>{{ 'CONNECT_SME_FIND_SUPPLIER' | translate }}</h3>
-            <p>{{ 'CONNECT_SME_FIND_SUPPLIER_DESC' | translate }}</p>
+            <div class="connect-card__icon-wrapper">
+                <i class="fas fa-search"></i>
+            </div>
+            <h3>{{ 'CONNECT_SME.CARD_FIND_SUPPLIER' | translate }}</h3>
+            <p>{{ 'CONNECT_SME.CARD_FIND_DESC' | translate }}</p>
             <ul class="connect-card__features">
-                <li>✓ {{ 'CONNECT_SME_FIND_FEATURE_1' | translate }}</li>
-                <li>✓ {{ 'CONNECT_SME_FIND_FEATURE_2' | translate }}</li>
-                <li>✓ {{ 'CONNECT_SME_FIND_FEATURE_3' | translate }}</li>
+                <li>{{ 'CONNECT_SME.FIND_FEATURE_1' | translate }}</li>
+                <li>{{ 'CONNECT_SME.FIND_FEATURE_2' | translate }}</li>
+                <li>{{ 'CONNECT_SME.FIND_FEATURE_3' | translate }}</li>
             </ul>
-            <span class="connect-card__arrow">{{ 'CONNECT_SME_START' | translate }} →</span>
+            <span class="connect-card__arrow">
+                {{ 'CONNECT_SME.START' | translate }} <i class="fas fa-arrow-right"></i>
+            </span>
         </a>
 
         <!-- Card 2: Mua chung -->
         <a routerLink="/group-buying" class="connect-card connect-card--group">
-            <div class="connect-card__icon">🛒</div>
-            <h3>{{ 'CONNECT_SME_GROUP_BUYING' | translate }}</h3>
-            <p>{{ 'CONNECT_SME_GROUP_BUYING_DESC' | translate }}</p>
+            <div class="connect-card__icon-wrapper">
+                <i class="fas fa-users"></i>
+            </div>
+            <h3>{{ 'CONNECT_SME.CARD_GROUP_BUYING' | translate }}</h3>
+            <p>{{ 'CONNECT_SME.CARD_GROUP_DESC' | translate }}</p>
             <ul class="connect-card__features">
-                <li>✓ {{ 'CONNECT_SME_GROUP_FEATURE_1' | translate }}</li>
-                <li>✓ {{ 'CONNECT_SME_GROUP_FEATURE_2' | translate }}</li>
-                <li>✓ {{ 'CONNECT_SME_GROUP_FEATURE_3' | translate }}</li>
+                <li>{{ 'CONNECT_SME.GROUP_FEATURE_1' | translate }}</li>
+                <li>{{ 'CONNECT_SME.GROUP_FEATURE_2' | translate }}</li>
+                <li>{{ 'CONNECT_SME.GROUP_FEATURE_3' | translate }}</li>
             </ul>
-            <span class="connect-card__arrow">{{ 'CONNECT_SME_START' | translate }} →</span>
+            <span class="connect-card__arrow">
+                {{ 'CONNECT_SME.START' | translate }} <i class="fas fa-arrow-right"></i>
+            </span>
         </a>
 
         <!-- Card 3: Nhận Offer -->
         <a routerLink="/get-offer" class="connect-card connect-card--offer">
-            <div class="connect-card__icon">🎯</div>
-            <h3>{{ 'CONNECT_SME_GET_OFFER' | translate }}</h3>
-            <p>{{ 'CONNECT_SME_GET_OFFER_DESC' | translate }}</p>
+            <div class="connect-card__icon-wrapper">
+                <i class="fas fa-tags"></i>
+            </div>
+            <h3>{{ 'CONNECT_SME.CARD_GET_OFFER' | translate }}</h3>
+            <p>{{ 'CONNECT_SME.CARD_OFFER_DESC' | translate }}</p>
             <ul class="connect-card__features">
-                <li>✓ {{ 'CONNECT_SME_OFFER_FEATURE_1' | translate }}</li>
-                <li>✓ {{ 'CONNECT_SME_OFFER_FEATURE_2' | translate }}</li>
-                <li>✓ {{ 'CONNECT_SME_OFFER_FEATURE_3' | translate }}</li>
+                <li>{{ 'CONNECT_SME.OFFER_FEATURE_1' | translate }}</li>
+                <li>{{ 'CONNECT_SME.OFFER_FEATURE_2' | translate }}</li>
+                <li>{{ 'CONNECT_SME.OFFER_FEATURE_3' | translate }}</li>
             </ul>
-            <span class="connect-card__arrow">{{ 'CONNECT_SME_START' | translate }} →</span>
+            <span class="connect-card__arrow">
+                {{ 'CONNECT_SME.START' | translate }} <i class="fas fa-arrow-right"></i>
+            </span>
         </a>
 
-        <!-- ⭐ Card 4: Trở thành đối tác doanh nghiệp (MỚI) -->
-        <a routerLink="/partner-register" class="connect-card connect-card--partner">
-            <div class="connect-card__icon">🤝</div>
-            <h3>{{ 'CONNECT_SME_CARD.BECOME_PARTNER' | translate }}</h3>
-            <p>{{ 'CONNECT_SME_CARD.BECOME_PARTNER_DESC' | translate }}</p>
+        <!-- Card 4: Đối tác doanh nghiệp -->
+        <a routerLink="/partner" class="connect-card connect-card--partner">
+            <div class="connect-card__icon-wrapper">
+                <i class="fas fa-handshake"></i>
+            </div>
+            <h3>{{ 'CONNECT_SME.CARD_PARTNER' | translate }}</h3>
+            <p>{{ 'CONNECT_SME.CARD_PARTNER_DESC' | translate }}</p>
             <ul class="connect-card__features">
-                <li>✓ {{ 'CONNECT_SME_CARD.BECOME_PARTNER_FEATURE_1' | translate }}</li>
-                <li>✓ {{ 'CONNECT_SME_CARD.BECOME_PARTNER_FEATURE_2' | translate }}</li>
-                <li>✓ {{ 'CONNECT_SME_CARD.BECOME_PARTNER_FEATURE_3' | translate }}</li>
+                <li>{{ 'CONNECT_SME.PARTNER_FEATURE_1' | translate }}</li>
+                <li>{{ 'CONNECT_SME.PARTNER_FEATURE_2' | translate }}</li>
+                <li>{{ 'CONNECT_SME.PARTNER_FEATURE_3' | translate }}</li>
             </ul>
-            <span class="connect-card__arrow">{{ 'CONNECT_SME.REGISTER' | translate }} →</span>
+            <span class="connect-card__arrow">
+                {{ 'CONNECT_SME.REGISTER' | translate }} <i class="fas fa-arrow-right"></i>
+            </span>
         </a>
     </div>
 </div>
