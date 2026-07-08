@@ -349,7 +349,8 @@
         "ERROR_EMAIL_INVALID": "Email không hợp lệ (VD: example@gmail.com)",
         "ERROR_FORM_INVALID": "Vui lòng kiểm tra lại thông tin đã nhập",
         "ERROR_REGISTER_FAILED": "Đăng ký thất bại, vui lòng thử lại sau",
-        "SUCCESS_REGISTER": "Đăng ký CTV thành công!"
+        "SUCCESS_REGISTER": "Đăng ký CTV thành công!",
+        "REGISTER_CTV_SECURE_NOTE": "Thông tin của bạn được bảo mật tuyệt đối"
     },
     "SELECT_COMPONENT": {
         "PLACEHOLDER": "Chọn một tùy chọn",
