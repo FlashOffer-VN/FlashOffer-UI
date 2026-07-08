@@ -37,6 +37,10 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     @Input() icon = '';
     @Input() readonly = false;
     @Input() isDisabled = false;
+    @Input() errorMessage = '';  // ✅ Thêm input này
+
+    @Input() isInvalid = false;  // ✅ Thêm input này để component cha có thể truyền trạng thái lỗi
+
     disabled = false;
 
     @Input()
@@ -66,14 +70,23 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     onChange: (value: string) => void = () => { };
     onTouched: () => void = () => { };
 
-    get isInvalid(): boolean {
+    // ✅ Ưu tiên isInvalid từ input, nếu không thì dùng từ ngControl
+    get invalid(): boolean {
+        if (this.isInvalid !== undefined) {
+            return this.isInvalid;
+        }
         return !!(
             this.ngControl?.invalid &&
             (this.ngControl?.touched || this.ngControl?.dirty)
         );
     }
 
-    get errorMessage(): string {
+    // ✅ Ưu tiên errorMessage từ input, nếu không thì tự sinh từ ngControl
+    get error(): string {
+        if (this.errorMessage) {
+            return this.errorMessage;
+        }
+
         const errors = this.ngControl?.errors;
         if (!errors) return '';
 

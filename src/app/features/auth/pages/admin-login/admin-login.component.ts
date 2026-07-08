@@ -1,27 +1,34 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { AppService } from '../../../../core/services/app.service';
-import { UserRole } from '../../../../core/models/auth.model';
+import { AppService } from '@core/services/app.service';
+import { InputComponent } from '@shared/components/input/input.component';
+import { ButtonComponent } from '@shared/components/button/button.component';
 
 @Component({
     selector: 'app-admin-login',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, TranslateModule, RouterLink],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        TranslateModule,
+        RouterLink,
+        InputComponent,
+        ButtonComponent
+    ],
     templateUrl: './admin-login.component.html',
     styleUrls: ['./admin-login.component.css']
 })
 export class AdminLoginComponent {
     loginForm: FormGroup;
     isLoading = false;
-    errorMessage = '';
+    showPassword = false;
 
     constructor(
         private fb: FormBuilder,
-        private _appService: AppService,
-        private router: Router
+        private _appService: AppService
     ) {
         this.loginForm = this.fb.group({
             username: ['', [Validators.required]],
@@ -32,55 +39,54 @@ export class AdminLoginComponent {
 
     get f() { return this.loginForm.controls; }
 
-    onSubmit() {
+    isFieldInvalid(fieldName: string): boolean {
+        const control = this.loginForm.get(fieldName);
+        return !!(control && control.invalid && (control.dirty || control.touched));
+    }
+
+    getErrorMessage(fieldName: string): string {
+        const control = this.loginForm.get(fieldName);
+        if (!control || !control.errors) return '';
+
+        if (control.errors['required']) {
+            if (fieldName === 'username') return this._appService.instant('LOGIN.VALIDATION.USERNAME_REQUIRED');
+            if (fieldName === 'password') return this._appService.instant('LOGIN.VALIDATION.PASSWORD_REQUIRED');
+            return this._appService.instant('VALIDATION.REQUIRED');
+        }
+
+        if (control.errors['minlength'] && fieldName === 'password') {
+            return this._appService.instant('LOGIN.VALIDATION.PASSWORD_MIN_LENGTH');
+        }
+
+        return this._appService.instant('VALIDATION.INVALID');
+    }
+
+    togglePasswordVisibility(): void {
+        this.showPassword = !this.showPassword;
+    }
+
+    onSubmit(): void {
         if (this.loginForm.invalid) {
             this.loginForm.markAllAsTouched();
             return;
         }
 
         this.isLoading = true;
-        this.errorMessage = '';
 
-        const { username, password } = this.loginForm.value;
+        const credentials = {
+            username: this.loginForm.value.username,
+            password: this.loginForm.value.password,
+            isAdmin: true
+        };
 
-        this._appService.auth.login({ username, password }).subscribe({
-            next: (response) => {
+        this._appService.login(credentials).subscribe({
+            next: () => {
                 this.isLoading = false;
-
-                // ✅ Lấy role từ response.data
-                const role = response?.data?.role || '';
-                const user = this._appService.auth.getCurrentUser();
-
-                // ✅ Nếu là admin -> về admin dashboard
-                if (role?.toLowerCase() === 'admin' || user?.role === UserRole.ADMIN || user?.role === 'Admin') {
-                    // Gọi getMe để lấy thông tin đầy đủ
-                    this._appService.auth.getMe().subscribe({
-                        next: () => {
-                            this.router.navigate(['/admin/dashboard']);
-                        },
-                        error: () => {
-                            // Vẫn cho vào dù getMe fail
-                            this.router.navigate(['/admin/dashboard']);
-                        }
-                    });
-                } else {
-                    // ❌ Không phải admin
-                    this.errorMessage = this._appService.instant('ADMIN_LOGIN.ERROR.NOT_ADMIN');
-                    this._appService.auth.logout();
-                }
             },
-            error: (err) => {
+            error: (error) => {
                 this.isLoading = false;
-
-                let errorMsg = this._appService.instant('ADMIN_LOGIN.ERROR.INVALID_CREDENTIALS');
-
-                if (err.error?.errors && Array.isArray(err.error.errors) && err.error.errors.length > 0) {
-                    errorMsg = err.error.errors[0];
-                } else if (err.error?.message) {
-                    errorMsg = err.error.message;
-                }
-
-                this.errorMessage = errorMsg;
+                const errorMsg = this._appService.extractErrorMessage(error);
+                this._appService.showError(errorMsg);
             }
         });
     }

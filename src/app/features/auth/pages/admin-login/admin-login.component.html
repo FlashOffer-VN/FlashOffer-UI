@@ -1,49 +1,59 @@
+<!-- admin-login.component.html -->
 <div class="admin-login-container">
     <div class="admin-login-card">
+        <!-- Header -->
         <div class="admin-login-header">
+            <div class="admin-login-logo">
+                <i class="fas fa-shield-alt"></i>
+            </div>
             <h1>{{ 'ADMIN_LOGIN.TITLE' | translate }}</h1>
             <p>{{ 'ADMIN_LOGIN.SUBTITLE' | translate }}</p>
         </div>
 
+        <!-- Form -->
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="admin-login-form">
-            <div class="form-group">
-                <label for="username">{{ 'ADMIN_LOGIN.USERNAME' | translate }}</label>
-                <input id="username" type="text" formControlName="username"
-                    placeholder="{{ 'ADMIN_LOGIN.USERNAME_PLACEHOLDER' | translate }}"
-                    [class.is-invalid]="f['username'].invalid && f['username'].touched">
-                <div class="error-message" *ngIf="f['username'].invalid && f['username'].touched">
-                    {{ 'ADMIN_LOGIN.ERROR.USERNAME_REQUIRED' | translate }}
-                </div>
-            </div>
+            <!-- Username -->
+            <app-input formControlName="username" [label]="'ADMIN_LOGIN.USERNAME' | translate"
+                [placeholder]="'ADMIN_LOGIN.USERNAME_PLACEHOLDER' | translate" [required]="true"
+                [isInvalid]="isFieldInvalid('username')" [errorMessage]="getErrorMessage('username')"
+                icon="fas fa-user">
+            </app-input>
 
-            <div class="form-group">
-                <label for="password">{{ 'ADMIN_LOGIN.PASSWORD' | translate }}</label>
-                <input id="password" type="password" formControlName="password"
-                    placeholder="{{ 'ADMIN_LOGIN.PASSWORD_PLACEHOLDER' | translate }}"
-                    [class.is-invalid]="f['password'].invalid && f['password'].touched">
-                <div class="error-message" *ngIf="f['password'].invalid && f['password'].touched">
-                    {{ 'ADMIN_LOGIN.ERROR.PASSWORD_REQUIRED' | translate }}
-                </div>
-            </div>
+            <!-- Password -->
+            <app-input formControlName="password" [type]="showPassword ? 'text' : 'password'"
+                [label]="'ADMIN_LOGIN.PASSWORD' | translate"
+                [placeholder]="'ADMIN_LOGIN.PASSWORD_PLACEHOLDER' | translate" [required]="true"
+                [isInvalid]="isFieldInvalid('password')" [errorMessage]="getErrorMessage('password')"
+                icon="fas fa-lock">
+                <button type="button" (click)="togglePasswordVisibility()" class="admin-login-password-toggle"
+                    [attr.aria-label]="(showPassword ? 'Hide password' : 'Show password')">
+                    <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                </button>
+            </app-input>
 
-            <div class="form-group checkbox-group">
-                <label>
-                    <input type="checkbox" formControlName="rememberMe">
-                    {{ 'ADMIN_LOGIN.REMEMBER_ME' | translate }}
+            <!-- Options -->
+            <div class="admin-login-options">
+                <label class="admin-login-remember">
+                    <input formControlName="rememberMe" type="checkbox">
+                    <span>{{ 'ADMIN_LOGIN.REMEMBER_ME' | translate }}</span>
                 </label>
+                <a routerLink="/forgot-password" class="admin-login-forgot">
+                    {{ 'ADMIN_LOGIN.FORGOT_PASSWORD' | translate }}
+                </a>
             </div>
 
-            <div class="text-center mb-1 error-message" *ngIf="errorMessage">
-                {{ errorMessage }}
-            </div>
+            <!-- Submit -->
+            <app-button type="submit" [variant]="'primary'" [loading]="isLoading"
+                [disabled]="loginForm.invalid || isLoading" [fullWidth]="true" [size]="'lg'">
+                {{ (isLoading ? 'ADMIN_LOGIN.LOADING' : 'ADMIN_LOGIN.BUTTON_LOGIN') | translate }}
+            </app-button>
 
-            <button type="submit" class="btn-login" [disabled]="isLoading">
-                <span *ngIf="!isLoading">{{ 'ADMIN_LOGIN.BUTTON_LOGIN' | translate }}</span>
-                <span *ngIf="isLoading">{{ 'ADMIN_LOGIN.LOADING' | translate }}</span>
-            </button>
-
+            <!-- Footer -->
             <div class="admin-login-footer">
-                <a routerLink="/login">{{ 'ADMIN_LOGIN.BACK_TO_USER' | translate }}</a>
+                <a routerLink="/login" class="admin-login-back">
+                    <i class="fas fa-arrow-left"></i>
+                    {{ 'ADMIN_LOGIN.BACK_TO_USER' | translate }}
+                </a>
             </div>
         </form>
     </div>

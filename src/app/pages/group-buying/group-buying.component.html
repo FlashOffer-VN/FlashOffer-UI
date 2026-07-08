@@ -1,84 +1,190 @@
+<!-- src/app/pages/group-buying/group-buying.component.html -->
 <div class="group-buying-container">
     <div class="group-buying-card">
+        <!-- Decorative -->
+        <div class="group-buying-deco group-buying-deco-1"></div>
+        <div class="group-buying-deco group-buying-deco-2"></div>
+
+        <!-- Header -->
         <div class="group-buying-header">
-            <h1>{{ 'GROUP_BUYING_TITLE' | translate }}</h1>
-            <p>{{ 'GROUP_BUYING_DESC' | translate }}</p>
+            <div class="group-buying-icon-wrapper">
+                <i class="fas fa-users"></i>
+            </div>
+            <h1>{{ 'GROUP_BUYING.TITLE' | translate }}</h1>
+            <p>{{ 'GROUP_BUYING.DESC' | translate }}</p>
+            <div class="group-buying-badge">
+                <i class="fas fa-rocket"></i>
+                {{ 'GROUP_BUYING.BADGE' | translate }}
+            </div>
         </div>
 
+        <!-- Form -->
         <form [formGroup]="groupForm" (ngSubmit)="onSubmit()" class="group-buying-form">
+            <!-- Progress -->
+            <div class="group-buying-progress">
+                <div class="progress-bar" [style.width.%]="formProgress"></div>
+            </div>
+
             <div class="form-grid">
                 <!-- Product Name -->
                 <div class="form-group full-width">
-                    <label>{{ 'GROUP_BUYING_PRODUCT_NAME' | translate }} <span class="required">*</span></label>
-                    <input type="text" formControlName="productName"
-                        placeholder="{{ 'GROUP_BUYING_PRODUCT_NAME_PLACEHOLDER' | translate }}" />
-                    <div class="error-message" *ngIf="f['productName'].invalid && f['productName'].touched">
-                        {{ 'GROUP_BUYING_PRODUCT_NAME_ERROR' | translate }}
+                    <label>{{ 'GROUP_BUYING.PRODUCT_NAME' | translate }} <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-box input-icon"></i>
+                        <input type="text" formControlName="productName"
+                            placeholder="{{ 'GROUP_BUYING.PRODUCT_NAME_PLACEHOLDER' | translate }}" />
+                    </div>
+                    <div class="error-message" *ngIf="isFieldInvalid('productName')">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ getErrorMessage('productName') }}
                     </div>
                 </div>
 
-                <!-- Target People Count -->
-                <div class="form-group">
-                    <label>{{ 'GROUP_BUYING_TARGET_PEOPLE' | translate }} <span class="required">*</span></label>
-                    <input type="number" formControlName="targetPeopleCount"
-                        placeholder="{{ 'GROUP_BUYING_TARGET_PEOPLE_PLACEHOLDER' | translate }}" />
-                    <div class="error-message" *ngIf="f['targetPeopleCount'].invalid && f['targetPeopleCount'].touched">
-                        {{ 'GROUP_BUYING_TARGET_PEOPLE_ERROR' | translate }}
+                <!-- Product Link -->
+                <div class="form-group full-width">
+                    <label>{{ 'GROUP_BUYING.PRODUCT_LINK' | translate }}</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-link input-icon"></i>
+                        <input type="url" formControlName="productLink"
+                            placeholder="{{ 'GROUP_BUYING.PRODUCT_LINK_PLACEHOLDER' | translate }}" />
                     </div>
+                    <small class="hint-text">
+                        <i class="fas fa-info-circle"></i>
+                        {{ 'GROUP_BUYING.PRODUCT_LINK_HINT' | translate }}
+                    </small>
                 </div>
 
                 <!-- Target Price -->
                 <div class="form-group">
-                    <label>{{ 'GROUP_BUYING_TARGET_PRICE' | translate }} <span class="required">*</span></label>
-                    <input type="number" formControlName="targetPrice"
-                        placeholder="{{ 'GROUP_BUYING_TARGET_PRICE_PLACEHOLDER' | translate }}" />
-                    <div class="error-message" *ngIf="f['targetPrice'].invalid && f['targetPrice'].touched">
-                        {{ 'GROUP_BUYING_TARGET_PRICE_ERROR' | translate }}
+                    <label>{{ 'GROUP_BUYING.TARGET_PRICE' | translate }} <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-tag input-icon"></i>
+                        <input type="number" formControlName="targetPrice"
+                            placeholder="{{ 'GROUP_BUYING.TARGET_PRICE_PLACEHOLDER' | translate }}" />
                     </div>
+                    <div class="error-message" *ngIf="isFieldInvalid('targetPrice')">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ getErrorMessage('targetPrice') }}
+                    </div>
+                    <small class="hint-text">
+                        <i class="fas fa-info-circle"></i>
+                        {{ 'GROUP_BUYING.TARGET_PRICE_HINT' | translate }}
+                    </small>
+                </div>
+
+                <!-- Target People -->
+                <div class="form-group">
+                    <label>{{ 'GROUP_BUYING.TARGET_PEOPLE' | translate }} <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user-group input-icon"></i>
+                        <input type="number" formControlName="targetPeopleCount"
+                            placeholder="{{ 'GROUP_BUYING.TARGET_PEOPLE_PLACEHOLDER' | translate }}" />
+                    </div>
+                    <div class="error-message" *ngIf="isFieldInvalid('targetPeopleCount')">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ getErrorMessage('targetPeopleCount') }}
+                    </div>
+                    <small class="hint-text">
+                        <i class="fas fa-info-circle"></i>
+                        {{ 'GROUP_BUYING.TARGET_PEOPLE_HINT' | translate }}
+                    </small>
                 </div>
 
                 <!-- Full Name -->
                 <div class="form-group">
-                    <label>{{ 'GROUP_BUYING_FULL_NAME' | translate }} <span class="required">*</span></label>
-                    <input type="text" formControlName="fullName"
-                        placeholder="{{ 'GROUP_BUYING_FULL_NAME_PLACEHOLDER' | translate }}" />
-                    <div class="error-message" *ngIf="f['fullName'].invalid && f['fullName'].touched">
-                        {{ 'GROUP_BUYING_FULL_NAME_ERROR' | translate }}
+                    <label>{{ 'GROUP_BUYING.FULL_NAME' | translate }} <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" formControlName="fullName"
+                            placeholder="{{ 'GROUP_BUYING.FULL_NAME_PLACEHOLDER' | translate }}" />
+                    </div>
+                    <div class="error-message" *ngIf="isFieldInvalid('fullName')">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ getErrorMessage('fullName') }}
                     </div>
                 </div>
 
                 <!-- Phone -->
                 <div class="form-group">
-                    <label>{{ 'GROUP_BUYING_PHONE' | translate }} <span class="required">*</span></label>
-                    <input type="text" formControlName="phone"
-                        placeholder="{{ 'GROUP_BUYING_PHONE_PLACEHOLDER' | translate }}" />
-                    <div class="error-message" *ngIf="f['phone'].invalid && f['phone'].touched">
-                        {{ 'GROUP_BUYING_PHONE_ERROR' | translate }}
+                    <label>{{ 'GROUP_BUYING.PHONE' | translate }} <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-phone input-icon"></i>
+                        <input type="text" formControlName="phone"
+                            placeholder="{{ 'GROUP_BUYING.PHONE_PLACEHOLDER' | translate }}" />
+                    </div>
+                    <div class="error-message" *ngIf="isFieldInvalid('phone')">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ getErrorMessage('phone') }}
+                    </div>
+                </div>
+
+                <!-- Zalo -->
+                <div class="form-group">
+                    <label>{{ 'GROUP_BUYING.ZALO' | translate }}</label>
+                    <div class="input-wrapper">
+                        <i class="fab fa-zalo input-icon"></i>
+                        <input type="text" formControlName="zalo"
+                            placeholder="{{ 'GROUP_BUYING.ZALO_PLACEHOLDER' | translate }}" />
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group full-width">
+                    <label>{{ 'GROUP_BUYING.EMAIL' | translate }} <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" formControlName="email"
+                            placeholder="{{ 'GROUP_BUYING.EMAIL_PLACEHOLDER' | translate }}" />
+                    </div>
+                    <div class="error-message" *ngIf="isFieldInvalid('email')">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ getErrorMessage('email') }}
                     </div>
                 </div>
 
                 <!-- Note -->
                 <div class="form-group full-width">
-                    <label>{{ 'GROUP_BUYING_NOTE' | translate }}</label>
-                    <textarea formControlName="note" rows="3"
-                        placeholder="{{ 'GROUP_BUYING_NOTE_PLACEHOLDER' | translate }}"></textarea>
+                    <label>{{ 'GROUP_BUYING.NOTE' | translate }}</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-pen input-icon textarea-icon"></i>
+                        <textarea formControlName="note" rows="3"
+                            placeholder="{{ 'GROUP_BUYING.NOTE_PLACEHOLDER' | translate }}"></textarea>
+                    </div>
+                </div>
+
+                <!-- Terms -->
+                <div class="form-group full-width terms-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" formControlName="agreeTerms" />
+                        <span class="checkmark"></span>
+                        {{ 'GROUP_BUYING.AGREE_TERMS' | translate }}
+                        <a routerLink="/terms" target="_blank">{{ 'GROUP_BUYING.TERMS_LINK' | translate }}</a>
+                        <span class="required">*</span>
+                    </label>
+                    <div class="error-message" *ngIf="isFieldInvalid('agreeTerms')">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ getErrorMessage('agreeTerms') }}
+                    </div>
                 </div>
             </div>
 
+            <!-- Actions -->
             <div class="form-actions">
-                <button type="submit" class="btn-submit" [disabled]="isSubmitting">
-                    <span *ngIf="!isSubmitting">{{ 'GROUP_BUYING_SUBMIT' | translate }}</span>
-                    <span *ngIf="isSubmitting">{{ 'GROUP_BUYING_SUBMITTING' | translate }}</span>
+                <button type="submit" class="btn-submit" [disabled]="isSubmitting || groupForm.invalid">
+                    <span *ngIf="!isSubmitting">
+                        <i class="fas fa-rocket"></i>
+                        {{ 'GROUP_BUYING.SUBMIT' | translate }}
+                    </span>
+                    <span *ngIf="isSubmitting">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        {{ 'GROUP_BUYING.SUBMITTING' | translate }}
+                    </span>
                 </button>
+                <p class="form-note">
+                    <i class="fas fa-shield-alt"></i>
+                    {{ 'GROUP_BUYING.SECURE_NOTE' | translate }}
+                </p>
             </div>
         </form>
     </div>
-</div>
-
-<!-- Toast -->
-<div class="toast" [class.show]="showToast" [class.success]="toastType === 'success'"
-    [class.error]="toastType === 'error'">
-    <span class="toast-icon">{{ toastType === 'success' ? '✓' : '✕' }}</span>
-    <span class="toast-message">{{ toastMessage }}</span>
-    <button class="toast-close" (click)="closeToast()">×</button>
 </div>

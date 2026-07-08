@@ -1,74 +1,210 @@
+<!-- src/app/pages/get-offer/get-offer.component.html -->
 <div class="get-offer-container">
     <div class="get-offer-card">
+        <!-- Decorative -->
+        <div class="get-offer-deco get-offer-deco-1"></div>
+        <div class="get-offer-deco get-offer-deco-2"></div>
+
+        <!-- Header -->
         <div class="get-offer-header">
-            <h1>{{ 'GET_OFFER_TITLE' | translate }}</h1>
-            <p>{{ 'GET_OFFER_DESC' | translate }}</p>
+            <div class="get-offer-icon-wrapper">
+                <i class="fas fa-tags"></i>
+            </div>
+            <h1>{{ 'GET_OFFER.TITLE' | translate }}</h1>
+            <p>{{ 'GET_OFFER.DESC' | translate }}</p>
+            <div class="get-offer-badge">
+                <i class="fas fa-bolt"></i>
+                {{ 'GET_OFFER.BADGE' | translate }}
+            </div>
         </div>
 
+        <!-- Form -->
         <form [formGroup]="offerForm" (ngSubmit)="onSubmit()" class="get-offer-form">
+            <!-- Progress -->
+            <div class="get-offer-progress">
+                <div class="progress-bar" [style.width.%]="formProgress"></div>
+            </div>
+
             <div class="form-grid">
-                <!-- Selected Offer -->
+                <!-- Product Name -->
                 <div class="form-group full-width">
-                    <label>{{ 'GET_OFFER_SELECTED_OFFER' | translate }} <span class="required">*</span></label>
-                    <input type="text" formControlName="selectedOffer"
-                        placeholder="{{ 'GET_OFFER_SELECTED_OFFER_PLACEHOLDER' | translate }}" />
-                    <div class="error-message" *ngIf="f['selectedOffer'].invalid && f['selectedOffer'].touched">
-                        {{ 'GET_OFFER_SELECTED_OFFER_ERROR' | translate }}
+                    <label>{{ 'GET_OFFER.PRODUCT_NAME' | translate }} <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-box input-icon"></i>
+                        <input type="text" formControlName="productName"
+                            placeholder="{{ 'GET_OFFER.PRODUCT_NAME_PLACEHOLDER' | translate }}" />
+                    </div>
+                    <div class="error-message" *ngIf="isFieldInvalid('productName')">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ getErrorMessage('productName') }}
+                    </div>
+                </div>
+
+                <!-- Product Link -->
+                <div class="form-group full-width">
+                    <label>{{ 'GET_OFFER.PRODUCT_LINK' | translate }}</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-link input-icon"></i>
+                        <input type="url" formControlName="productLink"
+                            placeholder="{{ 'GET_OFFER.PRODUCT_LINK_PLACEHOLDER' | translate }}" />
+                    </div>
+                    <small class="hint-text">
+                        <i class="fas fa-info-circle"></i>
+                        {{ 'GET_OFFER.PRODUCT_LINK_HINT' | translate }}
+                    </small>
+                </div>
+
+                <!-- Current Price -->
+                <div class="form-group">
+                    <label>{{ 'GET_OFFER.CURRENT_PRICE' | translate }} <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-money-bill-wave input-icon"></i>
+                        <input type="text" formControlName="currentPrice"
+                            placeholder="{{ 'GET_OFFER.CURRENT_PRICE_PLACEHOLDER' | translate }}" />
+                    </div>
+                    <div class="error-message" *ngIf="isFieldInvalid('currentPrice')">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ getErrorMessage('currentPrice') }}
+                    </div>
+                </div>
+
+                <!-- Expected Price -->
+                <div class="form-group">
+                    <label>{{ 'GET_OFFER.EXPECTED_PRICE' | translate }}</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-tag input-icon"></i>
+                        <input type="text" formControlName="expectedPrice"
+                            placeholder="{{ 'GET_OFFER.EXPECTED_PRICE_PLACEHOLDER' | translate }}" />
+                    </div>
+                    <small class="hint-text">
+                        <i class="fas fa-info-circle"></i>
+                        {{ 'GET_OFFER.EXPECTED_PRICE_HINT' | translate }}
+                    </small>
+                </div>
+
+                <!-- Quantity -->
+                <div class="form-group">
+                    <label>{{ 'GET_OFFER.QUANTITY' | translate }} <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-cubes input-icon"></i>
+                        <input type="number" formControlName="quantity"
+                            placeholder="{{ 'GET_OFFER.QUANTITY_PLACEHOLDER' | translate }}" />
+                    </div>
+                    <div class="error-message" *ngIf="isFieldInvalid('quantity')">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ getErrorMessage('quantity') }}
+                    </div>
+                </div>
+
+                <!-- Unit -->
+                <div class="form-group">
+                    <label>{{ 'GET_OFFER.UNIT' | translate }} <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-weight-scale input-icon"></i>
+                        <input type="text" formControlName="unit"
+                            placeholder="{{ 'GET_OFFER.UNIT_PLACEHOLDER' | translate }}" />
+                    </div>
+                    <div class="error-message" *ngIf="isFieldInvalid('unit')">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ getErrorMessage('unit') }}
                     </div>
                 </div>
 
                 <!-- Full Name -->
                 <div class="form-group">
-                    <label>{{ 'GET_OFFER_FULL_NAME' | translate }} <span class="required">*</span></label>
-                    <input type="text" formControlName="fullName"
-                        placeholder="{{ 'GET_OFFER_FULL_NAME_PLACEHOLDER' | translate }}" />
-                    <div class="error-message" *ngIf="f['fullName'].invalid && f['fullName'].touched">
-                        {{ 'GET_OFFER_FULL_NAME_ERROR' | translate }}
+                    <label>{{ 'GET_OFFER.FULL_NAME' | translate }} <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" formControlName="fullName"
+                            placeholder="{{ 'GET_OFFER.FULL_NAME_PLACEHOLDER' | translate }}" />
+                    </div>
+                    <div class="error-message" *ngIf="isFieldInvalid('fullName')">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ getErrorMessage('fullName') }}
                     </div>
                 </div>
 
                 <!-- Phone -->
                 <div class="form-group">
-                    <label>{{ 'GET_OFFER_PHONE' | translate }} <span class="required">*</span></label>
-                    <input type="text" formControlName="phone"
-                        placeholder="{{ 'GET_OFFER_PHONE_PLACEHOLDER' | translate }}" />
-                    <div class="error-message" *ngIf="f['phone'].invalid && f['phone'].touched">
-                        {{ 'GET_OFFER_PHONE_ERROR' | translate }}
+                    <label>{{ 'GET_OFFER.PHONE' | translate }} <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-phone input-icon"></i>
+                        <input type="text" formControlName="phone"
+                            placeholder="{{ 'GET_OFFER.PHONE_PLACEHOLDER' | translate }}" />
+                    </div>
+                    <div class="error-message" *ngIf="isFieldInvalid('phone')">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ getErrorMessage('phone') }}
                     </div>
                 </div>
 
                 <!-- Zalo -->
                 <div class="form-group">
-                    <label>{{ 'GET_OFFER_ZALO' | translate }}</label>
-                    <input type="text" formControlName="zalo"
-                        placeholder="{{ 'GET_OFFER_ZALO_PLACEHOLDER' | translate }}" />
+                    <label>{{ 'GET_OFFER.ZALO' | translate }}</label>
+                    <div class="input-wrapper">
+                        <i class="fab fa-zalo input-icon"></i>
+                        <input type="text" formControlName="zalo"
+                            placeholder="{{ 'GET_OFFER.ZALO_PLACEHOLDER' | translate }}" />
+                    </div>
                 </div>
 
                 <!-- Email -->
                 <div class="form-group full-width">
-                    <label>{{ 'GET_OFFER_EMAIL' | translate }} <span class="required">*</span></label>
-                    <input type="email" formControlName="email"
-                        placeholder="{{ 'GET_OFFER_EMAIL_PLACEHOLDER' | translate }}" />
-                    <div class="error-message" *ngIf="f['email'].invalid && f['email'].touched">
-                        {{ 'GET_OFFER_EMAIL_ERROR' | translate }}
+                    <label>{{ 'GET_OFFER.EMAIL' | translate }} <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" formControlName="email"
+                            placeholder="{{ 'GET_OFFER.EMAIL_PLACEHOLDER' | translate }}" />
+                    </div>
+                    <div class="error-message" *ngIf="isFieldInvalid('email')">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ getErrorMessage('email') }}
+                    </div>
+                </div>
+
+                <!-- Note -->
+                <div class="form-group full-width">
+                    <label>{{ 'GET_OFFER.NOTE' | translate }}</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-pen input-icon textarea-icon"></i>
+                        <textarea formControlName="note" rows="3"
+                            placeholder="{{ 'GET_OFFER.NOTE_PLACEHOLDER' | translate }}"></textarea>
+                    </div>
+                </div>
+
+                <!-- Terms -->
+                <div class="form-group full-width terms-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" formControlName="agreeTerms" />
+                        <span class="checkmark"></span>
+                        {{ 'GET_OFFER.AGREE_TERMS' | translate }}
+                        <a routerLink="/terms" target="_blank">{{ 'GET_OFFER.TERMS_LINK' | translate }}</a>
+                        <span class="required">*</span>
+                    </label>
+                    <div class="error-message" *ngIf="isFieldInvalid('agreeTerms')">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ getErrorMessage('agreeTerms') }}
                     </div>
                 </div>
             </div>
 
+            <!-- Actions -->
             <div class="form-actions">
-                <button type="submit" class="btn-submit" [disabled]="isSubmitting">
-                    <span *ngIf="!isSubmitting">{{ 'GET_OFFER_SUBMIT' | translate }}</span>
-                    <span *ngIf="isSubmitting">{{ 'GET_OFFER_SUBMITTING' | translate }}</span>
+                <button type="submit" class="btn-submit" [disabled]="isSubmitting || offerForm.invalid">
+                    <span *ngIf="!isSubmitting">
+                        <i class="fas fa-paper-plane"></i>
+                        {{ 'GET_OFFER.SUBMIT' | translate }}
+                    </span>
+                    <span *ngIf="isSubmitting">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        {{ 'GET_OFFER.SUBMITTING' | translate }}
+                    </span>
                 </button>
+                <p class="form-note">
+                    <i class="fas fa-shield-alt"></i>
+                    {{ 'GET_OFFER.SECURE_NOTE' | translate }}
+                </p>
             </div>
         </form>
     </div>
-</div>
-
-<!-- Toast -->
-<div class="toast" [class.show]="showToast" [class.success]="toastType === 'success'"
-    [class.error]="toastType === 'error'">
-    <span class="toast-icon">{{ toastType === 'success' ? '✓' : '✕' }}</span>
-    <span class="toast-message">{{ toastMessage }}</span>
-    <button class="toast-close" (click)="closeToast()">×</button>
 </div>
