@@ -39,12 +39,14 @@ export interface AuthResponse {
     success: boolean;
     message: string;
     data: {
+        id?: number;
         token: string;
         refreshToken?: string;
         expiresAt: string;
         username: string;
         fullName: string;
         role: string;
+        email?: string;
     };
     errors: string[] | null;
     timestamp: string;

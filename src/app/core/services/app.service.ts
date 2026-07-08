@@ -20,6 +20,31 @@ export class AppService {
         public ctvRegistration: CtvRegistrationService
     ) { }
 
+    // ========== Auth ==========
+    login(credentials: any) {
+        return this.auth.login(credentials);
+    }
+
+    logout() {
+        this.auth.logout();
+    }
+
+    logoutToAdmin() {
+        this.auth.logoutToAdmin();
+    }
+
+    getCurrentUser() {
+        return this.auth.getCurrentUser();
+    }
+
+    isAuthenticated() {
+        return this.auth.isAuthenticated();
+    }
+
+    extractErrorMessage(error: any): string {
+        return this.auth.extractErrorMessage(error);
+    }
+
     // ========== Language ==========
     changeLanguage(lang: string): void {
         localStorage.setItem('language', lang);

@@ -1,0 +1,224 @@
+<!-- src/app/features/auth/pages/register/register.component.html -->
+<div class="register-container">
+    <div class="register-card">
+        <!-- Decorative -->
+        <div class="register-deco register-deco-1"></div>
+        <div class="register-deco register-deco-2"></div>
+
+        <!-- Header -->
+        <div class="register-header">
+            <div class="register-icon-wrapper">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <h1>{{ 'REGISTER.TITLE' | translate }}</h1>
+            <p>{{ 'REGISTER.SUBTITLE' | translate }}</p>
+            <div class="register-badge">
+                <i class="fas fa-users"></i>
+                {{ 'REGISTER.COMMUNITY_BADGE' | translate }}
+            </div>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+
+            <!-- === SECTION 1: THÔNG TIN CÁ NHÂN === -->
+            <div class="section-title">
+                <i class="fas fa-user"></i>
+                {{ 'REGISTER.SECTION_PERSONAL' | translate }}
+            </div>
+
+            <div class="form-grid">
+                <!-- Full Name -->
+                <div class="form-group">
+                    <app-input formControlName="fullName" [label]="'REGISTER.FULL_NAME' | translate"
+                        [placeholder]="'REGISTER.FULL_NAME_PLACEHOLDER' | translate" [required]="true"
+                        [isInvalid]="isFieldInvalid('fullName')" [errorMessage]="getErrorMessage('fullName')"
+                        icon="fas fa-user">
+                    </app-input>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <app-input formControlName="email" type="email" [label]="'REGISTER.EMAIL' | translate"
+                        [placeholder]="'REGISTER.EMAIL_PLACEHOLDER' | translate" [required]="true"
+                        [isInvalid]="isFieldInvalid('email')" [errorMessage]="getErrorMessage('email')"
+                        icon="fas fa-envelope">
+                    </app-input>
+                </div>
+
+                <!-- Phone -->
+                <div class="form-group">
+                    <app-input formControlName="phone" type="tel" [label]="'REGISTER.PHONE' | translate"
+                        [placeholder]="'REGISTER.PHONE_PLACEHOLDER' | translate" [required]="true"
+                        [isInvalid]="isFieldInvalid('phone')" [errorMessage]="getErrorMessage('phone')"
+                        icon="fas fa-phone">
+                    </app-input>
+                </div>
+
+                <!-- Username -->
+                <div class="form-group">
+                    <app-input formControlName="username" [label]="'REGISTER.USERNAME' | translate"
+                        [placeholder]="'REGISTER.USERNAME_PLACEHOLDER' | translate" [required]="true"
+                        [isInvalid]="isFieldInvalid('username')" [errorMessage]="getErrorMessage('username')"
+                        icon="fas fa-id-badge">
+                    </app-input>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <app-input formControlName="password" [type]="showPassword ? 'text' : 'password'"
+                        [label]="'REGISTER.PASSWORD' | translate"
+                        [placeholder]="'REGISTER.PASSWORD_PLACEHOLDER' | translate" [required]="true"
+                        [isInvalid]="isFieldInvalid('password')" [errorMessage]="getErrorMessage('password')"
+                        icon="fas fa-lock">
+                        <button type="button" (click)="togglePasswordVisibility()" class="register-password-toggle">
+                            <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                        </button>
+                    </app-input>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <app-input formControlName="confirmPassword" [type]="showConfirmPassword ? 'text' : 'password'"
+                        [label]="'REGISTER.CONFIRM_PASSWORD' | translate"
+                        [placeholder]="'REGISTER.CONFIRM_PASSWORD_PLACEHOLDER' | translate" [required]="true"
+                        [isInvalid]="isFieldInvalid('confirmPassword')"
+                        [errorMessage]="getErrorMessage('confirmPassword')" icon="fas fa-shield-alt">
+                        <button type="button" (click)="toggleConfirmPasswordVisibility()"
+                            class="register-password-toggle">
+                            <i [class]="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                        </button>
+                    </app-input>
+                </div>
+            </div>
+
+            <!-- === SECTION 2: THÔNG TIN DOANH NHÂN === -->
+            <div class="section-title">
+                <i class="fas fa-building"></i>
+                {{ 'REGISTER.SECTION_BUSINESS' | translate }}
+            </div>
+            <p class="section-desc">{{ 'REGISTER.SECTION_BUSINESS_DESC' | translate }}</p>
+
+            <div class="form-grid">
+                <!-- Business Name -->
+                <div class="form-group">
+                    <app-input formControlName="businessName" [label]="'REGISTER.BUSINESS_NAME' | translate"
+                        [placeholder]="'REGISTER.BUSINESS_NAME_PLACEHOLDER' | translate" [required]="true"
+                        [isInvalid]="isFieldInvalid('businessName')" [errorMessage]="getErrorMessage('businessName')"
+                        icon="fas fa-building">
+                    </app-input>
+                </div>
+
+                <!-- Position -->
+                <div class="form-group">
+                    <app-input formControlName="position" [label]="'REGISTER.POSITION' | translate"
+                        [placeholder]="'REGISTER.POSITION_PLACEHOLDER' | translate" [required]="true"
+                        [isInvalid]="isFieldInvalid('position')" [errorMessage]="getErrorMessage('position')"
+                        icon="fas fa-briefcase">
+                    </app-input>
+                </div>
+
+                <!-- Business Field -->
+                <div class="form-group">
+                    <app-ng-select-wrapper formControlName="businessField" [items]="businessFields"
+                        [label]="'REGISTER.BUSINESS_FIELD' | translate"
+                        [placeholder]="'REGISTER.BUSINESS_FIELD_PLACEHOLDER' | translate" [required]="true"
+                        [isInvalid]="isFieldInvalid('businessField')" [errorMessage]="getErrorMessage('businessField')"
+                        [primaryColor]="'#7C3AED'" [primaryDark]="'#5B21B6'">
+                    </app-ng-select-wrapper>
+                </div>
+
+                <!-- Business Size -->
+                <div class="form-group">
+                    <app-ng-select-wrapper formControlName="businessSize" [items]="businessSizes"
+                        [label]="'REGISTER.BUSINESS_SIZE' | translate"
+                        [placeholder]="'REGISTER.BUSINESS_SIZE_PLACEHOLDER' | translate" [required]="true"
+                        [isInvalid]="isFieldInvalid('businessSize')" [errorMessage]="getErrorMessage('businessSize')"
+                        [primaryColor]="'#7C3AED'" [primaryDark]="'#5B21B6'">
+                    </app-ng-select-wrapper>
+                </div>
+
+                <!-- Experience -->
+                <div class="form-group">
+                    <app-ng-select-wrapper formControlName="experience" [items]="experienceLevels"
+                        [label]="'REGISTER.EXPERIENCE' | translate"
+                        [placeholder]="'REGISTER.EXPERIENCE_PLACEHOLDER' | translate" [required]="true"
+                        [isInvalid]="isFieldInvalid('experience')" [errorMessage]="getErrorMessage('experience')"
+                        [primaryColor]="'#7C3AED'" [primaryDark]="'#5B21B6'">
+                    </app-ng-select-wrapper>
+                </div>
+
+                <!-- Website -->
+                <div class="form-group">
+                    <app-input formControlName="website" [label]="'REGISTER.WEBSITE' | translate"
+                        [placeholder]="'REGISTER.WEBSITE_PLACEHOLDER' | translate" icon="fas fa-globe">
+                    </app-input>
+                </div>
+
+                <!-- LinkedIn -->
+                <div class="form-group">
+                    <app-input formControlName="linkedin" [label]="'REGISTER.LINKEDIN' | translate"
+                        [placeholder]="'REGISTER.LINKEDIN_PLACEHOLDER' | translate" icon="fab fa-linkedin">
+                    </app-input>
+                </div>
+            </div>
+
+            <!-- === SECTION 3: MỤC TIÊU & SỞ THÍCH === -->
+            <div class="section-title">
+                <i class="fas fa-bullseye"></i>
+                {{ 'REGISTER.SECTION_GOALS' | translate }}
+            </div>
+            <p class="section-desc">{{ 'REGISTER.SECTION_GOALS_DESC' | translate }}</p>
+
+            <div class="form-grid">
+                <!-- Interests -->
+                <div class="form-group">
+                    <app-input formControlName="interests" [label]="'REGISTER.INTERESTS' | translate"
+                        [placeholder]="'REGISTER.INTERESTS_PLACEHOLDER' | translate" icon="fas fa-heart">
+                    </app-input>
+                </div>
+
+                <!-- Goals -->
+                <div class="form-group">
+                    <app-input formControlName="goals" [label]="'REGISTER.GOALS' | translate"
+                        [placeholder]="'REGISTER.GOALS_PLACEHOLDER' | translate" icon="fas fa-rocket">
+                    </app-input>
+                </div>
+
+                <!-- Skills -->
+                <div class="form-group full-width">
+                    <app-input formControlName="skills" [label]="'REGISTER.SKILLS' | translate"
+                        [placeholder]="'REGISTER.SKILLS_PLACEHOLDER' | translate" icon="fas fa-star">
+                    </app-input>
+                </div>
+            </div>
+
+            <!-- === SECTION 4: ĐIỀU KHOẢN === -->
+            <div class="terms-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" formControlName="agreeTerms">
+                    <span class="checkmark"></span>
+                    <span>{{ 'REGISTER.AGREE_TERMS' | translate }}</span>
+                    <a routerLink="/terms" target="_blank">{{ 'REGISTER.TERMS_LINK' | translate }}</a>
+                    <span class="required">*</span>
+                </label>
+                <div class="error-message" *ngIf="isFieldInvalid('agreeTerms')">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ getErrorMessage('agreeTerms') }}
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <app-button type="submit" [variant]="'primary'" [loading]="isLoading"
+                [disabled]="registerForm.invalid || isLoading" [fullWidth]="true" [size]="'lg'">
+                {{ (isLoading ? 'REGISTER.LOADING' : 'REGISTER.BUTTON') | translate }}
+            </app-button>
+
+            <!-- Login Link -->
+            <div class="register-footer">
+                <span>{{ 'REGISTER.HAVE_ACCOUNT' | translate }}</span>
+                <a routerLink="/login">{{ 'REGISTER.LOGIN' | translate }}</a>
+            </div>
+        </form>
+    </div>
+</div>

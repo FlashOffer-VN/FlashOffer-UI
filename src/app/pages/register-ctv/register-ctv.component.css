@@ -1,38 +1,85 @@
+/* register-ctv.component.css */
 :host {
     display: block;
     min-height: 100vh;
-    background: #f8fafc;
-}
-
-.register-ctv-container {
-    max-width: 820px;
-    margin: 0 auto;
-    padding: 60px 20px 80px;
-}
-
-/* ===== Card Animation ===== */
-.register-ctv-card {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-    padding: 48px;
-    border: 1px solid #e8edf3;
-    opacity: 0;
-    transform: translateY(30px) scale(0.96);
-    animation: cardSlideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
     position: relative;
 }
 
-/* Card glow effect */
-.register-ctv-card::before {
+/* ===== Background pattern ===== */
+:host::before {
     content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at 70% 20%, rgba(0, 127, 148, 0.03), transparent 50%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        radial-gradient(circle at 20% 50%, rgba(0, 127, 148, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(0, 127, 148, 0.03) 0%, transparent 50%);
     pointer-events: none;
+    z-index: 0;
+}
+
+.register-ctv-container {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+}
+
+/* ===== Card ===== */
+.register-ctv-card {
+    position: relative;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.04);
+    padding: 48px 52px 40px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+    animation: cardSlideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    overflow: hidden;
+}
+
+/* ===== Decorative elements ===== */
+.register-ctv-deco {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.06;
+}
+
+.register-ctv-deco-1 {
+    width: 300px;
+    height: 300px;
+    top: -150px;
+    right: -150px;
+    background: linear-gradient(135deg, #007f94, #24c7d7);
+    animation: floatDeco 8s ease-in-out infinite;
+}
+
+.register-ctv-deco-2 {
+    width: 200px;
+    height: 200px;
+    bottom: -100px;
+    left: -100px;
+    background: linear-gradient(135deg, #7C3AED, #A78BFA);
+    animation: floatDeco 10s ease-in-out infinite reverse;
+}
+
+@keyframes floatDeco {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate(20px, -20px) scale(1.1);
+    }
 }
 
 @keyframes cardSlideUp {
@@ -47,10 +94,11 @@
     }
 }
 
-/* ===== Header Animation ===== */
+/* ===== Header ===== */
 .register-ctv-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 36px;
+    position: relative;
     opacity: 0;
     animation: headerFade 0.6s ease 0.2s forwards;
 }
@@ -67,20 +115,130 @@
     }
 }
 
+.register-ctv-icon-wrapper {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #007f94, #24c7d7);
+    color: #fff;
+    font-size: 28px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 24px rgba(0, 127, 148, 0.25);
+    transition: transform 0.3s ease;
+}
+
+.register-ctv-icon-wrapper:hover {
+    transform: scale(1.05) rotate(-5deg);
+}
+
 .register-ctv-header h1 {
     font-size: 28px;
     font-weight: 700;
     color: #0a1a2b;
-    margin-bottom: 8px;
+    margin: 0 0 6px;
     letter-spacing: -0.02em;
 }
 
 .register-ctv-header p {
-    color: #5a6c7e;
-    font-size: 16px;
+    color: #6b7a8a;
+    font-size: 15px;
+    margin: 0;
 }
 
-/* ===== Form Animation ===== */
+/* ===== Steps ===== */
+.register-ctv-steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.register-ctv-steps .step {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e8edf3;
+    color: #8a9aa8;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.4s ease;
+}
+
+.register-ctv-steps .step.active {
+    background: linear-gradient(135deg, #007f94, #24c7d7);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 127, 148, 0.3);
+    transform: scale(1.1);
+}
+
+.register-ctv-steps .step-line {
+    width: 40px;
+    height: 2px;
+    background: #e0e6ed;
+    border-radius: 2px;
+    position: relative;
+}
+
+.register-ctv-steps .step-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #007f94, #24c7d7);
+    border-radius: 2px;
+    animation: stepLine 1.2s ease 0.8s forwards;
+}
+
+@keyframes stepLine {
+    0% {
+        width: 0%;
+    }
+
+    100% {
+        width: 100%;
+    }
+}
+
+/* ===== Progress Bar ===== */
+.register-ctv-progress {
+    width: 100%;
+    height: 4px;
+    background: #e8edf3;
+    border-radius: 4px;
+    margin-bottom: 28px;
+    overflow: hidden;
+    opacity: 0;
+    animation: progressFade 0.6s ease 0.4s forwards;
+}
+
+@keyframes progressFade {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.register-ctv-progress .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #007f94, #24c7d7);
+    border-radius: 4px;
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    width: 0%;
+}
+
+/* ===== Form ===== */
 .register-ctv-form {
     opacity: 0;
     animation: formFade 0.6s ease 0.3s forwards;
@@ -102,7 +260,7 @@
     gap: 20px 24px;
 }
 
-/* ===== Form Group Animation ===== */
+/* ===== Form Group ===== */
 .form-group {
     display: flex;
     flex-direction: column;
@@ -136,6 +294,10 @@
     animation-delay: 0.60s;
 }
 
+.form-group:nth-child(7) {
+    animation-delay: 0.65s;
+}
+
 @keyframes groupSlide {
     0% {
         opacity: 0;
@@ -153,27 +315,62 @@
 }
 
 .form-group label {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: #1a2a3a;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    font-size: 11px;
 }
 
 .form-group label .required {
     color: #ef4444;
+    margin-left: 2px;
 }
 
-/* ===== Input Animation ===== */
+/* ===== Input Wrapper ===== */
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper .input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9aa8b6;
+    font-size: 14px;
+    transition: color 0.3s ease;
+    pointer-events: none;
+}
+
+.input-wrapper .input-icon.textarea-icon {
+    top: 14px;
+    transform: none;
+}
+
+.input-wrapper:focus-within .input-icon {
+    color: #007f94;
+}
+
 .form-group input,
 .form-group select,
 .form-group textarea {
-    padding: 10px 14px;
-    border: 1.5px solid #dce3eb;
-    border-radius: 8px;
+    width: 100%;
+    padding: 11px 14px 11px 42px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
     font-size: 14px;
     transition: all 0.3s ease;
     background: #fafbfc;
     font-family: inherit;
-    position: relative;
+    color: #1a2a3a;
+}
+
+.form-group textarea {
+    padding-left: 42px;
+    resize: vertical;
+    min-height: 90px;
 }
 
 .form-group input:focus,
@@ -182,7 +379,7 @@
     outline: none;
     border-color: #007f94;
     background: #fff;
-    box-shadow: 0 0 0 3px rgba(0, 127, 148, 0.08);
+    box-shadow: 0 0 0 4px rgba(0, 127, 148, 0.06);
     transform: translateY(-1px);
 }
 
@@ -216,18 +413,20 @@
     }
 }
 
-.form-group textarea {
-    resize: vertical;
-    min-height: 80px;
-}
-
 /* ===== Error Message ===== */
 .error-message {
     font-size: 12px;
     color: #ef4444;
     margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
     opacity: 0;
     animation: errorFade 0.3s ease forwards;
+}
+
+.error-message i {
+    font-size: 12px;
 }
 
 @keyframes errorFade {
@@ -240,6 +439,89 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* ===== Hint ===== */
+.hint-text {
+    font-size: 12px;
+    color: #8a9aa8;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+}
+
+.hint-text i {
+    font-size: 12px;
+}
+
+/* ===== Terms ===== */
+.terms-group {
+    margin-top: 4px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #3a4a5a;
+    cursor: pointer;
+    font-weight: 400;
+    text-transform: none;
+}
+
+.checkbox-label input {
+    display: none;
+}
+
+.checkbox-label .checkmark {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #d0d8e0;
+    border-radius: 6px;
+    background: #fff;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.checkbox-label .checkmark::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 11px;
+    color: #fff;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+}
+
+.checkbox-label input:checked+.checkmark {
+    background: linear-gradient(135deg, #007f94, #24c7d7);
+    border-color: #007f94;
+}
+
+.checkbox-label input:checked+.checkmark::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.checkbox-label input:focus+.checkmark {
+    box-shadow: 0 0 0 3px rgba(0, 127, 148, 0.15);
+}
+
+.checkbox-label a {
+    color: #007f94;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.checkbox-label a:hover {
+    text-decoration: underline;
 }
 
 /* ===== Form Actions ===== */
@@ -265,21 +547,24 @@
 
 /* ===== Submit Button ===== */
 .btn-submit {
-    background: #007f94;
+    background: linear-gradient(135deg, #007f94, #24c7d7);
     color: #fff;
     border: none;
-    padding: 12px 48px;
-    border-radius: 8px;
+    padding: 14px 52px;
+    border-radius: 12px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    min-width: 200px;
+    min-width: 220px;
     position: relative;
     overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
-/* Button shimmer effect */
 .btn-submit::after {
     content: '';
     position: absolute;
@@ -287,7 +572,7 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.15), transparent);
     transform: rotate(45deg);
     transition: all 0.6s ease;
     pointer-events: none;
@@ -298,9 +583,8 @@
 }
 
 .btn-submit:hover:not(:disabled) {
-    background: #006b7e;
     transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 8px 24px rgba(0, 127, 148, 0.3);
+    box-shadow: 0 12px 32px rgba(0, 127, 148, 0.35);
 }
 
 .btn-submit:active:not(:disabled) {
@@ -313,53 +597,63 @@
     transform: scale(0.98);
 }
 
-/* Button loading animation */
-.btn-submit:disabled span {
-    display: inline-block;
-    animation: dots 1.2s ease-in-out infinite;
+.btn-submit i {
+    font-size: 16px;
 }
 
-@keyframes dots {
+/* ===== Form Note ===== */
+.form-note {
+    font-size: 13px;
+    color: #8a9aa8;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
 
-    0%,
-    20% {
-        content: '';
-    }
-
-    40% {
-        content: '.';
-    }
-
-    60% {
-        content: '..';
-    }
-
-    80% {
-        content: '...';
-    }
-
-    100% {
-        content: '';
-    }
+.form-note i {
+    font-size: 12px;
 }
 
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
     .register-ctv-container {
-        padding: 32px 16px 60px;
+        padding: 20px 12px 40px;
     }
 
     .register-ctv-card {
-        padding: 28px 20px;
+        padding: 24px 16px 28px;
+        border-radius: 16px;
     }
 
     .register-ctv-header h1 {
+        font-size: 20px;
+    }
+
+    .register-ctv-header p {
+        font-size: 14px;
+    }
+
+    .register-ctv-icon-wrapper {
+        width: 56px;
+        height: 56px;
         font-size: 22px;
+    }
+
+    .register-ctv-steps .step {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .register-ctv-steps .step-line {
+        width: 24px;
     }
 
     .register-ctv-form .form-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 14px;
     }
 
     .form-group.full-width {
@@ -373,16 +667,68 @@
     .btn-submit {
         width: 100%;
         min-width: unset;
+        padding: 14px 24px;
     }
 
-    /* Reset animation trên mobile */
+    .register-ctv-deco {
+        display: none;
+    }
+
     .register-ctv-card,
     .register-ctv-header,
     .register-ctv-form,
     .form-group,
-    .form-actions {
+    .form-actions,
+    .register-ctv-progress {
         animation: none;
         opacity: 1;
         transform: none;
+    }
+
+    .register-ctv-steps .step-line::after {
+        animation: none;
+        width: 100%;
+    }
+
+    .checkbox-label {
+        font-size: 13px;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .register-ctv-card {
+        padding: 20px 12px 24px;
+        border-radius: 12px;
+    }
+
+    .register-ctv-header h1 {
+        font-size: 18px;
+    }
+
+    .register-ctv-steps .step {
+        width: 24px;
+        height: 24px;
+        font-size: 11px;
+    }
+
+    .register-ctv-steps .step-line {
+        width: 16px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 10px 12px 10px 36px;
+        font-size: 13px;
+    }
+
+    .form-group textarea {
+        padding-left: 36px;
+    }
+
+    .input-wrapper .input-icon {
+        left: 12px;
+        font-size: 13px;
     }
 }
