@@ -277,7 +277,7 @@
         "WHOLESALE_PRICE_PLACEHOLDER": "Enter wholesale price",
         "MIN_ORDER_QUANTITY": "Minimum Order Quantity",
         "MIN_ORDER_QUANTITY_PLACEHOLDER": "Enter minimum quantity",
-        "ADD_PRODUCT": "+ Add Product",
+        "ADD_PRODUCT": "Add Product",
         "COMMISSION_POLICY": "Commission Policy",
         "COMMISSION_TYPE": "Commission Type",
         "COMMISSION_RATE": "Commission Rate (%)",
@@ -610,5 +610,25 @@
         "PARTNER_FEATURE_1": "Connect with potential customers",
         "PARTNER_FEATURE_2": "Increase brand visibility",
         "PARTNER_FEATURE_3": "Special partner benefits"
+    },
+    "LOGIN": {
+        "TITLE": "Login",
+        "SUBTITLE": "Welcome back!",
+        "USERNAME": "Username",
+        "USERNAME_PLACEHOLDER": "Enter username",
+        "PASSWORD": "Password",
+        "PASSWORD_PLACEHOLDER": "Enter password",
+        "REMEMBER_ME": "Remember me",
+        "FORGOT_PASSWORD": "Forgot password?",
+        "BUTTON": "Login",
+        "LOADING": "Logging in...",
+        "NO_ACCOUNT": "Don't have an account?",
+        "REGISTER": "Sign up now",
+        "ADMIN_LOGIN": "Admin Login",
+        "VALIDATION": {
+            "USERNAME_REQUIRED": "Please enter username",
+            "PASSWORD_REQUIRED": "Please enter password",
+            "PASSWORD_MIN_LENGTH": "Password must be at least 6 characters"
+        }
     }
 }

@@ -232,7 +232,7 @@
         "WHOLESALE_PRICE_PLACEHOLDER": "Nhập giá bán sỉ",
         "MIN_ORDER_QUANTITY": "Số lượng đặt hàng tối thiểu",
         "MIN_ORDER_QUANTITY_PLACEHOLDER": "Nhập số lượng tối thiểu",
-        "ADD_PRODUCT": "+ Thêm sản phẩm",
+        "ADD_PRODUCT": "Thêm sản phẩm",
         "COMMISSION_POLICY": "Chính sách hoa hồng",
         "COMMISSION_TYPE": "Loại hoa hồng",
         "COMMISSION_RATE": "Tỷ lệ hoa hồng (%)",
@@ -565,5 +565,25 @@
         "PARTNER_FEATURE_1": "Kết nối với khách hàng tiềm năng",
         "PARTNER_FEATURE_2": "Tăng độ phủ thương hiệu",
         "PARTNER_FEATURE_3": "Ưu đãi đặc biệt cho đối tác"
+    },
+    "LOGIN": {
+        "TITLE": "Đăng nhập",
+        "SUBTITLE": "Chào mừng bạn trở lại!",
+        "USERNAME": "Tên đăng nhập",
+        "USERNAME_PLACEHOLDER": "Nhập tên đăng nhập",
+        "PASSWORD": "Mật khẩu",
+        "PASSWORD_PLACEHOLDER": "Nhập mật khẩu",
+        "REMEMBER_ME": "Ghi nhớ đăng nhập",
+        "FORGOT_PASSWORD": "Quên mật khẩu?",
+        "BUTTON": "Đăng nhập",
+        "LOADING": "Đang đăng nhập...",
+        "NO_ACCOUNT": "Chưa có tài khoản?",
+        "REGISTER": "Đăng ký ngay",
+        "ADMIN_LOGIN": "Đăng nhập Admin",
+        "VALIDATION": {
+            "USERNAME_REQUIRED": "Vui lòng nhập tên đăng nhập",
+            "PASSWORD_REQUIRED": "Vui lòng nhập mật khẩu",
+            "PASSWORD_MIN_LENGTH": "Mật khẩu tối thiểu 6 ký tự"
+        }
     }
 }
