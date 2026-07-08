@@ -1,0 +1,159 @@
+<!-- src/app/pages/partner/partner.component.html -->
+<div class="partner-container">
+    <!-- Hero Section -->
+    <div class="partner-hero">
+        <div class="partner-hero__content">
+            <span class="partner-badge">
+                <i class="fas fa-handshake"></i>
+                {{ 'PARTNER.LEADING_PAGE.BADGE' | translate }}
+            </span>
+            <h1>
+                {{ 'PARTNER.LEADING_PAGE.TITLE' | translate }}
+                <span class="highlight">{{ 'PARTNER.LEADING_PAGE.TITLE_HIGHLIGHT' | translate }}</span>
+            </h1>
+            <p>{{ 'PARTNER.LEADING_PAGE.DESC' | translate }}</p>
+            <div class="partner-hero__actions">
+                <a routerLink="/partner-register" class="btn-primary">
+                    <i class="fas fa-user-plus"></i>
+                    {{ 'PARTNER.LEADING_PAGE.JOIN' | translate }}
+                </a>
+                <a href="#partner-list" class="btn-outline">
+                    <i class="fas fa-search"></i>
+                    {{ 'PARTNER.LEADING_PAGE.EXPLORE' | translate }}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="partner-stats">
+        <div class="stat-item">
+            <span class="stat-icon">🏢</span>
+            <strong>{{ partners.length }}+</strong>
+            <span>{{ 'PARTNER.LEADING_PAGE.STATS_PARTNERS' | translate }}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-icon">🌍</span>
+            <strong>15+</strong>
+            <span>{{ 'PARTNER.LEADING_PAGE.STATS_CITIES' | translate }}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-icon">⭐</span>
+            <strong>4.7</strong>
+            <span>{{ 'PARTNER.LEADING_PAGE.STATS_RATING' | translate }}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-icon">📦</span>
+            <strong>500+</strong>
+            <span>{{ 'PARTNER.LEADING_PAGE.STATS_PRODUCTS' | translate }}</span>
+        </div>
+    </div>
+
+    <!-- Benefits -->
+    <section class="partner-benefits">
+        <div class="section-header">
+            <h2>{{ 'PARTNER.LEADING_PAGE.BENEFITS_TITLE' | translate }}</h2>
+            <p>{{ 'PARTNER.LEADING_PAGE.BENEFITS_DESC' | translate }}</p>
+        </div>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-card__icon">📈</div>
+                <h4>{{ 'PARTNER.LEADING_PAGE.BENEFIT_1_TITLE' | translate }}</h4>
+                <p>{{ 'PARTNER.LEADING_PAGE.BENEFIT_1_DESC' | translate }}</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-card__icon">🤝</div>
+                <h4>{{ 'PARTNER.LEADING_PAGE.BENEFIT_2_TITLE' | translate }}</h4>
+                <p>{{ 'PARTNER.LEADING_PAGE.BENEFIT_2_DESC' | translate }}</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-card__icon">🏷️</div>
+                <h4>{{ 'PARTNER.LEADING_PAGE.BENEFIT_3_TITLE' | translate }}</h4>
+                <p>{{ 'PARTNER.LEADING_PAGE.BENEFIT_3_DESC' | translate }}</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-card__icon">🔒</div>
+                <h4>{{ 'PARTNER.LEADING_PAGE.BENEFIT_4_TITLE' | translate }}</h4>
+                <p>{{ 'PARTNER.LEADING_PAGE.BENEFIT_4_DESC' | translate }}</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partner List -->
+    <section class="partner-list" id="partner-list">
+        <div class="section-header">
+            <h2>{{ 'PARTNER.LEADING_PAGE.LIST_TITLE' | translate }}</h2>
+            <p>{{ 'PARTNER.LEADING_PAGE.LIST_DESC' | translate }}</p>
+        </div>
+
+        <!-- Loading -->
+        <div class="partner-loading" *ngIf="isLoading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <span>{{ 'PARTNER.LEADING_PAGE.LOADING' | translate }}</span>
+        </div>
+
+        <!-- Grid -->
+        <div class="partner-grid" *ngIf="!isLoading">
+            <div class="partner-card" *ngFor="let partner of partners">
+                <div class="partner-card__badge" *ngIf="partner.verified">
+                    <i class="fas fa-check-circle"></i>
+                    {{ 'PARTNER.LEADING_PAGE.VERIFIED' | translate }}
+                </div>
+                <div class="partner-card__header">
+                    <div class="partner-card__logo">
+                        <i [class]="partner.logo"></i>
+                    </div>
+                    <div class="partner-card__rating">
+                        <span class="stars">
+                            <span *ngFor="let star of getStars(partner.rating)">★</span>
+                            <span class="half-star" *ngIf="hasHalfStar(partner.rating)">★</span>
+                        </span>
+                        <span class="rating-number">{{ partner.rating }}</span>
+                    </div>
+                </div>
+                <div class="partner-card__body">
+                    <h3>{{ partner.name }}</h3>
+                    <span class="partner-card__category">{{ partner.category }}</span>
+                    <p class="partner-card__description">{{ partner.description }}</p>
+                    <div class="partner-card__info">
+                        <span>
+                            <i class="fas fa-calendar"></i>
+                            {{ 'PARTNER.LEADING_PAGE.ESTABLISHED' | translate }}: {{ partner.establishedYear }}
+                        </span>
+                        <span>
+                            <i class="fas fa-users"></i>
+                            {{ partner.employees }} {{ 'PARTNER.LEADING_PAGE.EMPLOYEES' | translate }}
+                        </span>
+                    </div>
+                    <div class="partner-card__products">
+                        <span class="product-tag" *ngFor="let product of partner.products">
+                            {{ product }}
+                        </span>
+                    </div>
+                </div>
+                <div class="partner-card__footer">
+                    <span class="partner-card__location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {{ partner.address }}
+                    </span>
+                    <a class="partner-card__cta" [routerLink]="['/partner', partner.id]">
+                        {{ 'PARTNER.LEADING_PAGE.VIEW_DETAIL' | translate }}
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="partner-cta">
+        <div class="partner-cta__content">
+            <h2>{{ 'PARTNER.LEADING_PAGE.CTA_TITLE' | translate }}</h2>
+            <p>{{ 'PARTNER.LEADING_PAGE.CTA_DESC' | translate }}</p>
+            <a routerLink="/partner-register" class="btn-cta">
+                <i class="fas fa-handshake"></i>
+                {{ 'PARTNER.LEADING_PAGE.CTA_BUTTON' | translate }}
+            </a>
+        </div>
+    </section>
+</div>

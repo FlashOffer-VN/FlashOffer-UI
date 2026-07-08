@@ -45,7 +45,10 @@ export const routes: Routes = [
             { path: 'suppliers', loadComponent: () => import('./pages/suppliers/suppliers.component').then(m => m.SuppliersComponent) },
             { path: 'talent', loadComponent: () => import('./pages/talent/talent.component').then(m => m.TalentComponent) },
             { path: 'community', loadComponent: () => import('./pages/community/community.component').then(m => m.CommunityComponent) },
-            // { path: 'partner', loadComponent: () => import('./pages/partner/partner.component').then(m => m.PartnerComponent) },
+            { path: 'partner', loadComponent: () => import('./pages/partner/partner.component').then(m => m.PartnerComponent) },
+
+            // Chi tiết đối tác
+            // { path: 'partner/:id', loadComponent: () => import('./pages/partner-detail/partner-detail.component').then(m => m.PartnerDetailComponent) },
         ]
     },
 
