@@ -30,6 +30,9 @@ export class GuestHeaderComponent implements OnInit, OnDestroy {
     isAdmin = false;
     username = '';
 
+    // ✅ Mobile menu
+    mobileMenuOpen = false;
+
     // ✅ Secret code
     private keySequence: string[] = [];
     private readonly SECRET_CODE = ['a', 'd', 'm', 'i', 'n'];
@@ -54,6 +57,12 @@ export class GuestHeaderComponent implements OnInit, OnDestroy {
         });
     }
 
+    // ✅ Lấy tên viết tắt
+    getInitials(name: string): string {
+        if (!name) return '?';
+        return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+
     // ✅ Secret code listener - gõ "admin" để hiện nút
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
@@ -62,65 +71,80 @@ export class GuestHeaderComponent implements OnInit, OnDestroy {
 
         this.keySequence.push(key);
 
-        // Giữ tối đa 5 ký tự
         if (this.keySequence.length > 5) {
             this.keySequence.shift();
         }
 
-        // Kiểm tra secret code "admin"
         const typed = this.keySequence.join('');
         if (typed.includes('admin')) {
             this.showAdminButton = true;
             this.keySequence = [];
 
-            // Clear timeout cũ nếu có
             if (this.timeoutId) {
                 clearTimeout(this.timeoutId);
             }
 
-            // Tự động ẩn sau 10 giây
             this.timeoutId = setTimeout(() => {
                 this.showAdminButton = false;
             }, 10000);
         }
     }
 
-    // ✅ Xử lý khi bấm nút Admin (đã gộp, không duplicate)
+    // ✅ Toggle mobile menu
+    toggleMobileMenu(): void {
+        this.mobileMenuOpen = !this.mobileMenuOpen;
+        if (this.mobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+    }
+
+    // ✅ Close mobile menu
+    closeMobileMenu(): void {
+        this.mobileMenuOpen = false;
+        document.body.style.overflow = '';
+    }
+
+    // ✅ Go to Admin
     goToAdmin(): void {
+        this.closeMobileMenu();
         if (this.isLoggedIn && this.isAdmin) {
-            // Đã login + là Admin → vào thẳng Dashboard
             this._router.navigate(['/admin/dashboard']);
         } else if (this.isLoggedIn && !this.isAdmin) {
-            // ✅ Dùng translate cho message error
             this._appService.showError(
                 this._appService.instant('ERROR.ADMIN_ACCESS_DENIED')
             );
         } else {
-            // Chưa login → vào trang Admin Login
             this._router.navigate(['/admin-login']);
+        }
+    }
+
+    // ✅ Go to Profile
+    goToProfile(): void {
+        if (this.isLoggedIn) {
+            if (this.isAdmin) {
+                this._router.navigate(['/admin/dashboard']);
+            } else {
+                this._router.navigate(['/user/profile']);
+            }
         }
     }
 
     // ✅ Logout
     logout(): void {
+        this.closeMobileMenu();
         this._appService.auth.logout();
     }
 
-    // ✅ Helper để lấy text đã dịch trong HTML (nếu cần)
-    getTranslated(key: string): string {
-        return this._appService.instant(key);
-    }
-
     ngOnDestroy(): void {
-        // Cleanup subscriptions
         if (this.authSubscription) {
             this.authSubscription.unsubscribe();
         }
-
-        // Clear timeout
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
             this.timeoutId = null;
         }
+        document.body.style.overflow = '';
     }
 }
