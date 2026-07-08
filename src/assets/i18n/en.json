@@ -394,7 +394,8 @@
         "ERROR_EMAIL_INVALID": "Invalid email (e.g., example@gmail.com)",
         "ERROR_FORM_INVALID": "Please check your information",
         "ERROR_REGISTER_FAILED": "Registration failed, please try again",
-        "SUCCESS_REGISTER": "CTV registration successful!"
+        "SUCCESS_REGISTER": "CTV registration successful!",
+        "REGISTER_CTV_SECURE_NOTE": "Your information is completely secure"
     },
     "SELECT_COMPONENT": {
         "PLACEHOLDER": "Select an option",
