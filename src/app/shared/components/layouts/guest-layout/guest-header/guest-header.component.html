@@ -1,5 +1,5 @@
 <!-- shared/components/layouts/guest-layout/guest-header/guest-header.component.html -->
-<header class="sme-header">
+<header class="sme-header menu-open">
     <!-- Logo -->
     <a class="sme-logo" routerLink="/home">
         <span class="logo-text">{{ 'APP_NAME' | translate }}</span>
@@ -17,7 +17,7 @@
         <a routerLink="/talent" routerLinkActive="active">
             {{ 'NAV_TALENT' | translate }}
         </a>
-        <a routerLink="/comunity" routerLinkActive="active">
+        <a routerLink="/community" routerLinkActive="active">
             {{ 'NAV_COMMUNITY' | translate }}
         </a>
         <a routerLink="/partner" routerLinkActive="active" class="partner-nav-link">
@@ -86,7 +86,7 @@
         <a routerLink="/talent" routerLinkActive="active" (click)="closeMobileMenu()">
             <i class="fas fa-user-graduate"></i> {{ 'NAV_TALENT' | translate }}
         </a>
-        <a routerLink="/comunity" routerLinkActive="active" (click)="closeMobileMenu()">
+        <a routerLink="/community" routerLinkActive="active" (click)="closeMobileMenu()">
             <i class="fas fa-users"></i> {{ 'NAV_COMMUNITY' | translate }}
         </a>
         <a routerLink="/partner" routerLinkActive="active" (click)="closeMobileMenu()">

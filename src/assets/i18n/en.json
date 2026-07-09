@@ -722,5 +722,11 @@
         "LIKE": "Like",
         "COMMENT": "Comment",
         "SHARE": "Share"
+    },
+    "TOAST": {
+        "SUCCESS": "Success",
+        "ERROR": "Error",
+        "WARNING": "Warning",
+        "INFO": "Information"
     }
 }
