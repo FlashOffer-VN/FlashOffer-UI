@@ -12,8 +12,74 @@
     gap: 16px;
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 50;
     backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+}
+
+/* ✅ KHI MENU MỞ - HEADER BỊ CHE */
+.sme-header.menu-open {
+    z-index: 48;
+    /* ✅ Thấp hơn overlay (z-index: 49) */
+}
+
+/* ===== Mobile Menu Overlay ===== */
+.sme-mobile-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 49;
+    /* ✅ Cao hơn header (50) khi header bình thường */
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.sme-mobile-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ===== Mobile Menu ===== */
+.sme-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 300px;
+    height: 100vh;
+    background: white;
+    z-index: 51;
+    /* ✅ Cao nhất */
+    padding: 24px 20px;
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
+    transition: right 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow-y: auto;
+}
+
+.sme-mobile-menu.active {
+    right: 0;
+}
+
+/* ===== Header Scroll Effect ===== */
+.sme-header.scrolled {
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    min-height: 64px;
+    padding: 0 40px;
+}
+
+.sme-header.scrolled .sme-logo {
+    font-size: 18px;
+}
+
+.sme-header.scrolled .sme-nav a {
+    font-size: 14px;
+    padding: 4px 2px;
 }
 
 /* ===== Logo ===== */
@@ -24,13 +90,22 @@
     letter-spacing: -0.03em;
     text-decoration: none;
     color: #007f94;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     display: inline-block;
 }
 
 .sme-logo:hover {
     transform: scale(1.05);
     color: #24c7d7;
+}
+
+.sme-logo .logo-text {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.sme-logo:hover .logo-text {
+    transform: scale(1.05);
 }
 
 .sme-logo .logo-dot {
@@ -40,6 +115,12 @@
     background: #7C3AED;
     border-radius: 50%;
     margin-left: 2px;
+    transition: all 0.4s ease;
+}
+
+.sme-logo:hover .logo-dot {
+    transform: scale(1.3) rotate(180deg);
+    background: #F97316;
 }
 
 /* ===== Navigation ===== */
@@ -64,15 +145,34 @@
     position: relative;
 }
 
+.sme-nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2.5px;
+    background: #007f94;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: translateX(-50%);
+}
+
+.sme-nav a:hover::after,
+.sme-nav a.active::after {
+    width: 100%;
+}
+
 .sme-nav a:hover {
     color: #007f94;
-    border-bottom-color: #007f94;
 }
 
 .sme-nav a.active {
     color: #007f94;
-    border-bottom-color: #007f94;
     font-weight: 700;
+}
+
+.sme-nav a.active::after {
+    background: #007f94;
 }
 
 .sme-nav a.partner-nav-link {
@@ -81,12 +181,44 @@
 
 .sme-nav a.partner-nav-link:hover {
     color: #5B21B6;
-    border-bottom-color: #7C3AED;
+}
+
+.sme-nav a.partner-nav-link::after {
+    background: #7C3AED;
+}
+
+.sme-nav a.partner-nav-link:hover::after,
+.sme-nav a.partner-nav-link.active::after {
+    background: #7C3AED;
 }
 
 .sme-nav a.partner-nav-link.active {
     color: #7C3AED;
-    border-bottom-color: #7C3AED;
+}
+
+/* ===== Badge Dot ===== */
+.sme-nav a .badge-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #EF4444;
+    border-radius: 50%;
+    margin-left: 4px;
+    animation: pulseDot 2s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.3);
+        opacity: 0.7;
+    }
 }
 
 /* ===== Actions ===== */
@@ -104,7 +236,7 @@
     font-weight: 600;
     min-height: 38px;
     padding: 0 20px;
-    transition: all 160ms ease;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     cursor: pointer;
     border: none;
     text-decoration: none;
@@ -112,6 +244,28 @@
     align-items: center;
     justify-content: center;
     white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    z-index: 10;
+    /* ✅ Đảm bảo button có thể click */
+}
+
+.sme-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: all 0.6s ease;
+}
+
+.sme-button:hover::before {
+    width: 300px;
+    height: 300px;
 }
 
 .sme-button:hover {
@@ -123,6 +277,10 @@
     background: #007f94;
     color: #fff;
     box-shadow: 0 4px 12px rgba(0, 127, 148, 0.3);
+}
+
+.sme-button--primary::before {
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .sme-button--primary:hover {
@@ -151,11 +309,13 @@
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    z-index: 10;
+    /* ✅ Đảm bảo button có thể click */
 }
 
 .sme-admin-btn:hover {
@@ -175,10 +335,24 @@
     padding: 4px 8px;
     border-radius: 8px;
     transition: all 0.3s ease;
+    z-index: 10;
+    /* ✅ Đảm bảo button có thể click */
 }
 
 .sme-mobile-toggle:hover {
     background: #f3f4f6;
+}
+
+.sme-mobile-toggle.active {
+    transform: rotate(90deg);
+}
+
+.sme-mobile-toggle i {
+    transition: all 0.3s ease;
+}
+
+.sme-mobile-toggle.active i {
+    transform: rotate(90deg);
 }
 
 /* ===== Mobile Menu Overlay ===== */
@@ -190,13 +364,18 @@
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.4);
-    z-index: 999;
+    z-index: 49;
+    /* ✅ Giảm từ 990 xuống 49 */
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    /* ✅ Không chặn click khi chưa active */
 }
 
 .sme-mobile-overlay.active {
     opacity: 1;
+    pointer-events: auto;
+    /* ✅ Chặn click khi active */
 }
 
 /* ===== Mobile Menu ===== */
@@ -208,10 +387,11 @@
     width: 300px;
     height: 100vh;
     background: white;
-    z-index: 1001;
+    z-index: 51;
+    /* ✅ Giảm từ 1001 xuống 51 */
     padding: 24px 20px;
     box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
-    transition: right 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: right 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     overflow-y: auto;
 }
 
@@ -260,6 +440,59 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    position: relative;
+    transform: translateX(-10px);
+    opacity: 0;
+    animation: menuItemFade 0.4s ease forwards;
+}
+
+.sme-mobile-menu__nav a:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.sme-mobile-menu__nav a:nth-child(2) {
+    animation-delay: 0.10s;
+}
+
+.sme-mobile-menu__nav a:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.sme-mobile-menu__nav a:nth-child(4) {
+    animation-delay: 0.20s;
+}
+
+.sme-mobile-menu__nav a:nth-child(5) {
+    animation-delay: 0.25s;
+}
+
+@keyframes menuItemFade {
+    0% {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.sme-mobile-menu__nav a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #007f94;
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.sme-mobile-menu__nav a:hover::before,
+.sme-mobile-menu__nav a.active::before {
+    transform: scaleY(1);
 }
 
 .sme-mobile-menu__nav a:hover {
@@ -289,6 +522,66 @@
 .sme-mobile-menu__actions .sme-button {
     width: 100%;
     justify-content: center;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: actionFade 0.4s ease forwards;
+    z-index: 10;
+}
+
+.sme-mobile-menu__actions .sme-button:nth-child(1) {
+    animation-delay: 0.30s;
+}
+
+.sme-mobile-menu__actions .sme-button:nth-child(2) {
+    animation-delay: 0.35s;
+}
+
+@keyframes actionFade {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== User Info in header ===== */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #4a5b6e;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 10;
+}
+
+.user-info:hover {
+    background: #f3f4f6;
+}
+
+.user-info .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #007f94, #24c7d7);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.user-info .avatar.admin {
+    background: linear-gradient(135deg, #7C3AED, #A78BFA);
 }
 
 /* ===== Responsive ===== */
@@ -316,6 +609,15 @@
 
     .sme-logo {
         font-size: 18px;
+    }
+
+    .sme-header.scrolled {
+        min-height: 56px;
+        padding: 0 16px;
+    }
+
+    .sme-header.scrolled .sme-logo {
+        font-size: 16px;
     }
 
     /* Ẩn nav desktop */
@@ -379,6 +681,11 @@
         min-height: 56px;
     }
 
+    .sme-header.scrolled {
+        min-height: 50px;
+        padding: 0 12px;
+    }
+
     .sme-logo {
         font-size: 16px;
     }
@@ -399,39 +706,10 @@
     .sme-header-actions .user-info {
         font-size: 18px;
     }
-}
 
-/* ===== User Info in header ===== */
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: #4a5b6e;
-    cursor: pointer;
-    padding: 6px 12px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.user-info:hover {
-    background: #f3f4f6;
-}
-
-.user-info .avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #007f94, #24c7d7);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.user-info .avatar.admin {
-    background: linear-gradient(135deg, #7C3AED, #A78BFA);
+    .sme-header-actions .user-info .avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
 }

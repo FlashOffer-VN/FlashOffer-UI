@@ -7,11 +7,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { routeAnimation } from './shared/animations/animations';
 import { AppService } from './core/services/app.service';
+import { ToastComponent } from "@shared/components/toast/toast.component";
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [CommonModule, RouterOutlet, ScrollToTopComponent, TranslateModule],
+    imports: [CommonModule, RouterOutlet, ScrollToTopComponent, TranslateModule, ToastComponent],
     templateUrl: './app.html',
     styleUrls: ['./app.css'],
     animations: [routeAnimation]

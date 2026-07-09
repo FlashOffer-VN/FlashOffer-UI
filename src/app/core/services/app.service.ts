@@ -45,6 +45,61 @@ export class AppService {
         return this.auth.extractErrorMessage(error);
     }
 
+    // ========== Toast ==========
+    /**
+     * Hiển thị toast success
+     * @param message - Nội dung thông báo
+     * @param title - Tiêu đề (tùy chọn)
+     * @param duration - Thời gian hiển thị (ms)
+     */
+    showSuccess(message: string, title?: string, duration?: number): void {
+        this.toast.success(message, title, duration);
+    }
+
+    /**
+     * Hiển thị toast error
+     * @param message - Nội dung thông báo
+     * @param title - Tiêu đề (tùy chọn)
+     * @param duration - Thời gian hiển thị (ms)
+     */
+    showError(message: string, title?: string, duration?: number): void {
+        this.toast.error(message, title, duration);
+    }
+
+    /**
+     * Hiển thị toast warning
+     * @param message - Nội dung thông báo
+     * @param title - Tiêu đề (tùy chọn)
+     * @param duration - Thời gian hiển thị (ms)
+     */
+    showWarning(message: string, title?: string, duration?: number): void {
+        this.toast.warning(message, title, duration);
+    }
+
+    /**
+     * Hiển thị toast info
+     * @param message - Nội dung thông báo
+     * @param title - Tiêu đề (tùy chọn)
+     * @param duration - Thời gian hiển thị (ms)
+     */
+    showInfo(message: string, title?: string, duration?: number): void {
+        this.toast.info(message, title, duration);
+    }
+
+    /**
+     * Hiển thị toast với options đầy đủ
+     */
+    showToast(options: { message: string; type?: ToastType; title?: string; duration?: number }): void {
+        this.toast.show(options);
+    }
+
+    /**
+     * Đóng toast hiện tại
+     */
+    dismissToast(): void {
+        this.toast.dismiss();
+    }
+
     // ========== Language ==========
     changeLanguage(lang: string): void {
         localStorage.setItem('language', lang);
@@ -68,26 +123,5 @@ export class AppService {
 
     onLanguageChange(): Observable<any> {
         return this.translate.onLangChange;
-    }
-
-    // ========== Toast ==========
-    showToast(message: string, type: ToastType = 'info', duration?: number): void {
-        this.toast.show(message, type, duration);
-    }
-
-    showSuccess(message: string, duration?: number): void {
-        this.toast.success(message, duration);
-    }
-
-    showError(message: string, duration?: number): void {
-        this.toast.error(message, duration);
-    }
-
-    showWarning(message: string, duration?: number): void {
-        this.toast.warning(message, duration);
-    }
-
-    showInfo(message: string, duration?: number): void {
-        this.toast.info(message, duration);
     }
 }

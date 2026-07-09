@@ -677,5 +677,11 @@
         "LIKE": "Thích",
         "COMMENT": "Bình luận",
         "SHARE": "Chia sẻ"
+    },
+    "TOAST": {
+        "SUCCESS": "✅ Thành công",
+        "ERROR": "❌ Lỗi",
+        "WARNING": "⚠️ Cảnh báo",
+        "INFO": "ℹ️ Thông tin"
     }
 }
