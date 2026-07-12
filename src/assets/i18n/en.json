@@ -728,5 +728,14 @@
         "ERROR": "Error",
         "WARNING": "Warning",
         "INFO": "Information"
+    },
+    "PURCHASE_REQUEST": {
+        "STATUS": {
+            "PENDING": "Pending",
+            "APPROVED": "Approved",
+            "REJECTED": "Rejected",
+            "COMPLETED": "Completed",
+            "CANCELLED": "Cancelled"
+        }
     }
 }

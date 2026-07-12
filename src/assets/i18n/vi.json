@@ -679,9 +679,18 @@
         "SHARE": "Chia sẻ"
     },
     "TOAST": {
-        "SUCCESS": "✅ Thành công",
-        "ERROR": "❌ Lỗi",
-        "WARNING": "⚠️ Cảnh báo",
-        "INFO": "ℹ️ Thông tin"
+        "SUCCESS": "Thành công",
+        "ERROR": "Lỗi",
+        "WARNING": "Cảnh báo",
+        "INFO": "Thông tin"
+    },
+    "PURCHASE_REQUEST": {
+        "STATUS": {
+            "PENDING": "Chờ xử lý",
+            "APPROVED": "Đã duyệt",
+            "REJECTED": "Từ chối",
+            "COMPLETED": "Hoàn thành",
+            "CANCELLED": "Đã hủy"
+        }
     }
 }

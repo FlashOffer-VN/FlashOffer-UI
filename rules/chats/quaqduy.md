@@ -1,4 +1,4 @@
-## 📋 BẢN FULL QUY TẮC DỰ ÁN KINDI UI (ĐẦY ĐỦ - CẬP NHẬT HOÀN CHỈNH)
+## 📋 BẢN FULL QUY TẮC DỰ ÁN KINDI UI
 
 ---
 
@@ -13,11 +13,13 @@ src/app/
 │   │   ├── toast.service.ts        # Toast/Notification logic
 │   │   ├── product.service.ts      # Product logic
 │   │   ├── order.service.ts        # Order logic
+│   │   ├── purchase-request.service.ts  # ✅ Purchase Request logic
 │   │   └── app.service.ts          # Tổng hợp tất cả service
 │   ├── models/
 │   │   ├── auth.model.ts
 │   │   ├── product.model.ts
-│   │   └── order.model.ts
+│   │   ├── order.model.ts
+│   │   └── purchase-request.model.ts  # ✅ Purchase Request model
 │   ├── guards/
 │   │   ├── auth.guard.ts
 │   │   ├── admin.guard.ts
@@ -53,7 +55,9 @@ src/app/
     ├── home/
     ├── dashboard/
     ├── admin/
-    └── profile/
+    ├── profile/
+    ├── find-supplier/               # ✅ Find Supplier page
+    └── partner/                     # ✅ Partner page
 ```
 
 ---
@@ -197,6 +201,7 @@ export const appConfig: ApplicationConfig = {
 | Company Size | `PARTNER.COMPANY_SIZE_{KEY}` | `PARTNER.COMPANY_SIZE_1_10` |
 | Product Category | `PARTNER.PRODUCT_CATEGORY_{KEY}` | `PARTNER.PRODUCT_CATEGORY_ELECTRONICS` |
 | Commission Type | `PARTNER.COMMISSION_TYPE_{KEY}` | `PARTNER.COMMISSION_TYPE_PERCENTAGE` |
+| Unit | `FIND_SUPPLIER.UNIT_{KEY}` | `FIND_SUPPLIER.UNIT_KG` |
 
 ---
 
@@ -304,6 +309,8 @@ protected baseUrl = environment.apiUrl;
 | `DashboardComponent` | `pages/admin/dashboard/` | Admin dashboard |
 | `ProfileComponent` | `pages/profile/` | User profile |
 | `ConnectSmeComponent` | `pages/connect-sme/` | Kết nối doanh nghiệp |
+| `FindSupplierComponent` | `pages/find-supplier/` | ✅ Tìm nhà cung cấp |
+| `PartnerComponent` | `pages/partner/` | Đăng ký đối tác |
 
 ---
 
@@ -528,6 +535,8 @@ export const routes: Routes = [
 | 22 | **Select items format** ⭐ | Items format `{ value: number/string, label: string }` |
 | 23 | **app-select validation** ⭐ | Truyền `[isInvalid]`, `[errorMessage]`, `[touched]` |
 | 24 | **app-select với Reactive Forms** ⭐ | Dùng `formControlName` như input bình thường |
+| 25 | **Chia nhỏ theo bước** ⭐ | Không code full 1 lần, chia thành các bước nhỏ, chờ confirm mới làm bước tiếp theo |
+| 26 | **Fix lỗi trước khi chuyển bước** ⭐ | Nếu có lỗi, fix xong mới chuyển sang bước tiếp theo |
 
 ---
 
@@ -582,6 +591,28 @@ getErrorMessage(fieldName: string): string {
 }
 ```
 
+**✅ ĐÚNG - Dùng app-select cho unit options:**
+```html
+<app-select
+    formControlName="unit"
+    [items]="unitOptions"
+    [label]="'FIND_SUPPLIER.UNIT' | translate"
+    [placeholder]="'FIND_SUPPLIER.UNIT_PLACEHOLDER' | translate"
+    [required]="true"
+    [touched]="true"
+    [isInvalid]="isFieldInvalid('unit')"
+    [errorMessage]="getErrorMessage('unit')">
+</app-select>
+```
+
+```typescript
+unitOptions = [
+    { value: 'kg', label: 'FIND_SUPPLIER.UNIT_KG' | translate },
+    { value: 'gram', label: 'FIND_SUPPLIER.UNIT_GRAM' | translate },
+    // ...
+];
+```
+
 **❌ SAI - Dùng select thường:**
 ```html
 <select formControlName="businessType">
@@ -629,6 +660,8 @@ getErrorMessage(fieldName: string): string {
 | 17 | Animation (route, fade, slide, stagger) | ✅ |
 | 18 | Scroll to top khi chuyển trang | ✅ |
 | 19 | Partner Register (tách component + app-select) | ✅ |
+| 20 | PurchaseRequest Service + Model | ✅ |
+| 21 | Find Supplier Page (gọi API + app-select) | ✅ |
 
 ---
 
@@ -641,18 +674,19 @@ getErrorMessage(fieldName: string): string {
 | 3 | Admin - User Management | Thấp |
 | 4 | Admin - Product Management | Thấp |
 | 5 | Admin - Order Management | Thấp |
+| 6 | Admin - Purchase Request Management | Thấp |
 
 ---
 
-## 📝 TÓM TẮT CẬP NHẬT:
+## 📝 TÓM TẮT CẬP NHẬT MỚI NHẤT:
 
 | Mục | Nội dung |
 |-----|----------|
-| **Phần 1** | Thêm `select/` vào cấu trúc thư mục |
-| **Phần 7** | Thêm `SelectComponent` vào bảng components đã viết sẵn |
-| **Phần 10** | Thêm rule #21, #22, #23, #24 về app-select |
-| **Phần 11** | Thêm ví dụ đúng/sai cho app-select |
-| **Phần 12** | Thêm Partner Register vào danh sách đã hoàn thành |
-| **Phần 4** | Thêm key format cho select options |
-
----
+| **Phần 1** | Thêm `purchase-request.service.ts` và `purchase-request.model.ts` vào kiến trúc thư mục |
+| **Phần 1** | Thêm `find-supplier/` và `partner/` vào pages |
+| **Phần 4** | Thêm key format `FIND_SUPPLIER.UNIT_{KEY}` |
+| **Phần 7** | Thêm `FindSupplierComponent` và `PartnerComponent` vào bảng Pages |
+| **Phần 10** | Thêm rule #25, #26 về chia nhỏ theo bước và fix lỗi |
+| **Phần 11** | Thêm ví dụ đúng cho app-select với unit options |
+| **Phần 12** | Thêm PurchaseRequest Service + Model và Find Supplier Page vào danh sách đã hoàn thành |
+| **Phần 13** | Thêm Admin - Purchase Request Management vào danh sách cần làm tiếp |

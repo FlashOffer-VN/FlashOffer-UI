@@ -1,21 +1,35 @@
-// src/app/pages/find-supplier/find-supplier.component.ts
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
+import {
+    UNIT_OPTIONS,
+    PRODUCT_CATEGORY_OPTIONS,
+    CreatePurchaseRequestDto
+} from '@core/models/purchase-request.model';
 
 @Component({
     selector: 'app-find-supplier',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, TranslateModule, RouterLink],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        TranslateModule,
+        RouterLink
+    ],
     templateUrl: './find-supplier.component.html',
     styleUrls: ['./find-supplier.component.css']
 })
-export class FindSupplierComponent {
+export class FindSupplierComponent implements OnInit {
     findForm: FormGroup;
     isSubmitting = false;
+    submitted = false;
+
+    // Options from model
+    unitOptions = UNIT_OPTIONS;
+    productCategoryOptions = PRODUCT_CATEGORY_OPTIONS;
 
     constructor(
         private fb: FormBuilder,
@@ -37,6 +51,11 @@ export class FindSupplierComponent {
             note: [''],
             agreeTerms: [false, [Validators.requiredTrue]]
         });
+    }
+
+    ngOnInit(): void {
+        // Set default unit
+        // this.findForm.patchValue({ unit: 'kg' });
     }
 
     get f() {
@@ -66,7 +85,7 @@ export class FindSupplierComponent {
 
     isFieldInvalid(fieldName: string): boolean {
         const control = this.findForm.get(fieldName);
-        return !!(control && control.invalid && (control.dirty || control.touched));
+        return !!(control && control.invalid && (control.dirty || control.touched || this.submitted));
     }
 
     getErrorMessage(fieldName: string): string {
@@ -122,24 +141,68 @@ export class FindSupplierComponent {
     }
 
     onSubmit(): void {
+        this.submitted = true;
+
         if (this.findForm.invalid) {
-            this.findForm.markAllAsTouched();
+            // Mark all fields as touched to show errors
+            Object.keys(this.findForm.controls).forEach(key => {
+                const control = this.findForm.get(key);
+                control?.markAsTouched();
+            });
+
             this._appService.showError(this._appService.instant('FIND_SUPPLIER.ERROR.FORM_INVALID'));
             return;
         }
 
         this.isSubmitting = true;
-        const formData = this.findForm.value;
+        const formValue = this.findForm.value;
 
-        // TODO: Call API
-        console.log('Form data:', formData);
+        // Prepare data for API
+        const requestData: CreatePurchaseRequestDto = {
+            productName: formValue.productName.trim(),
+            productCategory: formValue.productCategory || null,
+            quantity: Number(formValue.quantity),
+            unit: formValue.unit,
+            expectedPrice: formValue.expectedPrice ? Number(formValue.expectedPrice) : null,
+            fullName: formValue.fullName.trim(),
+            phone: formValue.phone.trim(),
+            zalo: formValue.zalo?.trim() || null,
+            email: formValue.email.trim().toLowerCase(),
+            note: formValue.note?.trim() || null
+        };
 
-        // Simulate API call
-        setTimeout(() => {
-            this.isSubmitting = false;
-            this._appService.showSuccess(this._appService.instant('FIND_SUPPLIER.SUCCESS.SUBMIT'));
-            this.findForm.reset();
-            this.findForm.markAsPristine();
-        }, 1500);
+        // Call API
+        this._appService.purchaseRequest.create(requestData).subscribe({
+            next: (response) => {
+                this.isSubmitting = false;
+                if (response.success) {
+                    this._appService.showSuccess(
+                        this._appService.instant('FIND_SUPPLIER.SUCCESS.SUBMIT')
+                    );
+                    this.findForm.reset();
+                    this.findForm.markAsPristine();
+                    this.submitted = false;
+                    // Reset default unit
+                    this.findForm.patchValue({ unit: 'kg' });
+                } else {
+                    const errorMsg = response.message || this._appService.instant('FIND_SUPPLIER.ERROR.SUBMIT_FAILED');
+                    this._appService.showError(errorMsg);
+                }
+            },
+            error: (error) => {
+                this.isSubmitting = false;
+                console.error('Submit error:', error);
+
+                // Dùng extractErrorMessage từ AppService
+                const errorMessage = this._appService.extractErrorMessage(error);
+                this._appService.showError(errorMessage);
+            }
+        });
+    }
+
+    // Helper method to check if field has specific error
+    hasError(fieldName: string, errorType: string): boolean {
+        const control = this.findForm.get(fieldName);
+        return !!(control && control.hasError(errorType) && (control.dirty || control.touched || this.submitted));
     }
 }

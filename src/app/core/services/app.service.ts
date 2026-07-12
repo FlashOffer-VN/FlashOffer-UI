@@ -7,6 +7,7 @@ import { ToastType } from './toast.service';
 import { Observable } from 'rxjs';
 import { PartnerRegisterService } from './partner-register.service';
 import { CtvRegistrationService } from './ctv-registration.service';
+import { PurchaseRequestService } from './purchase-request.service';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +18,8 @@ export class AppService {
         public toast: ToastService,
         public partnerRegister: PartnerRegisterService,
         private translate: TranslateService,
-        public ctvRegistration: CtvRegistrationService
+        public ctvRegistration: CtvRegistrationService,
+        public purchaseRequest: PurchaseRequestService
     ) { }
 
     // ========== Auth ==========
