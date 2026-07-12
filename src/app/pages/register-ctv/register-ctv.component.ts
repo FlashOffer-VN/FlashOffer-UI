@@ -130,9 +130,21 @@ export class RegisterCtvComponent implements OnInit {
             next: (response: any) => {
                 this.isSubmitting = false;
                 this._appService.showSuccess(this._appService.instant('CTV_FORM.SUCCESS_REGISTER'));
+
+                // ✅ Reset form
                 this.ctvForm.reset();
+
+                // ✅ Reset touched state
                 this.touched = false;
+
+                // ✅ Reset form state (mark as pristine, untouched)
                 this.ctvForm.markAsPristine();
+                this.ctvForm.markAsUntouched();
+
+                // ✅ Đặt lại giá trị mặc định cho salesChannel nếu cần
+                this.ctvForm.patchValue({
+                    salesChannel: null
+                });
             },
             error: (error: any) => {
                 this.isSubmitting = false;
