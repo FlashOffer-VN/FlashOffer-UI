@@ -15,14 +15,15 @@ import { ApiService } from './api.service';
 })
 export class PartnerRegisterService {
     private api = inject(ApiService);
+    private endpoint = 'Partner';
     private translate = inject(TranslateService);
 
     register(data: PartnerRegisterRequest): Observable<PartnerRegisterResponse> {
-        return this.api.post<PartnerRegisterResponse>('Partner/register', data);
+        return this.api.post<PartnerRegisterResponse>(this.endpoint + '/register', data);
     }
 
     checkReferralCode(code: string): Observable<{ valid: boolean; message: string }> {
-        return this.api.get<{ valid: boolean; message: string }>(`Partner/check-referral?code=${code}`);
+        return this.api.get<{ valid: boolean; message: string }>(this.endpoint + `/check-referral?code=${code}`);
     }
 
     getBusinessTypes(): any[] {

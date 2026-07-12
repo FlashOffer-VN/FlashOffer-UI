@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({ providedIn: 'root' })
 export class CtvRegistrationService {
-    private endpoint = 'CtvRegistrations/ctv-registrations';
+    private endpoint = 'CtvRegistrations';
     private translate = inject(TranslateService);
     constructor(private api: ApiService) { }
 
