@@ -38,6 +38,7 @@ export class PartnerFormComponent implements OnInit {
     registerForm!: FormGroup;
     isReferralValid = false;
     private referralCheckTimeout: any;
+    private isSubmitting = false;
 
     constructor(
         private fb: FormBuilder,
@@ -232,6 +233,12 @@ export class PartnerFormComponent implements OnInit {
 
     // partner-form/partner-form.component.ts
     onSubmit(): void {
+
+        if (this.isSubmitting) {
+            // console.log('⏳ Already submitting, skip');
+            return;
+        }
+
         // console.log('🔥 SUBMIT TRIGGERED!');
         // console.log('📊 Form valid?', this.registerForm.valid);
         // console.log('📊 AgreeTerms value:', this.registerForm.get('agreeTerms')?.value);
@@ -270,6 +277,12 @@ export class PartnerFormComponent implements OnInit {
         }
 
         // console.log('✅ Form is VALID - Emitting submit');
+        this.isSubmitting = true;
         this.submit.emit();
+
+        // Reset sau 2s để cho phép submit lại nếu cần
+        setTimeout(() => {
+            this.isSubmitting = false;
+        }, 2000);
     }
 }

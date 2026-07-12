@@ -12,7 +12,7 @@ import { ToastComponent } from "@shared/components/toast/toast.component";
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [CommonModule, RouterOutlet, ScrollToTopComponent, TranslateModule, ToastComponent],
+    imports: [CommonModule, RouterOutlet, ScrollToTopComponent, TranslateModule],
     templateUrl: './app.html',
     styleUrls: ['./app.css'],
     animations: [routeAnimation]
