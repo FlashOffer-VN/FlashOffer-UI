@@ -41,6 +41,11 @@ export class PartnerRegisterComponent {
 
   // partner-register/partner-register.component.ts
   onSubmit(): void {
+    if (this.isLoading) {
+      // console.log('⏳ Already loading, skip');
+      return;
+    }
+
     // ✅ Kiểm tra form component tồn tại
     if (!this.formComponent) {
       // console.log('❌ No form component');
@@ -121,6 +126,7 @@ export class PartnerRegisterComponent {
           this._appService.showSuccess(
             response.message || this._appService.instant('PARTNER.REGISTER_SUCCESS')
           );
+
           this.router.navigate(['/home']);
         }
       },
