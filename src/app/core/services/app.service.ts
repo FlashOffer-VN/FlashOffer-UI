@@ -15,7 +15,7 @@ export class AppService {
     constructor(
         public auth: AuthService,
         public toast: ToastService,
-        public partner: PartnerRegisterService,
+        public partnerRegister: PartnerRegisterService,
         private translate: TranslateService,
         public ctvRegistration: CtvRegistrationService
     ) { }

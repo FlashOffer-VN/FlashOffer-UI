@@ -10,7 +10,7 @@ import { SocialPost, SocialMember, SocialEvent, SocialGroup } from '@core/models
 @Component({
     selector: 'app-social',
     standalone: true,
-    imports: [CommonModule, RouterLink, TranslateModule, FormsModule],
+    imports: [CommonModule, TranslateModule, FormsModule],
     templateUrl: './social.component.html',
     styleUrls: ['./social.component.css']
 })
