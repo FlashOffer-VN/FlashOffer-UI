@@ -9,6 +9,7 @@ import { PartnerRegisterService } from './partner-register.service';
 import { CtvRegistrationService } from './ctv-registration.service';
 import { PurchaseRequestService } from './purchase-request.service';
 import { GroupBuyingRequestService } from './group-buying-request.service';
+import { OfferRequestService } from './offer-request.service';
 
 @Injectable({
     providedIn: 'root'
@@ -21,7 +22,8 @@ export class AppService {
         private translate: TranslateService,
         public ctvRegistration: CtvRegistrationService,
         public purchaseRequest: PurchaseRequestService,
-        public groupBuyingRequest: GroupBuyingRequestService
+        public groupBuyingRequest: GroupBuyingRequestService,
+        public offerRequest: OfferRequestService
     ) { }
 
     // ========== Auth ==========

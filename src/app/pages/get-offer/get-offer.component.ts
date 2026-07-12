@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     selector: 'app-get-offer',
@@ -134,17 +135,57 @@ export class GetOfferComponent {
         }
 
         this.isSubmitting = true;
-        const formData = this.offerForm.value;
+        const formValue = this.offerForm.value;
 
-        // TODO: Call API
-        console.log('Form data:', formData);
+        const cleanPrice = (val: string) => Number(String(val).replace(/[,.\s]/g, ''));
 
-        // Simulate API call
-        setTimeout(() => {
-            this.isSubmitting = false;
-            this._appService.showSuccess(this._appService.instant('GET_OFFER.SUCCESS.SUBMIT'));
-            this.offerForm.reset();
-            this.offerForm.markAsPristine();
-        }, 1500);
+        const requestData = {
+            productName: formValue.productName.trim(),
+            productLink: formValue.productLink?.trim() || undefined,
+            currentPrice: cleanPrice(formValue.currentPrice),
+            expectedPrice: formValue.expectedPrice ? cleanPrice(formValue.expectedPrice) : undefined,
+            quantity: Number(formValue.quantity),
+            unit: formValue.unit.trim(),
+            fullName: formValue.fullName.trim(),
+            phone: formValue.phone.trim(),
+            zalo: formValue.zalo?.trim() || undefined,
+            email: formValue.email.trim().toLowerCase(),
+            note: formValue.note?.trim() || undefined
+        };
+
+        this._appService.offerRequest.create(requestData)
+            .pipe(finalize(() => {
+                this.isSubmitting = false;
+            }))
+            .subscribe({
+                next: (response) => {
+                    if (response.success) {
+                        this._appService.showSuccess(
+                            this._appService.instant('GET_OFFER.SUCCESS.SUBMIT')
+                        );
+                        this.offerForm.reset();
+                        this.offerForm.markAsPristine();
+                    } else {
+                        // Hiển thị lỗi đầu tiên từ API
+                        const errorMsg = response.errors?.[0] ||
+                            this._appService.instant('GET_OFFER.ERROR.SUBMIT_FAILED');
+                        this._appService.showError(errorMsg);
+                    }
+                },
+                error: (error) => {
+                    console.error('GetOffer error:', error);
+                    if (error.error?.errors) {
+                        const errorMsg = error.error.errors[0] ||
+                            this._appService.instant('GET_OFFER.ERROR.SUBMIT_FAILED');
+                        this._appService.showError(errorMsg);
+                    } else if (error.error?.message) {
+                        this._appService.showError(error.error.message);
+                    } else {
+                        this._appService.showError(
+                            this._appService.instant('GET_OFFER.ERROR.SUBMIT_FAILED')
+                        );
+                    }
+                }
+            });
     }
 }
