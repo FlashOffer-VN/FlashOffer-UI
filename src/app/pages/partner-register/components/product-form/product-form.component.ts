@@ -37,8 +37,9 @@ export class ProductFormComponent {
 
   isFieldInvalid(fieldName: string): boolean {
     const control = this.productForm.get(fieldName);
-    if (!control?.invalid) return this.touched = true;
-    return !!(control?.invalid && (control?.touched || control?.dirty));
+    if (!control) return false;
+    // ✅ Chỉ true khi invalid và đã touched/dirty
+    return !!(control.invalid && (control.touched || control.dirty));
   }
 
   isFieldTouched(fieldName: string): boolean {
