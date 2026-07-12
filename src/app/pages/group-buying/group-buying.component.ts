@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
+import { CreateGroupBuyingRequest } from '@core/models/group-buying-request.model';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     selector: 'app-group-buying',
@@ -126,22 +128,90 @@ export class GroupBuyingComponent {
     onSubmit(): void {
         if (this.groupForm.invalid) {
             this.groupForm.markAllAsTouched();
-            this._appService.showError(this._appService.instant('GROUP_BUYING.ERROR.FORM_INVALID'));
+            this._appService.toast.error(this._appService.instant('GROUP_BUYING.ERROR.FORM_INVALID'));
             return;
         }
 
         this.isSubmitting = true;
-        const formData = this.groupForm.value;
+        const formValue = this.groupForm.value;
 
-        // TODO: Call API
-        console.log('Form data:', formData);
+        // Prepare request data
+        const requestData: CreateGroupBuyingRequest = {
+            productName: formValue.productName.trim(),
+            productLink: formValue.productLink?.trim() || undefined,
+            targetPeopleCount: Number(formValue.targetPeopleCount),
+            targetPrice: Number(formValue.targetPrice),
+            fullName: formValue.fullName.trim(),
+            phone: formValue.phone.trim(),
+            zalo: formValue.zalo?.trim() || undefined,
+            email: formValue.email.trim().toLowerCase(),
+            note: formValue.note?.trim() || undefined
+        };
 
-        // Simulate API call
-        setTimeout(() => {
-            this.isSubmitting = false;
-            this._appService.showSuccess(this._appService.instant('GROUP_BUYING.SUCCESS.SUBMIT'));
-            this.groupForm.reset();
-            this.groupForm.markAsPristine();
-        }, 1500);
+        this._appService.groupBuyingRequest.create(requestData)
+            .pipe(finalize(() => {
+                this.isSubmitting = false;
+            }))
+            .subscribe({
+                next: (response) => {
+                    if (response.success) {
+                        this._appService.toast.success(
+                            this._appService.instant('GROUP_BUYING.SUCCESS.SUBMIT')
+                        );
+                        this.groupForm.reset();
+                        this.groupForm.markAsPristine();
+                    } else {
+                        // Handle API errors
+                        const errorMsg = response.errors?.[0] || this._appService.instant('GROUP_BUYING.ERROR.SUBMIT_FAILED');
+                        this._appService.toast.error(errorMsg);
+
+                        // Map errors to form fields
+                        this.mapErrorsToForm(response.errors);
+                    }
+                },
+                error: (error) => {
+                    console.error('GroupBuying error:', error);
+
+                    if (error.error?.errors) {
+                        const errorMsg = error.error.errors[0] || this._appService.instant('GROUP_BUYING.ERROR.SUBMIT_FAILED');
+                        this._appService.toast.error(errorMsg);
+                        this.mapErrorsToForm(error.error.errors);
+                    } else if (error.error?.message) {
+                        this._appService.toast.error(error.error.message);
+                    } else {
+                        this._appService.toast.error(
+                            this._appService.instant('GROUP_BUYING.ERROR.SUBMIT_FAILED')
+                        );
+                    }
+                }
+            });
+    }
+
+    private mapErrorsToForm(errors: string[] | null): void {
+        if (!errors) return;
+
+        const errorMap: Record<string, string[]> = {
+            'Tên sản phẩm': ['productName'],
+            'Giá mục tiêu': ['targetPrice'],
+            'Số người tham gia': ['targetPeopleCount'],
+            'Họ và tên': ['fullName'],
+            'Số điện thoại': ['phone'],
+            'Email': ['email']
+        };
+
+        errors.forEach(error => {
+            for (const [key, fieldNames] of Object.entries(errorMap)) {
+                if (error.includes(key)) {
+                    fieldNames.forEach(fieldName => {
+                        const control = this.groupForm.get(fieldName);
+                        if (control) {
+                            control.setErrors({ serverError: error });
+                            control.markAsTouched();
+                        }
+                    });
+                    break;
+                }
+            }
+        });
     }
 }
