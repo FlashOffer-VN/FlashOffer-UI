@@ -1,7 +1,7 @@
 // src/app/pages/register-ctv/register-ctv.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
@@ -26,10 +26,12 @@ export class RegisterCtvComponent implements OnInit {
     isSubmitting = false;
     salesChannels: SalesChannelOption[] = [];
     touched = false;
+    submitted = false;
 
     constructor(
         private fb: FormBuilder,
-        private _appService: AppService
+        private _appService: AppService,
+        private router: Router
     ) { }
 
     ngOnInit(): void {
@@ -51,7 +53,9 @@ export class RegisterCtvComponent implements OnInit {
 
     isFieldInvalid(fieldName: string): boolean {
         const control = this.ctvForm.get(fieldName);
-        return !!(control && control.invalid && (control.dirty || control.touched));
+        if (!control) return false;
+        // ✅ Chỉ hiển thị lỗi khi đã submit HOẶC touched/dirty
+        return !!(control.invalid && (this.submitted || control.dirty || control.touched));
     }
 
     getErrorMessage(fieldName: string): string {
@@ -115,10 +119,12 @@ export class RegisterCtvComponent implements OnInit {
         return Math.round((filled / total) * 100);
     }
 
+    // register-ctv/register-ctv.component.ts
     onSubmit(): void {
+        this.submitted = true;  // Đánh dấu đã submit
+        this.ctvForm.markAllAsTouched();
+
         if (this.ctvForm.invalid) {
-            this.ctvForm.markAllAsTouched();
-            this.touched = true;
             this._appService.showError(this._appService.instant('CTV_FORM.ERROR_FORM_INVALID'));
             return;
         }
@@ -130,9 +136,24 @@ export class RegisterCtvComponent implements OnInit {
             next: (response: any) => {
                 this.isSubmitting = false;
                 this._appService.showSuccess(this._appService.instant('CTV_FORM.SUCCESS_REGISTER'));
-                this.ctvForm.reset();
+
+                // ✅ Reset form
+                // ✅ Reset từng control
+                this.ctvForm.get('fullName')?.reset('');
+                this.ctvForm.get('phone')?.reset('');
+                this.ctvForm.get('zalo')?.reset('');
+                this.ctvForm.get('email')?.reset('');
+                this.ctvForm.get('salesChannel')?.reset(null, { emitEvent: false });
+                this.ctvForm.get('experience')?.reset('');
+                this.ctvForm.get('agreeTerms')?.reset(false);
+
+                // ✅ Reset states
                 this.touched = false;
+                this.submitted = false;
                 this.ctvForm.markAsPristine();
+                this.ctvForm.markAsUntouched();
+                this.ctvForm.updateValueAndValidity();
+                this.router.navigate(['/']);
             },
             error: (error: any) => {
                 this.isSubmitting = false;
