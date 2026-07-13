@@ -118,13 +118,13 @@ export class PartnerFormComponent implements OnInit {
             this.referralCheckTimeout = setTimeout(() => {
                 this.partnerService.checkReferralCode(code).subscribe({
                     next: (response) => {
-                        this.isReferralValid = response.valid;
+                        this.isReferralValid = response.success;
                     },
                     error: () => {
                         this.isReferralValid = false;
                     }
                 });
-            }, 500);
+            }, 1000);
         });
     }
 
