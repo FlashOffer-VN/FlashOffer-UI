@@ -11,8 +11,16 @@ export class ApiService {
 
     constructor(protected http: HttpClient) { }
 
-    get<T>(endpoint: string, params?: HttpParams): Observable<T> {
-        return this.http.get<T>(`${this.baseUrl}/${endpoint}`, { params });
+    get<T>(endpoint: string, params?: HttpParams | Record<string, any>): Observable<T> {
+        let httpParams: HttpParams | undefined;
+        if (params) {
+            if (params instanceof HttpParams) {
+                httpParams = params;
+            } else {
+                httpParams = new HttpParams({ fromObject: params });
+            }
+        }
+        return this.http.get<T>(`${this.baseUrl}/${endpoint}`, { params: httpParams });
     }
 
     post<T>(endpoint: string, data: any): Observable<T> {

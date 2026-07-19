@@ -1,8 +1,8 @@
-## 📋 BẢN FULL QUY TẮC DỰ ÁN KINDI UI
+# 📋 BẢN FULL QUY TẮC DỰ ÁN KINDI UI
 
 ---
 
-### 1. KIẾN TRÚC THƯ MỤC
+## 1. KIẾN TRÚC THƯ MỤC
 
 ```
 src/app/
@@ -13,13 +13,13 @@ src/app/
 │   │   ├── toast.service.ts        # Toast/Notification logic
 │   │   ├── product.service.ts      # Product logic
 │   │   ├── order.service.ts        # Order logic
-│   │   ├── purchase-request.service.ts  # ✅ Purchase Request logic
+│   │   ├── purchase-request.service.ts
 │   │   └── app.service.ts          # Tổng hợp tất cả service
 │   ├── models/
 │   │   ├── auth.model.ts
 │   │   ├── product.model.ts
 │   │   ├── order.model.ts
-│   │   └── purchase-request.model.ts  # ✅ Purchase Request model
+│   │   └── purchase-request.model.ts
 │   ├── guards/
 │   │   ├── auth.guard.ts
 │   │   ├── admin.guard.ts
@@ -43,7 +43,9 @@ src/app/
 │       ├── loading/
 │       ├── button/
 │       ├── input/
-│       ├── select/                  # ✅ Shared Select Component
+│       ├── ng-select-wrapper/      # Select wrapper (dùng @ng-select/ng-select)
+│       ├── pagination/             # Pagination dùng chung
+│       ├── badge/                  # Badge status dùng chung
 │       └── scroll-to-top/
 ├── features/
 │   └── auth/
@@ -56,13 +58,13 @@ src/app/
     ├── dashboard/
     ├── admin/
     ├── profile/
-    ├── find-supplier/               # ✅ Find Supplier page
-    └── partner/                     # ✅ Partner page
+    ├── find-supplier/
+    └── partner/
 ```
 
 ---
 
-### 2. NGUYÊN TẮC SERVICE
+## 2. NGUYÊN TẮC SERVICE
 
 | Nguyên tắc | Mô tả |
 |------------|-------|
@@ -83,9 +85,68 @@ Bước 5: Import Service vào AppService
 Bước 6: Export public property trong AppService
 ```
 
+**Quy tắc ApiService & Base URL:**
+
+| Nguyên tắc | Mô tả |
+|------------|-------|
+| **Base URL duy nhất** | Chỉ `ApiService` chứa `baseUrl = environment.apiUrl`, service con KHÔNG import environment |
+| **Endpoint tương đối** | Service con chỉ định nghĩa endpoint tương đối (ví dụ: `'Ctv'`, `'Partner'`) |
+| **Không gộp URL** | Service con KHÔNG được gộp `environment.apiUrl + '/Ctv'` |
+| **Params linh hoạt** | `ApiService.get()` hỗ trợ cả `HttpParams` và object `Record<string, any>` |
+
+**ApiService chuẩn:**
+```typescript
+@Injectable({ providedIn: 'root' })
+export class ApiService {
+    protected baseUrl = environment.apiUrl;
+
+    get<T>(endpoint: string, params?: HttpParams | Record<string, any>): Observable<T> {
+        let httpParams: HttpParams | undefined;
+        if (params) {
+            if (params instanceof HttpParams) {
+                httpParams = params;
+            } else {
+                httpParams = new HttpParams({ fromObject: params });
+            }
+        }
+        return this.http.get<T>(`${this.baseUrl}/${endpoint}`, { params: httpParams });
+    }
+
+    post<T>(endpoint: string, data: any): Observable<T> {
+        return this.http.post<T>(`${this.baseUrl}/${endpoint}`, data);
+    }
+
+    put<T>(endpoint: string, data: any): Observable<T> {
+        return this.http.put<T>(`${this.baseUrl}/${endpoint}`, data);
+    }
+
+    patch<T>(endpoint: string, data: any): Observable<T> {
+        return this.http.patch<T>(`${this.baseUrl}/${endpoint}`, data);
+    }
+
+    delete<T>(endpoint: string): Observable<T> {
+        return this.http.delete<T>(`${this.baseUrl}/${endpoint}`);
+    }
+}
+```
+
+**Service con chuẩn:**
+```typescript
+@Injectable({ providedIn: 'root' })
+export class CtvService {
+    private readonly _baseUrl = 'Ctv';  // ✅ Chỉ endpoint tương đối
+
+    constructor(private _apiService: ApiService) { }
+
+    getData() {
+        return this._apiService.get<PagedResponse<CtvRegistration>>(this._baseUrl);
+    }
+}
+```
+
 ---
 
-### 3. MODEL & ENUM
+## 3. MODEL & ENUM
 
 **Quy tắc Model:**
 - **Export hết**: interface, enum, type, const
@@ -124,11 +185,24 @@ export interface ApiResponse<T> {
   errors: string[] | null;
   timestamp: string;
 }
+
+export interface PagedResponse<T> {
+  success: boolean;
+  message: string;
+  data: T[];
+  pageNumber: number;
+  pageSize: number;
+  totalPages: number;
+  totalCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+  timestamp: string;
+}
 ```
 
 ---
 
-### 4. TRANSLATE (I18N)
+## 4. TRANSLATE (I18N)
 
 **Cấu hình (app.config.ts):**
 ```typescript
@@ -167,28 +241,63 @@ export const appConfig: ApplicationConfig = {
 
 | Quy tắc | Mô tả | Ví dụ |
 |---------|-------|-------|
-| **Gom nhóm theo module** | Nhóm các key theo module/trang | `CONNECT_SME.*`, `ADMIN.*`, `AUTH.*` |
-| **Gom nhóm theo component** | Nhóm key theo component | `CONNECT_SME_CARD.*`, `LOGIN_FORM.*` |
-| **Key viết hoa + underscore** | Tất cả key viết hoa, cách nhau bằng `_` | `BUTTON_JOIN_CTV`, `ERROR.LOGIN_FAILED` |
-| **Dùng dấu chấm phân cấp** | Phân cấp bằng dấu chấm `.` | `CONNECT_SME.BADGE`, `ERROR.GENERAL` |
-| **Không hardcode text** | Tất cả text hiển thị đều qua translate | `{{ 'BUTTON_ADMIN' \| translate }}` |
-| **File riêng cho mỗi ngôn ngữ** | `vi.json` cho tiếng Việt, `en.json` cho tiếng Anh | `assets/i18n/vi.json`, `assets/i18n/en.json` |
+| **Gom nhóm theo page/feature** | Nhóm key theo page/feature | `PARTNER.*`, `FIND_SUPPLIER.*` |
+| **COMMON cho dùng chung** | Text dùng chung toàn app | `COMMON.BUTTON.*`, `COMMON.STATUS.*` |
+| **Key viết hoa + underscore** | Tất cả key viết hoa, cách nhau bằng `_` | `COMMON.BUTTON_JOIN_CTV` |
+| **Dùng dấu chấm phân cấp** | Phân cấp bằng dấu chấm `.` | `PARTNER.FORM.TITLE` |
+| **Không hardcode text** | Tất cả text hiển thị đều qua translate | `{{ 'COMMON.BUTTON.SAVE' \| translate }}` |
+| **Chỉ hỗ trợ 2 ngôn ngữ** | `vi.json` và `en.json` | `assets/i18n/vi.json`, `assets/i18n/en.json` |
 
 **Cấu trúc file i18n chuẩn:**
 ```json
+// vi.json
 {
   "APP_NAME": "Kindi",
-  "MODULE_NAME": {
-    "KEY_1": "Giá trị 1",
-    "KEY_2": "Giá trị 2",
-    "SUB_GROUP": {
-      "SUB_KEY_1": "Giá trị con 1"
+  "COMMON": {
+    "BUTTON": {
+      "SAVE": "Lưu",
+      "CANCEL": "Hủy",
+      "DELETE": "Xóa",
+      "EDIT": "Sửa",
+      "CREATE": "Tạo mới"
+    },
+    "STATUS": {
+      "ACTIVE": "Hoạt động",
+      "INACTIVE": "Không hoạt động",
+      "PENDING": "Đang chờ",
+      "APPROVED": "Đã duyệt",
+      "REJECTED": "Từ chối",
+      "COMPLETED": "Hoàn thành",
+      "CANCELLED": "Đã hủy"
+    },
+    "ERROR": {
+      "REQUIRED": "Trường này là bắt buộc",
+      "INVALID": "Dữ liệu không hợp lệ"
     }
   },
-  "COMPONENT_CARD": {
-    "CARD_1": "Tên card 1",
-    "CARD_1_DESC": "Mô tả card 1",
-    "CARD_1_FEATURE_1": "Tính năng 1"
+  "PAGINATION": {
+    "SHOWING": "Hiển thị",
+    "OF": "trên tổng",
+    "ITEMS": "kết quả",
+    "SHOW": "Hiển thị",
+    "ITEMS_PER_PAGE": "kết quả/trang",
+    "NO_ITEMS": "Không có dữ liệu"
+  },
+  "PARTNER": {
+    "TITLE": "Đăng ký đối tác",
+    "DESCRIPTION": "Trở thành đối tác của Kindi",
+    "BUSINESS_TYPE_SME": "SME - Doanh nghiệp vừa và nhỏ",
+    "COMPANY_SIZE_1_10": "1 - 10 nhân viên"
+  },
+  "FIND_SUPPLIER": {
+    "TITLE": "Tìm nhà cung cấp",
+    "SEARCH_PLACEHOLDER": "Tìm kiếm...",
+    "UNIT_KG": "Kg",
+    "UNIT_GRAM": "Gram"
+  },
+  "CONNECT_SME": {
+    "TITLE": "Kết nối doanh nghiệp",
+    "BENEFIT_1": "Tiếp cận khách hàng mới"
   }
 }
 ```
@@ -205,7 +314,7 @@ export const appConfig: ApplicationConfig = {
 
 ---
 
-### 5. AUTH
+## 5. AUTH
 
 **AuthService methods:**
 | Method | Mô tả |
@@ -236,7 +345,7 @@ const errorMsg = err.error?.errors?.[0] || err.error?.message || err.message || 
 
 ---
 
-### 6. ENVIRONMENT
+## 6. ENVIRONMENT
 
 **File cấu hình:**
 ```
@@ -253,7 +362,7 @@ protected baseUrl = environment.apiUrl;
 
 ---
 
-### 7. COMPONENTS ĐÃ VIẾT SẴN
+## 7. COMPONENTS ĐÃ VIẾT SẴN
 
 **Layout Components:**
 | Component | Path | Mô tả |
@@ -268,24 +377,123 @@ protected baseUrl = environment.apiUrl;
 | `UserLayoutComponent` | `shared/components/layouts/user-layout/` | Layout cho user thường |
 
 **Shared Components (Helper):**
-| Component | Path | Mô tả |
-|-----------|------|-------|
-| `LanguageSwitcherComponent` | `shared/components/language-switcher/` | Chuyển đổi ngôn ngữ VI/EN |
-| `ToastComponent` | `shared/components/toast/` | Thông báo (success, error, warning, info) |
-| `ModalComponent` | `shared/components/modal/` | Dialog/Popup |
-| `LoadingComponent` | `shared/components/loading/` | Loading (dots, spinner, skeleton, pulse, logo, community) |
-| `ButtonComponent` | `shared/components/button/` | Nút với các variant |
-| `InputComponent` | `shared/components/input/` | Input form có validation |
-| `SelectComponent` | `shared/components/select/` | Select dropdown hỗ trợ Reactive Forms |
-| `ScrollToTopComponent` | `shared/components/scroll-to-top/` | Nút cuộn lên đầu trang |
+| Component | Selector | Mô tả |
+|-----------|----------|-------|
+| `NgSelectWrapperComponent` | `app-ng-select-wrapper` | Select wrapper dùng `@ng-select/ng-select` |
+| `ButtonComponent` | `app-button` | Nút với các variant |
+| `InputComponent` | `app-input` | Input form có validation |
+| `ToastComponent` | `app-toast` | Thông báo (success, error, warning, info) |
+| `ModalComponent` | `app-modal` | Dialog/Popup |
+| `LoadingComponent` | `app-loading` | Loading (dots, spinner, skeleton) |
+| `ScrollToTopComponent` | `app-scroll-to-top` | Nút cuộn lên đầu trang |
+| `PaginationComponent` | `app-pagination` | Phân trang dùng chung |
+| `BadgeComponent` | `app-badge` | Badge status dùng chung |
 
 **⚠️ Quy tắc dùng Helper Components:**
 - **Ưu tiên dùng component chung** thay vì viết lại HTML/CSS mới
 - **Thống nhất UI** toàn bộ dự án
 - **Không tự viết button, input, loading, toast, select** nếu đã có sẵn
+- **Luôn dùng `app-ng-select-wrapper`** thay vì `<select>` native
+- **Luôn dùng `app-pagination`** cho phân trang thay vì tự viết
+- **Luôn dùng `app-badge`** cho hiển thị status thay vì tự viết badge
 - Nếu cần style khác, extend từ component hiện có
 
-**ToastService - Quản lý thông báo: ⭐**
+**⚠️ Quy tắc dùng NgSelectWrapperComponent:**
+- Binding items: `[items]="options"` với format `{ value: any, label: string }`
+- Binding form: `formControlName` hoặc `[(ngModel)]`
+- Validation: `[isInvalid]`, `[errorMessage]`, `[touched]`
+
+**Ví dụ đúng:**
+```html
+<app-ng-select-wrapper
+    formControlName="businessType"
+    [items]="businessTypes"
+    [label]="'PARTNER.BUSINESS_TYPE' | translate"
+    [placeholder]="'PARTNER.BUSINESS_TYPE_PLACEHOLDER' | translate"
+    [required]="true"
+    [touched]="true"
+    [isInvalid]="isFieldInvalid('businessType')"
+    [errorMessage]="getErrorMessage('businessType')">
+</app-ng-select-wrapper>
+```
+
+**⚠️ Quy tắc dùng PaginationComponent:**
+
+**Inputs:**
+| Input | Type | Default | Mô tả |
+|-------|------|---------|-------|
+| `pageNumber` | number | 1 | Trang hiện tại |
+| `pageSize` | number | 10 | Số item trên 1 trang |
+| `totalCount` | number | 0 | Tổng số item |
+| `totalPages` | number | 0 | Tổng số trang |
+| `hasPreviousPage` | boolean | false | Có trang trước không |
+| `hasNextPage` | boolean | false | Có trang sau không |
+| `showInfo` | boolean | true | Hiển thị thông tin X-Y/Z |
+| `pageSizes` | number[] | [10, 20, 50] | Các option page size |
+| `showPageSize` | boolean | true | Hiển thị dropdown page size |
+
+**Outputs:**
+| Output | Type | Mô tả |
+|--------|------|-------|
+| `pageChange` | EventEmitter<number> | Emit khi đổi trang |
+| `pageSizeChange` | EventEmitter<number> | Emit khi đổi page size |
+
+**Ví dụ sử dụng:**
+```html
+<app-pagination
+    [pageNumber]="pageNumber"
+    [pageSize]="pageSize"
+    [totalCount]="totalCount"
+    [totalPages]="totalPages"
+    [hasPreviousPage]="hasPreviousPage"
+    [hasNextPage]="hasNextPage"
+    (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)">
+</app-pagination>
+```
+
+**⚠️ Quy tắc dùng BadgeComponent:**
+
+**Inputs:**
+| Input | Type | Default | Mô tả |
+|-------|------|---------|-------|
+| `status` | string | '' | Tên status (pending, approved, rejected, active, inactive, completed, cancelled) |
+| `variant` | `success` \| `danger` \| `warning` \| `info` \| `primary` \| `secondary` | 'secondary' | Variant badge (tự động map từ status) |
+| `label` | string | '' | Label hiển thị (nếu không truyền, dùng translate theo status) |
+| `size` | `'sm'` \| `'md'` \| `'lg'` | 'md' | Kích thước badge |
+| `rounded` | `'none'` \| `'sm'` \| `'md'` \| `'lg'` \| `'full'` | 'full' | Độ bo tròn |
+| `showDot` | boolean | true | Hiển thị chấm tròn màu |
+
+**Variant Mapping (Status → Variant):**
+| Status | Variant | Màu |
+|--------|---------|-----|
+| `pending` | `warning` | 🟡 Vàng |
+| `approved` | `success` | 🟢 Xanh |
+| `active` | `success` | 🟢 Xanh |
+| `rejected` | `danger` | 🔴 Đỏ |
+| `inactive` | `secondary` | ⚪ Xám |
+| `completed` | `info` | 🔵 Xanh dương |
+| `cancelled` | `danger` | 🔴 Đỏ |
+
+**Ví dụ sử dụng:**
+```html
+<!-- Tự động detect status -->
+<app-badge status="pending"></app-badge>
+<app-badge status="approved"></app-badge>
+<app-badge status="rejected"></app-badge>
+
+<!-- Custom variant và label -->
+<app-badge variant="primary" label="CUSTOM_LABEL"></app-badge>
+
+<!-- Tùy chỉnh size -->
+<app-badge status="pending" size="sm"></app-badge>
+<app-badge status="pending" size="lg"></app-badge>
+
+<!-- Ẩn dot -->
+<app-badge status="active" [showDot]="false"></app-badge>
+```
+
+**ToastService - Quản lý thông báo:**
 | Method | Mô tả |
 |--------|-------|
 | `showToast(message, type, duration)` | Hiển thị toast với type |
@@ -309,12 +517,12 @@ protected baseUrl = environment.apiUrl;
 | `DashboardComponent` | `pages/admin/dashboard/` | Admin dashboard |
 | `ProfileComponent` | `pages/profile/` | User profile |
 | `ConnectSmeComponent` | `pages/connect-sme/` | Kết nối doanh nghiệp |
-| `FindSupplierComponent` | `pages/find-supplier/` | ✅ Tìm nhà cung cấp |
+| `FindSupplierComponent` | `pages/find-supplier/` | Tìm nhà cung cấp |
 | `PartnerComponent` | `pages/partner/` | Đăng ký đối tác |
 
 ---
 
-### 8. MÀU SẮC CHỦ ĐẠO
+## 8. MÀU SẮC CHỦ ĐẠO
 
 **8.1. CSS Variables (styles.css)**
 ```css
@@ -455,7 +663,7 @@ private setBodyRoleClass(role: string | UserRole): void {
 
 ---
 
-### 9. ROUTES
+## 9. ROUTES
 
 ```typescript
 export const routes: Routes = [
@@ -488,6 +696,10 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
+      { path: 'ctv', component: AdminCtvListComponent },
+      { path: 'ctv/:id', component: AdminCtvDetailComponent },
+      { path: 'partner', component: AdminPartnerListComponent },
+      { path: 'partner/:id', component: AdminPartnerDetailComponent },
     ]
   },
   // User routes (cần login)
@@ -507,8 +719,45 @@ export const routes: Routes = [
 
 ---
 
-### 10. QUY TẮC CODE
+## 10. CODE CONVENTION
 
+### TypeScript Convention:
+- **Private properties** trong constructor: prefix `_` (giống C#)
+- **Public properties** trong constructor: không prefix
+- **Local variables**: không prefix
+
+**Ví dụ:**
+```typescript
+@Injectable({ providedIn: 'root' })
+export class ProductService {
+  constructor(
+    private _apiService: ApiService,      // private có _
+    private _toastService: ToastService,  // private có _
+    public appService: AppService         // public không _
+  ) {}
+
+  private _cache: Map<string, any>;       // private property có _
+
+  getData() {
+    const localVar = 'test';              // local variable không _
+    return this._apiService.get('/products');
+  }
+}
+
+@Component({ ... })
+export class ProductListComponent {
+  constructor(
+    private _appService: AppService,      // private có _
+    private _fb: FormBuilder,             // private có _
+    private _route: ActivatedRoute        // private có _
+  ) {}
+
+  isLoading = false;                      // public property không _
+  products: Product[] = [];               // public property không _
+}
+```
+
+### Quy tắc Code:
 | STT | Quy tắc | Mô tả |
 |-----|---------|-------|
 | 1 | **Hỏi - Đáp** | Hỏi gì trả lời đó, không vòng vo |
@@ -526,118 +775,147 @@ export const routes: Routes = [
 | 13 | **Refresh token** | Tự động refresh khi token sắp hết hạn |
 | 14 | **Guard** | Luôn có guard cho route cần bảo vệ |
 | 15 | **Standalone components** | Tất cả component đều standalone |
-| 16 | **Dùng component chung** | Ưu tiên dùng Button, Input, Toast, Modal, Loading, Select có sẵn |
-| 17 | **Toast qua AppService** ⭐ | Luôn dùng `this._appService.showSuccess()` hoặc `this._appService.showError()` để hiển thị toast |
-| 18 | **i18n gom nhóm** ⭐ | Gom nhóm key translate theo module/component, dùng dấu chấm phân cấp |
-| 19 | **Animation** ⭐ | Sử dụng `@angular/animations` cho hiệu ứng chuyển trang |
-| 20 | **Number pipe với string** ⭐ | Kiểm tra giá trị là number trước khi dùng pipe |
-| 21 | **Dùng app-select thay select thường** ⭐ | Luôn dùng `app-select` thay vì `<select>` native |
-| 22 | **Select items format** ⭐ | Items format `{ value: number/string, label: string }` |
-| 23 | **app-select validation** ⭐ | Truyền `[isInvalid]`, `[errorMessage]`, `[touched]` |
-| 24 | **app-select với Reactive Forms** ⭐ | Dùng `formControlName` như input bình thường |
-| 25 | **Chia nhỏ theo bước** ⭐ | Không code full 1 lần, chia thành các bước nhỏ, chờ confirm mới làm bước tiếp theo |
-| 26 | **Fix lỗi trước khi chuyển bước** ⭐ | Nếu có lỗi, fix xong mới chuyển sang bước tiếp theo |
+| 16 | **Dùng component chung** | Ưu tiên dùng Button, Input, Toast, Modal, Loading, NgSelectWrapper có sẵn |
+| 17 | **Toast qua AppService** | Luôn dùng `this._appService.showSuccess()` hoặc `this._appService.showError()` |
+| 18 | **i18n gom nhóm** | Gom nhóm key translate theo page/feature, dùng dấu chấm phân cấp |
+| 19 | **Animation** | Sử dụng `@angular/animations` cho hiệu ứng chuyển trang |
+| 20 | **Number pipe với string** | Kiểm tra giá trị là number trước khi dùng pipe |
+| 21 | **Dùng app-ng-select-wrapper** | Luôn dùng `app-ng-select-wrapper` thay vì `<select>` native |
+| 22 | **NgSelect items format** | Items format `{ value: number/string, label: string }` |
+| 23 | **NgSelect validation** | Truyền `[isInvalid]`, `[errorMessage]`, `[touched]` |
+| 24 | **NgSelect với Reactive Forms** | Dùng `formControlName` như input bình thường |
+| 25 | **Chia nhỏ theo bước** | Không code full 1 lần, chia thành các bước nhỏ, chờ confirm mới làm bước tiếp theo |
+| 26 | **Fix lỗi trước khi chuyển bước** | Nếu có lỗi, fix xong mới chuyển sang bước tiếp theo |
+| 27 | **Dùng app-pagination** | Luôn dùng `app-pagination` cho phân trang thay vì tự viết |
+| 28 | **Dùng app-badge** | Luôn dùng `app-badge` cho hiển thị status thay vì tự viết badge |
+| 29 | **Badge từ status** | Truyền `status` vào badge để auto-detect variant và label |
+| 30 | **Pagination với API** | Kết hợp `PagedResponse<T>` với `app-pagination` cho danh sách có phân trang |
+| 31 | **Không dùng env.apiUrl trong service con** | Không import `environment` trong service con, chỉ dùng trong `ApiService` |
+| 32 | **Endpoint tương đối** | Service con chỉ định nghĩa endpoint tương đối (ví dụ: `'Ctv'`, `'api/v1/Ctv'`) |
+| 33 | **ApiService quản lý baseUrl** | ApiService là nơi duy nhất quản lý baseUrl từ environment |
+| 34 | **Params linh hoạt** | `ApiService.get()` hỗ trợ cả `HttpParams` và object params |
 
 ---
 
-### 11. VÍ DỤ CHUẨN
+## 11. QUY TRÌNH TẠO COMPONENT VỚI SEED DATA
 
-**✅ ĐÚNG - Dùng Toast qua AppService:**
+**Mục đích:** Tạo component dùng data giả (seed) để kiểm tra UI trước khi kết nối API thật.
+
+**B1:** Tạo interface model trong `core/models/`  
+**B2:** Tạo service với method `getMockData()` trả về seed data  
+**B3:** Component gọi `getMockData()` thay vì API  
+**B4:** Sau khi UI hoàn thiện, thay `getMockData()` bằng `apiService.get()`
+
+**Cấu trúc Service với Pagination:**
 ```typescript
-this._appService.showSuccess('Thành công!');
-this._appService.showError('Lỗi rồi!');
-```
+@Injectable({ providedIn: 'root' })
+export class ProductService {
+  constructor(private _api: ApiService) {}
 
-**✅ ĐÚNG - Dùng app-select với Reactive Forms:**
-```html
-<app-select
-    formControlName="businessType"
-    [items]="businessTypes"
-    [label]="'PARTNER.BUSINESS_TYPE' | translate"
-    [placeholder]="'PARTNER.BUSINESS_TYPE_PLACEHOLDER' | translate"
-    [required]="true"
-    [touched]="true"
-    [isInvalid]="isFieldInvalid('businessType')"
-    [errorMessage]="getErrorMessage('businessType')">
-</app-select>
-```
+  // Seed data cho UI testing với pagination
+  getMockData(pageNumber = 1, pageSize = 10): Observable<PagedResponse<Product>> {
+    const allItems = [
+      { id: 1, name: 'Product 1', price: 100 },
+      { id: 2, name: 'Product 2', price: 200 },
+      // ... 20 items
+    ];
+    
+    const start = (pageNumber - 1) * pageSize;
+    const end = start + pageSize;
+    const items = allItems.slice(start, end);
+    
+    return of({
+      success: true,
+      message: 'Success',
+      data: items,
+      pageNumber: pageNumber,
+      pageSize: pageSize,
+      totalCount: allItems.length,
+      totalPages: Math.ceil(allItems.length / pageSize),
+      hasPreviousPage: pageNumber > 1,
+      hasNextPage: end < allItems.length,
+      timestamp: new Date().toISOString()
+    });
+  }
 
-```typescript
-businessTypes = [
-    { value: 1, label: 'SME - Doanh nghiệp vừa và nhỏ' },
-    { value: 2, label: 'Hộ kinh doanh cá thể' }
-];
-
-getErrorMessage(fieldName: string): string {
-    const control = this.formGroup.get(fieldName);
-    if (!control || !control.errors) return '';
-    if (control.errors['required']) {
-        if (fieldName === 'businessType') return 'Vui lòng chọn loại hình doanh nghiệp';
-        return 'Trường này là bắt buộc';
-    }
-    return 'Dữ liệu không hợp lệ';
+  // API thật - giữ nguyên tên method để dễ đổi
+  getData(pageNumber = 1, pageSize = 10): Observable<PagedResponse<Product>> {
+    return this._api.get<PagedResponse<Product>>(`/products?page=${pageNumber}&size=${pageSize}`);
+  }
 }
 ```
 
-**✅ ĐÚNG - Gom nhóm key i18n:**
-```json
-// vi.json
-{
-    "PARTNER": {
-        "BUSINESS_TYPE_SME": "SME - Doanh nghiệp vừa và nhỏ",
-        "COMPANY_SIZE_1_10": "1 - 10 nhân viên",
-        "PRODUCT_CATEGORY_ELECTRONICS": "Điện tử"
-    }
+**Component mẫu với Pagination:**
+```typescript
+@Component({ ... })
+export class ProductListComponent implements OnInit {
+  products: Product[] = [];
+  isLoading = true;
+  
+  // Pagination
+  pageNumber = 1;
+  pageSize = 10;
+  totalCount = 0;
+  totalPages = 0;
+  hasPreviousPage = false;
+  hasNextPage = false;
+
+  constructor(private _productService: ProductService) {}
+
+  ngOnInit() {
+    this.loadData();
+  }
+
+  loadData() {
+    this.isLoading = true;
+    this._productService.getMockData(this.pageNumber, this.pageSize).subscribe(response => {
+      this.products = response.data;
+      this.pageNumber = response.pageNumber;
+      this.pageSize = response.pageSize;
+      this.totalCount = response.totalCount;
+      this.totalPages = response.totalPages;
+      this.hasPreviousPage = response.hasPreviousPage;
+      this.hasNextPage = response.hasNextPage;
+      this.isLoading = false;
+    });
+  }
+
+  onPageChange(page: number) {
+    this.pageNumber = page;
+    this.loadData();
+  }
+
+  onPageSizeChange(size: number) {
+    this.pageSize = size;
+    this.pageNumber = 1;
+    this.loadData();
+  }
 }
 ```
 
-**✅ ĐÚNG - Dùng app-select cho unit options:**
-```html
-<app-select
-    formControlName="unit"
-    [items]="unitOptions"
-    [label]="'FIND_SUPPLIER.UNIT' | translate"
-    [placeholder]="'FIND_SUPPLIER.UNIT_PLACEHOLDER' | translate"
-    [required]="true"
-    [touched]="true"
-    [isInvalid]="isFieldInvalid('unit')"
-    [errorMessage]="getErrorMessage('unit')">
-</app-select>
-```
-
-```typescript
-unitOptions = [
-    { value: 'kg', label: 'FIND_SUPPLIER.UNIT_KG' | translate },
-    { value: 'gram', label: 'FIND_SUPPLIER.UNIT_GRAM' | translate },
-    // ...
-];
-```
-
-**❌ SAI - Dùng select thường:**
-```html
-<select formControlName="businessType">
-    <option value="1">SME</option>
-</select>
-```
-
-**❌ SAI - Thiếu label cho app-select:**
-```html
-<app-select formControlName="category" [items]="categories"></app-select>
-```
-
-**❌ SAI - Thiếu validation props:**
-```html
-<app-select
-    formControlName="category"
-    [items]="categories"
-    [isInvalid]="isFieldInvalid('category')">
-    <!-- Thiếu errorMessage và touched -->
-</app-select>
-```
+**Quy tắc chuyển đổi sang API thật:**
+| Bước | Hành động |
+|------|-----------|
+| 1 | Đổi `getMockData()` thành `getData()` trong component |
+| 2 | Xóa method `getMockData()` khỏi service |
+| 3 | Kiểm tra lại UI với API thật |
 
 ---
 
-### 12. CÁC TÍNH NĂNG ĐÃ HOÀN THÀNH
+## 12. PHONG CÁCH LÀM VIỆC CÁ NHÂN
+
+| Nguyên tắc | Mô tả |
+|------------|-------|
+| **Hỏi trước khi code** | Luôn hỏi xác nhận trước khi viết component mới |
+| **Chia nhỏ từng bước** | Mỗi lần chỉ làm 1 task nhỏ, chờ confirm mới chuyển |
+| **Seed data trước** | Dùng mock data để check UI, đổi sang API sau |
+| **Fix lỗi ngay** | Phát hiện lỗi → sửa xong mới làm tiếp |
+| **Không đoán ý** | Chưa rõ requirement → hỏi lại, không tự suy diễn |
+| **Review sau mỗi task** | Áp dụng quy trình review code mục 11 |
+
+---
+
+## 13. CÁC TÍNH NĂNG ĐÃ HOÀN THÀNH
 
 | STT | Tính năng | Trạng thái |
 |-----|-----------|-----------|
@@ -653,28 +931,33 @@ unitOptions = [
 | 10 | Route phân quyền | ✅ |
 | 11 | Error handling + Translate | ✅ |
 | 12 | Guest Header + Secret Admin Button | ✅ |
-| 13 | Shared Components (Button, Input, Toast, Modal, Loading, Select) | ✅ |
+| 13 | Shared Components (Button, Input, Toast, Modal, Loading, NgSelectWrapper) | ✅ |
 | 14 | ToastService | ✅ |
 | 15 | Admin Layout (tách component con) | ✅ |
 | 16 | Connect SME Page | ✅ |
 | 17 | Animation (route, fade, slide, stagger) | ✅ |
 | 18 | Scroll to top khi chuyển trang | ✅ |
-| 19 | Partner Register (tách component + app-select) | ✅ |
+| 19 | Partner Register (tách component + NgSelectWrapper) | ✅ |
 | 20 | PurchaseRequest Service + Model | ✅ |
-| 21 | Find Supplier Page (gọi API + app-select) | ✅ |
+| 21 | Find Supplier Page (gọi API + NgSelectWrapper) | ✅ |
+| 22 | PaginationComponent (dùng chung) | ✅ |
+| 23 | BadgeComponent (dùng chung) | ✅ |
+| 24 | PagedResponse Model | ✅ |
 
 ---
 
-### 13. CÁC TÍNH NĂNG CẦN LÀM TIẾP
+## 14. CÁC TÍNH NĂNG CẦN LÀM TIẾP
 
 | STT | Tính năng | Ưu tiên |
 |-----|-----------|---------|
 | 1 | Product Service + Model | Cao |
 | 2 | Order Service + Model | Cao |
-| 3 | Admin - User Management | Thấp |
-| 4 | Admin - Product Management | Thấp |
-| 5 | Admin - Order Management | Thấp |
-| 6 | Admin - Purchase Request Management | Thấp |
+| 3 | Admin - CTV Management | Cao |
+| 4 | Admin - Partner Management | Cao |
+| 5 | Admin - User Management | Thấp |
+| 6 | Admin - Product Management | Thấp |
+| 7 | Admin - Order Management | Thấp |
+| 8 | Admin - Purchase Request Management | Thấp |
 
 ---
 
@@ -682,11 +965,14 @@ unitOptions = [
 
 | Mục | Nội dung |
 |-----|----------|
-| **Phần 1** | Thêm `purchase-request.service.ts` và `purchase-request.model.ts` vào kiến trúc thư mục |
-| **Phần 1** | Thêm `find-supplier/` và `partner/` vào pages |
-| **Phần 4** | Thêm key format `FIND_SUPPLIER.UNIT_{KEY}` |
-| **Phần 7** | Thêm `FindSupplierComponent` và `PartnerComponent` vào bảng Pages |
-| **Phần 10** | Thêm rule #25, #26 về chia nhỏ theo bước và fix lỗi |
-| **Phần 11** | Thêm ví dụ đúng cho app-select với unit options |
-| **Phần 12** | Thêm PurchaseRequest Service + Model và Find Supplier Page vào danh sách đã hoàn thành |
-| **Phần 13** | Thêm Admin - Purchase Request Management vào danh sách cần làm tiếp |
+| **Phần 1** | Cập nhật cấu trúc thư mục: thêm `pagination/`, `badge/` |
+| **Phần 2** | Thêm quy tắc ApiService & Base URL, ApiService chuẩn, Service con chuẩn |
+| **Phần 3** | Thêm `PagedResponse<T>` vào model |
+| **Phần 4** | Thêm translate keys cho Pagination và Status |
+| **Phần 7** | Thêm PaginationComponent và BadgeComponent vào danh sách Shared Components |
+| **Phần 7** | Thêm quy tắc dùng `app-pagination` và `app-badge` |
+| **Phần 9** | Cập nhật routes: thêm admin/ctv và admin/partner |
+| **Phần 10** | Thêm quy tắc 27, 28, 29, 30, 31, 32, 33, 34 về dùng component chung và base URL |
+| **Phần 11** | Cập nhật seed data với pagination và PagedResponse |
+| **Phần 13** | Cập nhật danh sách tính năng đã hoàn thành |
+| **Phần 14** | Cập nhật danh sách tính năng cần làm: thêm Admin - CTV/Partner Management |

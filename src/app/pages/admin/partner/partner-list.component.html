@@ -1,0 +1,142 @@
+<div class="p-6">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">{{ 'ADMIN.PARTNER.TITLE' | translate }}</h1>
+            <p class="text-gray-500 text-sm">{{ 'ADMIN.PARTNER.LIST_TITLE' | translate }}</p>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+        <div class="flex flex-col sm:flex-row gap-4 items-end">
+            <!-- Search -->
+            <div class="flex-1">
+                <app-input [(ngModel)]="searchText" [placeholder]="'ADMIN.PARTNER.SEARCH_PLACEHOLDER' | translate"
+                    (keyup.enter)="onSearch()" class="w-full">
+                </app-input>
+            </div>
+
+            <!-- Status Filter -->
+            <div class="w-full sm:w-56">
+                <app-ng-select-wrapper [items]="statusOptions" [(ngModel)]="selectedStatus"
+                    [placeholder]="'ADMIN.PARTNER.FILTER_STATUS' | translate" [clearable]="true"
+                    (ngModelChange)="onStatusChange($event)" colorMode="admin">
+                </app-ng-select-wrapper>
+            </div>
+
+            <!-- Search Button -->
+            <div>
+                <app-button variant="primary" (click)="onSearch()">
+                    {{ 'COMMON.BUTTON.SEARCH' | translate }}
+                </app-button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            #
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'ADMIN.PARTNER.CODE' | translate }}
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'ADMIN.PARTNER.FULL_NAME' | translate }}
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'ADMIN.PARTNER.COMPANY_NAME' | translate }}
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'ADMIN.PARTNER.EMAIL' | translate }}
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'ADMIN.PARTNER.PHONE' | translate }}
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'ADMIN.PARTNER.BUSINESS_TYPE' | translate }}
+                        </th>
+                        <th class="px-5 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'ADMIN.PARTNER.STATUS' | translate }}
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'ADMIN.PARTNER.REGISTERED_AT' | translate }}
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'COMMON.BUTTON.ACTION' | translate }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <!-- Loading -->
+                    <tr *ngIf="isLoading">
+                        <td colspan="10" class="px-4 py-8 text-center">
+                            <app-loading></app-loading>
+                        </td>
+                    </tr>
+
+                    <!-- No data -->
+                    <tr *ngIf="!isLoading && partners.length === 0">
+                        <td colspan="10" class="px-4 py-8 text-center text-gray-500">
+                            {{ 'PAGINATION.NO_ITEMS' | translate }}
+                        </td>
+                    </tr>
+
+                    <!-- Data rows -->
+                    <tr *ngFor="let partner of partners; let i = index"
+                        class="hover:bg-gray-50 transition-colors cursor-pointer"
+                        (click)="navigateToDetail(partner.id)">
+                        <td class="px-4 py-3 text-sm text-gray-500">
+                            {{ (pageNumber - 1) * pageSize + i + 1 }}
+                        </td>
+                        <td class="px-4 py-3 text-sm font-mono text-gray-600">
+                            {{ partner.partnerCode }}
+                        </td>
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900">
+                            {{ partner.fullName }}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-600">
+                            {{ partner.companyName }}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-600">
+                            {{ partner.email }}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-600">
+                            {{ partner.phone }}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-600">
+                            {{ getBusinessTypeLabel(partner.businessType) | translate }}
+                        </td>
+                        <td class="px-4 py-3">
+                            <app-badge [status]="getStatusKey(partner.status)"
+                                [variant]="getStatusVariant(partner.status)">
+                            </app-badge>
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-500">
+                            {{ formatDate(partner.createdAt) }}
+                        </td>
+                        <td class="px-4 py-3">
+                            <app-button variant="primary" size="sm"
+                                (click)="$event.stopPropagation(); navigateToDetail(partner.id)">
+                                {{ 'COMMON.BUTTON.VIEW_DETAIL' | translate }}
+                            </app-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="border-t border-gray-200 px-4 py-3">
+            <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [totalCount]="totalCount"
+                [totalPages]="totalPages" [hasPreviousPage]="hasPreviousPage" [hasNextPage]="hasNextPage"
+                (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
+            </app-pagination>
+        </div>
+    </div>
+</div>

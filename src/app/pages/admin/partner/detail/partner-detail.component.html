@@ -1,0 +1,266 @@
+<div class="p-6 space-y-6">
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="flex justify-center items-center py-12">
+        <app-loading></app-loading>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="!isLoading && partner">
+        <!-- ====== 1. PROFILE HEADER ====== -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex flex-col lg:flex-row lg:items-center gap-6">
+                <!-- Avatar -->
+                <div class="flex-shrink-0">
+                    <div
+                        class="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primary-light text-white flex items-center justify-center text-3xl font-bold">
+                        {{ partner.fullName.charAt(0) }}
+                    </div>
+                </div>
+                <!-- Info -->
+                <div class="flex-1 min-w-0">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <h1 class="text-2xl font-bold text-gray-900 truncate">{{ partner.fullName }}</h1>
+                        <span class="text-sm font-mono text-gray-400 bg-gray-100 px-2 py-0.5 rounded">{{
+                            partner.partnerCode }}</span>
+                        <app-badge [status]="getStatusKey(partner.status)" size="lg"></app-badge>
+                    </div>
+                    <div class="flex flex-wrap gap-x-6 gap-y-1 mt-1 text-sm text-gray-500">
+                        <span><i class="fa-solid fa-envelope w-4"></i> {{ partner.email }}</span>
+                        <span><i class="fa-solid fa-phone w-4"></i> {{ partner.phone }}</span>
+                        <span><i class="fa-regular fa-building w-4"></i> {{ partner.companyName }}</span>
+                        <span><i class="fa-regular fa-calendar w-4"></i> {{ formatDate(partner.createdAt) }}</span>
+                    </div>
+                </div>
+                <!-- Actions -->
+                <div class="flex flex-wrap gap-2 flex-shrink-0">
+                    <app-button *ngIf="canApprove()" variant="success" size="sm" (click)="onApprove()"
+                        [loading]="isActionLoading">
+                        <i class="fa-solid fa-check mr-1"></i> {{ 'ADMIN.PARTNER.APPROVE' | translate }}
+                    </app-button>
+                    <app-button *ngIf="canReject()" variant="danger" size="sm" (click)="onReject()"
+                        [loading]="isActionLoading">
+                        <i class="fa-solid fa-xmark mr-1"></i> {{ 'ADMIN.PARTNER.REJECT' | translate }}
+                    </app-button>
+                    <app-button *ngIf="canActivate()" variant="primary" size="sm" (click)="onActivate()"
+                        [loading]="isActionLoading">
+                        <i class="fa-solid fa-play mr-1"></i> {{ 'ADMIN.PARTNER.ACTIVATE' | translate }}
+                    </app-button>
+                    <app-button variant="secondary" size="sm" (click)="goBack()">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> {{ 'COMMON.BUTTON.BACK' | translate }}
+                    </app-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== 2. INFO CARDS ====== -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.PARTNER.BUSINESS_TYPE' |
+                    translate }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ getBusinessTypeLabel(partner.businessType) |
+                    translate }}</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.PARTNER.COMPANY_SIZE' |
+                    translate }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ getCompanySizeLabel(partner.companySize) |
+                    translate }}</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.PARTNER.REGISTERED_AT' |
+                    translate }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ formatDate(partner.createdAt) }}</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.PARTNER.APPROVED_AT' |
+                    translate }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ formatDate(partner.approvedAt) || '--' }}</p>
+            </div>
+        </div>
+
+        <!-- ====== 3. TWO-COLUMN DETAIL ====== -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Personal & Business -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-6">
+                <div>
+                    <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
+                        <i class="fa-regular fa-user mr-2"></i> {{ 'ADMIN.PARTNER.PERSONAL_INFO' | translate }}
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="flex justify-between py-2 border-b border-gray-50">
+                            <span class="text-sm text-gray-500">{{ 'ADMIN.PARTNER.FULL_NAME' | translate }}</span>
+                            <span class="text-sm font-medium text-gray-900">{{ partner.fullName }}</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-50">
+                            <span class="text-sm text-gray-500">{{ 'ADMIN.PARTNER.EMAIL' | translate }}</span>
+                            <span class="text-sm font-medium text-gray-900">{{ partner.email }}</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-50">
+                            <span class="text-sm text-gray-500">{{ 'ADMIN.PARTNER.PHONE' | translate }}</span>
+                            <span class="text-sm font-medium text-gray-900">{{ partner.phone }}</span>
+                        </div>
+                        <div class="flex justify-between py-2">
+                            <span class="text-sm text-gray-500">{{ 'ADMIN.PARTNER.POSITION' | translate }}</span>
+                            <span class="text-sm font-medium text-gray-900">{{ partner.position }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
+                        <i class="fa-regular fa-building mr-2"></i> {{ 'ADMIN.PARTNER.BUSINESS_INFO' | translate }}
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="flex justify-between py-2 border-b border-gray-50">
+                            <span class="text-sm text-gray-500">{{ 'ADMIN.PARTNER.COMPANY_NAME' | translate }}</span>
+                            <span class="text-sm font-medium text-gray-900">{{ partner.companyName }}</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-50">
+                            <span class="text-sm text-gray-500">{{ 'ADMIN.PARTNER.COMPANY_TAX' | translate }}</span>
+                            <span class="text-sm font-medium text-gray-900">{{ partner.companyTax }}</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-50">
+                            <span class="text-sm text-gray-500">{{ 'ADMIN.PARTNER.COMPANY_ADDRESS' | translate }}</span>
+                            <span class="text-sm font-medium text-gray-900">{{ partner.companyAddress }}</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-50">
+                            <span class="text-sm text-gray-500">{{ 'ADMIN.PARTNER.COMPANY_WEBSITE' | translate }}</span>
+                            <span class="text-sm font-medium text-gray-900">{{ partner.companyWebsite || '--' }}</span>
+                        </div>
+                        <div class="flex justify-between py-2">
+                            <span class="text-sm text-gray-500">{{ 'ADMIN.PARTNER.REFERRAL_CODE' | translate }}</span>
+                            <span class="text-sm font-medium text-gray-900">{{ partner.referralCode || '--' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Commission & Note -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-6">
+                <div *ngIf="partner.commission">
+                    <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
+                        <i class="fa-regular fa-credit-card mr-2"></i> {{ 'ADMIN.PARTNER.COMMISSION' | translate }}
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="flex justify-between py-2 border-b border-gray-50">
+                            <span class="text-sm text-gray-500">{{ 'ADMIN.PARTNER.COMMISSION_TYPE' | translate }}</span>
+                            <span class="text-sm font-medium text-gray-900">{{
+                                getCommissionTypeLabel(partner.commission.type) | translate }}</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-50">
+                            <span class="text-sm text-gray-500">{{ 'ADMIN.PARTNER.COMMISSION_RATE' | translate }}</span>
+                            <span class="text-sm font-medium text-gray-900">
+                                {{ partner.commission.type === 1 ? partner.commission.rate + '%' :
+                                formatNumber(partner.commission.rate) + ' VNĐ' }}
+                            </span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-50"
+                            *ngIf="partner.commission.minOrderValue">
+                            <span class="text-sm text-gray-500">{{ 'ADMIN.PARTNER.MIN_ORDER_VALUE' | translate }}</span>
+                            <span class="text-sm font-medium text-gray-900">{{
+                                formatNumber(partner.commission.minOrderValue) }} VNĐ</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-50"
+                            *ngIf="partner.commission.maxCommission">
+                            <span class="text-sm text-gray-500">{{ 'ADMIN.PARTNER.MAX_COMMISSION' | translate }}</span>
+                            <span class="text-sm font-medium text-gray-900">{{
+                                formatNumber(partner.commission.maxCommission) }} VNĐ</span>
+                        </div>
+                        <div class="flex justify-between py-2" *ngIf="partner.commission.specialConditions">
+                            <span class="text-sm text-gray-500">{{ 'ADMIN.PARTNER.SPECIAL_CONDITIONS' | translate
+                                }}</span>
+                            <span class="text-sm font-medium text-gray-900 text-right">{{
+                                partner.commission.specialConditions }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
+                        <i class="fa-regular fa-note-sticky mr-2"></i> {{ 'ADMIN.PARTNER.NOTE' | translate }}
+                    </h2>
+                    <p class="text-sm text-gray-700 bg-gray-50 rounded-lg p-3 min-h-[60px]">{{ partner.note || 'Chưa có
+                        ghi chú' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== 4. PRODUCTS TABLE ====== -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">
+                    <i class="fa-solid fa-box mr-2"></i> {{ 'ADMIN.PARTNER.PRODUCTS' | translate }}
+                </h2>
+                <span class="text-sm text-gray-500">{{ partner.products?.length || 0 }} sản phẩm</span>
+            </div>
+
+            <div *ngIf="partner.products && partner.products.length > 0; else noProducts">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 border-b border-gray-200">
+                                <th
+                                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    #</th>
+                                <th
+                                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ 'ADMIN.PARTNER.PRODUCT_NAME' | translate }}</th>
+                                <th
+                                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ 'ADMIN.PARTNER.PRODUCT_CATEGORY' | translate }}</th>
+                                <th
+                                    class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ 'ADMIN.PARTNER.RETAIL_PRICE' | translate }}</th>
+                                <th
+                                    class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ 'ADMIN.PARTNER.WHOLESALE_PRICE' | translate }}</th>
+                                <th
+                                    class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ 'ADMIN.PARTNER.MIN_ORDER_QTY' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr *ngFor="let product of partner.products; let i = index"
+                                class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-3 text-gray-400">{{ i + 1 }}</td>
+                                <td class="px-4 py-3 font-medium text-gray-900">{{ product.name }}</td>
+                                <td class="px-4 py-3 text-gray-600">{{ getProductCategoryLabel(product.category) |
+                                    translate }}</td>
+                                <td class="px-4 py-3 text-right text-gray-600">{{ formatNumber(product.retailPrice) }}
+                                    VNĐ</td>
+                                <td class="px-4 py-3 text-right text-gray-600">{{ formatNumber(product.wholesalePrice)
+                                    }} VNĐ</td>
+                                <td class="px-4 py-3 text-center text-gray-600">{{ product.minOrderQuantity }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <ng-template #noProducts>
+                <p class="text-gray-500 text-sm py-4 text-center">{{ 'ADMIN.PARTNER.NO_PRODUCTS' | translate }}</p>
+            </ng-template>
+        </div>
+    </div>
+</div>
+
+<!-- ====== MODALS ====== -->
+<app-modal [(visible)]="showApproveModal" [title]="'ADMIN.PARTNER.APPROVE' | translate"
+    [confirmText]="'COMMON.BUTTON.CONFIRM' | translate" [cancelText]="'COMMON.BUTTON.CANCEL' | translate"
+    [confirmVariant]="'success'" [loading]="isActionLoading" (confirm)="confirmApprove()"
+    (cancel)="showApproveModal = false">
+    <p class="text-gray-600">{{ 'ADMIN.PARTNER.APPROVE_CONFIRM' | translate }}</p>
+</app-modal>
+
+<app-modal [(visible)]="showRejectModal" [title]="'ADMIN.PARTNER.REJECT' | translate"
+    [confirmText]="'COMMON.BUTTON.CONFIRM' | translate" [cancelText]="'COMMON.BUTTON.CANCEL' | translate"
+    [confirmVariant]="'danger'" [loading]="isActionLoading" (confirm)="confirmReject()"
+    (cancel)="showRejectModal = false">
+    <p class="text-gray-600">{{ 'ADMIN.PARTNER.REJECT_CONFIRM' | translate }}</p>
+</app-modal>
+
+<app-modal [(visible)]="showActivateModal" [title]="'ADMIN.PARTNER.ACTIVATE' | translate"
+    [confirmText]="'COMMON.BUTTON.CONFIRM' | translate" [cancelText]="'COMMON.BUTTON.CANCEL' | translate"
+    [confirmVariant]="'primary'" [loading]="isActionLoading" (confirm)="confirmActivate()"
+    (cancel)="showActivateModal = false">
+    <p class="text-gray-600">{{ 'ADMIN.PARTNER.ACTIVATE_CONFIRM' | translate }}</p>
+</app-modal>
