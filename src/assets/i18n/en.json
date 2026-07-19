@@ -757,10 +757,22 @@
         "BUTTON": {
             "SEARCH": "Search",
             "ACTION": "Action",
-            "VIEW_DETAIL": "View Detail"
+            "VIEW_DETAIL": "View Detail",
+            "EDIT": "Edit",
+            "DELETE": "Delete",
+            "BACK": "Back",
+            "SUBMIT": "Submit",
+            "CANCEL": "Cancel",
+            "SAVE": "Save",
+            "CREATE": "Create",
+            "UPDATE": "Update",
+            "CONFIRM": "Confirm",
+            "APPLY": "Apply"
         },
         "ERROR": {
-            "LOAD_FAILED": "An error occurred while loading data!"
+            "LOAD_FAILED": "An error occurred while loading data!",
+            "INVALID_ID": "Invalid ID!",
+            "NOT_FOUND": "Data not found!"
         }
     },
     "PAGINATION": {
@@ -783,7 +795,16 @@
             "PHONE": "Phone",
             "SALES_CHANNEL": "Sales Channel",
             "STATUS": "Status",
-            "REGISTERED_AT": "Registered At"
+            "REGISTERED_AT": "Registered At",
+            "PERSONAL_INFO": "Personal Information",
+            "REGISTRATION_INFO": "Registration Information",
+            "SYSTEM_INFO": "System Information",
+            "DETAIL_TITLE": "CTV Detail",
+            "ZALO": "Zalo",
+            "EXPERIENCE": "Experience",
+            "APPROVED_AT": "Approved At",
+            "APPROVE": "Approve CTV",
+            "REJECT": "Reject CTV"
         },
         "PARTNER": {
             "TITLE": "Partner Management",
@@ -807,7 +828,22 @@
             "ACTIVATE_CONFIRM": "Are you sure you want to activate this Partner?",
             "APPROVED_SUCCESS": "Partner approved successfully",
             "REJECTED_SUCCESS": "Partner rejected successfully",
-            "ACTIVATED_SUCCESS": "Partner activated successfully"
+            "ACTIVATED_SUCCESS": "Partner activated successfully",
+            "PERSONAL_INFO": "Personal Information",
+            "BUSINESS_INFO": "Business Information",
+            "SYSTEM_INFO": "System Information",
+            "POSITION": "Position",
+            "COMPANY_TAX": "Tax Code",
+            "COMPANY_ADDRESS": "Address",
+            "COMPANY_WEBSITE": "Website",
+            "COMPANY_SIZE": "Company Size",
+            "REFERRAL_CODE": "Referral Code",
+            "NOTE": "Note",
+            "PRODUCT_NAME": "Product Name",
+            "PRODUCT_CATEGORY": "Category",
+            "RETAIL_PRICE": "Retail Price",
+            "WHOLESALE_PRICE": "Wholesale Price",
+            "MIN_ORDER_QTY": "Min Qty"
         }
     }
 }

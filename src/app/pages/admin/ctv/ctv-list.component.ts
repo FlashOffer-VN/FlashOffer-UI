@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -57,7 +57,7 @@ export class AdminCtvListComponent implements OnInit {
     hasPreviousPage = false;
     hasNextPage = false;
 
-    constructor(private _appService: AppService) { }
+    constructor(private _appService: AppService, private _router: Router) { }
 
     ngOnInit(): void {
         this.loadData();
@@ -161,7 +161,6 @@ export class AdminCtvListComponent implements OnInit {
     }
 
     navigateToDetail(id: string): void {
-        // Will be implemented when detail component is created
-        console.log('Navigate to CTV detail:', id);
+        this._router.navigate(['/admin/ctv/', id]);
     }
 }

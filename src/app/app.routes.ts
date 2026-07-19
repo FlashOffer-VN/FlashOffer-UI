@@ -66,10 +66,10 @@ export const routes: Routes = [
             { path: 'demo', loadComponent: () => import('./pages/demo/demo.component').then(m => m.DemoComponent) },
             // CTV Management
             { path: 'ctv', loadComponent: () => import('./pages/admin/ctv/ctv-list.component').then(m => m.AdminCtvListComponent) },
-            // { path: 'ctv/:id', component: AdminCtvDetailComponent },
+            { path: 'ctv/:id', loadComponent: () => import('./pages/admin/ctv/detail/ctv-detail.component').then(m => m.AdminCtvDetailComponent) },
             // Partner Management
             { path: 'partner', loadComponent: () => import('./pages/admin/partner/partner-list.component').then(m => m.AdminPartnerListComponent) },
-            // { path: 'partner/:id', component: AdminPartnerDetailComponent },        
+            { path: 'partner/:id', loadComponent: () => import('./pages/admin/partner/detail/partner-detail.component').then(m => m.AdminPartnerDetailComponent) },
         ]
     },
 

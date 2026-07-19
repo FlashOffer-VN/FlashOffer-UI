@@ -712,10 +712,22 @@
         "BUTTON": {
             "SEARCH": "Tìm kiếm",
             "ACTION": "Thao tác",
-            "VIEW_DETAIL": "Xem chi tiết"
+            "VIEW_DETAIL": "Xem chi tiết",
+            "BACK": "Quay lại",
+            "SUBMIT": "Gửi",
+            "CANCEL": "Hủy",
+            "EDIT": "Sửa",
+            "DELETE": "Xóa",
+            "SAVE": "Lưu",
+            "CREATE": "Tạo mới",
+            "UPDATE": "Cập nhật",
+            "CONFIRM":"Xác nhận",
+            "APPLY": "Áp dụng"
         },
         "ERROR": {
-            "LOAD_FAILED": "Đã có lỗi xảy ra khi tải dữ liệu!"
+            "LOAD_FAILED": "Đã có lỗi xảy ra khi tải dữ liệu!",
+            "INVALID_ID": "ID không hợp lệ!",
+            "NOT_FOUND": "Không tìm thấy dữ liệu!"
         }
     },
     "PAGINATION": {
@@ -738,7 +750,16 @@
             "PHONE": "SĐT",
             "SALES_CHANNEL": "Kênh bán hàng",
             "STATUS": "Trạng thái",
-            "REGISTERED_AT": "Ngày đăng ký"
+            "REGISTERED_AT": "Ngày đăng ký",
+            "PERSONAL_INFO": "Thông tin cá nhân",
+            "REGISTRATION_INFO": "Thông tin đăng ký",
+            "SYSTEM_INFO": "Thông tin hệ thống",
+            "DETAIL_TITLE": "Chi tiết CTV",
+            "ZALO": "Zalo",
+            "EXPERIENCE": "Kinh nghiệm",
+            "APPROVED_AT": "Ngày duyệt",
+            "APPROVE": "Duyệt CTV",
+            "REJECT": "Từ chối CTV"
         },
         "PARTNER": {
             "TITLE": "Quản lý Đối tác",
@@ -762,7 +783,22 @@
             "ACTIVATE_CONFIRM": "Bạn có chắc muốn kích hoạt Đối tác này?",
             "APPROVED_SUCCESS": "Duyệt Đối tác thành công",
             "REJECTED_SUCCESS": "Từ chối Đối tác thành công",
-            "ACTIVATED_SUCCESS": "Kích hoạt Đối tác thành công"
+            "ACTIVATED_SUCCESS": "Kích hoạt Đối tác thành công",
+            "PERSONAL_INFO": "Thông tin cá nhân",
+            "BUSINESS_INFO": "Thông tin doanh nghiệp",
+            "SYSTEM_INFO": "Thông tin hệ thống",
+            "POSITION": "Chức vụ",
+            "COMPANY_TAX": "Mã số thuế",
+            "COMPANY_ADDRESS": "Địa chỉ",
+            "COMPANY_WEBSITE": "Website",
+            "COMPANY_SIZE": "Quy mô",
+            "REFERRAL_CODE": "Mã giới thiệu",
+            "NOTE": "Ghi chú",
+            "PRODUCT_NAME": "Tên sản phẩm",
+            "PRODUCT_CATEGORY": "Danh mục",
+            "RETAIL_PRICE": "Giá bán lẻ",
+            "WHOLESALE_PRICE": "Giá bán sỉ",
+            "MIN_ORDER_QTY": "SL tối thiểu"
         }
     }
 }

@@ -1,0 +1,120 @@
+<div class="p-6">
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="flex justify-center items-center py-12">
+        <app-loading></app-loading>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="!isLoading && ctv">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+            <div class="flex items-center gap-3">
+                <button
+                    class="w-9 h-9 flex items-center justify-center rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+                    (click)="goBack()">
+                    <i class="fa-solid fa-arrow-left text-lg"></i>
+                </button>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">{{ 'ADMIN.CTV.DETAIL_TITLE' | translate }}</h1>
+                    <p class="text-gray-500 text-sm">{{ ctv.fullName }}</p>
+                </div>
+            </div>
+            <div>
+                <app-badge [status]="getStatusKey(ctv.status)" [variant]="getStatusVariant(ctv.status)" size="lg">
+                </app-badge>
+            </div>
+        </div>
+
+        <!-- Detail Card -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <!-- Personal Info -->
+            <div class="p-6 border-b border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">{{ 'ADMIN.CTV.PERSONAL_INFO' | translate }}</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">{{ 'ADMIN.CTV.FULL_NAME' | translate }}</label>
+                        <p class="text-gray-900">{{ ctv.fullName }}</p>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">{{ 'ADMIN.CTV.EMAIL' | translate }}</label>
+                        <p class="text-gray-900">{{ ctv.email || '--' }}</p>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">{{ 'ADMIN.CTV.PHONE' | translate }}</label>
+                        <p class="text-gray-900">{{ ctv.phone }}</p>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">{{ 'ADMIN.CTV.ZALO' | translate }}</label>
+                        <p class="text-gray-900">{{ ctv.zalo || '--' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Registration Info -->
+            <div class="p-6 border-b border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">{{ 'ADMIN.CTV.REGISTRATION_INFO' | translate }}
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">{{ 'ADMIN.CTV.SALES_CHANNEL' | translate
+                            }}</label>
+                        <p class="text-gray-900">{{ getSalesChannelLabel(ctv.salesChannel) | translate }}</p>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">{{ 'ADMIN.CTV.EXPERIENCE' | translate
+                            }}</label>
+                        <p class="text-gray-900">{{ ctv.experience || '--' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Info -->
+            <div class="p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">{{ 'ADMIN.CTV.SYSTEM_INFO' | translate }}</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">{{ 'ADMIN.CTV.REGISTERED_AT' | translate
+                            }}</label>
+                        <p class="text-gray-900">{{ formatDate(ctv.createdAt) }}</p>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">{{ 'ADMIN.CTV.APPROVED_AT' | translate
+                            }}</label>
+                        <p class="text-gray-900">{{ formatDate(ctv.approvedAt) }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="mt-6 flex flex-wrap gap-3">
+            <app-button variant="secondary" (click)="goBack()">
+                {{ 'COMMON.BUTTON.BACK' | translate }}
+            </app-button>
+
+            <app-button *ngIf="canApprove()" variant="success" (click)="onApprove()" [loading]="isActionLoading">
+                {{ 'ADMIN.CTV.APPROVE' | translate }}
+            </app-button>
+
+            <app-button *ngIf="canReject()" variant="danger" (click)="onReject()" [loading]="isActionLoading">
+                {{ 'ADMIN.CTV.REJECT' | translate }}
+            </app-button>
+        </div>
+    </div>
+</div>
+
+<!-- Approve Modal -->
+<app-modal [(visible)]="showApproveModal" [title]="'ADMIN.CTV.APPROVE' | translate"
+    [confirmText]="'COMMON.BUTTON.CONFIRM' | translate" [cancelText]="'COMMON.BUTTON.CANCEL' | translate"
+    [confirmVariant]="'success'" [loading]="isActionLoading" (confirm)="confirmApprove()"
+    (cancel)="showApproveModal = false">
+    <p class="text-gray-600">{{ 'ADMIN.CTV.APPROVE_CONFIRM' | translate }}</p>
+</app-modal>
+
+<!-- Reject Modal -->
+<app-modal [(visible)]="showRejectModal" [title]="'ADMIN.CTV.REJECT' | translate"
+    [confirmText]="'COMMON.BUTTON.CONFIRM' | translate" [cancelText]="'COMMON.BUTTON.CANCEL' | translate"
+    [confirmVariant]="'danger'" [loading]="isActionLoading" (confirm)="confirmReject()"
+    (cancel)="showRejectModal = false">
+    <p class="text-gray-600">{{ 'ADMIN.CTV.REJECT_CONFIRM' | translate }}</p>
+</app-modal>
