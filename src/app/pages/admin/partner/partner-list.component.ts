@@ -86,10 +86,10 @@ export class AdminPartnerListComponent implements OnInit {
             { value: PartnerStatus.Active, label: this._appService.instant('COMMON.STATUS.ACTIVE') }
         ];
         this._appService.partnerService
-            .getMockData(
+            .getData(
                 this.pageNumber,
                 this.pageSize,
-                this.searchText,
+                this.searchText ?? '',
                 this.selectedStatus ?? undefined
             )
             .subscribe({
@@ -105,7 +105,7 @@ export class AdminPartnerListComponent implements OnInit {
                 },
                 error: () => {
                     this.isLoading = false;
-                    this._appService.showError('COMMON.ERROR.LOAD_FAILED');
+                    this._appService.showError(this._appService.instant('COMMON.ERROR.LOAD_FAILED'));
                 }
             });
     }

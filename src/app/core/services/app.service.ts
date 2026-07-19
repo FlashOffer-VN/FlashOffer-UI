@@ -10,8 +10,8 @@ import { CtvRegistrationService } from './ctv-registration.service';
 import { PurchaseRequestService } from './purchase-request.service';
 import { GroupBuyingRequestService } from './group-buying-request.service';
 import { OfferRequestService } from './offer-request.service';
-import { CtvService } from './ctv.service';
 import { PartnerService } from './partner.service';
+import { CtvService } from './ctv.service';
 
 @Injectable({
     providedIn: 'root'

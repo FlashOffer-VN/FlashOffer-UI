@@ -15,7 +15,7 @@ import { ApiService } from './api.service';
 })
 export class PartnerRegisterService {
     private api = inject(ApiService);
-    private endpoint = 'Partner';
+    private endpoint = 'Partners';
     private translate = inject(TranslateService);
 
     register(data: PartnerRegisterRequest): Observable<PartnerRegisterResponse> {

@@ -50,25 +50,25 @@ export class AdminCtvDetailComponent implements OnInit {
     loadData(): void {
         const id = this._route.snapshot.paramMap.get('id');
         if (!id) {
-            this._appService.showError('COMMON.ERROR.INVALID_ID');
+            this._appService.showError(this._appService.instant('COMMON.ERROR.INVALID_ID'));
             this._router.navigate(['/admin/ctv']);
             return;
         }
 
         this.isLoading = true;
-        this._appService.ctvService.getMockDetail(id).subscribe({
-            next: (data: CtvRegistration | null) => {
-                if (!data) {
-                    this._appService.showError('COMMON.ERROR.NOT_FOUND');
+        this._appService.ctvService.getDetail(id).subscribe({
+            next: (response: ApiResponse<CtvRegistration>) => {
+                if (!response.data) {
+                    this._appService.showError(this._appService.instant('COMMON.ERROR.NOT_FOUND'));
                     this._router.navigate(['/admin/ctv']);
                     return;
                 }
-                this.ctv = data;
+                this.ctv = response.data;
                 this.isLoading = false;
             },
             error: () => {
                 this.isLoading = false;
-                this._appService.showError('COMMON.ERROR.LOAD_FAILED');
+                this._appService.showError(this._appService.instant('COMMON.ERROR.LOAD_FAILED'));
                 this._router.navigate(['/admin/ctv']);
             }
         });
@@ -129,12 +129,13 @@ export class AdminCtvDetailComponent implements OnInit {
                 this.ctv = response.data;
                 this.isActionLoading = false;
                 this.showApproveModal = false;
-                this._appService.showSuccess('ADMIN.CTV.APPROVED_SUCCESS');
+                this._appService.showSuccess(this._appService.instant('ADMIN.CTV.APPROVED_SUCCESS'));
+                this.loadData();
             },
             error: () => {
                 this.isActionLoading = false;
                 this.showApproveModal = false;
-                this._appService.showError('COMMON.ERROR.UPDATE_FAILED');
+                this._appService.showError(this._appService.instant('COMMON.ERROR.UPDATE_FAILED'));
             }
         });
     }
@@ -151,12 +152,13 @@ export class AdminCtvDetailComponent implements OnInit {
                 this.ctv = response.data;
                 this.isActionLoading = false;
                 this.showRejectModal = false;
-                this._appService.showSuccess('ADMIN.CTV.REJECTED_SUCCESS');
+                this._appService.showSuccess(this._appService.instant('ADMIN.CTV.REJECTED_SUCCESS'));
+                this.loadData();
             },
             error: () => {
                 this.isActionLoading = false;
                 this.showRejectModal = false;
-                this._appService.showError('COMMON.ERROR.UPDATE_FAILED');
+                this._appService.showError(this._appService.instant('COMMON.ERROR.UPDATE_FAILED'));
             }
         });
     }

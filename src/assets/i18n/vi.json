@@ -721,7 +721,7 @@
             "SAVE": "Lưu",
             "CREATE": "Tạo mới",
             "UPDATE": "Cập nhật",
-            "CONFIRM":"Xác nhận",
+            "CONFIRM": "Xác nhận",
             "APPLY": "Áp dụng"
         },
         "ERROR": {
@@ -759,7 +759,12 @@
             "EXPERIENCE": "Kinh nghiệm",
             "APPROVED_AT": "Ngày duyệt",
             "APPROVE": "Duyệt CTV",
-            "REJECT": "Từ chối CTV"
+            "REJECT": "Từ chối CTV",
+            "APPROVE_CONFIRM": "Bạn có chắc muốn duyệt CTV này?",
+            "REJECT_CONFIRM": "Bạn có chắc muốn từ chối CTV này?",
+            "ACTIVATED_SUCCESS": "Kích hoạt CTV thành công",
+            "REJECTED_SUCCESS": "Từ chối CTV thành công",
+            "APPROVED_SUCCESS": "Duyệt CTV thành công"
         },
         "PARTNER": {
             "TITLE": "Quản lý Đối tác",
@@ -798,6 +803,13 @@
             "PRODUCT_CATEGORY": "Danh mục",
             "RETAIL_PRICE": "Giá bán lẻ",
             "WHOLESALE_PRICE": "Giá bán sỉ",
+            "COMMISSION": "Hoa hồng",
+            "COMMISSION_TYPE": "Loại hoa hồng",
+            "COMMISSION_RATE": "Tỷ lệ hoa hồng",
+            "MIN_ORDER_VALUE": "Giá trị đơn hàng tối thiểu",
+            "MAX_COMMISSION": "Hoa hồng tối đa",
+            "PRODUCTS": "Danh sách sản phẩm",
+            "APPROVED_AT": "Ngày duyệt",
             "MIN_ORDER_QTY": "SL tối thiểu"
         }
     }

@@ -85,6 +85,65 @@ Bước 5: Import Service vào AppService
 Bước 6: Export public property trong AppService
 ```
 
+**Quy tắc ApiService & Base URL:**
+
+| Nguyên tắc | Mô tả |
+|------------|-------|
+| **Base URL duy nhất** | Chỉ `ApiService` chứa `baseUrl = environment.apiUrl`, service con KHÔNG import environment |
+| **Endpoint tương đối** | Service con chỉ định nghĩa endpoint tương đối (ví dụ: `'Ctv'`, `'Partner'`) |
+| **Không gộp URL** | Service con KHÔNG được gộp `environment.apiUrl + '/Ctv'` |
+| **Params linh hoạt** | `ApiService.get()` hỗ trợ cả `HttpParams` và object `Record<string, any>` |
+
+**ApiService chuẩn:**
+```typescript
+@Injectable({ providedIn: 'root' })
+export class ApiService {
+    protected baseUrl = environment.apiUrl;
+
+    get<T>(endpoint: string, params?: HttpParams | Record<string, any>): Observable<T> {
+        let httpParams: HttpParams | undefined;
+        if (params) {
+            if (params instanceof HttpParams) {
+                httpParams = params;
+            } else {
+                httpParams = new HttpParams({ fromObject: params });
+            }
+        }
+        return this.http.get<T>(`${this.baseUrl}/${endpoint}`, { params: httpParams });
+    }
+
+    post<T>(endpoint: string, data: any): Observable<T> {
+        return this.http.post<T>(`${this.baseUrl}/${endpoint}`, data);
+    }
+
+    put<T>(endpoint: string, data: any): Observable<T> {
+        return this.http.put<T>(`${this.baseUrl}/${endpoint}`, data);
+    }
+
+    patch<T>(endpoint: string, data: any): Observable<T> {
+        return this.http.patch<T>(`${this.baseUrl}/${endpoint}`, data);
+    }
+
+    delete<T>(endpoint: string): Observable<T> {
+        return this.http.delete<T>(`${this.baseUrl}/${endpoint}`);
+    }
+}
+```
+
+**Service con chuẩn:**
+```typescript
+@Injectable({ providedIn: 'root' })
+export class CtvService {
+    private readonly _baseUrl = 'Ctv';  // ✅ Chỉ endpoint tương đối
+
+    constructor(private _apiService: ApiService) { }
+
+    getData() {
+        return this._apiService.get<PagedResponse<CtvRegistration>>(this._baseUrl);
+    }
+}
+```
+
 ---
 
 ## 3. MODEL & ENUM
@@ -731,6 +790,10 @@ export class ProductListComponent {
 | 28 | **Dùng app-badge** | Luôn dùng `app-badge` cho hiển thị status thay vì tự viết badge |
 | 29 | **Badge từ status** | Truyền `status` vào badge để auto-detect variant và label |
 | 30 | **Pagination với API** | Kết hợp `PagedResponse<T>` với `app-pagination` cho danh sách có phân trang |
+| 31 | **Không dùng env.apiUrl trong service con** | Không import `environment` trong service con, chỉ dùng trong `ApiService` |
+| 32 | **Endpoint tương đối** | Service con chỉ định nghĩa endpoint tương đối (ví dụ: `'Ctv'`, `'api/v1/Ctv'`) |
+| 33 | **ApiService quản lý baseUrl** | ApiService là nơi duy nhất quản lý baseUrl từ environment |
+| 34 | **Params linh hoạt** | `ApiService.get()` hỗ trợ cả `HttpParams` và object params |
 
 ---
 
@@ -903,12 +966,13 @@ export class ProductListComponent implements OnInit {
 | Mục | Nội dung |
 |-----|----------|
 | **Phần 1** | Cập nhật cấu trúc thư mục: thêm `pagination/`, `badge/` |
+| **Phần 2** | Thêm quy tắc ApiService & Base URL, ApiService chuẩn, Service con chuẩn |
 | **Phần 3** | Thêm `PagedResponse<T>` vào model |
 | **Phần 4** | Thêm translate keys cho Pagination và Status |
 | **Phần 7** | Thêm PaginationComponent và BadgeComponent vào danh sách Shared Components |
 | **Phần 7** | Thêm quy tắc dùng `app-pagination` và `app-badge` |
 | **Phần 9** | Cập nhật routes: thêm admin/ctv và admin/partner |
-| **Phần 10** | Thêm quy tắc 27, 28, 29, 30 về dùng component chung |
+| **Phần 10** | Thêm quy tắc 27, 28, 29, 30, 31, 32, 33, 34 về dùng component chung và base URL |
 | **Phần 11** | Cập nhật seed data với pagination và PagedResponse |
 | **Phần 13** | Cập nhật danh sách tính năng đã hoàn thành |
 | **Phần 14** | Cập nhật danh sách tính năng cần làm: thêm Admin - CTV/Partner Management |

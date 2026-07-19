@@ -843,7 +843,14 @@
             "PRODUCT_CATEGORY": "Category",
             "RETAIL_PRICE": "Retail Price",
             "WHOLESALE_PRICE": "Wholesale Price",
-            "MIN_ORDER_QTY": "Min Qty"
+            "MIN_ORDER_QTY": "Min Qty",
+            "COMMISSION": "Commission",
+            "COMMISSION_TYPE": "Commission Type",
+            "COMMISSION_RATE": "Commission Rate",
+            "MIN_ORDER_VALUE": "Min Order Value",
+            "MAX_COMMISSION": "Max Commission",
+            "PRODUCTS": "Products",
+            "APPROVED_AT": "Approved Date"
         }
     }
 }

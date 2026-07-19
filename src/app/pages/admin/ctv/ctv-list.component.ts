@@ -15,10 +15,12 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.component';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+
 interface StatusOption {
     value: CTVRegistrationStatus | null;
     label: string;
 }
+
 @Component({
     selector: 'app-admin-ctv-list',
     standalone: true,
@@ -57,6 +59,15 @@ export class AdminCtvListComponent implements OnInit {
     hasPreviousPage = false;
     hasNextPage = false;
 
+    // Translate keys for sales channel
+    salesChannelKeys: Record<number, string> = {
+        1: 'FIND_SUPPLIER.SALES_CHANNEL_RETAIL',
+        2: 'FIND_SUPPLIER.SALES_CHANNEL_WHOLESALE',
+        3: 'FIND_SUPPLIER.SALES_CHANNEL_ONLINE',
+        4: 'FIND_SUPPLIER.SALES_CHANNEL_OFFLINE',
+        5: 'FIND_SUPPLIER.SALES_CHANNEL_OTHER'
+    };
+
     constructor(private _appService: AppService, private _router: Router) { }
 
     ngOnInit(): void {
@@ -71,8 +82,9 @@ export class AdminCtvListComponent implements OnInit {
             { value: CTVRegistrationStatus.Approved, label: this._appService.instant('COMMON.STATUS.APPROVED') },
             { value: CTVRegistrationStatus.Rejected, label: this._appService.instant('COMMON.STATUS.REJECTED') }
         ];
+
         this._appService.ctvService
-            .getMockData(
+            .getData(
                 this.pageNumber,
                 this.pageSize,
                 this.searchText,
@@ -91,7 +103,7 @@ export class AdminCtvListComponent implements OnInit {
                 },
                 error: () => {
                     this.isLoading = false;
-                    this._appService.showError('Đã có lỗi xảy ra khi tải dữ liệu!');
+                    this._appService.showError(this._appService.instant('COMMON.ERROR.LOAD_FAILED'));
                 }
             });
     }
@@ -129,11 +141,7 @@ export class AdminCtvListComponent implements OnInit {
 
     getSalesChannelLabel(channel: number | undefined): string {
         if (channel === undefined) return '--';
-        return getSalesChannelLabel(channel);
-    }
-
-    getStatusLabel(status: CTVRegistrationStatus): string {
-        return getCTVStatusLabel(status);
+        return this.salesChannelKeys[channel] || channel.toString();
     }
 
     getStatusKey(status: CTVRegistrationStatus): string {
@@ -161,6 +169,6 @@ export class AdminCtvListComponent implements OnInit {
     }
 
     navigateToDetail(id: string): void {
-        this._router.navigate(['/admin/ctv/', id]);
+        this._router.navigate(['/admin/ctv', id]);
     }
 }
