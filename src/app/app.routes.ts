@@ -68,7 +68,7 @@ export const routes: Routes = [
             { path: 'ctv', loadComponent: () => import('./pages/admin/ctv/ctv-list.component').then(m => m.AdminCtvListComponent) },
             // { path: 'ctv/:id', component: AdminCtvDetailComponent },
             // Partner Management
-            // { path: 'partner', component: AdminPartnerListComponent },
+            { path: 'partner', loadComponent: () => import('./pages/admin/partner/partner-list.component').then(m => m.AdminPartnerListComponent) },
             // { path: 'partner/:id', component: AdminPartnerDetailComponent },        
         ]
     },

@@ -784,6 +784,30 @@
             "SALES_CHANNEL": "Sales Channel",
             "STATUS": "Status",
             "REGISTERED_AT": "Registered At"
+        },
+        "PARTNER": {
+            "TITLE": "Partner Management",
+            "LIST_TITLE": "Partner List",
+            "DETAIL_TITLE": "Partner Detail",
+            "SEARCH_PLACEHOLDER": "Search by name, email, company, tax code...",
+            "FILTER_STATUS": "Filter by status",
+            "CODE": "Partner Code",
+            "FULL_NAME": "Full Name",
+            "EMAIL": "Email",
+            "PHONE": "Phone",
+            "COMPANY_NAME": "Company",
+            "BUSINESS_TYPE": "Business Type",
+            "STATUS": "Status",
+            "REGISTERED_AT": "Registered At",
+            "APPROVE": "Approve Partner",
+            "REJECT": "Reject Partner",
+            "ACTIVATE": "Activate Partner",
+            "APPROVE_CONFIRM": "Are you sure you want to approve this Partner?",
+            "REJECT_CONFIRM": "Are you sure you want to reject this Partner?",
+            "ACTIVATE_CONFIRM": "Are you sure you want to activate this Partner?",
+            "APPROVED_SUCCESS": "Partner approved successfully",
+            "REJECTED_SUCCESS": "Partner rejected successfully",
+            "ACTIVATED_SUCCESS": "Partner activated successfully"
         }
     }
 }

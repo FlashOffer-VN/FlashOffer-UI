@@ -739,6 +739,30 @@
             "SALES_CHANNEL": "Kênh bán hàng",
             "STATUS": "Trạng thái",
             "REGISTERED_AT": "Ngày đăng ký"
+        },
+        "PARTNER": {
+            "TITLE": "Quản lý Đối tác",
+            "LIST_TITLE": "Danh sách Đối tác",
+            "DETAIL_TITLE": "Chi tiết Đối tác",
+            "SEARCH_PLACEHOLDER": "Tìm kiếm theo tên, email, công ty, MST...",
+            "FILTER_STATUS": "Lọc theo trạng thái",
+            "CODE": "Mã Đối tác",
+            "FULL_NAME": "Họ tên",
+            "EMAIL": "Email",
+            "PHONE": "SĐT",
+            "COMPANY_NAME": "Công ty",
+            "BUSINESS_TYPE": "Loại hình",
+            "STATUS": "Trạng thái",
+            "REGISTERED_AT": "Ngày đăng ký",
+            "APPROVE": "Duyệt Đối tác",
+            "REJECT": "Từ chối Đối tác",
+            "ACTIVATE": "Kích hoạt Đối tác",
+            "APPROVE_CONFIRM": "Bạn có chắc muốn duyệt Đối tác này?",
+            "REJECT_CONFIRM": "Bạn có chắc muốn từ chối Đối tác này?",
+            "ACTIVATE_CONFIRM": "Bạn có chắc muốn kích hoạt Đối tác này?",
+            "APPROVED_SUCCESS": "Duyệt Đối tác thành công",
+            "REJECTED_SUCCESS": "Từ chối Đối tác thành công",
+            "ACTIVATED_SUCCESS": "Kích hoạt Đối tác thành công"
         }
     }
 }
