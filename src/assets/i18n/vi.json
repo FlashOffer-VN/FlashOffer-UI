@@ -513,6 +513,11 @@
         "SUBMIT": "Tìm nhà cung cấp",
         "SUBMITTING": "Đang tìm kiếm...",
         "SECURE_NOTE": "Thông tin của bạn được bảo mật tuyệt đối",
+        "SALES_CHANNEL_RETAIL": "Bán lẻ",
+        "SALES_CHANNEL_WHOLESALE": "Bán sỉ",
+        "SALES_CHANNEL_ONLINE": "Online",
+        "SALES_CHANNEL_OFFLINE": "Offline",
+        "SALES_CHANNEL_OTHER": "Khác",
         "ERROR": {
             "REQUIRED": "Trường này là bắt buộc",
             "PRODUCT_NAME_REQUIRED": "Vui lòng nhập tên sản phẩm",
@@ -691,6 +696,49 @@
             "REJECTED": "Từ chối",
             "COMPLETED": "Hoàn thành",
             "CANCELLED": "Đã hủy"
+        }
+    },
+    "COMMON": {
+        "ALL": "Tất cả",
+        "STATUS": {
+            "PENDING": "Đang chờ",
+            "APPROVED": "Đã duyệt",
+            "REJECTED": "Từ chối",
+            "ACTIVE": "Hoạt động",
+            "INACTIVE": "Không hoạt động",
+            "COMPLETED": "Hoàn thành",
+            "CANCELLED": "Đã hủy"
+        },
+        "BUTTON": {
+            "SEARCH": "Tìm kiếm",
+            "ACTION": "Thao tác",
+            "VIEW_DETAIL": "Xem chi tiết"
+        },
+        "ERROR": {
+            "LOAD_FAILED": "Đã có lỗi xảy ra khi tải dữ liệu!"
+        }
+    },
+    "PAGINATION": {
+        "SHOWING": "Hiển thị",
+        "OF": "trên tổng",
+        "ITEMS": "kết quả",
+        "SHOW": "Hiển thị",
+        "ITEMS_PER_PAGE": "kết quả/trang",
+        "NO_ITEMS": "Không có dữ liệu"
+    },
+    "ADMIN": {
+        "CTV": {
+            "TITLE": "Quản lý CTV",
+            "LIST_TITLE": "Danh sách CTV",
+            "SEARCH_PLACEHOLDER": "Tìm kiếm theo tên, email, SĐT...",
+            "FILTER_STATUS": "Lọc theo trạng thái",
+            "CODE": "Mã CTV",
+            "FULL_NAME": "Họ tên",
+            "EMAIL": "Email",
+            "PHONE": "SĐT",
+            "SALES_CHANNEL": "Kênh bán hàng",
+            "STATUS": "Trạng thái",
+            "REGISTERED_AT": "Ngày đăng ký"
         }
     }
 }

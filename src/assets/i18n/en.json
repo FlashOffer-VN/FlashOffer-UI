@@ -558,6 +558,11 @@
         "SUBMIT": "Find suppliers",
         "SUBMITTING": "Searching...",
         "SECURE_NOTE": "Your information is completely secure",
+        "SALES_CHANNEL_RETAIL": "Retail",
+        "SALES_CHANNEL_WHOLESALE": "Wholesale",
+        "SALES_CHANNEL_ONLINE": "Online",
+        "SALES_CHANNEL_OFFLINE": "Offline",
+        "SALES_CHANNEL_OTHER": "Other",
         "ERROR": {
             "REQUIRED": "This field is required",
             "PRODUCT_NAME_REQUIRED": "Please enter product name",
@@ -736,6 +741,49 @@
             "REJECTED": "Rejected",
             "COMPLETED": "Completed",
             "CANCELLED": "Cancelled"
+        }
+    },
+    "COMMON": {
+        "ALL": "All",
+        "STATUS": {
+            "PENDING": "Pending",
+            "APPROVED": "Approved",
+            "REJECTED": "Rejected",
+            "ACTIVE": "Active",
+            "INACTIVE": "Inactive",
+            "COMPLETED": "Completed",
+            "CANCELLED": "Cancelled"
+        },
+        "BUTTON": {
+            "SEARCH": "Search",
+            "ACTION": "Action",
+            "VIEW_DETAIL": "View Detail"
+        },
+        "ERROR": {
+            "LOAD_FAILED": "An error occurred while loading data!"
+        }
+    },
+    "PAGINATION": {
+        "SHOWING": "Showing",
+        "OF": "of",
+        "ITEMS": "items",
+        "SHOW": "Show",
+        "ITEMS_PER_PAGE": "items/page",
+        "NO_ITEMS": "No data"
+    },
+    "ADMIN": {
+        "CTV": {
+            "TITLE": "CTV Management",
+            "LIST_TITLE": "CTV List",
+            "SEARCH_PLACEHOLDER": "Search by name, email, phone...",
+            "FILTER_STATUS": "Filter by status",
+            "CODE": "CTV Code",
+            "FULL_NAME": "Full Name",
+            "EMAIL": "Email",
+            "PHONE": "Phone",
+            "SALES_CHANNEL": "Sales Channel",
+            "STATUS": "Status",
+            "REGISTERED_AT": "Registered At"
         }
     }
 }

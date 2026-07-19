@@ -1,0 +1,56 @@
+<div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+    <!-- Info -->
+    <div class="text-sm text-gray-600" *ngIf="showInfo && totalCount > 0">
+        {{ 'PAGINATION.SHOWING' | translate }}
+        {{ getStartIndex() }}
+        -
+        {{ getEndIndex() }}
+        {{ 'PAGINATION.OF' | translate }}
+        {{ totalCount }}
+        {{ 'PAGINATION.ITEMS' | translate }}
+    </div>
+
+    <div class="text-sm text-gray-600" *ngIf="showInfo && totalCount === 0">
+        {{ 'PAGINATION.NO_ITEMS' | translate }}
+    </div>
+
+    <!-- Page buttons -->
+    <div class="flex items-center gap-1" *ngIf="totalPages > 0">
+        <button
+            class="px-3 py-1 rounded border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors"
+            [disabled]="!hasPreviousPage" (click)="onPageChange(pageNumber - 1)">
+            «
+        </button>
+
+        <ng-container *ngFor="let page of pages">
+            <button *ngIf="page !== '...'" class="px-3 py-1 rounded border transition-colors min-w-[36px]"
+                [class.bg-primary]="page === pageNumber" [class.text-white]="page === pageNumber"
+                [class.text-primary]="page !== pageNumber" [class.hover:bg-gray-100]="page !== pageNumber"
+                (click)="onPageChange(page)">
+                {{ page }}
+            </button>
+            <span *ngIf="page === '...'" class="px-2 py-1 text-gray-500">
+                …
+            </span>
+        </ng-container>
+
+        <button
+            class="px-3 py-1 rounded border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors"
+            [disabled]="!hasNextPage" (click)="onPageChange(pageNumber + 1)">
+            »
+        </button>
+    </div>
+
+    <!-- Page size -->
+    <div class="flex items-center gap-2" *ngIf="showPageSize && totalCount > 0">
+        <span class="text-sm text-gray-600">{{ 'PAGINATION.SHOW' | translate }}</span>
+        <select
+            class="border rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+            [value]="pageSize" (change)="onPageSizeChange($event)">
+            <option *ngFor="let size of pageSizes" [value]="size">
+                {{ size }}
+            </option>
+        </select>
+        <span class="text-sm text-gray-600">{{ 'PAGINATION.ITEMS_PER_PAGE' | translate }}</span>
+    </div>
+</div>

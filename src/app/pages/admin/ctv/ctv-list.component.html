@@ -1,0 +1,134 @@
+<div class="p-6">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">{{ 'ADMIN.CTV.TITLE' | translate }}</h1>
+            <p class="text-gray-500 text-sm">{{ 'ADMIN.CTV.LIST_TITLE' | translate }}</p>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+        <div class="flex flex-col sm:flex-row gap-4 align-items-center">
+            <!-- Search -->
+            <div class="flex-1">
+                <app-input [(ngModel)]="searchText" [placeholder]="'ADMIN.CTV.SEARCH_PLACEHOLDER' | translate"
+                    (keyup.enter)="onSearch()" class="w-full">
+                </app-input>
+            </div>
+
+            <!-- Status Filter -->
+            <div class="w-full sm:w-56">
+                <app-ng-select-wrapper [items]="statusOptions" [(ngModel)]="selectedStatus"
+                    [placeholder]="'ADMIN.CTV.FILTER_STATUS' | translate" [clearable]="true"
+                    (ngModelChange)="onStatusChange($event)" colorMode="admin">
+                </app-ng-select-wrapper>
+            </div>
+
+            <!-- Search Button -->
+            <div>
+                <app-button variant="primary" (click)="onSearch()">
+                    {{ 'COMMON.BUTTON.SEARCH' | translate }}
+                </app-button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            #
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'ADMIN.CTV.CODE' | translate }}
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'ADMIN.CTV.FULL_NAME' | translate }}
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'ADMIN.CTV.EMAIL' | translate }}
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'ADMIN.CTV.PHONE' | translate }}
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'ADMIN.CTV.SALES_CHANNEL' | translate }}
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'ADMIN.CTV.STATUS' | translate }}
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'ADMIN.CTV.REGISTERED_AT' | translate }}
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'COMMON.BUTTON.ACTION' | translate }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <!-- Loading -->
+                    <tr *ngIf="isLoading">
+                        <td colspan="9" class="px-4 py-8 text-center">
+                            <app-loading></app-loading>
+                        </td>
+                    </tr>
+
+                    <!-- No data -->
+                    <tr *ngIf="!isLoading && ctvs.length === 0">
+                        <td colspan="9" class="px-4 py-8 text-center text-gray-500">
+                            {{ 'PAGINATION.NO_ITEMS' | translate }}
+                        </td>
+                    </tr>
+
+                    <!-- Data rows -->
+                    <tr *ngFor="let ctv of ctvs; let i = index"
+                        class="hover:bg-gray-50 transition-colors cursor-pointer" (click)="navigateToDetail(ctv.id)">
+                        <td class="px-4 py-3 text-sm text-gray-500">
+                            {{ (pageNumber - 1) * pageSize + i + 1 }}
+                        </td>
+                        <td class="px-4 py-3 text-sm font-mono text-gray-600">
+                            {{ formatId(ctv.id) }}
+                        </td>
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900">
+                            {{ ctv.fullName }}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-600">
+                            {{ ctv.email || '--' }}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-600">
+                            {{ ctv.phone }}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-600">
+                            {{ getSalesChannelLabel(ctv.salesChannel) | translate }}
+                        </td>
+                        <td class="px-4 py-3">
+                            <app-badge [status]="getStatusKey(ctv.status)" [variant]="getStatusVariant(ctv.status)">
+                            </app-badge>
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-500">
+                            {{ formatDate(ctv.createdAt) }}
+                        </td>
+                        <td class="px-4 py-3">
+                            <app-button variant="primary" size="sm"
+                                (click)="$event.stopPropagation(); navigateToDetail(ctv.id)">
+                                {{ 'COMMON.BUTTON.VIEW_DETAIL' | translate }}
+                            </app-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="border-t border-gray-200 px-4 py-3">
+            <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [totalCount]="totalCount"
+                [totalPages]="totalPages" [hasPreviousPage]="hasPreviousPage" [hasNextPage]="hasNextPage"
+                (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
+            </app-pagination>
+        </div>
+    </div>
+</div>
