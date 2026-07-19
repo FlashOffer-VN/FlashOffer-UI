@@ -1,0 +1,61 @@
+<div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+    <!-- Info -->
+    <div class="text-sm text-gray-500" *ngIf="showInfo && totalCount > 0">
+        <span class="font-medium text-gray-700">{{ getStartIndex() }}</span>
+        <span class="text-gray-400">-</span>
+        <span class="font-medium text-gray-700">{{ getEndIndex() }}</span>
+        <span class="text-gray-400">/</span>
+        <span class="font-medium text-gray-700">{{ totalCount }}</span>
+        <span class="text-gray-400">{{ 'PAGINATION.ITEMS' | translate | lowercase }}</span>
+    </div>
+
+    <div class="text-sm text-gray-500" *ngIf="showInfo && totalCount === 0">
+        {{ 'PAGINATION.NO_ITEMS' | translate }}
+    </div>
+
+    <!-- Page buttons -->
+    <div class="flex items-center gap-1" *ngIf="totalPages > 0">
+        <button
+            class="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent transition-all"
+            [disabled]="!hasPreviousPage" (click)="onPageChange(pageNumber - 1)">
+            <i class="fa-solid fa-chevron-left text-sm"></i>
+        </button>
+
+        <ng-container *ngFor="let page of pages">
+            <button *ngIf="page !== '...'"
+                class="w-9 h-9 flex items-center justify-center rounded-lg text-sm font-medium transition-all" [class]="page === pageNumber 
+                    ? 'bg-primary text-white shadow-sm shadow-primary/20' 
+                    : 'text-gray-600 hover:bg-gray-100'" (click)="onPageChange(page)">
+                {{ page }}
+            </button>
+            <span *ngIf="page === '...'" class="px-1 text-gray-400 text-sm">
+                …
+            </span>
+        </ng-container>
+
+        <button
+            class="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent transition-all"
+            [disabled]="!hasNextPage" (click)="onPageChange(pageNumber + 1)">
+            <i class="fa-solid fa-chevron-right text-sm"></i>
+        </button>
+    </div>
+
+    <!-- Page size -->
+    <div class="flex items-center gap-2" *ngIf="showPageSize && totalCount > 0">
+        <span class="text-sm text-gray-500">{{ 'PAGINATION.SHOW' | translate }}</span>
+
+        <div class="relative">
+            <select
+                class="appearance-none border border-gray-200 rounded-lg px-3 py-1.5 pr-8 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all cursor-pointer"
+                [value]="pageSize" (change)="onPageSizeChange($event)">
+                <option *ngFor="let size of pageSizes" [value]="size">
+                    {{ size }}
+                </option>
+            </select>
+            <i
+                class="fa-solid fa-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+        </div>
+
+        <span class="text-sm text-gray-500">{{ 'PAGINATION.ITEMS_PER_PAGE' | translate }}</span>
+    </div>
+</div>

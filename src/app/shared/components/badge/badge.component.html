@@ -1,0 +1,8 @@
+<span class="inline-flex items-center gap-1.5 font-medium transition-colors" [class]="getClasses()">
+    <!-- Dot -->
+    <span *ngIf="showDot" class="inline-block rounded-full" [class]="getDotClasses()">
+    </span>
+
+    <!-- Label -->
+    {{ getLabel() | translate }}
+</span>

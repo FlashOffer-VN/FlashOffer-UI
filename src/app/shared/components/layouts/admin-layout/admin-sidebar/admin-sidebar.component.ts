@@ -19,6 +19,7 @@ export class AdminSidebarComponent {
         { path: '/admin/dashboard', icon: 'fa-solid fa-house', label: 'Dashboard' },
         { path: '/admin/offers', icon: 'fa-solid fa-tags', label: 'Offers' },
         { path: '/admin/ctv', icon: 'fa-solid fa-users', label: 'CTV' },
+        { path: '/admin/partner', icon: 'fa-solid fa-building', label: 'Partner' },
         { path: '/admin/settings', icon: 'fa-solid fa-cog', label: 'Settings' },
     ];
 
