@@ -1,6 +1,6 @@
 // step-sales/step-sales.component.ts
 
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, Signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormArray } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -29,7 +29,14 @@ export class StepSalesComponent {
   @Output() addProductEvent = new EventEmitter<void>();
   @Output() removeProductEvent = new EventEmitter<number>();
 
-  commissionTypes = COMMISSION_TYPES;
+  commissionTypes: Signal<any[]> = computed(() =>
+    COMMISSION_TYPES.map(e =>
+    ({
+      ...e,
+      label: this._appService.instant(e.label)
+    })
+    )
+  );
 
   constructor(private _appService: AppService) { }  // ✅ Inject AppService
 

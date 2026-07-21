@@ -1,5 +1,5 @@
 // product-form/product-form.component.ts
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, computed, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -29,7 +29,12 @@ export class ProductFormComponent {
 
   touched = false;
 
-  categories = PRODUCT_CATEGORIES;
+  categories: Signal<any[]> = computed(() =>
+    PRODUCT_CATEGORIES.map(e => ({
+      ...e,
+      label: this._appService.instant(e.label)
+    }))
+  );
 
   constructor(
     private _appService: AppService
