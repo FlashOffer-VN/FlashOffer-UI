@@ -1,6 +1,6 @@
 // step-business/step-business.component.ts
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -22,14 +22,28 @@ import { AppService } from '@core/services/app.service';
   templateUrl: './step-business.component.html',
   styleUrls: ['./step-business.component.css']
 })
-export class StepBusinessComponent {
+export class StepBusinessComponent implements OnInit {
   @Input() formGroup!: FormGroup;
   @Input() isReferralValid = false;
 
-  businessTypes = BUSINESS_TYPES;
-  companySizes = COMPANY_SIZES;
+  businessTypes: any[] = [];
+  companySizes: any[] = [];
 
   constructor(private _appService: AppService) { }
+
+  ngOnInit(): void {
+    this.businessTypes = BUSINESS_TYPES.map(e => ({
+      ...e,
+      label: this._appService.instant(e.label)
+    }));
+
+    console.log(this.businessTypes)
+
+    this.companySizes = COMPANY_SIZES.map(e => ({
+      ...e,
+      label: this._appService.instant(e.label)
+    }));
+  }
 
   isFieldInvalid(fieldName: string): boolean {
     const control = this.formGroup.get(fieldName);
