@@ -22,7 +22,7 @@
 
         <!-- Category - ✅ ĐÃ THÊM LABEL -->
         <div class="form-group">
-            <app-ng-select-wrapper formControlName="category" [items]="categories"
+            <app-ng-select-wrapper formControlName="category" [items]="categories()"
                 [label]="'PARTNER.PRODUCT_CATEGORY' | translate"
                 [placeholder]="'PARTNER.PRODUCT_CATEGORY_PLACEHOLDER' | translate" [required]="true"
                 [isInvalid]="isFieldInvalid('category')" [errorMessage]="getErrorMessage('category')"

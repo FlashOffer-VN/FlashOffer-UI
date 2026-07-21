@@ -46,7 +46,8 @@
         @if (formData.products?.length) {
         <div class="summary-item full-width">
             <span class="summary-label">{{ 'PARTNER.PRODUCTS_TITLE' | translate }}</span>
-            <span class="summary-value">{{ formData.products.length }} sản phẩm</span>
+            <span class="summary-value">{{ 'PARTNER.SUMMARY_PRODUCT' | translate:{ count: formData.products.length }
+                }}</span>
         </div>
         }
         @if (formData.commissionRate) {
