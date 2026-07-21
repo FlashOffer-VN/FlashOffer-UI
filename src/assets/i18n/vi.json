@@ -281,6 +281,7 @@
         "REGISTER_SUCCESS_DESC": "Cảm ơn bạn đã đăng ký trở thành đối tác của Kindi. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.",
         "REGISTER_ERROR": "Đăng ký thất bại. Vui lòng thử lại sau.",
         "REGISTER_ERROR_DESC": "Đã có lỗi xảy ra trong quá trình đăng ký. Vui lòng thử lại sau.",
+        "SUMMARY_PRODUCT": "({{count}}) Sản phẩm",
         "LEADING_PAGE": {
             "BADGE": "Đối tác doanh nghiệp",
             "TITLE": "Đối tác của",
