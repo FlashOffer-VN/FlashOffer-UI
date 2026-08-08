@@ -85,6 +85,9 @@
                 </div>
 
                 <div class="post-card__content">
+                    @if (post.title) {
+                    <h3 class="post-card__title">{{ post.title }}</h3>
+                    }
                     <p>{{ post.content }}</p>
                     @if (post.images && post.images.length > 0) {
                     <div class="post-card__images">

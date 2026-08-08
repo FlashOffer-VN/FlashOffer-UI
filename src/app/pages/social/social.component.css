@@ -260,11 +260,20 @@
     background: #f3f4f6;
 }
 
+.post-card__title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0a1a2b;
+    margin: 0 0 8px;
+    line-height: 1.4;
+}
+
 .post-card__content p {
     font-size: 15px;
     line-height: 1.6;
     color: #1F2937;
     margin: 0 0 12px;
+    white-space: pre-line;
 }
 
 .post-card__images img {

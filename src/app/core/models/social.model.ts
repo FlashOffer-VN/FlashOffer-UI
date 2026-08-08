@@ -8,6 +8,7 @@ export interface SocialPost {
         role?: string;
         isVerified?: boolean;
     };
+    title?: string;
     content: string;
     images?: string[];
     video?: string;
