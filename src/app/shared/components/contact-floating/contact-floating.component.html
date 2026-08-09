@@ -1,0 +1,18 @@
+<div class="contact-floating-wrap">
+    <a
+        class="contact-floating-btn"
+        [href]="'tel:' + phone"
+        [attr.aria-label]="'Gọi điện ' + phoneDisplay"
+        [title]="'Gọi ' + phoneDisplay"
+    >
+        <i class="fa-solid fa-phone"></i>
+    </a>
+    <a
+        class="contact-floating-btn"
+        [href]="'mailto:' + email"
+        aria-label="Gửi email"
+        [title]="'Email: ' + email"
+    >
+        <i class="fa-solid fa-envelope"></i>
+    </a>
+</div>
