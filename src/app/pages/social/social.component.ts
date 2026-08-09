@@ -6,11 +6,13 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { SocialService } from '@core/services/social.service';
 import { SocialPost, SocialMember, SocialEvent, SocialGroup } from '@core/models/social.model';
+import { ReadMorePipe } from '@shared/pipes/read-more.pipe';
+import { TruncatePipe } from '@shared/pipes/truncate.pipe';
 
 @Component({
     selector: 'app-social',
     standalone: true,
-    imports: [CommonModule, TranslateModule, FormsModule],
+    imports: [CommonModule, TranslateModule, FormsModule, ReadMorePipe],
     templateUrl: './social.component.html',
     styleUrls: ['./social.component.css']
 })
@@ -124,5 +126,13 @@ export class SocialComponent implements OnInit {
 
     getInitials(name: string): string {
         return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    toggleReadMore(post: SocialPost): void {
+        post.isExpanded = !post.isExpanded;
+    }
+
+    shouldShowReadMore(content: string): boolean {
+        return content.length > 200;
     }
 }

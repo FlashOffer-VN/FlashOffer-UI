@@ -727,7 +727,9 @@
         "POPULAR_GROUPS": "Popular groups",
         "LIKE": "Like",
         "COMMENT": "Comment",
-        "SHARE": "Share"
+        "SHARE": "Share",
+        "READ_MORE": "Read more",
+        "COLLAPSE": "Collapse"
     },
     "TOAST": {
         "SUCCESS": "Success",

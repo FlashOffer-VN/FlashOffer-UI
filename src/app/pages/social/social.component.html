@@ -88,12 +88,29 @@
                     @if (post.title) {
                     <h3 class="post-card__title">{{ post.title }}</h3>
                     }
-                    <p>{{ post.content }}</p>
+
+                    <!-- Nội dung với Read More -->
+                    <div class="post-content-wrapper">
+                        <div class="post-text-wrapper" [class.expanded]="post.isExpanded">
+                            <p>{{ post.content | readMore:post.isExpanded:200 }}</p>
+                        </div>
+
+                        <!-- Chỉ hiển thị nút khi content > 200 ký tự -->
+                        @if (post.content.length > 200) {
+                        <button class="read-more-btn" (click)="toggleReadMore(post)">
+                            <span>{{ post.isExpanded ? ('SOCIAL.COLLAPSE' | translate) : ('SOCIAL.READ_MORE' |
+                                translate) }}</span>
+                            <i class="fas fa-chevron-down" [class.rotated]="post.isExpanded"></i>
+                        </button>
+                        }
+                    </div>
+
                     @if (post.images && post.images.length > 0) {
                     <div class="post-card__images">
                         <img [src]="post.images[0]" alt="Post image">
                     </div>
                     }
+
                     @if (post.tags && post.tags.length > 0) {
                     <div class="post-card__tags">
                         @for (tag of post.tags; track tag) {

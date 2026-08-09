@@ -21,6 +21,7 @@ export interface SocialPost {
     tags?: string[];
     type: 'post' | 'question' | 'event' | 'announcement';
     privacy: 'public' | 'friends' | 'private';
+    isExpanded?: boolean;
 }
 
 export interface SocialMember {
