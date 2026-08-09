@@ -1,0 +1,49 @@
+.contact-floating-wrap {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 5rem;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.contact-floating-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary);
+    color: #fff;
+    font-size: 1.25rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+}
+
+.contact-floating-btn:hover {
+    transform: scale(1.1);
+    background-color: var(--primary-dark);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.contact-floating-btn:focus-visible {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+    .contact-floating-wrap {
+        right: 1rem;
+        bottom: 4rem;
+    }
+
+    .contact-floating-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+    }
+}
