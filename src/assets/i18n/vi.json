@@ -682,7 +682,9 @@
         "POPULAR_GROUPS": "Nhóm phổ biến",
         "LIKE": "Thích",
         "COMMENT": "Bình luận",
-        "SHARE": "Chia sẻ"
+        "SHARE": "Chia sẻ",
+        "READ_MORE": "Xem thêm",
+        "COLLAPSE": "Thu gọn"
     },
     "TOAST": {
         "SUCCESS": "Thành công",

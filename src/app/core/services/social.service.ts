@@ -182,71 +182,6 @@ Bạn nghĩ sao? Hãy chia sẻ quan điểm của bạn bên dưới nhé!`,
             tags: ['thảo_luận', 'góc_nhìn', 'khởi_nghiệp'],
             type: 'post',
             privacy: 'public'
-        },
-        {
-            id: 5,
-            author: {
-                id: 5,
-                name: 'Nguyễn Văn A',
-                avatar: 'assets/avatars/avatar.jpg',
-                username: 'nguyenvana',
-                role: 'CEO',
-                isVerified: true
-            },
-            content: '📢 Mình vừa ra mắt sản phẩm mới! Cảm ơn cộng đồng đã luôn ủng hộ. Hãy cùng nhau phát triển nhé! 🚀',
-            images: ['assets/posts/poster.jpg'],
-            likes: 45,
-            comments: 12,
-            shares: 8,
-            isLiked: false,
-            isSaved: false,
-            createdAt: new Date('2026-03-12T10:30:00'),
-            tags: ['Khởi nghiệp', 'Sản phẩm mới'],
-            type: 'post',
-            privacy: 'public'
-        },
-        {
-            id: 6,
-            author: {
-                id: 6,
-                name: 'Trần Thị B',
-                avatar: 'assets/avatars/avatar.jpg',
-                username: 'tranb',
-                role: 'Marketing Director',
-                isVerified: false
-            },
-            content: '💡 Mọi người có kinh nghiệm gì về marketing trên TikTok không? Mình đang tìm hiểu và muốn tham khảo!',
-            likes: 28,
-            comments: 23,
-            shares: 5,
-            isLiked: true,
-            isSaved: false,
-            createdAt: new Date('2026-03-13T14:20:00'),
-            tags: ['Marketing', 'TikTok'],
-            type: 'question',
-            privacy: 'public'
-        },
-        {
-            id: 7,
-            author: {
-                id: 7,
-                name: 'Lê Văn C',
-                avatar: 'assets/avatars/avatar.jpg',
-                username: 'levanc',
-                role: 'Founder',
-                isVerified: true
-            },
-            content: '🎯 Sự kiện sắp tới: "Kết nối doanh nhân trẻ" tại TP.HCM. Hẹn gặp mọi người nhé!',
-            images: ['assets/posts/event.jpg'],
-            likes: 89,
-            comments: 34,
-            shares: 45,
-            isLiked: false,
-            isSaved: true,
-            createdAt: new Date('2026-03-14T09:00:00'),
-            tags: ['Sự kiện', 'Kết nối'],
-            type: 'event',
-            privacy: 'public'
         }
     ];
 
@@ -256,10 +191,10 @@ Bạn nghĩ sao? Hãy chia sẻ quan điểm của bạn bên dưới nhé!`,
 
     getMembers(): Observable<SocialMember[]> {
         const members: SocialMember[] = [
-            { id: 1, name: 'Nguyễn Văn A', username: 'nguyenvana', avatar: 'assets/avatars/avatar.jpg', role: 'CEO', company: 'Công nghệ Xanh', followers: 150, following: 80, posts: 45, isFollowing: true, isOnline: true, isVerified: true },
-            { id: 2, name: 'Trần Thị B', username: 'tranb', avatar: 'assets/avatars/avatar.jpg', role: 'Marketing Director', company: 'Logistics Thành Công', followers: 120, following: 60, posts: 32, isFollowing: false, isOnline: true, isVerified: false },
-            { id: 3, name: 'Lê Văn C', username: 'levanc', avatar: 'assets/avatars/avatar.jpg', role: 'Founder', company: 'Thực phẩm Sạch 365', followers: 200, following: 100, posts: 56, isFollowing: true, isOnline: false, isVerified: true },
-            { id: 4, name: 'Phạm Thị D', username: 'phamd', avatar: 'assets/avatars/avatar.jpg', role: 'CTO', company: 'Nội thất Xanh', followers: 80, following: 40, posts: 28, isFollowing: false, isOnline: true, isVerified: false },
+            // { id: 1, name: 'Nguyễn Văn A', username: 'nguyenvana', avatar: 'assets/avatars/avatar.jpg', role: 'CEO', company: 'Công nghệ Xanh', followers: 150, following: 80, posts: 45, isFollowing: true, isOnline: true, isVerified: true },
+            // { id: 2, name: 'Trần Thị B', username: 'tranb', avatar: 'assets/avatars/avatar.jpg', role: 'Marketing Director', company: 'Logistics Thành Công', followers: 120, following: 60, posts: 32, isFollowing: false, isOnline: true, isVerified: false },
+            // { id: 3, name: 'Lê Văn C', username: 'levanc', avatar: 'assets/avatars/avatar.jpg', role: 'Founder', company: 'Thực phẩm Sạch 365', followers: 200, following: 100, posts: 56, isFollowing: true, isOnline: false, isVerified: true },
+            // { id: 4, name: 'Phạm Thị D', username: 'phamd', avatar: 'assets/avatars/avatar.jpg', role: 'CTO', company: 'Nội thất Xanh', followers: 80, following: 40, posts: 28, isFollowing: false, isOnline: true, isVerified: false },
         ];
         return of(members);
     }

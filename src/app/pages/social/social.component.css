@@ -1010,3 +1010,107 @@
         font-size: 18px;
     }
 }
+
+/* ===== Read More Button ===== */
+.read-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px 6px 14px;
+    border: none;
+    background: transparent;
+    color: #007f94;
+    /* ⭐ Màu xanh chủ đạo của app */
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 999px;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    margin-top: 6px;
+    position: relative;
+    user-select: none;
+}
+
+/* Hover - nổi bật nhẹ */
+.read-more-btn:hover {
+    background: rgba(0, 127, 148, 0.08);
+    /* ⭐ Màu xanh nhạt */
+    color: #006b80;
+    /* ⭐ Xanh đậm hơn khi hover */
+    transform: translateY(-1px);
+}
+
+/* Active - nhấn xuống */
+.read-more-btn:active {
+    transform: scale(0.95);
+}
+
+/* Focus - cho người dùng bàn phím */
+.read-more-btn:focus-visible {
+    outline: 2px solid #007f94;
+    outline-offset: 2px;
+}
+
+/* ⭐ Icon chevron - chỉ 1 icon duy nhất */
+.read-more-btn i {
+    font-size: 12px;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    color: #007f94;
+    /* ⭐ Màu xanh */
+}
+
+/* Xoay icon khi mở rộng */
+.read-more-btn i.rotated {
+    transform: rotate(180deg);
+}
+
+/* Hover icon */
+.read-more-btn:hover i {
+    color: #006b80;
+}
+
+/* ===== Dark mode ===== */
+@media (prefers-color-scheme: dark) {
+    .read-more-btn {
+        color: #24c7d7;
+        /* ⭐ Xanh sáng hơn trong dark mode */
+    }
+
+    .read-more-btn:hover {
+        background: rgba(36, 199, 215, 0.12);
+        color: #4dd4e0;
+    }
+
+    .read-more-btn i {
+        color: #24c7d7;
+    }
+
+    .read-more-btn:hover i {
+        color: #4dd4e0;
+    }
+
+    .read-more-btn:focus-visible {
+        outline-color: #24c7d7;
+    }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .read-more-btn {
+        font-size: 13px;
+        padding: 5px 14px 5px 12px;
+        gap: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .read-more-btn {
+        font-size: 12px;
+        padding: 4px 12px 4px 10px;
+        gap: 4px;
+    }
+
+    .read-more-btn i {
+        font-size: 10px;
+    }
+}
