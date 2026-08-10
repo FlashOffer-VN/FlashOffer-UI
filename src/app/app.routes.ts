@@ -36,6 +36,10 @@ export const routes: Routes = [
                 loadComponent: () => import('./pages/partner-register/partner-register.component').then(m => m.PartnerRegisterComponent)
             },
 
+            // Legal pages
+            { path: 'privacy', loadComponent: () => import('./pages/legal/privacy/privacy.component').then(m => m.PrivacyComponent) },
+            { path: 'terms', loadComponent: () => import('./pages/legal/terms/terms.component').then(m => m.TermsComponent) },
+
             // Các trang chức năng
             { path: 'register-ctv', loadComponent: () => import('./pages/register-ctv/register-ctv.component').then(m => m.RegisterCtvComponent) },
             { path: 'connect-sme', loadComponent: () => import('./pages/connect-sme/connect-sme.component').then(m => m.ConnectSmeComponent) },
