@@ -48,6 +48,17 @@
     cursor: pointer;
 }
 
+.terms-link {
+    color: #7C3AED;
+    text-decoration: underline;
+    font-weight: 500;
+    margin-left: 4px;
+}
+
+.terms-link:hover {
+    color: #5B21B6;
+}
+
 .error-text {
     font-size: 0.75rem;
     color: #EF4444;

@@ -3,6 +3,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { InputComponent } from '../../../../shared/components/input/input.component';
@@ -15,6 +16,7 @@ import { AppService } from '@core/services/app.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterLink,
     TranslateModule,
     InputComponent,
     PartnerSummaryComponent

@@ -1,0 +1,111 @@
+.legal-page {
+    background: #f8fafc;
+    min-height: 100vh;
+    padding: 64px 24px 96px;
+}
+
+.legal-page__inner {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+    padding: 56px 48px;
+}
+
+.legal-page__header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.legal-page__badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: #e0f2fe;
+    color: #0369a1;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.legal-page__header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 12px;
+}
+
+.legal-page__intro {
+    color: #64748b;
+    font-size: 16px;
+    margin: 0;
+}
+
+.legal-page__content h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 40px 0 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.legal-page__content h2:first-of-type {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+.legal-page__content p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #334155;
+    margin: 0 0 16px;
+}
+
+.legal-page__content ul {
+    margin: 0 0 16px;
+    padding-left: 24px;
+}
+
+.legal-page__content li {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #334155;
+    margin-bottom: 8px;
+}
+
+.legal-page__content a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+}
+
+.legal-page__content a:hover {
+    border-bottom-color: #2563eb;
+}
+
+@media (max-width: 640px) {
+    .legal-page {
+        padding: 32px 16px 64px;
+    }
+
+    .legal-page__inner {
+        padding: 32px 24px;
+    }
+
+    .legal-page__header h1 {
+        font-size: 24px;
+    }
+
+    .legal-page__content h2 {
+        font-size: 19px;
+    }
+}
