@@ -6,11 +6,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { SocialService } from '@core/services/social.service';
 import { SocialPost, SocialMember, SocialEvent, SocialGroup } from '@core/models/social.model';
-import { ReadMorePipe } from '@shared/pipes/read-more.pipe';
 
 // Components
 import { SocialHeaderComponent } from './components/social-header/social-header.component';
-import { CreatePostComponent } from './components/create-post/create-post.component';
+import { CreatePostComponent, CreatePostData } from './components/create-post/create-post.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
 import { TrendingTopicsComponent } from './components/trending-topics/trending-topics.component';
 import { MemberCardComponent } from './components/member-card/member-card.component';
@@ -25,7 +24,6 @@ import { SocialSidebarComponent } from './components/social-sidebar/social-sideb
         CommonModule,
         FormsModule,
         TranslateModule,
-        ReadMorePipe,
         SocialHeaderComponent,
         CreatePostComponent,
         PostCardComponent,
@@ -103,9 +101,25 @@ export class SocialComponent implements OnInit {
     }
 
     // ===== Create Post =====
-    createPost(content: string): void {
-        this.socialService.createPost(content).subscribe(() => {
-            this._appService.showSuccess('Đã đăng bài viết!');
+    createPost(data: CreatePostData): void {
+        this.isLoading = true;
+        this.socialService.createPost({
+            title: data.title,
+            content: data.content,
+            type: data.type,
+            privacy: data.privacy,
+            tags: data.tags,
+            images: data.images // sẽ xử lý upload sau
+        }).subscribe({
+            next: (post) => {
+                this.posts.unshift(post);
+                this.isLoading = false;
+                this._appService.showSuccess('Đã đăng bài viết!');
+            },
+            error: (err) => {
+                this.isLoading = false;
+                this._appService.showError('Không thể đăng bài viết. Vui lòng thử lại!');
+            }
         });
     }
 

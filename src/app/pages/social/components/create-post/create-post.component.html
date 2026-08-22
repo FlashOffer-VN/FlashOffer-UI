@@ -1,0 +1,125 @@
+<div class="create-post" [class.loading]="isLoading">
+    <!-- Avatar -->
+    <div class="create-post__avatar">
+        <img src="assets/avatars/avatar.jpg" alt="Avatar">
+    </div>
+
+    <!-- Form -->
+    <div class="create-post__form">
+        <!-- Input -->
+        <div class="create-post__input-wrapper" (click)="showOptions = true">
+            <input type="text" [(ngModel)]="title" [placeholder]="'SOCIAL.POST_TITLE' | translate"
+                class="create-post__title" [disabled]="isLoading" autocomplete="off">
+
+            <textarea [(ngModel)]="content" [placeholder]="'SOCIAL.WHATS_NEW' | translate" class="create-post__content"
+                rows="1" [disabled]="isLoading" (input)="autoResize($event)">
+            </textarea>
+
+            <div class="create-post__actions">
+                <button type="button" class="action-btn toggle-btn" (click)="toggleOptions(); $event.stopPropagation()"
+                    [class.active]="showOptions">
+                    <i class="fas fa-chevron-down" [class.rotated]="showOptions"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Options Panel -->
+        <div class="create-post__options" *ngIf="showOptions">
+            <!-- Post Type -->
+            <div class="options-row">
+                <span class="options-label">
+                    <i class="fas fa-tag"></i>
+                    Loại bài viết
+                </span>
+                <div class="options-buttons">
+                    <button type="button" *ngFor="let type of postTypes" class="option-btn"
+                        [class.active]="selectedType === type.value" (click)="selectType(type.value)">
+                        <i [class]="'fas ' + type.icon"></i>
+                        {{ type.label }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Privacy -->
+            <div class="options-row">
+                <span class="options-label">
+                    <i class="fas fa-shield-alt"></i>
+                    Quyền riêng tư
+                </span>
+                <div class="options-buttons">
+                    <button type="button" *ngFor="let privacy of privacyOptions" class="option-btn privacy-btn"
+                        [class.active]="selectedPrivacy === privacy.value" (click)="selectPrivacy(privacy.value)">
+                        <i [class]="'fas ' + privacy.icon"></i>
+                        {{ privacy.label }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tags -->
+            <div class="options-row">
+                <span class="options-label">
+                    <i class="fas fa-hashtag"></i>
+                    Thẻ
+                </span>
+                <div class="options-tags">
+                    <div class="tag-input-wrapper">
+                        <input type="text" [(ngModel)]="tagInput" [placeholder]="'SOCIAL.ADD_TAG' | translate"
+                            (keyup.enter)="addTag()" class="tag-input">
+                        <button type="button" class="tag-add-btn" (click)="addTag()">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="tag-list">
+                        <span *ngFor="let tag of tags; let i = index" class="tag-item">
+                            #{{ tag }}
+                            <i class="fas fa-times" (click)="removeTag(i)"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Images -->
+            <div class="options-row">
+                <span class="options-label">
+                    <i class="fas fa-image"></i>
+                    Hình ảnh
+                </span>
+                <div class="options-images">
+                    <button type="button" class="upload-btn" (click)="triggerFileInput()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        {{ 'SOCIAL.UPLOAD_IMAGES' | translate }}
+                    </button>
+                    <input id="fileInput" type="file" accept="image/*" multiple (change)="onFileSelected($event)"
+                        style="display: none;">
+
+                    <div class="image-preview-list" *ngIf="imagePreviews.length > 0">
+                        <div *ngFor="let img of imagePreviews; let i = index" class="image-preview-item">
+                            <img [src]="img" alt="Preview">
+                            <button type="button" class="remove-image" (click)="removeImage(i)">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="options-footer">
+                <div class="options-footer__left">
+                    <span class="privacy-info">
+                        <i [class]="'fas ' + getPrivacyIcon(selectedPrivacy)"></i>
+                        {{ getPrivacyLabel(selectedPrivacy) }}
+                    </span>
+                    <span class="type-info">
+                        <i class="fas fa-file-alt"></i>
+                        {{ getTypeLabel(selectedType) }}
+                    </span>
+                </div>
+                <button type="button" class="submit-btn" (click)="onSubmit()" [disabled]="!canSubmit">
+                    <i class="fas fa-paper-plane"></i>
+                    {{ 'SOCIAL.POST' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

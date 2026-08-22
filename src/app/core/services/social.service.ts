@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { delay, Observable, of } from 'rxjs';
 import { SocialPost, SocialMember, SocialEvent, SocialGroup, SocialComment } from '../models/social.model';
 
 @Injectable({
@@ -257,29 +257,39 @@ Bạn nghĩ sao? Hãy chia sẻ quan điểm của bạn bên dưới nhé!`,
         return of({ success: true });
     }
 
-    createPost(content: string, images?: string[]): Observable<SocialPost> {
+    createPost(data: {
+        title?: string;
+        content: string;
+        type?: string;
+        privacy?: string;
+        tags?: string[];
+        images?: File[]
+    }): Observable<SocialPost> {
         const newPost: SocialPost = {
-            id: Date.now(),
+            id: this.posts.length + 1,
             author: {
-                id: 999,
-                name: 'Bạn',
-                avatar: 'assets/avatars/avatar.jpg',
-                username: 'current_user',
-                role: 'Thành viên',
-                isVerified: false
+                id: 1,
+                name: 'Nguyễn Văn A',
+                username: 'nguyenvana',
+                avatar: 'assets/avatars/user1.jpg',
+                role: 'CEO',
+                isVerified: true
             },
-            content: content,
-            images: images || [],
+            title: data.title || '',
+            content: data.content,
+            type: (data.type as any) || 'post',
+            privacy: (data.privacy as any) || 'public',
+            tags: data.tags || [],
+            images: [], // sẽ xử lý upload sau
             likes: 0,
             comments: 0,
             shares: 0,
             isLiked: false,
             isSaved: false,
-            createdAt: new Date(),
-            type: 'post',
-            privacy: 'public'
+            isExpanded: false,
+            createdAt: new Date()
         };
         this.posts.unshift(newPost);
-        return of(newPost);
+        return of(newPost).pipe(delay(300));
     }
 }
