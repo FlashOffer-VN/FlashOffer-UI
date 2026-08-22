@@ -1,18 +1,40 @@
+// social.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { SocialService } from '@core/services/social.service';
 import { SocialPost, SocialMember, SocialEvent, SocialGroup } from '@core/models/social.model';
 import { ReadMorePipe } from '@shared/pipes/read-more.pipe';
-import { TruncatePipe } from '@shared/pipes/truncate.pipe';
+
+// Components
+import { SocialHeaderComponent } from './components/social-header/social-header.component';
+import { CreatePostComponent } from './components/create-post/create-post.component';
+import { PostCardComponent } from './components/post-card/post-card.component';
+import { TrendingTopicsComponent } from './components/trending-topics/trending-topics.component';
+import { MemberCardComponent } from './components/member-card/member-card.component';
+import { EventCardComponent } from './components/event-card/event-card.component';
+import { GroupCardComponent } from './components/group-card/group-card.component';
+import { SocialSidebarComponent } from './components/social-sidebar/social-sidebar.component';
 
 @Component({
     selector: 'app-social',
     standalone: true,
-    imports: [CommonModule, TranslateModule, FormsModule, ReadMorePipe],
+    imports: [
+        CommonModule,
+        FormsModule,
+        TranslateModule,
+        ReadMorePipe,
+        SocialHeaderComponent,
+        CreatePostComponent,
+        PostCardComponent,
+        TrendingTopicsComponent,
+        MemberCardComponent,
+        EventCardComponent,
+        GroupCardComponent,
+        SocialSidebarComponent
+    ],
     templateUrl: './social.component.html',
     styleUrls: ['./social.component.css']
 })
@@ -23,9 +45,7 @@ export class SocialComponent implements OnInit {
     groups: SocialGroup[] = [];
     trendingTopics: string[] = [];
     isLoading = true;
-    newPostContent = '';
     selectedTab: 'feed' | 'members' | 'events' | 'groups' = 'feed';
-    showCreatePost = false;
 
     constructor(
         private _appService: AppService,
@@ -63,6 +83,7 @@ export class SocialComponent implements OnInit {
         ];
     }
 
+    // ===== Post Actions =====
     toggleLike(post: SocialPost): void {
         this.socialService.likePost(post.id).subscribe();
     }
@@ -77,18 +98,18 @@ export class SocialComponent implements OnInit {
         this._appService.showSuccess('Đã chia sẻ bài viết!');
     }
 
-    createPost(): void {
-        if (!this.newPostContent.trim()) {
-            this._appService.showError('Vui lòng nhập nội dung bài viết');
-            return;
-        }
+    toggleReadMore(post: SocialPost): void {
+        post.isExpanded = !post.isExpanded;
+    }
 
-        this.socialService.createPost(this.newPostContent).subscribe(() => {
-            this.newPostContent = '';
+    // ===== Create Post =====
+    createPost(content: string): void {
+        this.socialService.createPost(content).subscribe(() => {
             this._appService.showSuccess('Đã đăng bài viết!');
         });
     }
 
+    // ===== Member Actions =====
     followMember(member: SocialMember): void {
         member.isFollowing = !member.isFollowing;
         member.followers += member.isFollowing ? 1 : -1;
@@ -97,6 +118,7 @@ export class SocialComponent implements OnInit {
         );
     }
 
+    // ===== Group Actions =====
     joinGroup(group: SocialGroup): void {
         group.isJoined = !group.isJoined;
         group.members += group.isJoined ? 1 : -1;
@@ -105,6 +127,7 @@ export class SocialComponent implements OnInit {
         );
     }
 
+    // ===== Event Actions =====
     registerEvent(event: SocialEvent): void {
         if (event.currentParticipants < event.maxParticipants) {
             event.currentParticipants++;
@@ -115,6 +138,7 @@ export class SocialComponent implements OnInit {
         }
     }
 
+    // ===== Utility =====
     getTimeAgo(date: Date): string {
         const now = new Date();
         const diff = Math.floor((now.getTime() - new Date(date).getTime()) / 1000);
@@ -122,17 +146,5 @@ export class SocialComponent implements OnInit {
         if (diff < 3600) return Math.floor(diff / 60) + ' phút';
         if (diff < 86400) return Math.floor(diff / 3600) + ' giờ';
         return Math.floor(diff / 86400) + ' ngày';
-    }
-
-    getInitials(name: string): string {
-        return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-    }
-
-    toggleReadMore(post: SocialPost): void {
-        post.isExpanded = !post.isExpanded;
-    }
-
-    shouldShowReadMore(content: string): boolean {
-        return content.length > 200;
     }
 }
