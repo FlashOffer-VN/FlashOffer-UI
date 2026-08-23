@@ -66,6 +66,7 @@ export interface SocialPost {
     // For Announcement
     priority?: PriorityType;
     pinnedUntil?: string;
+    showActions?: boolean;
 }
 
 export interface SocialMember {

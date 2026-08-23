@@ -13,6 +13,7 @@ import { OfferRequestService } from './offer-request.service';
 import { PartnerService } from './partner.service';
 import { CtvService } from './ctv.service';
 import { SocialService } from './social.service';
+import { UserRole } from '@core/models/auth.model';
 
 @Injectable({
     providedIn: 'root'
@@ -55,6 +56,18 @@ export class AppService {
 
     extractErrorMessage(error: any): string {
         return this.auth.extractErrorMessage(error);
+    }
+
+    isAdmin(): boolean {
+        const user = this.getCurrentUser();
+        if (!user) return false;
+        return user.role?.toUpperCase() === UserRole.ADMIN.toUpperCase();
+    }
+
+    isUser(): boolean {
+        const user = this.getCurrentUser();
+        if (!user) return false;
+        return user.role?.toUpperCase() === UserRole.USER.toUpperCase();
     }
 
     // ========== Toast ==========

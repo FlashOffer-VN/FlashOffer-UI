@@ -1,12 +1,12 @@
-// social.component.ts
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { SocialPost, SocialMember, SocialEvent, SocialGroup } from '@core/models/social.model';
+import { UserRole } from '@core/models/auth.model';
+import { User } from '@core/models/auth.model';
 
-// Components
 import { SocialHeaderComponent } from './components/social-header/social-header.component';
 import { CreatePostComponent } from './components/create-post/create-post.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
@@ -48,8 +48,17 @@ export class SocialComponent implements OnInit {
     isLoadingEvents = false;
     isLoadingGroups = false;
     selectedTab: 'feed' | 'members' | 'events' | 'groups' = 'feed';
+    currentUser: User | null = null;
+
+    // Edit Modal
+    showEditModal = false;
+    isSaving = false;
+    editPostData: Partial<SocialPost> = {};
+    editTagInput = '';
+    editingPostId: string | null = null;
 
     ngOnInit(): void {
+        this.getCurrentUser();
         this.loadPosts();
         this.loadMembers();
         this.loadEvents();
@@ -57,7 +66,20 @@ export class SocialComponent implements OnInit {
         this.loadTrendingTopics();
     }
 
-    // ===== LOAD METHODS =====
+    getCurrentUser(): void {
+        this.currentUser = this._appService.getCurrentUser();
+    }
+
+    canEditPost(post: SocialPost): boolean {
+        if (!this.currentUser) return false;
+        return this._appService.isAdmin() || post.author.id === this.currentUser.id;
+    }
+
+    canDeletePost(post: SocialPost): boolean {
+        if (!this.currentUser) return false;
+        return this._appService.isAdmin() || post.author.id === this.currentUser.id;
+    }
+
     loadPosts(): void {
         this.isLoadingPosts = true;
         this._appService.socialService.getPosts().subscribe({
@@ -67,6 +89,7 @@ export class SocialComponent implements OnInit {
             },
             error: () => {
                 this.isLoadingPosts = false;
+                this._appService.showError('SOCIAL.LOAD_ERROR');
             }
         });
     }
@@ -119,61 +142,177 @@ export class SocialComponent implements OnInit {
         ];
     }
 
-    // ===== Post Actions =====
     toggleLike(post: SocialPost): void {
-        this._appService.socialService.likePost(post.id).subscribe();
+        this._appService.socialService.likePost(post.id).subscribe({
+            next: () => { },
+            error: () => {
+                this._appService.showError('SOCIAL.LIKE_ERROR');
+            }
+        });
     }
 
     toggleSave(post: SocialPost): void {
-        this._appService.socialService.savePost(post.id).subscribe();
-        this._appService.showSuccess(post.isSaved ? 'Đã lưu bài viết!' : 'Đã bỏ lưu!');
+        this._appService.socialService.savePost(post.id).subscribe({
+            next: () => {
+                this._appService.showSuccess(
+                    post.isSaved ? 'SOCIAL.SAVE_SUCCESS' : 'SOCIAL.UNSAVE_SUCCESS'
+                );
+            },
+            error: () => {
+                this._appService.showError('SOCIAL.SAVE_ERROR');
+            }
+        });
     }
 
     sharePost(post: SocialPost): void {
-        this._appService.socialService.sharePost(post.id).subscribe();
-        this._appService.showSuccess('Đã chia sẻ bài viết!');
+        this._appService.socialService.sharePost(post.id).subscribe({
+            next: () => {
+                this._appService.showSuccess('SOCIAL.SHARE_SUCCESS');
+            },
+            error: () => {
+                this._appService.showError('SOCIAL.SHARE_ERROR');
+            }
+        });
     }
 
     toggleReadMore(post: SocialPost): void {
         post.isExpanded = !post.isExpanded;
     }
 
-    // ===== Create Post =====
+    // ===== EDIT MODAL =====
+    openEditModal(post: SocialPost): void {
+        if (!this.canEditPost(post)) {
+            this._appService.showWarning('SOCIAL.NO_PERMISSION');
+            return;
+        }
+        this.editingPostId = post.id;
+        this.editPostData = {
+            title: post.title || '',
+            content: post.content,
+            tags: [...post.tags]
+        };
+        this.editTagInput = '';
+        this.showEditModal = true;
+    }
+
+    closeEditModal(): void {
+        this.showEditModal = false;
+        this.editPostData = {};
+        this.editTagInput = '';
+        this.editingPostId = null;
+        this.isSaving = false;
+    }
+
+    addEditTag(): void {
+        const tag = this.editTagInput.trim().replace(/^#/, '').toLowerCase();
+        if (!tag) return;
+        if (tag.length > 20) {
+            this._appService.showWarning('SOCIAL.TAG_TOO_LONG');
+            return;
+        }
+        if (this.editPostData.tags && this.editPostData.tags.length >= 5) {
+            this._appService.showWarning('SOCIAL.TAG_MAX');
+            return;
+        }
+        if (this.editPostData.tags?.includes(tag)) {
+            this._appService.showWarning('SOCIAL.TAG_EXISTS');
+            return;
+        }
+        if (this.editPostData.tags) {
+            this.editPostData.tags.push(tag);
+        } else {
+            this.editPostData.tags = [tag];
+        }
+        this.editTagInput = '';
+    }
+
+    removeEditTag(index: number): void {
+        if (this.editPostData.tags) {
+            this.editPostData.tags.splice(index, 1);
+        }
+    }
+
+    saveEditPost(): void {
+        if (!this.editingPostId) return;
+        if (!this.editPostData.content?.trim()) {
+            this._appService.showWarning('SOCIAL.CONTENT_REQUIRED');
+            return;
+        }
+
+        this.isSaving = true;
+        const updateData = {
+            title: this.editPostData.title?.trim() || undefined,
+            content: this.editPostData.content.trim(),
+            tags: this.editPostData.tags || []
+        };
+
+        this._appService.socialService.updatePost(this.editingPostId, updateData).subscribe({
+            next: (updatedPost) => {
+                const index = this.posts.findIndex(p => p.id === this.editingPostId);
+                if (index !== -1) {
+                    this.posts[index] = { ...this.posts[index], ...updatedPost };
+                }
+                this._appService.showSuccess('SOCIAL.UPDATE_POST_SUCCESS');
+                this.closeEditModal();
+                this.isSaving = false;
+                this.loadPosts();
+            },
+            error: () => {
+                this._appService.showError('SOCIAL.UPDATE_POST_ERROR');
+                this.isSaving = false;
+            }
+        });
+    }
+
+    deletePost(post: SocialPost): void {
+        if (!this.canDeletePost(post)) {
+            this._appService.showWarning('SOCIAL.NO_PERMISSION');
+            return;
+        }
+
+        if (confirm(this._appService.trans('SOCIAL.CONFIRM_DELETE'))) {
+            this._appService.socialService.deletePost(post.id).subscribe({
+                next: () => {
+                    this.posts = this.posts.filter(p => p.id !== post.id);
+                    this._appService.showSuccess('SOCIAL.DELETE_POST_SUCCESS');
+                },
+                error: () => {
+                    this._appService.showError('SOCIAL.DELETE_POST_ERROR');
+                }
+            });
+        }
+    }
+
     onPostCreated(post: SocialPost): void {
-        // Chỉ reload posts, không reload members/events/groups
         this.loadPosts();
     }
 
-    // ===== Member Actions =====
     followMember(member: SocialMember): void {
         member.isFollowing = !member.isFollowing;
         member.followers += member.isFollowing ? 1 : -1;
         this._appService.showSuccess(
-            member.isFollowing ? 'Đã theo dõi!' : 'Đã bỏ theo dõi!'
+            member.isFollowing ? 'SOCIAL.FOLLOW_SUCCESS' : 'SOCIAL.UNFOLLOW_SUCCESS'
         );
     }
 
-    // ===== Group Actions =====
     joinGroup(group: SocialGroup): void {
         group.isJoined = !group.isJoined;
         group.members += group.isJoined ? 1 : -1;
         this._appService.showSuccess(
-            group.isJoined ? 'Đã tham gia nhóm!' : 'Đã rời nhóm!'
+            group.isJoined ? 'SOCIAL.JOIN_GROUP_SUCCESS' : 'SOCIAL.LEAVE_GROUP_SUCCESS'
         );
     }
 
-    // ===== Event Actions =====
     registerEvent(event: SocialEvent): void {
         if (event.currentParticipants < event.maxParticipants) {
             event.currentParticipants++;
             event.isRegistered = true;
-            this._appService.showSuccess('Đăng ký thành công!');
+            this._appService.showSuccess('SOCIAL.REGISTER_EVENT_SUCCESS');
         } else {
-            this._appService.showError('Sự kiện đã đủ số lượng tham gia');
+            this._appService.showError('SOCIAL.EVENT_FULL');
         }
     }
 
-    // ===== Utility =====
     getTimeAgo(date: string): string {
         const now = new Date();
         const diff = Math.floor((now.getTime() - new Date(date).getTime()) / 1000);

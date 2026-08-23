@@ -1,9 +1,6 @@
-<!-- social.component.html -->
 <div class="social-container">
-    <!-- Header -->
     <app-social-header></app-social-header>
 
-    <!-- Tabs -->
     <div class="social-tabs">
         <button class="tab-btn" [class.active]="selectedTab === 'feed'" (click)="selectedTab = 'feed'">
             <i class="fas fa-newspaper"></i> {{ 'SOCIAL.FEED' | translate }}
@@ -16,15 +13,11 @@
         </button>
     </div>
 
-    <!-- Grid -->
     <div class="social-grid">
-        <!-- Main Feed -->
         <div class="social-feed">
             @if (selectedTab === 'feed') {
-            <!-- Create Post -->
             <app-create-post (postCreated)="onPostCreated($event)"></app-create-post>
 
-            <!-- Loading -->
             @if (isLoadingPosts) {
             <div class="loading-posts">
                 <i class="fas fa-spinner fa-spin"></i>
@@ -32,22 +25,21 @@
             </div>
             }
 
-            <!-- Posts -->
             @for (post of posts; track post.id) {
-            <app-post-card [post]="post" [timeAgo]="getTimeAgo(post.createdAt)" (like)="toggleLike(post)"
-                (share)="sharePost(post)" (save)="toggleSave(post)" (toggleReadMore)="toggleReadMore(post)">
+            <app-post-card [post]="post" [timeAgo]="getTimeAgo(post.createdAt)" [canEdit]="canEditPost(post)"
+                [canDelete]="canDeletePost(post)" (like)="toggleLike(post)" (share)="sharePost(post)"
+                (save)="toggleSave(post)" (toggleReadMore)="toggleReadMore(post)" (edit)="openEditModal(post)"
+                (delete)="deletePost(post)">
             </app-post-card>
             }
 
-            <!-- Trending -->
             <app-trending-topics [topics]="trendingTopics"></app-trending-topics>
             }
 
             @if (selectedTab === 'members') {
             <div class="members-grid">
                 @for (member of members; track member.id) {
-                <app-member-card [member]="member" (follow)="followMember(member)">
-                </app-member-card>
+                <app-member-card [member]="member" (follow)="followMember(member)"></app-member-card>
                 }
             </div>
             }
@@ -55,8 +47,7 @@
             @if (selectedTab === 'events') {
             <div class="events-grid">
                 @for (event of events; track event.id) {
-                <app-event-card [event]="event" (register)="registerEvent(event)">
-                </app-event-card>
+                <app-event-card [event]="event" (register)="registerEvent(event)"></app-event-card>
                 }
             </div>
             }
@@ -64,15 +55,56 @@
             @if (selectedTab === 'groups') {
             <div class="groups-grid">
                 @for (group of groups; track group.id) {
-                <app-group-card [group]="group" (join)="joinGroup(group)">
-                </app-group-card>
+                <app-group-card [group]="group" (join)="joinGroup(group)"></app-group-card>
                 }
             </div>
             }
         </div>
 
-        <!-- Sidebar -->
         <app-social-sidebar [members]="members" [events]="events" [groups]="groups" (joinGroup)="joinGroup($event)">
         </app-social-sidebar>
+    </div>
+</div>
+
+<!-- Edit Post Modal -->
+<div class="modal-overlay" *ngIf="showEditModal" (click)="closeEditModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h3>{{ 'SOCIAL.EDIT_POST' | translate }}</h3>
+            <button class="modal-close" (click)="closeEditModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>{{ 'SOCIAL.POST_TITLE' | translate }}</label>
+                <input type="text" [(ngModel)]="editPostData.title" class="form-control"
+                    placeholder="{{ 'SOCIAL.POST_TITLE' | translate }}">
+            </div>
+            <div class="form-group">
+                <label>{{ 'SOCIAL.CONTENT' | translate }}</label>
+                <textarea [(ngModel)]="editPostData.content" class="form-control" rows="6"
+                    placeholder="{{ 'SOCIAL.WHATS_NEW' | translate }}"></textarea>
+            </div>
+            <div class="form-group">
+                <label>{{ 'SOCIAL.TAGS' | translate }}</label>
+                <input type="text" [(ngModel)]="editTagInput" (keyup.enter)="addEditTag()" class="form-control"
+                    placeholder="{{ 'SOCIAL.ADD_TAG' | translate }}">
+                <div class="tag-list">
+                    <span *ngFor="let tag of editPostData.tags; let i = index" class="tag-item">
+                        #{{ tag }}
+                        <i class="fas fa-times" (click)="removeEditTag(i)"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="closeEditModal()">{{ 'COMMON.BUTTON.CANCEL' | translate
+                }}</button>
+            <button class="btn btn-primary" (click)="saveEditPost()" [disabled]="isSaving">
+                <i class="fas fa-spinner fa-spin" *ngIf="isSaving"></i>
+                {{ 'COMMON.BUTTON.SAVE' | translate }}
+            </button>
+        </div>
     </div>
 </div>
