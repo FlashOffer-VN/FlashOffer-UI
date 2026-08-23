@@ -33,7 +33,7 @@ export class StepSalesComponent {
     COMMISSION_TYPES.map(e =>
     ({
       ...e,
-      label: this._appService.instant(e.label)
+      label: this._appService.trans(e.label)
     })
     )
   );
@@ -65,24 +65,24 @@ export class StepSalesComponent {
 
     // ✅ Thay hardcode bằng i18n
     if (errors['required']) {
-      return this._appService.instant('VALIDATION.REQUIRED');
+      return this._appService.trans('VALIDATION.REQUIRED');
     }
     if (errors['min']) {
-      return this._appService.instant('VALIDATION.MIN', {
+      return this._appService.trans('VALIDATION.MIN', {
         min: errors['min'].min
       });
     }
     if (errors['max']) {
-      return this._appService.instant('VALIDATION.MAX', {
+      return this._appService.trans('VALIDATION.MAX', {
         max: errors['max'].max
       });
     }
     if (errors['minlength']) {
-      return this._appService.instant('VALIDATION.MIN_LENGTH', {
+      return this._appService.trans('VALIDATION.MIN_LENGTH', {
         length: errors['minlength'].requiredLength
       });
     }
 
-    return this._appService.instant('VALIDATION.INVALID');
+    return this._appService.trans('VALIDATION.INVALID');
   }
 }

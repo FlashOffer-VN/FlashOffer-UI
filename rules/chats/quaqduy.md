@@ -134,7 +134,7 @@ export class ApiService {
 ```typescript
 @Injectable({ providedIn: 'root' })
 export class CtvService {
-    private readonly _baseUrl = 'Ctv';  // ✅ Chỉ endpoint tương đối
+    private readonly _baseUrl = 'Ctv';
 
     constructor(private _apiService: ApiService) { }
 
@@ -233,7 +233,7 @@ export const appConfig: ApplicationConfig = {
 
 **Sử dụng:**
 - **HTML**: `{{ 'key' | translate }}`
-- **TS**: `this._appService.instant('key')` hoặc `this._appService.get('key').subscribe()`
+- **TS**: `this._appService.trans('key')` hoặc `this._appService.get('key').subscribe()`
 - **Chỉ cần import AppService** là đủ dùng translate
 - **KHÔNG inject TranslateService trực tiếp vào component**
 
@@ -396,30 +396,14 @@ protected baseUrl = environment.apiUrl;
 - **Luôn dùng `app-ng-select-wrapper`** thay vì `<select>` native
 - **Luôn dùng `app-pagination`** cho phân trang thay vì tự viết
 - **Luôn dùng `app-badge`** cho hiển thị status thay vì tự viết badge
-- Nếu cần style khác, extend từ component hiện có
 
 **⚠️ Quy tắc dùng NgSelectWrapperComponent:**
 - Binding items: `[items]="options"` với format `{ value: any, label: string }`
 - Binding form: `formControlName` hoặc `[(ngModel)]`
 - Validation: `[isInvalid]`, `[errorMessage]`, `[touched]`
 
-**Ví dụ đúng:**
-```html
-<app-ng-select-wrapper
-    formControlName="businessType"
-    [items]="businessTypes"
-    [label]="'PARTNER.BUSINESS_TYPE' | translate"
-    [placeholder]="'PARTNER.BUSINESS_TYPE_PLACEHOLDER' | translate"
-    [required]="true"
-    [touched]="true"
-    [isInvalid]="isFieldInvalid('businessType')"
-    [errorMessage]="getErrorMessage('businessType')">
-</app-ng-select-wrapper>
-```
-
 **⚠️ Quy tắc dùng PaginationComponent:**
 
-**Inputs:**
 | Input | Type | Default | Mô tả |
 |-------|------|---------|-------|
 | `pageNumber` | number | 1 | Trang hiện tại |
@@ -432,35 +416,19 @@ protected baseUrl = environment.apiUrl;
 | `pageSizes` | number[] | [10, 20, 50] | Các option page size |
 | `showPageSize` | boolean | true | Hiển thị dropdown page size |
 
-**Outputs:**
 | Output | Type | Mô tả |
 |--------|------|-------|
 | `pageChange` | EventEmitter<number> | Emit khi đổi trang |
 | `pageSizeChange` | EventEmitter<number> | Emit khi đổi page size |
 
-**Ví dụ sử dụng:**
-```html
-<app-pagination
-    [pageNumber]="pageNumber"
-    [pageSize]="pageSize"
-    [totalCount]="totalCount"
-    [totalPages]="totalPages"
-    [hasPreviousPage]="hasPreviousPage"
-    [hasNextPage]="hasNextPage"
-    (pageChange)="onPageChange($event)"
-    (pageSizeChange)="onPageSizeChange($event)">
-</app-pagination>
-```
-
 **⚠️ Quy tắc dùng BadgeComponent:**
 
-**Inputs:**
 | Input | Type | Default | Mô tả |
 |-------|------|---------|-------|
 | `status` | string | '' | Tên status (pending, approved, rejected, active, inactive, completed, cancelled) |
-| `variant` | `success` \| `danger` \| `warning` \| `info` \| `primary` \| `secondary` | 'secondary' | Variant badge (tự động map từ status) |
-| `label` | string | '' | Label hiển thị (nếu không truyền, dùng translate theo status) |
-| `size` | `'sm'` \| `'md'` \| `'lg'` | 'md' | Kích thước badge |
+| `variant` | `success` \| `danger` \| `warning` \| `info` \| `primary` \| `secondary` | 'secondary' | Variant badge |
+| `label` | string | '' | Label hiển thị |
+| `size` | `'sm'` \| `'md'` \| `'lg'` | 'md' | Kích thước |
 | `rounded` | `'none'` \| `'sm'` \| `'md'` \| `'lg'` \| `'full'` | 'full' | Độ bo tròn |
 | `showDot` | boolean | true | Hiển thị chấm tròn màu |
 
@@ -474,24 +442,6 @@ protected baseUrl = environment.apiUrl;
 | `inactive` | `secondary` | ⚪ Xám |
 | `completed` | `info` | 🔵 Xanh dương |
 | `cancelled` | `danger` | 🔴 Đỏ |
-
-**Ví dụ sử dụng:**
-```html
-<!-- Tự động detect status -->
-<app-badge status="pending"></app-badge>
-<app-badge status="approved"></app-badge>
-<app-badge status="rejected"></app-badge>
-
-<!-- Custom variant và label -->
-<app-badge variant="primary" label="CUSTOM_LABEL"></app-badge>
-
-<!-- Tùy chỉnh size -->
-<app-badge status="pending" size="sm"></app-badge>
-<app-badge status="pending" size="lg"></app-badge>
-
-<!-- Ẩn dot -->
-<app-badge status="active" [showDot]="false"></app-badge>
-```
 
 **ToastService - Quản lý thông báo:**
 | Method | Mô tả |
@@ -528,7 +478,6 @@ protected baseUrl = environment.apiUrl;
 ```css
 @layer base {
     :root {
-        /* Brand */
         --primary: #007f94;
         --primary-light: #24c7d7;
         --primary-dark: #006b80;
@@ -537,7 +486,6 @@ protected baseUrl = environment.apiUrl;
         --secondary-dark: #111827;
         --accent: #EC4899;
         
-        /* Feature */
         --offer: #F97316;
         --offer-light: #FB923C;
         --offer-dark: #EA580C;
@@ -548,7 +496,6 @@ protected baseUrl = environment.apiUrl;
         --community-light: #A78BFA;
         --community-dark: #7C3AED;
         
-        /* Status */
         --success: #10B981;
         --success-light: #34D399;
         --success-dark: #059669;
@@ -562,7 +509,6 @@ protected baseUrl = environment.apiUrl;
         --info-light: #60A5FA;
         --info-dark: #2563EB;
         
-        /* Neutral */
         --gray-50: #F9FAFB;
         --gray-100: #F3F4F6;
         --gray-200: #E5E7EB;
@@ -575,14 +521,12 @@ protected baseUrl = environment.apiUrl;
         --gray-900: #111827;
     }
     
-    /* Admin role */
     body.admin-role {
         --primary: #7C3AED;
         --primary-light: #A78BFA;
         --primary-dark: #5B21B6;
     }
     
-    /* User role */
     body.user-role {
         --primary: #EC4899;
         --primary-light: #F472B6;
@@ -649,7 +593,6 @@ protected baseUrl = environment.apiUrl;
 
 **8.5. Set role class**
 ```typescript
-// AuthService tự động set khi login/logout
 private setBodyRoleClass(role: string | UserRole): void {
     this.clearBodyRoleClass();
     const roleStr = typeof role === 'string' ? role : role.toString();
@@ -667,7 +610,6 @@ private setBodyRoleClass(role: string | UserRole): void {
 
 ```typescript
 export const routes: Routes = [
-  // Guest routes (chưa đăng nhập)
   {
     path: '',
     component: GuestLayoutComponent,
@@ -688,7 +630,6 @@ export const routes: Routes = [
       { path: 'partner', component: PartnerComponent },
     ]
   },
-  // Admin routes (chỉ admin)
   {
     path: 'admin',
     component: AdminLayoutComponent,
@@ -702,7 +643,6 @@ export const routes: Routes = [
       { path: 'partner/:id', component: AdminPartnerDetailComponent },
     ]
   },
-  // User routes (cần login)
   {
     path: 'user',
     component: UserLayoutComponent,
@@ -712,7 +652,6 @@ export const routes: Routes = [
       { path: 'profile', component: ProfileComponent },
     ]
   },
-  // Fallback
   { path: '**', redirectTo: '' }
 ];
 ```
@@ -722,24 +661,23 @@ export const routes: Routes = [
 ## 10. CODE CONVENTION
 
 ### TypeScript Convention:
-- **Private properties** trong constructor: prefix `_` (giống C#)
+- **Private properties** trong constructor: prefix `_`
 - **Public properties** trong constructor: không prefix
 - **Local variables**: không prefix
 
-**Ví dụ:**
 ```typescript
 @Injectable({ providedIn: 'root' })
 export class ProductService {
   constructor(
-    private _apiService: ApiService,      // private có _
-    private _toastService: ToastService,  // private có _
-    public appService: AppService         // public không _
+    private _apiService: ApiService,
+    private _toastService: ToastService,
+    public appService: AppService
   ) {}
 
-  private _cache: Map<string, any>;       // private property có _
+  private _cache: Map<string, any>;
 
   getData() {
-    const localVar = 'test';              // local variable không _
+    const localVar = 'test';
     return this._apiService.get('/products');
   }
 }
@@ -747,17 +685,18 @@ export class ProductService {
 @Component({ ... })
 export class ProductListComponent {
   constructor(
-    private _appService: AppService,      // private có _
-    private _fb: FormBuilder,             // private có _
-    private _route: ActivatedRoute        // private có _
+    private _appService: AppService,
+    private _fb: FormBuilder,
+    private _route: ActivatedRoute
   ) {}
 
-  isLoading = false;                      // public property không _
-  products: Product[] = [];               // public property không _
+  isLoading = false;
+  products: Product[] = [];
 }
 ```
 
 ### Quy tắc Code:
+
 | STT | Quy tắc | Mô tả |
 |-----|---------|-------|
 | 1 | **Hỏi - Đáp** | Hỏi gì trả lời đó, không vòng vo |
@@ -768,7 +707,7 @@ export class ProductListComponent {
 | 6 | **Export hết** | Interface, enum, type đều export |
 | 7 | **Không hardcode** | Dùng enum, const thay vì string |
 | 8 | **private _appService** | Luôn dùng `private _appService: AppService` |
-| 9 | **Message translate** | Tất cả message hiển thị user đều qua translate |
+| 9 | **Message translate** | Dùng `this._appService.trans()` trong TS, `| translate` trong HTML |
 | 10 | **Không circular dependency** | Service con KHÔNG inject AppService |
 | 11 | **ApiResponse<T>** | Dùng chung cho tất cả API response |
 | 12 | **Error handling** | Lấy từ `errors[0]` hoặc `message` |
@@ -784,40 +723,38 @@ export class ProductListComponent {
 | 22 | **NgSelect items format** | Items format `{ value: number/string, label: string }` |
 | 23 | **NgSelect validation** | Truyền `[isInvalid]`, `[errorMessage]`, `[touched]` |
 | 24 | **NgSelect với Reactive Forms** | Dùng `formControlName` như input bình thường |
-| 25 | **Chia nhỏ theo bước** | Không code full 1 lần, chia thành các bước nhỏ, chờ confirm mới làm bước tiếp theo |
-| 26 | **Fix lỗi trước khi chuyển bước** | Nếu có lỗi, fix xong mới chuyển sang bước tiếp theo |
-| 27 | **Dùng app-pagination** | Luôn dùng `app-pagination` cho phân trang thay vì tự viết |
-| 28 | **Dùng app-badge** | Luôn dùng `app-badge` cho hiển thị status thay vì tự viết badge |
+| 25 | **Chia nhỏ theo bước** | Không code full 1 lần, chia thành các bước nhỏ, chờ confirm |
+| 26 | **Fix lỗi trước khi chuyển bước** | Fix lỗi xong mới chuyển sang bước tiếp theo |
+| 27 | **Dùng app-pagination** | Luôn dùng `app-pagination` cho phân trang |
+| 28 | **Dùng app-badge** | Luôn dùng `app-badge` cho hiển thị status |
 | 29 | **Badge từ status** | Truyền `status` vào badge để auto-detect variant và label |
-| 30 | **Pagination với API** | Kết hợp `PagedResponse<T>` với `app-pagination` cho danh sách có phân trang |
-| 31 | **Không dùng env.apiUrl trong service con** | Không import `environment` trong service con, chỉ dùng trong `ApiService` |
-| 32 | **Endpoint tương đối** | Service con chỉ định nghĩa endpoint tương đối (ví dụ: `'Ctv'`, `'api/v1/Ctv'`) |
-| 33 | **ApiService quản lý baseUrl** | ApiService là nơi duy nhất quản lý baseUrl từ environment |
+| 30 | **Pagination với API** | Kết hợp `PagedResponse<T>` với `app-pagination` |
+| 31 | **Không dùng env.apiUrl trong service con** | Không import `environment` trong service con |
+| 32 | **Endpoint tương đối** | Service con chỉ định nghĩa endpoint tương đối |
+| 33 | **ApiService quản lý baseUrl** | ApiService là nơi duy nhất quản lý baseUrl |
 | 34 | **Params linh hoạt** | `ApiService.get()` hỗ trợ cả `HttpParams` và object params |
+| 35 | **Gửi từng file 1** | Không gửi full code nhiều file cùng lúc |
+| 36 | **Chờ confirm** | Sau khi gửi 1 file, chờ OK mới gửi file tiếp |
+| 37 | **Comment code** | Chỉ comment mang tính trình bày luồng logic, không comment thừa |
 
 ---
 
 ## 11. QUY TRÌNH TẠO COMPONENT VỚI SEED DATA
 
-**Mục đích:** Tạo component dùng data giả (seed) để kiểm tra UI trước khi kết nối API thật.
-
-**B1:** Tạo interface model trong `core/models/`  
-**B2:** Tạo service với method `getMockData()` trả về seed data  
-**B3:** Component gọi `getMockData()` thay vì API  
+**B1:** Tạo interface model trong `core/models/`
+**B2:** Tạo service với method `getMockData()` trả về seed data
+**B3:** Component gọi `getMockData()` thay vì API
 **B4:** Sau khi UI hoàn thiện, thay `getMockData()` bằng `apiService.get()`
 
-**Cấu trúc Service với Pagination:**
 ```typescript
 @Injectable({ providedIn: 'root' })
 export class ProductService {
   constructor(private _api: ApiService) {}
 
-  // Seed data cho UI testing với pagination
   getMockData(pageNumber = 1, pageSize = 10): Observable<PagedResponse<Product>> {
     const allItems = [
       { id: 1, name: 'Product 1', price: 100 },
       { id: 2, name: 'Product 2', price: 200 },
-      // ... 20 items
     ];
     
     const start = (pageNumber - 1) * pageSize;
@@ -838,7 +775,6 @@ export class ProductService {
     });
   }
 
-  // API thật - giữ nguyên tên method để dễ đổi
   getData(pageNumber = 1, pageSize = 10): Observable<PagedResponse<Product>> {
     return this._api.get<PagedResponse<Product>>(`/products?page=${pageNumber}&size=${pageSize}`);
   }
@@ -851,8 +787,6 @@ export class ProductService {
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
   isLoading = true;
-  
-  // Pagination
   pageNumber = 1;
   pageSize = 10;
   totalCount = 0;
@@ -965,14 +899,6 @@ export class ProductListComponent implements OnInit {
 
 | Mục | Nội dung |
 |-----|----------|
-| **Phần 1** | Cập nhật cấu trúc thư mục: thêm `pagination/`, `badge/` |
-| **Phần 2** | Thêm quy tắc ApiService & Base URL, ApiService chuẩn, Service con chuẩn |
-| **Phần 3** | Thêm `PagedResponse<T>` vào model |
-| **Phần 4** | Thêm translate keys cho Pagination và Status |
-| **Phần 7** | Thêm PaginationComponent và BadgeComponent vào danh sách Shared Components |
-| **Phần 7** | Thêm quy tắc dùng `app-pagination` và `app-badge` |
-| **Phần 9** | Cập nhật routes: thêm admin/ctv và admin/partner |
-| **Phần 10** | Thêm quy tắc 27, 28, 29, 30, 31, 32, 33, 34 về dùng component chung và base URL |
-| **Phần 11** | Cập nhật seed data với pagination và PagedResponse |
-| **Phần 13** | Cập nhật danh sách tính năng đã hoàn thành |
-| **Phần 14** | Cập nhật danh sách tính năng cần làm: thêm Admin - CTV/Partner Management |
+| **Phần 4** | Sửa `instant` → `trans` |
+| **Phần 10** | Thêm quy tắc 35, 36, 37 về cách gửi code và comment |
+| **Phần 10** | Cập nhật quy tắc 9: dùng `this._appService.trans()` trong TS |

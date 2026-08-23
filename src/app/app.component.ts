@@ -2,17 +2,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { ScrollToTopComponent } from './shared/components/scroll-to-top/scroll-to-top.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { routeAnimation } from './shared/animations/animations';
 import { AppService } from './core/services/app.service';
 import { ToastComponent } from "@shared/components/toast/toast.component";
+import { ContactFloatingComponent } from "@shared/components/contact-floating/contact-floating.component";
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [CommonModule, RouterOutlet, ScrollToTopComponent, TranslateModule],
+    imports: [CommonModule, RouterOutlet, TranslateModule, ContactFloatingComponent],
     templateUrl: './app.html',
     styleUrls: ['./app.css'],
     animations: [routeAnimation]

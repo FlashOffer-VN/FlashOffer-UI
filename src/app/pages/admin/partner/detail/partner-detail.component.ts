@@ -62,7 +62,7 @@ export class AdminPartnerDetailComponent implements OnInit {
     loadData(): void {
         const id = this._route.snapshot.paramMap.get('id');
         if (!id) {
-            this._appService.showError(this._appService.instant('COMMON.ERROR.INVALID_ID'));
+            this._appService.showError(this._appService.trans('COMMON.ERROR.INVALID_ID'));
             this._router.navigate(['/admin/partner']);
             return;
         }
@@ -71,7 +71,7 @@ export class AdminPartnerDetailComponent implements OnInit {
         this._appService.partnerService.getDetail(id).subscribe({
             next: (response: ApiResponse<Partner>) => {
                 if (!response) {
-                    this._appService.showError(this._appService.instant('COMMON.ERROR.NOT_FOUND'));
+                    this._appService.showError(this._appService.trans('COMMON.ERROR.NOT_FOUND'));
                     this._router.navigate(['/admin/partner']);
                     return;
                 }
@@ -80,7 +80,7 @@ export class AdminPartnerDetailComponent implements OnInit {
             },
             error: (err) => {
                 this.isLoading = false;
-                this._appService.showError(this._appService.instant('COMMON.ERROR.LOAD_FAILED'));
+                this._appService.showError(this._appService.trans('COMMON.ERROR.LOAD_FAILED'));
                 this._router.navigate(['/admin/partner']);
             }
         });
@@ -162,12 +162,12 @@ export class AdminPartnerDetailComponent implements OnInit {
                 this.partner = response.data;
                 this.isActionLoading = false;
                 this.showApproveModal = false;
-                this._appService.showSuccess(this._appService.instant('ADMIN.PARTNER.APPROVED_SUCCESS'));
+                this._appService.showSuccess(this._appService.trans('ADMIN.PARTNER.APPROVED_SUCCESS'));
             },
             error: () => {
                 this.isActionLoading = false;
                 this.showApproveModal = false;
-                this._appService.showError(this._appService.instant('COMMON.ERROR.UPDATE_FAILED'));
+                this._appService.showError(this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
             }
         });
     }
@@ -184,12 +184,12 @@ export class AdminPartnerDetailComponent implements OnInit {
                 this.partner = response.data;
                 this.isActionLoading = false;
                 this.showRejectModal = false;
-                this._appService.showSuccess(this._appService.instant('ADMIN.PARTNER.REJECTED_SUCCESS'));
+                this._appService.showSuccess(this._appService.trans('ADMIN.PARTNER.REJECTED_SUCCESS'));
             },
             error: () => {
                 this.isActionLoading = false;
                 this.showRejectModal = false;
-                this._appService.showError(this._appService.instant('COMMON.ERROR.UPDATE_FAILED'));
+                this._appService.showError(this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
             }
         });
     }
@@ -206,12 +206,12 @@ export class AdminPartnerDetailComponent implements OnInit {
                 this.partner = response.data;
                 this.isActionLoading = false;
                 this.showActivateModal = false;
-                this._appService.showSuccess(this._appService.instant('ADMIN.PARTNER.ACTIVATED_SUCCESS'));
+                this._appService.showSuccess(this._appService.trans('ADMIN.PARTNER.ACTIVATED_SUCCESS'));
             },
             error: () => {
                 this.isActionLoading = false;
                 this.showActivateModal = false;
-                this._appService.showError(this._appService.instant('COMMON.ERROR.UPDATE_FAILED'));
+                this._appService.showError(this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
             }
         });
     }

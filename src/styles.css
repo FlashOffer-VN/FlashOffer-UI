@@ -60,3 +60,86 @@
     cursor: pointer !important;
     user-select: none !important;
 }
+
+/* Global fix cho Quill editor - đặt ở cuối file */
+.ql-container {
+    overflow: hidden !important;
+}
+
+.ql-editor {
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.ql-editor * {
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.ql-editor p,
+.ql-editor div {
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Global - bỏ border của Quill snow theme */
+.ql-snow .ql-toolbar,
+.ql-snow .ql-container,
+.ql-toolbar.ql-snow,
+.ql-container.ql-snow {
+    border: none !important;
+    border-color: transparent !important;
+}
+
+.ql-toolbar.ql-snow {
+    border: none !important;
+    border-bottom: none !important;
+}
+
+.ql-container.ql-snow {
+    border: none !important;
+}
+
+/* Font chính cho toàn bộ app */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Font cho bài viết */
+.post-text {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #1F2937;
+}
+
+/* Font cho tiêu đề bài viết */
+.post-title {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+}
+
+/* Font cho blockquote (trích dẫn) */
+.post-text blockquote {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: #4B5563;
+    border-left: 4px solid var(--primary);
+    padding-left: 16px;
+    margin: 12px 0;
+}

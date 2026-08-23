@@ -1,0 +1,79 @@
+<div class="post-card" tabindex="0" (focus)="isFocused = true" (blur)="isFocused = false">
+    <div class="post-header">
+        <div class="post-author">
+            <img [src]="post.author.avatar | avatar" [alt]="post.author.fullName" class="author-avatar">
+            <div class="author-info">
+                <div class="author-name">
+                    {{ post.author.fullName }}
+                    <i *ngIf="post.author.isVerified" class="fas fa-check-circle verified"></i>
+                </div>
+                <div class="author-role">{{ post.author.role }}</div>
+                <div class="post-meta">
+                    <span class="post-time">{{ post.createdAt | timeAgo }}</span>
+                    <span class="meta-separator">•</span>
+                    <span class="post-type" [class]="'type-' + post.type">
+                        <i [class]="getTypeIcon(post.type)"></i>
+                        {{ getTypeLabel(post.type) | translate }}
+                    </span>
+                    <span class="meta-separator">•</span>
+                    <span class="post-privacy" [class]="'privacy-' + post.privacy">
+                        <i [class]="getPrivacyIcon(post.privacy)"></i>
+                        {{ getPrivacyLabel(post.privacy) | translate }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="post-actions" *ngIf="canEdit || canDelete">
+            <button class="actions-toggle" (click)="toggleActions($event)" [class.active]="showActions">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+            <div class="actions-dropdown" *ngIf="showActions" (click)="$event.stopPropagation()">
+                <div class="dropdown-arrow"></div>
+                <button *ngIf="canEdit" class="action-item" (click)="onEdit()">
+                    <i class="fas fa-pen action-icon edit-icon"></i>
+                    <span class="action-label">{{ 'COMMON.BUTTON.EDIT' | translate }}</span>
+                    <span class="action-shortcut">Ctrl+E</span>
+                </button>
+                <div class="dropdown-divider" *ngIf="canEdit && canDelete"></div>
+                <button *ngIf="canDelete" class="action-item danger" (click)="onDelete()">
+                    <i class="fas fa-trash action-icon delete-icon"></i>
+                    <span class="action-label">{{ 'COMMON.BUTTON.DELETE' | translate }}</span>
+                    <span class="action-shortcut">Ctrl+D</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-content">
+        <h3 *ngIf="post.title" class="post-title">{{ post.title }}</h3>
+        <div class="post-text" [class.expanded]="post.isExpanded" [innerHTML]="post.content | sanitizeHtml | formatHtml : { 
+                 fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                 fontSize: '15px',
+                 color: '#1F2937',
+                 lineHeight: '1.7'
+             }">
+        </div>
+        <button *ngIf="post.content.length > 200" class="read-more" (click)="toggleReadMore.emit(post)">
+            {{ post.isExpanded ? ('SOCIAL.COLLAPSE' | translate) : ('SOCIAL.READ_MORE' | translate) }}
+        </button>
+
+        <div class="post-tags" *ngIf="post.tags.length">
+            <span *ngFor="let tag of post.tags" class="tag">#{{ tag }}</span>
+        </div>
+    </div>
+
+    <div class="post-actions-bar">
+        <button class="action-btn" (click)="like.emit(post)">
+            <i class="fas fa-heart" [class.liked]="post.isLiked"></i>
+            <span>{{ post.likesCount }}</span>
+        </button>
+        <button class="action-btn" (click)="share.emit(post)">
+            <i class="fas fa-share"></i>
+            <span>{{ post.sharesCount }}</span>
+        </button>
+        <button class="action-btn" (click)="save.emit(post)">
+            <i class="fas fa-bookmark" [class.saved]="post.isSaved"></i>
+        </button>
+    </div>
+</div>

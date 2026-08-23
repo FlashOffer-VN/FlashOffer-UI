@@ -1,15 +1,17 @@
 import { Component, HostListener, Inject, PLATFORM_ID } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
-    selector: 'app-scroll-to-top',
+    selector: 'app-contact-floating',
     standalone: true,
-    imports: [CommonModule],
-    templateUrl: './scroll-to-top.component.html',
-    styleUrls: ['./scroll-to-top.component.css']
+    templateUrl: './contact-floating.component.html',
+    styleUrls: ['./contact-floating.component.css']
 })
-export class ScrollToTopComponent {
+export class ContactFloatingComponent {
+    phone = '0363656223';
+    phoneDisplay = '0363 656 223';
+    email = 'info@kindi.vn';
+
     isVisible = false;
 
     constructor(@Inject(PLATFORM_ID) private platformId: any) { }

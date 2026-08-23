@@ -49,16 +49,16 @@ export class AdminLoginComponent {
         if (!control || !control.errors) return '';
 
         if (control.errors['required']) {
-            if (fieldName === 'username') return this._appService.instant('LOGIN.VALIDATION.USERNAME_REQUIRED');
-            if (fieldName === 'password') return this._appService.instant('LOGIN.VALIDATION.PASSWORD_REQUIRED');
-            return this._appService.instant('VALIDATION.REQUIRED');
+            if (fieldName === 'username') return this._appService.trans('LOGIN.VALIDATION.USERNAME_REQUIRED');
+            if (fieldName === 'password') return this._appService.trans('LOGIN.VALIDATION.PASSWORD_REQUIRED');
+            return this._appService.trans('VALIDATION.REQUIRED');
         }
 
         if (control.errors['minlength'] && fieldName === 'password') {
-            return this._appService.instant('LOGIN.VALIDATION.PASSWORD_MIN_LENGTH');
+            return this._appService.trans('LOGIN.VALIDATION.PASSWORD_MIN_LENGTH');
         }
 
-        return this._appService.instant('VALIDATION.INVALID');
+        return this._appService.trans('VALIDATION.INVALID');
     }
 
     togglePasswordVisibility(): void {

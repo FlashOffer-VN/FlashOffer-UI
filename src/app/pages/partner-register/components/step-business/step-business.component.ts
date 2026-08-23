@@ -34,14 +34,14 @@ export class StepBusinessComponent implements OnInit {
   ngOnInit(): void {
     this.businessTypes = BUSINESS_TYPES.map(e => ({
       ...e,
-      label: this._appService.instant(e.label)
+      label: this._appService.trans(e.label)
     }));
 
     console.log(this.businessTypes)
 
     this.companySizes = COMPANY_SIZES.map(e => ({
       ...e,
-      label: this._appService.instant(e.label)
+      label: this._appService.trans(e.label)
     }));
   }
 
@@ -58,38 +58,38 @@ export class StepBusinessComponent implements OnInit {
 
     // ✅ Dùng AppService để dịch
     if (errors['required']) {
-      return this._appService.instant('VALIDATION.REQUIRED');
+      return this._appService.trans('VALIDATION.REQUIRED');
     }
     if (errors['email']) {
-      return this._appService.instant('VALIDATION.EMAIL');
+      return this._appService.trans('VALIDATION.EMAIL');
     }
     if (errors['minlength']) {
-      return this._appService.instant('VALIDATION.MIN_LENGTH', {
+      return this._appService.trans('VALIDATION.MIN_LENGTH', {
         length: errors['minlength'].requiredLength
       });
     }
     if (errors['maxlength']) {
-      return this._appService.instant('VALIDATION.MAX_LENGTH', {
+      return this._appService.trans('VALIDATION.MAX_LENGTH', {
         length: errors['maxlength'].requiredLength
       });
     }
     if (errors['pattern']) {
       // Pattern specific messages
       if (fieldName === 'companyTax') {
-        return this._appService.instant('VALIDATION.PATTERN_TAX');
+        return this._appService.trans('VALIDATION.PATTERN_TAX');
       }
       if (fieldName === 'companyWebsite') {
-        return this._appService.instant('VALIDATION.PATTERN_WEBSITE');
+        return this._appService.trans('VALIDATION.PATTERN_WEBSITE');
       }
-      return this._appService.instant('VALIDATION.PATTERN');
+      return this._appService.trans('VALIDATION.PATTERN');
     }
     if (errors['min']) {
-      return this._appService.instant('VALIDATION.MIN', { min: errors['min'].min });
+      return this._appService.trans('VALIDATION.MIN', { min: errors['min'].min });
     }
     if (errors['max']) {
-      return this._appService.instant('VALIDATION.MAX', { max: errors['max'].max });
+      return this._appService.trans('VALIDATION.MAX', { max: errors['max'].max });
     }
 
-    return this._appService.instant('VALIDATION.INVALID');
+    return this._appService.trans('VALIDATION.INVALID');
   }
 }

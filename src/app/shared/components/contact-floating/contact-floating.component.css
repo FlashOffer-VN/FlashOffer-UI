@@ -1,0 +1,122 @@
+.contact-floating-wrap {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 5rem;
+    /* ⭐ Đồng nhất khoảng cách cho tất cả nút */
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    /* Khoảng cách giữa các nút */
+}
+
+.contact-floating-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary);
+    color: #fff;
+    font-size: 1.25rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    border: none;
+    /* ⭐ Thêm để reset button style */
+    cursor: pointer;
+    /* ⭐ Cho nút scroll */
+}
+
+.contact-floating-btn:hover {
+    transform: scale(1.1);
+    background-color: var(--primary-dark);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.contact-floating-btn:focus-visible {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 2px;
+}
+
+/* ⭐ Scroll to top specific - chỉ khác background */
+.contact-floating-btn.scroll-top-btn {
+    background-color: #007f94;
+    /* Có thể giữ nguyên màu riêng */
+}
+
+.contact-floating-btn.scroll-top-btn:hover {
+    background-color: #006b7e;
+}
+
+/* ⭐ Ẩn/hiện scroll button */
+.contact-floating-btn.scroll-top-btn {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.contact-floating-btn.scroll-top-btn.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Scroll icon */
+.scroll-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Pulse animation */
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 4px 16px rgba(0, 127, 148, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 4px 24px rgba(0, 127, 148, 0.5);
+    }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .contact-floating-wrap {
+        right: 1rem;
+        bottom: 4rem;
+        /* ⭐ Đồng nhất responsive */
+    }
+
+    .contact-floating-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+    }
+
+    .scroll-icon {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-floating-wrap {
+        bottom: 3.5rem;
+        right: 0.75rem;
+    }
+
+    .contact-floating-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .scroll-icon {
+        width: 16px;
+        height: 16px;
+    }
+}

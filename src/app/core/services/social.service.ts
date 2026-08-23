@@ -1,93 +1,235 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { SocialPost, SocialMember, SocialEvent, SocialGroup, SocialComment } from '../models/social.model';
+import { Observable, of, throwError } from 'rxjs';
+import { delay, tap, catchError, map } from 'rxjs/operators';
+import { ApiService } from './api.service';
+import {
+    SocialPost,
+    SocialMember,
+    SocialEvent,
+    SocialGroup,
+    SocialComment,
+    CreatePostRequest,
+    GetPostsQuery,
+    UpdatePostRequest,
+    EventType
+} from '../models/social.model';
+import { PagedResponse } from '@core/models/paged-response.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SocialService {
-    private posts: SocialPost[] = [
+    private readonly _baseUrl = 'social';
+
+    // ===== MOCK DATA =====
+    private _mockPosts: SocialPost[] = [
         {
-            id: 1,
+            id: '1',
             author: {
-                id: 1,
-                name: 'Nguyễn Văn A',
+                id: '1',
+                fullName: 'Minh Nguyen',
                 avatar: 'assets/avatars/avatar.jpg',
-                username: 'nguyenvana',
-                role: 'CEO',
+                username: 'minhnguyen',
+                role: 'Founder tại SMEConnect',
                 isVerified: true
             },
-            content: '📢 Mình vừa ra mắt sản phẩm mới! Cảm ơn cộng đồng đã luôn ủng hộ. Hãy cùng nhau phát triển nhé! 🚀',
-            images: ['assets/posts/poster.jpg'],
-            likes: 45,
-            comments: 12,
-            shares: 8,
+            title: 'KHÔNG AI THÀNH CÔNG MỘT MÌNH',
+            content: `Chúng ta thích tôn thờ hình ảnh một thiên tài đơn độc, tự tay dựng nên đế chế tỷ đô từ một gara xe. Nhưng khi lật lại lời kể của chính những người trong cuộc, sự thật lại khác hẳn.
+
+1. Bill Gates: "Không có Paul, sẽ không có Microsoft"
+Khi Paul Allen - người bạn thân cùng sáng lập Microsoft - qua đời năm 2018, Bill Gates không nói những lời sáo rỗng thông thường. Ông viết:
+"Without Paul's genius, without Paul's push, without Paul's insight, there's no Microsoft, just not a chance."
+
+Gates là người giỏi kinh doanh và lập trình, nhưng chính Allen mới là người mang tầm nhìn về một chiếc máy tính cá nhân cho mọi nhà, và là người thúc Gates bỏ học Harvard để bắt tay làm ngay.
+
+2. Steve Jobs và Steve Wozniak: Ai cũng cần một "Woz" của riêng mình
+Steve Jobs nổi tiếng là bậc thầy thuyết phục và tầm nhìn sản phẩm. Nhưng trong mười năm đầu của Apple, sản phẩm duy nhất mang lại doanh thu thực sự - chiếc Apple II - là do một mình Steve Wozniak thiết kế gần như trọn vẹn. Wozniak từng nói thẳng: "Jobs couldn't have done it without me."
+
+3. Elon Musk: Trận chiến tuyển người quan trọng nhất sự nghiệp
+Khi được hỏi về thành công của OpenAI, Elon Musk không nhắc đến vốn đầu tư hay ý tưởng ban đầu. Ông nhắc đến một con người: Ilya Sutskever. Musk chia sẻ: "That was one of the toughest recruiting battles I've ever had, but that was really the linchpin for OpenAI being successful."
+
+BÀI HỌC BẢN CHẤT:
+Điểm chung của Gates, Jobs và Musk không phải là họ may mắn gặp đúng người. Đó là họ đủ tỉnh táo để nhận ra giới hạn của chính mình, và đủ khiêm tốn để công khai thừa nhận điều đó.
+
+Một người có thể giỏi đến mức xuất chúng, nhưng không ai giỏi đều ở mọi mặt. Đi tìm người bù đắp cho phần mình còn thiếu không phải là dấu hiệu của sự yếu kém. Đó là điều kiện để đi được xa hơn giới hạn của một cá nhân.
+
+Nếu bạn đang khởi nghiệp, câu hỏi không nên dừng ở "tôi có đủ giỏi để tự làm không". Câu hỏi cần đặt ra là: ai là "Paul Allen", ai là "Wozniak", ai là "Ilya Sutskever" của chính mình - và mình đã đủ can đảm để đi tìm và giữ chân người đó chưa.`,
+            likesCount: 245,
+            commentsCount: 38,
+            sharesCount: 56,
             isLiked: false,
             isSaved: false,
-            createdAt: new Date('2026-03-12T10:30:00'),
-            tags: ['Khởi nghiệp', 'Sản phẩm mới'],
-            type: 'post',
-            privacy: 'public'
+            createdAt: '2026-08-04T10:30:00',
+            tags: ['khởi_nghiệp', 'đồng_đội', 'lãnh_đạo'],
+            type: 1,
+            privacy: 1,
+            isAnswered: false,
         },
         {
-            id: 2,
+            id: '2',
             author: {
-                id: 2,
-                name: 'Trần Thị B',
+                id: '2',
+                fullName: 'Chuyện Doanh Nhân',
                 avatar: 'assets/avatars/avatar.jpg',
-                username: 'tranb',
-                role: 'Marketing Director',
+                username: 'chuyendoanhnhan',
+                role: 'Trang thông tin doanh nghiệp',
                 isVerified: false
             },
-            content: '💡 Mọi người có kinh nghiệm gì về marketing trên TikTok không? Mình đang tìm hiểu và muốn tham khảo!',
-            likes: 28,
-            comments: 23,
-            shares: 5,
-            isLiked: true,
+            title: 'Cú lừa ngọt ngào mang tên trả góp 0%',
+            content: `NHÌN CÁCH "ÔNG TRÙM BÁN LẺ" CHƠI ĐÙA VỚI DÒNG TIỀN, 90% SẾP VIỆT MỚI NHẬN RA MÌNH ĐANG LÀM KINH DOANH NHƯ... CHƠI ĐỒ HÀNG!`,
+            likesCount: 189,
+            commentsCount: 52,
+            sharesCount: 94,
+            isLiked: false,
             isSaved: false,
-            createdAt: new Date('2026-03-13T14:20:00'),
-            tags: ['Marketing', 'TikTok'],
-            type: 'question',
-            privacy: 'public'
+            createdAt: '2026-08-02T14:15:00',
+            tags: ['tài_chính', 'trả_góp', 'kinh_doanh', 'dòng_tiền'],
+            type: 1,
+            privacy: 1,
+            isAnswered: false,
+
         },
         {
-            id: 3,
+            id: '3',
             author: {
-                id: 3,
-                name: 'Lê Văn C',
+                id: '3',
+                fullName: 'Phùng Lê Lâm Hải',
                 avatar: 'assets/avatars/avatar.jpg',
-                username: 'levanc',
-                role: 'Founder',
+                username: 'phunglelamhai',
+                role: 'Chuyên gia tài chính tại Equitix',
                 isVerified: true
             },
-            content: '🎯 Sự kiện sắp tới: "Kết nối doanh nhân trẻ" tại TP.HCM. Hẹn gặp mọi người nhé!',
-            images: ['assets/posts/event.jpg'],
-            likes: 89,
-            comments: 34,
-            shares: 45,
+            title: 'EVERY HALF - Chuỗi Specialty Coffee Gọi Vốn 8 Triệu USD Series A',
+            content: `EVERY HALF - CHUỖI SPECIALTY COFFEE VỪA GỌI VỐN 8 TRIỆU USD VÒNG SERIES A VÀ BÀI HỌC DÀNH CHO FOUNDERS`,
+            likesCount: 356,
+            commentsCount: 87,
+            sharesCount: 142,
             isLiked: false,
-            isSaved: true,
-            createdAt: new Date('2026-03-14T09:00:00'),
-            tags: ['Sự kiện', 'Kết nối'],
-            type: 'event',
-            privacy: 'public'
+            isSaved: false,
+            createdAt: '2026-08-06T09:00:00',
+            tags: ['gọi_vốn', 'startup', 'coffee', 'series_a', 'F&B'],
+            type: 1,
+            privacy: 1,
+            isAnswered: false,
+
+        },
+        {
+            id: '4',
+            author: {
+                id: '4',
+                fullName: 'Diễn đàn SME',
+                avatar: 'assets/avatars/avatar.jpg',
+                username: 'diendansme',
+                role: 'Thành viên cộng đồng',
+                isVerified: false
+            },
+            title: 'Mọi người thấy quan điểm này đúng không?',
+            content: `Mọi người thấy quan điểm này đúng không?
+
+Theo mình, trong kinh doanh, yếu tố con người và đội nhóm quan trọng hơn ý tưởng rất nhiều. Một ý tưởng hay với một đội ngũ yếu sẽ thất bại. Nhưng một đội ngũ mạnh có thể biến một ý tưởng bình thường thành điều phi thường.
+
+Bạn nghĩ sao? Hãy chia sẻ quan điểm của bạn bên dưới nhé!`,
+            likesCount: 67,
+            commentsCount: 24,
+            sharesCount: 8,
+            isLiked: false,
+            isSaved: false,
+            createdAt: '2026-08-07T08:00:00',
+            tags: ['thảo_luận', 'góc_nhìn', 'khởi_nghiệp'],
+            type: 1,
+            privacy: 1,
+            isAnswered: false
         }
     ];
 
-    getPosts(): Observable<SocialPost[]> {
-        return of(this.posts);
+    constructor(private _apiService: ApiService) { }
+
+    // ===== POSTS =====
+    // ✅ CÓ API - Gọi thật
+    getPosts(query: GetPostsQuery = {}): Observable<PagedResponse<SocialPost>> {
+        const params: any = {
+            pageNumber: query.pageNumber || 1,
+            pageSize: query.pageSize || 10
+        };
+        if (query.type) params.type = query.type;
+        if (query.privacy) params.privacy = query.privacy;
+        if (query.tag) params.tag = query.tag;
+
+        return this._apiService.get<PagedResponse<SocialPost>>(
+            `${this._baseUrl}/posts`,
+            params
+        ).pipe(
+            catchError(() => {
+                // Fallback mock data nếu API lỗi
+                return this._getMockPosts();
+            })
+        );
     }
 
+    // ✅ CÓ API - Gọi thật
+    getPostById(id: string): Observable<SocialPost> {
+        return this._apiService.get<SocialPost>(`${this._baseUrl}/posts/${id}`).pipe(
+            catchError(() => {
+                const mock = this._mockPosts.find(p => p.id === id);
+                return mock ? of(mock) : throwError(() => new Error('Post not found'));
+            })
+        );
+    }
+
+    // ✅ CÓ API - Gọi thật
+    createPost(data: CreatePostRequest): Observable<SocialPost> {
+        return this._apiService.post<SocialPost>(`${this._baseUrl}/posts`, data).pipe(
+            tap(post => {
+                // Thêm vào mock cache
+                this._mockPosts.unshift(post);
+            })
+        );
+    }
+
+    // ✅ CÓ API - Gọi thật
+    updatePost(id: string, data: UpdatePostRequest): Observable<SocialPost> {
+        return this._apiService.put<SocialPost>(`${this._baseUrl}/posts/${id}`, data).pipe(
+            tap(updated => {
+                const index = this._mockPosts.findIndex(p => p.id === id);
+                if (index !== -1) {
+                    this._mockPosts[index] = { ...this._mockPosts[index], ...updated };
+                }
+            })
+        );
+    }
+
+    // ✅ CÓ API - Gọi thật
+    deletePost(id: string): Observable<void> {
+        return this._apiService.delete<void>(`${this._baseUrl}/posts/${id}`);
+    }
+
+    // ===== MOCK DATA HELPERS =====
+    private _getMockPosts(): Observable<PagedResponse<SocialPost>> {
+        return of({
+            success: true,
+            message: 'Success',
+            data: this._mockPosts,
+            pageNumber: 1,
+            pageSize: 10,
+            totalPages: 1,
+            totalCount: this._mockPosts.length,
+            hasPreviousPage: false,
+            hasNextPage: false,
+            timestamp: new Date().toISOString()
+        }).pipe(delay(300));
+    }
+
+    // ===== MEMBERS =====
+    // ❌ CHƯA CÓ API - Giữ mock
     getMembers(): Observable<SocialMember[]> {
         const members: SocialMember[] = [
-            { id: 1, name: 'Nguyễn Văn A', username: 'nguyenvana', avatar: 'assets/avatars/avatar.jpg', role: 'CEO', company: 'Công nghệ Xanh', followers: 150, following: 80, posts: 45, isFollowing: true, isOnline: true, isVerified: true },
-            { id: 2, name: 'Trần Thị B', username: 'tranb', avatar: 'assets/avatars/avatar.jpg', role: 'Marketing Director', company: 'Logistics Thành Công', followers: 120, following: 60, posts: 32, isFollowing: false, isOnline: true, isVerified: false },
-            { id: 3, name: 'Lê Văn C', username: 'levanc', avatar: 'assets/avatars/avatar.jpg', role: 'Founder', company: 'Thực phẩm Sạch 365', followers: 200, following: 100, posts: 56, isFollowing: true, isOnline: false, isVerified: true },
-            { id: 4, name: 'Phạm Thị D', username: 'phamd', avatar: 'assets/avatars/avatar.jpg', role: 'CTO', company: 'Nội thất Xanh', followers: 80, following: 40, posts: 28, isFollowing: false, isOnline: true, isVerified: false },
+            // Mock data
         ];
-        return of(members);
+        return of(members).pipe(delay(300));
     }
 
+    // ===== EVENTS =====
+    // ❌ CHƯA CÓ API - Giữ mock
     getEvents(): Observable<SocialEvent[]> {
         const events: SocialEvent[] = [
             {
@@ -96,7 +238,7 @@ export class SocialService {
                 description: 'Chia sẻ chiến lược phát triển kinh doanh trong bối cảnh mới',
                 date: new Date('2026-03-20T14:00:00'),
                 location: 'Online - Zoom',
-                type: 'online',
+                type: EventType.Online,
                 maxParticipants: 100,
                 currentParticipants: 65,
                 image: 'assets/events/webinar.jpg',
@@ -109,7 +251,7 @@ export class SocialService {
                 description: 'Gặp gỡ, kết nối và chia sẻ kinh nghiệm kinh doanh',
                 date: new Date('2026-03-25T18:00:00'),
                 location: 'Quận 1, TP.HCM',
-                type: 'offline',
+                type: EventType.Offline,
                 maxParticipants: 50,
                 currentParticipants: 30,
                 image: 'assets/events/Meetup.jpg',
@@ -117,58 +259,46 @@ export class SocialService {
                 isRegistered: false
             }
         ];
-        return of(events);
+        return of(events).pipe(delay(300));
     }
 
+    // ===== GROUPS =====
+    // ❌ CHƯA CÓ API - Giữ mock
     getGroups(): Observable<SocialGroup[]> {
         const groups: SocialGroup[] = [
             { id: 1, name: 'Công nghệ & Khởi nghiệp', description: 'Thảo luận về công nghệ và xu hướng khởi nghiệp', icon: 'fa-solid fa-microchip', members: 120, posts: 45, isJoined: true, isPrivate: false },
             { id: 2, name: 'Marketing & Branding', description: 'Chia sẻ kiến thức marketing và xây dựng thương hiệu', icon: 'fa-solid fa-bullhorn', members: 85, posts: 32, isJoined: false, isPrivate: false },
             { id: 3, name: 'Tài chính & Đầu tư', description: 'Thảo luận về tài chính doanh nghiệp và đầu tư', icon: 'fa-solid fa-chart-line', members: 60, posts: 28, isJoined: false, isPrivate: true },
         ];
-        return of(groups);
+        return of(groups).pipe(delay(300));
     }
 
-    likePost(postId: number): Observable<any> {
-        const post = this.posts.find(p => p.id === postId);
+    // ===== INTERACTIONS =====
+    // ❌ CHƯA CÓ API - Giữ mock
+    likePost(postId: any): Observable<{ success: boolean }> {
+        const post = this._mockPosts.find(p => p.id === postId);
         if (post) {
             post.isLiked = !post.isLiked;
-            post.likes += post.isLiked ? 1 : -1;
+            post.likesCount += post.isLiked ? 1 : -1;
         }
-        return of({ success: true });
+        return of({ success: true }).pipe(delay(200));
     }
 
-    savePost(postId: number): Observable<any> {
-        const post = this.posts.find(p => p.id === postId);
+    // ❌ CHƯA CÓ API - Giữ mock
+    savePost(postId: any): Observable<{ success: boolean }> {
+        const post = this._mockPosts.find(p => p.id === postId);
         if (post) {
             post.isSaved = !post.isSaved;
         }
-        return of({ success: true });
+        return of({ success: true }).pipe(delay(200));
     }
 
-    createPost(content: string, images?: string[]): Observable<SocialPost> {
-        const newPost: SocialPost = {
-            id: Date.now(),
-            author: {
-                id: 999,
-                name: 'Bạn',
-                avatar: 'assets/avatars/avatar.jpg',
-                username: 'current_user',
-                role: 'Thành viên',
-                isVerified: false
-            },
-            content: content,
-            images: images || [],
-            likes: 0,
-            comments: 0,
-            shares: 0,
-            isLiked: false,
-            isSaved: false,
-            createdAt: new Date(),
-            type: 'post',
-            privacy: 'public'
-        };
-        this.posts.unshift(newPost);
-        return of(newPost);
+    // ❌ CHƯA CÓ API - Giữ mock
+    sharePost(postId: string): Observable<{ success: boolean }> {
+        const post = this._mockPosts.find(p => p.id === postId);
+        if (post) {
+            post.sharesCount += 1;
+        }
+        return of({ success: true }).pipe(delay(200));
     }
 }

@@ -3,8 +3,8 @@ import { Component } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { routeAnimations } from './shared/animations/route.animations';
-import { ScrollToTopComponent } from './shared/components/scroll-to-top/scroll-to-top.component';
 import { ToastComponent } from './shared/components/toast/toast.component';
+import { ContactFloatingComponent } from '@shared/components/contact-floating/contact-floating.component';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +12,8 @@ import { ToastComponent } from './shared/components/toast/toast.component';
   imports: [
     CommonModule,
     RouterOutlet,
-    ScrollToTopComponent,
-    ToastComponent
+    ToastComponent,
+    ContactFloatingComponent
   ],
   templateUrl: './app.html',
   styleUrls: ['./app.css'],

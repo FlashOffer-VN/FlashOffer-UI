@@ -113,7 +113,7 @@ export class GuestHeaderComponent implements OnInit, OnDestroy {
             this._router.navigate(['/admin/dashboard']);
         } else if (this.isLoggedIn && !this.isAdmin) {
             this._appService.showError(
-                this._appService.instant('ERROR.ADMIN_ACCESS_DENIED')
+                this._appService.trans('ERROR.ADMIN_ACCESS_DENIED')
             );
         } else {
             this._router.navigate(['/admin-login']);

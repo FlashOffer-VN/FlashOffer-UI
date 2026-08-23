@@ -124,7 +124,7 @@ export class PartnerRegisterComponent {
         this.isLoading = false;
         if (response.success) {
           this._appService.showSuccess(
-            response.message || this._appService.instant('PARTNER.REGISTER_SUCCESS')
+            response.message || this._appService.trans('PARTNER.REGISTER_SUCCESS')
           );
 
           this.router.navigate(['/home']);
@@ -134,7 +134,7 @@ export class PartnerRegisterComponent {
         this.isLoading = false;
         const msg = err.error?.errors?.[0] ||
           err.error?.message ||
-          this._appService.instant('PARTNER.REGISTER_ERROR');
+          this._appService.trans('PARTNER.REGISTER_ERROR');
         this._appService.showError(msg);
         // console.error('❌ Register partner error:', err);
       }

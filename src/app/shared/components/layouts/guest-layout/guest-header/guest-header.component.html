@@ -17,7 +17,7 @@
         <a routerLink="/talent" routerLinkActive="active">
             {{ 'NAV_TALENT' | translate }}
         </a>
-        <a routerLink="/community" routerLinkActive="active">
+        <a routerLink="/social" routerLinkActive="active">
             {{ 'NAV_COMMUNITY' | translate }}
         </a>
         <a routerLink="/partner" routerLinkActive="active" class="partner-nav-link">
@@ -45,8 +45,8 @@
         </button>
 
         <!-- CTV Button -->
-        <a class="sme-button sme-button--ghost" routerLink="/register-ctv">
-            {{ 'BUTTON_JOIN_CTV' | translate }}
+        <a class="sme-button sme-button--ghost" routerLink="/register">
+            {{ 'BUTTON_JOIN' | translate }}
         </a>
 
         <!-- SME Button -->
@@ -86,7 +86,7 @@
         <a routerLink="/talent" routerLinkActive="active" (click)="closeMobileMenu()">
             <i class="fas fa-user-graduate"></i> {{ 'NAV_TALENT' | translate }}
         </a>
-        <a routerLink="/community" routerLinkActive="active" (click)="closeMobileMenu()">
+        <a routerLink="/social" routerLinkActive="active" (click)="closeMobileMenu()">
             <i class="fas fa-users"></i> {{ 'NAV_COMMUNITY' | translate }}
         </a>
         <a routerLink="/partner" routerLinkActive="active" (click)="closeMobileMenu()">
@@ -112,8 +112,8 @@
             </button>
         </div>
 
-        <a class="sme-button sme-button--ghost" routerLink="/register-ctv" (click)="closeMobileMenu()">
-            {{ 'BUTTON_JOIN_CTV' | translate }}
+        <a class="sme-button sme-button--ghost" routerLink="/register" (click)="closeMobileMenu()">
+            {{ 'BUTTON_JOIN' | translate }}
         </a>
         <a class="sme-button sme-button--primary" routerLink="/connect-sme" (click)="closeMobileMenu()">
             {{ 'BUTTON_JOIN_SME' | translate }}

@@ -4,7 +4,6 @@ import { RouterOutlet } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { GuestFooterComponent } from './guest-footer/guest-footer.component';
 import { GuestHeaderComponent } from './guest-header/guest-header.component';
-
 @Component({
     selector: 'app-guest-layout',
     standalone: true,
