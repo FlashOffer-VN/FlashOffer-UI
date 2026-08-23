@@ -1,15 +1,15 @@
-// src/app/features/social/components/create-post/create-post.component.ts
 import { Component, EventEmitter, Output, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { QuillModule } from 'ngx-quill';
 import { AppService } from '../../../../core/services/app.service';
 import { PostType, PrivacyType, CreatePostRequest, SocialPost } from '../../../../core/models/social.model';
 
 @Component({
     selector: 'app-create-post',
     standalone: true,
-    imports: [CommonModule, FormsModule, TranslateModule],
+    imports: [CommonModule, FormsModule, TranslateModule, QuillModule],
     templateUrl: './create-post.component.html',
     styleUrls: ['./create-post.component.css']
 })
@@ -19,7 +19,6 @@ export class CreatePostComponent {
 
     private _appService = inject(AppService);
 
-    // Form data
     title = '';
     content = '';
     selectedType: PostType = PostType.Post;
@@ -30,6 +29,16 @@ export class CreatePostComponent {
     imagePreviews: string[] = [];
     showOptions = false;
     isSubmitting = false;
+
+    editorConfig = {
+        toolbar: [
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            ['link', 'image'],
+            ['clean']
+        ]
+    };
 
     readonly postTypes = [
         { value: PostType.Post, label: 'SOCIAL.TYPE_POST', icon: 'fa-file-alt' },
@@ -45,13 +54,8 @@ export class CreatePostComponent {
     ];
 
     get canSubmit(): boolean {
-        return this.content.trim().length > 0 && !this.isLoading && !this.isSubmitting;
-    }
-
-    autoResize(event: Event): void {
-        const textarea = event.target as HTMLTextAreaElement;
-        textarea.style.height = 'auto';
-        textarea.style.height = Math.min(textarea.scrollHeight, 300) + 'px';
+        const text = this.content.replace(/<[^>]*>/g, '').trim();
+        return text.length > 0 && !this.isLoading && !this.isSubmitting;
     }
 
     toggleOptions(): void {
@@ -145,21 +149,19 @@ export class CreatePostComponent {
 
         const request: CreatePostRequest = {
             title: this.title.trim() || undefined,
-            content: this.content.trim(),
+            content: this.content,
             type: this.selectedType,
             privacy: this.selectedPrivacy,
             tags: this.tags,
             images: []
         };
 
-        // Add event fields if type is Event
         if (this.selectedType === PostType.Event) {
-            // TODO: Add event fields when UI is ready
+            // TODO: Add event fields
         }
 
-        // Add announcement fields if type is Announcement
         if (this.selectedType === PostType.Announcement) {
-            // TODO: Add announcement fields when UI is ready
+            // TODO: Add announcement fields
         }
 
         this._appService.socialService.createPost(request).subscribe({

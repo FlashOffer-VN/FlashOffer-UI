@@ -1,19 +1,18 @@
 <div class="create-post" [class.loading]="isLoading">
-    <!-- Avatar -->
     <div class="create-post__avatar">
         <img src="assets/avatars/avatar.jpg" alt="Avatar">
     </div>
 
-    <!-- Form -->
     <div class="create-post__form">
-        <!-- Input -->
         <div class="create-post__input-wrapper" (click)="showOptions = true">
             <input type="text" [(ngModel)]="title" [placeholder]="'SOCIAL.POST_TITLE' | translate"
                 class="create-post__title" [disabled]="isLoading" autocomplete="off">
 
-            <textarea [(ngModel)]="content" [placeholder]="'SOCIAL.WHATS_NEW' | translate" class="create-post__content"
-                rows="1" [disabled]="isLoading" (input)="autoResize($event)">
-            </textarea>
+            <!-- Chỉ giữ Quill Editor, xóa textarea cũ -->
+            <quill-editor [(ngModel)]="content" [modules]="editorConfig" [readOnly]="isLoading"
+                (onFocus)="showOptions = true" class="create-post__editor"
+                placeholder="{{ 'SOCIAL.WHATS_NEW' | translate }}">
+            </quill-editor>
 
             <div class="create-post__actions">
                 <button type="button" class="action-btn toggle-btn" (click)="toggleOptions(); $event.stopPropagation()"
@@ -25,7 +24,6 @@
 
         <!-- Options Panel -->
         <div class="create-post__options" *ngIf="showOptions">
-            <!-- Post Type -->
             <div class="options-row">
                 <span class="options-label">
                     <i class="fas fa-tag"></i>
@@ -40,7 +38,6 @@
                 </div>
             </div>
 
-            <!-- Privacy -->
             <div class="options-row">
                 <span class="options-label">
                     <i class="fas fa-shield-alt"></i>
@@ -55,7 +52,6 @@
                 </div>
             </div>
 
-            <!-- Tags -->
             <div class="options-row">
                 <span class="options-label">
                     <i class="fas fa-hashtag"></i>
@@ -78,7 +74,6 @@
                 </div>
             </div>
 
-            <!-- Images -->
             <div class="options-row">
                 <span class="options-label">
                     <i class="fas fa-image"></i>
@@ -103,7 +98,6 @@
                 </div>
             </div>
 
-            <!-- Footer -->
             <div class="options-footer">
                 <div class="options-footer__left">
                     <span class="privacy-info">

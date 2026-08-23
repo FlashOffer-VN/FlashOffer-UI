@@ -9,6 +9,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 
 import { routes } from './app.routes';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { QuillModule } from 'ngx-quill';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -51,7 +52,21 @@ export const appConfig: ApplicationConfig = {
           useFactory: HttpLoaderFactory,
           deps: [HttpClient]
         }
-      })),
+      }),
+      QuillModule.forRoot({
+        modules: {
+          syntax: false,
+          toolbar: [
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'indent': '-1' }, { 'indent': '+1' }],
+            ['link', 'image'],
+            ['clean']
+          ]
+        }
+      })
+    ),
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializer,
