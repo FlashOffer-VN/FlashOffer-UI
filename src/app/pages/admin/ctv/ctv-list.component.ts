@@ -77,10 +77,10 @@ export class AdminCtvListComponent implements OnInit {
     loadData(): void {
         this.isLoading = true;
         this.statusOptions = [
-            { value: null, label: this._appService.instant('COMMON.ALL') },
-            { value: CTVRegistrationStatus.Pending, label: this._appService.instant('COMMON.STATUS.PENDING') },
-            { value: CTVRegistrationStatus.Approved, label: this._appService.instant('COMMON.STATUS.APPROVED') },
-            { value: CTVRegistrationStatus.Rejected, label: this._appService.instant('COMMON.STATUS.REJECTED') }
+            { value: null, label: this._appService.trans('COMMON.ALL') },
+            { value: CTVRegistrationStatus.Pending, label: this._appService.trans('COMMON.STATUS.PENDING') },
+            { value: CTVRegistrationStatus.Approved, label: this._appService.trans('COMMON.STATUS.APPROVED') },
+            { value: CTVRegistrationStatus.Rejected, label: this._appService.trans('COMMON.STATUS.REJECTED') }
         ];
 
         this._appService.ctvService
@@ -103,7 +103,7 @@ export class AdminCtvListComponent implements OnInit {
                 },
                 error: () => {
                     this.isLoading = false;
-                    this._appService.showError(this._appService.instant('COMMON.ERROR.LOAD_FAILED'));
+                    this._appService.showError(this._appService.trans('COMMON.ERROR.LOAD_FAILED'));
                 }
             });
     }

@@ -79,11 +79,11 @@ export class AdminPartnerListComponent implements OnInit {
     loadData(): void {
         this.isLoading = true;
         this.statusOptions = [
-            { value: null, label: this._appService.instant('COMMON.ALL') },
-            { value: PartnerStatus.Pending, label: this._appService.instant('COMMON.STATUS.PENDING') },
-            { value: PartnerStatus.Approved, label: this._appService.instant('COMMON.STATUS.APPROVED') },
-            { value: PartnerStatus.Rejected, label: this._appService.instant('COMMON.STATUS.REJECTED') },
-            { value: PartnerStatus.Active, label: this._appService.instant('COMMON.STATUS.ACTIVE') }
+            { value: null, label: this._appService.trans('COMMON.ALL') },
+            { value: PartnerStatus.Pending, label: this._appService.trans('COMMON.STATUS.PENDING') },
+            { value: PartnerStatus.Approved, label: this._appService.trans('COMMON.STATUS.APPROVED') },
+            { value: PartnerStatus.Rejected, label: this._appService.trans('COMMON.STATUS.REJECTED') },
+            { value: PartnerStatus.Active, label: this._appService.trans('COMMON.STATUS.ACTIVE') }
         ];
         this._appService.partnerService
             .getData(
@@ -105,7 +105,7 @@ export class AdminPartnerListComponent implements OnInit {
                 },
                 error: () => {
                     this.isLoading = false;
-                    this._appService.showError(this._appService.instant('COMMON.ERROR.LOAD_FAILED'));
+                    this._appService.showError(this._appService.trans('COMMON.ERROR.LOAD_FAILED'));
                 }
             });
     }

@@ -1,7 +1,7 @@
 // src/app/core/models/auth.model.ts
 
 export interface User {
-    id: number;
+    id: any;
     username: string;
     email: string;
     role: UserRole | string;

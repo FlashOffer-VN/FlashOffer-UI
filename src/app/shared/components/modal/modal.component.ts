@@ -2,10 +2,10 @@ import { Component, Input, Output, EventEmitter, HostListener } from '@angular/c
 import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-modal',
-    standalone: true,
-    imports: [CommonModule],
-    template: `
+  selector: 'app-modal',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
     <div
       *ngIf="visible"
       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn"
@@ -26,6 +26,8 @@ import { CommonModule } from '@angular/common';
 
         <!-- Content -->
         <div class="px-6 py-4">
+          <!-- 👈 THÊM DÒNG NÀY -->
+          <p *ngIf="message" class="text-gray-700 text-base">{{ message }}</p>
           <ng-content></ng-content>
         </div>
 
@@ -49,7 +51,7 @@ import { CommonModule } from '@angular/common';
       </div>
     </div>
   `,
-    styles: [`
+  styles: [`
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -67,66 +69,67 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class ModalComponent {
-    @Input() visible = false;
-    @Input() title = '';
-    @Input() confirmText = 'Xác nhận';
-    @Input() cancelText = 'Hủy bỏ';
-    @Input() confirmVariant: 'primary' | 'danger' | 'success' | 'warning' = 'primary';
-    @Input() showFooter = true;
-    @Input() showCancel = true;
-    @Input() loading = false;
-    @Input() size: 'sm' | 'md' | 'lg' = 'md';
-    @Output() confirm = new EventEmitter<void>();
-    @Output() cancel = new EventEmitter<void>();
-    @Output() closed = new EventEmitter<void>();
-    @Output() visibleChange = new EventEmitter<boolean>();
+  @Input() visible = false;
+  @Input() title = '';
+  @Input() message = '';
+  @Input() confirmText = 'Xác nhận';
+  @Input() cancelText = 'Hủy bỏ';
+  @Input() confirmVariant: 'primary' | 'danger' | 'success' | 'warning' = 'primary';
+  @Input() showFooter = true;
+  @Input() showCancel = true;
+  @Input() loading = false;
+  @Input() size: 'sm' | 'md' | 'lg' = 'md';
+  @Output() confirm = new EventEmitter<void>();
+  @Output() cancel = new EventEmitter<void>();
+  @Output() closed = new EventEmitter<void>();
+  @Output() visibleChange = new EventEmitter<boolean>();
 
-    private sizeClasses = {
-        sm: 'max-w-sm',
-        md: 'max-w-md',
-        lg: 'max-w-lg'
-    };
+  private sizeClasses = {
+    sm: 'max-w-sm',
+    md: 'max-w-md',
+    lg: 'max-w-lg'
+  };
 
-    private confirmClasses = {
-        primary: 'bg-primary hover:bg-primary-dark',
-        danger: 'bg-danger hover:bg-danger-dark',
-        success: 'bg-success hover:bg-success-dark',
-        warning: 'bg-warning hover:bg-warning-dark'
-    };
+  private confirmClasses = {
+    primary: 'bg-primary hover:bg-primary-dark',
+    danger: 'bg-danger hover:bg-danger-dark',
+    success: 'bg-success hover:bg-success-dark',
+    warning: 'bg-warning hover:bg-warning-dark'
+  };
 
-    getSizeClass(): string {
-        return this.sizeClasses[this.size];
+  getSizeClass(): string {
+    return this.sizeClasses[this.size];
+  }
+
+  getConfirmClass(): string {
+    return this.confirmClasses[this.confirmVariant];
+  }
+
+  close() {
+    this.visible = false;
+    this.visibleChange.emit(false);
+    this.closed.emit();
+  }
+
+  onConfirm() {
+    this.confirm.emit();
+  }
+
+  onCancel() {
+    this.cancel.emit();
+    this.close();
+  }
+
+  onBackdropClick(event: MouseEvent) {
+    if (event.target === event.currentTarget) {
+      this.close();
     }
+  }
 
-    getConfirmClass(): string {
-        return this.confirmClasses[this.confirmVariant];
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    if (this.visible) {
+      this.close();
     }
-
-    close() {
-        this.visible = false;
-        this.visibleChange.emit(false);
-        this.closed.emit();
-    }
-
-    onConfirm() {
-        this.confirm.emit();
-    }
-
-    onCancel() {
-        this.cancel.emit();
-        this.close();
-    }
-
-    onBackdropClick(event: MouseEvent) {
-        if (event.target === event.currentTarget) {
-            this.close();
-        }
-    }
-
-    @HostListener('document:keydown.escape')
-    onEscape() {
-        if (this.visible) {
-            this.close();
-        }
-    }
+  }
 }

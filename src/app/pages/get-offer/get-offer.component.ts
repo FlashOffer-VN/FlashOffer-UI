@@ -77,51 +77,51 @@ export class GetOfferComponent {
 
         if (control.errors['required']) {
             const fieldMap: Record<string, string> = {
-                productName: this._appService.instant('GET_OFFER.ERROR.PRODUCT_NAME_REQUIRED'),
-                currentPrice: this._appService.instant('GET_OFFER.ERROR.CURRENT_PRICE_REQUIRED'),
-                quantity: this._appService.instant('GET_OFFER.ERROR.QUANTITY_REQUIRED'),
-                unit: this._appService.instant('GET_OFFER.ERROR.UNIT_REQUIRED'),
-                fullName: this._appService.instant('GET_OFFER.ERROR.FULL_NAME_REQUIRED'),
-                phone: this._appService.instant('GET_OFFER.ERROR.PHONE_REQUIRED'),
-                email: this._appService.instant('GET_OFFER.ERROR.EMAIL_REQUIRED'),
-                agreeTerms: this._appService.instant('GET_OFFER.ERROR.AGREE_TERMS_REQUIRED')
+                productName: this._appService.trans('GET_OFFER.ERROR.PRODUCT_NAME_REQUIRED'),
+                currentPrice: this._appService.trans('GET_OFFER.ERROR.CURRENT_PRICE_REQUIRED'),
+                quantity: this._appService.trans('GET_OFFER.ERROR.QUANTITY_REQUIRED'),
+                unit: this._appService.trans('GET_OFFER.ERROR.UNIT_REQUIRED'),
+                fullName: this._appService.trans('GET_OFFER.ERROR.FULL_NAME_REQUIRED'),
+                phone: this._appService.trans('GET_OFFER.ERROR.PHONE_REQUIRED'),
+                email: this._appService.trans('GET_OFFER.ERROR.EMAIL_REQUIRED'),
+                agreeTerms: this._appService.trans('GET_OFFER.ERROR.AGREE_TERMS_REQUIRED')
             };
-            return fieldMap[fieldName] || this._appService.instant('GET_OFFER.ERROR.REQUIRED');
+            return fieldMap[fieldName] || this._appService.trans('GET_OFFER.ERROR.REQUIRED');
         }
 
         if (control.errors['requiredTrue']) {
-            return this._appService.instant('GET_OFFER.ERROR.AGREE_TERMS_REQUIRED');
+            return this._appService.trans('GET_OFFER.ERROR.AGREE_TERMS_REQUIRED');
         }
 
         if (control.errors['minlength']) {
             if (fieldName === 'productName') {
-                return this._appService.instant('GET_OFFER.ERROR.PRODUCT_NAME_MINLENGTH');
+                return this._appService.trans('GET_OFFER.ERROR.PRODUCT_NAME_MINLENGTH');
             }
             if (fieldName === 'fullName') {
-                return this._appService.instant('GET_OFFER.ERROR.FULL_NAME_MINLENGTH');
+                return this._appService.trans('GET_OFFER.ERROR.FULL_NAME_MINLENGTH');
             }
-            return this._appService.instant('GET_OFFER.ERROR.MINLENGTH');
+            return this._appService.trans('GET_OFFER.ERROR.MINLENGTH');
         }
 
         if (control.errors['min']) {
             if (fieldName === 'quantity') {
-                return this._appService.instant('GET_OFFER.ERROR.QUANTITY_MIN');
+                return this._appService.trans('GET_OFFER.ERROR.QUANTITY_MIN');
             }
-            return this._appService.instant('GET_OFFER.ERROR.MIN_VALUE');
+            return this._appService.trans('GET_OFFER.ERROR.MIN_VALUE');
         }
 
         if (control.errors['pattern']) {
             if (fieldName === 'phone') {
-                return this._appService.instant('GET_OFFER.ERROR.PHONE_INVALID');
+                return this._appService.trans('GET_OFFER.ERROR.PHONE_INVALID');
             }
             if (fieldName === 'currentPrice') {
-                return this._appService.instant('GET_OFFER.ERROR.PRICE_INVALID');
+                return this._appService.trans('GET_OFFER.ERROR.PRICE_INVALID');
             }
-            return this._appService.instant('GET_OFFER.ERROR.INVALID');
+            return this._appService.trans('GET_OFFER.ERROR.INVALID');
         }
 
         if (control.errors['email']) {
-            return this._appService.instant('GET_OFFER.ERROR.EMAIL_INVALID');
+            return this._appService.trans('GET_OFFER.ERROR.EMAIL_INVALID');
         }
 
         return '';
@@ -130,7 +130,7 @@ export class GetOfferComponent {
     onSubmit(): void {
         if (this.offerForm.invalid) {
             this.offerForm.markAllAsTouched();
-            this._appService.showError(this._appService.instant('GET_OFFER.ERROR.FORM_INVALID'));
+            this._appService.showError(this._appService.trans('GET_OFFER.ERROR.FORM_INVALID'));
             return;
         }
 
@@ -161,14 +161,14 @@ export class GetOfferComponent {
                 next: (response) => {
                     if (response.success) {
                         this._appService.showSuccess(
-                            this._appService.instant('GET_OFFER.SUCCESS.SUBMIT')
+                            this._appService.trans('GET_OFFER.SUCCESS.SUBMIT')
                         );
                         this.offerForm.reset();
                         this.offerForm.markAsPristine();
                     } else {
                         // Hiển thị lỗi đầu tiên từ API
                         const errorMsg = response.errors?.[0] ||
-                            this._appService.instant('GET_OFFER.ERROR.SUBMIT_FAILED');
+                            this._appService.trans('GET_OFFER.ERROR.SUBMIT_FAILED');
                         this._appService.showError(errorMsg);
                     }
                 },
@@ -176,13 +176,13 @@ export class GetOfferComponent {
                     console.error('GetOffer error:', error);
                     if (error.error?.errors) {
                         const errorMsg = error.error.errors[0] ||
-                            this._appService.instant('GET_OFFER.ERROR.SUBMIT_FAILED');
+                            this._appService.trans('GET_OFFER.ERROR.SUBMIT_FAILED');
                         this._appService.showError(errorMsg);
                     } else if (error.error?.message) {
                         this._appService.showError(error.error.message);
                     } else {
                         this._appService.showError(
-                            this._appService.instant('GET_OFFER.ERROR.SUBMIT_FAILED')
+                            this._appService.trans('GET_OFFER.ERROR.SUBMIT_FAILED')
                         );
                     }
                 }

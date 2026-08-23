@@ -64,35 +64,35 @@ export class RegisterCtvComponent implements OnInit {
 
         if (control.errors['required']) {
             const fieldMap: Record<string, string> = {
-                fullName: this._appService.instant('CTV_FORM.ERROR_FULLNAME_REQUIRED'),
-                phone: this._appService.instant('CTV_FORM.ERROR_PHONE_REQUIRED'),
-                email: this._appService.instant('CTV_FORM.ERROR_EMAIL_REQUIRED'),
-                salesChannel: this._appService.instant('CTV_FORM.ERROR_SALES_CHANNEL_REQUIRED'),
-                agreeTerms: this._appService.instant('CTV_FORM.ERROR_AGREE_TERMS_REQUIRED')
+                fullName: this._appService.trans('CTV_FORM.ERROR_FULLNAME_REQUIRED'),
+                phone: this._appService.trans('CTV_FORM.ERROR_PHONE_REQUIRED'),
+                email: this._appService.trans('CTV_FORM.ERROR_EMAIL_REQUIRED'),
+                salesChannel: this._appService.trans('CTV_FORM.ERROR_SALES_CHANNEL_REQUIRED'),
+                agreeTerms: this._appService.trans('CTV_FORM.ERROR_AGREE_TERMS_REQUIRED')
             };
-            return fieldMap[fieldName] || this._appService.instant('CTV_FORM.ERROR_REQUIRED');
+            return fieldMap[fieldName] || this._appService.trans('CTV_FORM.ERROR_REQUIRED');
         }
 
         if (control.errors['requiredTrue']) {
-            return this._appService.instant('CTV_FORM.ERROR_AGREE_TERMS_REQUIRED');
+            return this._appService.trans('CTV_FORM.ERROR_AGREE_TERMS_REQUIRED');
         }
 
         if (control.errors['minlength']) {
             if (fieldName === 'fullName') {
-                return this._appService.instant('CTV_FORM.ERROR_FULLNAME_MINLENGTH');
+                return this._appService.trans('CTV_FORM.ERROR_FULLNAME_MINLENGTH');
             }
-            return this._appService.instant('CTV_FORM.ERROR_MINLENGTH');
+            return this._appService.trans('CTV_FORM.ERROR_MINLENGTH');
         }
 
         if (control.errors['pattern']) {
             if (fieldName === 'phone') {
-                return this._appService.instant('CTV_FORM.ERROR_PHONE_INVALID');
+                return this._appService.trans('CTV_FORM.ERROR_PHONE_INVALID');
             }
-            return this._appService.instant('CTV_FORM.ERROR_INVALID');
+            return this._appService.trans('CTV_FORM.ERROR_INVALID');
         }
 
         if (control.errors['email']) {
-            return this._appService.instant('CTV_FORM.ERROR_EMAIL_INVALID');
+            return this._appService.trans('CTV_FORM.ERROR_EMAIL_INVALID');
         }
 
         return '';
@@ -125,7 +125,7 @@ export class RegisterCtvComponent implements OnInit {
         this.ctvForm.markAllAsTouched();
 
         if (this.ctvForm.invalid) {
-            this._appService.showError(this._appService.instant('CTV_FORM.ERROR_FORM_INVALID'));
+            this._appService.showError(this._appService.trans('CTV_FORM.ERROR_FORM_INVALID'));
             return;
         }
 
@@ -135,7 +135,7 @@ export class RegisterCtvComponent implements OnInit {
         this._appService.ctvRegistration.register(request).subscribe({
             next: (response: any) => {
                 this.isSubmitting = false;
-                this._appService.showSuccess(this._appService.instant('CTV_FORM.SUCCESS_REGISTER'));
+                this._appService.showSuccess(this._appService.trans('CTV_FORM.SUCCESS_REGISTER'));
 
                 // ✅ Reset form
                 // ✅ Reset từng control
@@ -157,7 +157,7 @@ export class RegisterCtvComponent implements OnInit {
             },
             error: (error: any) => {
                 this.isSubmitting = false;
-                const errorMsg = error?.error?.message || this._appService.instant('CTV_FORM.ERROR_REGISTER_FAILED');
+                const errorMsg = error?.error?.message || this._appService.trans('CTV_FORM.ERROR_REGISTER_FAILED');
                 this._appService.showError(errorMsg);
             }
         });

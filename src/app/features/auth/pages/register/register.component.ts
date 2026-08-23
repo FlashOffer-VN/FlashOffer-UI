@@ -123,57 +123,57 @@ export class RegisterComponent implements OnInit {
 
         if (control.errors['required']) {
             const fieldMap: Record<string, string> = {
-                fullName: this._appService.instant('REGISTER.VALIDATION.FULL_NAME_REQUIRED'),
-                email: this._appService.instant('REGISTER.VALIDATION.EMAIL_REQUIRED'),
-                phone: this._appService.instant('REGISTER.VALIDATION.PHONE_REQUIRED'),
-                username: this._appService.instant('REGISTER.VALIDATION.USERNAME_REQUIRED'),
-                password: this._appService.instant('REGISTER.VALIDATION.PASSWORD_REQUIRED'),
-                confirmPassword: this._appService.instant('REGISTER.VALIDATION.CONFIRM_PASSWORD_REQUIRED'),
-                businessName: this._appService.instant('REGISTER.VALIDATION.BUSINESS_NAME_REQUIRED'),
-                businessField: this._appService.instant('REGISTER.VALIDATION.BUSINESS_FIELD_REQUIRED'),
-                businessSize: this._appService.instant('REGISTER.VALIDATION.BUSINESS_SIZE_REQUIRED'),
-                position: this._appService.instant('REGISTER.VALIDATION.POSITION_REQUIRED'),
-                experience: this._appService.instant('REGISTER.VALIDATION.EXPERIENCE_REQUIRED'),
-                agreeTerms: this._appService.instant('REGISTER.VALIDATION.AGREE_TERMS_REQUIRED')
+                fullName: this._appService.trans('REGISTER.VALIDATION.FULL_NAME_REQUIRED'),
+                email: this._appService.trans('REGISTER.VALIDATION.EMAIL_REQUIRED'),
+                phone: this._appService.trans('REGISTER.VALIDATION.PHONE_REQUIRED'),
+                username: this._appService.trans('REGISTER.VALIDATION.USERNAME_REQUIRED'),
+                password: this._appService.trans('REGISTER.VALIDATION.PASSWORD_REQUIRED'),
+                confirmPassword: this._appService.trans('REGISTER.VALIDATION.CONFIRM_PASSWORD_REQUIRED'),
+                businessName: this._appService.trans('REGISTER.VALIDATION.BUSINESS_NAME_REQUIRED'),
+                businessField: this._appService.trans('REGISTER.VALIDATION.BUSINESS_FIELD_REQUIRED'),
+                businessSize: this._appService.trans('REGISTER.VALIDATION.BUSINESS_SIZE_REQUIRED'),
+                position: this._appService.trans('REGISTER.VALIDATION.POSITION_REQUIRED'),
+                experience: this._appService.trans('REGISTER.VALIDATION.EXPERIENCE_REQUIRED'),
+                agreeTerms: this._appService.trans('REGISTER.VALIDATION.AGREE_TERMS_REQUIRED')
             };
-            return fieldMap[fieldName] || this._appService.instant('VALIDATION.REQUIRED');
+            return fieldMap[fieldName] || this._appService.trans('VALIDATION.REQUIRED');
         }
 
         if (control.errors['email']) {
-            return this._appService.instant('REGISTER.VALIDATION.EMAIL_INVALID');
+            return this._appService.trans('REGISTER.VALIDATION.EMAIL_INVALID');
         }
 
         if (control.errors['pattern']) {
             if (fieldName === 'phone') {
-                return this._appService.instant('REGISTER.VALIDATION.PHONE_INVALID');
+                return this._appService.trans('REGISTER.VALIDATION.PHONE_INVALID');
             }
-            return this._appService.instant('VALIDATION.PATTERN');
+            return this._appService.trans('VALIDATION.PATTERN');
         }
 
         if (control.errors['minlength']) {
             if (fieldName === 'fullName') {
-                return this._appService.instant('REGISTER.VALIDATION.FULL_NAME_MINLENGTH');
+                return this._appService.trans('REGISTER.VALIDATION.FULL_NAME_MINLENGTH');
             }
             if (fieldName === 'username') {
-                return this._appService.instant('REGISTER.VALIDATION.USERNAME_MINLENGTH');
+                return this._appService.trans('REGISTER.VALIDATION.USERNAME_MINLENGTH');
             }
             if (fieldName === 'password') {
-                return this._appService.instant('REGISTER.VALIDATION.PASSWORD_MINLENGTH');
+                return this._appService.trans('REGISTER.VALIDATION.PASSWORD_MINLENGTH');
             }
             if (fieldName === 'businessName') {
-                return this._appService.instant('REGISTER.VALIDATION.BUSINESS_NAME_MINLENGTH');
+                return this._appService.trans('REGISTER.VALIDATION.BUSINESS_NAME_MINLENGTH');
             }
             if (fieldName === 'position') {
-                return this._appService.instant('REGISTER.VALIDATION.POSITION_MINLENGTH');
+                return this._appService.trans('REGISTER.VALIDATION.POSITION_MINLENGTH');
             }
-            return this._appService.instant('VALIDATION.MIN_LENGTH', { length: control.errors['minlength'].requiredLength });
+            return this._appService.trans('VALIDATION.MIN_LENGTH', { length: control.errors['minlength'].requiredLength });
         }
 
         if (control.errors['mismatch']) {
-            return this._appService.instant('REGISTER.VALIDATION.PASSWORD_MISMATCH');
+            return this._appService.trans('REGISTER.VALIDATION.PASSWORD_MISMATCH');
         }
 
-        return this._appService.instant('VALIDATION.INVALID');
+        return this._appService.trans('VALIDATION.INVALID');
     }
 
     togglePasswordVisibility(): void {
@@ -201,7 +201,7 @@ export class RegisterComponent implements OnInit {
         // this._appService.register(formData).subscribe({
         //     next: (response) => {
         //         this.isLoading = false;
-        //         this._appService.showSuccess(this._appService.instant('REGISTER.SUCCESS'));
+        //         this._appService.showSuccess(this._appService.trans('REGISTER.SUCCESS'));
         //         this.router.navigate(['/login']);
         //     },
         //     error: (error) => {

@@ -1,17 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { SocialPost, SocialMember, SocialEvent, SocialGroup, SocialComment } from '../models/social.model';
+import { Observable, of, throwError } from 'rxjs';
+import { delay, tap, catchError, map } from 'rxjs/operators';
+import { ApiService } from './api.service';
+import {
+    SocialPost,
+    SocialMember,
+    SocialEvent,
+    SocialGroup,
+    SocialComment,
+    CreatePostRequest,
+    GetPostsQuery,
+    UpdatePostRequest,
+    EventType
+} from '../models/social.model';
+import { PagedResponse } from '@core/models/paged-response.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SocialService {
-    private posts: SocialPost[] = [
+    private readonly _baseUrl = 'social';
+
+    // ===== MOCK DATA =====
+    private _mockPosts: SocialPost[] = [
         {
-            id: 1,
+            id: '1',
             author: {
-                id: 1,
-                name: 'Minh Nguyen',
+                id: '1',
+                fullName: 'Minh Nguyen',
                 avatar: 'assets/avatars/avatar.jpg',
                 username: 'minhnguyen',
                 role: 'Founder tại SMEConnect',
@@ -38,130 +54,70 @@ BÀI HỌC BẢN CHẤT:
 Một người có thể giỏi đến mức xuất chúng, nhưng không ai giỏi đều ở mọi mặt. Đi tìm người bù đắp cho phần mình còn thiếu không phải là dấu hiệu của sự yếu kém. Đó là điều kiện để đi được xa hơn giới hạn của một cá nhân.
 
 Nếu bạn đang khởi nghiệp, câu hỏi không nên dừng ở "tôi có đủ giỏi để tự làm không". Câu hỏi cần đặt ra là: ai là "Paul Allen", ai là "Wozniak", ai là "Ilya Sutskever" của chính mình - và mình đã đủ can đảm để đi tìm và giữ chân người đó chưa.`,
-            likes: 245,
-            comments: 38,
-            shares: 56,
+            likesCount: 245,
+            commentsCount: 38,
+            sharesCount: 56,
             isLiked: false,
             isSaved: false,
-            createdAt: new Date('2026-08-04T10:30:00'),
+            createdAt: '2026-08-04T10:30:00',
             tags: ['khởi_nghiệp', 'đồng_đội', 'lãnh_đạo'],
-            type: 'post',
-            privacy: 'public'
+            type: 1,
+            privacy: 1,
+            isAnswered: false,
         },
         {
-            id: 2,
+            id: '2',
             author: {
-                id: 2,
-                name: 'Chuyện Doanh Nhân',
+                id: '2',
+                fullName: 'Chuyện Doanh Nhân',
                 avatar: 'assets/avatars/avatar.jpg',
                 username: 'chuyendoanhnhan',
                 role: 'Trang thông tin doanh nghiệp',
                 isVerified: false
             },
             title: 'Cú lừa ngọt ngào mang tên trả góp 0%',
-            content: `NHÌN CÁCH "ÔNG TRÙM BÁN LẺ" CHƠI ĐÙA VỚI DÒNG TIỀN, 90% SẾP VIỆT MỚI NHẬN RA MÌNH ĐANG LÀM KINH DOANH NHƯ... CHƠI ĐỒ HÀNG!
-
-Nhiều công ty nhỏ thường vỗ ngực tự hào: "Mình bán rẻ hơn Thế Giới Di Động, mình sát giá gốc hơn, khách hàng chắc chắn sẽ chọn mình!" Nhưng bạn ơi, sếp bán đắt hay bán rẻ để làm gì, khi mà khách hàng mua nợ, tiền lãi nằm hết trên sổ sách?
-
-SỰ THẬT TÀN NHẪN VỀ TRÒ CHƠI TÀI CHÍNH CỦA NHỮNG ĐẾ CHẾ TỶ ĐÔ:
-Trò chơi tinh vi nhất của những ông lớn không nằm ở tỷ suất lợi nhuận trên từng sản phẩm. Nó nằm ở năng lực "Mượn tiền thiên hạ" thông qua chiêu bài: TRẢ GÓP 0%.
-
-Đó chính là lý do vì sao có những thời điểm, đế chế bán lẻ này thâu tóm và ôm trọn tới 24.000 TỶ ĐỒNG TIỀN MẶT gửi ngân hàng lấy lãi, trong khi các đối thủ nhỏ lẻ thì chết chìm trong công nợ.
-
-HỌ ĐÃ LÀM ĐIỀU ĐÓ NHƯ THẾ NÀO?
-Rất đơn giản! Khi bạn bước vào cửa hàng, mua một chiếc iPhone 30 triệu, nhân viên sẽ đon đả làm cho bạn một hồ sơ "Trả góp 0%". Nhưng sự thật động trời là: Họ KHÔNG HỀ cho bạn nợ!
-
-Ngay tại khoảnh khắc bạn đặt bút ký tên, các tổ chức tài chính/ngân hàng đã lập tức giải ngân, bơm thẳng 30 triệu "tiền tươi thóc thật" vào tài khoản của ông trùm bán lẻ.
-
-Ông trùm sẵn sàng trích lại một khoản phí rất nhỏ (chiết khấu) cho ngân hàng, để đánh đổi lấy 3 ĐẶC QUYỀN VÔ GIÁ:
-❶ Chuyển giao rủi ro 100%: Khách bùng nợ? Đó là việc của ngân hàng, không phải việc của công ty.
-❷ Bẻ gãy rào cản giá: Biến một chiếc điện thoại 30 triệu xa xỉ thành một món đồ rẻ bèo chỉ 2,5 triệu/tháng.
-❸ Giải phóng hàng tồn thần tốc: Tiền mặt thu về ngay giây thứ nhất, tiếp tục được xoay vòng đi nhập lô hàng mới.
-
-BÀI HỌC THỨC TỈNH:
-Để khách hàng nợ bằng chính tiền túi (vốn lưu động) của mình là tư duy của thập kỷ trước. Bán hàng đỉnh cao là phải biết dùng đòn bẩy – "Mượn tiền người khác" để kinh doanh!
-
-Lãi trên giấy là ẢO, Tiền trong két mới là THẬT! Kẻ mạnh không phải là kẻ bán hàng rẻ nhất, mà là kẻ giữ được nhiều tiền mặt nhất khi giông bão ập tới.`,
-            likes: 189,
-            comments: 52,
-            shares: 94,
+            content: `NHÌN CÁCH "ÔNG TRÙM BÁN LẺ" CHƠI ĐÙA VỚI DÒNG TIỀN, 90% SẾP VIỆT MỚI NHẬN RA MÌNH ĐANG LÀM KINH DOANH NHƯ... CHƠI ĐỒ HÀNG!`,
+            likesCount: 189,
+            commentsCount: 52,
+            sharesCount: 94,
             isLiked: false,
             isSaved: false,
-            createdAt: new Date('2026-08-02T14:15:00'),
+            createdAt: '2026-08-02T14:15:00',
             tags: ['tài_chính', 'trả_góp', 'kinh_doanh', 'dòng_tiền'],
-            type: 'post',
-            privacy: 'public'
+            type: 1,
+            privacy: 1,
+            isAnswered: false,
+
         },
         {
-            id: 3,
+            id: '3',
             author: {
-                id: 3,
-                name: 'Phùng Lê Lâm Hải',
+                id: '3',
+                fullName: 'Phùng Lê Lâm Hải',
                 avatar: 'assets/avatars/avatar.jpg',
                 username: 'phunglelamhai',
                 role: 'Chuyên gia tài chính tại Equitix',
                 isVerified: true
             },
             title: 'EVERY HALF - Chuỗi Specialty Coffee Gọi Vốn 8 Triệu USD Series A',
-            content: `EVERY HALF - CHUỖI SPECIALTY COFFEE VỪA GỌI VỐN 8 TRIỆU USD VÒNG SERIES A VÀ BÀI HỌC DÀNH CHO FOUNDERS
-
-Hôm qua giờ khá nhiều founders hỏi mình: "Anh ơi, Every Half gọi được Series A rồi. Làm bằng cách nào vậy nhỉ?"
-
-Sau đây là các lý do chia sẻ về model của Every Half: Từ tài chính tới định vị thị trường và cách NDT tổ chức nhìn tài sản này để quyết định đầu tư:
-
-1. Founder team đã có track record trên thị trường tài chính.
-Người khởi nguồn của Every Half là Trần Lê Minh Trúc - nghệ nhân rang cà phê, từng làm việc ở Urban Station, The Coffee House. CEO Võ Duy Phú - Cựu Phó Tổng Giám đốc The Coffee House: Operation, Finance, Tech. Một team founder với năng lực bù trừ hoàn hảo.
-
-2. Team founder mạnh có liên quan tới nhau ở thương vụ trước
-Every Half có thêm Mr Nguyễn Hải Ninh - Founder The Coffee House. M Village góp khoảng 80% vốn điều lệ. Founder team từng làm việc cùng nhau ở The Coffee House, đã va chạm, đã hiểu nhau và biết cách phối hợp.
-
-3. Tài chính không phải lợi thế đầu tiên - Quan hệ mới là lợi thế đầu tiên.
-Quỹ không chỉ nhìn từng CV mà còn nhìn vào lịch sử cộng tác. Đó là một tín hiệu khiến signaling cost giảm đi rất nhiều.
-
-4. Định vị của Every Half Coffee: "Affordable Specialty Coffee", chuẩn SCA, giải quốc tế, nguồn gốc minh bạch. Khoảng trống: Specialty thường rất đắt. Mass-market thì không specialty. Every Half đứng ở giữa.
-
-5. Chuỗi cung ứng: Every Half không chỉ bán cà phê. Họ có 2 xưởng rang, làm việc trực tiếp với nông dân, hợp tác từ 8ha lên 50ha, có truy xuất nguồn gốc + phát triển Fine Robusta.
-
-6. Unit Economics dự đoán:
-• Khoảng 250 giao dịch/ngày
-• Giá bán trung bình khoảng 72.000 đồng
-• Doanh thu khoảng 540 triệu/tháng
-• COGS khoảng 28%, nhân sự khoảng 18%, mặt bằng khoảng 12%
-• Contribution margin khoảng 34%
-• Hoàn vốn khoảng 4-5 tháng
-
-7. Funding rounds:
-• Seed (8/2024): Khoảng 8 cửa hàng
-• Pre-Series A (5/2025): 3 triệu USD, khoảng 14 cửa hàng
-• Series A (7/2026): 8 triệu USD, 35-36 cửa hàng
-
-Founders học được gì?
-1. Founder-Market Fit dựa trên track record ấn tượng trong quá khứ
-2. Người giỏi sản phẩm chưa chắc là người giỏi gọi vốn - Dream team cần cả 2
-3. Đồng sáng lập từng làm việc với nhau đáng giá hơn nhiều CV đẹp
-4. Branding với nhà đầu tư cũng quan trọng như branding với khách hàng
-5. Unit Economics đẹp chưa đủ, hiểu tổng thể mô hình KD để nắm rõ động lực của vốn lưu động
-6. Cashflow luôn quan trọng hơn Profit
-7. Scale nhanh nhưng governance không theo kịp sẽ rất nguy hiểm
-8. Lợi thế cạnh tranh thật sự nằm ở hệ thống, chuỗi cung ứng và con người
-9. Quỹ đầu tư không mua doanh thu - Quỹ mua khả năng nhân bản với ít biến động trong tương lai
-
-Điều cuối cùng: Vốn không tạo ra doanh nghiệp tốt. Doanh nghiệp tốt mới hấp thụ được vốn.`,
-            likes: 356,
-            comments: 87,
-            shares: 142,
+            content: `EVERY HALF - CHUỖI SPECIALTY COFFEE VỪA GỌI VỐN 8 TRIỆU USD VÒNG SERIES A VÀ BÀI HỌC DÀNH CHO FOUNDERS`,
+            likesCount: 356,
+            commentsCount: 87,
+            sharesCount: 142,
             isLiked: false,
             isSaved: false,
-            createdAt: new Date('2026-08-06T09:00:00'),
+            createdAt: '2026-08-06T09:00:00',
             tags: ['gọi_vốn', 'startup', 'coffee', 'series_a', 'F&B'],
-            type: 'post',
-            privacy: 'public'
+            type: 1,
+            privacy: 1,
+            isAnswered: false,
+
         },
         {
-            id: 4,
+            id: '4',
             author: {
-                id: 4,
-                name: 'Diễn đàn SME',
+                id: '4',
+                fullName: 'Diễn đàn SME',
                 avatar: 'assets/avatars/avatar.jpg',
                 username: 'diendansme',
                 role: 'Thành viên cộng đồng',
@@ -173,32 +129,107 @@ Founders học được gì?
 Theo mình, trong kinh doanh, yếu tố con người và đội nhóm quan trọng hơn ý tưởng rất nhiều. Một ý tưởng hay với một đội ngũ yếu sẽ thất bại. Nhưng một đội ngũ mạnh có thể biến một ý tưởng bình thường thành điều phi thường.
 
 Bạn nghĩ sao? Hãy chia sẻ quan điểm của bạn bên dưới nhé!`,
-            likes: 67,
-            comments: 24,
-            shares: 8,
+            likesCount: 67,
+            commentsCount: 24,
+            sharesCount: 8,
             isLiked: false,
             isSaved: false,
-            createdAt: new Date('2026-08-07T08:00:00'),
+            createdAt: '2026-08-07T08:00:00',
             tags: ['thảo_luận', 'góc_nhìn', 'khởi_nghiệp'],
-            type: 'post',
-            privacy: 'public'
+            type: 1,
+            privacy: 1,
+            isAnswered: false
         }
     ];
 
-    getPosts(): Observable<SocialPost[]> {
-        return of(this.posts);
+    constructor(private _apiService: ApiService) { }
+
+    // ===== POSTS =====
+    // ✅ CÓ API - Gọi thật
+    getPosts(query: GetPostsQuery = {}): Observable<PagedResponse<SocialPost>> {
+        const params: any = {
+            pageNumber: query.pageNumber || 1,
+            pageSize: query.pageSize || 10
+        };
+        if (query.type) params.type = query.type;
+        if (query.privacy) params.privacy = query.privacy;
+        if (query.tag) params.tag = query.tag;
+
+        return this._apiService.get<PagedResponse<SocialPost>>(
+            `${this._baseUrl}/posts`,
+            params
+        ).pipe(
+            catchError(() => {
+                // Fallback mock data nếu API lỗi
+                return this._getMockPosts();
+            })
+        );
     }
 
+    // ✅ CÓ API - Gọi thật
+    getPostById(id: string): Observable<SocialPost> {
+        return this._apiService.get<SocialPost>(`${this._baseUrl}/posts/${id}`).pipe(
+            catchError(() => {
+                const mock = this._mockPosts.find(p => p.id === id);
+                return mock ? of(mock) : throwError(() => new Error('Post not found'));
+            })
+        );
+    }
+
+    // ✅ CÓ API - Gọi thật
+    createPost(data: CreatePostRequest): Observable<SocialPost> {
+        return this._apiService.post<SocialPost>(`${this._baseUrl}/posts`, data).pipe(
+            tap(post => {
+                // Thêm vào mock cache
+                this._mockPosts.unshift(post);
+            })
+        );
+    }
+
+    // ✅ CÓ API - Gọi thật
+    updatePost(id: string, data: UpdatePostRequest): Observable<SocialPost> {
+        return this._apiService.put<SocialPost>(`${this._baseUrl}/posts/${id}`, data).pipe(
+            tap(updated => {
+                const index = this._mockPosts.findIndex(p => p.id === id);
+                if (index !== -1) {
+                    this._mockPosts[index] = { ...this._mockPosts[index], ...updated };
+                }
+            })
+        );
+    }
+
+    // ✅ CÓ API - Gọi thật
+    deletePost(id: string): Observable<void> {
+        return this._apiService.delete<void>(`${this._baseUrl}/posts/${id}`);
+    }
+
+    // ===== MOCK DATA HELPERS =====
+    private _getMockPosts(): Observable<PagedResponse<SocialPost>> {
+        return of({
+            success: true,
+            message: 'Success',
+            data: this._mockPosts,
+            pageNumber: 1,
+            pageSize: 10,
+            totalPages: 1,
+            totalCount: this._mockPosts.length,
+            hasPreviousPage: false,
+            hasNextPage: false,
+            timestamp: new Date().toISOString()
+        }).pipe(delay(300));
+    }
+
+    // ===== MEMBERS =====
+    // ❌ CHƯA CÓ API - Giữ mock
     getMembers(): Observable<SocialMember[]> {
         const members: SocialMember[] = [
-            // { id: 1, name: 'Nguyễn Văn A', username: 'nguyenvana', avatar: 'assets/avatars/avatar.jpg', role: 'CEO', company: 'Công nghệ Xanh', followers: 150, following: 80, posts: 45, isFollowing: true, isOnline: true, isVerified: true },
-            // { id: 2, name: 'Trần Thị B', username: 'tranb', avatar: 'assets/avatars/avatar.jpg', role: 'Marketing Director', company: 'Logistics Thành Công', followers: 120, following: 60, posts: 32, isFollowing: false, isOnline: true, isVerified: false },
-            // { id: 3, name: 'Lê Văn C', username: 'levanc', avatar: 'assets/avatars/avatar.jpg', role: 'Founder', company: 'Thực phẩm Sạch 365', followers: 200, following: 100, posts: 56, isFollowing: true, isOnline: false, isVerified: true },
-            // { id: 4, name: 'Phạm Thị D', username: 'phamd', avatar: 'assets/avatars/avatar.jpg', role: 'CTO', company: 'Nội thất Xanh', followers: 80, following: 40, posts: 28, isFollowing: false, isOnline: true, isVerified: false },
+            // Mock data
         ];
-        return of(members);
+        return of(members).pipe(delay(300));
     }
 
+    // ===== EVENTS =====
+    // ❌ CHƯA CÓ API - Giữ mock
     getEvents(): Observable<SocialEvent[]> {
         const events: SocialEvent[] = [
             {
@@ -207,7 +238,7 @@ Bạn nghĩ sao? Hãy chia sẻ quan điểm của bạn bên dưới nhé!`,
                 description: 'Chia sẻ chiến lược phát triển kinh doanh trong bối cảnh mới',
                 date: new Date('2026-03-20T14:00:00'),
                 location: 'Online - Zoom',
-                type: 'online',
+                type: EventType.Online,
                 maxParticipants: 100,
                 currentParticipants: 65,
                 image: 'assets/events/webinar.jpg',
@@ -220,7 +251,7 @@ Bạn nghĩ sao? Hãy chia sẻ quan điểm của bạn bên dưới nhé!`,
                 description: 'Gặp gỡ, kết nối và chia sẻ kinh nghiệm kinh doanh',
                 date: new Date('2026-03-25T18:00:00'),
                 location: 'Quận 1, TP.HCM',
-                type: 'offline',
+                type: EventType.Offline,
                 maxParticipants: 50,
                 currentParticipants: 30,
                 image: 'assets/events/Meetup.jpg',
@@ -228,58 +259,46 @@ Bạn nghĩ sao? Hãy chia sẻ quan điểm của bạn bên dưới nhé!`,
                 isRegistered: false
             }
         ];
-        return of(events);
+        return of(events).pipe(delay(300));
     }
 
+    // ===== GROUPS =====
+    // ❌ CHƯA CÓ API - Giữ mock
     getGroups(): Observable<SocialGroup[]> {
         const groups: SocialGroup[] = [
             { id: 1, name: 'Công nghệ & Khởi nghiệp', description: 'Thảo luận về công nghệ và xu hướng khởi nghiệp', icon: 'fa-solid fa-microchip', members: 120, posts: 45, isJoined: true, isPrivate: false },
             { id: 2, name: 'Marketing & Branding', description: 'Chia sẻ kiến thức marketing và xây dựng thương hiệu', icon: 'fa-solid fa-bullhorn', members: 85, posts: 32, isJoined: false, isPrivate: false },
             { id: 3, name: 'Tài chính & Đầu tư', description: 'Thảo luận về tài chính doanh nghiệp và đầu tư', icon: 'fa-solid fa-chart-line', members: 60, posts: 28, isJoined: false, isPrivate: true },
         ];
-        return of(groups);
+        return of(groups).pipe(delay(300));
     }
 
-    likePost(postId: number): Observable<any> {
-        const post = this.posts.find(p => p.id === postId);
+    // ===== INTERACTIONS =====
+    // ❌ CHƯA CÓ API - Giữ mock
+    likePost(postId: any): Observable<{ success: boolean }> {
+        const post = this._mockPosts.find(p => p.id === postId);
         if (post) {
             post.isLiked = !post.isLiked;
-            post.likes += post.isLiked ? 1 : -1;
+            post.likesCount += post.isLiked ? 1 : -1;
         }
-        return of({ success: true });
+        return of({ success: true }).pipe(delay(200));
     }
 
-    savePost(postId: number): Observable<any> {
-        const post = this.posts.find(p => p.id === postId);
+    // ❌ CHƯA CÓ API - Giữ mock
+    savePost(postId: any): Observable<{ success: boolean }> {
+        const post = this._mockPosts.find(p => p.id === postId);
         if (post) {
             post.isSaved = !post.isSaved;
         }
-        return of({ success: true });
+        return of({ success: true }).pipe(delay(200));
     }
 
-    createPost(content: string, images?: string[]): Observable<SocialPost> {
-        const newPost: SocialPost = {
-            id: Date.now(),
-            author: {
-                id: 999,
-                name: 'Bạn',
-                avatar: 'assets/avatars/avatar.jpg',
-                username: 'current_user',
-                role: 'Thành viên',
-                isVerified: false
-            },
-            content: content,
-            images: images || [],
-            likes: 0,
-            comments: 0,
-            shares: 0,
-            isLiked: false,
-            isSaved: false,
-            createdAt: new Date(),
-            type: 'post',
-            privacy: 'public'
-        };
-        this.posts.unshift(newPost);
-        return of(newPost);
+    // ❌ CHƯA CÓ API - Giữ mock
+    sharePost(postId: string): Observable<{ success: boolean }> {
+        const post = this._mockPosts.find(p => p.id === postId);
+        if (post) {
+            post.sharesCount += 1;
+        }
+        return of({ success: true }).pipe(delay(200));
     }
 }

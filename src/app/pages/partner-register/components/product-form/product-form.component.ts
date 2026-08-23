@@ -32,7 +32,7 @@ export class ProductFormComponent {
   categories: Signal<any[]> = computed(() =>
     PRODUCT_CATEGORIES.map(e => ({
       ...e,
-      label: this._appService.instant(e.label)
+      label: this._appService.trans(e.label)
     }))
   );
 
@@ -59,27 +59,27 @@ export class ProductFormComponent {
     const errors = control.errors;
 
     if (errors['required']) {
-      return this._appService.instant('VALIDATION.REQUIRED');
+      return this._appService.trans('VALIDATION.REQUIRED');
     }
     if (errors['min']) {
-      return this._appService.instant('VALIDATION.MIN', { min: errors['min'].min });
+      return this._appService.trans('VALIDATION.MIN', { min: errors['min'].min });
     }
     if (errors['max']) {
-      return this._appService.instant('VALIDATION.MAX', { max: errors['max'].max });
+      return this._appService.trans('VALIDATION.MAX', { max: errors['max'].max });
     }
     if (errors['minlength']) {
-      return this._appService.instant('VALIDATION.MIN_LENGTH', { length: errors['minlength'].requiredLength });
+      return this._appService.trans('VALIDATION.MIN_LENGTH', { length: errors['minlength'].requiredLength });
     }
     if (errors['maxlength']) {
-      return this._appService.instant('VALIDATION.MAX_LENGTH', { length: errors['maxlength'].requiredLength });
+      return this._appService.trans('VALIDATION.MAX_LENGTH', { length: errors['maxlength'].requiredLength });
     }
     if (errors['email']) {
-      return this._appService.instant('VALIDATION.EMAIL');
+      return this._appService.trans('VALIDATION.EMAIL');
     }
     if (errors['pattern']) {
-      return this._appService.instant('VALIDATION.PATTERN');
+      return this._appService.trans('VALIDATION.PATTERN');
     }
 
-    return this._appService.instant('VALIDATION.INVALID');
+    return this._appService.trans('VALIDATION.INVALID');
   }
 }

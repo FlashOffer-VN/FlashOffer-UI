@@ -42,28 +42,28 @@ export class StepConfirmationComponent {
 
     // ✅ Dùng AppService để dịch
     if (errors['required']) {
-      return this._appService.instant('VALIDATION.REQUIRED');
+      return this._appService.trans('VALIDATION.REQUIRED');
     }
     if (errors['requiredTrue']) {
-      return this._appService.instant('VALIDATION.REQUIRED_TRUE');
+      return this._appService.trans('VALIDATION.REQUIRED_TRUE');
     }
     if (errors['minlength']) {
-      return this._appService.instant('VALIDATION.MIN_LENGTH', {
+      return this._appService.trans('VALIDATION.MIN_LENGTH', {
         length: errors['minlength'].requiredLength
       });
     }
     if (errors['maxlength']) {
-      return this._appService.instant('VALIDATION.MAX_LENGTH', {
+      return this._appService.trans('VALIDATION.MAX_LENGTH', {
         length: errors['maxlength'].requiredLength
       });
     }
     if (errors['email']) {
-      return this._appService.instant('VALIDATION.EMAIL');
+      return this._appService.trans('VALIDATION.EMAIL');
     }
     if (errors['pattern']) {
-      return this._appService.instant('VALIDATION.PATTERN');
+      return this._appService.trans('VALIDATION.PATTERN');
     }
 
-    return this._appService.instant('VALIDATION.INVALID');
+    return this._appService.trans('VALIDATION.INVALID');
   }
 }
