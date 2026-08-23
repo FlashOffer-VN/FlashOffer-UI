@@ -142,7 +142,6 @@ export class SocialComponent implements OnInit {
     onPostCreated(post: SocialPost): void {
         // Chỉ reload posts, không reload members/events/groups
         this.loadPosts();
-        this._appService.showSuccess('Đã đăng bài viết!');
     }
 
     // ===== Member Actions =====
