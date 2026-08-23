@@ -84,11 +84,12 @@
                     placeholder="{{ 'SOCIAL.POST_TITLE' | translate }}">
             </div>
 
-            <!-- Content -->
+            <!-- Content - Dùng Quill Editor với ngIf để force re-render -->
             <div class="form-group">
                 <label>{{ 'SOCIAL.CONTENT' | translate }}</label>
-                <textarea [(ngModel)]="editPostData.content" class="form-control" rows="6"
-                    placeholder="{{ 'SOCIAL.WHATS_NEW' | translate }}"></textarea>
+                <quill-editor *ngIf="showQuillEditor" [(ngModel)]="editPostData.content" [modules]="editorConfig"
+                    class="edit-post-editor" placeholder="{{ 'SOCIAL.WHATS_NEW' | translate }}">
+                </quill-editor>
             </div>
 
             <!-- Post Type -->

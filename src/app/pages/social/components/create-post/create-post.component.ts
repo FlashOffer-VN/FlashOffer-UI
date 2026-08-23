@@ -111,19 +111,19 @@ export class CreatePostComponent implements AfterViewInit {
     addTag(): void {
         const tag = this.tagInput.trim().replace(/^#/, '').toLowerCase();
         if (!tag) {
-            this._appService.showWarning('SOCIAL.TAG_EMPTY');
+            this._appService.showWarning(this._appService.trans('SOCIAL.TAG_EMPTY'));
             return;
         }
         if (tag.length > 20) {
-            this._appService.showWarning('SOCIAL.TAG_TOO_LONG');
+            this._appService.showWarning(this._appService.trans('SOCIAL.TAG_TOO_LONG'));
             return;
         }
         if (this.tags.length >= 5) {
-            this._appService.showWarning('SOCIAL.TAG_MAX');
+            this._appService.showWarning(this._appService.trans('SOCIAL.TAG_MAX'));
             return;
         }
         if (this.tags.includes(tag)) {
-            this._appService.showWarning('SOCIAL.TAG_EXISTS');
+            this._appService.showWarning(this._appService.trans('SOCIAL.TAG_EXISTS'));
             return;
         }
         this.tags.push(tag);
@@ -147,7 +147,7 @@ export class CreatePostComponent implements AfterViewInit {
             const file = input.files[i];
             if (!file.type.startsWith('image/')) continue;
             if (file.size > 5 * 1024 * 1024) {
-                this._appService.showWarning('SOCIAL.IMAGE_TOO_LARGE');
+                this._appService.showWarning(this._appService.trans('SOCIAL.IMAGE_TOO_LARGE'));
                 continue;
             }
             const reader = new FileReader();

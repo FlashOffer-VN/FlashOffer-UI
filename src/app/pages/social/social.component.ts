@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { QuillModule } from 'ngx-quill';
 import { AppService } from '@core/services/app.service';
 import { SocialPost, SocialMember, SocialEvent, SocialGroup } from '@core/models/social.model';
 import { PostType, PrivacyType } from '@core/models/social.model';
@@ -24,6 +25,7 @@ import { MemberCardComponent } from './components/member-card/member-card.compon
         CommonModule,
         FormsModule,
         TranslateModule,
+        QuillModule,
         SocialHeaderComponent,
         CreatePostComponent,
         PostCardComponent,
@@ -56,11 +58,23 @@ export class SocialComponent implements OnInit {
     isSaving = false;
     editingPostId: string | null = null;
     editTagInput = '';
+    editorKey = 0;
+    showQuillEditor = true;
 
     editPostData: Partial<SocialPost> & {
         type?: PostType;
         privacy?: PrivacyType;
     } = {};
+
+    editorConfig = {
+        toolbar: [
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            ['link', 'image'],
+            ['clean']
+        ]
+    };
 
     // Options for edit modal
     readonly postTypes = [
@@ -108,7 +122,7 @@ export class SocialComponent implements OnInit {
             },
             error: () => {
                 this.isLoadingPosts = false;
-                this._appService.showError('SOCIAL.LOAD_ERROR');
+                this._appService.showError(this._appService.trans('SOCIAL.LOAD_ERROR'));
             }
         });
     }
@@ -174,11 +188,11 @@ export class SocialComponent implements OnInit {
         this._appService.socialService.savePost(post.id).subscribe({
             next: () => {
                 this._appService.showSuccess(
-                    post.isSaved ? 'SOCIAL.SAVE_SUCCESS' : 'SOCIAL.UNSAVE_SUCCESS'
+                    post.isSaved ? this._appService.trans('SOCIAL.SAVE_SUCCESS') : this._appService.trans('SOCIAL.UNSAVE_SUCCESS')
                 );
             },
             error: () => {
-                this._appService.showError('SOCIAL.SAVE_ERROR');
+                this._appService.showError(this._appService.trans('SOCIAL.SAVE_ERROR'));
             }
         });
     }
@@ -186,10 +200,10 @@ export class SocialComponent implements OnInit {
     sharePost(post: SocialPost): void {
         this._appService.socialService.sharePost(post.id).subscribe({
             next: () => {
-                this._appService.showSuccess('SOCIAL.SHARE_SUCCESS');
+                this._appService.showSuccess(this._appService.trans('SOCIAL.SHARE_SUCCESS'));
             },
             error: () => {
-                this._appService.showError('SOCIAL.SHARE_ERROR');
+                this._appService.showError(this._appService.trans('SOCIAL.SHARE_ERROR'));
             }
         });
     }
@@ -201,7 +215,7 @@ export class SocialComponent implements OnInit {
     // ===== EDIT MODAL =====
     openEditModal(post: SocialPost): void {
         if (!this.canEditPost(post)) {
-            this._appService.showWarning('SOCIAL.NO_PERMISSION');
+            this._appService.showWarning(this._appService.trans('SOCIAL.NO_PERMISSION'));
             return;
         }
         this.editingPostId = post.id;
@@ -214,6 +228,11 @@ export class SocialComponent implements OnInit {
         };
         this.editTagInput = '';
         this.showEditModal = true;
+        // Force re-render quill
+        this.showQuillEditor = false;
+        setTimeout(() => {
+            this.showQuillEditor = true;
+        }, 0);
     }
 
     closeEditModal(): void {
@@ -222,6 +241,8 @@ export class SocialComponent implements OnInit {
         this.editTagInput = '';
         this.editingPostId = null;
         this.isSaving = false;
+        // Reset quill
+        this.showQuillEditor = true;
     }
 
     selectEditType(type: PostType): void {
@@ -249,24 +270,26 @@ export class SocialComponent implements OnInit {
 
     addEditTag(): void {
         const tag = this.editTagInput.trim().replace(/^#/, '').toLowerCase();
-        if (!tag) return;
+        if (!tag) {
+            this._appService.showWarning(this._appService.trans('SOCIAL.TAG_EMPTY'));
+            return;
+        }
         if (tag.length > 20) {
-            this._appService.showWarning('SOCIAL.TAG_TOO_LONG');
+            this._appService.showWarning(this._appService.trans('SOCIAL.TAG_TOO_LONG'));
             return;
         }
         if (this.editPostData.tags && this.editPostData.tags.length >= 5) {
-            this._appService.showWarning('SOCIAL.TAG_MAX');
+            this._appService.showWarning(this._appService.trans('SOCIAL.TAG_MAX'));
             return;
         }
         if (this.editPostData.tags?.includes(tag)) {
-            this._appService.showWarning('SOCIAL.TAG_EXISTS');
+            this._appService.showWarning(this._appService.trans('SOCIAL.TAG_EXISTS'));
             return;
         }
-        if (this.editPostData.tags) {
-            this.editPostData.tags.push(tag);
-        } else {
-            this.editPostData.tags = [tag];
+        if (!this.editPostData.tags) {
+            this.editPostData.tags = [];
         }
+        this.editPostData.tags.push(tag);
         this.editTagInput = '';
     }
 
@@ -278,18 +301,20 @@ export class SocialComponent implements OnInit {
 
     saveEditPost(): void {
         if (!this.editingPostId) return;
-        if (!this.editPostData.content?.trim()) {
-            this._appService.showWarning('SOCIAL.CONTENT_REQUIRED');
+
+        const content = this.editPostData.content || '';
+        if (!content.replace(/<[^>]*>/g, '').trim()) {
+            this._appService.showWarning(this._appService.trans('SOCIAL.CONTENT_REQUIRED'));
             return;
         }
 
         this.isSaving = true;
         const updateData = {
             title: this.editPostData.title?.trim() || undefined,
-            content: this.editPostData.content.trim(),
+            content: this.editPostData.content,
             tags: this.editPostData.tags || [],
-            type: this.editPostData.type,
-            privacy: this.editPostData.privacy
+            type: this.editPostData.type || PostType.Post,
+            privacy: this.editPostData.privacy || PrivacyType.Public
         };
 
         this._appService.socialService.updatePost(this.editingPostId, updateData).subscribe({
@@ -298,13 +323,13 @@ export class SocialComponent implements OnInit {
                 if (index !== -1) {
                     this.posts[index] = { ...this.posts[index], ...updatedPost };
                 }
-                this._appService.showSuccess('SOCIAL.UPDATE_POST_SUCCESS');
+                this._appService.showSuccess(this._appService.trans('SOCIAL.UPDATE_POST_SUCCESS'));
                 this.closeEditModal();
                 this.isSaving = false;
                 this.loadPosts();
             },
             error: () => {
-                this._appService.showError('SOCIAL.UPDATE_POST_ERROR');
+                this._appService.showError(this._appService.trans('SOCIAL.UPDATE_POST_ERROR'));
                 this.isSaving = false;
             }
         });
@@ -325,10 +350,10 @@ export class SocialComponent implements OnInit {
             this._appService.socialService.deletePost(post.id).subscribe({
                 next: () => {
                     this.posts = this.posts.filter(p => p.id !== post.id);
-                    this._appService.showSuccess('SOCIAL.DELETE_POST_SUCCESS');
+                    this._appService.showSuccess(this._appService.trans('SOCIAL.DELETE_POST_SUCCESS'));
                 },
                 error: () => {
-                    this._appService.showError('SOCIAL.DELETE_POST_ERROR');
+                    this._appService.showError(this._appService.trans('SOCIAL.DELETE_POST_ERROR'));
                 }
             });
         }
@@ -342,7 +367,7 @@ export class SocialComponent implements OnInit {
         member.isFollowing = !member.isFollowing;
         member.followers += member.isFollowing ? 1 : -1;
         this._appService.showSuccess(
-            member.isFollowing ? 'SOCIAL.FOLLOW_SUCCESS' : 'SOCIAL.UNFOLLOW_SUCCESS'
+            member.isFollowing ? this._appService.trans('SOCIAL.FOLLOW_SUCCESS') : this._appService.trans('SOCIAL.UNFOLLOW_SUCCESS')
         );
     }
 
@@ -350,7 +375,7 @@ export class SocialComponent implements OnInit {
         group.isJoined = !group.isJoined;
         group.members += group.isJoined ? 1 : -1;
         this._appService.showSuccess(
-            group.isJoined ? 'SOCIAL.JOIN_GROUP_SUCCESS' : 'SOCIAL.LEAVE_GROUP_SUCCESS'
+            group.isJoined ? this._appService.trans('SOCIAL.JOIN_GROUP_SUCCESS') : this._appService.trans('SOCIAL.LEAVE_GROUP_SUCCESS')
         );
     }
 
@@ -358,9 +383,9 @@ export class SocialComponent implements OnInit {
         if (event.currentParticipants < event.maxParticipants) {
             event.currentParticipants++;
             event.isRegistered = true;
-            this._appService.showSuccess('SOCIAL.REGISTER_EVENT_SUCCESS');
+            this._appService.showSuccess(this._appService.trans('SOCIAL.REGISTER_EVENT_SUCCESS'));
         } else {
-            this._appService.showError('SOCIAL.EVENT_FULL');
+            this._appService.showError(this._appService.trans('SOCIAL.EVENT_FULL'));
         }
     }
 
