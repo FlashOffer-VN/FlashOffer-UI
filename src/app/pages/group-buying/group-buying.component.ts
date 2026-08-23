@@ -76,50 +76,50 @@ export class GroupBuyingComponent {
 
         if (control.errors['required']) {
             const fieldMap: Record<string, string> = {
-                productName: this._appService.instant('GROUP_BUYING.ERROR.PRODUCT_NAME_REQUIRED'),
-                targetPrice: this._appService.instant('GROUP_BUYING.ERROR.TARGET_PRICE_REQUIRED'),
-                targetPeopleCount: this._appService.instant('GROUP_BUYING.ERROR.TARGET_PEOPLE_REQUIRED'),
-                fullName: this._appService.instant('GROUP_BUYING.ERROR.FULL_NAME_REQUIRED'),
-                phone: this._appService.instant('GROUP_BUYING.ERROR.PHONE_REQUIRED'),
-                email: this._appService.instant('GROUP_BUYING.ERROR.EMAIL_REQUIRED'),
-                agreeTerms: this._appService.instant('GROUP_BUYING.ERROR.AGREE_TERMS_REQUIRED')
+                productName: this._appService.trans('GROUP_BUYING.ERROR.PRODUCT_NAME_REQUIRED'),
+                targetPrice: this._appService.trans('GROUP_BUYING.ERROR.TARGET_PRICE_REQUIRED'),
+                targetPeopleCount: this._appService.trans('GROUP_BUYING.ERROR.TARGET_PEOPLE_REQUIRED'),
+                fullName: this._appService.trans('GROUP_BUYING.ERROR.FULL_NAME_REQUIRED'),
+                phone: this._appService.trans('GROUP_BUYING.ERROR.PHONE_REQUIRED'),
+                email: this._appService.trans('GROUP_BUYING.ERROR.EMAIL_REQUIRED'),
+                agreeTerms: this._appService.trans('GROUP_BUYING.ERROR.AGREE_TERMS_REQUIRED')
             };
-            return fieldMap[fieldName] || this._appService.instant('GROUP_BUYING.ERROR.REQUIRED');
+            return fieldMap[fieldName] || this._appService.trans('GROUP_BUYING.ERROR.REQUIRED');
         }
 
         if (control.errors['requiredTrue']) {
-            return this._appService.instant('GROUP_BUYING.ERROR.AGREE_TERMS_REQUIRED');
+            return this._appService.trans('GROUP_BUYING.ERROR.AGREE_TERMS_REQUIRED');
         }
 
         if (control.errors['minlength']) {
             if (fieldName === 'productName') {
-                return this._appService.instant('GROUP_BUYING.ERROR.PRODUCT_NAME_MINLENGTH');
+                return this._appService.trans('GROUP_BUYING.ERROR.PRODUCT_NAME_MINLENGTH');
             }
             if (fieldName === 'fullName') {
-                return this._appService.instant('GROUP_BUYING.ERROR.FULL_NAME_MINLENGTH');
+                return this._appService.trans('GROUP_BUYING.ERROR.FULL_NAME_MINLENGTH');
             }
-            return this._appService.instant('GROUP_BUYING.ERROR.MINLENGTH');
+            return this._appService.trans('GROUP_BUYING.ERROR.MINLENGTH');
         }
 
         if (control.errors['min']) {
             if (fieldName === 'targetPrice') {
-                return this._appService.instant('GROUP_BUYING.ERROR.TARGET_PRICE_MIN');
+                return this._appService.trans('GROUP_BUYING.ERROR.TARGET_PRICE_MIN');
             }
             if (fieldName === 'targetPeopleCount') {
-                return this._appService.instant('GROUP_BUYING.ERROR.TARGET_PEOPLE_MIN');
+                return this._appService.trans('GROUP_BUYING.ERROR.TARGET_PEOPLE_MIN');
             }
-            return this._appService.instant('GROUP_BUYING.ERROR.MIN_VALUE');
+            return this._appService.trans('GROUP_BUYING.ERROR.MIN_VALUE');
         }
 
         if (control.errors['pattern']) {
             if (fieldName === 'phone') {
-                return this._appService.instant('GROUP_BUYING.ERROR.PHONE_INVALID');
+                return this._appService.trans('GROUP_BUYING.ERROR.PHONE_INVALID');
             }
-            return this._appService.instant('GROUP_BUYING.ERROR.INVALID');
+            return this._appService.trans('GROUP_BUYING.ERROR.INVALID');
         }
 
         if (control.errors['email']) {
-            return this._appService.instant('GROUP_BUYING.ERROR.EMAIL_INVALID');
+            return this._appService.trans('GROUP_BUYING.ERROR.EMAIL_INVALID');
         }
 
         return '';
@@ -128,7 +128,7 @@ export class GroupBuyingComponent {
     onSubmit(): void {
         if (this.groupForm.invalid) {
             this.groupForm.markAllAsTouched();
-            this._appService.toast.error(this._appService.instant('GROUP_BUYING.ERROR.FORM_INVALID'));
+            this._appService.toast.error(this._appService.trans('GROUP_BUYING.ERROR.FORM_INVALID'));
             return;
         }
 
@@ -156,13 +156,13 @@ export class GroupBuyingComponent {
                 next: (response) => {
                     if (response.success) {
                         this._appService.toast.success(
-                            this._appService.instant('GROUP_BUYING.SUCCESS.SUBMIT')
+                            this._appService.trans('GROUP_BUYING.SUCCESS.SUBMIT')
                         );
                         this.groupForm.reset();
                         this.groupForm.markAsPristine();
                     } else {
                         // Handle API errors
-                        const errorMsg = response.errors?.[0] || this._appService.instant('GROUP_BUYING.ERROR.SUBMIT_FAILED');
+                        const errorMsg = response.errors?.[0] || this._appService.trans('GROUP_BUYING.ERROR.SUBMIT_FAILED');
                         this._appService.toast.error(errorMsg);
 
                         // Map errors to form fields
@@ -173,14 +173,14 @@ export class GroupBuyingComponent {
                     console.error('GroupBuying error:', error);
 
                     if (error.error?.errors) {
-                        const errorMsg = error.error.errors[0] || this._appService.instant('GROUP_BUYING.ERROR.SUBMIT_FAILED');
+                        const errorMsg = error.error.errors[0] || this._appService.trans('GROUP_BUYING.ERROR.SUBMIT_FAILED');
                         this._appService.toast.error(errorMsg);
                         this.mapErrorsToForm(error.error.errors);
                     } else if (error.error?.message) {
                         this._appService.toast.error(error.error.message);
                     } else {
                         this._appService.toast.error(
-                            this._appService.instant('GROUP_BUYING.ERROR.SUBMIT_FAILED')
+                            this._appService.trans('GROUP_BUYING.ERROR.SUBMIT_FAILED')
                         );
                     }
                 }

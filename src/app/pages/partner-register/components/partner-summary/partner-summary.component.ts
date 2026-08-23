@@ -19,11 +19,11 @@ export class PartnerSummaryComponent {
 
   getBusinessTypeLabel(value: number): string {
     const found = BUSINESS_TYPES.find(t => t.value === value);
-    return found ? this._appservice.instant(found.label) : '---';
+    return found ? this._appservice.trans(found.label) : '---';
   }
 
   getCompanySizeLabel(value: number): string {
     const found = COMPANY_SIZES.find((t: any) => t.value === value);
-    return found ? this._appservice.instant(found.label) : '---';
+    return found ? this._appservice.trans(found.label) : '---';
   }
 }

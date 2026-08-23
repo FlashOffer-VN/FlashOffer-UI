@@ -122,7 +122,7 @@ export class AppService {
         return this.translate.currentLang || 'vi';
     }
 
-    instant(key: string, params?: any): string {
+    trans(key: string, params?: any): string {
         if (params) {
             return this.translate.instant(key, params);
         }

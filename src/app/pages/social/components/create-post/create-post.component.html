@@ -29,13 +29,13 @@
             <div class="options-row">
                 <span class="options-label">
                     <i class="fas fa-tag"></i>
-                    Loại bài viết
+                    {{ 'SOCIAL.TYPE' | translate }}
                 </span>
                 <div class="options-buttons">
                     <button type="button" *ngFor="let type of postTypes" class="option-btn"
                         [class.active]="selectedType === type.value" (click)="selectType(type.value)">
                         <i [class]="'fas ' + type.icon"></i>
-                        {{ type.label }}
+                        {{ type.label | translate }}
                     </button>
                 </div>
             </div>
@@ -44,13 +44,13 @@
             <div class="options-row">
                 <span class="options-label">
                     <i class="fas fa-shield-alt"></i>
-                    Quyền riêng tư
+                    {{ 'SOCIAL.PRIVACY' | translate }}
                 </span>
                 <div class="options-buttons">
                     <button type="button" *ngFor="let privacy of privacyOptions" class="option-btn privacy-btn"
                         [class.active]="selectedPrivacy === privacy.value" (click)="selectPrivacy(privacy.value)">
                         <i [class]="'fas ' + privacy.icon"></i>
-                        {{ privacy.label }}
+                        {{ privacy.label | translate }}
                     </button>
                 </div>
             </div>
@@ -59,7 +59,7 @@
             <div class="options-row">
                 <span class="options-label">
                     <i class="fas fa-hashtag"></i>
-                    Thẻ
+                    {{ 'SOCIAL.TAGS' | translate }}
                 </span>
                 <div class="options-tags">
                     <div class="tag-input-wrapper">
@@ -82,7 +82,7 @@
             <div class="options-row">
                 <span class="options-label">
                     <i class="fas fa-image"></i>
-                    Hình ảnh
+                    {{ 'SOCIAL.IMAGES' | translate }}
                 </span>
                 <div class="options-images">
                     <button type="button" class="upload-btn" (click)="triggerFileInput()">
@@ -108,11 +108,11 @@
                 <div class="options-footer__left">
                     <span class="privacy-info">
                         <i [class]="'fas ' + getPrivacyIcon(selectedPrivacy)"></i>
-                        {{ getPrivacyLabel(selectedPrivacy) | translate}}
+                        {{ getPrivacyLabel(selectedPrivacy) | translate }}
                     </span>
                     <span class="type-info">
                         <i class="fas fa-file-alt"></i>
-                        {{ getTypeLabel(selectedType) | translate}}
+                        {{ getTypeLabel(selectedType) | translate }}
                     </span>
                 </div>
                 <button type="button" class="submit-btn" (click)="onSubmit()" [disabled]="!canSubmit">

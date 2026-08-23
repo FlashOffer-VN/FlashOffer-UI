@@ -165,7 +165,7 @@ export class CreatePostComponent {
         this._appService.socialService.createPost(request).subscribe({
             next: (post) => {
                 this.postCreated.emit(post);
-                this._appService.showSuccess('SOCIAL.CREATE_POST_SUCCESS');
+                this._appService.showSuccess(this._appService.trans('SOCIAL.CREATE_POST_SUCCESS'));
                 this.resetForm();
                 this.isSubmitting = false;
             },

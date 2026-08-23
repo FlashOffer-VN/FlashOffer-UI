@@ -94,47 +94,47 @@ export class FindSupplierComponent implements OnInit {
 
         if (control.errors['required']) {
             const fieldMap: Record<string, string> = {
-                productName: this._appService.instant('FIND_SUPPLIER.ERROR.PRODUCT_NAME_REQUIRED'),
-                quantity: this._appService.instant('FIND_SUPPLIER.ERROR.QUANTITY_REQUIRED'),
-                unit: this._appService.instant('FIND_SUPPLIER.ERROR.UNIT_REQUIRED'),
-                fullName: this._appService.instant('FIND_SUPPLIER.ERROR.FULL_NAME_REQUIRED'),
-                phone: this._appService.instant('FIND_SUPPLIER.ERROR.PHONE_REQUIRED'),
-                email: this._appService.instant('FIND_SUPPLIER.ERROR.EMAIL_REQUIRED'),
-                agreeTerms: this._appService.instant('FIND_SUPPLIER.ERROR.AGREE_TERMS_REQUIRED')
+                productName: this._appService.trans('FIND_SUPPLIER.ERROR.PRODUCT_NAME_REQUIRED'),
+                quantity: this._appService.trans('FIND_SUPPLIER.ERROR.QUANTITY_REQUIRED'),
+                unit: this._appService.trans('FIND_SUPPLIER.ERROR.UNIT_REQUIRED'),
+                fullName: this._appService.trans('FIND_SUPPLIER.ERROR.FULL_NAME_REQUIRED'),
+                phone: this._appService.trans('FIND_SUPPLIER.ERROR.PHONE_REQUIRED'),
+                email: this._appService.trans('FIND_SUPPLIER.ERROR.EMAIL_REQUIRED'),
+                agreeTerms: this._appService.trans('FIND_SUPPLIER.ERROR.AGREE_TERMS_REQUIRED')
             };
-            return fieldMap[fieldName] || this._appService.instant('FIND_SUPPLIER.ERROR.REQUIRED');
+            return fieldMap[fieldName] || this._appService.trans('FIND_SUPPLIER.ERROR.REQUIRED');
         }
 
         if (control.errors['requiredTrue']) {
-            return this._appService.instant('FIND_SUPPLIER.ERROR.AGREE_TERMS_REQUIRED');
+            return this._appService.trans('FIND_SUPPLIER.ERROR.AGREE_TERMS_REQUIRED');
         }
 
         if (control.errors['minlength']) {
             if (fieldName === 'productName') {
-                return this._appService.instant('FIND_SUPPLIER.ERROR.PRODUCT_NAME_MINLENGTH');
+                return this._appService.trans('FIND_SUPPLIER.ERROR.PRODUCT_NAME_MINLENGTH');
             }
             if (fieldName === 'fullName') {
-                return this._appService.instant('FIND_SUPPLIER.ERROR.FULL_NAME_MINLENGTH');
+                return this._appService.trans('FIND_SUPPLIER.ERROR.FULL_NAME_MINLENGTH');
             }
-            return this._appService.instant('FIND_SUPPLIER.ERROR.MINLENGTH');
+            return this._appService.trans('FIND_SUPPLIER.ERROR.MINLENGTH');
         }
 
         if (control.errors['min']) {
             if (fieldName === 'quantity') {
-                return this._appService.instant('FIND_SUPPLIER.ERROR.QUANTITY_MIN');
+                return this._appService.trans('FIND_SUPPLIER.ERROR.QUANTITY_MIN');
             }
-            return this._appService.instant('FIND_SUPPLIER.ERROR.MIN_VALUE');
+            return this._appService.trans('FIND_SUPPLIER.ERROR.MIN_VALUE');
         }
 
         if (control.errors['pattern']) {
             if (fieldName === 'phone') {
-                return this._appService.instant('FIND_SUPPLIER.ERROR.PHONE_INVALID');
+                return this._appService.trans('FIND_SUPPLIER.ERROR.PHONE_INVALID');
             }
-            return this._appService.instant('FIND_SUPPLIER.ERROR.INVALID');
+            return this._appService.trans('FIND_SUPPLIER.ERROR.INVALID');
         }
 
         if (control.errors['email']) {
-            return this._appService.instant('FIND_SUPPLIER.ERROR.EMAIL_INVALID');
+            return this._appService.trans('FIND_SUPPLIER.ERROR.EMAIL_INVALID');
         }
 
         return '';
@@ -150,7 +150,7 @@ export class FindSupplierComponent implements OnInit {
                 control?.markAsTouched();
             });
 
-            this._appService.showError(this._appService.instant('FIND_SUPPLIER.ERROR.FORM_INVALID'));
+            this._appService.showError(this._appService.trans('FIND_SUPPLIER.ERROR.FORM_INVALID'));
             return;
         }
 
@@ -177,7 +177,7 @@ export class FindSupplierComponent implements OnInit {
                 this.isSubmitting = false;
                 if (response.success) {
                     this._appService.showSuccess(
-                        this._appService.instant('FIND_SUPPLIER.SUCCESS.SUBMIT')
+                        this._appService.trans('FIND_SUPPLIER.SUCCESS.SUBMIT')
                     );
                     this.findForm.reset();
                     this.findForm.markAsPristine();
@@ -185,7 +185,7 @@ export class FindSupplierComponent implements OnInit {
                     // Reset default unit
                     this.findForm.patchValue({ unit: 'kg' });
                 } else {
-                    const errorMsg = response.message || this._appService.instant('FIND_SUPPLIER.ERROR.SUBMIT_FAILED');
+                    const errorMsg = response.message || this._appService.trans('FIND_SUPPLIER.ERROR.SUBMIT_FAILED');
                     this._appService.showError(errorMsg);
                 }
             },
