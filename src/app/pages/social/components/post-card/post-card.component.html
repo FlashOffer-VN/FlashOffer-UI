@@ -1,4 +1,4 @@
-<div class="post-card">
+<div class="post-card" tabindex="0" (focus)="isFocused = true" (blur)="isFocused = false">
     <div class="post-header">
         <div class="post-author">
             <img [src]="post.author.avatar | avatar" [alt]="post.author.fullName" class="author-avatar">
@@ -13,15 +13,21 @@
         </div>
 
         <div class="post-actions" *ngIf="canEdit || canDelete">
-            <button class="actions-toggle" (click)="showActions = !showActions">
+            <button class="actions-toggle" (click)="toggleActions($event)" [class.active]="showActions">
                 <i class="fas fa-ellipsis-v"></i>
             </button>
-            <div class="actions-dropdown" *ngIf="showActions">
-                <button *ngIf="canEdit" class="action-item" (click)="edit.emit(post)">
-                    <i class="fas fa-pen"></i> {{ 'COMMON.BUTTON.EDIT' | translate }}
+            <div class="actions-dropdown" *ngIf="showActions" (click)="$event.stopPropagation()">
+                <div class="dropdown-arrow"></div>
+                <button *ngIf="canEdit" class="action-item" (click)="onEdit()">
+                    <i class="fas fa-pen action-icon edit-icon"></i>
+                    <span class="action-label">{{ 'COMMON.BUTTON.EDIT' | translate }}</span>
+                    <span class="action-shortcut">Ctrl+E</span>
                 </button>
-                <button *ngIf="canDelete" class="action-item danger" (click)="delete.emit(post)">
-                    <i class="fas fa-trash"></i> {{ 'COMMON.BUTTON.DELETE' | translate }}
+                <div class="dropdown-divider" *ngIf="canEdit && canDelete"></div>
+                <button *ngIf="canDelete" class="action-item danger" (click)="onDelete()">
+                    <i class="fas fa-trash action-icon delete-icon"></i>
+                    <span class="action-label">{{ 'COMMON.BUTTON.DELETE' | translate }}</span>
+                    <span class="action-shortcut">Ctrl+D</span>
                 </button>
             </div>
         </div>

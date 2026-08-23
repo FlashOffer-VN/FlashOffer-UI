@@ -4,10 +4,70 @@
     padding: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     transition: all 0.3s ease;
+    outline: none;
+    position: relative;
+    cursor: default;
 }
 
 .post-card:hover {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+.post-card:focus {
+    box-shadow: 
+        0 0 0 2px rgba(0, 127, 148, 0.1),
+        0 0 0 4px rgba(0, 127, 148, 0.05),
+        0 8px 32px rgba(0, 127, 148, 0.12);
+    transform: translateY(-2px);
+}
+
+.post-card:focus::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 20px;
+    background: radial-gradient(circle at center, rgba(0, 127, 148, 0.08), transparent 70%);
+    z-index: -1;
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.02);
+    }
+}
+
+.post-card:focus::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 17px;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light), var(--primary));
+    background-size: 200% 200%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: borderRotate 3s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes borderRotate {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 .post-header {
@@ -65,53 +125,138 @@
 }
 
 .actions-toggle {
-    background: none;
+    width: 32px;
+    height: 32px;
     border: none;
-    padding: 4px 8px;
+    background: transparent;
+    border-radius: 8px;
     cursor: pointer;
-    color: #6B7280;
-    border-radius: 4px;
+    color: #9CA3AF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
 }
 
 .actions-toggle:hover {
     background: #F3F4F6;
+    color: #374151;
+}
+
+.actions-toggle.active {
+    background: #F3F4F6;
+    color: var(--primary);
+}
+
+.actions-toggle i {
+    font-size: 18px;
 }
 
 .actions-dropdown {
     position: absolute;
     right: 0;
-    top: 100%;
+    top: calc(100% + 8px);
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-    min-width: 120px;
-    padding: 4px 0;
-    z-index: 10;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    min-width: 200px;
+    padding: 6px;
+    z-index: 100;
+    animation: dropdownSlide 0.2s ease;
+}
+
+.dropdown-arrow {
+    position: absolute;
+    right: 10px;
+    top: -6px;
+    width: 12px;
+    height: 12px;
+    background: white;
+    transform: rotate(45deg);
+    box-shadow: -2px -2px 4px rgba(0, 0, 0, 0.04);
 }
 
 .action-item {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     width: 100%;
-    padding: 8px 16px;
+    padding: 10px 14px;
     border: none;
     background: none;
     cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    color: #374151;
     font-size: 14px;
-    color: #1F2937;
 }
 
 .action-item:hover {
-    background: #F3F4F6;
+    background: #F9FAFB;
 }
 
-.action-item.danger {
+.action-item:active {
+    transform: scale(0.98);
+}
+
+.action-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.edit-icon {
+    background: #EFF6FF;
+    color: #3B82F6;
+}
+
+.delete-icon {
+    background: #FEF2F2;
+    color: #EF4444;
+}
+
+.action-label {
+    flex: 1;
+    font-weight: 500;
+    text-align: left;
+}
+
+.action-shortcut {
+    font-size: 11px;
+    color: #9CA3AF;
+    background: #F3F4F6;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 400;
+}
+
+.action-item.danger .action-label {
     color: #EF4444;
 }
 
 .action-item.danger:hover {
-    background: #FEE2E2;
+    background: #FEF2F2;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: #F3F4F6;
+    margin: 4px 8px;
+}
+
+@keyframes dropdownSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 .post-content {
@@ -211,5 +356,14 @@
 @media (max-width: 480px) {
     .post-card {
         padding: 16px;
+    }
+
+    .actions-dropdown {
+        right: -8px;
+        min-width: 180px;
+    }
+
+    .action-shortcut {
+        display: none;
     }
 }
