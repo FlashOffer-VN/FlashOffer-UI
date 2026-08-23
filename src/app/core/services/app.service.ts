@@ -14,6 +14,7 @@ import { PartnerService } from './partner.service';
 import { CtvService } from './ctv.service';
 import { SocialService } from './social.service';
 import { UserRole } from '@core/models/auth.model';
+import { ModalService } from './modal.service';
 
 @Injectable({
     providedIn: 'root'
@@ -22,6 +23,7 @@ export class AppService {
     constructor(
         public auth: AuthService,
         public toast: ToastService,
+        public modal: ModalService,
         public partnerRegister: PartnerRegisterService,
         private translate: TranslateService,
         public ctvRegistration: CtvRegistrationService,
@@ -71,56 +73,26 @@ export class AppService {
     }
 
     // ========== Toast ==========
-    /**
-     * Hiển thị toast success
-     * @param message - Nội dung thông báo
-     * @param title - Tiêu đề (tùy chọn)
-     * @param duration - Thời gian hiển thị (ms)
-     */
     showSuccess(message: string, title?: string, duration?: number): void {
         this.toast.success(message, title, duration);
     }
 
-    /**
-     * Hiển thị toast error
-     * @param message - Nội dung thông báo
-     * @param title - Tiêu đề (tùy chọn)
-     * @param duration - Thời gian hiển thị (ms)
-     */
     showError(message: string, title?: string, duration?: number): void {
         this.toast.error(message, title, duration);
     }
 
-    /**
-     * Hiển thị toast warning
-     * @param message - Nội dung thông báo
-     * @param title - Tiêu đề (tùy chọn)
-     * @param duration - Thời gian hiển thị (ms)
-     */
     showWarning(message: string, title?: string, duration?: number): void {
         this.toast.warning(message, title, duration);
     }
 
-    /**
-     * Hiển thị toast info
-     * @param message - Nội dung thông báo
-     * @param title - Tiêu đề (tùy chọn)
-     * @param duration - Thời gian hiển thị (ms)
-     */
     showInfo(message: string, title?: string, duration?: number): void {
         this.toast.info(message, title, duration);
     }
 
-    /**
-     * Hiển thị toast với options đầy đủ
-     */
     showToast(options: { message: string; type?: ToastType; title?: string; duration?: number }): void {
         this.toast.show(options);
     }
 
-    /**
-     * Đóng toast hiện tại
-     */
     dismissToast(): void {
         this.toast.dismiss();
     }
@@ -148,5 +120,63 @@ export class AppService {
 
     onLanguageChange(): Observable<any> {
         return this.translate.onLangChange;
+    }
+
+    // ========== Modal ==========
+    /**
+  * Xác nhận xóa
+  * @param message - Nội dung xác nhận (tùy chọn)
+  * @param confirmText - Text nút xác nhận (tùy chọn)
+  * @param cancelText - Text nút hủy (tùy chọn)
+  * @returns Promise<boolean> - true nếu xác nhận, false nếu hủy
+  */
+    confirmDelete(message?: string, confirmText?: string, cancelText?: string): Promise<boolean> {
+        return this.modal.confirm({
+            title: this.trans('COMMON.CONFIRM_DELETE'),
+            message: message || this.trans('COMMON.CONFIRM_DELETE_MESSAGE'),
+            confirmText: confirmText || this.trans('COMMON.BUTTON.DELETE'),
+            cancelText: cancelText || this.trans('COMMON.BUTTON.CANCEL'),
+            confirmVariant: 'danger'
+        });
+    }
+
+    /**
+     * Xác nhận chung
+     * @param options - Cấu hình confirm
+     * @returns Promise<boolean>
+     */
+    confirm(options: {
+        title: string;
+        message: string;
+        confirmText?: string;
+        cancelText?: string;
+        confirmVariant?: 'primary' | 'danger' | 'success' | 'warning';
+    }): Promise<boolean> {
+        return this.modal.confirm({
+            title: options.title,
+            message: options.message,
+            confirmText: options.confirmText || this.trans('COMMON.BUTTON.CONFIRM'),
+            cancelText: options.cancelText || this.trans('COMMON.BUTTON.CANCEL'),
+            confirmVariant: options.confirmVariant || 'primary'
+        });
+    }
+
+    /**
+     * Thông báo
+     * @param options - Cấu hình alert
+     * @returns Promise<void>
+     */
+    alert(options: {
+        title: string;
+        message: string;
+        confirmText?: string;
+        confirmVariant?: 'primary' | 'danger' | 'success' | 'warning';
+    }): Promise<void> {
+        return this.modal.alert({
+            title: options.title,
+            message: options.message,
+            confirmText: options.confirmText || this.trans('COMMON.BUTTON.OK'),
+            confirmVariant: options.confirmVariant || 'primary'
+        });
     }
 }

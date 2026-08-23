@@ -264,13 +264,18 @@ export class SocialComponent implements OnInit {
         });
     }
 
-    deletePost(post: SocialPost): void {
+    async deletePost(post: SocialPost): Promise<void> {
         if (!this.canDeletePost(post)) {
             this._appService.showWarning('SOCIAL.NO_PERMISSION');
             return;
         }
 
-        if (confirm(this._appService.trans('SOCIAL.CONFIRM_DELETE'))) {
+        const postTitle = post.title || post.content.slice(0, 50) + '...';
+        const message = this._appService.trans('SOCIAL.CONFIRM_DELETE_MESSAGE', { title: postTitle });
+
+        const confirmed = await this._appService.confirmDelete(message);
+
+        if (confirmed) {
             this._appService.socialService.deletePost(post.id).subscribe({
                 next: () => {
                     this.posts = this.posts.filter(p => p.id !== post.id);

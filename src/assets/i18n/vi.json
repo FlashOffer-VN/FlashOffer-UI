@@ -739,7 +739,8 @@
         "CONTENT": "Nội dung",
         "CONTENT_REQUIRED": "Vui lòng nhập nội dung bài viết",
         "UPDATE_POST_SUCCESS": "Cập nhật bài viết thành công!",
-        "UPDATE_POST_ERROR": "Không thể cập nhật bài viết"
+        "UPDATE_POST_ERROR": "Không thể cập nhật bài viết",
+        "CONFIRM_DELETE_MESSAGE": "Bạn có chắc chắn muốn xóa bài viết \"{{title}}\"?"
     },
     "TOAST": {
         "SUCCESS": "Thành công",
@@ -780,13 +781,16 @@
             "CREATE": "Tạo mới",
             "UPDATE": "Cập nhật",
             "CONFIRM": "Xác nhận",
-            "APPLY": "Áp dụng"
+            "APPLY": "Áp dụng",
+            "OK": "OK"
         },
         "ERROR": {
             "LOAD_FAILED": "Đã có lỗi xảy ra khi tải dữ liệu!",
             "INVALID_ID": "ID không hợp lệ!",
             "NOT_FOUND": "Không tìm thấy dữ liệu!"
-        }
+        },
+        "CONFIRM_DELETE": "Xác nhận xóa",
+        "CONFIRM_DELETE_MESSAGE": "Bạn có chắc chắn muốn xóa? Hành động này không thể hoàn tác."
     },
     "PAGINATION": {
         "SHOWING": "Hiển thị",
