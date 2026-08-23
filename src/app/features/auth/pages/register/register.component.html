@@ -11,7 +11,9 @@
                 <i class="fas fa-user-plus"></i>
             </div>
             <h1>{{ 'REGISTER.TITLE' | translate }}</h1>
-            <p>{{ 'REGISTER.SUBTITLE' | translate }}</p>
+            <p class="subtitle">{{ 'REGISTER.SUBTITLE' | translate }}</p>
+            <p class="description">{{ 'REGISTER.DESCRIPTION' | translate }}</p>
+            <p class="cta">{{ 'REGISTER.CTA' | translate }}</p>
             <div class="register-badge">
                 <i class="fas fa-users"></i>
                 {{ 'REGISTER.COMMUNITY_BADGE' | translate }}
@@ -97,7 +99,7 @@
                 <i class="fas fa-building"></i>
                 {{ 'REGISTER.SECTION_BUSINESS' | translate }}
             </div>
-            <p class="section-desc">{{ 'REGISTER.SECTION_BUSINESS_DESC' | translate }}</p>
+            <div class="section-desc w-100 text-center mt-1">{{ 'REGISTER.SECTION_BUSINESS_DESC' | translate }}</div>
 
             <div class="form-grid">
                 <!-- Business Name -->
@@ -138,27 +140,19 @@
                     </app-ng-select-wrapper>
                 </div>
 
-                <!-- Experience -->
-                <div class="form-group">
-                    <app-ng-select-wrapper formControlName="experience" [items]="experienceLevels"
-                        [label]="'REGISTER.EXPERIENCE' | translate"
-                        [placeholder]="'REGISTER.EXPERIENCE_PLACEHOLDER' | translate" [required]="true"
-                        [isInvalid]="isFieldInvalid('experience')" [errorMessage]="getErrorMessage('experience')"
-                        [primaryColor]="'#7C3AED'" [primaryDark]="'#5B21B6'">
-                    </app-ng-select-wrapper>
+                <!-- Address - THÊM MỚI thay cho experience + linkedin -->
+                <div class="form-group full-width">
+                    <app-input formControlName="address" [label]="'REGISTER.ADDRESS' | translate"
+                        [placeholder]="'REGISTER.ADDRESS_PLACEHOLDER' | translate" [required]="true"
+                        [isInvalid]="isFieldInvalid('address')" [errorMessage]="getErrorMessage('address')"
+                        icon="fas fa-map-marker-alt">
+                    </app-input>
                 </div>
 
                 <!-- Website -->
                 <div class="form-group">
                     <app-input formControlName="website" [label]="'REGISTER.WEBSITE' | translate"
                         [placeholder]="'REGISTER.WEBSITE_PLACEHOLDER' | translate" icon="fas fa-globe">
-                    </app-input>
-                </div>
-
-                <!-- LinkedIn -->
-                <div class="form-group">
-                    <app-input formControlName="linkedin" [label]="'REGISTER.LINKEDIN' | translate"
-                        [placeholder]="'REGISTER.LINKEDIN_PLACEHOLDER' | translate" icon="fab fa-linkedin">
                     </app-input>
                 </div>
             </div>

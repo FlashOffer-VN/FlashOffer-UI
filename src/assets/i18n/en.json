@@ -5,7 +5,7 @@
     "NAV_SUPPLIERS": "Suppliers",
     "NAV_TALENT": "Talent",
     "NAV_COMMUNITY": "Community",
-    "NAV_PARTNER": "Partner",
+    "NAV_PARTNER": "Business Partner",
     "BUTTON_JOIN_CTV": "Join as Collaborator",
     "BUTTON_JOIN_SME": "Connect with SME",
     "ERROR": {
@@ -645,9 +645,11 @@
         }
     },
     "REGISTER": {
-        "TITLE": "Join the EcoCommercial Community",
-        "SUBTITLE": "Connect, learn and grow together",
-        "COMMUNITY_BADGE": "Civilized Business Community",
+        "TITLE": "BECOME A KINDI PARTNER",
+        "SUBTITLE": "Connect Opportunities – Expand Income",
+        "DESCRIPTION": "Kindi connects you with suitable business opportunities, customers and partners.",
+        "CTA": "Register as a Kindi Partner to start receiving and sharing opportunities that match your network.",
+        "COMMUNITY_BADGE": "Business Partner",
         "SECTION_PERSONAL": "Personal Information",
         "SECTION_BUSINESS": "Business Information",
         "SECTION_BUSINESS_DESC": "Share your business info so the community can understand you better",
@@ -718,6 +720,7 @@
     "SOCIAL": {
         "TITLE": "Ecomecial Social Network",
         "DESC": "Connect, share and grow with the entrepreneur community",
+        "TAGLINE": "Connect • Share • Collaborate • Grow",
         "STATS_MEMBERS": "Members",
         "STATS_POSTS": "Posts",
         "STATS_EVENTS": "Events",

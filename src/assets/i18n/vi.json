@@ -5,7 +5,7 @@
     "NAV_SUPPLIERS": "Nguồn Cung",
     "NAV_TALENT": "Tuyển Dụng",
     "NAV_COMMUNITY": "Cộng Đồng",
-    "NAV_PARTNER": "Đối tác",
+    "NAV_PARTNER": "Đối tác doanh nghiệp",
     "BUTTON_JOIN_CTV": "Tham gia CTV",
     "BUTTON_JOIN": "Tham gia",
     "BUTTON_JOIN_SME": "Kết nối với SME",
@@ -601,9 +601,11 @@
         }
     },
     "REGISTER": {
-        "TITLE": "Tham gia cộng đồng EcoCommercial",
-        "SUBTITLE": "Kết nối, học hỏi và phát triển cùng cộng đồng",
-        "COMMUNITY_BADGE": "Cộng đồng doanh nhân văn minh",
+        "TITLE": "TRỞ THÀNH ĐỐI TÁC KINDI",
+        "SUBTITLE": "Kết nối cơ hội – Mở rộng thu nhập",
+        "DESCRIPTION": "Kindi kết nối bạn với các cơ hội kinh doanh, khách hàng và đối tác phù hợp.",
+        "CTA": "Đăng ký trở thành Đối tác Kindi để bắt đầu nhận và chia sẻ các cơ hội phù hợp với mạng lưới của bạn.",
+        "COMMUNITY_BADGE": "Đối tác kinh doanh",
         "SECTION_PERSONAL": "Thông tin cá nhân",
         "SECTION_BUSINESS": "Thông tin doanh nghiệp",
         "SECTION_BUSINESS_DESC": "Chia sẻ thông tin về doanh nghiệp để cộng đồng hiểu rõ về bạn",
@@ -672,8 +674,9 @@
         }
     },
     "SOCIAL": {
-        "TITLE": "Mạng xã hội Ecomecial",
-        "DESC": "Kết nối, chia sẻ và phát triển cùng cộng đồng doanh nhân",
+        "TITLE": "Nền tảng kết nối cơ hội",
+        "DESC": "Thông tin của bạn là tài sản. Kindi giúp bạn tối ưu hóa giá trị từ mạng lưới.",
+        "TAGLINE": "Kết nối • Chia sẻ • Hợp tác • Phát triển",
         "STATS_MEMBERS": "Thành viên",
         "STATS_POSTS": "Bài viết",
         "STATS_EVENTS": "Sự kiện",

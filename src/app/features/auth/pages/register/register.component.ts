@@ -53,14 +53,6 @@ export class RegisterComponent implements OnInit {
         { value: 5, label: '500+ nhân viên' }
     ];
 
-    experienceLevels = [
-        { value: 'beginner', label: 'Dưới 1 năm' },
-        { value: 'junior', label: '1 - 3 năm' },
-        { value: 'mid', label: '3 - 5 năm' },
-        { value: 'senior', label: '5 - 10 năm' },
-        { value: 'expert', label: 'Trên 10 năm' }
-    ];
-
     constructor(
         private fb: FormBuilder,
         private _appService: AppService,
@@ -80,9 +72,8 @@ export class RegisterComponent implements OnInit {
             businessField: [null, [Validators.required]],
             businessSize: [null, [Validators.required]],
             position: ['', [Validators.required]],
-            experience: [null, [Validators.required]],
+            address: ['', [Validators.required, Validators.minLength(5)]],
             website: [''],
-            linkedin: [''],
 
             // Mục tiêu - Sở thích
             interests: [''],
@@ -133,7 +124,7 @@ export class RegisterComponent implements OnInit {
                 businessField: this._appService.trans('REGISTER.VALIDATION.BUSINESS_FIELD_REQUIRED'),
                 businessSize: this._appService.trans('REGISTER.VALIDATION.BUSINESS_SIZE_REQUIRED'),
                 position: this._appService.trans('REGISTER.VALIDATION.POSITION_REQUIRED'),
-                experience: this._appService.trans('REGISTER.VALIDATION.EXPERIENCE_REQUIRED'),
+                address: this._appService.trans('REGISTER.VALIDATION.ADDRESS_REQUIRED'),
                 agreeTerms: this._appService.trans('REGISTER.VALIDATION.AGREE_TERMS_REQUIRED')
             };
             return fieldMap[fieldName] || this._appService.trans('VALIDATION.REQUIRED');
@@ -166,6 +157,9 @@ export class RegisterComponent implements OnInit {
             if (fieldName === 'position') {
                 return this._appService.trans('REGISTER.VALIDATION.POSITION_MINLENGTH');
             }
+            if (fieldName === 'address') {
+                return this._appService.trans('REGISTER.VALIDATION.ADDRESS_MINLENGTH');
+            }
             return this._appService.trans('VALIDATION.MIN_LENGTH', { length: control.errors['minlength'].requiredLength });
         }
 
@@ -185,30 +179,32 @@ export class RegisterComponent implements OnInit {
     }
 
     onSubmit(): void {
-        // if (this.registerForm.invalid) {
-        //     this.registerForm.markAllAsTouched();
-        //     return;
-        // }
 
-        // this.isLoading = true;
+        console.log(this.registerForm)
 
-        // const formData = {
-        //     ...this.registerForm.value,
-        //     role: 'USER'  // ✅ Mặc định role USER
-        // };
+        if (this.registerForm.invalid) {
+            this.registerForm.markAllAsTouched();
+            return;
+        }
 
-        // // ✅ Gửi request đăng ký
-        // this._appService.register(formData).subscribe({
-        //     next: (response) => {
-        //         this.isLoading = false;
-        //         this._appService.showSuccess(this._appService.trans('REGISTER.SUCCESS'));
-        //         this.router.navigate(['/login']);
-        //     },
-        //     error: (error) => {
-        //         this.isLoading = false;
-        //         const errorMsg = this._appService.extractErrorMessage(error);
-        //         this._appService.showError(errorMsg);
-        //     }
-        // });
+        this.isLoading = true;
+
+        const formData = {
+            ...this.registerForm.value,
+            role: 'USER'
+        };
+
+        this._appService.partnerRegister.register(formData).subscribe({
+            next: (response) => {
+                this.isLoading = false;
+                this._appService.showSuccess(this._appService.trans('REGISTER.SUCCESS'));
+                this.router.navigate(['/login']);
+            },
+            error: (error) => {
+                this.isLoading = false;
+                const errorMsg = this._appService.extractErrorMessage(error);
+                this._appService.showError(errorMsg);
+            }
+        });
     }
 }

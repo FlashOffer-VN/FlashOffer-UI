@@ -12,6 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
             <div class="social-header__content">
                 <h1><i class="fas fa-users"></i> {{ 'SOCIAL.TITLE' | translate }}</h1>
                 <p>{{ 'SOCIAL.DESC' | translate }}</p>
+                <p class="tagline">{{ 'SOCIAL.TAGLINE' | translate }}</p>
                 <div class="social-stats">
                     <div class="stat-item">
                         <strong>1,200+</strong>
