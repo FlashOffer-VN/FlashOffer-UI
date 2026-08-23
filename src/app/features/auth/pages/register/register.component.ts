@@ -27,10 +27,10 @@ import { AppService } from '@core/services/app.service';
 export class RegisterComponent implements OnInit {
     registerForm: FormGroup;
     isLoading = false;
+    isSubmitted = false;
     showPassword = false;
     showConfirmPassword = false;
 
-    // Options cho select
     businessFields = [
         { value: 'technology', label: 'Công nghệ thông tin' },
         { value: 'manufacturing', label: 'Sản xuất - Chế tạo' },
@@ -53,43 +53,27 @@ export class RegisterComponent implements OnInit {
         { value: 5, label: '500+ nhân viên' }
     ];
 
-    experienceLevels = [
-        { value: 'beginner', label: 'Dưới 1 năm' },
-        { value: 'junior', label: '1 - 3 năm' },
-        { value: 'mid', label: '3 - 5 năm' },
-        { value: 'senior', label: '5 - 10 năm' },
-        { value: 'expert', label: 'Trên 10 năm' }
-    ];
-
     constructor(
         private fb: FormBuilder,
         private _appService: AppService,
         private router: Router
     ) {
         this.registerForm = this.fb.group({
-            // Thông tin cơ bản
-            fullName: ['', [Validators.required, Validators.minLength(2)]],
+            fullName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]],
             email: ['', [Validators.required, Validators.email]],
             phone: ['', [Validators.required, Validators.pattern(/^0[0-9]{9,10}$/)]],
-            username: ['', [Validators.required, Validators.minLength(3)]],
-            password: ['', [Validators.required, Validators.minLength(6)]],
+            username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+            password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
             confirmPassword: ['', [Validators.required]],
-
-            // Thông tin doanh nhân
-            businessName: ['', [Validators.required, Validators.minLength(2)]],
+            businessName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]],
             businessField: [null, [Validators.required]],
             businessSize: [null, [Validators.required]],
-            position: ['', [Validators.required]],
-            experience: [null, [Validators.required]],
-            website: [''],
-            linkedin: [''],
-
-            // Mục tiêu - Sở thích
-            interests: [''],
-            goals: [''],
-            skills: [''],
-
-            // Đồng thuận
+            position: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+            address: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(500)]],
+            website: ['', [Validators.pattern(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/)]],
+            interests: ['', Validators.maxLength(500)],
+            goals: ['', Validators.maxLength(500)],
+            skills: ['', Validators.maxLength(500)],
             agreeTerms: [false, [Validators.requiredTrue]]
         }, {
             validators: this.passwordMatchValidator
@@ -105,7 +89,28 @@ export class RegisterComponent implements OnInit {
     passwordMatchValidator(group: FormGroup): any {
         const password = group.get('password')?.value;
         const confirm = group.get('confirmPassword')?.value;
-        return password === confirm ? null : { mismatch: true };
+        const confirmControl = group.get('confirmPassword');
+
+        if (!password || !confirm) {
+            if (confirmControl?.hasError('mismatch')) {
+                const errors = { ...confirmControl.errors };
+                delete errors['mismatch'];
+                confirmControl?.setErrors(Object.keys(errors).length ? errors : null);
+            }
+            return null;
+        }
+
+        if (password !== confirm) {
+            confirmControl?.setErrors({ mismatch: true });
+            return { mismatch: true };
+        }
+
+        if (confirmControl?.hasError('mismatch')) {
+            const errors = { ...confirmControl.errors };
+            delete errors['mismatch'];
+            confirmControl?.setErrors(Object.keys(errors).length ? errors : null);
+        }
+        return null;
     }
 
     get f() {
@@ -114,66 +119,87 @@ export class RegisterComponent implements OnInit {
 
     isFieldInvalid(fieldName: string): boolean {
         const control = this.registerForm.get(fieldName);
-        return !!(control && control.invalid && (control.dirty || control.touched));
+        if (!control) return false;
+        return control.invalid && (control.dirty || control.touched || this.isSubmitted);
     }
 
     getErrorMessage(fieldName: string): string {
         const control = this.registerForm.get(fieldName);
         if (!control || !control.errors) return '';
 
-        if (control.errors['required']) {
-            const fieldMap: Record<string, string> = {
-                fullName: this._appService.trans('REGISTER.VALIDATION.FULL_NAME_REQUIRED'),
-                email: this._appService.trans('REGISTER.VALIDATION.EMAIL_REQUIRED'),
-                phone: this._appService.trans('REGISTER.VALIDATION.PHONE_REQUIRED'),
-                username: this._appService.trans('REGISTER.VALIDATION.USERNAME_REQUIRED'),
-                password: this._appService.trans('REGISTER.VALIDATION.PASSWORD_REQUIRED'),
-                confirmPassword: this._appService.trans('REGISTER.VALIDATION.CONFIRM_PASSWORD_REQUIRED'),
-                businessName: this._appService.trans('REGISTER.VALIDATION.BUSINESS_NAME_REQUIRED'),
-                businessField: this._appService.trans('REGISTER.VALIDATION.BUSINESS_FIELD_REQUIRED'),
-                businessSize: this._appService.trans('REGISTER.VALIDATION.BUSINESS_SIZE_REQUIRED'),
-                position: this._appService.trans('REGISTER.VALIDATION.POSITION_REQUIRED'),
-                experience: this._appService.trans('REGISTER.VALIDATION.EXPERIENCE_REQUIRED'),
-                agreeTerms: this._appService.trans('REGISTER.VALIDATION.AGREE_TERMS_REQUIRED')
-            };
-            return fieldMap[fieldName] || this._appService.trans('VALIDATION.REQUIRED');
+        const errorMessages: Record<string, Record<string, string>> = {
+            fullName: {
+                required: this._appService.trans('REGISTER.VALIDATION.FULL_NAME_REQUIRED'),
+                minlength: this._appService.trans('REGISTER.VALIDATION.FULL_NAME_MINLENGTH'),
+                maxlength: this._appService.trans('REGISTER.VALIDATION.FULL_NAME_MAXLENGTH')
+            },
+            email: {
+                required: this._appService.trans('REGISTER.VALIDATION.EMAIL_REQUIRED'),
+                email: this._appService.trans('REGISTER.VALIDATION.EMAIL_INVALID')
+            },
+            phone: {
+                required: this._appService.trans('REGISTER.VALIDATION.PHONE_REQUIRED'),
+                pattern: this._appService.trans('REGISTER.VALIDATION.PHONE_INVALID')
+            },
+            username: {
+                required: this._appService.trans('REGISTER.VALIDATION.USERNAME_REQUIRED'),
+                minlength: this._appService.trans('REGISTER.VALIDATION.USERNAME_MINLENGTH'),
+                maxlength: this._appService.trans('REGISTER.VALIDATION.USERNAME_MAXLENGTH')
+            },
+            password: {
+                required: this._appService.trans('REGISTER.VALIDATION.PASSWORD_REQUIRED'),
+                minlength: this._appService.trans('REGISTER.VALIDATION.PASSWORD_MINLENGTH'),
+                maxlength: this._appService.trans('REGISTER.VALIDATION.PASSWORD_MAXLENGTH')
+            },
+            confirmPassword: {
+                required: this._appService.trans('REGISTER.VALIDATION.CONFIRM_PASSWORD_REQUIRED'),
+                mismatch: this._appService.trans('REGISTER.VALIDATION.PASSWORD_MISMATCH')
+            },
+            businessName: {
+                required: this._appService.trans('REGISTER.VALIDATION.BUSINESS_NAME_REQUIRED'),
+                minlength: this._appService.trans('REGISTER.VALIDATION.BUSINESS_NAME_MINLENGTH'),
+                maxlength: this._appService.trans('REGISTER.VALIDATION.BUSINESS_NAME_MAXLENGTH')
+            },
+            businessField: {
+                required: this._appService.trans('REGISTER.VALIDATION.BUSINESS_FIELD_REQUIRED')
+            },
+            businessSize: {
+                required: this._appService.trans('REGISTER.VALIDATION.BUSINESS_SIZE_REQUIRED')
+            },
+            position: {
+                required: this._appService.trans('REGISTER.VALIDATION.POSITION_REQUIRED'),
+                minlength: this._appService.trans('REGISTER.VALIDATION.POSITION_MINLENGTH'),
+                maxlength: this._appService.trans('REGISTER.VALIDATION.POSITION_MAXLENGTH')
+            },
+            address: {
+                required: this._appService.trans('REGISTER.VALIDATION.ADDRESS_REQUIRED'),
+                minlength: this._appService.trans('REGISTER.VALIDATION.ADDRESS_MINLENGTH'),
+                maxlength: this._appService.trans('REGISTER.VALIDATION.ADDRESS_MAXLENGTH')
+            },
+            website: {
+                pattern: this._appService.trans('REGISTER.VALIDATION.WEBSITE_INVALID')
+            },
+            interests: {
+                maxlength: this._appService.trans('REGISTER.VALIDATION.INTERESTS_MAXLENGTH')
+            },
+            goals: {
+                maxlength: this._appService.trans('REGISTER.VALIDATION.GOALS_MAXLENGTH')
+            },
+            skills: {
+                maxlength: this._appService.trans('REGISTER.VALIDATION.SKILLS_MAXLENGTH')
+            },
+            agreeTerms: {
+                required: this._appService.trans('REGISTER.VALIDATION.AGREE_TERMS_REQUIRED')
+            }
+        };
+
+        const fieldErrors = errorMessages[fieldName];
+        if (!fieldErrors) {
+            return this._appService.trans('VALIDATION.INVALID');
         }
 
-        if (control.errors['email']) {
-            return this._appService.trans('REGISTER.VALIDATION.EMAIL_INVALID');
-        }
-
-        if (control.errors['pattern']) {
-            if (fieldName === 'phone') {
-                return this._appService.trans('REGISTER.VALIDATION.PHONE_INVALID');
-            }
-            return this._appService.trans('VALIDATION.PATTERN');
-        }
-
-        if (control.errors['minlength']) {
-            if (fieldName === 'fullName') {
-                return this._appService.trans('REGISTER.VALIDATION.FULL_NAME_MINLENGTH');
-            }
-            if (fieldName === 'username') {
-                return this._appService.trans('REGISTER.VALIDATION.USERNAME_MINLENGTH');
-            }
-            if (fieldName === 'password') {
-                return this._appService.trans('REGISTER.VALIDATION.PASSWORD_MINLENGTH');
-            }
-            if (fieldName === 'businessName') {
-                return this._appService.trans('REGISTER.VALIDATION.BUSINESS_NAME_MINLENGTH');
-            }
-            if (fieldName === 'position') {
-                return this._appService.trans('REGISTER.VALIDATION.POSITION_MINLENGTH');
-            }
-            return this._appService.trans('VALIDATION.MIN_LENGTH', { length: control.errors['minlength'].requiredLength });
-        }
-
-        if (control.errors['mismatch']) {
-            return this._appService.trans('REGISTER.VALIDATION.PASSWORD_MISMATCH');
-        }
-
-        return this._appService.trans('VALIDATION.INVALID');
+        const errorKey = Object.keys(control.errors)[0];
+        return fieldErrors[errorKey as keyof typeof fieldErrors] || this._appService.trans('VALIDATION.INVALID');
     }
 
     togglePasswordVisibility(): void {
@@ -185,30 +211,44 @@ export class RegisterComponent implements OnInit {
     }
 
     onSubmit(): void {
-        // if (this.registerForm.invalid) {
-        //     this.registerForm.markAllAsTouched();
-        //     return;
-        // }
+        this.isSubmitted = true;
 
-        // this.isLoading = true;
+        // Force re-validate all fields
+        Object.keys(this.registerForm.controls).forEach(key => {
+            this.registerForm.get(key)?.updateValueAndValidity();
+        });
+        this.registerForm.updateValueAndValidity();
 
-        // const formData = {
-        //     ...this.registerForm.value,
-        //     role: 'USER'  // ✅ Mặc định role USER
-        // };
+        if (this.registerForm.invalid) {
+            this.registerForm.markAllAsTouched();
+            const firstInvalid = document.querySelector('.is-invalid, .ng-invalid');
+            if (firstInvalid) {
+                firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            return;
+        }
 
-        // // ✅ Gửi request đăng ký
-        // this._appService.register(formData).subscribe({
-        //     next: (response) => {
-        //         this.isLoading = false;
-        //         this._appService.showSuccess(this._appService.trans('REGISTER.SUCCESS'));
-        //         this.router.navigate(['/login']);
-        //     },
-        //     error: (error) => {
-        //         this.isLoading = false;
-        //         const errorMsg = this._appService.extractErrorMessage(error);
-        //         this._appService.showError(errorMsg);
-        //     }
-        // });
+        this.isLoading = true;
+        const formData = {
+            ...this.registerForm.value,
+            role: 'USER'
+        };
+
+        this._appService.collaboratorService.register(formData).subscribe({
+            next: () => {
+                this.isLoading = false;
+                this._appService.showSuccess(this._appService.trans('REGISTER.SUCCESS'));
+                this.router.navigate(['/login']);
+            },
+            error: (error) => {
+                this.isLoading = false;
+                const errorMsg = this._appService.extractErrorMessage(error);
+                if (errorMsg.includes('Email') || errorMsg.includes('Phone') || errorMsg.includes('duplicate')) {
+                    this._appService.showError('Thông tin đăng ký đã tồn tại, vui lòng kiểm tra lại');
+                } else {
+                    this._appService.showError(errorMsg);
+                }
+            }
+        });
     }
 }

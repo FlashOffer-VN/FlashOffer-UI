@@ -5,7 +5,7 @@
     "NAV_SUPPLIERS": "Suppliers",
     "NAV_TALENT": "Talent",
     "NAV_COMMUNITY": "Community",
-    "NAV_PARTNER": "Partner",
+    "NAV_PARTNER": "Business Partner",
     "BUTTON_JOIN_CTV": "Join as Collaborator",
     "BUTTON_JOIN_SME": "Connect with SME",
     "ERROR": {
@@ -645,9 +645,11 @@
         }
     },
     "REGISTER": {
-        "TITLE": "Join the EcoCommercial Community",
-        "SUBTITLE": "Connect, learn and grow together",
-        "COMMUNITY_BADGE": "Civilized Business Community",
+        "TITLE": "BECOME A KINDI PARTNER",
+        "SUBTITLE": "Connect Opportunities – Expand Income",
+        "DESCRIPTION": "Kindi connects you with suitable business opportunities, customers and partners.",
+        "CTA": "Register as a Kindi Partner to start receiving and sharing opportunities that match your network.",
+        "COMMUNITY_BADGE": "Business Partner",
         "SECTION_PERSONAL": "Personal Information",
         "SECTION_BUSINESS": "Business Information",
         "SECTION_BUSINESS_DESC": "Share your business info so the community can understand you better",
@@ -692,6 +694,8 @@
         "HAVE_ACCOUNT": "Already have an account?",
         "LOGIN": "Login now",
         "SUCCESS": "Registration successful! Please login.",
+        "ADDRESS": "Address",
+        "ADDRESS_PLACEHOLDER": "Enter your address",
         "VALIDATION": {
             "FULL_NAME_REQUIRED": "Please enter full name",
             "FULL_NAME_MINLENGTH": "Full name must be at least 2 characters",
@@ -712,12 +716,16 @@
             "POSITION_REQUIRED": "Please enter your position",
             "POSITION_MINLENGTH": "Position must be at least 2 characters",
             "EXPERIENCE_REQUIRED": "Please select years of experience",
-            "AGREE_TERMS_REQUIRED": "Please agree to the terms"
+            "AGREE_TERMS_REQUIRED": "Please agree to the terms",
+            "ADDRESS_REQUIRED": "Please enter a valid address",
+            "ADDRESS_MINLENGTH": "Address must be at least 5 characters",
+            "ADDRESS_MAXLENGTH": "Address cannot exceed 500 characters"
         }
     },
     "SOCIAL": {
         "TITLE": "Ecomecial Social Network",
         "DESC": "Connect, share and grow with the entrepreneur community",
+        "TAGLINE": "Connect • Share • Collaborate • Grow",
         "STATS_MEMBERS": "Members",
         "STATS_POSTS": "Posts",
         "STATS_EVENTS": "Events",
@@ -779,7 +787,13 @@
         "CONFIRM_DELETE": "Are you sure you want to delete this post?",
         "DELETE_POST_SUCCESS": "Post deleted successfully!",
         "DELETE_POST_ERROR": "Failed to delete post",
-        "EDIT_POST_FEATURE": "Edit feature is under development"
+        "EDIT_POST_FEATURE": "Edit feature is under development",
+        "EDIT_POST": "Edit Post",
+        "CONTENT": "Content",
+        "CONTENT_REQUIRED": "Please enter post content",
+        "UPDATE_POST_SUCCESS": "Post updated successfully!",
+        "UPDATE_POST_ERROR": "Failed to update post",
+        "CONFIRM_DELETE_MESSAGE": "Are you sure you want to delete post \"{{title}}\"?"
     },
     "TOAST": {
         "SUCCESS": "Success",

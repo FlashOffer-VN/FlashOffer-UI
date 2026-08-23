@@ -15,6 +15,7 @@ import { CtvService } from './ctv.service';
 import { SocialService } from './social.service';
 import { UserRole } from '@core/models/auth.model';
 import { ModalService } from './modal.service';
+import { CollaboratorService } from './collaborator.service';
 
 @Injectable({
     providedIn: 'root'
@@ -33,6 +34,7 @@ export class AppService {
         public ctvService: CtvService,
         public partnerService: PartnerService,
         public socialService: SocialService,
+        public collaboratorService: CollaboratorService
     ) { }
 
     // ========== Auth ==========
