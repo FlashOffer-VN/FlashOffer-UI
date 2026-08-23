@@ -650,6 +650,8 @@
         "HAVE_ACCOUNT": "Đã có tài khoản?",
         "LOGIN": "Đăng nhập ngay",
         "SUCCESS": "Đăng ký thành công! Vui lòng đăng nhập.",
+        "ADDRESS": "Địa chỉ",
+        "ADDRESS_PLACEHOLDER": "Số nhà, đường, quận/huyện...",
         "VALIDATION": {
             "FULL_NAME_REQUIRED": "Vui lòng nhập họ và tên",
             "FULL_NAME_MINLENGTH": "Họ và tên tối thiểu 2 ký tự",
@@ -670,7 +672,10 @@
             "POSITION_REQUIRED": "Vui lòng nhập vị trí công việc",
             "POSITION_MINLENGTH": "Vị trí tối thiểu 2 ký tự",
             "EXPERIENCE_REQUIRED": "Vui lòng chọn số năm kinh nghiệm",
-            "AGREE_TERMS_REQUIRED": "Vui lòng đồng ý với điều khoản"
+            "AGREE_TERMS_REQUIRED": "Vui lòng đồng ý với điều khoản",
+            "ADDRESS_REQUIRED": "Vui lòng nhập địa chỉ hợp lệ",
+            "ADDRESS_MINLENGTH": "Địa chỉ phải có ít nhất 5 ký tự",
+            "ADDRESS_MAXLENGTH": "Địa chỉ không được vượt quá 500 ký tự"
         }
     },
     "SOCIAL": {

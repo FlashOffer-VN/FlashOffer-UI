@@ -694,6 +694,8 @@
         "HAVE_ACCOUNT": "Already have an account?",
         "LOGIN": "Login now",
         "SUCCESS": "Registration successful! Please login.",
+        "ADDRESS": "Address",
+        "ADDRESS_PLACEHOLDER": "Enter your address",
         "VALIDATION": {
             "FULL_NAME_REQUIRED": "Please enter full name",
             "FULL_NAME_MINLENGTH": "Full name must be at least 2 characters",
@@ -714,7 +716,10 @@
             "POSITION_REQUIRED": "Please enter your position",
             "POSITION_MINLENGTH": "Position must be at least 2 characters",
             "EXPERIENCE_REQUIRED": "Please select years of experience",
-            "AGREE_TERMS_REQUIRED": "Please agree to the terms"
+            "AGREE_TERMS_REQUIRED": "Please agree to the terms",
+            "ADDRESS_REQUIRED": "Please enter a valid address",
+            "ADDRESS_MINLENGTH": "Address must be at least 5 characters",
+            "ADDRESS_MAXLENGTH": "Address cannot exceed 500 characters"
         }
     },
     "SOCIAL": {

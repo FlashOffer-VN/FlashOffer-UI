@@ -140,8 +140,8 @@
                     </app-ng-select-wrapper>
                 </div>
 
-                <!-- Address - THÊM MỚI thay cho experience + linkedin -->
-                <div class="form-group full-width">
+                <!-- Address -->
+                <div class="form-group">
                     <app-input formControlName="address" [label]="'REGISTER.ADDRESS' | translate"
                         [placeholder]="'REGISTER.ADDRESS_PLACEHOLDER' | translate" [required]="true"
                         [isInvalid]="isFieldInvalid('address')" [errorMessage]="getErrorMessage('address')"
@@ -152,7 +152,9 @@
                 <!-- Website -->
                 <div class="form-group">
                     <app-input formControlName="website" [label]="'REGISTER.WEBSITE' | translate"
-                        [placeholder]="'REGISTER.WEBSITE_PLACEHOLDER' | translate" icon="fas fa-globe">
+                        [placeholder]="'REGISTER.WEBSITE_PLACEHOLDER' | translate"
+                        [isInvalid]="isFieldInvalid('website')" [errorMessage]="getErrorMessage('website')"
+                        icon="fas fa-globe">
                     </app-input>
                 </div>
             </div>
