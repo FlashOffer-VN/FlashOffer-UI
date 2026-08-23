@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { SocialPost, SocialMember, SocialEvent, SocialGroup } from '@core/models/social.model';
+import { PostType, PrivacyType } from '@core/models/social.model';
 import { UserRole } from '@core/models/auth.model';
 import { User } from '@core/models/auth.model';
 
@@ -53,9 +54,27 @@ export class SocialComponent implements OnInit {
     // Edit Modal
     showEditModal = false;
     isSaving = false;
-    editPostData: Partial<SocialPost> = {};
-    editTagInput = '';
     editingPostId: string | null = null;
+    editTagInput = '';
+
+    editPostData: Partial<SocialPost> & {
+        type?: PostType;
+        privacy?: PrivacyType;
+    } = {};
+
+    // Options for edit modal
+    readonly postTypes = [
+        { value: PostType.Post, label: 'SOCIAL.TYPE_POST', icon: 'fa-file-alt' },
+        { value: PostType.Question, label: 'SOCIAL.TYPE_QUESTION', icon: 'fa-question-circle' },
+        { value: PostType.Event, label: 'SOCIAL.TYPE_EVENT', icon: 'fa-calendar' },
+        { value: PostType.Announcement, label: 'SOCIAL.TYPE_ANNOUNCEMENT', icon: 'fa-bullhorn' }
+    ];
+
+    readonly privacyOptions = [
+        { value: PrivacyType.Public, label: 'SOCIAL.PRIVACY_PUBLIC', icon: 'fa-globe' },
+        { value: PrivacyType.Friends, label: 'SOCIAL.PRIVACY_FRIENDS', icon: 'fa-user-friends' },
+        { value: PrivacyType.Private, label: 'SOCIAL.PRIVACY_PRIVATE', icon: 'fa-lock' }
+    ];
 
     ngOnInit(): void {
         this.getCurrentUser();
@@ -189,7 +208,9 @@ export class SocialComponent implements OnInit {
         this.editPostData = {
             title: post.title || '',
             content: post.content,
-            tags: [...post.tags]
+            tags: [...post.tags],
+            type: post.type,
+            privacy: post.privacy
         };
         this.editTagInput = '';
         this.showEditModal = true;
@@ -201,6 +222,29 @@ export class SocialComponent implements OnInit {
         this.editTagInput = '';
         this.editingPostId = null;
         this.isSaving = false;
+    }
+
+    selectEditType(type: PostType): void {
+        this.editPostData.type = type;
+    }
+
+    selectEditPrivacy(privacy: PrivacyType): void {
+        this.editPostData.privacy = privacy;
+    }
+
+    getEditTypeLabel(type: PostType): string {
+        const found = this.postTypes.find(t => t.value === type);
+        return found ? found.label : 'SOCIAL.TYPE_POST';
+    }
+
+    getEditPrivacyLabel(privacy: PrivacyType): string {
+        const found = this.privacyOptions.find(p => p.value === privacy);
+        return found ? found.label : 'SOCIAL.PRIVACY_PUBLIC';
+    }
+
+    getEditPrivacyIcon(privacy: PrivacyType): string {
+        const found = this.privacyOptions.find(p => p.value === privacy);
+        return found ? found.icon : 'fa-globe';
     }
 
     addEditTag(): void {
@@ -243,7 +287,9 @@ export class SocialComponent implements OnInit {
         const updateData = {
             title: this.editPostData.title?.trim() || undefined,
             content: this.editPostData.content.trim(),
-            tags: this.editPostData.tags || []
+            tags: this.editPostData.tags || [],
+            type: this.editPostData.type,
+            privacy: this.editPostData.privacy
         };
 
         this._appService.socialService.updatePost(this.editingPostId, updateData).subscribe({

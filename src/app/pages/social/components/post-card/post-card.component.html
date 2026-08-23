@@ -8,7 +8,19 @@
                     <i *ngIf="post.author.isVerified" class="fas fa-check-circle verified"></i>
                 </div>
                 <div class="author-role">{{ post.author.role }}</div>
-                <div class="post-time">{{ timeAgo }}</div>
+                <div class="post-meta">
+                    <span class="post-time">{{ timeAgo }}</span>
+                    <span class="meta-separator">•</span>
+                    <span class="post-type" [class]="'type-' + post.type">
+                        <i [class]="getTypeIcon(post.type)"></i>
+                        {{ getTypeLabel(post.type) | translate }}
+                    </span>
+                    <span class="meta-separator">•</span>
+                    <span class="post-privacy" [class]="'privacy-' + post.privacy">
+                        <i [class]="getPrivacyIcon(post.privacy)"></i>
+                        {{ getPrivacyLabel(post.privacy) | translate }}
+                    </span>
+                </div>
             </div>
         </div>
 
