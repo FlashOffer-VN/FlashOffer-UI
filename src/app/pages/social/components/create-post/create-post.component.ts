@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Output, Input, inject } from '@angular/core';
+import { Component, EventEmitter, Output, Input, inject, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { QuillModule } from 'ngx-quill';
+import { QuillModule, QuillEditorComponent } from 'ngx-quill';
 import { AppService } from '../../../../core/services/app.service';
 import { PostType, PrivacyType, CreatePostRequest, SocialPost } from '../../../../core/models/social.model';
 
@@ -13,11 +13,14 @@ import { PostType, PrivacyType, CreatePostRequest, SocialPost } from '../../../.
     templateUrl: './create-post.component.html',
     styleUrls: ['./create-post.component.css']
 })
-export class CreatePostComponent {
+export class CreatePostComponent implements AfterViewInit {
     @Output() postCreated = new EventEmitter<SocialPost>();
     @Input() isLoading = false;
 
     private _appService = inject(AppService);
+    private _cdr = inject(ChangeDetectorRef);
+
+    @ViewChild('quillEditor') quillEditor!: QuillEditorComponent;
 
     title = '';
     content = '';
@@ -29,6 +32,7 @@ export class CreatePostComponent {
     imagePreviews: string[] = [];
     showOptions = false;
     isSubmitting = false;
+    showEditor = true; // Thêm flag để force re-render
 
     editorConfig = {
         toolbar: [
@@ -56,6 +60,25 @@ export class CreatePostComponent {
     get canSubmit(): boolean {
         const text = this.content.replace(/<[^>]*>/g, '').trim();
         return text.length > 0 && !this.isLoading && !this.isSubmitting;
+    }
+
+    ngAfterViewInit() {
+        this.fixQuillEditor();
+    }
+
+    private fixQuillEditor(): void {
+        if (this.quillEditor && this.quillEditor.quillEditor) {
+            const editor = this.quillEditor.quillEditor;
+            const container = editor.root;
+            if (container) {
+                container.style.overflowX = 'hidden';
+                container.style.wordWrap = 'break-word';
+                container.style.wordBreak = 'break-word';
+                container.style.whiteSpace = 'pre-wrap';
+                container.style.width = '100%';
+                container.style.maxWidth = '100%';
+            }
+        }
     }
 
     toggleOptions(): void {
@@ -178,6 +201,9 @@ export class CreatePostComponent {
     }
 
     resetForm(): void {
+        // Force re-render quill bằng cách hide/show
+        this.showEditor = false;
+
         this.title = '';
         this.content = '';
         this.selectedType = PostType.Post;
@@ -188,5 +214,50 @@ export class CreatePostComponent {
         this.imagePreviews = [];
         this.showOptions = false;
         this.isSubmitting = false;
+
+        // Force detect changes
+        this._cdr.detectChanges();
+
+        // Show lại quill editor
+        this.showEditor = true;
+
+        // Force detect changes lần nữa
+        this._cdr.detectChanges();
+
+        // Reset quill editor sau khi show lại
+        setTimeout(() => {
+            if (this.quillEditor && this.quillEditor.quillEditor) {
+                const editor = this.quillEditor.quillEditor;
+
+                editor.setText('');
+                const length = editor.getLength();
+                if (length > 0) {
+                    editor.deleteText(0, length);
+                }
+
+                if (editor.history) {
+                    editor.history.clear();
+                }
+
+                const container = editor.root;
+                if (container) {
+                    container.style.cssText = `
+                        overflow-x: hidden !important;
+                        word-wrap: break-word !important;
+                        word-break: break-word !important;
+                        white-space: pre-wrap !important;
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        min-height: 44px;
+                        max-height: 300px;
+                        height: auto;
+                        padding: 4px 0;
+                        box-sizing: border-box !important;
+                    `;
+                }
+
+                editor.update();
+            }
+        }, 0);
     }
 }

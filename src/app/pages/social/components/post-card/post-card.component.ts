@@ -4,11 +4,14 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SocialPost } from '@core/models/social.model';
 import { PostType, PrivacyType } from '@core/models/social.model';
 import { AvatarPipe } from '@shared/pipes/avatar.pipe';
+import { SanitizeHtmlPipe } from '@shared/pipes/sanitize-html.pipe';
+import { FormatHtmlPipe } from '@shared/pipes/format-html.pipe';
+import { TimeAgoPipe } from '@shared/pipes/time-ago.pipe';
 
 @Component({
     selector: 'app-post-card',
     standalone: true,
-    imports: [CommonModule, TranslateModule, AvatarPipe],
+    imports: [CommonModule, TranslateModule, AvatarPipe, SanitizeHtmlPipe, FormatHtmlPipe, TimeAgoPipe],
     templateUrl: './post-card.component.html',
     styleUrls: ['./post-card.component.css']
 })

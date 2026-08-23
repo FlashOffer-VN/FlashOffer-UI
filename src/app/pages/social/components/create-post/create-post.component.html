@@ -8,9 +8,8 @@
             <input type="text" [(ngModel)]="title" [placeholder]="'SOCIAL.POST_TITLE' | translate"
                 class="create-post__title" [disabled]="isLoading" autocomplete="off">
 
-            <!-- Chỉ giữ Quill Editor, xóa textarea cũ -->
-            <quill-editor [(ngModel)]="content" [modules]="editorConfig" [readOnly]="isLoading"
-                (onFocus)="showOptions = true" class="create-post__editor"
+            <quill-editor *ngIf="showEditor" #quillEditor [(ngModel)]="content" [modules]="editorConfig"
+                [readOnly]="isLoading" (onFocus)="showOptions = true" class="create-post__editor"
                 placeholder="{{ 'SOCIAL.WHATS_NEW' | translate }}">
             </quill-editor>
 

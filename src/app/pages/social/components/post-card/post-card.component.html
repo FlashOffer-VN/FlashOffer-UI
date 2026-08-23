@@ -9,7 +9,7 @@
                 </div>
                 <div class="author-role">{{ post.author.role }}</div>
                 <div class="post-meta">
-                    <span class="post-time">{{ timeAgo }}</span>
+                    <span class="post-time">{{ post.createdAt | timeAgo }}</span>
                     <span class="meta-separator">•</span>
                     <span class="post-type" [class]="'type-' + post.type">
                         <i [class]="getTypeIcon(post.type)"></i>
@@ -47,9 +47,13 @@
 
     <div class="post-content">
         <h3 *ngIf="post.title" class="post-title">{{ post.title }}</h3>
-        <p class="post-text" [class.expanded]="post.isExpanded">
-            {{ post.content }}
-        </p>
+        <div class="post-text" [class.expanded]="post.isExpanded" [innerHTML]="post.content | sanitizeHtml | formatHtml : { 
+                 fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                 fontSize: '15px',
+                 color: '#1F2937',
+                 lineHeight: '1.7'
+             }">
+        </div>
         <button *ngIf="post.content.length > 200" class="read-more" (click)="toggleReadMore.emit(post)">
             {{ post.isExpanded ? ('SOCIAL.COLLAPSE' | translate) : ('SOCIAL.READ_MORE' | translate) }}
         </button>
