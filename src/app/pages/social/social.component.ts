@@ -1,21 +1,20 @@
 // social.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
-import { SocialService } from '@core/services/social.service';
 import { SocialPost, SocialMember, SocialEvent, SocialGroup } from '@core/models/social.model';
 
 // Components
 import { SocialHeaderComponent } from './components/social-header/social-header.component';
-import { CreatePostComponent, CreatePostData } from './components/create-post/create-post.component';
+import { CreatePostComponent } from './components/create-post/create-post.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
 import { TrendingTopicsComponent } from './components/trending-topics/trending-topics.component';
-import { MemberCardComponent } from './components/member-card/member-card.component';
-import { EventCardComponent } from './components/event-card/event-card.component';
-import { GroupCardComponent } from './components/group-card/group-card.component';
 import { SocialSidebarComponent } from './components/social-sidebar/social-sidebar.component';
+import { GroupCardComponent } from './components/group-card/group-card.component';
+import { EventCardComponent } from './components/event-card/event-card.component';
+import { MemberCardComponent } from './components/member-card/member-card.component';
 
 @Component({
     selector: 'app-social',
@@ -28,47 +27,86 @@ import { SocialSidebarComponent } from './components/social-sidebar/social-sideb
         CreatePostComponent,
         PostCardComponent,
         TrendingTopicsComponent,
-        MemberCardComponent,
-        EventCardComponent,
+        SocialSidebarComponent,
         GroupCardComponent,
-        SocialSidebarComponent
+        EventCardComponent,
+        MemberCardComponent
     ],
     templateUrl: './social.component.html',
     styleUrls: ['./social.component.css']
 })
 export class SocialComponent implements OnInit {
+    private _appService = inject(AppService);
+
     posts: SocialPost[] = [];
     members: SocialMember[] = [];
     events: SocialEvent[] = [];
     groups: SocialGroup[] = [];
     trendingTopics: string[] = [];
-    isLoading = true;
+    isLoadingPosts = false;
+    isLoadingMembers = false;
+    isLoadingEvents = false;
+    isLoadingGroups = false;
     selectedTab: 'feed' | 'members' | 'events' | 'groups' = 'feed';
 
-    constructor(
-        private _appService: AppService,
-        private socialService: SocialService
-    ) { }
-
     ngOnInit(): void {
-        this.loadData();
+        this.loadPosts();
+        this.loadMembers();
+        this.loadEvents();
+        this.loadGroups();
         this.loadTrendingTopics();
     }
 
-    loadData(): void {
-        this.isLoading = true;
-        this.socialService.getPosts().subscribe(posts => {
-            this.posts = posts;
-            this.isLoading = false;
+    // ===== LOAD METHODS =====
+    loadPosts(): void {
+        this.isLoadingPosts = true;
+        this._appService.socialService.getPosts().subscribe({
+            next: (response) => {
+                this.posts = response.data;
+                this.isLoadingPosts = false;
+            },
+            error: () => {
+                this.isLoadingPosts = false;
+            }
         });
-        this.socialService.getMembers().subscribe(members => {
-            this.members = members;
+    }
+
+    loadMembers(): void {
+        this.isLoadingMembers = true;
+        this._appService.socialService.getMembers().subscribe({
+            next: (members) => {
+                this.members = members;
+                this.isLoadingMembers = false;
+            },
+            error: () => {
+                this.isLoadingMembers = false;
+            }
         });
-        this.socialService.getEvents().subscribe(events => {
-            this.events = events;
+    }
+
+    loadEvents(): void {
+        this.isLoadingEvents = true;
+        this._appService.socialService.getEvents().subscribe({
+            next: (events) => {
+                this.events = events;
+                this.isLoadingEvents = false;
+            },
+            error: () => {
+                this.isLoadingEvents = false;
+            }
         });
-        this.socialService.getGroups().subscribe(groups => {
-            this.groups = groups;
+    }
+
+    loadGroups(): void {
+        this.isLoadingGroups = true;
+        this._appService.socialService.getGroups().subscribe({
+            next: (groups) => {
+                this.groups = groups;
+                this.isLoadingGroups = false;
+            },
+            error: () => {
+                this.isLoadingGroups = false;
+            }
         });
     }
 
@@ -83,16 +121,16 @@ export class SocialComponent implements OnInit {
 
     // ===== Post Actions =====
     toggleLike(post: SocialPost): void {
-        this.socialService.likePost(post.id).subscribe();
+        this._appService.socialService.likePost(post.id).subscribe();
     }
 
     toggleSave(post: SocialPost): void {
-        this.socialService.savePost(post.id).subscribe();
+        this._appService.socialService.savePost(post.id).subscribe();
         this._appService.showSuccess(post.isSaved ? 'Đã lưu bài viết!' : 'Đã bỏ lưu!');
     }
 
     sharePost(post: SocialPost): void {
-        post.shares++;
+        this._appService.socialService.sharePost(post.id).subscribe();
         this._appService.showSuccess('Đã chia sẻ bài viết!');
     }
 
@@ -101,26 +139,10 @@ export class SocialComponent implements OnInit {
     }
 
     // ===== Create Post =====
-    createPost(data: CreatePostData): void {
-        this.isLoading = true;
-        this.socialService.createPost({
-            title: data.title,
-            content: data.content,
-            type: data.type,
-            privacy: data.privacy,
-            tags: data.tags,
-            images: data.images // sẽ xử lý upload sau
-        }).subscribe({
-            next: (post) => {
-                this.posts.unshift(post);
-                this.isLoading = false;
-                this._appService.showSuccess('Đã đăng bài viết!');
-            },
-            error: (err) => {
-                this.isLoading = false;
-                this._appService.showError('Không thể đăng bài viết. Vui lòng thử lại!');
-            }
-        });
+    onPostCreated(post: SocialPost): void {
+        // Chỉ reload posts, không reload members/events/groups
+        this.loadPosts();
+        this._appService.showSuccess('Đã đăng bài viết!');
     }
 
     // ===== Member Actions =====
@@ -153,7 +175,7 @@ export class SocialComponent implements OnInit {
     }
 
     // ===== Utility =====
-    getTimeAgo(date: Date): string {
+    getTimeAgo(date: string): string {
         const now = new Date();
         const diff = Math.floor((now.getTime() - new Date(date).getTime()) / 1000);
         if (diff < 60) return 'Vừa xong';

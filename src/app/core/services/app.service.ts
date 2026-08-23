@@ -12,6 +12,7 @@ import { GroupBuyingRequestService } from './group-buying-request.service';
 import { OfferRequestService } from './offer-request.service';
 import { PartnerService } from './partner.service';
 import { CtvService } from './ctv.service';
+import { SocialService } from './social.service';
 
 @Injectable({
     providedIn: 'root'
@@ -28,6 +29,7 @@ export class AppService {
         public offerRequest: OfferRequestService,
         public ctvService: CtvService,
         public partnerService: PartnerService,
+        public socialService: SocialService,
     ) { }
 
     // ========== Auth ==========

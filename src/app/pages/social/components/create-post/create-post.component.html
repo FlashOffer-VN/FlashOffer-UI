@@ -108,11 +108,11 @@
                 <div class="options-footer__left">
                     <span class="privacy-info">
                         <i [class]="'fas ' + getPrivacyIcon(selectedPrivacy)"></i>
-                        {{ getPrivacyLabel(selectedPrivacy) }}
+                        {{ getPrivacyLabel(selectedPrivacy) | translate}}
                     </span>
                     <span class="type-info">
                         <i class="fas fa-file-alt"></i>
-                        {{ getTypeLabel(selectedType) }}
+                        {{ getTypeLabel(selectedType) | translate}}
                     </span>
                 </div>
                 <button type="button" class="submit-btn" (click)="onSubmit()" [disabled]="!canSubmit">

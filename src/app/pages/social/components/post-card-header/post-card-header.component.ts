@@ -2,18 +2,19 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SocialPost } from '@core/models/social.model';
+import { AvatarPipe } from '@shared/pipes/avatar.pipe';
 
 @Component({
     selector: 'app-post-card-header',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, AvatarPipe],
     template: `
         <div class="post-card__header">
             <div class="post-author">
-                <img [src]="post.author.avatar" [alt]="post.author.name">
+                <img [src]="post.author.avatar | avatar" [alt]="post.author.fullName">
                 <div>
                     <span class="name">
-                        {{ post.author.name }}
+                        {{ post.author.fullName }}
                         <i *ngIf="post.author.isVerified" class="fas fa-check-circle verified"></i>
                     </span>
                     <span class="role">{{ post.author.role }}</span>

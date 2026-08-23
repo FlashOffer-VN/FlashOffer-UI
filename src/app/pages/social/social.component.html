@@ -22,10 +22,10 @@
         <div class="social-feed">
             @if (selectedTab === 'feed') {
             <!-- Create Post -->
-            <app-create-post (create)="createPost($event)"></app-create-post>
+            <app-create-post (postCreated)="onPostCreated($event)"></app-create-post>
 
             <!-- Loading -->
-            @if (isLoading) {
+            @if (isLoadingPosts) {
             <div class="loading-posts">
                 <i class="fas fa-spinner fa-spin"></i>
                 <span>{{ 'SOCIAL.LOADING' | translate }}</span>
@@ -34,8 +34,8 @@
 
             <!-- Posts -->
             @for (post of posts; track post.id) {
-            <app-post-card [post]="post" [timeAgo]="getTimeAgo(post.createdAt)" (like)="toggleLike($event)"
-                (share)="sharePost($event)" (save)="toggleSave($event)" (toggleReadMore)="toggleReadMore($event)">
+            <app-post-card [post]="post" [timeAgo]="getTimeAgo(post.createdAt)" (like)="toggleLike(post)"
+                (share)="sharePost(post)" (save)="toggleSave(post)" (toggleReadMore)="toggleReadMore(post)">
             </app-post-card>
             }
 
@@ -46,7 +46,7 @@
             @if (selectedTab === 'members') {
             <div class="members-grid">
                 @for (member of members; track member.id) {
-                <app-member-card [member]="member" (follow)="followMember($event)">
+                <app-member-card [member]="member" (follow)="followMember(member)">
                 </app-member-card>
                 }
             </div>
@@ -55,7 +55,7 @@
             @if (selectedTab === 'events') {
             <div class="events-grid">
                 @for (event of events; track event.id) {
-                <app-event-card [event]="event" (register)="registerEvent($event)">
+                <app-event-card [event]="event" (register)="registerEvent(event)">
                 </app-event-card>
                 }
             </div>
@@ -64,7 +64,7 @@
             @if (selectedTab === 'groups') {
             <div class="groups-grid">
                 @for (group of groups; track group.id) {
-                <app-group-card [group]="group" (join)="joinGroup($event)">
+                <app-group-card [group]="group" (join)="joinGroup(group)">
                 </app-group-card>
                 }
             </div>
