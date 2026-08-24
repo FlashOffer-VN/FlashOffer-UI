@@ -1,3 +1,4 @@
+// shared/components/modal/modal.component.ts
 import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -11,13 +12,16 @@ import { CommonModule } from '@angular/common';
       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn"
       (click)="onBackdropClick($event)">
       <div
-        class="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-slideUp"
+        class="bg-white rounded-xl shadow-xl w-full max-h-[90vh] overflow-y-auto animate-slideUp"
         [class]="getSizeClass()"
+        [style.max-width]="customWidth || 'auto'"
         (click)="$event.stopPropagation()">
+        
         <!-- Header -->
-        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        <div *ngIf="showHeader" class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h3 class="text-lg font-semibold text-secondary">{{ title }}</h3>
           <button
+            *ngIf="showCloseButton"
             (click)="close()"
             class="text-gray-400 hover:text-secondary transition">
             <i class="fa-solid fa-xmark text-2xl"></i>
@@ -26,7 +30,6 @@ import { CommonModule } from '@angular/common';
 
         <!-- Content -->
         <div class="px-6 py-4">
-          <!-- 👈 THÊM DÒNG NÀY -->
           <p *ngIf="message" class="text-gray-700 text-base">{{ message }}</p>
           <ng-content></ng-content>
         </div>
@@ -79,6 +82,9 @@ export class ModalComponent {
   @Input() showCancel = true;
   @Input() loading = false;
   @Input() size: 'sm' | 'md' | 'lg' = 'md';
+  @Input() customWidth: string = '';
+  @Input() showHeader: boolean = true;
+  @Input() showCloseButton: boolean = true;
   @Output() confirm = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
   @Output() closed = new EventEmitter<void>();

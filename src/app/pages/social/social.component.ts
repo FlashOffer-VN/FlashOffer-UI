@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+// social.component.ts
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -17,6 +18,9 @@ import { SocialSidebarComponent } from './components/social-sidebar/social-sideb
 import { GroupCardComponent } from './components/group-card/group-card.component';
 import { EventCardComponent } from './components/event-card/event-card.component';
 import { MemberCardComponent } from './components/member-card/member-card.component';
+import { ActivatedRoute } from '@angular/router';
+import { PostDetailModalComponent } from './components/post-detail-modal/post-detail-modal.component';
+import { ModalComponent } from '@shared/components/modal/modal.component';
 
 @Component({
     selector: 'app-social',
@@ -38,8 +42,11 @@ import { MemberCardComponent } from './components/member-card/member-card.compon
     templateUrl: './social.component.html',
     styleUrls: ['./social.component.css']
 })
-export class SocialComponent implements OnInit {
-    private _appService = inject(AppService);
+export class SocialComponent implements OnInit, AfterViewInit {
+    constructor(
+        private _appService: AppService,
+        private _route: ActivatedRoute
+    ) { }
 
     posts: SocialPost[] = [];
     members: SocialMember[] = [];
@@ -52,6 +59,10 @@ export class SocialComponent implements OnInit {
     isLoadingGroups = false;
     selectedTab: 'feed' | 'members' | 'events' | 'groups' = 'feed';
     currentUser: User | null = null;
+
+    // Post Detail Modal
+    private _pendingPostId: string | null = null;
+    private _isInitialized = false;
 
     // Edit Modal
     showEditModal = false;
@@ -90,7 +101,25 @@ export class SocialComponent implements OnInit {
         { value: PrivacyType.Private, label: 'SOCIAL.PRIVACY_PRIVATE', icon: 'fa-lock' }
     ];
 
+    ngAfterViewInit(): void {
+        this._isInitialized = true;
+        if (this._pendingPostId) {
+            this.openPostDetail(this._pendingPostId);
+            this._pendingPostId = null;
+        }
+    }
+
     ngOnInit(): void {
+        this._route.params.subscribe(params => {
+            const postId = params['postId'];
+            if (postId) {
+                if (this._isInitialized) {
+                    this.openPostDetail(postId);
+                } else {
+                    this._pendingPostId = postId;
+                }
+            }
+        });
         this.getCurrentUser();
         this.loadPosts();
         this.loadMembers();
@@ -175,11 +204,16 @@ export class SocialComponent implements OnInit {
         ];
     }
 
+    public likeStatus = {};
     toggleLike(post: SocialPost): void {
         this._appService.socialService.likePost(post.id).subscribe({
-            next: () => { },
+            next: (response) => {
+                post.isLiked = !post.isLiked;
+                post.likesCount += post.isLiked ? 1 : -1;
+                post.likesCount = Math.max(0, post.likesCount);
+            },
             error: () => {
-                this._appService.showError('SOCIAL.LIKE_ERROR');
+                this._appService.showError(this._appService.trans('SOCIAL.LIKE_ERROR'));
             }
         });
     }
@@ -396,5 +430,27 @@ export class SocialComponent implements OnInit {
         if (diff < 3600) return Math.floor(diff / 60) + ' phút';
         if (diff < 86400) return Math.floor(diff / 3600) + ' giờ';
         return Math.floor(diff / 86400) + ' ngày';
+    }
+
+    openPostDetail(postId: string): void {
+        this._appService.socialService.getPostById(postId).subscribe({
+            next: (response) => {
+                this._appService.modal.create(ModalComponent, {
+                    contentComponent: PostDetailModalComponent,
+                    contentData: { post: response.data },
+                    size: 'lg',
+                    customWidth: '800px',
+                    showCancel: false,
+                    title: '',
+                    showHeader: false,
+                    showFooter: false,
+                    showCloseButton: false,
+                });
+            },
+            error: (err) => {
+                console.error('❌ Error loading post:', err);
+                this._appService.showError(this._appService.trans('SOCIAL.LOAD_POST_ERROR'));
+            }
+        });
     }
 }

@@ -52,7 +52,16 @@ export const routes: Routes = [
             { path: 'partner', loadComponent: () => import('./pages/partner/partner.component').then(m => m.PartnerComponent) },
             {
                 path: 'social',
-                loadComponent: () => import('./pages/social/social.component').then(m => m.SocialComponent)
+                children: [
+                    {
+                        path: '',
+                        loadComponent: () => import('./pages/social/social.component').then(m => m.SocialComponent)
+                    },
+                    {
+                        path: ':postId',
+                        loadComponent: () => import('./pages/social/social.component').then(m => m.SocialComponent)
+                    }
+                ]
             }
             // Chi tiết đối tác
             // { path: 'partner/:id', loadComponent: () => import('./pages/partner-detail/partner-detail.component').then(m => m.PartnerDetailComponent) },
