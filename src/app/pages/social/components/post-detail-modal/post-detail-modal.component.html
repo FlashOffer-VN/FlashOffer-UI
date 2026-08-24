@@ -7,10 +7,10 @@
     <ng-container *ngIf="post">
         <div class="modal-header">
             <div class="author-info">
-                <img [src]="post.author?.avatar | avatar" class="avatar">
+                <img [src]="post.author.avatar | avatar" class="avatar">
                 <div>
-                    <div class="author-name">{{ post.author?.fullName || '' }}</div>
-                    <div class="author-role">{{ post.author?.role || '' }}</div>
+                    <div class="author-name">{{ post.author.fullName || '' }}</div>
+                    <div class="author-role">{{ post.author.role || '' }}</div>
                 </div>
             </div>
         </div>
