@@ -16,6 +16,7 @@ import { SocialService } from './social.service';
 import { UserRole } from '@core/models/auth.model';
 import { ModalService } from './modal.service';
 import { CollaboratorService } from './collaborator.service';
+import { ModalComponent } from '@shared/components/modal/modal.component';
 
 @Injectable({
     providedIn: 'root'
@@ -180,5 +181,43 @@ export class AppService {
             confirmText: options.confirmText || this.trans('COMMON.BUTTON.OK'),
             confirmVariant: options.confirmVariant || 'primary'
         });
+    }
+
+    /**
+     * Mở modal với component bất kỳ
+     * @param component - Component cần hiển thị
+     * @param data - Data truyền vào component
+     * @param options - Cấu hình modal
+     * @returns ModalRef
+     */
+    openModal(component: any, data: any = {}, options: any = {}): any {
+        if (component === ModalComponent && data.contentComponent) {
+            return this.modal.create(ModalComponent, {
+                contentComponent: data.contentComponent,
+                contentData: data.contentData || {},
+                size: options.size || 'md',
+                showCancel: options.showCancel ?? false,
+                showFooter: options.showFooter ?? true,
+                title: options.title || '',
+                customWidth: options.customWidth || '',
+                showHeader: options.showHeader ?? true,
+                showCloseButton: options.showCloseButton ?? true
+            });
+        }
+
+        const modalRef = this.modal.create(component, {
+            title: options.title || '',
+            size: options.size || 'md',
+            showCancel: options.showCancel ?? false,
+            confirmText: options.confirmText || this.trans('COMMON.BUTTON.CONFIRM'),
+            cancelText: options.cancelText || this.trans('COMMON.BUTTON.CANCEL'),
+            confirmVariant: options.confirmVariant || 'primary'
+        });
+
+        if (data) {
+            Object.assign(modalRef.componentRef.instance, data);
+        }
+
+        return modalRef;
     }
 }

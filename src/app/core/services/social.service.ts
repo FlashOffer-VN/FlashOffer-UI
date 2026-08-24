@@ -14,138 +14,20 @@ import {
     EventType
 } from '../models/social.model';
 import { PagedResponse } from '@core/models/paged-response.model';
+import { ApiResponse } from '@core/models/auth.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SocialService {
-    private readonly _baseUrl = 'social';
-
-    // ===== MOCK DATA =====
-    private _mockPosts: SocialPost[] = [
-        // {
-        //             id: '1',
-        //             author: {
-        //                 id: '1',
-        //                 fullName: 'Minh Nguyen',
-        //                 avatar: 'assets/avatars/avatar.jpg',
-        //                 username: 'minhnguyen',
-        //                 role: 'Founder tại SMEConnect',
-        //                 isVerified: true
-        //             },
-        //             title: 'KHÔNG AI THÀNH CÔNG MỘT MÌNH',
-        //             content: `Chúng ta thích tôn thờ hình ảnh một thiên tài đơn độc, tự tay dựng nên đế chế tỷ đô từ một gara xe. Nhưng khi lật lại lời kể của chính những người trong cuộc, sự thật lại khác hẳn.
-
-        // 1. Bill Gates: "Không có Paul, sẽ không có Microsoft"
-        // Khi Paul Allen - người bạn thân cùng sáng lập Microsoft - qua đời năm 2018, Bill Gates không nói những lời sáo rỗng thông thường. Ông viết:
-        // "Without Paul's genius, without Paul's push, without Paul's insight, there's no Microsoft, just not a chance."
-
-        // Gates là người giỏi kinh doanh và lập trình, nhưng chính Allen mới là người mang tầm nhìn về một chiếc máy tính cá nhân cho mọi nhà, và là người thúc Gates bỏ học Harvard để bắt tay làm ngay.
-
-        // 2. Steve Jobs và Steve Wozniak: Ai cũng cần một "Woz" của riêng mình
-        // Steve Jobs nổi tiếng là bậc thầy thuyết phục và tầm nhìn sản phẩm. Nhưng trong mười năm đầu của Apple, sản phẩm duy nhất mang lại doanh thu thực sự - chiếc Apple II - là do một mình Steve Wozniak thiết kế gần như trọn vẹn. Wozniak từng nói thẳng: "Jobs couldn't have done it without me."
-
-        // 3. Elon Musk: Trận chiến tuyển người quan trọng nhất sự nghiệp
-        // Khi được hỏi về thành công của OpenAI, Elon Musk không nhắc đến vốn đầu tư hay ý tưởng ban đầu. Ông nhắc đến một con người: Ilya Sutskever. Musk chia sẻ: "That was one of the toughest recruiting battles I've ever had, but that was really the linchpin for OpenAI being successful."
-
-        // BÀI HỌC BẢN CHẤT:
-        // Điểm chung của Gates, Jobs và Musk không phải là họ may mắn gặp đúng người. Đó là họ đủ tỉnh táo để nhận ra giới hạn của chính mình, và đủ khiêm tốn để công khai thừa nhận điều đó.
-
-        // Một người có thể giỏi đến mức xuất chúng, nhưng không ai giỏi đều ở mọi mặt. Đi tìm người bù đắp cho phần mình còn thiếu không phải là dấu hiệu của sự yếu kém. Đó là điều kiện để đi được xa hơn giới hạn của một cá nhân.
-
-        // Nếu bạn đang khởi nghiệp, câu hỏi không nên dừng ở "tôi có đủ giỏi để tự làm không". Câu hỏi cần đặt ra là: ai là "Paul Allen", ai là "Wozniak", ai là "Ilya Sutskever" của chính mình - và mình đã đủ can đảm để đi tìm và giữ chân người đó chưa.`,
-        //             likesCount: 245,
-        //             commentsCount: 38,
-        //             sharesCount: 56,
-        //             isLiked: false,
-        //             isSaved: false,
-        //             createdAt: '2026-08-04T10:30:00',
-        //             tags: ['khởi_nghiệp', 'đồng_đội', 'lãnh_đạo'],
-        //             type: 1,
-        //             privacy: 1,
-        //             isAnswered: false,
-        //         },
-        //         {
-        //             id: '2',
-        //             author: {
-        //                 id: '2',
-        //                 fullName: 'Chuyện Doanh Nhân',
-        //                 avatar: 'assets/avatars/avatar.jpg',
-        //                 username: 'chuyendoanhnhan',
-        //                 role: 'Trang thông tin doanh nghiệp',
-        //                 isVerified: false
-        //             },
-        //             title: 'Cú lừa ngọt ngào mang tên trả góp 0%',
-        //             content: `NHÌN CÁCH "ÔNG TRÙM BÁN LẺ" CHƠI ĐÙA VỚI DÒNG TIỀN, 90% SẾP VIỆT MỚI NHẬN RA MÌNH ĐANG LÀM KINH DOANH NHƯ... CHƠI ĐỒ HÀNG!`,
-        //             likesCount: 189,
-        //             commentsCount: 52,
-        //             sharesCount: 94,
-        //             isLiked: false,
-        //             isSaved: false,
-        //             createdAt: '2026-08-02T14:15:00',
-        //             tags: ['tài_chính', 'trả_góp', 'kinh_doanh', 'dòng_tiền'],
-        //             type: 1,
-        //             privacy: 1,
-        //             isAnswered: false,
-
-        //         },
-        //         {
-        //             id: '3',
-        //             author: {
-        //                 id: '3',
-        //                 fullName: 'Phùng Lê Lâm Hải',
-        //                 avatar: 'assets/avatars/avatar.jpg',
-        //                 username: 'phunglelamhai',
-        //                 role: 'Chuyên gia tài chính tại Equitix',
-        //                 isVerified: true
-        //             },
-        //             title: 'EVERY HALF - Chuỗi Specialty Coffee Gọi Vốn 8 Triệu USD Series A',
-        //             content: `EVERY HALF - CHUỖI SPECIALTY COFFEE VỪA GỌI VỐN 8 TRIỆU USD VÒNG SERIES A VÀ BÀI HỌC DÀNH CHO FOUNDERS`,
-        //             likesCount: 356,
-        //             commentsCount: 87,
-        //             sharesCount: 142,
-        //             isLiked: false,
-        //             isSaved: false,
-        //             createdAt: '2026-08-06T09:00:00',
-        //             tags: ['gọi_vốn', 'startup', 'coffee', 'series_a', 'F&B'],
-        //             type: 1,
-        //             privacy: 1,
-        //             isAnswered: false,
-
-        //         },
-        //         {
-        //             id: '4',
-        //             author: {
-        //                 id: '4',
-        //                 fullName: 'Diễn đàn SME',
-        //                 avatar: 'assets/avatars/avatar.jpg',
-        //                 username: 'diendansme',
-        //                 role: 'Thành viên cộng đồng',
-        //                 isVerified: false
-        //             },
-        //             title: 'Mọi người thấy quan điểm này đúng không?',
-        //             content: `Mọi người thấy quan điểm này đúng không?
-
-        // Theo mình, trong kinh doanh, yếu tố con người và đội nhóm quan trọng hơn ý tưởng rất nhiều. Một ý tưởng hay với một đội ngũ yếu sẽ thất bại. Nhưng một đội ngũ mạnh có thể biến một ý tưởng bình thường thành điều phi thường.
-
-        // Bạn nghĩ sao? Hãy chia sẻ quan điểm của bạn bên dưới nhé!`,
-        //             likesCount: 67,
-        //             commentsCount: 24,
-        //             sharesCount: 8,
-        //             isLiked: false,
-        //             isSaved: false,
-        //             createdAt: '2026-08-07T08:00:00',
-        //             tags: ['thảo_luận', 'góc_nhìn', 'khởi_nghiệp'],
-        //             type: 1,
-        //             privacy: 1,
-        //             isAnswered: false
-        //         }
-    ];
+    private readonly _baseSocialUrl = 'social';
+    private readonly _baseSocialInteractionUrl = 'socialInteraction';
 
     constructor(private _apiService: ApiService) { }
 
+    _mockPosts = [];
+
     // ===== POSTS =====
-    // ✅ CÓ API - Gọi thật
     getPosts(query: GetPostsQuery = {}): Observable<PagedResponse<SocialPost>> {
         const params: any = {
             pageNumber: query.pageNumber || 1,
@@ -156,67 +38,25 @@ export class SocialService {
         if (query.tag) params.tag = query.tag;
 
         return this._apiService.get<PagedResponse<SocialPost>>(
-            `${this._baseUrl}/posts`,
+            `${this._baseSocialUrl}/posts`,
             params
-        ).pipe(
-            catchError(() => {
-                // Fallback mock data nếu API lỗi
-                return this._getMockPosts();
-            })
         );
     }
 
-    // ✅ CÓ API - Gọi thật
-    getPostById(id: string): Observable<SocialPost> {
-        return this._apiService.get<SocialPost>(`${this._baseUrl}/posts/${id}`).pipe(
-            catchError(() => {
-                const mock = this._mockPosts.find(p => p.id === id);
-                return mock ? of(mock) : throwError(() => new Error('Post not found'));
-            })
-        );
+    getPostById(id: string): Observable<any> {
+        return this._apiService.get<SocialPost>(`${this._baseSocialUrl}/posts/${id}`);
     }
 
-    // ✅ CÓ API - Gọi thật
     createPost(data: CreatePostRequest): Observable<SocialPost> {
-        return this._apiService.post<SocialPost>(`${this._baseUrl}/posts`, data).pipe(
-            tap(post => {
-                // Thêm vào mock cache
-                this._mockPosts.unshift(post);
-            })
-        );
+        return this._apiService.post<SocialPost>(`${this._baseSocialUrl}/posts`, data);
     }
 
-    // ✅ CÓ API - Gọi thật
     updatePost(id: string, data: UpdatePostRequest): Observable<SocialPost> {
-        return this._apiService.put<SocialPost>(`${this._baseUrl}/posts/${id}`, data).pipe(
-            tap(updated => {
-                const index = this._mockPosts.findIndex(p => p.id === id);
-                if (index !== -1) {
-                    this._mockPosts[index] = { ...this._mockPosts[index], ...updated };
-                }
-            })
-        );
+        return this._apiService.put<SocialPost>(`${this._baseSocialUrl}/posts/${id}`, data);
     }
 
-    // ✅ CÓ API - Gọi thật
     deletePost(id: string): Observable<void> {
-        return this._apiService.delete<void>(`${this._baseUrl}/posts/${id}`);
-    }
-
-    // ===== MOCK DATA HELPERS =====
-    private _getMockPosts(): Observable<PagedResponse<SocialPost>> {
-        return of({
-            success: true,
-            message: 'Success',
-            data: this._mockPosts,
-            pageNumber: 1,
-            pageSize: 10,
-            totalPages: 1,
-            totalCount: this._mockPosts.length,
-            hasPreviousPage: false,
-            hasNextPage: false,
-            timestamp: new Date().toISOString()
-        }).pipe(delay(300));
+        return this._apiService.delete<void>(`${this._baseSocialUrl}/posts/${id}`);
     }
 
     // ===== MEMBERS =====
@@ -274,31 +114,27 @@ export class SocialService {
     }
 
     // ===== INTERACTIONS =====
-    // ❌ CHƯA CÓ API - Giữ mock
     likePost(postId: any): Observable<{ success: boolean }> {
-        const post = this._mockPosts.find(p => p.id === postId);
-        if (post) {
-            post.isLiked = !post.isLiked;
-            post.likesCount += post.isLiked ? 1 : -1;
-        }
-        return of({ success: true }).pipe(delay(200));
+        const url = `${this._baseSocialInteractionUrl}/posts/${postId}/like`;
+        return this._apiService.post(url, {})
+    }
+
+    getLikeStatus(postId: any): Observable<any> {
+        const url = `${this._baseSocialInteractionUrl}/posts/${postId}/like-status`;
+        return this._apiService.get(url, {})
     }
 
     // ❌ CHƯA CÓ API - Giữ mock
     savePost(postId: any): Observable<{ success: boolean }> {
-        const post = this._mockPosts.find(p => p.id === postId);
-        if (post) {
-            post.isSaved = !post.isSaved;
-        }
+        // const post = this._mockPosts.find(p => p.id === postId);
+        // if (post) {
+        //     post.isSaved = !post.isSaved;
+        // }
         return of({ success: true }).pipe(delay(200));
     }
 
-    // ❌ CHƯA CÓ API - Giữ mock
-    sharePost(postId: string): Observable<{ success: boolean }> {
-        const post = this._mockPosts.find(p => p.id === postId);
-        if (post) {
-            post.sharesCount += 1;
-        }
-        return of({ success: true }).pipe(delay(200));
+    sharePost(postId: string): Observable<ApiResponse<any>> {
+        const url = `${this._baseSocialInteractionUrl}/posts/${postId}/share`;
+        return this._apiService.post<ApiResponse<any>>(url, {});
     }
 }

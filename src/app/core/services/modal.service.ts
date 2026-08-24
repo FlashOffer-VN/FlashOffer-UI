@@ -1,3 +1,4 @@
+// core/services/modal.service.ts
 import { Injectable, ApplicationRef, ComponentRef, EnvironmentInjector, createComponent, Type } from '@angular/core';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 
@@ -10,6 +11,12 @@ export interface ModalOptions {
     size?: 'sm' | 'md' | 'lg';
     showCancel?: boolean;
     data?: any;
+    contentComponent?: any;
+    contentData?: any;
+    customWidth?: string;
+    showHeader?: boolean;
+    showCloseButton?: boolean;
+    showFooter?: boolean;
 }
 
 export interface ModalRef {
@@ -17,6 +24,7 @@ export interface ModalRef {
     onConfirm: () => void;
     onCancel: () => void;
     componentRef: ComponentRef<ModalComponent>;
+    contentComponentRef?: ComponentRef<any>;
 }
 
 @Injectable({
@@ -31,7 +39,7 @@ export class ModalService {
     ) { }
 
     confirm(options: ModalOptions): Promise<boolean> {
-        const service = this;  // 👈 LƯU THIS
+        const service = this;
         return new Promise((resolve) => {
             const modalRef = service._createModal({
                 ...options,
@@ -51,7 +59,7 @@ export class ModalService {
     }
 
     alert(options: ModalOptions): Promise<void> {
-        const service = this;  // 👈 LƯU THIS
+        const service = this;
         return new Promise((resolve) => {
             const modalRef = service._createModal({
                 ...options,
@@ -71,13 +79,59 @@ export class ModalService {
         });
     }
 
-    create<T>(component: Type<T>, options: ModalOptions): ModalRef {
-        const modalRef = this._createModal(options);
+    create<T>(component: Type<T> | string, options: ModalOptions = {}): ModalRef {
+        // Nếu component là string → hiển thị text message
+        if (typeof component === 'string') {
+            const modalRef = this._createModal(options);
+            const instance = modalRef.componentRef.instance;
+            instance.message = component;
+            instance.title = options.title || '';
+            instance.showFooter = options.showCancel !== undefined ? options.showCancel : false;
+            return modalRef;
+        }
 
+        // Nếu có contentComponent → render vào ng-content
+        if (options.contentComponent) {
+            const modalRef = this._createModal(options);
+
+            setTimeout(() => {
+                const contentRef = createComponent(options.contentComponent, {
+                    environmentInjector: this._injector
+                });
+
+                if (options.contentData) {
+                    Object.assign(contentRef.instance as any, options.contentData);
+                }
+
+                this._appRef.attachView(contentRef.hostView);
+
+                const nativeEl = modalRef.componentRef.location.nativeElement;
+                const bodyEl = nativeEl.querySelector('.modal-body');
+                const contentEl = nativeEl.querySelector('.px-6.py-4');
+
+                if (bodyEl) {
+                    bodyEl.appendChild(contentRef.location.nativeElement);
+                } else if (contentEl) {
+                    contentEl.appendChild(contentRef.location.nativeElement);
+                } else {
+                    const container = nativeEl.querySelector('.bg-white.rounded-xl > div');
+                    if (container) {
+                        container.appendChild(contentRef.location.nativeElement);
+                    }
+                }
+
+                // Lưu trữ contentComponentRef để có thể truy cập từ bên ngoài
+                modalRef.contentComponentRef = contentRef;
+            }, 100);
+
+            return modalRef;
+        }
+
+        // Fallback: tạo modal với component truyền vào (cách cũ)
+        const modalRef = this._createModal(options);
         if (options.data && modalRef.componentRef.instance) {
             Object.assign(modalRef.componentRef.instance, options.data);
         }
-
         return modalRef;
     }
 
@@ -103,7 +157,11 @@ export class ModalService {
         instance.cancelText = options.cancelText || 'Hủy bỏ';
         instance.confirmVariant = options.confirmVariant || 'primary';
         instance.size = options.size || 'md';
+        instance.customWidth = options.customWidth || '';
         instance.showCancel = options.showCancel !== undefined ? options.showCancel : true;
+        instance.showHeader = options.showHeader !== undefined ? options.showHeader : true;
+        instance.showFooter = options.showFooter !== undefined ? options.showFooter : true;
+        instance.showCloseButton = options.showCloseButton !== undefined ? options.showCloseButton : true;
         instance.visible = true;
 
         this._appRef.attachView(componentRef.hostView);

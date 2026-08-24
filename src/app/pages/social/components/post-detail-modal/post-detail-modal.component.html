@@ -1,0 +1,50 @@
+<div class="post-detail-modal">
+    <div *ngIf="!post" class="empty-state">
+        <i class="fas fa-file-alt text-4xl text-gray-300 mb-3"></i>
+        <p class="text-gray-500">{{ 'SOCIAL.POST_NOT_FOUND' | translate }}</p>
+    </div>
+
+    <ng-container *ngIf="post">
+        <div class="modal-header">
+            <div class="author-info">
+                <img [src]="post.author.avatar | avatar" class="avatar">
+                <div>
+                    <div class="author-name">{{ post.author.fullName || '' }}</div>
+                    <div class="author-role">{{ post.author.role || '' }}</div>
+                </div>
+            </div>
+            <!-- <button class="close-btn" (click)="onClose()">
+                <i class="fas fa-times"></i>
+            </button> -->
+        </div>
+
+        <div class="modal-body">
+            <div class="post-meta">
+                <span class="post-type">{{ getTypeLabel(post.type) | translate }}</span>
+                <span class="post-privacy">{{ getPrivacyLabel(post.privacy) | translate }}</span>
+                <span class="post-time">{{ post.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+
+            <h3 *ngIf="post.title" class="post-title">{{ post.title }}</h3>
+            <div class="post-content" [innerHTML]="sanitizeHtml(post.content || '')"></div>
+
+            <div class="post-tags" *ngIf="post.tags?.length">
+                <span *ngFor="let tag of post.tags" class="tag">#{{ tag }}</span>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="action-btn" (click)="onLike()">
+                <i class="fas fa-heart" [class.liked]="post.isLiked"></i>
+                <span>{{ post.likesCount || 0 }}</span>
+            </button>
+            <button class="action-btn" (click)="onShare()">
+                <i class="fas fa-share"></i>
+                <span>{{ post.sharesCount || 0 }}</span>
+            </button>
+            <button class="action-btn" (click)="onSave()">
+                <i class="fas fa-bookmark" [class.saved]="post.isSaved"></i>
+            </button>
+        </div>
+    </ng-container>
+</div>

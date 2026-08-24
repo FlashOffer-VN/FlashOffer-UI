@@ -74,7 +74,7 @@ export interface SocialMember {
     name: string;
     username: string;
     avatar: string;
-    role: string;
+    role?: string;
     company?: string;
     followers: number;
     following: number;
@@ -111,7 +111,7 @@ export interface SocialGroup {
 
 export interface SocialComment {
     id: number;
-    author: {
+    author?: {
         id: string;
         name: string;
         avatar: string;
