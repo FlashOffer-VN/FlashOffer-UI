@@ -221,6 +221,7 @@ export class SocialComponent implements OnInit, AfterViewInit {
     toggleSave(post: SocialPost): void {
         this._appService.socialService.savePost(post.id).subscribe({
             next: () => {
+                post.isSaved = !post.isSaved;
                 this._appService.showSuccess(
                     post.isSaved ? this._appService.trans('SOCIAL.SAVE_SUCCESS') : this._appService.trans('SOCIAL.UNSAVE_SUCCESS')
                 );
@@ -234,6 +235,7 @@ export class SocialComponent implements OnInit, AfterViewInit {
     sharePost(post: SocialPost): void {
         this._appService.socialService.sharePost(post.id).subscribe({
             next: () => {
+                post.sharesCount = (post.sharesCount || 0) + 1;
                 this._appService.showSuccess(this._appService.trans('SOCIAL.SHARE_SUCCESS'));
             },
             error: () => {
@@ -435,7 +437,7 @@ export class SocialComponent implements OnInit, AfterViewInit {
     openPostDetail(postId: string): void {
         this._appService.socialService.getPostById(postId).subscribe({
             next: (response) => {
-                this._appService.modal.create(ModalComponent, {
+                const modalRef = this._appService.modal.create(ModalComponent, {
                     contentComponent: PostDetailModalComponent,
                     contentData: { post: response.data },
                     size: 'lg',
@@ -446,9 +448,28 @@ export class SocialComponent implements OnInit, AfterViewInit {
                     showFooter: false,
                     showCloseButton: false,
                 });
+
+                // Lấy instance của content component từ modalRef
+                const contentInstance = modalRef.contentComponentRef?.instance as PostDetailModalComponent;
+
+                // Subscribe vào sự kiện close của content component
+                if (contentInstance) {
+                    contentInstance.close.subscribe(() => {
+                        console.log('Modal đã đóng từ content');
+                        this.loadPosts();
+                    });
+                    // Subscribe to like and share events to refresh posts when they occur
+                    contentInstance.liked?.subscribe(() => {
+                        console.log('Post liked in modal, reloading posts');
+                        this.loadPosts();
+                    });
+                    contentInstance.shared?.subscribe(() => {
+                        console.log('Post shared in modal, reloading posts');
+                        this.loadPosts();
+                    });
+                }
             },
             error: (err) => {
-                console.error('❌ Error loading post:', err);
                 this._appService.showError(this._appService.trans('SOCIAL.LOAD_POST_ERROR'));
             }
         });

@@ -13,6 +13,9 @@
                     <div class="author-role">{{ post.author.role || '' }}</div>
                 </div>
             </div>
+            <button class="close-btn" (click)="onClose()">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
 
         <div class="modal-body">

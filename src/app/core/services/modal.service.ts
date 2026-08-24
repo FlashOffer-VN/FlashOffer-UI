@@ -24,6 +24,7 @@ export interface ModalRef {
     onConfirm: () => void;
     onCancel: () => void;
     componentRef: ComponentRef<ModalComponent>;
+    contentComponentRef?: ComponentRef<any>;
 }
 
 @Injectable({
@@ -118,6 +119,9 @@ export class ModalService {
                         container.appendChild(contentRef.location.nativeElement);
                     }
                 }
+
+                // Lưu trữ contentComponentRef để có thể truy cập từ bên ngoài
+                modalRef.contentComponentRef = contentRef;
             }, 100);
 
             return modalRef;
