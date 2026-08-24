@@ -233,14 +233,28 @@ export class SocialComponent implements OnInit, AfterViewInit {
     }
 
     sharePost(post: SocialPost): void {
+        // Copy link vào clipboard
+        const shareUrl = `${window.location.origin}/social/${post.id}`;
+
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            this._appService.showSuccess('Đã sao chép link bài viết!');
+        }).catch(() => {
+            // Fallback: tạo input tạm để copy
+            const input = document.createElement('input');
+            input.value = shareUrl;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            this._appService.showSuccess('Đã sao chép link bài viết!');
+        });
+
+        // Gọi API share (không cần quan tâm response)
         this._appService.socialService.sharePost(post.id).subscribe({
             next: () => {
                 post.sharesCount = (post.sharesCount || 0) + 1;
-                this._appService.showSuccess(this._appService.trans('SOCIAL.SHARE_SUCCESS'));
             },
-            error: () => {
-                this._appService.showError(this._appService.trans('SOCIAL.SHARE_ERROR'));
-            }
+            error: () => { }
         });
     }
 

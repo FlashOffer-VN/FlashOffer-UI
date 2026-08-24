@@ -14,6 +14,7 @@ import {
     EventType
 } from '../models/social.model';
 import { PagedResponse } from '@core/models/paged-response.model';
+import { ApiResponse } from '@core/models/auth.model';
 
 @Injectable({
     providedIn: 'root'
@@ -132,8 +133,8 @@ export class SocialService {
         return of({ success: true }).pipe(delay(200));
     }
 
-    sharePost(postId: string): Observable<{ success: boolean }> {
+    sharePost(postId: string): Observable<ApiResponse<any>> {
         const url = `${this._baseSocialInteractionUrl}/posts/${postId}/share`;
-        return this._apiService.post(url, {})
+        return this._apiService.post<ApiResponse<any>>(url, {});
     }
 }
