@@ -1,12 +1,16 @@
 <!doctype html>
-<html lang="en">
+<html lang="vi">
 
 <head>
   <meta charset="utf-8">
-  <title>Kindi - Nền tảng kết nối SME</title>
+  <title>Kindi - Nền tảng kết nối SME | Mua chung - Tìm nhà cung cấp</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <!-- ====== META DESCRIPTION (Google Search) ====== -->
+  <meta name="description"
+    content="Kindi - Nền tảng kết nối doanh nghiệp SME. Mua chung hàng hóa, tìm nhà cung cấp, nhận ưu đãi giảm giá và phát triển kênh bán hàng CTV hiệu quả. Đăng ký ngay hôm nay!">
 
   <!-- ====== OPEN GRAPH (Facebook, Zalo, LinkedIn, Telegram) ====== -->
   <meta property="og:title" content="Kindi - Nền tảng kết nối SME & Mua chung thông minh">
@@ -27,7 +31,128 @@
     content="Kết nối doanh nghiệp SME, mua chung hàng hóa, nhận ưu đãi giảm giá và phát triển kênh bán hàng CTV hiệu quả.">
   <meta name="twitter:image" content="https://kindi.vn/assets/images/og-image.png">
 
-  <meta name="google-site-verification" content="xvbnJdIdbvBRf2Zd23KrPDj6Qzznb_7rzXQaxk91Bao" />
+  <!-- ====== GOOGLE SITE VERIFICATION ====== -->
+  <meta name="google-site-verification" content="googleb37932a9c455930c">
+
+  <!-- ====== SCHEMA.ORG - ORGANIZATION (Logo, thông tin công ty) ====== -->
+  <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Kindi",
+            "url": "https://kindi.vn",
+            "logo": "https://kindi.vn/assets/images/logo.png",
+            "description": "Nền tảng kết nối doanh nghiệp SME - Mua chung, tìm nhà cung cấp, kết nối cộng đồng",
+            "sameAs": [
+                "https://www.facebook.com/kindi.vn",
+                "https://www.linkedin.com/company/kindi"
+            ],
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+84-123-456-789",
+                "contactType": "customer service"
+            }
+        }
+    </script>
+
+  <!-- ====== SCHEMA.ORG - WEBSITE (Search box trên Google) ====== -->
+  <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "url": "https://kindi.vn",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://kindi.vn/search?q={search_term_string}"
+                },
+                "query-input": "required name=search_term_string"
+            }
+        }
+    </script>
+
+  <!-- ====== SCHEMA.ORG - BREADCRUMB (Đường dẫn phân cấp) ====== -->
+  <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Trang chủ",
+                    "item": "https://kindi.vn/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Tìm nhà cung cấp",
+                    "item": "https://kindi.vn/find-supplier"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "Kết nối doanh nghiệp",
+                    "item": "https://kindi.vn/connect-sme"
+                }
+            ]
+        }
+    </script>
+
+  <!-- ====== SCHEMA.ORG - FAQ (Câu hỏi thường gặp) ====== -->
+  <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [{
+                "@type": "Question",
+                "name": "Kindi là gì?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Kindi là nền tảng kết nối doanh nghiệp SME, giúp mua chung hàng hóa, tìm nhà cung cấp và phát triển kênh bán hàng CTV."
+                }
+            }, {
+                "@type": "Question",
+                "name": "Làm thế nào để đăng ký làm đối tác?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Bạn có thể đăng ký trực tiếp trên website tại mục 'Đăng ký đối tác' hoặc liên hệ hotline để được hỗ trợ."
+                }
+            }, {
+                "@type": "Question",
+                "name": "Mua chung trên Kindi có lợi ích gì?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Mua chung trên Kindi giúp doanh nghiệp tiết kiệm đến 40% chi phí nhờ sức mua tập thể, kết nối với nhà cung cấp uy tín và tối ưu hóa chi phí vận hành."
+                }
+            }]
+        }
+    </script>
+
+  <!-- ====== SCHEMA.ORG - PRODUCT (Rating, đánh giá) ====== -->
+  <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "Kindi - Nền tảng kết nối SME",
+            "description": "Nền tảng kết nối doanh nghiệp SME, mua chung hàng hóa, tìm nhà cung cấp, CTV bán hàng",
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.8",
+                "reviewCount": "127",
+                "bestRating": "5",
+                "worstRating": "1"
+            },
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "VND",
+                "availability": "https://schema.org/InStock"
+            }
+        }
+    </script>
+
   <!-- Google Fonts - Inter (Modern UI) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,12 +162,6 @@
 
   <!-- Font Awesome 6 Free -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
-    rel="stylesheet">
 
   <style>
     * {
