@@ -69,7 +69,7 @@ export class PartnerFormComponent implements OnInit {
             // Step 3: Sales Info
             products: this.fb.array([]),
             commissionType: [1, Validators.required],
-            commissionRate: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+            commissionRate: ['', [Validators.min(0), Validators.max(100)]],
             minOrderValue: [''],
             maxCommission: [''],
             specialConditions: [''],
