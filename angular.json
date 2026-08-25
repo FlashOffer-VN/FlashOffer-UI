@@ -89,7 +89,11 @@
                 "glob": "**/*",
                 "input": "public"
               },
-              "src/assets"
+              "src/favicon.ico",
+              "src/assets",
+              "src/robots.txt",
+              "src/sitemap.xml",
+              "src/googleb37932a9c455930c.html"
             ],
             "styles": [
               "src/styles.css"
