@@ -31,6 +31,10 @@ export class RegisterComponent implements OnInit {
     showPassword = false;
     showConfirmPassword = false;
 
+    // 👈 Step management
+    currentStep = 1;
+    totalSteps = 2;
+
     businessFields = [
         { value: 'technology', label: 'Công nghệ thông tin' },
         { value: 'manufacturing', label: 'Sản xuất - Chế tạo' },
@@ -59,18 +63,21 @@ export class RegisterComponent implements OnInit {
         private router: Router
     ) {
         this.registerForm = this.fb.group({
+            // Step 1
             fullName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]],
             email: ['', [Validators.required, Validators.email]],
             phone: ['', [Validators.required, Validators.pattern(/^0[0-9]{9,10}$/)]],
             username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
             password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
             confirmPassword: ['', [Validators.required]],
+            // Step 2
             businessName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]],
             businessField: [null, [Validators.required]],
             businessSize: [null, [Validators.required]],
             position: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
             address: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(500)]],
             website: ['', [Validators.pattern(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/)]],
+            // Comment fields (vẫn giữ trong form)
             interests: ['', Validators.maxLength(500)],
             goals: ['', Validators.maxLength(500)],
             skills: ['', Validators.maxLength(500)],
@@ -86,6 +93,34 @@ export class RegisterComponent implements OnInit {
         }
     }
 
+    // ===== STEP NAVIGATION =====
+    nextStep(): void {
+        if (this.isStep1Valid()) {
+            this.currentStep = 2;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    prevStep(): void {
+        if (this.currentStep > 1) {
+            this.currentStep--;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    isStep1Valid(): boolean {
+        const step1Fields = ['fullName', 'email', 'phone', 'username', 'password', 'confirmPassword'];
+        let valid = true;
+        step1Fields.forEach(field => {
+            const control = this.registerForm.get(field);
+            if (control?.invalid) {
+                valid = false;
+            }
+        });
+        return valid;
+    }
+
+    // ===== VALIDATION =====
     passwordMatchValidator(group: FormGroup): any {
         const password = group.get('password')?.value;
         const confirm = group.get('confirmPassword')?.value;
@@ -179,6 +214,7 @@ export class RegisterComponent implements OnInit {
             website: {
                 pattern: this._appService.trans('REGISTER.VALIDATION.WEBSITE_INVALID')
             },
+            // Comment fields (vẫn giữ validation messages)
             interests: {
                 maxlength: this._appService.trans('REGISTER.VALIDATION.INTERESTS_MAXLENGTH')
             },

@@ -1,8 +1,8 @@
 // shared/components/post-detail-modal/post-detail-modal.component.ts
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { SocialPost } from '@core/models/social.model';
+import { SocialPost, PostType, PrivacyType } from '@core/models/social.model';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AvatarPipe } from '@shared/pipes/avatar.pipe';
 import { AppService } from '@core/services/app.service';
@@ -17,7 +17,6 @@ import { AppService } from '@core/services/app.service';
 export class PostDetailModalComponent implements OnInit {
   @Input() post: SocialPost | null = null;
   @Output() close = new EventEmitter<void>();
-  // Emit when the post is liked or shared to allow parent component to refresh data
   @Output() liked = new EventEmitter<void>();
   @Output() shared = new EventEmitter<void>();
 
@@ -29,7 +28,9 @@ export class PostDetailModalComponent implements OnInit {
   ngOnInit() { }
 
   sanitizeHtml(content: string): SafeHtml {
-    return this._sanitizer.sanitize(1, content) || '';
+    if (!content) return '';
+    const sanitized = this._sanitizer.sanitize(SecurityContext.HTML, content);
+    return this._sanitizer.bypassSecurityTrustHtml(sanitized || '');
   }
 
   onClose(): void {
@@ -46,7 +47,6 @@ export class PostDetailModalComponent implements OnInit {
           this.post.likesCount += this.post.isLiked ? 1 : -1;
           this.post.likesCount = Math.max(0, this.post.likesCount);
         }
-        // Notify parent that like action occurred
         this.liked.emit();
       },
       error: () => {
@@ -64,7 +64,6 @@ export class PostDetailModalComponent implements OnInit {
           this.post.sharesCount = (this.post.sharesCount || 0) + 1;
         }
         this._appService.showSuccess(this._appService.trans('SOCIAL.SHARE_SUCCESS'));
-        // Notify parent that share action occurred
         this.shared.emit();
       },
       error: () => {
@@ -93,13 +92,24 @@ export class PostDetailModalComponent implements OnInit {
     });
   }
 
-  getTypeLabel(type: number): string {
-    const labels = ['SOCIAL.TYPE_POST', 'SOCIAL.TYPE_QUESTION', 'SOCIAL.TYPE_EVENT', 'SOCIAL.TYPE_ANNOUNCEMENT'];
-    return labels[type - 1] || 'SOCIAL.TYPE_POST';
+  // ✅ Đã sửa: dùng enum
+  getTypeLabel(type: PostType): string {
+    const labels = {
+      [PostType.Post]: 'SOCIAL.TYPE_POST',
+      [PostType.Question]: 'SOCIAL.TYPE_QUESTION',
+      [PostType.Event]: 'SOCIAL.TYPE_EVENT',
+      [PostType.Announcement]: 'SOCIAL.TYPE_ANNOUNCEMENT'
+    };
+    return labels[type] || 'SOCIAL.TYPE_POST';
   }
 
-  getPrivacyLabel(privacy: number): string {
-    const labels = ['SOCIAL.PRIVACY_PUBLIC', 'SOCIAL.PRIVACY_FRIENDS', 'SOCIAL.PRIVACY_PRIVATE'];
-    return labels[privacy - 1] || 'SOCIAL.PRIVACY_PUBLIC';
+  // ✅ Đã sửa: dùng enum
+  getPrivacyLabel(privacy: PrivacyType): string {
+    const labels = {
+      [PrivacyType.Public]: 'SOCIAL.PRIVACY_PUBLIC',
+      [PrivacyType.Friends]: 'SOCIAL.PRIVACY_FRIENDS',
+      [PrivacyType.Private]: 'SOCIAL.PRIVACY_PRIVATE'
+    };
+    return labels[privacy] || 'SOCIAL.PRIVACY_PUBLIC';
   }
 }

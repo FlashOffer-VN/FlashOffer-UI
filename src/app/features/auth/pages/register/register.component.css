@@ -1,4 +1,5 @@
 /* src/app/features/auth/pages/register/register.component.css */
+
 :host {
     display: block;
     min-height: 100vh;
@@ -56,7 +57,7 @@
     }
 }
 
-/* Decorative */
+/* ===== Decorative ===== */
 .register-deco {
     position: absolute;
     border-radius: 50%;
@@ -80,7 +81,7 @@
     background: linear-gradient(135deg, #007f94, #24c7d7);
 }
 
-/* Header */
+/* ===== Header ===== */
 .register-header {
     text-align: center;
     margin-bottom: 2rem;
@@ -133,14 +134,103 @@
     font-weight: 600;
 }
 
-/* Form */
+/* ===== Step Indicator ===== */
+.step-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    padding: 0.5rem 1rem;
+    background: #f8fafc;
+    border-radius: 999px;
+    border: 1px solid #e9edf2;
+}
+
+.step-dot {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.step-number {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #9ca3af;
+    background: #e9edf2;
+    transition: all 0.3s ease;
+}
+
+.step-dot.active .step-number {
+    color: #fff;
+    background: linear-gradient(135deg, #7C3AED, #A78BFA);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.step-dot.completed .step-number {
+    color: #fff;
+    background: #10B981;
+}
+
+.step-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #9ca3af;
+    transition: color 0.3s ease;
+}
+
+.step-dot.active .step-label,
+.step-dot.completed .step-label {
+    color: #1F2937;
+}
+
+.step-line {
+    width: 40px;
+    height: 2px;
+    background: #e9edf2;
+    border-radius: 2px;
+    transition: background 0.3s ease;
+}
+
+.step-line.completed {
+    background: #10B981;
+}
+
+/* ===== Form ===== */
 .register-form {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 
-/* Section Title */
+/* ===== Step Content ===== */
+.step-content {
+    animation: fadeSlideIn 0.3s ease;
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ===== Section Title ===== */
 .section-title {
     display: flex;
     align-items: center;
@@ -159,9 +249,10 @@
 .section-desc {
     font-size: 0.875rem;
     color: #6b7a8a;
+    margin-bottom: 0.5rem;
 }
 
-/* Form Grid */
+/* ===== Form Grid ===== */
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -172,7 +263,7 @@
     grid-column: 1 / -1;
 }
 
-/* Password Toggle */
+/* ===== Password Toggle ===== */
 .register-password-toggle {
     position: absolute;
     right: 0.75rem;
@@ -192,7 +283,7 @@
     color: #4b5563;
 }
 
-/* Terms */
+/* ===== Terms ===== */
 .terms-group {
     margin-top: 0.5rem;
 }
@@ -269,7 +360,26 @@
     gap: 4px;
 }
 
-/* Footer */
+/* ===== Step Navigation ===== */
+.step-navigation {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.step-navigation-2 {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.step-navigation app-button i {
+    margin: 0 0.25rem;
+}
+
+/* ===== Footer ===== */
 .register-footer {
     text-align: center;
     font-size: 0.875rem;
@@ -289,7 +399,20 @@
     text-decoration: underline;
 }
 
-/* Responsive */
+/* ===== Helper ===== */
+.w-100 {
+    width: 100%;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-1 {
+    margin-top: 0.25rem;
+}
+
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
     .register-card {
         padding: 1.75rem 1.25rem 1.5rem;
@@ -328,6 +451,39 @@
     .section-desc {
         margin-left: 0;
     }
+
+    .step-indicator {
+        padding: 0.4rem 0.75rem;
+        gap: 0.25rem;
+        flex-wrap: wrap;
+    }
+
+    .step-label {
+        font-size: 0.65rem;
+    }
+
+    .step-number {
+        width: 24px;
+        height: 24px;
+        font-size: 0.65rem;
+    }
+
+    .step-line {
+        width: 20px;
+    }
+
+    .step-dot {
+        padding: 0.15rem 0.4rem;
+    }
+
+    .step-navigation-2 {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .step-navigation-2 app-button {
+        width: 100%;
+    }
 }
 
 @media (max-width: 480px) {
@@ -342,5 +498,27 @@
 
     .checkbox-label {
         font-size: 0.8rem;
+    }
+
+    .step-indicator {
+        padding: 0.3rem 0.5rem;
+    }
+
+    .step-label {
+        display: none;
+    }
+
+    .step-dot {
+        padding: 0.15rem 0.3rem;
+    }
+
+    .step-number {
+        width: 22px;
+        height: 22px;
+        font-size: 0.6rem;
+    }
+
+    .step-line {
+        width: 16px;
     }
 }
