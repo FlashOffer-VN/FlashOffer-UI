@@ -11,9 +11,9 @@ import { TimeAgoPipe } from '@shared/pipes/time-ago.pipe';
 @Component({
     selector: 'app-post-card',
     standalone: true,
-    imports: [CommonModule, TranslateModule, AvatarPipe, SanitizeHtmlPipe, FormatHtmlPipe, TimeAgoPipe],
+    imports: [CommonModule, TranslateModule, AvatarPipe, SanitizeHtmlPipe, TimeAgoPipe],
     templateUrl: './post-card.component.html',
-    styleUrls: ['./post-card.component.css']
+    styleUrls: ['./post-card.component.scss']
 })
 export class PostCardComponent {
     @Input() post!: SocialPost;
@@ -31,6 +31,25 @@ export class PostCardComponent {
 
     showActions = false;
     isFocused = false;
+
+    // ===== 👇 THÊM METHOD NÀY =====
+    /**
+     * Kiểm tra xem có nên hiển thị nút "Xem thêm" không
+     * Dựa trên độ dài text content (bỏ qua HTML tags)
+     */
+    get shouldShowReadMore(): boolean {
+        if (!this.post?.content) return false;
+
+        // Tạo element tạm để parse HTML và lấy text content
+        const temp = document.createElement('div');
+        temp.innerHTML = this.post.content;
+        const textContent = temp.textContent || '';
+        const trimmedText = textContent.trim();
+
+        // Ngưỡng 200 ký tự - có thể điều chỉnh
+        return trimmedText.length > 200;
+    }
+    // ===== 👆 END THÊM METHOD =====
 
     // Type methods
     getTypeIcon(type: PostType): string {

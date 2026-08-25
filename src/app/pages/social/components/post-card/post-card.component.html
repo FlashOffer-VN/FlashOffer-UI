@@ -47,14 +47,13 @@
 
     <div class="post-content">
         <h3 *ngIf="post.title" class="post-title">{{ post.title }}</h3>
-        <div class="post-text" [class.expanded]="post.isExpanded" [innerHTML]="post.content | sanitizeHtml | formatHtml : { 
-                 fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-                 fontSize: '15px',
-                 color: '#1F2937',
-                 lineHeight: '1.7'
-             }">
+
+        <!-- 👈 SỬA: Bỏ pipe formatHtml, chỉ giữ sanitizeHtml -->
+        <div class="post-text" [class.expanded]="post.isExpanded" [innerHTML]="post.content | sanitizeHtml">
         </div>
-        <button *ngIf="post.content.length > 200" class="read-more" (click)="toggleReadMore.emit(post)">
+
+        <!-- 👈 SỬA: Dùng shouldShowReadMore thay vì post.content.length -->
+        <button *ngIf="shouldShowReadMore" class="read-more" (click)="toggleReadMore.emit(post)">
             {{ post.isExpanded ? ('SOCIAL.COLLAPSE' | translate) : ('SOCIAL.READ_MORE' | translate) }}
         </button>
 

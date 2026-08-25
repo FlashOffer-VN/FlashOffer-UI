@@ -345,21 +345,97 @@
     margin: 0 0 8px 0;
 }
 
+/* ===== 🔥 PHẦN QUAN TRỌNG: POST TEXT ĐÃ SỬA ===== */
 .post-text {
     font-size: 15px;
-    line-height: 1.6;
+    line-height: 1.7;
     color: #374151;
     margin: 0 0 8px 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
+    position: relative;
+
+    /* 👈 Thay -webkit-line-clamp bằng max-height */
+    max-height: 76.5px;
+    /* 15px * 1.7 * 3 dòng */
     overflow: hidden;
+
+    /* 👈 Wrap an toàn, không cắt ngang chữ */
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: pre-wrap !important;
+    max-width: 100% !important;
+
+    /* Transition mượt khi expand */
+    transition: max-height 0.3s ease;
 }
 
-.post-text.expanded {
-    display: block;
-    -webkit-line-clamp: unset;
+/* 👈 Gradient fade ở cuối khi chưa expand */
+.post-text:not(.expanded)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    background: linear-gradient(to bottom, transparent, white);
+    pointer-events: none;
 }
+
+/* 👈 Trạng thái expanded - hiện full nội dung */
+.post-text.expanded {
+    max-height: none;
+    overflow: visible;
+}
+
+.post-text.expanded::after {
+    display: none;
+}
+
+/* 👈 Force wrap cho tất cả children */
+.post-text * {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    max-width: 100% !important;
+}
+
+/* 👈 Fix cho pre/code block */
+.post-text pre,
+.post-text code {
+    white-space: pre-wrap !important;
+    word-break: break-all !important;
+}
+
+/* 👈 Fix cho image */
+.post-text img {
+    max-width: 100% !important;
+    height: auto !important;
+    border-radius: 8px;
+}
+
+/* 👈 Fix cho blockquote từ Quill */
+.post-text blockquote {
+    margin: 8px 0;
+    padding: 8px 16px;
+    border-left: 4px solid var(--primary);
+    background: #F9FAFB;
+    border-radius: 0 4px 4px 0;
+}
+
+/* 👈 Fix cho danh sách từ Quill */
+.post-text ul,
+.post-text ol {
+    margin: 8px 0;
+    padding-left: 24px;
+}
+
+.post-text ul li,
+.post-text ol li {
+    margin-bottom: 4px;
+    line-height: 1.7;
+}
+
+/* ===== END POST TEXT ===== */
 
 .read-more {
     background: none;
@@ -458,54 +534,4 @@
     .post-privacy i {
         font-size: 8px;
     }
-}
-
-/* ===== FIX WRAP TEXT CHO POST CONTENT ===== */
-.post-text {
-    font-size: 15px;
-    line-height: 1.7;
-    color: #374151;
-    margin: 0 0 8px 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    /* 👈 Thêm các thuộc tính wrap */
-    word-wrap: break-word !important;
-    word-break: break-word !important;
-    overflow-wrap: break-word !important;
-    white-space: pre-wrap !important;
-    max-width: 100% !important;
-}
-
-.post-text.expanded {
-    display: block;
-    -webkit-line-clamp: unset;
-    overflow: visible;
-    /* 👈 Giữ wrap khi expanded */
-    word-wrap: break-word !important;
-    word-break: break-word !important;
-    overflow-wrap: break-word !important;
-    white-space: pre-wrap !important;
-}
-
-/* Force wrap cho tất cả element bên trong post-text */
-.post-text * {
-    word-wrap: break-word !important;
-    word-break: break-word !important;
-    overflow-wrap: break-word !important;
-    max-width: 100% !important;
-}
-
-/* Fix cho pre/code block */
-.post-text pre,
-.post-text code {
-    white-space: pre-wrap !important;
-    word-break: break-all !important;
-}
-
-/* Fix cho image trong post */
-.post-text img {
-    max-width: 100% !important;
-    height: auto !important;
 }
