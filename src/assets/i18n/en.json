@@ -7,7 +7,7 @@
     "NAV_COMMUNITY": "Community",
     "NAV_PARTNER": "Business Partner",
     "BUTTON_JOIN_CTV": "Join as Collaborator",
-    "BUTTON_JOIN_SME": "Connect with SME",
+    "BUTTON_JOIN": "Partner Register",
     "ERROR": {
         "ADMIN_ACCESS_DENIED": "You don't have permission to access Admin!",
         "GENERAL": "An error occurred!"
@@ -734,7 +734,7 @@
             "GOALS_MAXLENGTH": "Goals cannot exceed 500 characters",
             "SKILLS_MAXLENGTH": "Skills cannot exceed 500 characters"
         }
-    }
+    },
     "SOCIAL": {
         "TITLE": "Ecomecial Social Network",
         "DESC": "Connect, share and grow with the entrepreneur community",
