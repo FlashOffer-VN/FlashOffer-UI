@@ -852,7 +852,11 @@
         "ERROR": {
             "LOAD_FAILED": "An error occurred while loading data!",
             "INVALID_ID": "Invalid ID!",
-            "NOT_FOUND": "Data not found!"
+            "NOT_FOUND": "Data not found!",
+            "UNKNOWN": "An error occurred!",
+            "INVALID_DATA": "Invalid data",
+            "SYSTEM_ERROR": "System is experiencing issues, please try again later",
+            "CONNECTION_ERROR": "Cannot connect to server"
         }
     },
     "PAGINATION": {

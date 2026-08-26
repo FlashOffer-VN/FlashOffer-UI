@@ -809,7 +809,11 @@
         "ERROR": {
             "LOAD_FAILED": "Đã có lỗi xảy ra khi tải dữ liệu!",
             "INVALID_ID": "ID không hợp lệ!",
-            "NOT_FOUND": "Không tìm thấy dữ liệu!"
+            "NOT_FOUND": "Không tìm thấy dữ liệu!",
+            "UNKNOWN": "Đã có lỗi xảy ra!",
+            "INVALID_DATA": "Dữ liệu không hợp lệ",
+            "SYSTEM_ERROR": "Hệ thống đang gặp sự cố, vui lòng thử lại sau",
+            "CONNECTION_ERROR": "Không thể kết nối đến server"
         },
         "CONFIRM_DELETE": "Xác nhận xóa",
         "CONFIRM_DELETE_MESSAGE": "Bạn có chắc chắn muốn xóa? Hành động này không thể hoàn tác."
