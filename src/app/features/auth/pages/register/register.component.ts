@@ -337,7 +337,7 @@ export class RegisterComponent implements OnInit {
         this.isLoading = true;
         const formData = {
             ...this.registerForm.value,
-            businessField: businessFieldValue,
+            businessFieldName: businessFieldValue,
             role: 'USER'
         };
 
