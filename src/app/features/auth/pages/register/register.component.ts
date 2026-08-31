@@ -31,9 +31,10 @@ export class RegisterComponent implements OnInit {
     showPassword = false;
     showConfirmPassword = false;
 
-    // 👈 Step management
     currentStep = 1;
     totalSteps = 2;
+
+    private readonly passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     businessFields = [
         { value: 'technology', label: 'Công nghệ thông tin' },
@@ -63,28 +64,84 @@ export class RegisterComponent implements OnInit {
         private router: Router
     ) {
         this.registerForm = this.fb.group({
-            // Step 1
             fullName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]],
             email: ['', [Validators.required, Validators.email]],
             phone: ['', [Validators.required, Validators.pattern(/^0[0-9]{9,10}$/)]],
             username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-            password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
+            password: ['', [
+                Validators.required,
+                Validators.minLength(8),
+                Validators.maxLength(100),
+                Validators.pattern(this.passwordPattern)
+            ]],
             confirmPassword: ['', [Validators.required]],
-            // Step 2
             businessName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]],
             businessField: [null, [Validators.required]],
+            businessFieldOther: [''],
             businessSize: [null, [Validators.required]],
             position: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
             address: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(500)]],
             website: ['', [Validators.pattern(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/)]],
-            // Comment fields (vẫn giữ trong form)
             interests: ['', Validators.maxLength(500)],
             goals: ['', Validators.maxLength(500)],
             skills: ['', Validators.maxLength(500)],
             agreeTerms: [false, [Validators.requiredTrue]]
         }, {
-            validators: this.passwordMatchValidator
+            validators: [
+                this.passwordMatchValidator,
+                this.businessFieldOtherValidator
+            ]
         });
+
+        this.registerForm.get('businessField')?.valueChanges.subscribe(value => {
+            const otherControl = this.registerForm.get('businessFieldOther');
+            if (value !== 'other') {
+                otherControl?.reset('');
+                otherControl?.clearValidators();
+                otherControl?.updateValueAndValidity();
+            } else {
+                otherControl?.setValidators([Validators.required, Validators.minLength(2)]);
+                otherControl?.updateValueAndValidity();
+            }
+        });
+    }
+
+    // ===== CUSTOM VALIDATORS =====
+    businessFieldOtherValidator(group: FormGroup): any {
+        const businessField = group.get('businessField')?.value;
+        const businessFieldOther = group.get('businessFieldOther')?.value;
+
+        if (businessField === 'other' && !businessFieldOther) {
+            return { businessFieldOtherRequired: true };
+        }
+        return null;
+    }
+
+    passwordMatchValidator(group: FormGroup): any {
+        const password = group.get('password')?.value;
+        const confirm = group.get('confirmPassword')?.value;
+        const confirmControl = group.get('confirmPassword');
+
+        if (!password || !confirm) {
+            if (confirmControl?.hasError('mismatch')) {
+                const errors = { ...confirmControl.errors };
+                delete errors['mismatch'];
+                confirmControl?.setErrors(Object.keys(errors).length ? errors : null);
+            }
+            return null;
+        }
+
+        if (password !== confirm) {
+            confirmControl?.setErrors({ mismatch: true });
+            return { mismatch: true };
+        }
+
+        if (confirmControl?.hasError('mismatch')) {
+            const errors = { ...confirmControl.errors };
+            delete errors['mismatch'];
+            confirmControl?.setErrors(Object.keys(errors).length ? errors : null);
+        }
+        return null;
     }
 
     ngOnInit(): void {
@@ -120,34 +177,7 @@ export class RegisterComponent implements OnInit {
         return valid;
     }
 
-    // ===== VALIDATION =====
-    passwordMatchValidator(group: FormGroup): any {
-        const password = group.get('password')?.value;
-        const confirm = group.get('confirmPassword')?.value;
-        const confirmControl = group.get('confirmPassword');
-
-        if (!password || !confirm) {
-            if (confirmControl?.hasError('mismatch')) {
-                const errors = { ...confirmControl.errors };
-                delete errors['mismatch'];
-                confirmControl?.setErrors(Object.keys(errors).length ? errors : null);
-            }
-            return null;
-        }
-
-        if (password !== confirm) {
-            confirmControl?.setErrors({ mismatch: true });
-            return { mismatch: true };
-        }
-
-        if (confirmControl?.hasError('mismatch')) {
-            const errors = { ...confirmControl.errors };
-            delete errors['mismatch'];
-            confirmControl?.setErrors(Object.keys(errors).length ? errors : null);
-        }
-        return null;
-    }
-
+    // ===== FORM HELPERS =====
     get f() {
         return this.registerForm.controls;
     }
@@ -161,6 +191,45 @@ export class RegisterComponent implements OnInit {
     getErrorMessage(fieldName: string): string {
         const control = this.registerForm.get(fieldName);
         if (!control || !control.errors) return '';
+
+        if (fieldName === 'businessFieldOther') {
+            if (control.errors['required']) {
+                return this._appService.trans('REGISTER.VALIDATION.BUSINESS_FIELD_OTHER_REQUIRED');
+            }
+            if (control.errors['minlength']) {
+                return this._appService.trans('REGISTER.VALIDATION.BUSINESS_FIELD_OTHER_MINLENGTH');
+            }
+        }
+
+        if (fieldName === 'businessField') {
+            if (this.registerForm.errors?.['businessFieldOtherRequired']) {
+                return this._appService.trans('REGISTER.VALIDATION.BUSINESS_FIELD_OTHER_REQUIRED');
+            }
+        }
+
+        if (fieldName === 'password') {
+            if (control.errors['required']) {
+                return this._appService.trans('REGISTER.VALIDATION.PASSWORD_REQUIRED');
+            }
+            if (control.errors['minlength']) {
+                return this._appService.trans('REGISTER.VALIDATION.PASSWORD_MINLENGTH');
+            }
+            if (control.errors['maxlength']) {
+                return this._appService.trans('REGISTER.VALIDATION.PASSWORD_MAXLENGTH');
+            }
+            if (control.errors['pattern']) {
+                return this._appService.trans('REGISTER.VALIDATION.PASSWORD_WEAK');
+            }
+        }
+
+        if (fieldName === 'confirmPassword') {
+            if (control.errors['required']) {
+                return this._appService.trans('REGISTER.VALIDATION.CONFIRM_PASSWORD_REQUIRED');
+            }
+            if (this.registerForm.errors?.['mismatch']) {
+                return this._appService.trans('REGISTER.VALIDATION.PASSWORD_MISMATCH');
+            }
+        }
 
         const errorMessages: Record<string, Record<string, string>> = {
             fullName: {
@@ -180,15 +249,6 @@ export class RegisterComponent implements OnInit {
                 required: this._appService.trans('REGISTER.VALIDATION.USERNAME_REQUIRED'),
                 minlength: this._appService.trans('REGISTER.VALIDATION.USERNAME_MINLENGTH'),
                 maxlength: this._appService.trans('REGISTER.VALIDATION.USERNAME_MAXLENGTH')
-            },
-            password: {
-                required: this._appService.trans('REGISTER.VALIDATION.PASSWORD_REQUIRED'),
-                minlength: this._appService.trans('REGISTER.VALIDATION.PASSWORD_MINLENGTH'),
-                maxlength: this._appService.trans('REGISTER.VALIDATION.PASSWORD_MAXLENGTH')
-            },
-            confirmPassword: {
-                required: this._appService.trans('REGISTER.VALIDATION.CONFIRM_PASSWORD_REQUIRED'),
-                mismatch: this._appService.trans('REGISTER.VALIDATION.PASSWORD_MISMATCH')
             },
             businessName: {
                 required: this._appService.trans('REGISTER.VALIDATION.BUSINESS_NAME_REQUIRED'),
@@ -214,7 +274,6 @@ export class RegisterComponent implements OnInit {
             website: {
                 pattern: this._appService.trans('REGISTER.VALIDATION.WEBSITE_INVALID')
             },
-            // Comment fields (vẫn giữ validation messages)
             interests: {
                 maxlength: this._appService.trans('REGISTER.VALIDATION.INTERESTS_MAXLENGTH')
             },
@@ -249,6 +308,11 @@ export class RegisterComponent implements OnInit {
     onSubmit(): void {
         this.isSubmitted = true;
 
+        // Force validate businessFieldOther khi chọn Other
+        if (this.registerForm.get('businessField')?.value === 'other') {
+            this.registerForm.get('businessFieldOther')?.updateValueAndValidity();
+        }
+
         // Force re-validate all fields
         Object.keys(this.registerForm.controls).forEach(key => {
             this.registerForm.get(key)?.updateValueAndValidity();
@@ -264,11 +328,21 @@ export class RegisterComponent implements OnInit {
             return;
         }
 
+        // Lấy giá trị businessField
+        let businessFieldValue = this.registerForm.value.businessField;
+        if (businessFieldValue === 'other') {
+            businessFieldValue = this.registerForm.value.businessFieldOther;
+        }
+
         this.isLoading = true;
         const formData = {
             ...this.registerForm.value,
+            businessFieldName: businessFieldValue,
             role: 'USER'
         };
+
+        // Xóa businessFieldOther khỏi payload
+        delete formData.businessFieldOther;
 
         this._appService.collaboratorService.register(formData).subscribe({
             next: () => {

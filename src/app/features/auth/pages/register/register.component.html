@@ -156,6 +156,15 @@
                             [primaryDark]="'#5B21B6'">
                         </app-ng-select-wrapper>
                     </div>
+                    <!-- 👇 Input Business Field Other (hiển thị khi chọn Other) -->
+                    <div class="form-group" *ngIf="registerForm.get('businessField')?.value === 'other'">
+                        <app-input formControlName="businessFieldOther"
+                            [label]="'REGISTER.BUSINESS_FIELD_OTHER' | translate"
+                            [placeholder]="'REGISTER.BUSINESS_FIELD_OTHER_PLACEHOLDER' | translate" [required]="true"
+                            [isInvalid]="isFieldInvalid('businessFieldOther')"
+                            [errorMessage]="getErrorMessage('businessFieldOther')" icon="fas fa-pen">
+                        </app-input>
+                    </div>
 
                     <!-- Business Size -->
                     <div class="form-group">
