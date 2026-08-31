@@ -656,7 +656,11 @@
         "SUCCESS": "Đăng ký thành công! Vui lòng đăng nhập.",
         "ADDRESS": "Địa chỉ",
         "ADDRESS_PLACEHOLDER": "Số nhà, đường, quận/huyện...",
+        "BUSINESS_FIELD_OTHER": "Lĩnh vực khác (vui lòng nhập)",
+        "BUSINESS_FIELD_OTHER_PLACEHOLDER": "Nhập lĩnh vực kinh doanh của bạn",
         "VALIDATION": {
+            "BUSINESS_FIELD_OTHER_REQUIRED": "Vui lòng nhập lĩnh vực kinh doanh",
+            "BUSINESS_FIELD_OTHER_MINLENGTH": "Lĩnh vực kinh doanh phải có ít nhất 2 ký tự",
             "FULL_NAME_REQUIRED": "Vui lòng nhập họ và tên",
             "FULL_NAME_MINLENGTH": "Họ và tên tối thiểu 2 ký tự",
             "FULL_NAME_MAXLENGTH": "Họ và tên không được vượt quá 200 ký tự",

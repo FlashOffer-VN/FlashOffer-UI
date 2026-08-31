@@ -700,7 +700,11 @@
         "SUCCESS": "Registration successful! Please login.",
         "ADDRESS": "Address",
         "ADDRESS_PLACEHOLDER": "Enter your address",
+        "BUSINESS_FIELD_OTHER": "Other business field (please specify)",
+        "BUSINESS_FIELD_OTHER_PLACEHOLDER": "Enter your business field",
         "VALIDATION": {
+            "BUSINESS_FIELD_OTHER_REQUIRED": "Please specify your business field",
+            "BUSINESS_FIELD_OTHER_MINLENGTH": "Business field must be at least 2 characters",
             "FULL_NAME_REQUIRED": "Please enter full name",
             "FULL_NAME_MINLENGTH": "Full name must be at least 2 characters",
             "FULL_NAME_MAXLENGTH": "Full name cannot exceed 200 characters",
