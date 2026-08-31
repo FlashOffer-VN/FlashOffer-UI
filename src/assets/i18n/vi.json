@@ -688,7 +688,8 @@
             "WEBSITE_INVALID": "Website không hợp lệ (VD: https://example.com)",
             "INTERESTS_MAXLENGTH": "Sở thích không được vượt quá 500 ký tự",
             "GOALS_MAXLENGTH": "Mục tiêu không được vượt quá 500 ký tự",
-            "SKILLS_MAXLENGTH": "Kỹ năng không được vượt quá 500 ký tự"
+            "SKILLS_MAXLENGTH": "Kỹ năng không được vượt quá 500 ký tự",
+            "PASSWORD_WEAK": "Mật khẩu phải có ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt (@$!%*?&)"
         }
     },
     "SOCIAL": {

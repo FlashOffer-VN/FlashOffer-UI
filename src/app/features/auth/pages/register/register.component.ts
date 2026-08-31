@@ -31,9 +31,12 @@ export class RegisterComponent implements OnInit {
     showPassword = false;
     showConfirmPassword = false;
 
-    // 👈 Step management
     currentStep = 1;
     totalSteps = 2;
+
+    // 👇 Regex cho mật khẩu mạnh
+    // Ít nhất 1 chữ hoa, 1 chữ thường, 1 số, 1 ký tự đặc biệt (@$!%*?&)
+    private readonly passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     businessFields = [
         { value: 'technology', label: 'Công nghệ thông tin' },
@@ -68,7 +71,13 @@ export class RegisterComponent implements OnInit {
             email: ['', [Validators.required, Validators.email]],
             phone: ['', [Validators.required, Validators.pattern(/^0[0-9]{9,10}$/)]],
             username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-            password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
+            // 👇 Sửa password validator
+            password: ['', [
+                Validators.required,
+                Validators.minLength(8),
+                Validators.maxLength(100),
+                Validators.pattern(this.passwordPattern)
+            ]],
             confirmPassword: ['', [Validators.required]],
             // Step 2
             businessName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]],
@@ -77,7 +86,6 @@ export class RegisterComponent implements OnInit {
             position: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
             address: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(500)]],
             website: ['', [Validators.pattern(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/)]],
-            // Comment fields (vẫn giữ trong form)
             interests: ['', Validators.maxLength(500)],
             goals: ['', Validators.maxLength(500)],
             skills: ['', Validators.maxLength(500)],
@@ -162,6 +170,32 @@ export class RegisterComponent implements OnInit {
         const control = this.registerForm.get(fieldName);
         if (!control || !control.errors) return '';
 
+        // 👇 Thêm case cho password errors
+        if (fieldName === 'password') {
+            if (control.errors['required']) {
+                return this._appService.trans('REGISTER.VALIDATION.PASSWORD_REQUIRED');
+            }
+            if (control.errors['minlength']) {
+                return this._appService.trans('REGISTER.VALIDATION.PASSWORD_MINLENGTH');
+            }
+            if (control.errors['maxlength']) {
+                return this._appService.trans('REGISTER.VALIDATION.PASSWORD_MAXLENGTH');
+            }
+            if (control.errors['pattern']) {
+                return this._appService.trans('REGISTER.VALIDATION.PASSWORD_WEAK');
+            }
+        }
+
+        if (fieldName === 'confirmPassword') {
+            if (control.errors['required']) {
+                return this._appService.trans('REGISTER.VALIDATION.CONFIRM_PASSWORD_REQUIRED');
+            }
+            // Kiểm tra lỗi mismatch từ form group
+            if (this.registerForm.errors?.['mismatch']) {
+                return this._appService.trans('REGISTER.VALIDATION.PASSWORD_MISMATCH');
+            }
+        }
+
         const errorMessages: Record<string, Record<string, string>> = {
             fullName: {
                 required: this._appService.trans('REGISTER.VALIDATION.FULL_NAME_REQUIRED'),
@@ -180,15 +214,6 @@ export class RegisterComponent implements OnInit {
                 required: this._appService.trans('REGISTER.VALIDATION.USERNAME_REQUIRED'),
                 minlength: this._appService.trans('REGISTER.VALIDATION.USERNAME_MINLENGTH'),
                 maxlength: this._appService.trans('REGISTER.VALIDATION.USERNAME_MAXLENGTH')
-            },
-            password: {
-                required: this._appService.trans('REGISTER.VALIDATION.PASSWORD_REQUIRED'),
-                minlength: this._appService.trans('REGISTER.VALIDATION.PASSWORD_MINLENGTH'),
-                maxlength: this._appService.trans('REGISTER.VALIDATION.PASSWORD_MAXLENGTH')
-            },
-            confirmPassword: {
-                required: this._appService.trans('REGISTER.VALIDATION.CONFIRM_PASSWORD_REQUIRED'),
-                mismatch: this._appService.trans('REGISTER.VALIDATION.PASSWORD_MISMATCH')
             },
             businessName: {
                 required: this._appService.trans('REGISTER.VALIDATION.BUSINESS_NAME_REQUIRED'),
@@ -214,7 +239,6 @@ export class RegisterComponent implements OnInit {
             website: {
                 pattern: this._appService.trans('REGISTER.VALIDATION.WEBSITE_INVALID')
             },
-            // Comment fields (vẫn giữ validation messages)
             interests: {
                 maxlength: this._appService.trans('REGISTER.VALIDATION.INTERESTS_MAXLENGTH')
             },
@@ -249,7 +273,6 @@ export class RegisterComponent implements OnInit {
     onSubmit(): void {
         this.isSubmitted = true;
 
-        // Force re-validate all fields
         Object.keys(this.registerForm.controls).forEach(key => {
             this.registerForm.get(key)?.updateValueAndValidity();
         });
