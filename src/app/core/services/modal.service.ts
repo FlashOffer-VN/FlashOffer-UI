@@ -1,6 +1,7 @@
 // core/services/modal.service.ts
 import { Injectable, ApplicationRef, ComponentRef, EnvironmentInjector, createComponent, Type } from '@angular/core';
 import { ModalComponent } from '@shared/components/modal/modal.component';
+import { isBrowser } from '../utils/platform';
 
 export interface ModalOptions {
     title?: string;
@@ -165,7 +166,9 @@ export class ModalService {
         instance.visible = true;
 
         this._appRef.attachView(componentRef.hostView);
-        document.body.appendChild(componentRef.location.nativeElement);
+        if (isBrowser()) {
+            document.body.appendChild(componentRef.location.nativeElement);
+        }
 
         this._modalRef = componentRef;
 

@@ -10,6 +10,7 @@ import { ToastComponent } from "@shared/components/toast/toast.component";
 import { ContactFloatingComponent } from "@shared/components/contact-floating/contact-floating.component";
 import { SeoService } from './core/services/seo.service';
 import { SEO_CONFIG } from './core/configs/seo.config';
+import { isBrowser } from './core/utils/platform';
 
 @Component({
     selector: 'app-root',
@@ -33,8 +34,10 @@ export class AppComponent implements OnInit {
         this.router.events.pipe(
             filter(event => event instanceof NavigationEnd)
         ).subscribe(() => {
-            // Cuộn lên đầu trang
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Cuộn lên đầu trang (browser-only — `window` doesn't exist during prerender)
+            if (isBrowser()) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
 
             // 👇 Cập nhật SEO cho trang hiện tại
             this.updateSEO();

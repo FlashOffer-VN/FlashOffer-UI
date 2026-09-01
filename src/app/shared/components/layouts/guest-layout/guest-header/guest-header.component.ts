@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { AppService } from '../../../../../core/services/app.service';
 import { UserRole } from '../../../../../core/models/auth.model';
+import { isBrowser } from '../../../../../core/utils/platform';
 import { LanguageSwitcherComponent } from '../../../language-switcher/language-switcher.component';
 
 @Component({
@@ -93,6 +94,7 @@ export class GuestHeaderComponent implements OnInit, OnDestroy {
     // ✅ Toggle mobile menu
     toggleMobileMenu(): void {
         this.mobileMenuOpen = !this.mobileMenuOpen;
+        if (!isBrowser()) return;
         if (this.mobileMenuOpen) {
             document.body.style.overflow = 'hidden';
         } else {
@@ -103,6 +105,7 @@ export class GuestHeaderComponent implements OnInit, OnDestroy {
     // ✅ Close mobile menu
     closeMobileMenu(): void {
         this.mobileMenuOpen = false;
+        if (!isBrowser()) return;
         document.body.style.overflow = '';
     }
 
@@ -145,6 +148,8 @@ export class GuestHeaderComponent implements OnInit, OnDestroy {
             clearTimeout(this.timeoutId);
             this.timeoutId = null;
         }
-        document.body.style.overflow = '';
+        if (isBrowser()) {
+            document.body.style.overflow = '';
+        }
     }
 }

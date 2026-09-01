@@ -8,6 +8,7 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 import { AppService } from '@core/services/app.service';
+import { isBrowser } from '@core/utils/platform';
 
 @Component({
     selector: 'app-register',
@@ -154,14 +155,18 @@ export class RegisterComponent implements OnInit {
     nextStep(): void {
         if (this.isStep1Valid()) {
             this.currentStep = 2;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (isBrowser()) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
     }
 
     prevStep(): void {
         if (this.currentStep > 1) {
             this.currentStep--;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (isBrowser()) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
     }
 
@@ -320,8 +325,11 @@ export class RegisterComponent implements OnInit {
         this.registerForm.updateValueAndValidity();
 
         if (this.registerForm.invalid) {
+
             this.registerForm.markAllAsTouched();
-            const firstInvalid = document.querySelector('.is-invalid, .ng-invalid');
+            if (!isBrowser()) return;
+
+            const firstInvalid = document.querySelector('.is-invalid,.ng-invalid');
             if (firstInvalid) {
                 firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }

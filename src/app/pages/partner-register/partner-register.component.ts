@@ -7,6 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { PartnerHeroComponent } from './components/partner-hero/partner-hero.component';
 import { PartnerStepsComponent } from './components/partner-steps/partner-steps.component';
 import { AppService } from '../../core/services/app.service';
+import { isBrowser } from '../../core/utils/platform';
 import { PartnerRegisterService } from '../../core/services/partner-register.service';
 import { PartnerFormComponent } from './components/partner-form/partner-form.component';
 
@@ -67,6 +68,7 @@ export class PartnerRegisterComponent {
         return control?.invalid;
       });
 
+      if (!isBrowser()) return;
       if (firstInvalid === 'agreeTerms') {
         const termsElement = document.querySelector('.terms-group');
         if (termsElement) {
