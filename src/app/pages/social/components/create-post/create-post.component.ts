@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { QuillModule, QuillEditorComponent } from 'ngx-quill';
-import { isBrowser } from '../../../../core/utils/platform';
 import { AppService } from '../../../../core/services/app.service';
 import { PostType, PrivacyType, CreatePostRequest, SocialPost } from '../../../../core/models/social.model';
 
@@ -136,7 +135,6 @@ export class CreatePostComponent implements AfterViewInit {
     }
 
     triggerFileInput(): void {
-        if (!isBrowser()) return;
         const input = document.getElementById('fileInput') as HTMLInputElement;
         if (input) input.click();
     }

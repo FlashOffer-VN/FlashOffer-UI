@@ -11,8 +11,6 @@ import {
     AuthResponse,
     ApiResponse
 } from '../models/auth.model';
-import { isBrowser } from '../utils/platform';
-import { storageGet, storageRemove, storageSet } from '../utils/storage';
 
 @Injectable({
     providedIn: 'root'
@@ -69,14 +67,14 @@ export class AuthService {
      * Lấy token từ localStorage
      */
     getToken(): string | null {
-        return storageGet('token');
+        return localStorage.getItem('token');
     }
 
     /**
      * Lấy refresh token từ localStorage
      */
     getRefreshToken(): string | null {
-        return storageGet('refreshToken');
+        return localStorage.getItem('refreshToken');
     }
 
     /**
@@ -101,7 +99,7 @@ export class AuthService {
             tap(response => {
                 if (response.success && response.data) {
                     const user = response.data;
-                    storageSet('user', JSON.stringify(user));
+                    localStorage.setItem('user', JSON.stringify(user));
                     this.currentUserSubject.next(user);
                     this.setBodyRoleClass(user.role);
                 }
@@ -121,7 +119,7 @@ export class AuthService {
             tap((response: any) => {
                 const newToken = response?.data?.token || response?.token;
                 if (newToken) {
-                    storageSet('token', newToken);
+                    localStorage.setItem('token', newToken);
                     this.startRefreshTokenTimer();
                 }
             })
@@ -148,9 +146,9 @@ export class AuthService {
      * Xóa session và reset state
      */
     private clearSession(): void {
-        storageRemove('token');
-        storageRemove('refreshToken');
-        storageRemove('user');
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('user');
         this.currentUserSubject.next(null);
         this.clearBodyRoleClass();
         this.stopRefreshTokenTimer();
@@ -210,14 +208,14 @@ export class AuthService {
         };
 
         if (data.token) {
-            storageSet('token', data.token);
+            localStorage.setItem('token', data.token);
         }
 
         if (data.refreshToken) {
-            storageSet('refreshToken', data.refreshToken);
+            localStorage.setItem('refreshToken', data.refreshToken);
         }
 
-        storageSet('user', JSON.stringify(user));
+        localStorage.setItem('user', JSON.stringify(user));
         this.currentUserSubject.next(user);
         this.setBodyRoleClass(user.role);
         this.startRefreshTokenTimer();
@@ -240,9 +238,7 @@ export class AuthService {
      * Load user từ localStorage khi app khởi động
      */
     private loadStoredUser(): void {
-        // SSR-safe: on the server (prerender) there is no localStorage — skip.
-        if (!isBrowser()) return;
-        const userStr = storageGet('user');
+        const userStr = localStorage.getItem('user');
         if (userStr) {
             try {
                 const user = JSON.parse(userStr) as User;
@@ -274,7 +270,6 @@ export class AuthService {
      * Set class cho body dựa trên role
      */
     private setBodyRoleClass(role: string | UserRole): void {
-        if (!isBrowser()) return;
         this.clearBodyRoleClass();
         const roleStr = this.normalizeRole(role);
 
@@ -289,7 +284,6 @@ export class AuthService {
      * Xóa class role trên body
      */
     private clearBodyRoleClass(): void {
-        if (!isBrowser()) return;
         document.body.classList.remove('admin-role', 'user-role');
     }
 }

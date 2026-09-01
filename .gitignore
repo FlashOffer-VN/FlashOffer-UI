@@ -5,9 +5,3 @@ node_modules/
 *.log
 .DS_Store
 .env
-
-# IDE
-.idea/
-
-# Test coverage
-coverage/

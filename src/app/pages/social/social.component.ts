@@ -9,7 +9,6 @@ import { SocialPost, SocialMember, SocialEvent, SocialGroup } from '@core/models
 import { PostType, PrivacyType } from '@core/models/social.model';
 import { UserRole } from '@core/models/auth.model';
 import { User } from '@core/models/auth.model';
-import { isBrowser } from '@core/utils/platform';
 
 import { SocialHeaderComponent } from './components/social-header/social-header.component';
 import { CreatePostComponent } from './components/create-post/create-post.component';
@@ -234,8 +233,6 @@ export class SocialComponent implements OnInit, AfterViewInit {
     }
 
     sharePost(post: SocialPost): void {
-        if (!isBrowser()) return; // clipboard + DOM tạm only exist in browser
-
         // Copy link vào clipboard
         const shareUrl = `${window.location.origin}/social/${post.id}`;
 

@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, Output, HostListener, ElementRef, ViewC
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { SocialPost } from '@core/models/social.model';
-import { isBrowser } from '@core/utils/platform';
 import { PostType, PrivacyType } from '@core/models/social.model';
 import { AvatarPipe } from '@shared/pipes/avatar.pipe';
 import { SanitizeHtmlPipe } from '@shared/pipes/sanitize-html.pipe';
@@ -41,23 +40,14 @@ export class PostCardComponent {
     get shouldShowReadMore(): boolean {
         if (!this.post?.content) return false;
 
-        const trimmedText = this.extractTextContent(this.post.content).trim();
+        // Tạo element tạm để parse HTML và lấy text content
+        const temp = document.createElement('div');
+        temp.innerHTML = this.post.content;
+        const textContent = temp.textContent || '';
+        const trimmedText = textContent.trim();
 
         // Ngưỡng 200 ký tự - có thể điều chỉnh
         return trimmedText.length > 200;
-    }
-
-    /**
-     * Lấy text content từ HTML. Trên server (prerender) không có `document` —
-     * fallback sang regex strip tags để không crash build-time render.
-     */
-    private extractTextContent(html: string): string {
-        if (isBrowser()) {
-            const temp = document.createElement('div');
-            temp.innerHTML = html;
-            return temp.textContent || '';
-        }
-        return html.replace(/<[^>]*>/g, ' ');
     }
     // ===== 👆 END THÊM METHOD =====
 

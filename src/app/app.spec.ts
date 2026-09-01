@@ -1,20 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideRouter } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
 import { AppComponent } from './app.component';
-import { routes } from './app.routes';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent, TranslateModule.forRoot()],
-      providers: [
-        provideHttpClient(),
-        provideRouter(routes),
-        provideAnimations(),
-      ],
+      imports: [AppComponent],
     }).compileComponents();
   });
 

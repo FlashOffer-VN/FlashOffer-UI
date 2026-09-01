@@ -14,7 +14,6 @@ import { PartnerService } from './partner.service';
 import { CtvService } from './ctv.service';
 import { SocialService } from './social.service';
 import { UserRole } from '@core/models/auth.model';
-import { storageSet } from '../utils/storage';
 import { ModalService } from './modal.service';
 import { CollaboratorService } from './collaborator.service';
 import { ModalComponent } from '@shared/components/modal/modal.component';
@@ -103,7 +102,7 @@ export class AppService {
 
     // ========== Language ==========
     changeLanguage(lang: string): void {
-        storageSet('language', lang);
+        localStorage.setItem('language', lang);
         this.translate.use(lang);
     }
 
