@@ -7,6 +7,7 @@ import {
     Output
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { isBrowser } from '@core/utils/platform';
 import {
     ControlValueAccessor,
     FormsModule,
@@ -107,21 +108,21 @@ export class NgSelectWrapperComponent implements ControlValueAccessor, OnDestroy
     }
 
     onOpen(): void {
-        if (this.appendTo === 'body') {
+        if (this.appendTo === 'body' && isBrowser()) {
             document.body.style.setProperty('--select-primary', this.primaryColorFinal);
             document.body.style.setProperty('--select-primary-dark', this.primaryDarkFinal);
         }
     }
 
     onClose(): void {
-        if (this.appendTo === 'body') {
+        if (this.appendTo === 'body' && isBrowser()) {
             document.body.style.removeProperty('--select-primary');
             document.body.style.removeProperty('--select-primary-dark');
         }
     }
 
     ngOnDestroy(): void {
-        if (this.appendTo === 'body') {
+        if (this.appendTo === 'body' && isBrowser()) {
             document.body.style.removeProperty('--select-primary');
             document.body.style.removeProperty('--select-primary-dark');
         }

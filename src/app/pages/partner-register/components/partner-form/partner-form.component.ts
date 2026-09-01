@@ -5,6 +5,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } fr
 import { TranslateModule } from '@ngx-translate/core';
 
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
+import { isBrowser } from '../../../../core/utils/platform';
 import { StepPersonalComponent } from '../step-personal/step-personal.component';
 import { StepBusinessComponent } from '../step-business/step-business.component';
 import { StepSalesComponent } from '../step-sales/step-sales.component';
@@ -184,7 +185,9 @@ export class PartnerFormComponent implements OnInit {
         this.currentStep++;
         // console.log(`➡️ Moving to step ${this.currentStep}`);
         this.stepChange.emit(this.currentStep);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (isBrowser()) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     }
 
     validateStep(controls: string[]): boolean {
@@ -211,12 +214,14 @@ export class PartnerFormComponent implements OnInit {
             });
             if (firstInvalid) {
                 // console.log(`🎯 First invalid field: ${firstInvalid}`);
-                const element = document.querySelector(`[formcontrolname="${firstInvalid}"]`);
-                if (element) {
-                    (element as HTMLElement).focus();
-                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                } else {
-                    // console.log(`⚠️ Cannot find element for: ${firstInvalid}`);
+                if (isBrowser()) {
+                    const element = document.querySelector(`[formcontrolname="${firstInvalid}"]`);
+                    if (element) {
+                        (element as HTMLElement).focus();
+                        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    } else {
+                        // console.log(`⚠️ Cannot find element for: ${firstInvalid}`);
+                    }
                 }
             }
         }
@@ -227,7 +232,9 @@ export class PartnerFormComponent implements OnInit {
         if (this.currentStep > 1) {
             this.currentStep--;
             this.stepChange.emit(this.currentStep);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (isBrowser()) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
     }
 
@@ -263,7 +270,7 @@ export class PartnerFormComponent implements OnInit {
                 return control?.invalid;
             });
 
-            if (firstInvalid === 'agreeTerms') {
+            if (firstInvalid === 'agreeTerms' && isBrowser()) {
                 const termsElement = document.querySelector('.terms-group');
                 if (termsElement) {
                     termsElement.scrollIntoView({ behavior: 'smooth', block: 'center' });

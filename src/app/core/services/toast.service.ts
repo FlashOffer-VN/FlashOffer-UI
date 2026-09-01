@@ -2,6 +2,7 @@
 import { Injectable, ApplicationRef, ComponentRef, createComponent, EnvironmentInjector } from '@angular/core';
 import { ToastComponent } from '../../shared/components/toast/toast.component';
 import { TranslateService } from '@ngx-translate/core';
+import { isBrowser } from '../utils/platform';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -49,7 +50,9 @@ export class ToastService {
         instance.duration = opts.duration || 3000;
         instance.visible = true;
 
-        document.body.appendChild(componentRef.location.nativeElement);
+        if (isBrowser()) {
+            document.body.appendChild(componentRef.location.nativeElement);
+        }
         this.appRef.attachView(componentRef.hostView);
 
         this.toastRef = componentRef;

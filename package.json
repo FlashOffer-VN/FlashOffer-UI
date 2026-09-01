@@ -13,7 +13,10 @@
     "test:ci": "ng test --watch=false --browsers=ChromeHeadless --code-coverage",
     "lint": "ng lint",
     "env": "node generate-env.js",
-    "env:prod": "NODE_ENV=production node generate-env.js"
+    "env:prod": "NODE_ENV=production node generate-env.js",
+    "check:routes": "node scripts/check-server-routes.mjs",
+    "check:globals": "node scripts/check-browser-globals.mjs",
+    "check:prerender": "node scripts/smoke-prerender.mjs"
   },
   "prettier": {
     "printWidth": 100,
@@ -36,7 +39,9 @@
     "@angular/forms": "^20.3.0",
     "@angular/localize": "^20.3.25",
     "@angular/platform-browser": "^20.3.0",
+    "@angular/platform-server": "^20.3.30",
     "@angular/router": "^20.3.0",
+    "@angular/ssr": "^20.3.35",
     "@auth0/angular-jwt": "^5.2.0",
     "@ng-select/ng-select": "^23.2.0",
     "@ngx-translate/core": "^14.0.0",

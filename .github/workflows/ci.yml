@@ -39,11 +39,31 @@ jobs:
       - name: Run tests
         run: npm run test:ci || echo "No test script found"
 
-      - name: Build project
+      - name: Check SSR route coverage
+        run: node scripts/check-server-routes.mjs
+
+      - name: Check browser-global SSR safety
+        run: node scripts/check-browser-globals.mjs
+
+      - name: Build project (prerender)
         run: npm run build
+
+      - name: Smoke-test prerendered output
+        run: node scripts/smoke-prerender.mjs
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: flashoffer-ui-build
           path: dist/
+
+      - name: Deploy to Vercel
+        if: github.ref == 'refs/heads/production' && env.VERCEL_TOKEN != ''
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          npx vercel deploy dist/flashoffer-ui/browser \
+            --prebuilt --prod --token "$VERCEL_TOKEN" \
+            --yes

@@ -5,10 +5,20 @@
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
     "types": [
-      "jasmine"
+      "jasmine",
+      "node"
     ]
   },
   "include": [
     "src/**/*.ts"
+  ],
+  "exclude": [
+    /* Dead-code duplicate of app.component.ts; see app.routes.ts for the real root. */
+    "src/app/app.ts",
+    /* Server-side files type-checked by tsconfig.app.json (node platform). */
+    "src/app/app.config.server.ts",
+    "src/app/app.routes.server.ts",
+    "src/app/server-translate.loader.ts",
+    "src/main.server.ts"
   ]
 }
