@@ -46,7 +46,7 @@ jobs:
         run: node scripts/check-browser-globals.mjs
 
       - name: Build project (prerender)
-        run: npm run build
+        run: npm run build:production
 
       - name: Smoke-test prerendered output
         run: node scripts/smoke-prerender.mjs
@@ -64,6 +64,4 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
         run: |
-          npx vercel deploy dist/flashoffer-ui/browser \
-            --prebuilt --prod --token "$VERCEL_TOKEN" \
-            --yes
+          npx vercel deploy --prod --token "$VERCEL_TOKEN" --yes
