@@ -644,6 +644,16 @@
             "PASSWORD_MIN_LENGTH": "Password must be at least 6 characters"
         }
     },
+    "USER": {
+        "WELCOME_LABEL": "Member area",
+        "WELCOME_TITLE": "Welcome back!",
+        "WELCOME_DESCRIPTION": "Your account is ready. More member features will be available soon.",
+        "USERNAME": "Username",
+        "EMAIL": "Email",
+        "COMING_SOON": "We are preparing more exciting features for you.",
+        "BACK_HOME": "Back home",
+        "LOGOUT": "Log out"
+    },
     "REGISTER": {
         "TITLE": "BECOME A KINDI PARTNER",
         "SUBTITLE": "Connect Opportunities – Expand Income",
@@ -875,6 +885,39 @@
         "NO_ITEMS": "No data"
     },
     "ADMIN": {
+        "SIDEBAR": {
+            "PANEL": "Admin Panel",
+            "OFFERS": "Offers",
+            "COLLABORATOR": "Collaborator",
+            "SOCIAL_POSTS": "Social Posts",
+            "PARTNER": "Partner",
+            "SETTINGS": "Settings",
+            "LOGOUT": "Logout"
+        },
+        "DASHBOARD": {
+            "TITLE": "Admin overview",
+            "SUBTITLE": "Quick statistics from the available list APIs",
+            "REFRESH": "Refresh",
+            "PARTNERS": "Partners",
+            "COLLABORATORS": "Collaborators",
+            "SOCIAL_POSTS": "Community posts",
+            "OFFER_REQUESTS": "Offer requests",
+            "PURCHASE_REQUESTS": "Supplier requests",
+            "GROUP_BUYING_REQUESTS": "Group buying requests",
+            "UNAVAILABLE": "Unavailable",
+            "LAST_UPDATED": "Last updated"
+        },
+        "SOCIAL": {
+            "TITLE": "Moderate community posts",
+            "LIST_TITLE": "Posts pending approval",
+            "AUTHOR": "Author",
+            "CONTENT": "Content",
+            "CREATED_AT": "Created at",
+            "APPROVE": "Approve",
+            "REJECT": "Reject",
+            "APPROVED_SUCCESS": "Post approved successfully",
+            "REJECTED_SUCCESS": "Post rejected successfully"
+        },
         "CTV": {
             "TITLE": "CTV Management",
             "LIST_TITLE": "CTV List",

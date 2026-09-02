@@ -600,6 +600,16 @@
             "PASSWORD_MIN_LENGTH": "Mật khẩu tối thiểu 6 ký tự"
         }
     },
+    "USER": {
+        "WELCOME_LABEL": "Khu vực thành viên",
+        "WELCOME_TITLE": "Chào mừng bạn trở lại!",
+        "WELCOME_DESCRIPTION": "Tài khoản của bạn đã sẵn sàng. Các tính năng dành cho thành viên sẽ được cập nhật sớm.",
+        "USERNAME": "Tên đăng nhập",
+        "EMAIL": "Email",
+        "COMING_SOON": "Chúng tôi đang chuẩn bị thêm nhiều tính năng thú vị cho bạn.",
+        "BACK_HOME": "Về trang chủ",
+        "LOGOUT": "Đăng xuất"
+    },
     "REGISTER": {
         "TITLE": "TRỞ THÀNH ĐỐI TÁC KINDI",
         "SUBTITLE": "Kết nối cơ hội – Mở rộng thu nhập",
@@ -834,6 +844,39 @@
         "NO_ITEMS": "Không có dữ liệu"
     },
     "ADMIN": {
+        "SIDEBAR": {
+            "PANEL": "Trang quản trị",
+            "OFFERS": "Offers",
+            "COLLABORATOR": "Cộng tác viên",
+            "SOCIAL_POSTS": "Bài viết cộng đồng",
+            "PARTNER": "Đối tác",
+            "SETTINGS": "Cài đặt",
+            "LOGOUT": "Đăng xuất"
+        },
+        "DASHBOARD": {
+            "TITLE": "Tổng quan quản trị",
+            "SUBTITLE": "Thống kê nhanh từ các danh sách hiện có",
+            "REFRESH": "Làm mới",
+            "PARTNERS": "Đối tác",
+            "COLLABORATORS": "Cộng tác viên",
+            "SOCIAL_POSTS": "Bài viết cộng đồng",
+            "OFFER_REQUESTS": "Yêu cầu nhận offer",
+            "PURCHASE_REQUESTS": "Yêu cầu tìm nhà cung cấp",
+            "GROUP_BUYING_REQUESTS": "Yêu cầu mua chung",
+            "UNAVAILABLE": "Không tải được",
+            "LAST_UPDATED": "Cập nhật lúc"
+        },
+        "SOCIAL": {
+            "TITLE": "Duyệt bài viết cộng đồng",
+            "LIST_TITLE": "Danh sách bài viết đang chờ duyệt",
+            "AUTHOR": "Tác giả",
+            "CONTENT": "Nội dung",
+            "CREATED_AT": "Ngày tạo",
+            "APPROVE": "Duyệt",
+            "REJECT": "Từ chối",
+            "APPROVED_SUCCESS": "Duyệt bài viết thành công",
+            "REJECTED_SUCCESS": "Từ chối bài viết thành công"
+        },
         "CTV": {
             "TITLE": "Quản lý CTV",
             "LIST_TITLE": "Danh sách CTV",

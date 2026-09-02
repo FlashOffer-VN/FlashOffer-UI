@@ -1,0 +1,44 @@
+<div class="dashboard-page">
+    <div class="dashboard-header">
+        <div>
+            <h1>{{ 'ADMIN.DASHBOARD.TITLE' | translate }}</h1>
+            <p>{{ 'ADMIN.DASHBOARD.SUBTITLE' | translate }}</p>
+        </div>
+        <button type="button" class="refresh-button" (click)="loadStats()" [disabled]="isLoading">
+            <i class="fa-solid fa-rotate" [class.fa-spin]="isLoading"></i>
+            {{ 'ADMIN.DASHBOARD.REFRESH' | translate }}
+        </button>
+    </div>
+
+    <div class="stats-grid">
+        <ng-container *ngFor="let stat of stats">
+            <a *ngIf="stat.route; else statCard" class="stat-card" [routerLink]="stat.route"
+                [class]="'stat-card stat-card-' + stat.color">
+                <ng-container *ngTemplateOutlet="statContent; context: { stat: stat }"></ng-container>
+            </a>
+            <ng-template #statCard>
+                <div class="stat-card" [class]="'stat-card stat-card-' + stat.color">
+                    <ng-container *ngTemplateOutlet="statContent; context: { stat: stat }"></ng-container>
+                </div>
+            </ng-template>
+        </ng-container>
+    </div>
+
+    <ng-template #statContent let-stat="stat">
+        <div class="stat-card-top">
+            <div class="stat-icon"><i [class]="stat.icon"></i></div>
+            <i *ngIf="stat.route" class="fa-solid fa-arrow-up-right-from-square stat-link-icon"></i>
+        </div>
+        <div class="stat-label">{{ stat.label | translate }}</div>
+        <div *ngIf="stat.hasError; else statValue" class="stat-error">
+            {{ 'ADMIN.DASHBOARD.UNAVAILABLE' | translate }}
+        </div>
+        <ng-template #statValue>
+            <div class="stat-value">{{ stat.value === undefined ? '-' : (stat.value | number) }}</div>
+        </ng-template>
+    </ng-template>
+
+    <div class="dashboard-footer" *ngIf="lastUpdated">
+        {{ 'ADMIN.DASHBOARD.LAST_UPDATED' | translate }}: {{ lastUpdated | date:'dd/MM/yyyy HH:mm:ss' }}
+    </div>
+</div>

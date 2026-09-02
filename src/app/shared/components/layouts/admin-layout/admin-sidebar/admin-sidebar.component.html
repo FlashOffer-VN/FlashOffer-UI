@@ -8,7 +8,7 @@
         <a routerLink="/" class="flex items-center justify-center">
             <img src="logo-white.svg" alt="Kindi" class="h-8">
         </a>
-        <p class="text-gray-400 text-sm mt-1 text-center">Admin Panel</p>
+        <p class="text-gray-400 text-sm mt-1 text-center">{{ 'ADMIN.SIDEBAR.PANEL' | translate }}</p>
     </div>
 
     <!-- Menu - flex-1 để đẩy logout xuống dưới -->
@@ -17,7 +17,11 @@
         <a [routerLink]="item.path" routerLinkActive="bg-primary"
             class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-secondary-light transition">
             <i [class]="item.icon" class="w-5"></i>
+            @if (item.path === '/admin/dashboard') {
             {{ item.label }}
+            } @else {
+            {{ item.label | translate }}
+            }
         </a>
         }
     </nav>
@@ -27,7 +31,7 @@
         <button (click)="logout()"
             class="flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 transition w-full">
             <i class="fa-solid fa-right-from-bracket w-5"></i>
-            <span>Logout</span>
+            <span>{{ 'ADMIN.SIDEBAR.LOGOUT' | translate }}</span>
         </button>
     </div>
 </aside>
