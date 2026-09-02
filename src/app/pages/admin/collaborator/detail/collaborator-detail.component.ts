@@ -4,7 +4,7 @@ import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
-import { CtvRegistration, CTVRegistrationStatus, getCTVStatusLabel, getSalesChannelLabel } from '@core/models/ctv.model';
+import { CtvRegistration, CTVRegistrationStatus } from '@core/models/ctv.model';
 import { ApiResponse } from '@core/models/paged-response.model';
 
 // Shared Components
@@ -14,7 +14,7 @@ import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.com
 import { ModalComponent } from '@shared/components/modal/modal.component';
 
 @Component({
-    selector: 'app-admin-ctv-detail',
+    selector: 'app-admin-collaborator-detail',
     standalone: true,
     imports: [
         CommonModule,
@@ -25,11 +25,11 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
         BadgeComponent,
         ModalComponent
     ],
-    templateUrl: './ctv-detail.component.html',
-    styleUrls: ['./ctv-detail.component.css']
+    templateUrl: './collaborator-detail.component.html',
+    styleUrls: ['./collaborator-detail.component.css']
 })
-export class AdminCtvDetailComponent implements OnInit {
-    ctv: CtvRegistration | null = null;
+export class AdminCollaboratorDetailComponent implements OnInit {
+    collaborator: CtvRegistration | null = null;
     isLoading = true;
     isActionLoading = false;
 
@@ -51,7 +51,7 @@ export class AdminCtvDetailComponent implements OnInit {
         const id = this._route.snapshot.paramMap.get('id');
         if (!id) {
             this._appService.showError(this._appService.trans('COMMON.ERROR.INVALID_ID'));
-            this._router.navigate(['/admin/ctv']);
+            this._router.navigate(['/admin/collaborator']);
             return;
         }
 
@@ -60,16 +60,16 @@ export class AdminCtvDetailComponent implements OnInit {
             next: (response: ApiResponse<CtvRegistration>) => {
                 if (!response.data) {
                     this._appService.showError(this._appService.trans('COMMON.ERROR.NOT_FOUND'));
-                    this._router.navigate(['/admin/ctv']);
+                    this._router.navigate(['/admin/collaborator']);
                     return;
                 }
-                this.ctv = response.data;
+                this.collaborator = response.data;
                 this.isLoading = false;
             },
             error: () => {
                 this.isLoading = false;
                 this._appService.showError(this._appService.trans('COMMON.ERROR.LOAD_FAILED'));
-                this._router.navigate(['/admin/ctv']);
+                this._router.navigate(['/admin/collaborator']);
             }
         });
     }
@@ -92,11 +92,6 @@ export class AdminCtvDetailComponent implements OnInit {
         return keys[status] || 'pending';
     }
 
-    getSalesChannelLabel(channel: number | undefined): string {
-        if (channel === undefined) return '--';
-        return getSalesChannelLabel(channel);
-    }
-
     formatDate(dateString?: string): string {
         if (!dateString) return '--';
         const date = new Date(dateString);
@@ -110,11 +105,11 @@ export class AdminCtvDetailComponent implements OnInit {
     }
 
     canApprove(): boolean {
-        return this.ctv?.status === CTVRegistrationStatus.Pending;
+        return this.collaborator?.status === CTVRegistrationStatus.Pending;
     }
 
     canReject(): boolean {
-        return this.ctv?.status === CTVRegistrationStatus.Pending;
+        return this.collaborator?.status === CTVRegistrationStatus.Pending;
     }
 
     onApprove(): void {
@@ -122,11 +117,11 @@ export class AdminCtvDetailComponent implements OnInit {
     }
 
     confirmApprove(): void {
-        if (!this.ctv) return;
+        if (!this.collaborator) return;
         this.isActionLoading = true;
-        this._appService.ctvService.approve(this.ctv.id).subscribe({
+        this._appService.ctvService.approve(this.collaborator.id).subscribe({
             next: (response: ApiResponse<CtvRegistration>) => {
-                this.ctv = response.data;
+                this.collaborator = response.data;
                 this.isActionLoading = false;
                 this.showApproveModal = false;
                 this._appService.showSuccess(this._appService.trans('ADMIN.CTV.APPROVED_SUCCESS'));
@@ -145,11 +140,11 @@ export class AdminCtvDetailComponent implements OnInit {
     }
 
     confirmReject(): void {
-        if (!this.ctv) return;
+        if (!this.collaborator) return;
         this.isActionLoading = true;
-        this._appService.ctvService.reject(this.ctv.id).subscribe({
+        this._appService.ctvService.reject(this.collaborator.id).subscribe({
             next: (response: ApiResponse<CtvRegistration>) => {
-                this.ctv = response.data;
+                this.collaborator = response.data;
                 this.isActionLoading = false;
                 this.showRejectModal = false;
                 this._appService.showSuccess(this._appService.trans('ADMIN.CTV.REJECTED_SUCCESS'));
@@ -164,6 +159,6 @@ export class AdminCtvDetailComponent implements OnInit {
     }
 
     goBack(): void {
-        this._router.navigate(['/admin/ctv']);
+        this._router.navigate(['/admin/collaborator']);
     }
 }
