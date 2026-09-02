@@ -20,7 +20,7 @@ import { ApiResponse } from '@core/models/auth.model';
     providedIn: 'root'
 })
 export class SocialService {
-    private readonly _baseSocialUrl = 'social';
+    private readonly _baseSocialUrl = 'Social';
     private readonly _baseSocialInteractionUrl = 'socialInteraction';
 
     constructor(private _apiService: ApiService) { }
@@ -40,6 +40,24 @@ export class SocialService {
         return this._apiService.get<PagedResponse<SocialPost>>(
             `${this._baseSocialUrl}/posts`,
             params
+        );
+    }
+
+    getPendingPosts(pageNumber = 1, pageSize = 10): Observable<PagedResponse<SocialPost>> {
+        return this._apiService.get<PagedResponse<SocialPost>>(
+            `${this._baseSocialUrl}/posts/pending`,
+            { pageNumber, pageSize }
+        );
+    }
+
+    approvePost(id: string): Observable<SocialPost> {
+        return this._apiService.post<SocialPost>(`${this._baseSocialUrl}/posts/${id}/approve`, {});
+    }
+
+    rejectPost(id: string, reason = ''): Observable<SocialPost> {
+        return this._apiService.post<SocialPost>(
+            `${this._baseSocialUrl}/posts/${id}/reject`,
+            reason
         );
     }
 

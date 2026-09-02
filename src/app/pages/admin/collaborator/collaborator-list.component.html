@@ -56,9 +56,6 @@
                             {{ 'ADMIN.CTV.PHONE' | translate }}
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            {{ 'ADMIN.CTV.SALES_CHANNEL' | translate }}
-                        </th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             {{ 'ADMIN.CTV.STATUS' | translate }}
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -72,49 +69,46 @@
                 <tbody class="divide-y divide-gray-200">
                     <!-- Loading -->
                     <tr *ngIf="isLoading">
-                        <td colspan="9" class="px-4 py-8 text-center">
+                        <td colspan="8" class="px-4 py-8 text-center">
                             <app-loading></app-loading>
                         </td>
                     </tr>
 
                     <!-- No data -->
-                    <tr *ngIf="!isLoading && ctvs.length === 0">
-                        <td colspan="9" class="px-4 py-8 text-center text-gray-500">
+                    <tr *ngIf="!isLoading && collaborators.length === 0">
+                        <td colspan="8" class="px-4 py-8 text-center text-gray-500">
                             {{ 'PAGINATION.NO_ITEMS' | translate }}
                         </td>
                     </tr>
 
                     <!-- Data rows -->
-                    <tr *ngFor="let ctv of ctvs; let i = index"
-                        class="hover:bg-gray-50 transition-colors cursor-pointer" (click)="navigateToDetail(ctv.id)">
+                    <tr *ngFor="let collaborator of collaborators; let i = index"
+                        class="hover:bg-gray-50 transition-colors cursor-pointer" (click)="navigateToDetail(collaborator.id)">
                         <td class="px-4 py-3 text-sm text-gray-500">
                             {{ (pageNumber - 1) * pageSize + i + 1 }}
                         </td>
                         <td class="px-4 py-3 text-sm font-mono text-gray-600">
-                            {{ formatId(ctv.id) }}
+                            {{ formatId(collaborator.id) }}
                         </td>
                         <td class="px-4 py-3 text-sm font-medium text-gray-900">
-                            {{ ctv.fullName }}
+                            {{ collaborator.fullName }}
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-600">
-                            {{ ctv.email || '--' }}
+                            {{ collaborator.email || '--' }}
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-600">
-                            {{ ctv.phone }}
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-600">
-                            {{ getSalesChannelLabel(ctv.salesChannel) | translate }}
+                            {{ collaborator.phone }}
                         </td>
                         <td class="px-4 py-3">
-                            <app-badge [status]="getStatusKey(ctv.status)" [variant]="getStatusVariant(ctv.status)">
+                            <app-badge [status]="getStatusKey(collaborator.status)" [variant]="getStatusVariant(collaborator.status)">
                             </app-badge>
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-500">
-                            {{ formatDate(ctv.createdAt) }}
+                            {{ formatDate(collaborator.createdAt) }}
                         </td>
                         <td class="px-4 py-3">
                             <app-button variant="primary" size="sm"
-                                (click)="$event.stopPropagation(); navigateToDetail(ctv.id)">
+                                (click)="$event.stopPropagation(); navigateToDetail(collaborator.id)">
                                 {{ 'COMMON.BUTTON.VIEW_DETAIL' | translate }}
                             </app-button>
                         </td>

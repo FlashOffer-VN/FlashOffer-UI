@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
-import { CtvRegistration, CTVRegistrationStatus, getCTVStatusLabel, getSalesChannelLabel } from '@core/models/ctv.model';
+import { CtvRegistration, CTVRegistrationStatus } from '@core/models/ctv.model';
 import { PagedResponse } from '@core/models/paged-response.model';
 
 // Shared Components
@@ -22,7 +22,7 @@ interface StatusOption {
 }
 
 @Component({
-    selector: 'app-admin-ctv-list',
+    selector: 'app-admin-collaborator-list',
     standalone: true,
     imports: [
         CommonModule,
@@ -36,12 +36,12 @@ interface StatusOption {
         BadgeComponent,
         NgSelectWrapperComponent
     ],
-    templateUrl: './ctv-list.component.html',
-    styleUrls: ['./ctv-list.component.css']
+    templateUrl: './collaborator-list.component.html',
+    styleUrls: ['./collaborator-list.component.css']
 })
-export class AdminCtvListComponent implements OnInit {
+export class AdminCollaboratorListComponent implements OnInit {
     // Data
-    ctvs: CtvRegistration[] = [];
+    collaborators: CtvRegistration[] = [];
     isLoading = true;
 
     // Filter
@@ -58,15 +58,6 @@ export class AdminCtvListComponent implements OnInit {
     totalPages = 0;
     hasPreviousPage = false;
     hasNextPage = false;
-
-    // Translate keys for sales channel
-    salesChannelKeys: Record<number, string> = {
-        1: 'FIND_SUPPLIER.SALES_CHANNEL_RETAIL',
-        2: 'FIND_SUPPLIER.SALES_CHANNEL_WHOLESALE',
-        3: 'FIND_SUPPLIER.SALES_CHANNEL_ONLINE',
-        4: 'FIND_SUPPLIER.SALES_CHANNEL_OFFLINE',
-        5: 'FIND_SUPPLIER.SALES_CHANNEL_OTHER'
-    };
 
     constructor(private _appService: AppService, private _router: Router) { }
 
@@ -92,7 +83,7 @@ export class AdminCtvListComponent implements OnInit {
             )
             .subscribe({
                 next: (response: PagedResponse<CtvRegistration>) => {
-                    this.ctvs = response.data;
+                    this.collaborators = response.data;
                     this.pageNumber = response.pageNumber;
                     this.pageSize = response.pageSize;
                     this.totalCount = response.totalCount;
@@ -139,11 +130,6 @@ export class AdminCtvListComponent implements OnInit {
         return variants[status] || 'secondary';
     }
 
-    getSalesChannelLabel(channel: number | undefined): string {
-        if (channel === undefined) return '--';
-        return this.salesChannelKeys[channel] || channel.toString();
-    }
-
     getStatusKey(status: CTVRegistrationStatus): string {
         const keys: Record<CTVRegistrationStatus, string> = {
             [CTVRegistrationStatus.Pending]: 'pending',
@@ -169,6 +155,6 @@ export class AdminCtvListComponent implements OnInit {
     }
 
     navigateToDetail(id: string): void {
-        this._router.navigate(['/admin/ctv', id]);
+        this._router.navigate(['/admin/collaborator', id]);
     }
 }

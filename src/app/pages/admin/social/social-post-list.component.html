@@ -1,0 +1,98 @@
+<div class="p-6">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">{{ 'ADMIN.SOCIAL.TITLE' | translate }}</h1>
+        <p class="text-sm text-gray-500">{{ 'ADMIN.SOCIAL.LIST_TITLE' | translate }}</p>
+    </div>
+
+    <div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="border-b border-gray-200 bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">#</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">{{ 'ADMIN.SOCIAL.AUTHOR' | translate }}</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">{{ 'ADMIN.SOCIAL.CONTENT' | translate }}</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">{{ 'ADMIN.SOCIAL.CREATED_AT' | translate }}</th>
+                        <th class="action-column px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">{{ 'COMMON.BUTTON.ACTION' | translate }}</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <tr *ngIf="isLoading">
+                        <td colspan="5" class="px-4 py-8 text-center"><app-loading></app-loading></td>
+                    </tr>
+                    <tr *ngIf="!isLoading && posts.length === 0">
+                        <td colspan="5" class="px-4 py-8 text-center text-gray-500">{{ 'PAGINATION.NO_ITEMS' | translate }}</td>
+                    </tr>
+                    <tr *ngFor="let post of posts; let i = index">
+                        <td class="px-4 py-3 text-sm text-gray-500">{{ (pageNumber - 1) * pageSize + i + 1 }}</td>
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ post.author.fullName }}</td>
+                        <td class="max-w-md px-4 py-3 text-sm text-gray-600">
+                            <button type="button" class="post-preview text-left" (click)="openPostDetail(post)">
+                                <div class="truncate font-medium">{{ post.title || '--' }}</div>
+                                <div class="line-clamp-2">{{ getContentPreview(post.content) }}</div>
+                            </button>
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-500">{{ formatDate(post.createdAt) }}</td>
+                        <td class="action-column px-4 py-3">
+                            <div class="action-buttons">
+                                <app-button variant="success" size="sm" [disabled]="isActionLoading"
+                                    (click)="approve(post)" [title]="'ADMIN.SOCIAL.APPROVE' | translate"
+                                    [attr.aria-label]="'ADMIN.SOCIAL.APPROVE' | translate">
+                                    <i class="fa-solid fa-check"></i>
+                                </app-button>
+                                <app-button variant="danger" size="sm" [disabled]="isActionLoading"
+                                    (click)="reject(post)" [title]="'ADMIN.SOCIAL.REJECT' | translate"
+                                    [attr.aria-label]="'ADMIN.SOCIAL.REJECT' | translate">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </app-button>
+                                <app-button variant="outline" size="sm" (click)="openPostDetail(post)"
+                                    [title]="'ADMIN.SOCIAL.VIEW_DETAIL' | translate"
+                                    [attr.aria-label]="'ADMIN.SOCIAL.VIEW_DETAIL' | translate">
+                                    <i class="fa-solid fa-eye"></i>
+                                </app-button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-3">
+            <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [totalCount]="totalCount"
+                [totalPages]="totalPages" [hasPreviousPage]="hasPreviousPage" [hasNextPage]="hasNextPage"
+                (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
+            </app-pagination>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="selectedPost" class="post-modal-backdrop" (click)="closePostDetail()">
+    <section class="post-modal" role="dialog" aria-modal="true"
+        [attr.aria-label]="'ADMIN.SOCIAL.DETAIL_TITLE' | translate" (click)="$event.stopPropagation()">
+        <header class="post-modal-header">
+            <div>
+                <h2>{{ selectedPost.title || ('ADMIN.SOCIAL.UNTITLED' | translate) }}</h2>
+                <p>{{ selectedPost.author.fullName }} · {{ formatDate(selectedPost.createdAt) }}</p>
+            </div>
+            <button type="button" class="close-button" (click)="closePostDetail()" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </header>
+
+        <div class="post-modal-content" [innerHTML]="selectedPost.content"></div>
+
+        <footer class="post-modal-footer">
+            <app-button variant="danger" [disabled]="isActionLoading"
+                (click)="reject(selectedPost); closePostDetail()"
+                [title]="'ADMIN.SOCIAL.REJECT' | translate"
+                [attr.aria-label]="'ADMIN.SOCIAL.REJECT' | translate">
+                <i class="fa-solid fa-xmark"></i>
+            </app-button>
+            <app-button variant="success" [disabled]="isActionLoading"
+                (click)="approve(selectedPost); closePostDetail()"
+                [title]="'ADMIN.SOCIAL.APPROVE' | translate"
+                [attr.aria-label]="'ADMIN.SOCIAL.APPROVE' | translate">
+                <i class="fa-solid fa-check"></i>
+            </app-button>
+        </footer>
+    </section>
+</div>

@@ -29,13 +29,8 @@ export class RegisterComponent implements OnInit {
     registerForm: FormGroup;
     isLoading = false;
     isSubmitted = false;
-    showPassword = false;
-    showConfirmPassword = false;
-
     currentStep = 1;
     totalSteps = 2;
-
-    private readonly passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     businessFields = [
         { value: 'technology', label: 'Công nghệ thông tin' },
@@ -59,6 +54,72 @@ export class RegisterComponent implements OnInit {
         { value: 5, label: '500+ nhân viên' }
     ];
 
+    provinces = [
+        { value: 'An Giang', label: 'An Giang' },
+        { value: 'Bà Rịa - Vũng Tàu', label: 'Bà Rịa - Vũng Tàu' },
+        { value: 'Bắc Giang', label: 'Bắc Giang' },
+        { value: 'Bắc Kạn', label: 'Bắc Kạn' },
+        { value: 'Bạc Liêu', label: 'Bạc Liêu' },
+        { value: 'Bắc Ninh', label: 'Bắc Ninh' },
+        { value: 'Bến Tre', label: 'Bến Tre' },
+        { value: 'Bình Định', label: 'Bình Định' },
+        { value: 'Bình Dương', label: 'Bình Dương' },
+        { value: 'Bình Phước', label: 'Bình Phước' },
+        { value: 'Bình Thuận', label: 'Bình Thuận' },
+        { value: 'Cà Mau', label: 'Cà Mau' },
+        { value: 'Cao Bằng', label: 'Cao Bằng' },
+        { value: 'Cần Thơ', label: 'Cần Thơ' },
+        { value: 'Đà Nẵng', label: 'Đà Nẵng' },
+        { value: 'Đắk Lắk', label: 'Đắk Lắk' },
+        { value: 'Đắk Nông', label: 'Đắk Nông' },
+        { value: 'Điện Biên', label: 'Điện Biên' },
+        { value: 'Đồng Nai', label: 'Đồng Nai' },
+        { value: 'Đồng Tháp', label: 'Đồng Tháp' },
+        { value: 'Gia Lai', label: 'Gia Lai' },
+        { value: 'Hà Giang', label: 'Hà Giang' },
+        { value: 'Hà Nam', label: 'Hà Nam' },
+        { value: 'Hà Nội', label: 'Hà Nội' },
+        { value: 'Hà Tĩnh', label: 'Hà Tĩnh' },
+        { value: 'Hải Dương', label: 'Hải Dương' },
+        { value: 'Hải Phòng', label: 'Hải Phòng' },
+        { value: 'Hậu Giang', label: 'Hậu Giang' },
+        { value: 'Hòa Bình', label: 'Hòa Bình' },
+        { value: 'Hưng Yên', label: 'Hưng Yên' },
+        { value: 'Khánh Hòa', label: 'Khánh Hòa' },
+        { value: 'Kiên Giang', label: 'Kiên Giang' },
+        { value: 'Kon Tum', label: 'Kon Tum' },
+        { value: 'Lai Châu', label: 'Lai Châu' },
+        { value: 'Lâm Đồng', label: 'Lâm Đồng' },
+        { value: 'Lạng Sơn', label: 'Lạng Sơn' },
+        { value: 'Lào Cai', label: 'Lào Cai' },
+        { value: 'Long An', label: 'Long An' },
+        { value: 'Nam Định', label: 'Nam Định' },
+        { value: 'Nghệ An', label: 'Nghệ An' },
+        { value: 'Ninh Bình', label: 'Ninh Bình' },
+        { value: 'Ninh Thuận', label: 'Ninh Thuận' },
+        { value: 'Phú Thọ', label: 'Phú Thọ' },
+        { value: 'Phú Yên', label: 'Phú Yên' },
+        { value: 'Quảng Bình', label: 'Quảng Bình' },
+        { value: 'Quảng Nam', label: 'Quảng Nam' },
+        { value: 'Quảng Ngãi', label: 'Quảng Ngãi' },
+        { value: 'Quảng Ninh', label: 'Quảng Ninh' },
+        { value: 'Quảng Trị', label: 'Quảng Trị' },
+        { value: 'Sóc Trăng', label: 'Sóc Trăng' },
+        { value: 'Sơn La', label: 'Sơn La' },
+        { value: 'Tây Ninh', label: 'Tây Ninh' },
+        { value: 'Thái Bình', label: 'Thái Bình' },
+        { value: 'Thái Nguyên', label: 'Thái Nguyên' },
+        { value: 'Thanh Hóa', label: 'Thanh Hóa' },
+        { value: 'Thừa Thiên Huế', label: 'Thừa Thiên Huế' },
+        { value: 'Tiền Giang', label: 'Tiền Giang' },
+        { value: 'TP. Hồ Chí Minh', label: 'TP. Hồ Chí Minh' },
+        { value: 'Trà Vinh', label: 'Trà Vinh' },
+        { value: 'Tuyên Quang', label: 'Tuyên Quang' },
+        { value: 'Vĩnh Long', label: 'Vĩnh Long' },
+        { value: 'Vĩnh Phúc', label: 'Vĩnh Phúc' },
+        { value: 'Yên Bái', label: 'Yên Bái' }
+    ];
+
     constructor(
         private fb: FormBuilder,
         private _appService: AppService,
@@ -68,81 +129,12 @@ export class RegisterComponent implements OnInit {
             fullName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]],
             email: ['', [Validators.required, Validators.email]],
             phone: ['', [Validators.required, Validators.pattern(/^0[0-9]{9,10}$/)]],
-            username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-            password: ['', [
-                Validators.required,
-                Validators.minLength(8),
-                Validators.maxLength(100),
-                Validators.pattern(this.passwordPattern)
-            ]],
-            confirmPassword: ['', [Validators.required]],
             businessName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]],
             businessField: [null, [Validators.required]],
-            businessFieldOther: [''],
             businessSize: [null, [Validators.required]],
-            position: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
-            address: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(500)]],
-            website: ['', [Validators.pattern(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/)]],
-            interests: ['', Validators.maxLength(500)],
-            goals: ['', Validators.maxLength(500)],
-            skills: ['', Validators.maxLength(500)],
+            address: [null, [Validators.required]],
             agreeTerms: [false, [Validators.requiredTrue]]
-        }, {
-            validators: [
-                this.passwordMatchValidator,
-                this.businessFieldOtherValidator
-            ]
         });
-
-        this.registerForm.get('businessField')?.valueChanges.subscribe(value => {
-            const otherControl = this.registerForm.get('businessFieldOther');
-            if (value !== 'other') {
-                otherControl?.reset('');
-                otherControl?.clearValidators();
-                otherControl?.updateValueAndValidity();
-            } else {
-                otherControl?.setValidators([Validators.required, Validators.minLength(2)]);
-                otherControl?.updateValueAndValidity();
-            }
-        });
-    }
-
-    // ===== CUSTOM VALIDATORS =====
-    businessFieldOtherValidator(group: FormGroup): any {
-        const businessField = group.get('businessField')?.value;
-        const businessFieldOther = group.get('businessFieldOther')?.value;
-
-        if (businessField === 'other' && !businessFieldOther) {
-            return { businessFieldOtherRequired: true };
-        }
-        return null;
-    }
-
-    passwordMatchValidator(group: FormGroup): any {
-        const password = group.get('password')?.value;
-        const confirm = group.get('confirmPassword')?.value;
-        const confirmControl = group.get('confirmPassword');
-
-        if (!password || !confirm) {
-            if (confirmControl?.hasError('mismatch')) {
-                const errors = { ...confirmControl.errors };
-                delete errors['mismatch'];
-                confirmControl?.setErrors(Object.keys(errors).length ? errors : null);
-            }
-            return null;
-        }
-
-        if (password !== confirm) {
-            confirmControl?.setErrors({ mismatch: true });
-            return { mismatch: true };
-        }
-
-        if (confirmControl?.hasError('mismatch')) {
-            const errors = { ...confirmControl.errors };
-            delete errors['mismatch'];
-            confirmControl?.setErrors(Object.keys(errors).length ? errors : null);
-        }
-        return null;
     }
 
     ngOnInit(): void {
@@ -171,7 +163,7 @@ export class RegisterComponent implements OnInit {
     }
 
     isStep1Valid(): boolean {
-        const step1Fields = ['fullName', 'email', 'phone', 'username', 'password', 'confirmPassword'];
+        const step1Fields = ['fullName', 'email', 'phone'];
         let valid = true;
         step1Fields.forEach(field => {
             const control = this.registerForm.get(field);
@@ -197,45 +189,6 @@ export class RegisterComponent implements OnInit {
         const control = this.registerForm.get(fieldName);
         if (!control || !control.errors) return '';
 
-        if (fieldName === 'businessFieldOther') {
-            if (control.errors['required']) {
-                return this._appService.trans('REGISTER.VALIDATION.BUSINESS_FIELD_OTHER_REQUIRED');
-            }
-            if (control.errors['minlength']) {
-                return this._appService.trans('REGISTER.VALIDATION.BUSINESS_FIELD_OTHER_MINLENGTH');
-            }
-        }
-
-        if (fieldName === 'businessField') {
-            if (this.registerForm.errors?.['businessFieldOtherRequired']) {
-                return this._appService.trans('REGISTER.VALIDATION.BUSINESS_FIELD_OTHER_REQUIRED');
-            }
-        }
-
-        if (fieldName === 'password') {
-            if (control.errors['required']) {
-                return this._appService.trans('REGISTER.VALIDATION.PASSWORD_REQUIRED');
-            }
-            if (control.errors['minlength']) {
-                return this._appService.trans('REGISTER.VALIDATION.PASSWORD_MINLENGTH');
-            }
-            if (control.errors['maxlength']) {
-                return this._appService.trans('REGISTER.VALIDATION.PASSWORD_MAXLENGTH');
-            }
-            if (control.errors['pattern']) {
-                return this._appService.trans('REGISTER.VALIDATION.PASSWORD_WEAK');
-            }
-        }
-
-        if (fieldName === 'confirmPassword') {
-            if (control.errors['required']) {
-                return this._appService.trans('REGISTER.VALIDATION.CONFIRM_PASSWORD_REQUIRED');
-            }
-            if (this.registerForm.errors?.['mismatch']) {
-                return this._appService.trans('REGISTER.VALIDATION.PASSWORD_MISMATCH');
-            }
-        }
-
         const errorMessages: Record<string, Record<string, string>> = {
             fullName: {
                 required: this._appService.trans('REGISTER.VALIDATION.FULL_NAME_REQUIRED'),
@@ -250,11 +203,6 @@ export class RegisterComponent implements OnInit {
                 required: this._appService.trans('REGISTER.VALIDATION.PHONE_REQUIRED'),
                 pattern: this._appService.trans('REGISTER.VALIDATION.PHONE_INVALID')
             },
-            username: {
-                required: this._appService.trans('REGISTER.VALIDATION.USERNAME_REQUIRED'),
-                minlength: this._appService.trans('REGISTER.VALIDATION.USERNAME_MINLENGTH'),
-                maxlength: this._appService.trans('REGISTER.VALIDATION.USERNAME_MAXLENGTH')
-            },
             businessName: {
                 required: this._appService.trans('REGISTER.VALIDATION.BUSINESS_NAME_REQUIRED'),
                 minlength: this._appService.trans('REGISTER.VALIDATION.BUSINESS_NAME_MINLENGTH'),
@@ -266,27 +214,8 @@ export class RegisterComponent implements OnInit {
             businessSize: {
                 required: this._appService.trans('REGISTER.VALIDATION.BUSINESS_SIZE_REQUIRED')
             },
-            position: {
-                required: this._appService.trans('REGISTER.VALIDATION.POSITION_REQUIRED'),
-                minlength: this._appService.trans('REGISTER.VALIDATION.POSITION_MINLENGTH'),
-                maxlength: this._appService.trans('REGISTER.VALIDATION.POSITION_MAXLENGTH')
-            },
             address: {
                 required: this._appService.trans('REGISTER.VALIDATION.ADDRESS_REQUIRED'),
-                minlength: this._appService.trans('REGISTER.VALIDATION.ADDRESS_MINLENGTH'),
-                maxlength: this._appService.trans('REGISTER.VALIDATION.ADDRESS_MAXLENGTH')
-            },
-            website: {
-                pattern: this._appService.trans('REGISTER.VALIDATION.WEBSITE_INVALID')
-            },
-            interests: {
-                maxlength: this._appService.trans('REGISTER.VALIDATION.INTERESTS_MAXLENGTH')
-            },
-            goals: {
-                maxlength: this._appService.trans('REGISTER.VALIDATION.GOALS_MAXLENGTH')
-            },
-            skills: {
-                maxlength: this._appService.trans('REGISTER.VALIDATION.SKILLS_MAXLENGTH')
             },
             agreeTerms: {
                 required: this._appService.trans('REGISTER.VALIDATION.AGREE_TERMS_REQUIRED')
@@ -302,23 +231,9 @@ export class RegisterComponent implements OnInit {
         return fieldErrors[errorKey as keyof typeof fieldErrors] || this._appService.trans('VALIDATION.INVALID');
     }
 
-    togglePasswordVisibility(): void {
-        this.showPassword = !this.showPassword;
-    }
-
-    toggleConfirmPasswordVisibility(): void {
-        this.showConfirmPassword = !this.showConfirmPassword;
-    }
-
     onSubmit(): void {
         this.isSubmitted = true;
 
-        // Force validate businessFieldOther khi chọn Other
-        if (this.registerForm.get('businessField')?.value === 'other') {
-            this.registerForm.get('businessFieldOther')?.updateValueAndValidity();
-        }
-
-        // Force re-validate all fields
         Object.keys(this.registerForm.controls).forEach(key => {
             this.registerForm.get(key)?.updateValueAndValidity();
         });
@@ -336,21 +251,12 @@ export class RegisterComponent implements OnInit {
             return;
         }
 
-        // Lấy giá trị businessField
-        let businessFieldValue = this.registerForm.value.businessField;
-        if (businessFieldValue === 'other') {
-            businessFieldValue = this.registerForm.value.businessFieldOther;
-        }
-
         this.isLoading = true;
         const formData = {
             ...this.registerForm.value,
-            businessFieldName: businessFieldValue,
+            businessFieldName: this.registerForm.value.businessField,
             role: 'USER'
         };
-
-        // Xóa businessFieldOther khỏi payload
-        delete formData.businessFieldOther;
 
         this._appService.collaboratorService.register(formData).subscribe({
             next: () => {

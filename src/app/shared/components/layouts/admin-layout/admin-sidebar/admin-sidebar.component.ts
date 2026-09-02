@@ -2,12 +2,13 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '../../../../../core/services/app.service';
 
 @Component({
     selector: 'app-admin-sidebar',
     standalone: true,
-    imports: [CommonModule, RouterLink, RouterLinkActive],
+    imports: [CommonModule, RouterLink, RouterLinkActive, TranslateModule],
     templateUrl: './admin-sidebar.component.html',
     styleUrls: ['./admin-sidebar.component.css']
 })
@@ -17,10 +18,12 @@ export class AdminSidebarComponent {
 
     menuItems: MenuItem[] = [
         { path: '/admin/dashboard', icon: 'fa-solid fa-house', label: 'Dashboard' },
-        { path: '/admin/offers', icon: 'fa-solid fa-tags', label: 'Offers' },
-        { path: '/admin/ctv', icon: 'fa-solid fa-users', label: 'CTV' },
-        { path: '/admin/partner', icon: 'fa-solid fa-building', label: 'Partner' },
-        { path: '/admin/settings', icon: 'fa-solid fa-cog', label: 'Settings' },
+        { path: '/admin/offers', icon: 'fa-solid fa-tags', label: 'ADMIN.SIDEBAR.OFFERS' },
+        { path: '/admin/collaborator', icon: 'fa-solid fa-users', label: 'ADMIN.SIDEBAR.COLLABORATOR' },
+        { path: '/admin/social-posts', icon: 'fa-solid fa-clipboard-check', label: 'ADMIN.SIDEBAR.SOCIAL_POSTS' },
+        { path: '/admin/partner', icon: 'fa-solid fa-building', label: 'ADMIN.SIDEBAR.PARTNER' },
+        { path: '/admin/settings', icon: 'fa-solid fa-cog', label: 'ADMIN.SIDEBAR.SETTINGS' },
+        { path: '/', icon: 'fa-solid fa-arrow-right-from-bracket', label: 'ADMIN.SIDEBAR.BACK_TO_SITE' },
     ];
 
     constructor(private _appService: AppService) { }

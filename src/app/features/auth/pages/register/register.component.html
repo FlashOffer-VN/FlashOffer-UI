@@ -71,41 +71,6 @@
                         </app-input>
                     </div>
 
-                    <!-- Username -->
-                    <div class="form-group">
-                        <app-input formControlName="username" [label]="'REGISTER.USERNAME' | translate"
-                            [placeholder]="'REGISTER.USERNAME_PLACEHOLDER' | translate" [required]="true"
-                            [isInvalid]="isFieldInvalid('username')" [errorMessage]="getErrorMessage('username')"
-                            icon="fas fa-id-badge">
-                        </app-input>
-                    </div>
-
-                    <!-- Password -->
-                    <div class="form-group">
-                        <app-input formControlName="password" [type]="showPassword ? 'text' : 'password'"
-                            [label]="'REGISTER.PASSWORD' | translate"
-                            [placeholder]="'REGISTER.PASSWORD_PLACEHOLDER' | translate" [required]="true"
-                            [isInvalid]="isFieldInvalid('password')" [errorMessage]="getErrorMessage('password')"
-                            icon="fas fa-lock">
-                            <button type="button" (click)="togglePasswordVisibility()" class="register-password-toggle">
-                                <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
-                            </button>
-                        </app-input>
-                    </div>
-
-                    <!-- Confirm Password -->
-                    <div class="form-group">
-                        <app-input formControlName="confirmPassword" [type]="showConfirmPassword ? 'text' : 'password'"
-                            [label]="'REGISTER.CONFIRM_PASSWORD' | translate"
-                            [placeholder]="'REGISTER.CONFIRM_PASSWORD_PLACEHOLDER' | translate" [required]="true"
-                            [isInvalid]="isFieldInvalid('confirmPassword')"
-                            [errorMessage]="getErrorMessage('confirmPassword')" icon="fas fa-shield-alt">
-                            <button type="button" (click)="toggleConfirmPasswordVisibility()"
-                                class="register-password-toggle">
-                                <i [class]="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
-                            </button>
-                        </app-input>
-                    </div>
                 </div>
 
                 <!-- Navigation Step 1 -->
@@ -137,15 +102,6 @@
                         </app-input>
                     </div>
 
-                    <!-- Position -->
-                    <div class="form-group">
-                        <app-input formControlName="position" [label]="'REGISTER.POSITION' | translate"
-                            [placeholder]="'REGISTER.POSITION_PLACEHOLDER' | translate" [required]="true"
-                            [isInvalid]="isFieldInvalid('position')" [errorMessage]="getErrorMessage('position')"
-                            icon="fas fa-briefcase">
-                        </app-input>
-                    </div>
-
                     <!-- Business Field -->
                     <div class="form-group">
                         <app-ng-select-wrapper formControlName="businessField" [items]="businessFields"
@@ -156,16 +112,6 @@
                             [primaryDark]="'#5B21B6'">
                         </app-ng-select-wrapper>
                     </div>
-                    <!-- 👇 Input Business Field Other (hiển thị khi chọn Other) -->
-                    <div class="form-group" *ngIf="registerForm.get('businessField')?.value === 'other'">
-                        <app-input formControlName="businessFieldOther"
-                            [label]="'REGISTER.BUSINESS_FIELD_OTHER' | translate"
-                            [placeholder]="'REGISTER.BUSINESS_FIELD_OTHER_PLACEHOLDER' | translate" [required]="true"
-                            [isInvalid]="isFieldInvalid('businessFieldOther')"
-                            [errorMessage]="getErrorMessage('businessFieldOther')" icon="fas fa-pen">
-                        </app-input>
-                    </div>
-
                     <!-- Business Size -->
                     <div class="form-group">
                         <app-ng-select-wrapper formControlName="businessSize" [items]="businessSizes"
@@ -177,22 +123,14 @@
                         </app-ng-select-wrapper>
                     </div>
 
-                    <!-- Address -->
+                    <!-- Province -->
                     <div class="form-group">
-                        <app-input formControlName="address" [label]="'REGISTER.ADDRESS' | translate"
-                            [placeholder]="'REGISTER.ADDRESS_PLACEHOLDER' | translate" [required]="true"
+                        <app-ng-select-wrapper formControlName="address" [items]="provinces"
+                            [label]="'REGISTER.ADDRESS_PROVINCE' | translate"
+                            [placeholder]="'REGISTER.ADDRESS_PROVINCE_PLACEHOLDER' | translate" [required]="true"
                             [isInvalid]="isFieldInvalid('address')" [errorMessage]="getErrorMessage('address')"
-                            icon="fas fa-map-marker-alt">
-                        </app-input>
-                    </div>
-
-                    <!-- Website -->
-                    <div class="form-group">
-                        <app-input formControlName="website" [label]="'REGISTER.WEBSITE' | translate"
-                            [placeholder]="'REGISTER.WEBSITE_PLACEHOLDER' | translate"
-                            [isInvalid]="isFieldInvalid('website')" [errorMessage]="getErrorMessage('website')"
-                            icon="fas fa-globe">
-                        </app-input>
+                            [primaryColor]="'#7C3AED'" [primaryDark]="'#5B21B6'" [searchable]="true">
+                        </app-ng-select-wrapper>
                     </div>
                 </div>
 

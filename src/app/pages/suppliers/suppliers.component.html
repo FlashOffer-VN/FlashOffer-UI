@@ -8,46 +8,29 @@
         </div>
     </div>
 
-    <!-- Stats -->
-    <div class="suppliers-stats">
-        <div class="stat-item">
-            <strong>{{ suppliers.length }}+</strong>
-            <span>{{ 'SUPPLIERS_STATS_PARTNERS' | translate }}</span>
-        </div>
-        <div class="stat-item">
-            <strong>200+</strong>
-            <span>{{ 'SUPPLIERS_STATS_PRODUCTS' | translate }}</span>
-        </div>
-        <div class="stat-item">
-            <strong>98%</strong>
-            <span>{{ 'SUPPLIERS_STATS_SATISFACTION' | translate }}</span>
-        </div>
-    </div>
-
-    <!-- Featured Products -->
-    <section class="suppliers-featured">
-        <div class="section-header">
-            <h2>{{ 'SUPPLIERS_FEATURED_PRODUCTS' | translate }}</h2>
-            <p>{{ 'SUPPLIERS_FEATURED_DESC' | translate }}</p>
-        </div>
-        <div class="featured-grid">
-            <div class="featured-card" *ngFor="let product of featuredProducts">
-                <div class="featured-card__icon">📦</div>
-                <h4>{{ product.name }}</h4>
-                <span class="featured-card__supplier">{{ product.supplier }}</span>
-                <span class="featured-card__price">{{ product.price }}</span>
-            </div>
-        </div>
-    </section>
-
     <!-- Suppliers List -->
     <section class="suppliers-list">
         <div class="section-header">
             <h2>{{ 'SUPPLIERS_LIST_TITLE' | translate }}</h2>
             <p>{{ 'SUPPLIERS_LIST_DESC' | translate }}</p>
         </div>
+        <div class="suppliers-filters">
+            <label class="supplier-search">
+                <i class="fas fa-search"></i>
+                <input type="search" [(ngModel)]="searchTerm"
+                    [placeholder]="'SUPPLIERS_SEARCH_PLACEHOLDER' | translate">
+            </label>
+            <app-ng-select-wrapper class="supplier-category-select" [items]="categoryOptions"
+                [(ngModel)]="selectedCategory" [placeholder]="'SUPPLIERS_CATEGORY_PLACEHOLDER' | translate"
+                [clearable]="true" [searchable]="false" appendTo="body"
+                (valueChange)="selectedCategory = $event">
+            </app-ng-select-wrapper>
+            <span class="supplier-result-count">
+                {{ filteredSuppliers.length }} {{ 'SUPPLIERS_RESULTS' | translate }}
+            </span>
+        </div>
         <div class="suppliers-grid">
-            <div class="supplier-card" *ngFor="let supplier of suppliers">
+            <div class="supplier-card" *ngFor="let supplier of filteredSuppliers">
                 <div class="supplier-card__header">
                     <div class="supplier-card__logo">{{ supplier.logo }}</div>
                     <div class="supplier-card__rating">
@@ -76,14 +59,9 @@
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="suppliers-cta">
-        <div class="suppliers-cta__content">
-            <h2>{{ 'SUPPLIERS_CTA_TITLE' | translate }}</h2>
-            <p>{{ 'SUPPLIERS_CTA_DESC' | translate }}</p>
-            <a class="btn-cta" routerLink="/partner-register">{{ 'SUPPLIERS_CTA_BUTTON' | translate }}</a>
+        <div class="empty-state" *ngIf="filteredSuppliers.length === 0">
+            <i class="fas fa-search"></i>
+            <p>{{ 'SUPPLIERS_EMPTY' | translate }}</p>
         </div>
     </section>
 </div>
