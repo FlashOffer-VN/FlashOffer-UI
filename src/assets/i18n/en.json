@@ -700,6 +700,8 @@
         "SUCCESS": "Registration successful! Please login.",
         "ADDRESS": "Address",
         "ADDRESS_PLACEHOLDER": "Enter your address",
+        "ADDRESS_PROVINCE": "Address (Select province)",
+        "ADDRESS_PROVINCE_PLACEHOLDER": "Select province/city",
         "BUSINESS_FIELD_OTHER": "Other business field (please specify)",
         "BUSINESS_FIELD_OTHER_PLACEHOLDER": "Enter your business field",
         "VALIDATION": {

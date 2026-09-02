@@ -631,7 +631,7 @@
         "BUSINESS_NAME_PLACEHOLDER": "Nhập tên doanh nghiệp",
         "POSITION": "Vị trí / Chức danh",
         "POSITION_PLACEHOLDER": "Nhập vị trí công việc",
-        "BUSINESS_FIELD": "Lĩnh vực hoạt động",
+        "BUSINESS_FIELD": "Lĩnh vực kinh doanh",
         "BUSINESS_FIELD_PLACEHOLDER": "Chọn lĩnh vực",
         "BUSINESS_SIZE": "Quy mô doanh nghiệp",
         "BUSINESS_SIZE_PLACEHOLDER": "Chọn quy mô",
@@ -656,6 +656,8 @@
         "SUCCESS": "Đăng ký thành công! Vui lòng đăng nhập.",
         "ADDRESS": "Địa chỉ",
         "ADDRESS_PLACEHOLDER": "Số nhà, đường, quận/huyện...",
+        "ADDRESS_PROVINCE": "Địa chỉ (Chọn tỉnh)",
+        "ADDRESS_PROVINCE_PLACEHOLDER": "Chọn tỉnh/thành phố",
         "BUSINESS_FIELD_OTHER": "Lĩnh vực khác (vui lòng nhập)",
         "BUSINESS_FIELD_OTHER_PLACEHOLDER": "Nhập lĩnh vực kinh doanh của bạn",
         "VALIDATION": {
