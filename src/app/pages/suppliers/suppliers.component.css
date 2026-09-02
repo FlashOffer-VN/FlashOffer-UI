@@ -205,6 +205,86 @@
     animation: fadeUp 0.6s ease 0.4s forwards;
 }
 
+.suppliers-filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 auto 24px;
+    padding: 14px;
+    border: 1px solid #e8edf3;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.supplier-search {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 8px;
+    color: #8a98a8;
+}
+
+.supplier-search input,
+.suppliers-filters select {
+    width: 100%;
+    border: 1px solid #d9e1e8;
+    border-radius: 8px;
+    background: #fff;
+    color: #263746;
+    padding: 10px 12px;
+    font: inherit;
+}
+
+.supplier-search input {
+    min-width: 0;
+    flex: 1 1 auto;
+    border: 0;
+    outline: 0;
+    padding: 10px 12px;
+}
+
+.suppliers-filters app-ng-select-wrapper {
+    display: block;
+    flex: 0 0 220px;
+    width: 220px;
+    max-width: 220px;
+}
+
+.suppliers-filters .supplier-category-select {
+    position: relative;
+    z-index: 2;
+}
+
+::ng-deep .supplier-category-select .ng-dropdown-panel {
+    z-index: 1000 !important;
+}
+
+.supplier-result-count {
+    flex: 0 0 auto;
+    color: #6b7a8a;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.empty-state {
+    padding: 40px 20px;
+    border: 1px dashed #cbd5df;
+    border-radius: 12px;
+    color: #6b7a8a;
+    text-align: center;
+}
+
+.empty-state i {
+    margin-bottom: 10px;
+    color: #007f94;
+    font-size: 24px;
+}
+
+.empty-state p {
+    margin: 0;
+}
+
 .suppliers-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -442,6 +522,17 @@
     .suppliers-grid {
         grid-template-columns: 1fr;
         gap: 16px;
+    }
+
+    .suppliers-filters {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .suppliers-filters app-ng-select-wrapper {
+        flex-basis: auto;
+        width: 100%;
+        max-width: none;
     }
 
     .supplier-card {

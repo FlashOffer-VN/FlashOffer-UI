@@ -30,7 +30,7 @@ export class ApiService {
     }
 
     post<T>(endpoint: string, data?: any): Observable<T> {
-        return this.http.post<T>(`${this.baseUrl}/${endpoint}`, data || {})
+        return this.http.post<T>(`${this.baseUrl}/${endpoint}`, data ?? {})
             .pipe(catchError(this.handleError.bind(this)));
     }
 

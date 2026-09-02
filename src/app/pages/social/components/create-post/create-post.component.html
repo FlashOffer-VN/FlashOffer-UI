@@ -79,12 +79,14 @@
                     {{ 'SOCIAL.IMAGES' | translate }}
                 </span>
                 <div class="options-images">
-                    <button type="button" class="upload-btn" (click)="triggerFileInput()">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        {{ 'SOCIAL.UPLOAD_IMAGES' | translate }}
-                    </button>
-                    <input id="fileInput" type="file" accept="image/*" multiple (change)="onFileSelected($event)"
-                        style="display: none;">
+                    <span [title]="'SOCIAL.IMAGE_UPLOAD_UNAVAILABLE' | translate">
+                        <button type="button" class="upload-btn" disabled>
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            {{ 'SOCIAL.UPLOAD_IMAGES' | translate }}
+                        </button>
+                    </span>
+                    <input id="fileInput" type="file" accept="image/*" multiple
+                        (change)="onFileSelected($event)" disabled style="display: none;">
 
                     <div class="image-preview-list" *ngIf="imagePreviews.length > 0">
                         <div *ngFor="let img of imagePreviews; let i = index" class="image-preview-item">

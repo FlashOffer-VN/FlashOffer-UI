@@ -23,6 +23,7 @@ export class AdminSidebarComponent {
         { path: '/admin/social-posts', icon: 'fa-solid fa-clipboard-check', label: 'ADMIN.SIDEBAR.SOCIAL_POSTS' },
         { path: '/admin/partner', icon: 'fa-solid fa-building', label: 'ADMIN.SIDEBAR.PARTNER' },
         { path: '/admin/settings', icon: 'fa-solid fa-cog', label: 'ADMIN.SIDEBAR.SETTINGS' },
+        { path: '/', icon: 'fa-solid fa-arrow-right-from-bracket', label: 'ADMIN.SIDEBAR.BACK_TO_SITE' },
     ];
 
     constructor(private _appService: AppService) { }

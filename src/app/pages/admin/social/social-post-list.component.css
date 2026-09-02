@@ -1,0 +1,111 @@
+.action-column {
+    width: 9rem;
+    min-width: 9rem;
+    white-space: nowrap;
+}
+
+.action-buttons {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.25rem;
+    width: max-content;
+}
+
+.action-buttons app-button {
+    flex: 0 0 auto;
+}
+
+.action-buttons app-button i {
+    margin: 0;
+}
+
+table th:nth-child(3),
+table td:nth-child(3) {
+    width: 48%;
+}
+
+.post-preview {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.post-preview:hover .font-medium {
+    color: #7c3aed;
+}
+
+.post-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgb(0 0 0 / 50%);
+}
+
+.post-modal {
+    width: min(100%, 48rem);
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 0.75rem;
+    background: #fff;
+    box-shadow: 0 20px 40px rgb(0 0 0 / 20%);
+}
+
+.post-modal-header,
+.post-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+}
+
+.post-modal-header {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.post-modal-header h2 {
+    margin: 0;
+    color: #111827;
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+.post-modal-header p {
+    margin: 0.25rem 0 0;
+    color: #6b7280;
+    font-size: 0.8rem;
+}
+
+.close-button {
+    border: 0;
+    background: transparent;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 1.25rem;
+}
+
+.close-button:hover {
+    color: #374151;
+}
+
+.post-modal-content {
+    min-height: 8rem;
+    padding: 1.25rem;
+    color: #374151;
+    line-height: 1.65;
+}
+
+.post-modal-content :deep(img) {
+    max-width: 100%;
+}
+
+.post-modal-footer {
+    justify-content: flex-end;
+    border-top: 1px solid #e5e7eb;
+}

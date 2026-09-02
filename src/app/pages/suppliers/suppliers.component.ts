@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 
 @Component({
     selector: 'app-suppliers',
     standalone: true,
-    imports: [CommonModule, RouterLink, TranslateModule],
+    imports: [CommonModule, FormsModule, RouterLink, TranslateModule, NgSelectWrapperComponent],
     templateUrl: './suppliers.component.html',
     styleUrls: ['./suppliers.component.css']
 })
@@ -75,6 +77,25 @@ export class SuppliersComponent {
         { name: 'Rau củ hữu cơ sạch', supplier: 'Thực phẩm Sạch 365', price: '200.000đ/kg' },
         { name: 'Bàn làm việc thông minh', supplier: 'Nội thất Xanh', price: '2.500.000đ' }
     ];
+
+    searchTerm = '';
+    selectedCategory = '';
+
+    readonly categories = [...new Set(this.suppliers.map(supplier => supplier.category))];
+
+    readonly categoryOptions = this.categories.map(category => ({
+        label: category,
+        value: category
+    }));
+
+    get filteredSuppliers() {
+        const term = this.searchTerm.trim().toLowerCase();
+        return this.suppliers.filter(supplier => {
+            const matchesCategory = !this.selectedCategory || supplier.category === this.selectedCategory;
+            const searchableText = `${supplier.name} ${supplier.category} ${supplier.products.join(' ')}`.toLowerCase();
+            return matchesCategory && (!term || searchableText.includes(term));
+        });
+    }
 
     getStars(rating: number): number[] {
         return Array(Math.floor(rating)).fill(0);

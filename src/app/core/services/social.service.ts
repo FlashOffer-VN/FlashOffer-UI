@@ -54,10 +54,10 @@ export class SocialService {
         return this._apiService.post<SocialPost>(`${this._baseSocialUrl}/posts/${id}/approve`, {});
     }
 
-    rejectPost(id: string, reason?: string): Observable<SocialPost> {
+    rejectPost(id: string, reason = ''): Observable<SocialPost> {
         return this._apiService.post<SocialPost>(
             `${this._baseSocialUrl}/posts/${id}/reject`,
-            reason ?? null
+            reason
         );
     }
 

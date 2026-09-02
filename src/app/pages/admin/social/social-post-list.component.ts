@@ -26,6 +26,7 @@ export class AdminSocialPostListComponent implements OnInit {
     totalPages = 0;
     hasPreviousPage = false;
     hasNextPage = false;
+    selectedPost: SocialPost | null = null;
 
     constructor(private readonly appService: AppService) { }
 
@@ -81,6 +82,25 @@ export class AdminSocialPostListComponent implements OnInit {
                 this.appService.showError(this.appService.trans('COMMON.ERROR.UPDATE_FAILED'));
             }
         });
+    }
+
+    openPostDetail(post: SocialPost): void {
+        this.selectedPost = post;
+    }
+
+    closePostDetail(): void {
+        this.selectedPost = null;
+    }
+
+    getContentPreview(content: string): string {
+        const plainText = content
+            .replace(/<br\s*\/?>/gi, ' ')
+            .replace(/<\/(p|div|li|h[1-6])>/gi, ' ')
+            .replace(/<[^>]*>/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+        return plainText.length > 140 ? `${plainText.substring(0, 140).trim()}...` : plainText;
     }
 
     onPageChange(page: number): void {

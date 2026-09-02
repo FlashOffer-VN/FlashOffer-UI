@@ -12,9 +12,21 @@
             </div>
             <h1>{{ 'FIND_SUPPLIER.TITLE' | translate }}</h1>
             <p>{{ 'FIND_SUPPLIER.DESC' | translate }}</p>
-            <div class="find-supplier-badge">
-                <i class="fas fa-handshake"></i>
-                {{ 'FIND_SUPPLIER.BADGE' | translate }}
+            <div class="request-process">
+                <div class="process-item">
+                    <span class="process-number">1</span>
+                    <span>{{ 'FIND_SUPPLIER.PROCESS.DESCRIBE' | translate }}</span>
+                </div>
+                <i class="fas fa-chevron-right process-arrow"></i>
+                <div class="process-item">
+                    <span class="process-number">2</span>
+                    <span>{{ 'FIND_SUPPLIER.PROCESS.MATCH' | translate }}</span>
+                </div>
+                <i class="fas fa-chevron-right process-arrow"></i>
+                <div class="process-item">
+                    <span class="process-number">3</span>
+                    <span>{{ 'FIND_SUPPLIER.PROCESS.CONNECT' | translate }}</span>
+                </div>
             </div>
         </div>
 
@@ -24,6 +36,10 @@
             <div class="find-supplier-progress">
                 <div class="progress-bar" [style.width.%]="formProgress"></div>
             </div>
+            <p class="form-helper">
+                <i class="fas fa-circle-info"></i>
+                {{ 'FIND_SUPPLIER.FORM_HELPER' | translate }}
+            </p>
 
             <div class="form-grid">
                 <!-- Product Name -->

@@ -76,6 +76,8 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
             { path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent) },
+            { path: 'offers', loadComponent: () => import('./pages/admin/offers/admin-offers.component').then(m => m.AdminOffersComponent) },
+            { path: 'settings', loadComponent: () => import('./pages/admin/settings/admin-settings.component').then(m => m.AdminSettingsComponent) },
             { path: 'demo', loadComponent: () => import('./pages/demo/demo.component').then(m => m.DemoComponent) },
             { path: 'social-posts', loadComponent: () => import('./pages/admin/social/social-post-list.component').then(m => m.AdminSocialPostListComponent) },
             // Collaborator Management

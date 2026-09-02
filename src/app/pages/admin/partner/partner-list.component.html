@@ -61,13 +61,13 @@
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             {{ 'ADMIN.PARTNER.BUSINESS_TYPE' | translate }}
                         </th>
-                        <th class="px-5 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="status-column px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             {{ 'ADMIN.PARTNER.STATUS' | translate }}
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             {{ 'ADMIN.PARTNER.REGISTERED_AT' | translate }}
                         </th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="action-column px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             {{ 'COMMON.BUTTON.ACTION' | translate }}
                         </th>
                     </tr>
@@ -112,15 +112,15 @@
                         <td class="px-4 py-3 text-sm text-gray-600">
                             {{ getBusinessTypeLabel(partner.businessType) | translate }}
                         </td>
-                        <td class="px-4 py-3">
-                            <app-badge [status]="getStatusKey(partner.status)"
+                        <td class="status-column px-3 py-3">
+                            <app-badge size="sm" [status]="getStatusKey(partner.status)"
                                 [variant]="getStatusVariant(partner.status)">
                             </app-badge>
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-500">
                             {{ formatDate(partner.createdAt) }}
                         </td>
-                        <td class="px-4 py-3">
+                        <td class="action-column px-3 py-3">
                             <app-button variant="primary" size="sm"
                                 (click)="$event.stopPropagation(); navigateToDetail(partner.id)">
                                 {{ 'COMMON.BUTTON.VIEW_DETAIL' | translate }}
