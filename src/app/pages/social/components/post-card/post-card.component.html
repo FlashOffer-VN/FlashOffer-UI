@@ -9,6 +9,9 @@
                 </div>
                 <div class="author-role">{{ post.author.role }}</div>
                 <div class="post-meta">
+                    <span *ngIf="post.isPinned" class="pinned-badge">
+                        <i class="fas fa-thumbtack"></i> {{ 'SOCIAL.PINNED' | translate }}
+                    </span>
                     <span class="post-time">{{ post.createdAt | timeAgo }}</span>
                     <span class="meta-separator">•</span>
                     <span class="post-type" [class]="'type-' + post.type">
@@ -24,7 +27,7 @@
             </div>
         </div>
 
-        <div class="post-actions" *ngIf="canEdit || canDelete">
+        <div class="post-actions" *ngIf="canEdit || canDelete || canPin">
             <button class="actions-toggle" (click)="toggleActions($event)" [class.active]="showActions">
                 <i class="fas fa-ellipsis-v"></i>
             </button>
@@ -40,6 +43,12 @@
                     <i class="fas fa-trash action-icon delete-icon"></i>
                     <span class="action-label">{{ 'COMMON.BUTTON.DELETE' | translate }}</span>
                     <span class="action-shortcut">Ctrl+D</span>
+                </button>
+                <div class="dropdown-divider" *ngIf="canPin && (canEdit || canDelete)"></div>
+                <button *ngIf="canPin" class="action-item" (click)="onPin()">
+                    <i class="fas fa-thumbtack action-icon pin-icon"></i>
+                    <span class="action-label">{{ (post.isPinned ? 'SOCIAL.UNPIN' : 'SOCIAL.PIN') | translate }}</span>
+                    <span class="action-shortcut">Ctrl+P</span>
                 </button>
             </div>
         </div>

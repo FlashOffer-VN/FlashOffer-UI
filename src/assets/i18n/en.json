@@ -854,7 +854,13 @@
         "CONTENT_REQUIRED": "Please enter post content",
         "UPDATE_POST_SUCCESS": "Post updated successfully!",
         "UPDATE_POST_ERROR": "Failed to update post",
-        "CONFIRM_DELETE_MESSAGE": "Are you sure you want to delete post \"{{title}}\"?"
+        "CONFIRM_DELETE_MESSAGE": "Are you sure you want to delete post \"{{title}}\"?",
+        "PIN": "Pin",
+        "UNPIN": "Unpin",
+        "PINNED": "Pinned",
+        "PIN_SUCCESS": "Post pinned to top successfully!",
+        "UNPIN_SUCCESS": "Post unpinned successfully!",
+        "PIN_ERROR": "Failed to pin post"
     },
     "TOAST": {
         "SUCCESS": "Success",

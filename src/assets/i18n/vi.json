@@ -810,7 +810,13 @@
         "CONTENT_REQUIRED": "Vui lòng nhập nội dung bài viết",
         "UPDATE_POST_SUCCESS": "Cập nhật bài viết thành công!",
         "UPDATE_POST_ERROR": "Không thể cập nhật bài viết",
-        "CONFIRM_DELETE_MESSAGE": "Bạn có chắc chắn muốn xóa bài viết \"{{title}}\"?"
+        "CONFIRM_DELETE_MESSAGE": "Bạn có chắc chắn muốn xóa bài viết \"{{title}}\"?",
+        "PIN": "Ghim",
+        "UNPIN": "Hủ ghim",
+        "PINNED": "Đã ghim",
+        "PIN_SUCCESS": "Đã ghim bài viết lên đầu trang!",
+        "UNPIN_SUCCESS": "Đã hủy ghim bài viết!",
+        "PIN_ERROR": "Không thể thực hiện thao tác ghim"
     },
     "TOAST": {
         "SUCCESS": "Thành công",
