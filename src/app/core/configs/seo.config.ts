@@ -9,7 +9,7 @@ export interface SeoConfig {
 export const SEO_CONFIG: Record<string, SeoConfig> = {
     '/': {
         title: 'Kindi - Nền tảng kết nối doanh nghiệp SME | Mua chung - Tìm nhà cung cấp',
-        description: 'Kindi là nền tảng kết nối doanh nghiệp SME. Mua chung hàng hóa, tìm nhà cung cấp, nhận ưu đãi giảm giá và phát triển kênh bán hàng CTV hiệu quả.',
+        description: 'Kindi - Nền tảng kết nối doanh nghiệp SME tại Việt Nam. Cung cấp dịch vụ mua chung hàng hóa, tìm kiếm nhà cung cấp uy tín và phát triển kênh bán hàng cộng tác viên.',
         image: 'https://kindi.vn/assets/images/og-image.png',
         url: 'https://kindi.vn',
         keywords: 'kindi, nền tảng kết nối sme, mua chung, tìm nhà cung cấp, ctv bán hàng'
