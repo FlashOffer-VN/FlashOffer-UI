@@ -21,12 +21,14 @@ export class PostCardComponent {
     @Input() timeAgo = '';
     @Input() canEdit = false;
     @Input() canDelete = false;
+    @Input() canPin = false;
     @Output() like = new EventEmitter<SocialPost>();
     @Output() share = new EventEmitter<SocialPost>();
     @Output() save = new EventEmitter<SocialPost>();
     @Output() toggleReadMore = new EventEmitter<SocialPost>();
     @Output() edit = new EventEmitter<SocialPost>();
     @Output() delete = new EventEmitter<SocialPost>();
+    @Output() pin = new EventEmitter<SocialPost>();
 
     @ViewChild('actionsToggle') actionsToggle!: ElementRef;
 
@@ -124,6 +126,11 @@ export class PostCardComponent {
         this.closeActions();
     }
 
+    onPin(): void {
+        this.pin.emit(this.post);
+        this.closeActions();
+    }
+
     @HostListener('document:click', ['$event'])
     onDocumentClick(event: MouseEvent): void {
         const target = event.target as HTMLElement;
@@ -153,6 +160,11 @@ export class PostCardComponent {
         if (isCtrl && event.key === 'd' && this.canDelete) {
             event.preventDefault();
             this.onDelete();
+        }
+
+        if (isCtrl && event.key === 'p' && this.canPin) {
+            event.preventDefault();
+            this.onPin();
         }
     }
 }

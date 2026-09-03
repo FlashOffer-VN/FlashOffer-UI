@@ -61,6 +61,21 @@ export class SocialService {
         );
     }
 
+    // ===== PIN / UNPIN (Admin ghim) =====
+    pinPost(id: string): Observable<SocialPost> {
+        return this._apiService.post<SocialPost>(
+            `${this._baseSocialUrl}/posts/${id}/pin`,
+            {}
+        );
+    }
+
+    unpinPost(id: string): Observable<SocialPost> {
+        return this._apiService.post<SocialPost>(
+            `${this._baseSocialUrl}/posts/${id}/unpin`,
+            {}
+        );
+    }
+
     getPostById(id: string): Observable<any> {
         return this._apiService.get<SocialPost>(`${this._baseSocialUrl}/posts/${id}`);
     }

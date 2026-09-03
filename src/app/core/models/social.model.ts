@@ -50,6 +50,7 @@ export interface SocialPost {
     sharesCount: number;
     isLiked: boolean;
     isSaved: boolean;
+    isPinned?: boolean;         // ✅ Admin ghim lên đầu feed
     createdAt: string;
     isExpanded?: boolean;     // ✅ UI only
 

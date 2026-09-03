@@ -143,6 +143,11 @@ export class SocialComponent implements OnInit, AfterViewInit {
         return this._appService.isAdmin() || post.author.id === this.currentUser.id;
     }
 
+    canPinPost(post: SocialPost): boolean {
+        if (!this.currentUser) return false;
+        return this._appService.isAdmin();
+    }
+
     loadPosts(): void {
         this.isLoadingPosts = true;
         this._appService.socialService.getPosts().subscribe({
@@ -414,6 +419,40 @@ export class SocialComponent implements OnInit, AfterViewInit {
 
     onPostCreated(post: SocialPost): void {
         this.loadPosts();
+    }
+
+    togglePin(post: SocialPost): void {
+        if (!this.canPinPost(post)) {
+            this._appService.showWarning(this._appService.trans('SOCIAL.NO_PERMISSION'));
+            return;
+        }
+
+        const willPin = !post.isPinned;
+        const action = willPin
+            ? this._appService.socialService.pinPost(post.id)
+            : this._appService.socialService.unpinPost(post.id);
+
+        action.subscribe({
+            next: (updatedPost) => {
+                const index = this.posts.findIndex(p => p.id === post.id);
+                if (index !== -1) {
+                    this.posts[index] = { ...this.posts[index], ...updatedPost };
+                }
+                this.sortPostsByPin();
+                this._appService.showSuccess(
+                    this._appService.trans(willPin ? 'SOCIAL.PIN_SUCCESS' : 'SOCIAL.UNPIN_SUCCESS')
+                );
+            },
+            error: () => {
+                this._appService.showError(this._appService.trans('SOCIAL.PIN_ERROR'));
+            }
+        });
+    }
+
+    private sortPostsByPin(): void {
+        this.posts.sort((a, b) =>
+            Number(b.isPinned) - Number(a.isPinned) ||
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     }
 
     followMember(member: SocialMember): void {

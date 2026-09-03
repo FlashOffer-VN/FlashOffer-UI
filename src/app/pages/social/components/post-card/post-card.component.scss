@@ -129,6 +129,23 @@
     margin-top: 2px;
 }
 
+.pinned-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 18px;
+    background: #FEF3C7;
+    color: #B45309;
+}
+
+.pinned-badge i {
+    font-size: 9px;
+}
+
 .meta-separator {
     color: #D1D5DB;
     font-size: 10px;
@@ -291,6 +308,11 @@
 .delete-icon {
     background: #FEF2F2;
     color: #EF4444;
+}
+
+.pin-icon {
+    background: #FEF3C7;
+    color: #B45309;
 }
 
 .action-label {
