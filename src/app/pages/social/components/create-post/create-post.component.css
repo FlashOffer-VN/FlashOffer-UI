@@ -185,7 +185,7 @@
     color: #9CA3AF;
     font-style: normal;
     font-size: 15px;
-    content: "Bạn đang nghĩ gì?";
+    content: "Hôm nay, Bạn biết cơ hội gì?";
 }
 
 /* Force wrap for all child elements in editor */
@@ -853,7 +853,7 @@
     color: #9CA3AF;
     font-style: normal;
     font-size: 15px;
-    content: "Bạn đang nghĩ gì?";
+    content: "Hôm nay, Bạn biết cơ hội gì?";
     left: 0 !important;
     right: auto !important;
 }
