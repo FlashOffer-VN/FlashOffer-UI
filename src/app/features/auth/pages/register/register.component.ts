@@ -8,6 +8,7 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 import { AppService } from '@core/services/app.service';
+import { BusinessFieldOption, BusinessFieldService } from '@core/services/business-field.service';
 import { isBrowser } from '@core/utils/platform';
 
 @Component({
@@ -32,19 +33,8 @@ export class RegisterComponent implements OnInit {
     currentStep = 1;
     totalSteps = 2;
 
-    businessFields = [
-        { value: 'technology', label: 'Công nghệ thông tin' },
-        { value: 'manufacturing', label: 'Sản xuất - Chế tạo' },
-        { value: 'trade', label: 'Thương mại - Dịch vụ' },
-        { value: 'agriculture', label: 'Nông nghiệp - Thực phẩm' },
-        { value: 'construction', label: 'Xây dựng - Bất động sản' },
-        { value: 'education', label: 'Giáo dục - Đào tạo' },
-        { value: 'healthcare', label: 'Y tế - Chăm sóc sức khỏe' },
-        { value: 'finance', label: 'Tài chính - Ngân hàng' },
-        { value: 'logistics', label: 'Vận tải - Logistics' },
-        { value: 'consulting', label: 'Tư vấn - Chiến lược' },
-        { value: 'other', label: 'Lĩnh vực khác' }
-    ];
+    /** Danh sách lĩnh vực hoạt động lấy từ API (BusinessField — quản lý tập trung). */
+    businessFields: BusinessFieldOption[] = [];
 
     businessSizes = [
         { value: 1, label: '1 - 10 nhân viên' },
@@ -123,6 +113,7 @@ export class RegisterComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private _appService: AppService,
+        private businessFieldService: BusinessFieldService,
         private router: Router
     ) {
         this.registerForm = this.fb.group({
@@ -130,7 +121,7 @@ export class RegisterComponent implements OnInit {
             email: ['', [Validators.required, Validators.email]],
             phone: ['', [Validators.required, Validators.pattern(/^0[0-9]{9,10}$/)]],
             businessName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]],
-            businessField: [null, [Validators.required]],
+            businessFieldId: [null, [Validators.required]],
             businessSize: [null, [Validators.required]],
             address: [null, [Validators.required]],
             agreeTerms: [false, [Validators.requiredTrue]]
@@ -140,7 +131,20 @@ export class RegisterComponent implements OnInit {
     ngOnInit(): void {
         if (this._appService.isAuthenticated()) {
             this.router.navigate(['/']);
+            return;
         }
+        this.loadBusinessFields();
+    }
+
+    loadBusinessFields(): void {
+        this.businessFieldService.getActive().subscribe(fields => {
+            this.businessFields = fields;
+        });
+    }
+
+    /** Tên lĩnh vực theo Id — gửi kèm lên API để hiển thị/đối chiếu. */
+    getBusinessFieldName(id: string): string {
+        return this.businessFields.find(f => f.value === id)?.label ?? '';
     }
 
     // ===== STEP NAVIGATION =====
@@ -208,7 +212,7 @@ export class RegisterComponent implements OnInit {
                 minlength: this._appService.trans('REGISTER.VALIDATION.BUSINESS_NAME_MINLENGTH'),
                 maxlength: this._appService.trans('REGISTER.VALIDATION.BUSINESS_NAME_MAXLENGTH')
             },
-            businessField: {
+            businessFieldId: {
                 required: this._appService.trans('REGISTER.VALIDATION.BUSINESS_FIELD_REQUIRED')
             },
             businessSize: {
@@ -252,9 +256,11 @@ export class RegisterComponent implements OnInit {
         }
 
         this.isLoading = true;
+        const businessFieldId = this.registerForm.value.businessFieldId;
         const formData = {
             ...this.registerForm.value,
-            businessFieldName: this.registerForm.value.businessField,
+            businessFieldId,
+            businessFieldName: this.getBusinessFieldName(businessFieldId),
             role: 'USER'
         };
 

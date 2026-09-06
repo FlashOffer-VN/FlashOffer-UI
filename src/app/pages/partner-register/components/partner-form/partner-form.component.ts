@@ -11,6 +11,7 @@ import { StepBusinessComponent } from '../step-business/step-business.component'
 import { StepConfirmationComponent } from '../step-confirmation/step-confirmation.component';
 
 import { PartnerRegisterService } from '../../../../core/services/partner-register.service';
+import { BusinessFieldOption, BusinessFieldService } from '../../../../core/services/business-field.service';
 
 @Component({
     selector: 'app-partner-form',
@@ -38,14 +39,15 @@ export class PartnerFormComponent implements OnInit {
     isReferralValid = false;
 
     /** Danh sách lĩnh vực hoạt động lấy từ API (BusinessField — quản lý tập trung). */
-    businessFields: { value: string; label: string }[] = [];
+    businessFields: BusinessFieldOption[] = [];
 
     private referralCheckTimeout: any;
     private isSubmitting = false;
 
     constructor(
         private fb: FormBuilder,
-        private partnerService: PartnerRegisterService
+        private partnerService: PartnerRegisterService,
+        private businessFieldService: BusinessFieldService
     ) { }
 
     ngOnInit(): void {
@@ -101,16 +103,8 @@ export class PartnerFormComponent implements OnInit {
     }
 
     loadBusinessFields(): void {
-        this.partnerService.getBusinessFields().subscribe({
-            next: (fields: any[]) => {
-                this.businessFields = (fields || []).map(f => ({
-                    value: f.id,
-                    label: f.name
-                }));
-            },
-            error: () => {
-                this.businessFields = [];
-            }
+        this.businessFieldService.getActive().subscribe(fields => {
+            this.businessFields = fields;
         });
     }
 
