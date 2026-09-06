@@ -23,7 +23,7 @@ export class BusinessInfoComponent {
     @Input() title = '';
 
     getTitle(): string {
-        return this.title || 'ADMIN.BUSINESS_INFO';
+        return this.title || 'ADMIN.BUSINESS_INFO.TITLE';
     }
 
     getBusinessTypeLabel(type?: BusinessType): string {
