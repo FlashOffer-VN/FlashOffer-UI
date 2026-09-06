@@ -27,6 +27,7 @@ export class BadgeComponent implements OnInit {
         'active': 'success',
         'rejected': 'danger',
         'expired': 'secondary',
+        'deleted': 'secondary',
         'inactive': 'secondary',
         'completed': 'info',
         'cancelled': 'danger'

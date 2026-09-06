@@ -471,28 +471,52 @@
 }
 
 .upload-btn {
-    padding: 6px 16px;
-    border: 1.5px dashed #d1d5db;
-    border-radius: 8px;
-    background: transparent;
+    padding: 18px 20px;
+    border: 2px dashed #d1d5db;
+    border-radius: 12px;
+    background: #fafafa;
     color: #6B7280;
     cursor: pointer;
     transition: all 0.2s ease;
     font-size: 13px;
-    display: inline-flex;
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 8px;
+    width: 100%;
+    text-align: center;
 }
 
 .upload-btn:hover {
     border-color: #7C3AED;
     color: #7C3AED;
     background: #faf5ff;
-    transform: translateY(-1px);
+}
+
+.upload-btn.dragging {
+    border-color: #7C3AED;
+    color: #7C3AED;
+    background: #f3e8ff;
+    transform: scale(1.01);
 }
 
 .upload-btn i {
-    font-size: 16px;
+    font-size: 24px;
+}
+
+.upload-btn span {
+    font-weight: 600;
+}
+
+.upload-hint {
+    font-weight: 400;
+    font-size: 12px;
+    color: #9CA3AF;
+}
+
+.upload-btn:hover .upload-hint {
+    color: #7C3AED;
 }
 
 .image-preview-list {

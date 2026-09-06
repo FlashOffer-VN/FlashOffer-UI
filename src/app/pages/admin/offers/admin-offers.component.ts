@@ -8,18 +8,12 @@ import { AppService } from '@core/services/app.service';
 import { OfferRequest, OfferStatus } from '@core/models/offer-request.model';
 import { PagedResponse } from '@core/models/paged-response.model';
 
-// Shared Components
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.component';
-import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
-
-interface StatusOption {
-    value: OfferStatus | null;
-    label: string;
-}
+import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 
 @Component({
     selector: 'app-admin-offers',
@@ -34,25 +28,22 @@ interface StatusOption {
         LoadingComponent,
         PaginationComponent,
         BadgeComponent,
-        NgSelectWrapperComponent
+        StatusTabsComponent
     ],
     templateUrl: './admin-offers.component.html',
     styleUrls: ['./admin-offers.component.css']
 })
 export class AdminOffersComponent implements OnInit {
-    // Data
     offers: OfferRequest[] = [];
     isLoading = true;
     isDeleting = false;
+    isRestoring = false;
 
-    // Filter
     searchText = '';
-    selectedStatus: OfferStatus | null = null;
 
-    // Status options for filter dropdown
-    statusOptions: StatusOption[] = [];
+    activeTab = 'all';
+    tabs: { key: string; label: string }[] = [];
 
-    // Pagination
     pageNumber = 1;
     pageSize = 10;
     totalCount = 0;
@@ -63,25 +54,50 @@ export class AdminOffersComponent implements OnInit {
     constructor(private _appService: AppService, private _router: Router) { }
 
     ngOnInit(): void {
+        this.buildTabs();
+        this.loadData();
+    }
+
+    private buildTabs(): void {
+        this.tabs = [
+            { key: 'all', label: this._appService.trans('COMMON.ALL') },
+            { key: 'pending', label: this._appService.trans('COMMON.STATUS.PENDING') },
+            { key: 'approved', label: this._appService.trans('COMMON.STATUS.APPROVED') },
+            { key: 'rejected', label: this._appService.trans('COMMON.STATUS.REJECTED') },
+            { key: 'expired', label: this._appService.trans('COMMON.STATUS.EXPIRED') },
+            { key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') }
+        ];
+    }
+
+    onTabChange(tab: string): void {
+        this.activeTab = tab;
+        this.pageNumber = 1;
         this.loadData();
     }
 
     loadData(): void {
         this.isLoading = true;
-        this.statusOptions = [
-            { value: null, label: this._appService.trans('COMMON.ALL') },
-            { value: OfferStatus.PENDING, label: this._appService.trans('COMMON.STATUS.PENDING') },
-            { value: OfferStatus.APPROVED, label: this._appService.trans('COMMON.STATUS.APPROVED') },
-            { value: OfferStatus.REJECTED, label: this._appService.trans('COMMON.STATUS.REJECTED') },
-            { value: OfferStatus.EXPIRED, label: this._appService.trans('COMMON.STATUS.EXPIRED') }
-        ];
+
+        const isDeleted = this.activeTab === 'deleted';
+
+        let status: OfferStatus | undefined;
+        if (!isDeleted && this.activeTab !== 'all') {
+            switch (this.activeTab) {
+                case 'pending': status = OfferStatus.PENDING; break;
+                case 'approved': status = OfferStatus.APPROVED; break;
+                case 'rejected': status = OfferStatus.REJECTED; break;
+                case 'expired': status = OfferStatus.EXPIRED; break;
+            }
+        }
 
         this._appService.offerRequest
             .getData(
                 this.pageNumber,
                 this.pageSize,
                 this.searchText,
-                this.selectedStatus ?? undefined
+                status,
+                undefined,
+                isDeleted ? true : undefined
             )
             .subscribe({
                 next: (response: PagedResponse<OfferRequest>) => {
@@ -102,12 +118,6 @@ export class AdminOffersComponent implements OnInit {
     }
 
     onSearch(): void {
-        this.pageNumber = 1;
-        this.loadData();
-    }
-
-    onStatusChange(status: OfferStatus | null): void {
-        this.selectedStatus = status;
         this.pageNumber = 1;
         this.loadData();
     }
@@ -141,6 +151,21 @@ export class AdminOffersComponent implements OnInit {
                     this._appService.showError(this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
                 }
             });
+        });
+    }
+
+    onRestore(offer: OfferRequest): void {
+        this.isRestoring = true;
+        this._appService.offerRequest.restore(offer.id).subscribe({
+            next: () => {
+                this.isRestoring = false;
+                this._appService.showSuccess(this._appService.trans('ADMIN.OFFERS.RESTORED_SUCCESS'));
+                this.loadData();
+            },
+            error: () => {
+                this.isRestoring = false;
+                this._appService.showError(this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+            }
         });
     }
 

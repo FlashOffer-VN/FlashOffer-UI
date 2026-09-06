@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { QuillModule, QuillEditorComponent } from 'ngx-quill';
+import { firstValueFrom } from 'rxjs';
 import { isBrowser } from '../../../../core/utils/platform';
 import { AppService } from '../../../../core/services/app.service';
 import { PostType, PrivacyType, CreatePostRequest, SocialPost } from '../../../../core/models/social.model';
@@ -143,14 +144,45 @@ export class CreatePostComponent implements AfterViewInit {
 
     onFileSelected(event: Event): void {
         const input = event.target as HTMLInputElement;
-        if (!input.files) return;
+        if (input.files) {
+            this.processFiles(input.files);
+            input.value = '';
+        }
+    }
 
-        for (let i = 0; i < input.files.length; i++) {
-            const file = input.files[i];
+    // ===== Drag & Drop =====
+    isDragging = false;
+
+    onDragOver(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragging = true;
+    }
+
+    onDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragging = false;
+    }
+
+    onDrop(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragging = false;
+        const files = event.dataTransfer?.files;
+        if (files && files.length > 0) {
+            this.processFiles(files);
+        }
+    }
+
+    private processFiles(files: FileList | File[]): void {
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
             if (!file.type.startsWith('image/')) continue;
             if (file.size > 5 * 1024 * 1024) {
                 this._appService.showWarning(this._appService.trans('SOCIAL.IMAGE_TOO_LARGE'));
                 continue;
+            }
+            if (this.imagePreviews.length >= 9) {
+                this._appService.showWarning(this._appService.trans('SOCIAL.IMAGE_MAX'));
+                break;
             }
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -160,7 +192,6 @@ export class CreatePostComponent implements AfterViewInit {
             };
             reader.readAsDataURL(file);
         }
-        input.value = '';
     }
 
     removeImage(index: number): void {
@@ -172,13 +203,53 @@ export class CreatePostComponent implements AfterViewInit {
 
         this.isSubmitting = true;
 
+        if (this.imagePreviews.length > 0) {
+            this.uploadImagesThenSubmit();
+            return;
+        }
+
+        this.submitPost([]);
+    }
+
+    private uploadImagesThenSubmit(): void {
+        const uploads = this.imagePreviews.map((dataUrl, index) =>
+            this.dataUrlToBlob(dataUrl).then(blob =>
+                firstValueFrom(this._appService.socialService.uploadImage(blob, `post-image-${index}.jpg`))
+            )
+        );
+
+        Promise.all(uploads).then(urls => {
+            // Server trả { url } relative
+            const imageUrls = urls.map(u => u?.url).filter(Boolean) as string[];
+            this.submitPost(imageUrls);
+        }).catch(() => {
+            this.isSubmitting = false;
+            this._appService.showError(this._appService.trans('SOCIAL.IMAGE_UPLOAD_FAILED'));
+        });
+    }
+
+    private dataUrlToBlob(dataUrl: string): Promise<Blob> {
+        if (isBrowser() && typeof fetch === 'function') {
+            return fetch(dataUrl).then(r => r.blob());
+        }
+        // Fallback không có fetch (prerender hiếm gặp)
+        const parts = dataUrl.split(',');
+        const mime = (parts[0]?.match(/data:(.*?);/)?.[1]) || 'image/jpeg';
+        const b64 = parts[1] || '';
+        const binary = atob(b64);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        return Promise.resolve(new Blob([bytes], { type: mime }));
+    }
+
+    private submitPost(images: string[]): void {
         const request: CreatePostRequest = {
             title: this.title.trim() || undefined,
             content: this.content,
             type: this.selectedType,
             privacy: this.selectedPrivacy,
             tags: this.tags,
-            images: []
+            images
         };
 
         if (this.selectedType === PostType.Event) {

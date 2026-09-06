@@ -45,7 +45,8 @@ export class OfferRequestService {
         pageSize = 10,
         search = '',
         status?: OfferStatus,
-        isOfferSent?: boolean
+        isOfferSent?: boolean,
+        includeDeleted?: boolean
     ): Observable<OfferRequestPagedResponse> {
         const params: any = {
             pageNumber,
@@ -57,6 +58,9 @@ export class OfferRequestService {
         }
         if (isOfferSent !== undefined && isOfferSent !== null) {
             params.isOfferSent = isOfferSent;
+        }
+        if (includeDeleted !== undefined && includeDeleted !== null) {
+            params.includeDeleted = includeDeleted;
         }
         return this.apiService.get<OfferRequestPagedResponse>(this.endpoint, params);
     }
@@ -78,10 +82,18 @@ export class OfferRequestService {
     }
 
     /**
-     * Xóa mềm yêu cầu nhận offer (Admin)
+     * Xóa mềm yêu cầu nhận cnn offer (Admin)
      * DELETE /api/v1/OfferRequests/{id}
      */
     delete(id: string): Observable<OfferRequestResponse> {
         return this.apiService.delete<OfferRequestResponse>(`${this.endpoint}/${id}`);
+    }
+
+    /**
+     * Khôi phục yêu cầu nhận offer đã xóa (Admin)
+     * POST /api/v1/OfferRequests/{id}/restore
+     */
+    restore(id: string): Observable<OfferRequestResponse> {
+        return this.apiService.post<OfferRequestResponse>(`${this.endpoint}/${id}/restore`, {});
     }
 }

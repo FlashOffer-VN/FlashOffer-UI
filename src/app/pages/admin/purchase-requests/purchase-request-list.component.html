@@ -2,8 +2,8 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">{{ 'ADMIN.OFFERS.TITLE' | translate }}</h1>
-            <p class="text-gray-500 text-sm">{{ 'ADMIN.OFFERS.LIST_TITLE' | translate }}</p>
+            <h1 class="text-2xl font-bold text-gray-900">{{ 'ADMIN.PURCHASE_REQUESTS.TITLE' | translate }}</h1>
+            <p class="text-gray-500 text-sm">{{ 'ADMIN.PURCHASE_REQUESTS.LIST_TITLE' | translate }}</p>
         </div>
     </div>
 
@@ -12,7 +12,7 @@
         <div class="flex flex-col sm:flex-row gap-3 items-end">
             <!-- Search -->
             <div class="flex-1 min-w-0">
-                <app-input [(ngModel)]="searchText" [placeholder]="'ADMIN.OFFERS.SEARCH_PLACEHOLDER' | translate"
+                <app-input [(ngModel)]="searchText" [placeholder]="'ADMIN.PURCHASE_REQUESTS.SEARCH_PLACEHOLDER' | translate"
                     (keyup.enter)="onSearch()" class="w-full">
                 </app-input>
             </div>
@@ -38,22 +38,22 @@
                             #
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            {{ 'ADMIN.OFFERS.CODE' | translate }}
+                            {{ 'ADMIN.PURCHASE_REQUESTS.CODE' | translate }}
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            {{ 'ADMIN.OFFERS.PRODUCT_NAME' | translate }}
+                            {{ 'ADMIN.PURCHASE_REQUESTS.PRODUCT_NAME' | translate }}
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            {{ 'ADMIN.OFFERS.FULL_NAME' | translate }}
+                            {{ 'ADMIN.PURCHASE_REQUESTS.FULL_NAME' | translate }}
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            {{ 'ADMIN.OFFERS.PHONE' | translate }}
+                            {{ 'ADMIN.PURCHASE_REQUESTS.PHONE' | translate }}
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            {{ 'ADMIN.OFFERS.STATUS' | translate }}
+                            {{ 'ADMIN.PURCHASE_REQUESTS.STATUS' | translate }}
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            {{ 'ADMIN.OFFERS.CREATED_AT' | translate }}
+                            {{ 'ADMIN.PURCHASE_REQUESTS.CREATED_AT' | translate }}
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             {{ 'COMMON.BUTTON.ACTION' | translate }}
@@ -69,54 +69,42 @@
                     </tr>
 
                     <!-- No data -->
-                    <tr *ngIf="!isLoading && offers.length === 0">
+                    <tr *ngIf="!isLoading && requests.length === 0">
                         <td colspan="8" class="px-4 py-8 text-center text-gray-500">
                             {{ 'PAGINATION.NO_ITEMS' | translate }}
                         </td>
                     </tr>
 
                     <!-- Data rows -->
-                    <tr *ngFor="let offer of offers; let i = index"
-                        class="hover:bg-gray-50 transition-colors cursor-pointer" (click)="navigateToDetail(offer.id)">
+                    <tr *ngFor="let request of requests; let i = index"
+                        class="hover:bg-gray-50 transition-colors cursor-pointer" (click)="navigateToDetail(request.id)">
                         <td class="px-4 py-3 text-sm text-gray-500">
                             {{ (pageNumber - 1) * pageSize + i + 1 }}
                         </td>
                         <td class="px-4 py-3 text-sm font-mono text-gray-600">
-                            {{ offer.offerRequestCode || formatId(offer.id) }}
+                            {{ request.purchaseRequestCode || formatId(request.id) }}
                         </td>
                         <td class="px-4 py-3 text-sm font-medium text-gray-900 max-w-[220px] truncate">
-                            {{ offer.productName }}
+                            {{ request.productName }}
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-600">
-                            {{ offer.fullName }}
+                            {{ request.fullName }}
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-600">
-                            {{ offer.phone }}
+                            {{ request.phone }}
                         </td>
                         <td class="px-4 py-3">
-                            <app-badge [status]="getStatusKey(offer.status)" [variant]="getStatusVariant(offer.status)">
+                            <app-badge [status]="getStatusKey(request.status)" [variant]="getStatusVariant(request.status)">
                             </app-badge>
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-500">
-                            {{ formatDate(offer.createdAt) }}
+                            {{ formatDate(request.createdAt) }}
                         </td>
                         <td class="px-4 py-3">
-                            <div class="flex items-center gap-2">
-                                <app-button variant="primary" size="sm"
-                                    (click)="$event.stopPropagation(); navigateToDetail(offer.id)">
-                                    {{ 'COMMON.BUTTON.VIEW_DETAIL' | translate }}
-                                </app-button>
-                                <app-button *ngIf="activeTab === 'deleted'" variant="primary" size="sm" [loading]="isRestoring"
-                                    (click)="$event.stopPropagation(); onRestore(offer)"
-                                    [title]="'COMMON.BUTTON.RESTORE' | translate" [attr.aria-label]="'COMMON.BUTTON.RESTORE' | translate">
-                                    <i class="fa-solid fa-rotate-left"></i>
-                                </app-button>
-                                <app-button *ngIf="activeTab !== 'deleted'" variant="danger" size="sm" [loading]="isDeleting"
-                                    (click)="$event.stopPropagation(); onDelete(offer)"
-                                    [title]="'COMMON.BUTTON.DELETE' | translate">
-                                    <i class="fa-solid fa-trash"></i>
-                                </app-button>
-                            </div>
+                            <app-button variant="primary" size="sm"
+                                (click)="$event.stopPropagation(); navigateToDetail(request.id)">
+                                {{ 'COMMON.BUTTON.VIEW_DETAIL' | translate }}
+                            </app-button>
                         </td>
                     </tr>
                 </tbody>

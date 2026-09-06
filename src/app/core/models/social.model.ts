@@ -28,6 +28,7 @@ export enum EventType {
 // ===== INTERFACES =====
 export interface Author {
     id: string;
+    userCode?: string;
     fullName: string;
     username: string;
     avatar?: string;

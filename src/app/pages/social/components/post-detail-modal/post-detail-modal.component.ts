@@ -92,6 +92,13 @@ export class PostDetailModalComponent implements OnInit {
     });
   }
 
+  // Hiển thị "UserCode - username" (fallback fullName nếu username rỗng)
+  getAuthorLabel(author: any): string {
+    if (!author) return '';
+    const name = author.username || author.fullName || '';
+    return author.userCode ? `${author.userCode} - ${name}` : name;
+  }
+
   // ✅ Đã sửa: dùng enum
   getTypeLabel(type: PostType): string {
     const labels = {

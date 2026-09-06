@@ -78,6 +78,9 @@ export const routes: Routes = [
             { path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent) },
             { path: 'offers', loadComponent: () => import('./pages/admin/offers/admin-offers.component').then(m => m.AdminOffersComponent) },
             { path: 'offers/:id', loadComponent: () => import('./pages/admin/offers/detail/offer-detail.component').then(m => m.AdminOfferDetailComponent) },
+            // Purchase Request Management
+            { path: 'purchase-requests', loadComponent: () => import('./pages/admin/purchase-requests/purchase-request-list.component').then(m => m.AdminPurchaseRequestListComponent) },
+            { path: 'purchase-requests/:id', loadComponent: () => import('./pages/admin/purchase-requests/detail/purchase-request-detail.component').then(m => m.AdminPurchaseRequestDetailComponent) },
             { path: 'settings', loadComponent: () => import('./pages/admin/settings/admin-settings.component').then(m => m.AdminSettingsComponent) },
             { path: 'demo', loadComponent: () => import('./pages/demo/demo.component').then(m => m.DemoComponent) },
             { path: 'social-posts', loadComponent: () => import('./pages/admin/social/social-post-list.component').then(m => m.AdminSocialPostListComponent) },

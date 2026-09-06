@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
+import { PagedResponse } from '@core/models/paged-response.model';
 import {
     CreatePurchaseRequestDto,
     UpdatePurchaseRequestStatusDto,
@@ -51,6 +52,27 @@ export class PurchaseRequestService {
     }
 
     /**
+     * Lấy danh sách phân trang (Admin)
+     * GET /api/v1/PurchaseRequests?pageNumber=&pageSize=&search=&status=
+     */
+    getData(
+        pageNumber = 1,
+        pageSize = 10,
+        search = '',
+        status?: PurchaseRequestStatus
+    ): Observable<PagedResponse<PurchaseRequest>> {
+        const params: any = {
+            pageNumber,
+            pageSize,
+            search: search || ''
+        };
+        if (status !== undefined && status !== null) {
+            params.status = status;
+        }
+        return this.apiService.get<PagedResponse<PurchaseRequest>>(this.endpoint, params);
+    }
+
+    /**
      * Lấy chi tiết yêu cầu theo ID
      * GET /api/v1/PurchaseRequests/{id}
      */
@@ -60,18 +82,10 @@ export class PurchaseRequestService {
 
     /**
      * Cập nhật trạng thái yêu cầu (Admin)
-     * PUT /api/v1/PurchaseRequests/{id}/status
+     * PATCH /api/v1/PurchaseRequests/{id}/status
      */
     updateStatus(id: string, status: PurchaseRequestStatus): Observable<PurchaseRequestResponse> {
         const payload: UpdatePurchaseRequestStatusDto = { status };
-        return this.apiService.put<PurchaseRequestResponse>(`${this.endpoint}/${id}/status`, payload);
-    }
-
-    /**
-     * Hủy yêu cầu (User)
-     * PUT /api/v1/PurchaseRequests/{id}/cancel
-     */
-    cancel(id: string): Observable<PurchaseRequestResponse> {
-        return this.apiService.put<PurchaseRequestResponse>(`${this.endpoint}/${id}/cancel`, {});
+        return this.apiService.patch<PurchaseRequestResponse>(`${this.endpoint}/${id}/status`, payload);
     }
 }

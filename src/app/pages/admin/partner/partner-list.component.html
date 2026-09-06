@@ -17,14 +17,6 @@
                 </app-input>
             </div>
 
-            <!-- Status Filter -->
-            <div class="w-full sm:w-56">
-                <app-ng-select-wrapper [items]="statusOptions" [(ngModel)]="selectedStatus"
-                    [placeholder]="'ADMIN.PARTNER.FILTER_STATUS' | translate" [clearable]="true"
-                    (ngModelChange)="onStatusChange($event)" colorMode="admin">
-                </app-ng-select-wrapper>
-            </div>
-
             <!-- Search Button -->
             <div>
                 <app-button variant="primary" (click)="onSearch()">
@@ -33,6 +25,8 @@
             </div>
         </div>
     </div>
+
+    <app-status-tabs [items]="tabs" [active]="activeTab" (change)="onTabChange($event)"></app-status-tabs>
 
     <!-- Table -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
