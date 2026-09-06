@@ -1,4 +1,6 @@
 // Enums từ C# chuyển sang TypeScript
+import { BusinessInfo } from './business-info.model';
+
 export enum SalesChannel {
     Retail = 1,
     Wholesale = 2,
@@ -34,6 +36,7 @@ export interface CtvRegistration {
         fullName: string;
         phone?: string;
     };
+    businessInfo?: BusinessInfo;
 }
 
 // Helper function để lấy tên hiển thị của SalesChannel

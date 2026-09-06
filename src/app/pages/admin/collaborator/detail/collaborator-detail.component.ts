@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
 import { CtvRegistration, CTVRegistrationStatus } from '@core/models/ctv.model';
+import { BusinessInfo } from '@core/models/business-info.model';
 import { ApiResponse } from '@core/models/paged-response.model';
 
 // Shared Components
@@ -12,6 +13,7 @@ import { ButtonComponent } from '@shared/components/button/button.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
+import { BusinessInfoComponent } from '@shared/components/business-info/business-info.component';
 
 @Component({
     selector: 'app-admin-collaborator-detail',
@@ -23,7 +25,8 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
         ButtonComponent,
         LoadingComponent,
         BadgeComponent,
-        ModalComponent
+        ModalComponent,
+        BusinessInfoComponent
     ],
     templateUrl: './collaborator-detail.component.html',
     styleUrls: ['./collaborator-detail.component.css']
@@ -102,6 +105,11 @@ export class AdminCollaboratorDetailComponent implements OnInit {
             hour: '2-digit',
             minute: '2-digit'
         });
+    }
+
+    getBusinessInfo(): BusinessInfo | null {
+        // CTV chỉ nhận dữ liệu doanh nghiệp từ nested `businessInfo` (không có field phẳng)
+        return this.collaborator?.businessInfo ?? null;
     }
 
     canApprove(): boolean {

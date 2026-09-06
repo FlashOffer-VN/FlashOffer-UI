@@ -1069,6 +1069,16 @@
             "DELETE_CONFIRM": "Bạn có chắc muốn xóa CTV \"{{name}}\"?",
             "DELETED_SUCCESS": "Xóa CTV thành công"
         },
+        "BUSINESS_INFO": {
+            "TITLE": "Thông tin doanh nghiệp",
+            "COMPANY_NAME": "Tên doanh nghiệp",
+            "COMPANY_TAX": "Mã số thuế",
+            "COMPANY_ADDRESS": "Địa chỉ",
+            "COMPANY_WEBSITE": "Website",
+            "BUSINESS_TYPE": "Loại hình",
+            "COMPANY_SIZE": "Quy mô",
+            "BUSINESS_FIELD": "Lĩnh vực kinh doanh"
+        },
         "PARTNER": {
             "TITLE": "Quản lý Đối tác",
             "LIST_TITLE": "Danh sách Đối tác",

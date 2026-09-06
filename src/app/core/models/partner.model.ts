@@ -2,6 +2,8 @@
 // 1. ENUMS
 // ==============================
 
+import { BusinessInfo } from './business-info.model';
+
 export enum BusinessType {
     SME = 1,
     SoleProprietor = 2,
@@ -159,6 +161,7 @@ export interface Partner {
     };
     commission?: PartnerCommission;
     products?: PartnerProduct[];
+    businessInfo?: BusinessInfo;
 }
 
 export interface PartnerCommission {

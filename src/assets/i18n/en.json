@@ -1106,6 +1106,16 @@
             "DELETE_CONFIRM": "Are you sure you want to delete CTV \"{{name}}\"?",
             "DELETED_SUCCESS": "CTV deleted successfully"
         },
+        "BUSINESS_INFO": {
+            "TITLE": "Business Information",
+            "COMPANY_NAME": "Company Name",
+            "COMPANY_TAX": "Tax Code",
+            "COMPANY_ADDRESS": "Address",
+            "COMPANY_WEBSITE": "Website",
+            "BUSINESS_TYPE": "Business Type",
+            "COMPANY_SIZE": "Company Size",
+            "BUSINESS_FIELD": "Business Field"
+        },
         "PARTNER": {
             "TITLE": "Partner Management",
             "LIST_TITLE": "Partner List",
