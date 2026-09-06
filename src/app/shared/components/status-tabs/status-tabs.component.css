@@ -1,0 +1,67 @@
+:host {
+    display: block;
+}
+
+.status-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #fff;
+}
+
+.tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: #f3f4f6;
+    color: #6b7280;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 150ms ease;
+    line-height: 1;
+}
+
+.tab-btn i {
+    font-size: 12px;
+}
+
+.tab-btn:hover {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.tab-btn.active {
+    background: #7c3aed;
+    color: #fff;
+}
+
+.tab-count {
+    font-size: 11px;
+    font-weight: 600;
+    background: rgb(255 255 255 / 0.2);
+    border-radius: 999px;
+    padding: 1px 7px;
+}
+
+.tab-btn:not(.active) .tab-count {
+    background: #e5e7eb;
+    color: #6b7280;
+}
+
+@media (max-width: 600px) {
+    .status-tabs {
+        gap: 4px;
+        padding: 8px;
+    }
+
+    .tab-btn {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+}

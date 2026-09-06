@@ -816,7 +816,9 @@
         "TAG_MAX": "Maximum 5 tags allowed",
         "TAG_EXISTS": "This tag already exists",
         "IMAGE_TOO_LARGE": "Image cannot exceed 5MB",
-        "IMAGE_UPLOAD_UNAVAILABLE": "Image upload is currently being implemented",
+        "IMAGE_MAX": "Maximum 9 images allowed",
+        "IMAGE_UPLOAD_FAILED": "Image upload failed",
+        "DRAG_DROP_HINT": "Drag & drop images here or click to select",
         "CREATE_POST_SUCCESS": "Post created successfully!",
         "POST_TITLE": "Post title",
         "CREATE_POST": "Create Post",
@@ -871,10 +873,8 @@
     "PURCHASE_REQUEST": {
         "STATUS": {
             "PENDING": "Pending",
-            "APPROVED": "Approved",
-            "REJECTED": "Rejected",
-            "COMPLETED": "Completed",
-            "CANCELLED": "Cancelled"
+            "CONTACTED": "Contacted",
+            "COMPLETED": "Completed"
         }
     },
     "COMMON": {
@@ -886,7 +886,10 @@
             "ACTIVE": "Active",
             "INACTIVE": "Inactive",
             "COMPLETED": "Completed",
-            "CANCELLED": "Cancelled"
+            "CANCELLED": "Cancelled",
+            "EXPIRED": "Expired",
+            "CONTACTED": "Contacted",
+            "DELETED": "Deleted"
         },
         "BUTTON": {
             "SEARCH": "Search",
@@ -901,7 +904,9 @@
             "CREATE": "Create",
             "UPDATE": "Update",
             "CONFIRM": "Confirm",
-            "APPLY": "Apply"
+            "APPLY": "Apply",
+            "OK": "OK",
+            "RESTORE": "Restore"
         },
         "ERROR": {
             "LOAD_FAILED": "An error occurred while loading data!",
@@ -926,6 +931,7 @@
         "SIDEBAR": {
             "PANEL": "Admin Panel",
             "OFFERS": "Offers",
+            "PURCHASE_REQUESTS": "Purchase requests",
             "COLLABORATOR": "Collaborator",
             "SOCIAL_POSTS": "Social Posts",
             "PARTNER": "Partner",
@@ -935,7 +941,7 @@
         },
         "DASHBOARD": {
             "TITLE": "Admin overview",
-            "SUBTITLE": "Quick statistics from the available list APIs",
+            "SUBTITLE": "Quick statistics from system data",
             "REFRESH": "Refresh",
             "PARTNERS": "Partners",
             "COLLABORATORS": "Collaborators",
@@ -943,18 +949,83 @@
             "OFFER_REQUESTS": "Offer requests",
             "PURCHASE_REQUESTS": "Supplier requests",
             "GROUP_BUYING_REQUESTS": "Group buying requests",
+            "CTV_REGISTRATIONS": "Collaborator registrations",
+            "PENDING": "pending",
             "UNAVAILABLE": "Unavailable",
-            "LAST_UPDATED": "Last updated"
+            "LAST_UPDATED": "Last updated",
+            "QUICK_LINKS": "Quick links",
+            "RECENT_ACTIVITIES": "Recent activities",
+            "ACTIVITY": {
+                "CREATED": "created",
+                "REGISTERED": "registered",
+                "UPDATED": "updated",
+                "OFFER_REQUEST": "offer request",
+                "PURCHASE_REQUEST": "supplier request",
+                "GROUP_BUYING_REQUEST": "group buying request",
+                "CTV_REGISTRATION": "collaborator",
+                "EMPTY": "No recent activity"
+            }
         },
         "COMING_SOON": "Coming soon",
         "OFFERS": {
             "TITLE": "Offer management",
-            "SUBTITLE": "Track and manage promotional offers",
-            "CARD_TITLE": "Offers are being prepared",
-            "CARD_TEXT": "Tools for creating, approving, and tracking offers will be available soon.",
-            "FILTERS": "Offer filters",
-            "REPORTS": "Performance reports",
-            "NOTIFICATIONS": "Offer notifications"
+            "LIST_TITLE": "Manage customer offer requests",
+            "SEARCH_PLACEHOLDER": "Search by product name, customer name, phone, email, code...",
+            "FILTER_STATUS": "Filter by status",
+            "CODE": "Request code",
+            "PRODUCT_NAME": "Product name",
+            "FULL_NAME": "Customer name",
+            "PHONE": "Phone",
+            "STATUS": "Status",
+            "CREATED_AT": "Created at",
+            "PRODUCT_INFO": "Product information",
+            "USER_INFO": "Requester information",
+            "PRODUCT_LINK": "Product link",
+            "CURRENT_PRICE": "Current price",
+            "EXPECTED_PRICE": "Expected price",
+            "QUANTITY": "Quantity",
+            "NOTE": "Note",
+            "ZALO": "Zalo",
+            "EMAIL": "Email",
+            "APPROVE": "Approve",
+            "REJECT": "Reject",
+            "EXPIRE": "Mark as expired",
+            "APPROVE_CONFIRM": "Are you sure you want to approve this request?",
+            "REJECT_CONFIRM": "Are you sure you want to reject this request?",
+            "EXPIRE_CONFIRM": "Are you sure you want to mark this request as expired?",
+            "APPROVED_SUCCESS": "Offer request approved successfully",
+            "REJECTED_SUCCESS": "Offer request rejected successfully",
+            "EXPIRED_SUCCESS": "Offer request marked as expired successfully",
+            "DELETE_CONFIRM": "Are you sure you want to delete \"{{name}}\"?",
+            "DELETED_SUCCESS": "Offer request deleted successfully",
+            "RESTORED_SUCCESS": "Offer request restored successfully"
+        },
+        "PURCHASE_REQUESTS": {
+            "TITLE": "Purchase Request Management",
+            "LIST_TITLE": "Manage customer purchase requests",
+            "SEARCH_PLACEHOLDER": "Search by product name, customer name, phone, email, code...",
+            "FILTER_STATUS": "Filter by status",
+            "CODE": "Request code",
+            "PRODUCT_NAME": "Product name",
+            "FULL_NAME": "Customer name",
+            "PHONE": "Phone",
+            "STATUS": "Status",
+            "CREATED_AT": "Created at",
+            "PRODUCT_INFO": "Product information",
+            "USER_INFO": "Requester information",
+            "PRODUCT_CATEGORY": "Product category",
+            "QUANTITY": "Quantity",
+            "UNIT": "Unit",
+            "EXPECTED_PRICE": "Expected price",
+            "NOTE": "Note",
+            "ZALO": "Zalo",
+            "EMAIL": "Email",
+            "CONTACT": "Contacted",
+            "CONTACT_CONFIRM": "Are you sure you want to mark this request as contacted?",
+            "CONTACTED_SUCCESS": "Request marked as contacted successfully",
+            "COMPLETE": "Complete",
+            "COMPLETE_CONFIRM": "Are you sure you want to mark this request as completed?",
+            "COMPLETED_SUCCESS": "Request marked as completed successfully"
         },
         "SETTINGS_PAGE": {
             "TITLE": "System settings",
@@ -978,7 +1049,8 @@
             "APPROVE": "Approve",
             "REJECT": "Reject",
             "APPROVED_SUCCESS": "Post approved successfully",
-            "REJECTED_SUCCESS": "Post rejected successfully"
+            "REJECTED_SUCCESS": "Post rejected successfully",
+            "RESTORED_SUCCESS": "Post restored successfully"
         },
         "CTV": {
             "TITLE": "CTV Management",
@@ -1000,7 +1072,10 @@
             "EXPERIENCE": "Experience",
             "APPROVED_AT": "Approved At",
             "APPROVE": "Approve CTV",
-            "REJECT": "Reject CTV"
+            "REJECT": "Reject CTV",
+            "RESTORED_SUCCESS": "CTV restored successfully",
+            "DELETE_CONFIRM": "Are you sure you want to delete CTV \"{{name}}\"?",
+            "DELETED_SUCCESS": "CTV deleted successfully"
         },
         "PARTNER": {
             "TITLE": "Partner Management",

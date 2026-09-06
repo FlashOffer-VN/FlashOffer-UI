@@ -49,6 +49,14 @@ export class ApiService {
             .pipe(catchError(this.handleError.bind(this)));
     }
 
+    /**
+     * Upload multipart (form-data). Angular tự đặt header multipart/form-data.
+     */
+    uploadMultipart<T>(endpoint: string, formData: FormData): Observable<T> {
+        return this.http.post<T>(`${this.baseUrl}/${endpoint}`, formData)
+            .pipe(catchError(this.handleError.bind(this)));
+    }
+
     private handleError(error: any): Observable<never> {
         const status = error.status;
         let message = this._translate.instant('COMMON.ERROR.UNKNOWN');

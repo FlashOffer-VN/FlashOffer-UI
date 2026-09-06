@@ -4,7 +4,7 @@
             <img [src]="post.author.avatar | avatar" [alt]="post.author.fullName" class="author-avatar">
             <div class="author-info">
                 <div class="author-name">
-                    {{ post.author.fullName }}
+                    {{ getAuthorLabel(post.author) }}
                     <i *ngIf="post.author.isVerified" class="fas fa-check-circle verified"></i>
                 </div>
                 <div class="author-role">{{ post.author.role }}</div>
@@ -65,6 +65,11 @@
         <button *ngIf="shouldShowReadMore" class="read-more" (click)="toggleReadMore.emit(post)">
             {{ post.isExpanded ? ('SOCIAL.COLLAPSE' | translate) : ('SOCIAL.READ_MORE' | translate) }}
         </button>
+
+        <div class="post-images" *ngIf="post.images?.length">
+            <img *ngFor="let img of post.images" [src]="img" alt="" class="post-image"
+                loading="lazy">
+        </div>
 
         <div class="post-tags" *ngIf="post.tags.length">
             <span *ngFor="let tag of post.tags" class="tag">#{{ tag }}</span>

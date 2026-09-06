@@ -8,11 +8,20 @@ import { PagedResponse } from '@core/models/paged-response.model';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
+import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 
 @Component({
     selector: 'app-admin-social-post-list',
     standalone: true,
-    imports: [CommonModule, RouterModule, TranslateModule, ButtonComponent, LoadingComponent, PaginationComponent],
+    imports: [
+        CommonModule,
+        RouterModule,
+        TranslateModule,
+        ButtonComponent,
+        LoadingComponent,
+        PaginationComponent,
+        StatusTabsComponent
+    ],
     templateUrl: './social-post-list.component.html',
     styleUrls: ['./social-post-list.component.css']
 })
@@ -28,15 +37,35 @@ export class AdminSocialPostListComponent implements OnInit {
     hasNextPage = false;
     selectedPost: SocialPost | null = null;
 
+    // Tab lọc status (All / Pending / Approved / Deleted)
+    activeStatus = 'all';
+    tabs: { key: string; label: string }[] = [];
+
     constructor(private readonly appService: AppService) { }
 
     ngOnInit(): void {
+        this.buildTabs();
+        this.loadPosts();
+    }
+
+    private buildTabs(): void {
+        this.tabs = [
+            { key: 'all', label: this.appService.trans('COMMON.ALL') },
+            { key: 'pending', label: this.appService.trans('COMMON.STATUS.PENDING') },
+            { key: 'approved', label: this.appService.trans('COMMON.STATUS.APPROVED') },
+            { key: 'deleted', label: this.appService.trans('COMMON.STATUS.DELETED') }
+        ];
+    }
+
+    onTabChange(tab: string): void {
+        this.activeStatus = tab;
+        this.pageNumber = 1;
         this.loadPosts();
     }
 
     loadPosts(): void {
         this.isLoading = true;
-        this.appService.socialService.getPendingPosts(this.pageNumber, this.pageSize).subscribe({
+        this.appService.socialService.getAdminPosts(this.activeStatus, this.pageNumber, this.pageSize).subscribe({
             next: (response: PagedResponse<SocialPost>) => {
                 this.posts = response.data;
                 this.pageNumber = response.pageNumber;
@@ -84,12 +113,36 @@ export class AdminSocialPostListComponent implements OnInit {
         });
     }
 
+    restore(post: SocialPost): void {
+        this.isActionLoading = true;
+        this.appService.socialService.restorePost(post.id).subscribe({
+            next: () => {
+                this.isActionLoading = false;
+                this.appService.showSuccess(this.appService.trans('ADMIN.SOCIAL.RESTORED_SUCCESS'));
+                this.loadPosts();
+            },
+            error: () => {
+                this.isActionLoading = false;
+                this.appService.showError(this.appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+            }
+        });
+    }
+
     openPostDetail(post: SocialPost): void {
         this.selectedPost = post;
     }
 
     closePostDetail(): void {
         this.selectedPost = null;
+    }
+
+    /**
+     * Hiển thị "UserCode - username" (fallback fullName nếu username rỗng).
+     */
+    getAuthorLabel(author: any): string {
+        if (!author) return '';
+        const name = author.username || author.fullName || '';
+        return author.userCode ? `${author.userCode} - ${name}` : name;
     }
 
     getContentPreview(content: string): string {

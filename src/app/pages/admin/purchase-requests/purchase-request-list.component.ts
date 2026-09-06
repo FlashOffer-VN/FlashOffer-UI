@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
-import { Partner, PartnerStatus, getPartnerStatusLabel, getBusinessTypeLabel, getCompanySizeLabel } from '@core/models/partner.model';
+import { PurchaseRequest, PurchaseRequestStatus } from '@core/models/purchase-request.model';
 import { PagedResponse } from '@core/models/paged-response.model';
 
 import { ButtonComponent } from '@shared/components/button/button.component';
@@ -16,7 +16,7 @@ import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.com
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 
 @Component({
-    selector: 'app-admin-partner-list',
+    selector: 'app-admin-purchase-request-list',
     standalone: true,
     imports: [
         CommonModule,
@@ -30,12 +30,12 @@ import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.
         BadgeComponent,
         StatusTabsComponent
     ],
-    templateUrl: './partner-list.component.html',
-    styleUrls: ['./partner-list.component.css']
+    templateUrl: './purchase-request-list.component.html',
+    styleUrls: ['./purchase-request-list.component.css']
 })
-export class AdminPartnerListComponent implements OnInit {
+export class AdminPurchaseRequestListComponent implements OnInit {
     // Data
-    partners: Partner[] = [];
+    requests: PurchaseRequest[] = [];
     isLoading = true;
 
     // Search
@@ -53,16 +53,6 @@ export class AdminPartnerListComponent implements OnInit {
     hasPreviousPage = false;
     hasNextPage = false;
 
-    // Translate keys for business type
-    businessTypeKeys: Record<number, string> = {
-        1: 'PARTNER.BUSINESS_TYPE_SME',
-        2: 'PARTNER.BUSINESS_TYPE_SOLE_PROPRIETOR',
-        3: 'PARTNER.BUSINESS_TYPE_PARTNERSHIP',
-        4: 'PARTNER.BUSINESS_TYPE_CORPORATION',
-        5: 'PARTNER.BUSINESS_TYPE_LIMITED',
-        6: 'PARTNER.BUSINESS_TYPE_OTHER'
-    };
-
     constructor(private _appService: AppService, private _router: Router) { }
 
     ngOnInit(): void {
@@ -74,9 +64,8 @@ export class AdminPartnerListComponent implements OnInit {
         this.tabs = [
             { key: 'all', label: this._appService.trans('COMMON.ALL') },
             { key: 'pending', label: this._appService.trans('COMMON.STATUS.PENDING') },
-            { key: 'approved', label: this._appService.trans('COMMON.STATUS.APPROVED') },
-            { key: 'rejected', label: this._appService.trans('COMMON.STATUS.REJECTED') },
-            { key: 'active', label: this._appService.trans('COMMON.STATUS.ACTIVE') }
+            { key: 'contacted', label: this._appService.trans('COMMON.STATUS.CONTACTED') },
+            { key: 'completed', label: this._appService.trans('COMMON.STATUS.COMPLETED') }
         ];
     }
 
@@ -89,26 +78,25 @@ export class AdminPartnerListComponent implements OnInit {
     loadData(): void {
         this.isLoading = true;
 
-        let status: PartnerStatus | undefined;
+        let status: PurchaseRequestStatus | undefined;
         if (this.activeTab !== 'all') {
             switch (this.activeTab) {
-                case 'pending': status = PartnerStatus.Pending; break;
-                case 'approved': status = PartnerStatus.Approved; break;
-                case 'rejected': status = PartnerStatus.Rejected; break;
-                case 'active': status = PartnerStatus.Active; break;
+                case 'pending': status = PurchaseRequestStatus.PENDING; break;
+                case 'contacted': status = PurchaseRequestStatus.CONTACTED; break;
+                case 'completed': status = PurchaseRequestStatus.COMPLETED; break;
             }
         }
 
-        this._appService.partnerService
+        this._appService.purchaseRequest
             .getData(
                 this.pageNumber,
                 this.pageSize,
-                this.searchText ?? '',
+                this.searchText,
                 status
             )
             .subscribe({
-                next: (response: PagedResponse<Partner>) => {
-                    this.partners = response.data;
+                next: (response: PagedResponse<PurchaseRequest>) => {
+                    this.requests = response.data;
                     this.pageNumber = response.pageNumber;
                     this.pageSize = response.pageSize;
                     this.totalCount = response.totalCount;
@@ -140,28 +128,22 @@ export class AdminPartnerListComponent implements OnInit {
         this.loadData();
     }
 
-    getStatusVariant(status: PartnerStatus): BadgeVariant {
-        const variants: Record<PartnerStatus, BadgeVariant> = {
-            [PartnerStatus.Pending]: 'warning',
-            [PartnerStatus.Approved]: 'success',
-            [PartnerStatus.Rejected]: 'danger',
-            [PartnerStatus.Active]: 'success'
+    getStatusVariant(status: PurchaseRequestStatus): BadgeVariant {
+        const variants: Record<PurchaseRequestStatus, BadgeVariant> = {
+            [PurchaseRequestStatus.PENDING]: 'warning',
+            [PurchaseRequestStatus.CONTACTED]: 'info',
+            [PurchaseRequestStatus.COMPLETED]: 'success'
         };
         return variants[status] || 'secondary';
     }
 
-    getStatusKey(status: PartnerStatus): string {
-        const keys: Record<PartnerStatus, string> = {
-            [PartnerStatus.Pending]: 'pending',
-            [PartnerStatus.Approved]: 'approved',
-            [PartnerStatus.Rejected]: 'rejected',
-            [PartnerStatus.Active]: 'active'
+    getStatusKey(status: PurchaseRequestStatus): string {
+        const keys: Record<PurchaseRequestStatus, string> = {
+            [PurchaseRequestStatus.PENDING]: 'pending',
+            [PurchaseRequestStatus.CONTACTED]: 'contacted',
+            [PurchaseRequestStatus.COMPLETED]: 'completed'
         };
         return keys[status] || 'pending';
-    }
-
-    getBusinessTypeLabel(type: number): string {
-        return this.businessTypeKeys[type] || type.toString();
     }
 
     formatId(id: string): string {
@@ -179,7 +161,16 @@ export class AdminPartnerListComponent implements OnInit {
         });
     }
 
+    formatPrice(value?: number | null): string {
+        if (value === undefined || value === null) return '--';
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+            maximumFractionDigits: 0
+        }).format(value);
+    }
+
     navigateToDetail(id: string): void {
-        this._router.navigate(['/admin/partner', id]);
+        this._router.navigate(['/admin/purchase-requests', id]);
     }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
-import { delay, tap, catchError, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { delay, map, catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import {
     SocialPost,
@@ -48,6 +48,37 @@ export class SocialService {
             `${this._baseSocialUrl}/posts/pending`,
             { pageNumber, pageSize }
         );
+    }
+
+    /**
+     * Admin: danh sách bài viết theo trạng thái (approved/pending/deleted/all).
+     */
+    getAdminPosts(status: string | null, pageNumber = 1, pageSize = 10): Observable<PagedResponse<SocialPost>> {
+        const params: any = { pageNumber, pageSize };
+        if (status) params.status = status;
+        return this._apiService.get<PagedResponse<SocialPost>>(
+            `${this._baseSocialUrl}/posts/admin`,
+            params
+        );
+    }
+
+    /**
+     * Admin: khôi phục bài viết đã xóa.
+     */
+    restorePost(id: string): Observable<SocialPost> {
+        return this._apiService.post<SocialPost>(`${this._baseSocialUrl}/posts/${id}/restore`, {});
+    }
+
+    /**
+     * Upload ảnh lên server, trả url tương đối để gắn vào post.
+     * API trả ApiResponse<{ url }> -> map lấy data.url.
+     */
+    uploadImage(file: Blob, fileName: string): Observable<{ url: string }> {
+        const formData = new FormData();
+        formData.append('file', file, fileName);
+        return this._apiService
+            .uploadMultipart<ApiResponse<{ url: string }>>('Files/upload', formData)
+            .pipe(map(r => r.data ?? { url: '' }));
     }
 
     approvePost(id: string): Observable<SocialPost> {

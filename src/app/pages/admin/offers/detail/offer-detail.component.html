@@ -1,0 +1,175 @@
+<div class="p-6 space-y-6">
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="flex justify-center items-center py-12">
+        <app-loading></app-loading>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="!isLoading && offer">
+        <!-- ====== 1. PROFILE HEADER ====== -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex flex-col lg:flex-row lg:items-center gap-6">
+                <!-- Avatar -->
+                <div class="flex-shrink-0">
+                    <div
+                        class="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primary-light text-white flex items-center justify-center text-3xl font-bold">
+                        {{ offer.fullName.charAt(0) }}
+                    </div>
+                </div>
+                <!-- Info -->
+                <div class="flex-1 min-w-0">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <h1 class="text-2xl font-bold text-gray-900 truncate">{{ offer.fullName }}</h1>
+                        <app-badge [status]="getStatusKey(offer.status)" size="lg"></app-badge>
+                    </div>
+                    <div class="flex flex-wrap gap-x-6 gap-y-1 mt-1 text-sm text-gray-500">
+                        <span><i class="fa-solid fa-tag w-4"></i> {{ offer.offerRequestCode || formatId(offer.id) }}</span>
+                        <span><i class="fa-solid fa-phone w-4"></i> {{ offer.phone }}</span>
+                        <span><i class="fa-solid fa-envelope w-4"></i> {{ offer.email || '--' }}</span>
+                        <span><i class="fa-regular fa-calendar w-4"></i> {{ formatDate(offer.createdAt) }}</span>
+                    </div>
+                </div>
+                <!-- Actions -->
+                <div class="flex flex-wrap gap-2 flex-shrink-0">
+                    <app-button *ngIf="canApprove()" variant="success" size="sm" (click)="onApprove()"
+                        [loading]="isActionLoading">
+                        <i class="fa-solid fa-check mr-1"></i> {{ 'ADMIN.OFFERS.APPROVE' | translate }}
+                    </app-button>
+                    <app-button *ngIf="canReject()" variant="danger" size="sm" (click)="onReject()"
+                        [loading]="isActionLoading">
+                        <i class="fa-solid fa-xmark mr-1"></i> {{ 'ADMIN.OFFERS.REJECT' | translate }}
+                    </app-button>
+                    <app-button *ngIf="canExpire()" variant="warning" size="sm" (click)="onExpire()"
+                        [loading]="isActionLoading">
+                        <i class="fa-solid fa-clock mr-1"></i> {{ 'ADMIN.OFFERS.EXPIRE' | translate }}
+                    </app-button>
+                    <app-button variant="secondary" size="sm" (click)="goBack()">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> {{ 'COMMON.BUTTON.BACK' | translate }}
+                    </app-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== 2. INFO CARDS ====== -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.OFFERS.CURRENT_PRICE' |
+                    translate }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ formatPrice(offer.currentPrice) }}</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.OFFERS.EXPECTED_PRICE'
+                    | translate }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ formatPrice(offer.expectedPrice) }}</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.OFFERS.QUANTITY' |
+                    translate }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ offer.quantity }} {{ offer.unit }}</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Offer Sent</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">
+                    <i [class.text-green-600]="offer.isOfferSent" [class.text-gray-400]="!offer.isOfferSent"
+                        [class.fa-circle-check]="offer.isOfferSent" [class.fa-circle]="!offer.isOfferSent"
+                        class="fa-solid"></i>
+                </p>
+            </div>
+        </div>
+
+        <!-- ====== 3. DETAIL SECTIONS ====== -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Product Info -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
+                    <i class="fa-solid fa-box mr-2"></i> {{ 'ADMIN.OFFERS.PRODUCT_INFO' | translate }}
+                </h2>
+                <div class="space-y-3">
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.PRODUCT_NAME' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900 text-right">{{ offer.productName }}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.PRODUCT_LINK' | translate }}</span>
+                        <a *ngIf="offer.productLink" [href]="offer.productLink" target="_blank"
+                            class="text-sm font-medium text-primary hover:underline truncate max-w-[220px]">
+                            {{ offer.productLink }}
+                        </a>
+                        <span *ngIf="!offer.productLink" class="text-sm text-gray-400">--</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.CURRENT_PRICE' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ formatPrice(offer.currentPrice) }}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.EXPECTED_PRICE' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ formatPrice(offer.expectedPrice) }}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.QUANTITY' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ offer.quantity }} {{ offer.unit }}</span>
+                    </div>
+                    <div class="flex justify-between py-2">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.NOTE' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900 text-right max-w-[220px]">{{ offer.note || '--' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Requester Info -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
+                    <i class="fa-regular fa-user mr-2"></i> {{ 'ADMIN.OFFERS.USER_INFO' | translate }}
+                </h2>
+                <div class="space-y-3">
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.FULL_NAME' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ offer.fullName }}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.PHONE' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ offer.phone }}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.ZALO' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ offer.zalo || '--' }}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.EMAIL' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ offer.email || '--' }}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.CREATED_AT' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ formatDate(offer.createdAt) }}</span>
+                    </div>
+                    <div class="flex justify-between py-2">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.STATUS' | translate }}</span>
+                        <app-badge [status]="getStatusKey(offer.status)" size="sm"></app-badge>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ====== MODALS ====== -->
+<app-modal [(visible)]="showApproveModal" [title]="'ADMIN.OFFERS.APPROVE' | translate"
+    [confirmText]="'COMMON.BUTTON.CONFIRM' | translate" [cancelText]="'COMMON.BUTTON.CANCEL' | translate"
+    [confirmVariant]="'success'" [loading]="isActionLoading" (confirm)="confirmApprove()"
+    (cancel)="showApproveModal = false">
+    <p class="text-gray-600">{{ 'ADMIN.OFFERS.APPROVE_CONFIRM' | translate }}</p>
+</app-modal>
+
+<app-modal [(visible)]="showRejectModal" [title]="'ADMIN.OFFERS.REJECT' | translate"
+    [confirmText]="'COMMON.BUTTON.CONFIRM' | translate" [cancelText]="'COMMON.BUTTON.CANCEL' | translate"
+    [confirmVariant]="'danger'" [loading]="isActionLoading" (confirm)="confirmReject()"
+    (cancel)="showRejectModal = false">
+    <p class="text-gray-600">{{ 'ADMIN.OFFERS.REJECT_CONFIRM' | translate }}</p>
+</app-modal>
+
+<app-modal [(visible)]="showExpireModal" [title]="'ADMIN.OFFERS.EXPIRE' | translate"
+    [confirmText]="'COMMON.BUTTON.CONFIRM' | translate" [cancelText]="'COMMON.BUTTON.CANCEL' | translate"
+    [confirmVariant]="'warning'" [loading]="isActionLoading" (confirm)="confirmExpire()"
+    (cancel)="showExpireModal = false">
+    <p class="text-gray-600">{{ 'ADMIN.OFFERS.EXPIRE_CONFIRM' | translate }}</p>
+</app-modal>

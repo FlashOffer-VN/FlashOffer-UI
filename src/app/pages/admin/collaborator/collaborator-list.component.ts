@@ -8,18 +8,12 @@ import { AppService } from '@core/services/app.service';
 import { CtvRegistration, CTVRegistrationStatus } from '@core/models/ctv.model';
 import { PagedResponse } from '@core/models/paged-response.model';
 
-// Shared Components
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.component';
-import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
-
-interface StatusOption {
-    value: CTVRegistrationStatus | null;
-    label: string;
-}
+import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 
 @Component({
     selector: 'app-admin-collaborator-list',
@@ -34,7 +28,7 @@ interface StatusOption {
         LoadingComponent,
         PaginationComponent,
         BadgeComponent,
-        NgSelectWrapperComponent
+        StatusTabsComponent
     ],
     templateUrl: './collaborator-list.component.html',
     styleUrls: ['./collaborator-list.component.css']
@@ -43,13 +37,15 @@ export class AdminCollaboratorListComponent implements OnInit {
     // Data
     collaborators: CtvRegistration[] = [];
     isLoading = true;
+    isDeleting = false;
+    isRestoring = false;
 
-    // Filter
+    // Search
     searchText = '';
-    selectedStatus: CTVRegistrationStatus | null = null;
 
-    // Status options for filter dropdown
-    statusOptions: StatusOption[] = [];
+    // Tab lọc status
+    activeTab = 'all';
+    tabs: { key: string; label: string }[] = [];
 
     // Pagination
     pageNumber = 1;
@@ -62,35 +58,57 @@ export class AdminCollaboratorListComponent implements OnInit {
     constructor(private _appService: AppService, private _router: Router) { }
 
     ngOnInit(): void {
+        this.buildTabs();        this.loadData();
+    }
+
+    private buildTabs(): void {
+        this.tabs = [
+            { key: 'all', label: this._appService.trans('COMMON.ALL') },
+            { key: 'pending', label: this._appService.trans('COMMON.STATUS.PENDING') },
+            { key: 'approved', label: this._appService.trans('COMMON.STATUS.APPROVED') },
+            { key: 'rejected', label: this._appService.trans('COMMON.STATUS.REJECTED') },
+            { key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') }
+        ];
+    }
+
+    onTabChange(tab: string): void {
+        this.activeTab = tab;
+        this.pageNumber = 1;
         this.loadData();
     }
 
     loadData(): void {
         this.isLoading = true;
-        this.statusOptions = [
-            { value: null, label: this._appService.trans('COMMON.ALL') },
-            { value: CTVRegistrationStatus.Pending, label: this._appService.trans('COMMON.STATUS.PENDING') },
-            { value: CTVRegistrationStatus.Approved, label: this._appService.trans('COMMON.STATUS.APPROVED') },
-            { value: CTVRegistrationStatus.Rejected, label: this._appService.trans('COMMON.STATUS.REJECTED') }
-        ];
+        const isDeleted = this.activeTab === 'deleted';
 
-        this._appService.ctvService
-            .getData(
-                this.pageNumber,
-                this.pageSize,
-                this.searchText,
-                this.selectedStatus ?? undefined
-            )
+        if (isDeleted) {
+            this._appService.ctvService.getDeletedData(this.pageNumber, this.pageSize, this.searchText)
+                .subscribe({
+                    next: (response: PagedResponse<CtvRegistration>) => {
+                        this.applyPagedResponse(response);
+                        this.isLoading = false;
+                    },
+                    error: () => {
+                        this.isLoading = false;
+                        this._appService.showError(this._appService.trans('COMMON.ERROR.LOAD_FAILED'));
+                    }
+                });
+            return;
+        }
+
+        let status: CTVRegistrationStatus | undefined;
+        if (this.activeTab !== 'all') {
+            switch (this.activeTab) {
+                case 'pending': status = CTVRegistrationStatus.Pending; break;
+                case 'approved': status = CTVRegistrationStatus.Approved; break;
+                case 'rejected': status = CTVRegistrationStatus.Rejected; break;
+            }
+        }
+
+        this._appService.ctvService.getData(this.pageNumber, this.pageSize, this.searchText, status)
             .subscribe({
                 next: (response: PagedResponse<CtvRegistration>) => {
-                    this.collaborators = response.data;
-                    this.pageNumber = response.pageNumber;
-                    this.pageSize = response.pageSize;
-                    this.totalCount = response.totalCount;
-                    this.totalPages = response.totalPages;
-                    this.hasPreviousPage = response.hasPreviousPage;
-                    this.hasNextPage = response.hasNextPage;
-                    this.isLoading = false;
+                    this.applyPagedResponse(response);                    this.isLoading = false;
                 },
                 error: () => {
                     this.isLoading = false;
@@ -99,13 +117,17 @@ export class AdminCollaboratorListComponent implements OnInit {
             });
     }
 
-    onSearch(): void {
-        this.pageNumber = 1;
-        this.loadData();
+    private applyPagedResponse(response: PagedResponse<CtvRegistration>): void {
+        this.collaborators = response.data;
+        this.pageNumber = response.pageNumber;
+        this.pageSize = response.pageSize;
+        this.totalCount = response.totalCount;
+        this.totalPages = response.totalPages;
+        this.hasPreviousPage = response.hasPreviousPage;
+        this.hasNextPage = response.hasNextPage;
     }
 
-    onStatusChange(status: CTVRegistrationStatus | null): void {
-        this.selectedStatus = status;
+    onSearch(): void {
         this.pageNumber = 1;
         this.loadData();
     }
@@ -119,6 +141,41 @@ export class AdminCollaboratorListComponent implements OnInit {
         this.pageSize = size;
         this.pageNumber = 1;
         this.loadData();
+    }
+
+    onDelete(item: CtvRegistration): void {
+        this._appService.confirmDelete(
+            this._appService.trans('ADMIN.CTV.DELETE_CONFIRM', { name: item.fullName })
+        ).then(confirmed => {
+            if (!confirmed) return;
+            this.isDeleting = true;
+            this._appService.ctvService.delete(item.id).subscribe({
+                next: () => {
+                    this.isDeleting = false;
+                    this._appService.showSuccess(this._appService.trans('ADMIN.CTV.DELETED_SUCCESS'));
+                    this.loadData();
+                },
+                error: () => {
+                    this.isDeleting = false;
+                    this._appService.showError(this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+                }
+            });
+        });
+    }
+
+    onRestore(item: CtvRegistration): void {
+        this.isRestoring = true;
+        this._appService.ctvService.restore(item.id).subscribe({
+            next: () => {
+                this.isRestoring = false;
+                this._appService.showSuccess(this._appService.trans('ADMIN.CTV.RESTORED_SUCCESS'));
+                this.loadData();
+            },
+            error: () => {
+                this.isRestoring = false;
+                this._appService.showError(this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+            }
+        });
     }
 
     getStatusVariant(status: CTVRegistrationStatus): BadgeVariant {

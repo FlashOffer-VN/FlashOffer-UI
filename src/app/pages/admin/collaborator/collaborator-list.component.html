@@ -17,14 +17,6 @@
                 </app-input>
             </div>
 
-            <!-- Status Filter -->
-            <div class="w-full sm:w-56 flex-shrink-0">
-                <app-ng-select-wrapper [items]="statusOptions" [(ngModel)]="selectedStatus"
-                    [placeholder]="'ADMIN.CTV.FILTER_STATUS' | translate" [clearable]="true"
-                    (ngModelChange)="onStatusChange($event)" colorMode="admin">
-                </app-ng-select-wrapper>
-            </div>
-
             <!-- Search Button -->
             <div class="flex-shrink-0">
                 <app-button variant="primary" (click)="onSearch()">
@@ -33,6 +25,8 @@
             </div>
         </div>
     </div>
+
+    <app-status-tabs [items]="tabs" [active]="activeTab" (change)="onTabChange($event)"></app-status-tabs>
 
     <!-- Table -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
@@ -107,10 +101,24 @@
                             {{ formatDate(collaborator.createdAt) }}
                         </td>
                         <td class="px-4 py-3">
-                            <app-button variant="primary" size="sm"
-                                (click)="$event.stopPropagation(); navigateToDetail(collaborator.id)">
-                                {{ 'COMMON.BUTTON.VIEW_DETAIL' | translate }}
-                            </app-button>
+                            <div class="flex items-center gap-2">
+                                <app-button variant="primary" size="sm"
+                                    (click)="$event.stopPropagation(); navigateToDetail(collaborator.id)">
+                                    {{ 'COMMON.BUTTON.VIEW_DETAIL' | translate }}
+                                </app-button>
+                                <app-button *ngIf="activeTab === 'deleted'" variant="primary" size="sm"
+                                    [loading]="isRestoring"
+                                    (click)="$event.stopPropagation(); onRestore(collaborator)"
+                                    [title]="'COMMON.BUTTON.RESTORE' | translate">
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                </app-button>
+                                <app-button *ngIf="activeTab !== 'deleted'" variant="danger" size="sm"
+                                    [loading]="isDeleting"
+                                    (click)="$event.stopPropagation(); onDelete(collaborator)"
+                                    [title]="'COMMON.BUTTON.DELETE' | translate">
+                                    <i class="fa-solid fa-trash"></i>
+                                </app-button>
+                            </div>
                         </td>
                     </tr>
                 </tbody>

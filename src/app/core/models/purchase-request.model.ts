@@ -7,6 +7,7 @@
 
 export interface PurchaseRequest {
     id: string;
+    purchaseRequestCode?: string | null;
     userId: string | null;
     productName: string;
     productCategory: string | null;
@@ -43,28 +44,22 @@ export interface UpdatePurchaseRequestStatusDto {
 
 export enum PurchaseRequestStatus {
     PENDING = 1,
-    APPROVED = 2,
-    REJECTED = 3,
-    COMPLETED = 4,
-    CANCELLED = 5
+    CONTACTED = 2,
+    COMPLETED = 3
 }
 
 // ============ CONSTANTS - DÙNG KEY DỊCH ============
 
 export const PurchaseRequestStatusLabels: Record<PurchaseRequestStatus, string> = {
     [PurchaseRequestStatus.PENDING]: 'PURCHASE_REQUEST.STATUS.PENDING',
-    [PurchaseRequestStatus.APPROVED]: 'PURCHASE_REQUEST.STATUS.APPROVED',
-    [PurchaseRequestStatus.REJECTED]: 'PURCHASE_REQUEST.STATUS.REJECTED',
-    [PurchaseRequestStatus.COMPLETED]: 'PURCHASE_REQUEST.STATUS.COMPLETED',
-    [PurchaseRequestStatus.CANCELLED]: 'PURCHASE_REQUEST.STATUS.CANCELLED'
+    [PurchaseRequestStatus.CONTACTED]: 'PURCHASE_REQUEST.STATUS.CONTACTED',
+    [PurchaseRequestStatus.COMPLETED]: 'PURCHASE_REQUEST.STATUS.COMPLETED'
 };
 
 export const PurchaseRequestStatusColors: Record<PurchaseRequestStatus, string> = {
     [PurchaseRequestStatus.PENDING]: 'warning',
-    [PurchaseRequestStatus.APPROVED]: 'success',
-    [PurchaseRequestStatus.REJECTED]: 'danger',
-    [PurchaseRequestStatus.COMPLETED]: 'info',
-    [PurchaseRequestStatus.CANCELLED]: 'gray'
+    [PurchaseRequestStatus.CONTACTED]: 'info',
+    [PurchaseRequestStatus.COMPLETED]: 'success'
 };
 
 // ============ OPTIONS ============

@@ -63,6 +63,15 @@ export class PostCardComponent {
     }
     // ===== 👆 END THÊM METHOD =====
 
+    /**
+     * Hiển thị "UserCode - username" (fallback fullName nếu username rỗng).
+     */
+    getAuthorLabel(author: any): string {
+        if (!author) return '';
+        const name = author.username || author.fullName || '';
+        return author.userCode ? `${author.userCode} - ${name}` : name;
+    }
+
     // Type methods
     getTypeIcon(type: PostType): string {
         const icons = {

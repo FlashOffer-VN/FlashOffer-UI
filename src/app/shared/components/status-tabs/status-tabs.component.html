@@ -1,0 +1,8 @@
+<div class="status-tabs">
+    <button type="button" *ngFor="let item of items" class="tab-btn"
+        [class.active]="active === item.key" (click)="onSelect(item.key)">
+        <i *ngIf="item.icon" [class]="item.icon"></i>
+        <span>{{ item.label }}</span>
+        <span *ngIf="item.count !== undefined" class="tab-count">{{ item.count }}</span>
+    </button>
+</div>

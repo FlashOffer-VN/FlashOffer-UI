@@ -367,6 +367,42 @@
     margin: 0 0 8px 0;
 }
 
+/* ===== Ảnh đính kèm bài viết ===== */
+.post-images {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin: 8px 0;
+}
+
+.post-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    background: #f3f4f6;
+}
+
+.post-images:has(> img:only-child) {
+    grid-template-columns: 1fr;
+}
+
+.post-images:has(> img:only-child) .post-image {
+    height: auto;
+    max-height: 400px;
+}
+
+@media (max-width: 480px) {
+    .post-images {
+        grid-template-columns: 1fr;
+    }
+
+    .post-image {
+        height: auto;
+        max-height: 300px;
+    }
+}
+
 /* ===== 🔥 PHẦN QUAN TRỌNG: POST TEXT ĐÃ SỬA ===== */
 .post-text {
     font-size: 15px;

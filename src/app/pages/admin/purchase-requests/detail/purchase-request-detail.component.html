@@ -1,0 +1,153 @@
+<div class="p-6 space-y-6">
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="flex justify-center items-center py-12">
+        <app-loading></app-loading>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="!isLoading && request">
+        <!-- ====== 1. PROFILE HEADER ====== -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex flex-col lg:flex-row lg:items-center gap-6">
+                <!-- Avatar -->
+                <div class="flex-shrink-0">
+                    <div
+                        class="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primary-light text-white flex items-center justify-center text-3xl font-bold">
+                        {{ request.fullName.charAt(0) }}
+                    </div>
+                </div>
+                <!-- Info -->
+                <div class="flex-1 min-w-0">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <h1 class="text-2xl font-bold text-gray-900 truncate">{{ request.fullName }}</h1>
+                        <app-badge [status]="getStatusKey(request.status)" size="lg"></app-badge>
+                    </div>
+                    <div class="flex flex-wrap gap-x-6 gap-y-1 mt-1 text-sm text-gray-500">
+                        <span><i class="fa-solid fa-tag w-4"></i> {{ request.purchaseRequestCode || formatId(request.id) }}</span>
+                        <span><i class="fa-solid fa-phone w-4"></i> {{ request.phone }}</span>
+                        <span><i class="fa-solid fa-envelope w-4"></i> {{ request.email || '--' }}</span>
+                        <span><i class="fa-regular fa-calendar w-4"></i> {{ formatDate(request.createdAt) }}</span>
+                    </div>
+                </div>
+                <!-- Actions -->
+                <div class="flex flex-wrap gap-2 flex-shrink-0">
+                    <app-button *ngIf="canMarkContacted()" variant="primary" size="sm" (click)="onMarkContacted()"
+                        [loading]="isActionLoading">
+                        <i class="fa-solid fa-phone mr-1"></i> {{ 'ADMIN.PURCHASE_REQUESTS.CONTACT' | translate }}
+                    </app-button>
+                    <app-button *ngIf="canComplete()" variant="success" size="sm" (click)="onComplete()"
+                        [loading]="isActionLoading">
+                        <i class="fa-solid fa-check mr-1"></i> {{ 'ADMIN.PURCHASE_REQUESTS.COMPLETE' | translate }}
+                    </app-button>
+                    <app-button variant="secondary" size="sm" (click)="goBack()">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> {{ 'COMMON.BUTTON.BACK' | translate }}
+                    </app-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== 2. INFO CARDS ====== -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.PURCHASE_REQUESTS.PRODUCT_NAME' |
+                    translate }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1 truncate">{{ request.productName }}</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.PURCHASE_REQUESTS.EXPECTED_PRICE'
+                    | translate }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ formatPrice(request.expectedPrice) }}</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.PURCHASE_REQUESTS.QUANTITY' |
+                    translate }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ request.quantity }} {{ request.unit }}</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.PURCHASE_REQUESTS.CREATED_AT' |
+                    translate }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ formatDate(request.createdAt) }}</p>
+            </div>
+        </div>
+
+        <!-- ====== 3. DETAIL SECTIONS ====== -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Product Info -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
+                    <i class="fa-solid fa-box mr-2"></i> {{ 'ADMIN.PURCHASE_REQUESTS.PRODUCT_INFO' | translate }}
+                </h2>
+                <div class="space-y-3">
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.PURCHASE_REQUESTS.PRODUCT_NAME' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900 text-right">{{ request.productName }}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.PURCHASE_REQUESTS.PRODUCT_CATEGORY' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900 text-right">{{ request.productCategory || '--' }}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.PURCHASE_REQUESTS.QUANTITY' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ request.quantity }} {{ request.unit }}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.PURCHASE_REQUESTS.EXPECTED_PRICE' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ formatPrice(request.expectedPrice) }}</span>
+                    </div>
+                    <div class="flex justify-between py-2">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.PURCHASE_REQUESTS.NOTE' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900 text-right max-w-[220px]">{{ request.note || '--' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Requester Info -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
+                    <i class="fa-regular fa-user mr-2"></i> {{ 'ADMIN.PURCHASE_REQUESTS.USER_INFO' | translate }}
+                </h2>
+                <div class="space-y-3">
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.PURCHASE_REQUESTS.FULL_NAME' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ request.fullName }}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.PURCHASE_REQUESTS.PHONE' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ request.phone }}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.PURCHASE_REQUESTS.ZALO' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ request.zalo || '--' }}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.PURCHASE_REQUESTS.EMAIL' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ request.email || '--' }}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-50">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.PURCHASE_REQUESTS.CREATED_AT' | translate }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ formatDate(request.createdAt) }}</span>
+                    </div>
+                    <div class="flex justify-between py-2">
+                        <span class="text-sm text-gray-500">{{ 'ADMIN.PURCHASE_REQUESTS.STATUS' | translate }}</span>
+                        <app-badge [status]="getStatusKey(request.status)" size="sm"></app-badge>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ====== MODALS ====== -->
+<app-modal [(visible)]="showContactedModal" [title]="'ADMIN.PURCHASE_REQUESTS.CONTACT' | translate"
+    [confirmText]="'COMMON.BUTTON.CONFIRM' | translate" [cancelText]="'COMMON.BUTTON.CANCEL' | translate"
+    [confirmVariant]="'primary'" [loading]="isActionLoading" (confirm)="confirmContacted()"
+    (cancel)="showContactedModal = false">
+    <p class="text-gray-600">{{ 'ADMIN.PURCHASE_REQUESTS.CONTACT_CONFIRM' | translate }}</p>
+</app-modal>
+
+<app-modal [(visible)]="showCompletedModal" [title]="'ADMIN.PURCHASE_REQUESTS.COMPLETE' | translate"
+    [confirmText]="'COMMON.BUTTON.CONFIRM' | translate" [cancelText]="'COMMON.BUTTON.CANCEL' | translate"
+    [confirmVariant]="'success'" [loading]="isActionLoading" (confirm)="confirmCompleted()"
+    (cancel)="showCompletedModal = false">
+    <p class="text-gray-600">{{ 'ADMIN.PURCHASE_REQUESTS.COMPLETE_CONFIRM' | translate }}</p>
+</app-modal>

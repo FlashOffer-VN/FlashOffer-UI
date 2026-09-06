@@ -772,7 +772,9 @@
         "TAG_MAX": "Chỉ được thêm tối đa 5 tag",
         "TAG_EXISTS": "Tag này đã tồn tại",
         "IMAGE_TOO_LARGE": "Ảnh không được vượt quá 5MB",
-        "IMAGE_UPLOAD_UNAVAILABLE": "Tính năng tải ảnh đang được triển khai",
+        "IMAGE_MAX": "Chỉ được đăng tối đa 9 ảnh",
+        "IMAGE_UPLOAD_FAILED": "Tải ảnh lên thất bại",
+        "DRAG_DROP_HINT": "Kéo thả ảnh vào đây hoặc bấm để chọn",
         "CREATE_POST_SUCCESS": "Đăng bài thành công!",
         "POST_TITLE": "Tiêu đề bài viết",
         "CREATE_POST": "Đăng bài",
@@ -827,10 +829,8 @@
     "PURCHASE_REQUEST": {
         "STATUS": {
             "PENDING": "Chờ xử lý",
-            "APPROVED": "Đã duyệt",
-            "REJECTED": "Từ chối",
-            "COMPLETED": "Hoàn thành",
-            "CANCELLED": "Đã hủy"
+            "CONTACTED": "Đã liên hệ",
+            "COMPLETED": "Hoàn thành"
         }
     },
     "COMMON": {
@@ -842,7 +842,10 @@
             "ACTIVE": "Hoạt động",
             "INACTIVE": "Không hoạt động",
             "COMPLETED": "Hoàn thành",
-            "CANCELLED": "Đã hủy"
+            "CANCELLED": "Đã hủy",
+            "EXPIRED": "Hết hạn",
+            "CONTACTED": "Đã liên hệ",
+            "DELETED": "Đã xóa"
         },
         "BUTTON": {
             "SEARCH": "Tìm kiếm",
@@ -858,7 +861,8 @@
             "UPDATE": "Cập nhật",
             "CONFIRM": "Xác nhận",
             "APPLY": "Áp dụng",
-            "OK": "OK"
+            "OK": "OK",
+            "RESTORE": "Khôi phục"
         },
         "ERROR": {
             "LOAD_FAILED": "Đã có lỗi xảy ra khi tải dữ liệu!",
@@ -885,6 +889,7 @@
         "SIDEBAR": {
             "PANEL": "Trang quản trị",
             "OFFERS": "Offers",
+            "PURCHASE_REQUESTS": "Yêu cầu tìm nhà cung cấp",
             "COLLABORATOR": "Cộng tác viên",
             "SOCIAL_POSTS": "Bài viết cộng đồng",
             "PARTNER": "Đối tác",
@@ -894,7 +899,7 @@
         },
         "DASHBOARD": {
             "TITLE": "Tổng quan quản trị",
-            "SUBTITLE": "Thống kê nhanh từ các danh sách hiện có",
+            "SUBTITLE": "Thống kê nhanh từ dữ liệu hệ thống",
             "REFRESH": "Làm mới",
             "PARTNERS": "Đối tác",
             "COLLABORATORS": "Cộng tác viên",
@@ -902,18 +907,83 @@
             "OFFER_REQUESTS": "Yêu cầu nhận offer",
             "PURCHASE_REQUESTS": "Yêu cầu tìm nhà cung cấp",
             "GROUP_BUYING_REQUESTS": "Yêu cầu mua chung",
+            "CTV_REGISTRATIONS": "Đăng ký cộng tác viên",
+            "PENDING": "chờ duyệt",
             "UNAVAILABLE": "Không tải được",
-            "LAST_UPDATED": "Cập nhật lúc"
+            "LAST_UPDATED": "Cập nhật lúc",
+            "QUICK_LINKS": "Liên kết nhanh",
+            "RECENT_ACTIVITIES": "Hoạt động gần đây",
+            "ACTIVITY": {
+                "CREATED": "đã tạo",
+                "REGISTERED": "đã đăng ký",
+                "UPDATED": "đã cập nhật",
+                "OFFER_REQUEST": "yêu cầu nhận offer",
+                "PURCHASE_REQUEST": "yêu cầu tìm nhà cung cấp",
+                "GROUP_BUYING_REQUEST": "yêu cầu mua chung",
+                "CTV_REGISTRATION": "cộng tác viên",
+                "EMPTY": "Chưa có hoạt động nào"
+            }
         },
         "COMING_SOON": "Đang triển khai",
         "OFFERS": {
             "TITLE": "Quản lý Offers",
-            "SUBTITLE": "Theo dõi và quản lý các chương trình ưu đãi",
-            "CARD_TITLE": "Tính năng Offers đang được hoàn thiện",
-            "CARD_TEXT": "Các công cụ tạo, duyệt và theo dõi ưu đãi sẽ sớm được cập nhật.",
-            "FILTERS": "Bộ lọc ưu đãi",
-            "REPORTS": "Báo cáo hiệu quả",
-            "NOTIFICATIONS": "Thông báo ưu đãi"
+            "LIST_TITLE": "Quản lý các yêu cầu nhận offer từ khách hàng",
+            "SEARCH_PLACEHOLDER": "Tìm theo tên sản phẩm, tên khách, SĐT, email, mã...",
+            "FILTER_STATUS": "Lọc theo trạng thái",
+            "CODE": "Mã yêu cầu",
+            "PRODUCT_NAME": "Tên sản phẩm",
+            "FULL_NAME": "Tên khách hàng",
+            "PHONE": "SĐT",
+            "STATUS": "Trạng thái",
+            "CREATED_AT": "Ngày tạo",
+            "PRODUCT_INFO": "Thông tin sản phẩm",
+            "USER_INFO": "Thông tin người yêu cầu",
+            "PRODUCT_LINK": "Link sản phẩm",
+            "CURRENT_PRICE": "Giá hiện tại",
+            "EXPECTED_PRICE": "Giá mong muốn",
+            "QUANTITY": "Số lượng",
+            "NOTE": "Ghi chú",
+            "ZALO": "Zalo",
+            "EMAIL": "Email",
+            "APPROVE": "Duyệt",
+            "REJECT": "Từ chối",
+            "EXPIRE": "Đánh dấu hết hạn",
+            "APPROVE_CONFIRM": "Bạn có chắc chắn duyệt yêu cầu này không?",
+            "REJECT_CONFIRM": "Bạn có chắc chắn từ chối yêu cầu này không?",
+            "EXPIRE_CONFIRM": "Bạn có chắc chắn đánh dấu yêu cầu này hết hạn không?",
+            "APPROVED_SUCCESS": "Đã duyệt yêu cầu offer thành công",
+            "REJECTED_SUCCESS": "Đã từ chối yêu cầu offer thành công",
+            "EXPIRED_SUCCESS": "Đã đánh dấu hết hạn thành công",
+            "DELETE_CONFIRM": "Bạn có chắc chắn muốn xóa yêu cầu \"{{name}}\"?",
+            "DELETED_SUCCESS": "Đã xóa yêu cầu offer thành công",
+            "RESTORED_SUCCESS": "Khôi phục yêu cầu offer thành công"
+        },
+        "PURCHASE_REQUESTS": {
+            "TITLE": "Quản lý yêu cầu tìm nhà cung cấp",
+            "LIST_TITLE": "Quản lý các yêu cầu tìm nhà cung cấp từ khách hàng",
+            "SEARCH_PLACEHOLDER": "Tìm theo tên sản phẩm, tên khách, SĐT, email, mã...",
+            "FILTER_STATUS": "Lọc theo trạng thái",
+            "CODE": "Mã yêu cầu",
+            "PRODUCT_NAME": "Tên sản phẩm",
+            "FULL_NAME": "Tên khách hàng",
+            "PHONE": "SĐT",
+            "STATUS": "Trạng thái",
+            "CREATED_AT": "Ngày tạo",
+            "PRODUCT_INFO": "Thông tin sản phẩm",
+            "USER_INFO": "Thông tin người yêu cầu",
+            "PRODUCT_CATEGORY": "Danh mục sản phẩm",
+            "QUANTITY": "Số lượng",
+            "UNIT": "Đơn vị",
+            "EXPECTED_PRICE": "Giá mong muốn",
+            "NOTE": "Ghi chú",
+            "ZALO": "Zalo",
+            "EMAIL": "Email",
+            "CONTACT": "Đã liên hệ",
+            "CONTACT_CONFIRM": "Bạn có chắc chắn đánh dấu đã liên hệ với yêu cầu này không?",
+            "CONTACTED_SUCCESS": "Đã đánh dấu đã liên hệ thành công",
+            "COMPLETE": "Hoàn thành",
+            "COMPLETE_CONFIRM": "Bạn có chắc chắn đánh dấu yêu cầu này hoàn thành không?",
+            "COMPLETED_SUCCESS": "Đã đánh dấu hoàn thành thành công"
         },
         "SETTINGS_PAGE": {
             "TITLE": "Cài đặt hệ thống",
@@ -937,7 +1007,8 @@
             "APPROVE": "Duyệt",
             "REJECT": "Từ chối",
             "APPROVED_SUCCESS": "Duyệt bài viết thành công",
-            "REJECTED_SUCCESS": "Từ chối bài viết thành công"
+            "REJECTED_SUCCESS": "Từ chối bài viết thành công",
+            "RESTORED_SUCCESS": "Khôi phục bài viết thành công"
         },
         "CTV": {
             "TITLE": "Quản lý CTV",
@@ -964,7 +1035,10 @@
             "REJECT_CONFIRM": "Bạn có chắc muốn từ chối CTV này?",
             "ACTIVATED_SUCCESS": "Kích hoạt CTV thành công",
             "REJECTED_SUCCESS": "Từ chối CTV thành công",
-            "APPROVED_SUCCESS": "Duyệt CTV thành công"
+            "APPROVED_SUCCESS": "Duyệt CTV thành công",
+            "RESTORED_SUCCESS": "Khôi phục CTV thành công",
+            "DELETE_CONFIRM": "Bạn có chắc muốn xóa CTV \"{{name}}\"?",
+            "DELETED_SUCCESS": "Xóa CTV thành công"
         },
         "PARTNER": {
             "TITLE": "Quản lý Đối tác",

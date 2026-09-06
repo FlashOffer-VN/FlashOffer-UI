@@ -79,14 +79,15 @@
                     {{ 'SOCIAL.IMAGES' | translate }}
                 </span>
                 <div class="options-images">
-                    <span [title]="'SOCIAL.IMAGE_UPLOAD_UNAVAILABLE' | translate">
-                        <button type="button" class="upload-btn" disabled>
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            {{ 'SOCIAL.UPLOAD_IMAGES' | translate }}
-                        </button>
-                    </span>
+                    <button type="button" class="upload-btn" (click)="triggerFileInput()"
+                        (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
+                        (drop)="onDrop($event)" [class.dragging]="isDragging">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>{{ 'SOCIAL.UPLOAD_IMAGES' | translate }}</span>
+                        <small class="upload-hint">{{ 'SOCIAL.DRAG_DROP_HINT' | translate }}</small>
+                    </button>
                     <input id="fileInput" type="file" accept="image/*" multiple
-                        (change)="onFileSelected($event)" disabled style="display: none;">
+                        (change)="onFileSelected($event)" style="display: none;">
 
                     <div class="image-preview-list" *ngIf="imagePreviews.length > 0">
                         <div *ngFor="let img of imagePreviews; let i = index" class="image-preview-item">
