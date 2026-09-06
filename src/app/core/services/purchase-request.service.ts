@@ -59,16 +59,20 @@ export class PurchaseRequestService {
         pageNumber = 1,
         pageSize = 10,
         search = '',
-        status?: PurchaseRequestStatus
+        status?: PurchaseRequestStatus,
+        fromDate?: string,
+        toDate?: string
     ): Observable<PagedResponse<PurchaseRequest>> {
         const params: any = {
-            pageNumber,
+            page: pageNumber, // API DTO dùng "Page"
             pageSize,
             search: search || ''
         };
         if (status !== undefined && status !== null) {
             params.status = status;
         }
+        if (fromDate) params.fromDate = fromDate;
+        if (toDate) params.toDate = toDate;
         return this.apiService.get<PagedResponse<PurchaseRequest>>(this.endpoint, params);
     }
 

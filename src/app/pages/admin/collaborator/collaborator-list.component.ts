@@ -14,6 +14,7 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.component';
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
+import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 
 @Component({
     selector: 'app-admin-collaborator-list',
@@ -28,7 +29,8 @@ import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.
         LoadingComponent,
         PaginationComponent,
         BadgeComponent,
-        StatusTabsComponent
+        StatusTabsComponent,
+        NgxFilterDaterangeComponent
     ],
     templateUrl: './collaborator-list.component.html',
     styleUrls: ['./collaborator-list.component.css']
@@ -42,6 +44,8 @@ export class AdminCollaboratorListComponent implements OnInit {
 
     // Search
     searchText = '';
+    fromDate: string | null = null;
+    toDate: string | null = null;
 
     // Tab lọc status
     activeTab = 'all';
@@ -82,7 +86,13 @@ export class AdminCollaboratorListComponent implements OnInit {
         const isDeleted = this.activeTab === 'deleted';
 
         if (isDeleted) {
-            this._appService.ctvService.getDeletedData(this.pageNumber, this.pageSize, this.searchText)
+            this._appService.ctvService.getDeletedData(
+                this.pageNumber,
+                this.pageSize,
+                this.searchText,
+                this.fromDate ?? undefined,
+                this.toDate ?? undefined
+            )
                 .subscribe({
                     next: (response: PagedResponse<CtvRegistration>) => {
                         this.applyPagedResponse(response);
@@ -105,7 +115,14 @@ export class AdminCollaboratorListComponent implements OnInit {
             }
         }
 
-        this._appService.ctvService.getData(this.pageNumber, this.pageSize, this.searchText, status)
+        this._appService.ctvService.getData(
+                this.pageNumber,
+                this.pageSize,
+                this.searchText,
+                status,
+                this.fromDate ?? undefined,
+                this.toDate ?? undefined
+            )
             .subscribe({
                 next: (response: PagedResponse<CtvRegistration>) => {
                     this.applyPagedResponse(response);                    this.isLoading = false;
@@ -128,6 +145,13 @@ export class AdminCollaboratorListComponent implements OnInit {
     }
 
     onSearch(): void {
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    onRangeChange(range: { from: string | null; to: string | null }): void {
+        this.fromDate = range.from;
+        this.toDate = range.to;
         this.pageNumber = 1;
         this.loadData();
     }

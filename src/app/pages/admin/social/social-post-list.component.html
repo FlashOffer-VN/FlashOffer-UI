@@ -6,6 +6,24 @@
 
     <app-status-tabs [items]="tabs" [active]="activeStatus" (change)="onTabChange($event)"></app-status-tabs>
 
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+        <div class="flex flex-col sm:flex-row gap-3 items-end">
+            <div class="flex-1 min-w-0">
+                <app-input [(ngModel)]="searchText" [placeholder]="'ADMIN.SOCIAL.SEARCH_PLACEHOLDER' | translate"
+                    (keyup.enter)="onSearch()" class="w-full">
+                </app-input>
+            </div>
+            <ngx-filter-daterange [from]="fromDate" [to]="toDate" (rangeChange)="onRangeChange($event)">
+            </ngx-filter-daterange>
+            <div class="flex-shrink-0">
+                <app-button variant="primary" (click)="onSearch()">
+                    {{ 'COMMON.BUTTON.SEARCH' | translate }}
+                </app-button>
+            </div>
+        </div>
+    </div>
+
     <div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
         <div class="overflow-x-auto">
             <table class="w-full">
@@ -27,7 +45,10 @@
                     </tr>
                     <tr *ngFor="let post of posts; let i = index">
                         <td class="px-4 py-3 text-sm text-gray-500">{{ (pageNumber - 1) * pageSize + i + 1 }}</td>
-                        <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ getAuthorLabel(post.author) }}</td>
+                        <td class="px-4 py-3">
+                            <div class="text-sm font-medium text-gray-900">{{ post.author.fullName }}</div>
+                            <div class="text-xs text-gray-400">{{ getAuthorCode(post.author) }}</div>
+                        </td>
                         <td class="max-w-md px-4 py-3 text-sm text-gray-600">
                             <button type="button" class="post-preview text-left" (click)="openPostDetail(post)">
                                 <div class="truncate font-medium">{{ post.title || '--' }}</div>
@@ -82,7 +103,7 @@
         <header class="post-modal-header">
             <div>
                 <h2>{{ selectedPost.title || ('ADMIN.SOCIAL.UNTITLED' | translate) }}</h2>
-                <p>{{ getAuthorLabel(selectedPost.author) }} · {{ formatDate(selectedPost.createdAt) }}</p>
+                <p>{{ selectedPost.author.fullName }} ({{ getAuthorCode(selectedPost.author) }}) · {{ formatDate(selectedPost.createdAt) }}</p>
             </div>
             <button type="button" class="close-button" (click)="closePostDetail()" aria-label="Close">
                 <i class="fa-solid fa-xmark"></i>

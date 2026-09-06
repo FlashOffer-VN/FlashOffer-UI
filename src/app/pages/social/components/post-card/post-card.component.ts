@@ -64,12 +64,14 @@ export class PostCardComponent {
     // ===== 👆 END THÊM METHOD =====
 
     /**
-     * Hiển thị "UserCode - username" (fallback fullName nếu username rỗng).
+     * Dòng nhỏ mờ dưới tên: "UserCode - username" (fallback username/fullName).
      */
-    getAuthorLabel(author: any): string {
+    getAuthorCode(author: any): string {
         if (!author) return '';
-        const name = author.username || author.fullName || '';
-        return author.userCode ? `${author.userCode} - ${name}` : name;
+        if (author.userCode) {
+            return `${author.userCode} - ${author.username || author.fullName || ''}`;
+        }
+        return author.username || author.fullName || '';
     }
 
     // Type methods

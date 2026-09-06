@@ -19,7 +19,9 @@ export class CtvService {
         pageNumber = 1,
         pageSize = 10,
         search = '',
-        status?: CTVRegistrationStatus
+        status?: CTVRegistrationStatus,
+        fromDate?: string,
+        toDate?: string
     ): Observable<PagedResponse<CtvRegistration>> {
         const params: any = {
             pageNumber,
@@ -29,6 +31,8 @@ export class CtvService {
         if (status !== undefined) {
             params.status = status;
         }
+        if (fromDate) params.fromDate = fromDate;
+        if (toDate) params.toDate = toDate;
         return this._apiService.get<PagedResponse<CtvRegistration>>(
             this._baseUrl,
             params
@@ -59,8 +63,10 @@ export class CtvService {
      * Danh sách CTV đã xóa (Admin)
      * GET /api/v1/Ctv/deleted?pageNumber=&pageSize=&search=
      */
-    getDeletedData(pageNumber = 1, pageSize = 10, search = ''): Observable<PagedResponse<CtvRegistration>> {
+    getDeletedData(pageNumber = 1, pageSize = 10, search = '', fromDate?: string, toDate?: string): Observable<PagedResponse<CtvRegistration>> {
         const params: any = { pageNumber, pageSize, search };
+        if (fromDate) params.fromDate = fromDate;
+        if (toDate) params.toDate = toDate;
         return this._apiService.get<PagedResponse<CtvRegistration>>(
             `${this._baseUrl}/deleted`,
             params

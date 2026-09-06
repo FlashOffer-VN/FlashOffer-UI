@@ -53,9 +53,19 @@ export class SocialService {
     /**
      * Admin: danh sách bài viết theo trạng thái (approved/pending/deleted/all).
      */
-    getAdminPosts(status: string | null, pageNumber = 1, pageSize = 10): Observable<PagedResponse<SocialPost>> {
+    getAdminPosts(
+        status: string | null,
+        pageNumber = 1,
+        pageSize = 10,
+        search = '',
+        fromDate?: string,
+        toDate?: string
+    ): Observable<PagedResponse<SocialPost>> {
         const params: any = { pageNumber, pageSize };
         if (status) params.status = status;
+        if (search) params.search = search;
+        if (fromDate) params.fromDate = fromDate;
+        if (toDate) params.toDate = toDate;
         return this._apiService.get<PagedResponse<SocialPost>>(
             `${this._baseSocialUrl}/posts/admin`,
             params

@@ -14,6 +14,7 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.component';
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
+import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 
 @Component({
     selector: 'app-admin-offers',
@@ -28,7 +29,8 @@ import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.
         LoadingComponent,
         PaginationComponent,
         BadgeComponent,
-        StatusTabsComponent
+        StatusTabsComponent,
+        NgxFilterDaterangeComponent
     ],
     templateUrl: './admin-offers.component.html',
     styleUrls: ['./admin-offers.component.css']
@@ -40,6 +42,8 @@ export class AdminOffersComponent implements OnInit {
     isRestoring = false;
 
     searchText = '';
+    fromDate: string | null = null;
+    toDate: string | null = null;
 
     activeTab = 'all';
     tabs: { key: string; label: string }[] = [];
@@ -97,7 +101,9 @@ export class AdminOffersComponent implements OnInit {
                 this.searchText,
                 status,
                 undefined,
-                isDeleted ? true : undefined
+                isDeleted ? true : undefined,
+                this.fromDate ?? undefined,
+                this.toDate ?? undefined
             )
             .subscribe({
                 next: (response: PagedResponse<OfferRequest>) => {
@@ -118,6 +124,13 @@ export class AdminOffersComponent implements OnInit {
     }
 
     onSearch(): void {
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    onRangeChange(range: { from: string | null; to: string | null }): void {
+        this.fromDate = range.from;
+        this.toDate = range.to;
         this.pageNumber = 1;
         this.loadData();
     }

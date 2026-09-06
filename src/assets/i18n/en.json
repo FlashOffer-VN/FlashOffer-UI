@@ -917,7 +917,10 @@
             "INVALID_DATA": "Invalid data",
             "SYSTEM_ERROR": "System is experiencing issues, please try again later",
             "CONNECTION_ERROR": "Cannot connect to server"
-        }
+        },
+        "FROM_DATE": "From",
+        "TO_DATE": "To",
+        "CLEAR": "Clear"
     },
     "PAGINATION": {
         "SHOWING": "Showing",
@@ -937,6 +940,7 @@
             "PARTNER": "Partner",
             "SETTINGS": "Settings",
             "BACK_TO_SITE": "Back to site",
+            "CRM": "CRM",
             "LOGOUT": "Logout"
         },
         "DASHBOARD": {
@@ -965,6 +969,30 @@
                 "CTV_REGISTRATION": "collaborator",
                 "EMPTY": "No recent activity"
             }
+        },
+        "CRM": {
+            "TITLE": "CRM Analytics",
+            "SUBTITLE": "Overview of offers, purchase requests, CTV registrations, partners and social posts",
+            "REFRESH": "Refresh",
+            "PENDING": "pending",
+            "UNAVAILABLE": "CRM data is unavailable right now",
+            "LAST_UPDATED": "Last updated",
+            "TRENDS_TITLE": "Activity trends",
+            "TRENDS_EMPTY": "No trend data",
+            "DISTRIBUTION_TITLE": "Status distribution",
+            "DISTRIBUTION_OFFERS": "Offers",
+            "DISTRIBUTION_PURCHASES": "Purchase requests",
+            "DISTRIBUTION_CTV": "CTV registrations",
+            "DISTRIBUTION_PARTNERS": "Partners",
+            "CATEGORIES_TITLE": "Top product categories",
+            "CATEGORIES_EMPTY": "No category data",
+            "CATEGORIES_SERIES": "Requests",
+            "SUMMARY_OFFERS": "Offer requests",
+            "SUMMARY_PURCHASES": "Purchase requests",
+            "SUMMARY_GROUP_BUYING": "Group buying",
+            "SUMMARY_CTV": "CTV registrations",
+            "SUMMARY_PARTNERS": "Partners",
+            "SUMMARY_SOCIAL": "Social posts"
         },
         "COMING_SOON": "Coming soon",
         "OFFERS": {
@@ -1040,6 +1068,7 @@
         "SOCIAL": {
             "TITLE": "Moderate community posts",
             "LIST_TITLE": "Posts pending approval",
+            "SEARCH_PLACEHOLDER": "Search by title or author name...",
             "AUTHOR": "Author",
             "CONTENT": "Content",
             "CREATED_AT": "Created at",

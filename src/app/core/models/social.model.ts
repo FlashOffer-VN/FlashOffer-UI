@@ -52,6 +52,7 @@ export interface SocialPost {
     isLiked: boolean;
     isSaved: boolean;
     isPinned?: boolean;         // ✅ Admin ghim lên đầu feed
+    isApproved?: boolean;       // ✅ Trạng thái duyệt (admin)
     createdAt: string;
     isExpanded?: boolean;     // ✅ UI only
 

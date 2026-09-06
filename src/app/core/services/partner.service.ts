@@ -32,7 +32,9 @@ export class PartnerService {
         pageNumber = 1,
         pageSize = 10,
         search = '',
-        status?: PartnerStatus
+        status?: PartnerStatus,
+        fromDate?: string,
+        toDate?: string
     ): Observable<PagedResponse<Partner>> {
         const params: any = {
             pageNumber,
@@ -42,6 +44,8 @@ export class PartnerService {
         if (status !== undefined && status !== null) {
             params.status = status;
         }
+        if (fromDate) params.fromDate = fromDate;
+        if (toDate) params.toDate = toDate;
         return this._apiService.get<PagedResponse<Partner>>(this._baseUrl, params);
     }
 

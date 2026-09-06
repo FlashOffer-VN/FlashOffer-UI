@@ -92,11 +92,13 @@ export class PostDetailModalComponent implements OnInit {
     });
   }
 
-  // Hiển thị "UserCode - username" (fallback fullName nếu username rỗng)
-  getAuthorLabel(author: any): string {
+  // Dòng nhỏ mờ: "UserCode - username" (fallback username/fullName)
+  getAuthorCode(author: any): string {
     if (!author) return '';
-    const name = author.username || author.fullName || '';
-    return author.userCode ? `${author.userCode} - ${name}` : name;
+    if (author.userCode) {
+      return `${author.userCode} - ${author.username || author.fullName || ''}`;
+    }
+    return author.username || author.fullName || '';
   }
 
   // ✅ Đã sửa: dùng enum

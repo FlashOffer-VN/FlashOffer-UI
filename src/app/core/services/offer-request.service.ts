@@ -46,10 +46,12 @@ export class OfferRequestService {
         search = '',
         status?: OfferStatus,
         isOfferSent?: boolean,
-        includeDeleted?: boolean
+        includeDeleted?: boolean,
+        fromDate?: string,
+        toDate?: string
     ): Observable<OfferRequestPagedResponse> {
         const params: any = {
-            pageNumber,
+            page: pageNumber, // API DTO dùng property "Page" (không phải "pageNumber")
             pageSize,
             search: search || ''
         };
@@ -62,6 +64,8 @@ export class OfferRequestService {
         if (includeDeleted !== undefined && includeDeleted !== null) {
             params.includeDeleted = includeDeleted;
         }
+        if (fromDate) params.fromDate = fromDate;
+        if (toDate) params.toDate = toDate;
         return this.apiService.get<OfferRequestPagedResponse>(this.endpoint, params);
     }
 

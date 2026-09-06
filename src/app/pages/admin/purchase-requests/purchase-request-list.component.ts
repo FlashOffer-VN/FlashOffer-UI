@@ -14,6 +14,7 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.component';
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
+import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 
 @Component({
     selector: 'app-admin-purchase-request-list',
@@ -28,7 +29,8 @@ import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.
         LoadingComponent,
         PaginationComponent,
         BadgeComponent,
-        StatusTabsComponent
+        StatusTabsComponent,
+        NgxFilterDaterangeComponent
     ],
     templateUrl: './purchase-request-list.component.html',
     styleUrls: ['./purchase-request-list.component.css']
@@ -40,6 +42,8 @@ export class AdminPurchaseRequestListComponent implements OnInit {
 
     // Search
     searchText = '';
+    fromDate: string | null = null;
+    toDate: string | null = null;
 
     // Tab lọc status
     activeTab = 'all';
@@ -92,7 +96,9 @@ export class AdminPurchaseRequestListComponent implements OnInit {
                 this.pageNumber,
                 this.pageSize,
                 this.searchText,
-                status
+                status,
+                this.fromDate ?? undefined,
+                this.toDate ?? undefined
             )
             .subscribe({
                 next: (response: PagedResponse<PurchaseRequest>) => {
@@ -113,6 +119,13 @@ export class AdminPurchaseRequestListComponent implements OnInit {
     }
 
     onSearch(): void {
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    onRangeChange(range: { from: string | null; to: string | null }): void {
+        this.fromDate = range.from;
+        this.toDate = range.to;
         this.pageNumber = 1;
         this.loadData();
     }

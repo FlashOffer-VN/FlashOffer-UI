@@ -4,9 +4,10 @@
             <img [src]="post.author.avatar | avatar" [alt]="post.author.fullName" class="author-avatar">
             <div class="author-info">
                 <div class="author-name">
-                    {{ getAuthorLabel(post.author) }}
+                    {{ post.author.fullName }}
                     <i *ngIf="post.author.isVerified" class="fas fa-check-circle verified"></i>
                 </div>
+                <div class="author-code">{{ getAuthorCode(post.author) }}</div>
                 <div class="author-role">{{ post.author.role }}</div>
                 <div class="post-meta">
                     <span *ngIf="post.isPinned" class="pinned-badge">

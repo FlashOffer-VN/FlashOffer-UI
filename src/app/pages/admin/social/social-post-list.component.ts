@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { SocialPost } from '@core/models/social.model';
 import { PagedResponse } from '@core/models/paged-response.model';
 import { ButtonComponent } from '@shared/components/button/button.component';
+import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
+import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 
 @Component({
     selector: 'app-admin-social-post-list',
@@ -16,11 +19,14 @@ import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.
     imports: [
         CommonModule,
         RouterModule,
+        FormsModule,
         TranslateModule,
         ButtonComponent,
+        InputComponent,
         LoadingComponent,
         PaginationComponent,
-        StatusTabsComponent
+        StatusTabsComponent,
+        NgxFilterDaterangeComponent
     ],
     templateUrl: './social-post-list.component.html',
     styleUrls: ['./social-post-list.component.css']
@@ -36,6 +42,11 @@ export class AdminSocialPostListComponent implements OnInit {
     hasPreviousPage = false;
     hasNextPage = false;
     selectedPost: SocialPost | null = null;
+
+    // Search + date range
+    searchText = '';
+    fromDate: string | null = null;
+    toDate: string | null = null;
 
     // Tab lọc status (All / Pending / Approved / Deleted)
     activeStatus = 'all';
@@ -65,7 +76,14 @@ export class AdminSocialPostListComponent implements OnInit {
 
     loadPosts(): void {
         this.isLoading = true;
-        this.appService.socialService.getAdminPosts(this.activeStatus, this.pageNumber, this.pageSize).subscribe({
+        this.appService.socialService.getAdminPosts(
+            this.activeStatus,
+            this.pageNumber,
+            this.pageSize,
+            this.searchText,
+            this.fromDate ?? undefined,
+            this.toDate ?? undefined
+        ).subscribe({
             next: (response: PagedResponse<SocialPost>) => {
                 this.posts = response.data;
                 this.pageNumber = response.pageNumber;
@@ -137,12 +155,14 @@ export class AdminSocialPostListComponent implements OnInit {
     }
 
     /**
-     * Hiển thị "UserCode - username" (fallback fullName nếu username rỗng).
+     * Dòng nhỏ mờ dưới tên: "UserCode - username" (fallback username/fullName).
      */
-    getAuthorLabel(author: any): string {
+    getAuthorCode(author: any): string {
         if (!author) return '';
-        const name = author.username || author.fullName || '';
-        return author.userCode ? `${author.userCode} - ${name}` : name;
+        if (author.userCode) {
+            return `${author.userCode} - ${author.username || author.fullName || ''}`;
+        }
+        return author.username || author.fullName || '';
     }
 
     getContentPreview(content: string): string {
@@ -158,6 +178,18 @@ export class AdminSocialPostListComponent implements OnInit {
 
     onPageChange(page: number): void {
         this.pageNumber = page;
+        this.loadPosts();
+    }
+
+    onSearch(): void {
+        this.pageNumber = 1;
+        this.loadPosts();
+    }
+
+    onRangeChange(range: { from: string | null; to: string | null }): void {
+        this.fromDate = range.from;
+        this.toDate = range.to;
+        this.pageNumber = 1;
         this.loadPosts();
     }
 

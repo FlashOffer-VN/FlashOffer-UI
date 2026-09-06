@@ -76,6 +76,7 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
             { path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent) },
+            { path: 'admin-crm', loadComponent: () => import('./pages/admin/crm/admin-crm.component').then(m => m.AdminCrmComponent) },
             { path: 'offers', loadComponent: () => import('./pages/admin/offers/admin-offers.component').then(m => m.AdminOffersComponent) },
             { path: 'offers/:id', loadComponent: () => import('./pages/admin/offers/detail/offer-detail.component').then(m => m.AdminOfferDetailComponent) },
             // Purchase Request Management

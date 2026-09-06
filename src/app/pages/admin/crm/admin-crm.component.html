@@ -1,0 +1,94 @@
+<div class="dashboard-page crm-page">
+    <div class="dashboard-header">
+        <div>
+            <h1>{{ 'ADMIN.CRM.TITLE' | translate }}</h1>
+            <p>{{ 'ADMIN.CRM.SUBTITLE' | translate }}</p>
+        </div>
+        <button type="button" class="refresh-button" (click)="loadStats()" [disabled]="isLoading">
+            <i class="fa-solid fa-rotate" [class.fa-spin]="isLoading"></i>
+            {{ 'ADMIN.CRM.REFRESH' | translate }}
+        </button>
+    </div>
+
+    <div *ngIf="hasError" class="dashboard-error">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        {{ 'ADMIN.CRM.UNAVAILABLE' | translate }}
+    </div>
+
+    <ng-container *ngIf="!hasError">
+        <div class="stats-grid">
+            <div class="stat-card" *ngFor="let card of cards" [class]="'stat-card stat-card-' + card.color">
+                <div class="stat-card-top">
+                    <div class="stat-icon"><i [class]="card.icon"></i></div>
+                    <span class="stat-pending-badge" *ngIf="card.showPending">{{ card.pending }} {{ 'ADMIN.CRM.PENDING' | translate }}</span>
+                </div>
+                <div class="stat-label">{{ card.label | translate }}</div>
+                <div class="stat-value">{{ isLoading ? '-' : (card.total | number) }}</div>
+            </div>
+        </div>
+
+        <section class="dashboard-section">
+            <h2 class="section-title">{{ 'ADMIN.CRM.TRENDS_TITLE' | translate }}</h2>
+            <div class="chart-card">
+                <apx-chart
+                    *ngIf="isBrowser() && trendOptions"
+                    [chart]="trendOptions.chart"
+                    [series]="trendOptions.series"
+                    [colors]="trendOptions.colors"
+                    [stroke]="trendOptions.stroke"
+                    [fill]="trendOptions.fill"
+                    [grid]="trendOptions.grid"
+                    [dataLabels]="trendOptions.dataLabels"
+                    [xaxis]="trendOptions.xaxis"
+                    [yaxis]="trendOptions.yaxis"
+                    [legend]="trendOptions.legend"
+                    [tooltip]="trendOptions.tooltip"
+                    [noData]="trendOptions.noData"
+                ></apx-chart>
+            </div>
+        </section>
+
+        <section class="dashboard-section" *ngIf="distributionGroups.length">
+            <h2 class="section-title">{{ 'ADMIN.CRM.DISTRIBUTION_TITLE' | translate }}</h2>
+            <div class="donut-grid">
+                <div class="chart-card donut-card" *ngFor="let group of distributionGroups">
+                    <h3 class="chart-card-title">{{ group.titleKey | translate }}</h3>
+                    <apx-chart
+                        *ngIf="isBrowser()"
+                        [chart]="group.options.chart"
+                        [series]="group.options.series"
+                        [labels]="group.options.labels"
+                        [colors]="group.options.colors"
+                        [legend]="group.options.legend"
+                        [dataLabels]="group.options.dataLabels"
+                        [plotOptions]="group.options.plotOptions"
+                        [responsive]="group.options.responsive"
+                        [noData]="group.options.noData"
+                    ></apx-chart>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-section" *ngIf="categoryOptions">
+            <h2 class="section-title">{{ 'ADMIN.CRM.CATEGORIES_TITLE' | translate }}</h2>
+            <div class="chart-card">
+                <apx-chart
+                    *ngIf="isBrowser()"
+                    [chart]="categoryOptions.chart"
+                    [series]="categoryOptions.series"
+                    [colors]="categoryOptions.colors"
+                    [plotOptions]="categoryOptions.plotOptions"
+                    [dataLabels]="categoryOptions.dataLabels"
+                    [xaxis]="categoryOptions.xaxis"
+                    [grid]="categoryOptions.grid"
+                    [legend]="categoryOptions.legend"
+                    [noData]="categoryOptions.noData"
+                ></apx-chart>
+            </div>
+        </section>
+    </ng-container>
+
+    <div class="dashboard-footer" *ngIf="lastUpdated">
+        {{ 'ADMIN.CRM.LAST_UPDATED' | translate }}: {{ lastUpdated | date:'dd/MM/yyyy HH:mm:ss' }}
+    </div>
+</div>
