@@ -17,13 +17,12 @@ export interface Step {
 })
 export class PartnerStepsComponent {
   @Input() currentStep = 1;
-  @Input() totalSteps = 4;
+  @Input() totalSteps = 3;
 
   steps: Step[] = [
     { label: 'PARTNER.STEP_1_TITLE', icon: 'fa-regular fa-user' },
     { label: 'PARTNER.STEP_2_TITLE', icon: 'fa-regular fa-building' },
-    { label: 'PARTNER.STEP_3_TITLE', icon: 'fa-regular fa-chart-bar' },
-    { label: 'PARTNER.STEP_4_TITLE', icon: 'fa-regular fa-check-circle' }
+    { label: 'PARTNER.STEP_3_TITLE', icon: 'fa-regular fa-check-circle' }
   ];
 
   isStepActive(step: number): boolean {

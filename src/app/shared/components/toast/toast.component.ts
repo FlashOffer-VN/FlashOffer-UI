@@ -277,7 +277,7 @@ export class ToastComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.duration > 0) {
-      this.startTimer();
+      this.startTimer?.();
     }
   }
 

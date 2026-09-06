@@ -46,6 +46,19 @@
     font-weight: 600;
 }
 
+.summary-product {
+    font-size: 0.875rem;
+    color: #1F2937;
+    font-weight: 600;
+    padding: 0.125rem 0;
+}
+
+.summary-product::before {
+    content: "•";
+    color: #7C3AED;
+    margin-right: 0.5rem;
+}
+
 @media (max-width: 768px) {
     .summary-grid {
         grid-template-columns: 1fr;

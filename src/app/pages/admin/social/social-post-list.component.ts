@@ -146,6 +146,30 @@ export class AdminSocialPostListComponent implements OnInit {
         });
     }
 
+    /**
+     * Xóa mềm bài viết (Admin) — áp dụng cho cả bài đã duyệt lẫn chưa duyệt.
+     */
+    delete(post: SocialPost): void {
+        const name = post.title || post.author?.fullName || this.appService.trans('ADMIN.SOCIAL.UNTITLED');
+        this.appService.confirmDelete(
+            this.appService.trans('ADMIN.SOCIAL.DELETE_CONFIRM', { name })
+        ).then(confirmed => {
+            if (!confirmed) return;
+            this.isActionLoading = true;
+            this.appService.socialService.deletePost(post.id).subscribe({
+                next: () => {
+                    this.isActionLoading = false;
+                    this.appService.showSuccess(this.appService.trans('ADMIN.SOCIAL.DELETED_SUCCESS'));
+                    this.loadPosts();
+                },
+                error: () => {
+                    this.isActionLoading = false;
+                    this.appService.showError(this.appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+                }
+            });
+        });
+    }
+
     openPostDetail(post: SocialPost): void {
         this.selectedPost = post;
     }

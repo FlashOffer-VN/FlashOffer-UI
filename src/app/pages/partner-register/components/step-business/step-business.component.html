@@ -14,23 +14,13 @@
             }
         </div>
 
-        <!-- Company Tax -->
+        <!-- Business Field (lĩnh vực hoạt động — quản lý tập trung) -->
         <div class="form-group">
-            <app-input formControlName="companyTax" [label]="'PARTNER.COMPANY_TAX' | translate"
-                [placeholder]="'PARTNER.COMPANY_TAX_PLACEHOLDER' | translate" [id]="'companyTax'">
-            </app-input>
-            @if (isFieldInvalid('companyTax')) {
-            <span class="error-text">{{ getErrorMessage('companyTax') }}</span>
-            }
-        </div>
-
-        <!-- Business Type -->
-        <div class="form-group">
-            <app-ng-select-wrapper formControlName="businessType" [items]="businessTypes"
-                [label]="'PARTNER.BUSINESS_TYPE' | translate"
-                [placeholder]="'PARTNER.BUSINESS_TYPE_PLACEHOLDER' | translate" [required]="true"
-                [primaryColor]="'#7C3AED'" [isInvalid]="isFieldInvalid('businessType')"
-                [errorMessage]="getErrorMessage('businessType')" [primaryColor]="'#7C3AED'" [primaryDark]="'#5B21B6'">
+            <app-ng-select-wrapper formControlName="businessFieldId" [items]="businessFields"
+                [label]="'PARTNER.BUSINESS_FIELD' | translate"
+                [placeholder]="'PARTNER.BUSINESS_FIELD_PLACEHOLDER' | translate" [required]="true"
+                [primaryColor]="'#7C3AED'" [isInvalid]="isFieldInvalid('businessFieldId')"
+                [errorMessage]="getErrorMessage('businessFieldId')" [primaryColor]="'#7C3AED'" [primaryDark]="'#5B21B6'">
             </app-ng-select-wrapper>
         </div>
 
@@ -53,28 +43,47 @@
             <span class="error-text">{{ getErrorMessage('companyAddress') }}</span>
             }
         </div>
+    </div>
 
-        <!-- Company Website -->
-        <div class="form-group">
-            <app-input formControlName="companyWebsite" [label]="'PARTNER.COMPANY_WEBSITE' | translate"
-                [placeholder]="'PARTNER.COMPANY_WEBSITE_PLACEHOLDER' | translate" [id]="'companyWebsite'">
-            </app-input>
-            @if (isFieldInvalid('companyWebsite')) {
-            <span class="error-text">{{ getErrorMessage('companyWebsite') }}</span>
-            }
-        </div>
+    <!-- Products & Services -->
+    <div class="products-section" [formGroup]="formGroup">
+        <h3 class="section-title">{{ 'PARTNER.PRODUCTS_TITLE' | translate }}</h3>
 
-        <!-- Referral Code -->
-        <div class="form-group">
-            <app-input formControlName="referralCode" [label]="'PARTNER.REFERRAL_CODE' | translate"
-                [placeholder]="'PARTNER.REFERRAL_CODE_PLACEHOLDER' | translate" [id]="'referralCode'">
-            </app-input>
-            @if (formGroup.get('referralCode')?.value && !isReferralValid) {
-            <span class="error-text">{{ 'PARTNER.REFERRAL_CODE_INVALID' | translate }}</span>
-            }
-            @if (isReferralValid && formGroup.get('referralCode')?.value) {
-            <span class="success-text">{{ 'PARTNER.REFERRAL_CODE_VALID' | translate }}</span>
-            }
+        @for (product of products.controls; track $index) {
+        <div class="product-item" [formGroup]="$any(product)">
+            <div class="product-header">
+                <h4>{{ 'PARTNER.PRODUCT' | translate }} #{{ $index + 1 }}</h4>
+                @if (products.length > 1) {
+                <button type="button" class="btn-remove" (click)="removeProduct($index)">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+                }
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <app-input formControlName="name" [label]="'PARTNER.PRODUCT_NAME' | translate"
+                        [placeholder]="'PARTNER.PRODUCT_NAME_PLACEHOLDER' | translate"
+                        [id]="'product_name_' + $index">
+                    </app-input>
+                    @if (isProductInvalid($any(product), 'name')) {
+                    <span class="error-text">{{ getProductErrorMessage($any(product), 'name') }}</span>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <app-input formControlName="description" [label]="'PARTNER.PRODUCT_DESC' | translate"
+                        [placeholder]="'PARTNER.PRODUCT_DESC_PLACEHOLDER' | translate"
+                        [id]="'product_desc_' + $index">
+                    </app-input>
+                </div>
+            </div>
         </div>
+        }
+
+        <button type="button" class="btn-add-product" (click)="addProduct()">
+            <i class="fa-solid fa-plus"></i>
+            {{ 'PARTNER.ADD_PRODUCT' | translate }}
+        </button>
     </div>
 </div>

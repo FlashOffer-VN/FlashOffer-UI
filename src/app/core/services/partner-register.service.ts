@@ -26,6 +26,14 @@ export class PartnerRegisterService {
         return this.api.get<{ success: boolean; message: string }>(this.endpoint + `/check-referral/${code}`);
     }
 
+    /**
+     * Lấy danh sách lĩnh vực hoạt động đang hoạt động (BusinessField — quản lý tập trung).
+     * GET /api/v1/business-fields/active → [{ id, name }]
+     */
+    getBusinessFields(): Observable<any[]> {
+        return this.api.get<any[]>('business-fields/active');
+    }
+
     getBusinessTypes(): any[] {
         return [
             { value: 1, label: this.translate.instant('PARTNER.BUSINESS_TYPE_SME') },

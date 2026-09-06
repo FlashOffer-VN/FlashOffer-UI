@@ -17,17 +17,19 @@
             <span class="summary-label">{{ 'PARTNER.POSITION' | translate }}</span>
             <span class="summary-value">{{ formData.position || '---' }}</span>
         </div>
+        @if (formData.referralCode) {
+        <div class="summary-item">
+            <span class="summary-label">{{ 'PARTNER.REFERRAL_CODE' | translate }}</span>
+            <span class="summary-value">{{ formData.referralCode }}</span>
+        </div>
+        }
         <div class="summary-item">
             <span class="summary-label">{{ 'PARTNER.COMPANY_NAME' | translate }}</span>
             <span class="summary-value">{{ formData.companyName || '---' }}</span>
         </div>
         <div class="summary-item">
-            <span class="summary-label">{{ 'PARTNER.COMPANY_TAX' | translate }}</span>
-            <span class="summary-value">{{ formData.companyTax || '---' }}</span>
-        </div>
-        <div class="summary-item">
-            <span class="summary-label">{{ 'PARTNER.BUSINESS_TYPE' | translate }}</span>
-            <span class="summary-value">{{ getBusinessTypeLabel(formData.businessType) }}</span>
+            <span class="summary-label">{{ 'PARTNER.BUSINESS_FIELD' | translate }}</span>
+            <span class="summary-value">{{ formData.businessFieldName || '---' }}</span>
         </div>
         <div class="summary-item">
             <span class="summary-label">{{ 'PARTNER.COMPANY_SIZE' | translate }}</span>
@@ -37,29 +39,14 @@
             <span class="summary-label">{{ 'PARTNER.COMPANY_ADDRESS' | translate }}</span>
             <span class="summary-value">{{ formData.companyAddress || '---' }}</span>
         </div>
-        @if (formData.companyWebsite) {
-        <div class="summary-item">
-            <span class="summary-label">{{ 'PARTNER.COMPANY_WEBSITE' | translate }}</span>
-            <span class="summary-value">{{ formData.companyWebsite }}</span>
-        </div>
-        }
         @if (formData.products?.length) {
         <div class="summary-item full-width">
             <span class="summary-label">{{ 'PARTNER.PRODUCTS_TITLE' | translate }}</span>
-            <span class="summary-value">{{ 'PARTNER.SUMMARY_PRODUCT' | translate:{ count: formData.products.length }
-                }}</span>
-        </div>
-        }
-        @if (formData.commissionRate) {
-        <div class="summary-item">
-            <span class="summary-label">{{ 'PARTNER.COMMISSION_RATE' | translate }}</span>
-            <span class="summary-value">{{ formData.commissionRate }}%</span>
-        </div>
-        }
-        @if (formData.referralCode) {
-        <div class="summary-item">
-            <span class="summary-label">{{ 'PARTNER.REFERRAL_CODE' | translate }}</span>
-            <span class="summary-value">{{ formData.referralCode }}</span>
+            <span class="summary-value">
+                @for (product of formData.products; track $index) {
+                <div class="summary-product">{{ product.name || '---' }}</div>
+                }
+            </span>
         </div>
         }
     </div>

@@ -47,6 +47,13 @@
     animation: shake 0.3s ease;
 }
 
+.success-text {
+    font-size: 0.75rem;
+    color: #10B981;
+    margin-top: 0.25rem;
+    display: block;
+}
+
 @keyframes shake {
 
     0%,

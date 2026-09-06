@@ -1,24 +1,18 @@
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <!-- Step 1 -->
     @if (currentStep === 1) {
-    <app-step-personal [formGroup]="registerForm"></app-step-personal>
+    <app-step-personal [formGroup]="registerForm" [isReferralValid]="isReferralValid"></app-step-personal>
     }
 
     <!-- Step 2 -->
     @if (currentStep === 2) {
-    <app-step-business [formGroup]="registerForm" [isReferralValid]="isReferralValid">
+    <app-step-business [formGroup]="registerForm" [businessFields]="businessFields"
+        (addProductEvent)="addProduct()" (removeProductEvent)="removeProduct($event)">
     </app-step-business>
     }
 
     <!-- Step 3 -->
     @if (currentStep === 3) {
-    <app-step-sales [formGroup]="registerForm" (addProductEvent)="addProduct()"
-        (removeProductEvent)="removeProduct($event)">
-    </app-step-sales>
-    }
-
-    <!-- Step 4 -->
-    @if (currentStep === 4) {
     <app-step-confirmation [formGroup]="registerForm"></app-step-confirmation>
     }
 

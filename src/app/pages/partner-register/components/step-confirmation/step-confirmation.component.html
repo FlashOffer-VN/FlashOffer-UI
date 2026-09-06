@@ -1,7 +1,7 @@
 <!-- step-confirmation/step-confirmation.component.html -->
 <div class="partner-step-content" [formGroup]="formGroup">
-    <h2 class="step-title">{{ 'PARTNER.STEP_4_TITLE' | translate }}</h2>
-    <p class="step-desc">{{ 'PARTNER.STEP_4_DESC' | translate }}</p>
+    <h2 class="step-title">{{ 'PARTNER.STEP_3_TITLE' | translate }}</h2>
+    <p class="step-desc">{{ 'PARTNER.STEP_3_DESC' | translate }}</p>
 
     <!-- Summary -->
     <app-partner-summary [formData]="formGroup.value"></app-partner-summary>
@@ -20,12 +20,5 @@
         @if (isFieldInvalid('agreeTerms')) {
         <span class="error-text">{{ getErrorMessage('agreeTerms') }}</span>
         }
-    </div>
-
-    <!-- Note -->
-    <div class="form-group">
-        <app-input formControlName="note" [label]="'PARTNER.NOTE' | translate"
-            [placeholder]="'PARTNER.NOTE_PLACEHOLDER' | translate" [id]="'note'">
-        </app-input>
     </div>
 </div>

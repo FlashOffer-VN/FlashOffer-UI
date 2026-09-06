@@ -66,15 +66,22 @@
                                     </app-button>
                                 </ng-container>
                                 <ng-container *ngIf="activeStatus !== 'deleted'">
-                                    <app-button variant="success" size="sm" [disabled]="isActionLoading"
+                                    <!-- Chỉ hiện Duyệt/Từ chối khi bài chưa được duyệt -->
+                                    <app-button *ngIf="!post.isApproved" variant="success" size="sm" [disabled]="isActionLoading"
                                         (click)="approve(post)" [title]="'ADMIN.SOCIAL.APPROVE' | translate"
                                         [attr.aria-label]="'ADMIN.SOCIAL.APPROVE' | translate">
                                         <i class="fa-solid fa-check"></i>
                                     </app-button>
-                                    <app-button variant="danger" size="sm" [disabled]="isActionLoading"
+                                    <app-button *ngIf="!post.isApproved" variant="danger" size="sm" [disabled]="isActionLoading"
                                         (click)="reject(post)" [title]="'ADMIN.SOCIAL.REJECT' | translate"
                                         [attr.aria-label]="'ADMIN.SOCIAL.REJECT' | translate">
                                         <i class="fa-solid fa-xmark"></i>
+                                    </app-button>
+                                    <!-- Xóa mềm — áp dụng cho cả bài đã duyệt lẫn chưa duyệt -->
+                                    <app-button variant="danger" size="sm" [disabled]="isActionLoading"
+                                        (click)="delete(post)" [title]="'COMMON.BUTTON.DELETE' | translate"
+                                        [attr.aria-label]="'COMMON.BUTTON.DELETE' | translate">
+                                        <i class="fa-solid fa-trash"></i>
                                     </app-button>
                                 </ng-container>
                                 <app-button variant="outline" size="sm" (click)="openPostDetail(post)"
@@ -113,13 +120,14 @@
         <div class="post-modal-content" [innerHTML]="selectedPost.content"></div>
 
         <footer class="post-modal-footer">
-            <app-button variant="danger" [disabled]="isActionLoading"
+            <!-- Chỉ hiện Duyệt/Từ chối khi bài chưa được duyệt -->
+            <app-button *ngIf="!selectedPost.isApproved" variant="danger" [disabled]="isActionLoading"
                 (click)="reject(selectedPost); closePostDetail()"
                 [title]="'ADMIN.SOCIAL.REJECT' | translate"
                 [attr.aria-label]="'ADMIN.SOCIAL.REJECT' | translate">
                 <i class="fa-solid fa-xmark"></i>
             </app-button>
-            <app-button variant="success" [disabled]="isActionLoading"
+            <app-button *ngIf="!selectedPost.isApproved" variant="success" [disabled]="isActionLoading"
                 (click)="approve(selectedPost); closePostDetail()"
                 [title]="'ADMIN.SOCIAL.APPROVE' | translate"
                 [attr.aria-label]="'ADMIN.SOCIAL.APPROVE' | translate">
