@@ -5,8 +5,11 @@ import { ApiService } from './api.service';
 import {
     CreateOfferRequest,
     OfferRequest,
+    OfferRequestListResponse,
+    OfferRequestPagedResponse,
     OfferRequestResponse,
-    OfferRequestListResponse
+    OfferRequestStatusResponse,
+    OfferStatus
 } from '@core/models/offer-request.model';
 
 @Injectable({
@@ -19,22 +22,47 @@ export class OfferRequestService {
 
     /**
      * Tạo yêu cầu nhận offer mới (Public - không cần đăng nhập)
-     * POST /api/v1/OfferRequests/offer-requests
+     * POST /api/v1/OfferRequests
      */
     create(request: CreateOfferRequest): Observable<OfferRequestResponse> {
         return this.apiService.post<OfferRequestResponse>(`${this.endpoint}`, request);
     }
 
     /**
-     * Lấy danh sách tất cả yêu cầu nhận offer (Chỉ Admin)
-     * GET /api/v1/OfferRequests/offer-requests
+     * Lấy danh sách tất cả yêu cầu nhận offer (Admin)
+     * GET /api/v1/OfferRequests
      */
     getAll(): Observable<OfferRequestListResponse> {
         return this.apiService.get<OfferRequestListResponse>(`${this.endpoint}`);
     }
 
     /**
-     * Lấy chi tiết yêu cầu nhận offer theo ID
+     * Lấy danh sách phân trang yêu cầu nhận offer (Admin)
+     * GET /api/v1/OfferRequests?pageNumber=&pageSize=&search=&status=
+     */
+    getData(
+        pageNumber = 1,
+        pageSize = 10,
+        search = '',
+        status?: OfferStatus,
+        isOfferSent?: boolean
+    ): Observable<OfferRequestPagedResponse> {
+        const params: any = {
+            pageNumber,
+            pageSize,
+            search: search || ''
+        };
+        if (status !== undefined && status !== null) {
+            params.status = status;
+        }
+        if (isOfferSent !== undefined && isOfferSent !== null) {
+            params.isOfferSent = isOfferSent;
+        }
+        return this.apiService.get<OfferRequestPagedResponse>(this.endpoint, params);
+    }
+
+    /**
+     * Lấy chi tiết yêu cầu nhận offer theo ID (Admin)
      * GET /api/v1/OfferRequests/{id}
      */
     getById(id: string): Observable<OfferRequestResponse> {
@@ -43,10 +71,10 @@ export class OfferRequestService {
 
     /**
      * Cập nhật trạng thái yêu cầu nhận offer (Admin)
-     * PUT /api/v1/OfferRequests/{id}/status
+     * PATCH /api/v1/OfferRequests/{id}/status
      */
-    updateStatus(id: string, status: number): Observable<OfferRequestResponse> {
-        return this.apiService.put<OfferRequestResponse>(`${this.endpoint}/${id}/status`, { status });
+    updateStatus(id: string, status: OfferStatus): Observable<OfferRequestStatusResponse> {
+        return this.apiService.patch<OfferRequestStatusResponse>(`${this.endpoint}/${id}/status`, { status });
     }
 
     /**

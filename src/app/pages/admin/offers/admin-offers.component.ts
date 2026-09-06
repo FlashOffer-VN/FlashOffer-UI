@@ -1,48 +1,193 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+
+import { AppService } from '@core/services/app.service';
+import { OfferRequest, OfferStatus } from '@core/models/offer-request.model';
+import { PagedResponse } from '@core/models/paged-response.model';
+
+// Shared Components
+import { ButtonComponent } from '@shared/components/button/button.component';
+import { InputComponent } from '@shared/components/input/input.component';
+import { LoadingComponent } from '@shared/components/loading/loading.component';
+import { PaginationComponent } from '@shared/components/pagination/pagination.component';
+import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.component';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+
+interface StatusOption {
+    value: OfferStatus | null;
+    label: string;
+}
 
 @Component({
     selector: 'app-admin-offers',
     standalone: true,
-    imports: [CommonModule, TranslateModule],
-    template: `
-        <div class="page">
-            <header>
-                <div>
-                    <h1>{{ 'ADMIN.OFFERS.TITLE' | translate }}</h1>
-                    <p>{{ 'ADMIN.OFFERS.SUBTITLE' | translate }}</p>
-                </div>
-                <span class="status"><i class="fa-solid fa-wrench"></i> {{ 'ADMIN.COMING_SOON' | translate }}</span>
-            </header>
-            <section class="hero-card">
-                <div class="hero-icon"><i class="fa-solid fa-tags"></i></div>
-                <div>
-                    <h2>{{ 'ADMIN.OFFERS.CARD_TITLE' | translate }}</h2>
-                    <p>{{ 'ADMIN.OFFERS.CARD_TEXT' | translate }}</p>
-                </div>
-            </section>
-            <div class="preview-grid">
-                <div class="preview-card"><i class="fa-solid fa-filter"></i><span>{{ 'ADMIN.OFFERS.FILTERS' | translate }}</span></div>
-                <div class="preview-card"><i class="fa-solid fa-chart-line"></i><span>{{ 'ADMIN.OFFERS.REPORTS' | translate }}</span></div>
-                <div class="preview-card"><i class="fa-solid fa-bell"></i><span>{{ 'ADMIN.OFFERS.NOTIFICATIONS' | translate }}</span></div>
-            </div>
-        </div>
-    `,
-    styles: [`
-        .page { padding: 1.5rem; color: #111827; }
-        header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
-        h1 { margin: 0; font-size: 1.5rem; font-weight: 700; }
-        header p { margin: .35rem 0 0; color: #6b7280; font-size: .875rem; }
-        .status { border-radius: 999px; background: #fef3c7; color: #92400e; padding: .45rem .75rem; font-size: .75rem; font-weight: 600; white-space: nowrap; }
-        .hero-card { display: flex; align-items: center; gap: 1rem; border: 1px solid #ddd6fe; border-radius: .75rem; background: linear-gradient(135deg, #f5f3ff, #fff); padding: 2rem; }
-        .hero-icon { display: grid; width: 3.5rem; height: 3.5rem; place-items: center; border-radius: .75rem; background: #7c3aed; color: #fff; font-size: 1.4rem; }
-        h2 { margin: 0; font-size: 1.125rem; font-weight: 700; }
-        .hero-card p { margin: .4rem 0 0; color: #6b7280; }
-        .preview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1rem; }
-        .preview-card { display: flex; align-items: center; gap: .75rem; border: 1px solid #e5e7eb; border-radius: .65rem; background: #fff; padding: 1rem; color: #4b5563; }
-        .preview-card i { color: #7c3aed; }
-        @media (max-width: 700px) { header { flex-direction: column; } .preview-grid { grid-template-columns: 1fr; } }
-    `]
+    imports: [
+        CommonModule,
+        RouterModule,
+        FormsModule,
+        TranslateModule,
+        ButtonComponent,
+        InputComponent,
+        LoadingComponent,
+        PaginationComponent,
+        BadgeComponent,
+        NgSelectWrapperComponent
+    ],
+    templateUrl: './admin-offers.component.html',
+    styleUrls: ['./admin-offers.component.css']
 })
-export class AdminOffersComponent { }
+export class AdminOffersComponent implements OnInit {
+    // Data
+    offers: OfferRequest[] = [];
+    isLoading = true;
+    isDeleting = false;
+
+    // Filter
+    searchText = '';
+    selectedStatus: OfferStatus | null = null;
+
+    // Status options for filter dropdown
+    statusOptions: StatusOption[] = [];
+
+    // Pagination
+    pageNumber = 1;
+    pageSize = 10;
+    totalCount = 0;
+    totalPages = 0;
+    hasPreviousPage = false;
+    hasNextPage = false;
+
+    constructor(private _appService: AppService, private _router: Router) { }
+
+    ngOnInit(): void {
+        this.loadData();
+    }
+
+    loadData(): void {
+        this.isLoading = true;
+        this.statusOptions = [
+            { value: null, label: this._appService.trans('COMMON.ALL') },
+            { value: OfferStatus.PENDING, label: this._appService.trans('COMMON.STATUS.PENDING') },
+            { value: OfferStatus.APPROVED, label: this._appService.trans('COMMON.STATUS.APPROVED') },
+            { value: OfferStatus.REJECTED, label: this._appService.trans('COMMON.STATUS.REJECTED') },
+            { value: OfferStatus.EXPIRED, label: this._appService.trans('COMMON.STATUS.EXPIRED') }
+        ];
+
+        this._appService.offerRequest
+            .getData(
+                this.pageNumber,
+                this.pageSize,
+                this.searchText,
+                this.selectedStatus ?? undefined
+            )
+            .subscribe({
+                next: (response: PagedResponse<OfferRequest>) => {
+                    this.offers = response.data;
+                    this.pageNumber = response.pageNumber;
+                    this.pageSize = response.pageSize;
+                    this.totalCount = response.totalCount;
+                    this.totalPages = response.totalPages;
+                    this.hasPreviousPage = response.hasPreviousPage;
+                    this.hasNextPage = response.hasNextPage;
+                    this.isLoading = false;
+                },
+                error: () => {
+                    this.isLoading = false;
+                    this._appService.showError(this._appService.trans('COMMON.ERROR.LOAD_FAILED'));
+                }
+            });
+    }
+
+    onSearch(): void {
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    onStatusChange(status: OfferStatus | null): void {
+        this.selectedStatus = status;
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    onPageChange(page: number): void {
+        this.pageNumber = page;
+        this.loadData();
+    }
+
+    onPageSizeChange(size: number): void {
+        this.pageSize = size;
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    onDelete(offer: OfferRequest): void {
+        this._appService.confirmDelete(
+            this._appService.trans('ADMIN.OFFERS.DELETE_CONFIRM', { name: offer.productName })
+        ).then(confirmed => {
+            if (!confirmed) return;
+
+            this.isDeleting = true;
+            this._appService.offerRequest.delete(offer.id).subscribe({
+                next: () => {
+                    this.isDeleting = false;
+                    this._appService.showSuccess(this._appService.trans('ADMIN.OFFERS.DELETED_SUCCESS'));
+                    this.loadData();
+                },
+                error: () => {
+                    this.isDeleting = false;
+                    this._appService.showError(this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+                }
+            });
+        });
+    }
+
+    getStatusVariant(status: OfferStatus): BadgeVariant {
+        const variants: Record<OfferStatus, BadgeVariant> = {
+            [OfferStatus.PENDING]: 'warning',
+            [OfferStatus.APPROVED]: 'success',
+            [OfferStatus.REJECTED]: 'danger',
+            [OfferStatus.EXPIRED]: 'secondary'
+        };
+        return variants[status] || 'secondary';
+    }
+
+    getStatusKey(status: OfferStatus): string {
+        const keys: Record<OfferStatus, string> = {
+            [OfferStatus.PENDING]: 'pending',
+            [OfferStatus.APPROVED]: 'approved',
+            [OfferStatus.REJECTED]: 'rejected',
+            [OfferStatus.EXPIRED]: 'expired'
+        };
+        return keys[status] || 'pending';
+    }
+
+    formatId(id: string): string {
+        return id.substring(0, 8).toUpperCase();
+    }
+
+    formatDate(dateString: string): string {
+        const date = new Date(dateString);
+        return date.toLocaleString('vi-VN', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    formatPrice(value: number): string {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+            maximumFractionDigits: 0
+        }).format(value);
+    }
+
+    navigateToDetail(id: string): void {
+        this._router.navigate(['/admin/offers', id]);
+    }
+}
