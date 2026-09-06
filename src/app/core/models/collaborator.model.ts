@@ -49,7 +49,10 @@ export interface CreateCollaboratorRequest {
     experience?: string;
     agreeTerms: boolean;
     businessName?: string;
-    businessField?: string;
+    /** Id lĩnh vực hoạt động (BusinessField — quản lý tập trung). */
+    businessFieldId?: string;
+    /** Tên lĩnh vực; API dùng find-or-create khi không có businessFieldId. */
+    businessFieldName?: string;
     businessSize?: number;
     address?: string;
     website?: string;
