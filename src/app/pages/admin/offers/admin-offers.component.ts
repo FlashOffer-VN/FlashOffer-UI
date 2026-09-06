@@ -109,7 +109,10 @@ export class AdminOffersComponent implements OnInit {
                 next: (response: PagedResponse<OfferRequest>) => {
                     this.offers = response.data;
                     this.pageNumber = response.pageNumber;
-                    this.pageSize = response.pageSize;
+                    // Chỉ nhận pageSize hợp lệ (backend yêu cầu 1-100)
+                    if (response.pageSize >= 1 && response.pageSize <= 100) {
+                        this.pageSize = response.pageSize;
+                    }
                     this.totalCount = response.totalCount;
                     this.totalPages = response.totalPages;
                     this.hasPreviousPage = response.hasPreviousPage;
@@ -141,6 +144,7 @@ export class AdminOffersComponent implements OnInit {
     }
 
     onPageSizeChange(size: number): void {
+        if (!size || size < 1) size = 10;
         this.pageSize = size;
         this.pageNumber = 1;
         this.loadData();

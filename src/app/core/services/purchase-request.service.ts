@@ -63,6 +63,8 @@ export class PurchaseRequestService {
         fromDate?: string,
         toDate?: string
     ): Observable<PagedResponse<PurchaseRequest>> {
+        // Backend yêu cầu pageSize trong [1, 100]
+        pageSize = this.clampPageSize(pageSize);
         const params: any = {
             page: pageNumber, // API DTO dùng "Page"
             pageSize,
@@ -74,6 +76,15 @@ export class PurchaseRequestService {
         if (fromDate) params.fromDate = fromDate;
         if (toDate) params.toDate = toDate;
         return this.apiService.get<PagedResponse<PurchaseRequest>>(this.endpoint, params);
+    }
+
+    /**
+     * Đảm bảo pageSize trong khoảng hợp lệ mà backend cho phép ([1, 100]).
+     */
+    private clampPageSize(pageSize: number): number {
+        if (!pageSize || pageSize < 1) return 10;
+        if (pageSize > 100) return 100;
+        return pageSize;
     }
 
     /**

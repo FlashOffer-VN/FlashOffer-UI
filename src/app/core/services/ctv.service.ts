@@ -23,6 +23,8 @@ export class CtvService {
         fromDate?: string,
         toDate?: string
     ): Observable<PagedResponse<CtvRegistration>> {
+        // Backend yêu cầu pageSize trong [1, 100]
+        pageSize = this.clampPageSize(pageSize);
         const params: any = {
             pageNumber,
             pageSize,
@@ -64,6 +66,7 @@ export class CtvService {
      * GET /api/v1/Ctv/deleted?pageNumber=&pageSize=&search=
      */
     getDeletedData(pageNumber = 1, pageSize = 10, search = '', fromDate?: string, toDate?: string): Observable<PagedResponse<CtvRegistration>> {
+        pageSize = this.clampPageSize(pageSize);
         const params: any = { pageNumber, pageSize, search };
         if (fromDate) params.fromDate = fromDate;
         if (toDate) params.toDate = toDate;
@@ -90,5 +93,14 @@ export class CtvService {
             `${this._baseUrl}/${id}/restore`,
             {}
         );
+    }
+
+    /**
+     * Đảm bảo pageSize trong khoảng hợp lệ mà backend cho phép ([1, 100]).
+     */
+    private clampPageSize(pageSize: number): number {
+        if (!pageSize || pageSize < 1) return 10;
+        if (pageSize > 100) return 100;
+        return pageSize;
     }
 }

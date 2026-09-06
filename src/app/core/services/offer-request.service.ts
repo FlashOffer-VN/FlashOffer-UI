@@ -50,6 +50,8 @@ export class OfferRequestService {
         fromDate?: string,
         toDate?: string
     ): Observable<OfferRequestPagedResponse> {
+        // Backend yêu cầu pageSize trong [1, 100] — không cho gửi 0/âm
+        pageSize = this.clampPageSize(pageSize);
         const params: any = {
             page: pageNumber, // API DTO dùng property "Page" (không phải "pageNumber")
             pageSize,
@@ -99,5 +101,14 @@ export class OfferRequestService {
      */
     restore(id: string): Observable<OfferRequestResponse> {
         return this.apiService.post<OfferRequestResponse>(`${this.endpoint}/${id}/restore`, {});
+    }
+
+    /**
+     * Đảm bảo pageSize trong khoảng hợp lệ mà backend cho phép ([1, 100]).
+     */
+    private clampPageSize(pageSize: number): number {
+        if (!pageSize || pageSize < 1) return 10;
+        if (pageSize > 100) return 100;
+        return pageSize;
     }
 }

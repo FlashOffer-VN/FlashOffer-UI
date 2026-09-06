@@ -61,6 +61,8 @@ export class SocialService {
         fromDate?: string,
         toDate?: string
     ): Observable<PagedResponse<SocialPost>> {
+        // Backend yêu cầu pageSize trong [1, 100]
+        pageSize = this.clampPageSize(pageSize);
         const params: any = { pageNumber, pageSize };
         if (status) params.status = status;
         if (search) params.search = search;
@@ -70,6 +72,15 @@ export class SocialService {
             `${this._baseSocialUrl}/posts/admin`,
             params
         );
+    }
+
+    /**
+     * Đảm bảo pageSize trong khoảng hợp lệ mà backend cho phép ([1, 100]).
+     */
+    private clampPageSize(pageSize: number): number {
+        if (!pageSize || pageSize < 1) return 10;
+        if (pageSize > 100) return 100;
+        return pageSize;
     }
 
     /**
