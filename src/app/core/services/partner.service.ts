@@ -32,8 +32,12 @@ export class PartnerService {
         pageNumber = 1,
         pageSize = 10,
         search = '',
-        status?: PartnerStatus
+        status?: PartnerStatus,
+        fromDate?: string,
+        toDate?: string
     ): Observable<PagedResponse<Partner>> {
+        // Backend yêu cầu pageSize trong [1, 100]
+        pageSize = this.clampPageSize(pageSize);
         const params: any = {
             pageNumber,
             pageSize,
@@ -42,7 +46,18 @@ export class PartnerService {
         if (status !== undefined && status !== null) {
             params.status = status;
         }
+        if (fromDate) params.fromDate = fromDate;
+        if (toDate) params.toDate = toDate;
         return this._apiService.get<PagedResponse<Partner>>(this._baseUrl, params);
+    }
+
+    /**
+     * Đảm bảo pageSize trong khoảng hợp lệ mà backend cho phép ([1, 100]).
+     */
+    private clampPageSize(pageSize: number): number {
+        if (!pageSize || pageSize < 1) return 10;
+        if (pageSize > 100) return 100;
+        return pageSize;
     }
 
     // ==============================

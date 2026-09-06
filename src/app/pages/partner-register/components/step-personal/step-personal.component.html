@@ -43,5 +43,18 @@
             <span class="error-text">{{ getErrorMessage('position') }}</span>
             }
         </div>
+
+        <!-- Referral Code -->
+        <div class="form-group">
+            <app-input formControlName="referralCode" [label]="'PARTNER.REFERRAL_CODE' | translate"
+                [placeholder]="'PARTNER.REFERRAL_CODE_PLACEHOLDER' | translate" [id]="'referralCode'">
+            </app-input>
+            @if (formGroup.get('referralCode')?.value && !isReferralValid) {
+            <span class="error-text">{{ 'PARTNER.REFERRAL_CODE_INVALID' | translate }}</span>
+            }
+            @if (isReferralValid && formGroup.get('referralCode')?.value) {
+            <span class="success-text">{{ 'PARTNER.REFERRAL_CODE_VALID' | translate }}</span>
+            }
+        </div>
     </div>
 </div>

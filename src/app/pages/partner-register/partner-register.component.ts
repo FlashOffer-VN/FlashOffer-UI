@@ -27,7 +27,7 @@ export class PartnerRegisterComponent {
   @ViewChild(PartnerFormComponent) formComponent!: PartnerFormComponent;
 
   currentStep = 1;
-  totalSteps = 4;
+  totalSteps = 3;
   isLoading = false;
 
   constructor(
@@ -96,27 +96,15 @@ export class PartnerRegisterComponent {
       phone: formData.phone,
       position: formData.position,
       companyName: formData.companyName,
-      companyTax: formData.companyTax,
       companyAddress: formData.companyAddress,
-      businessType: Number(formData.businessType),
-      companyWebsite: formData.companyWebsite || '',
+      businessFieldId: formData.businessFieldId,
       companySize: Number(formData.companySize),
       referralCode: formData.referralCode || '',
       products: formData.products.map((p: any) => ({
         name: p.name,
-        category: Number(p.category),
-        retailPrice: Number(p.retailPrice),
-        wholesalePrice: Number(p.wholesalePrice),
-        minOrderQuantity: Number(p.minOrderQuantity),
         description: p.description || ''
       })),
-      commissionType: Number(formData.commissionType),
-      commissionRate: Number(formData.commissionRate),
-      minOrderValue: Number(formData.minOrderValue) || 0,
-      maxCommission: Number(formData.maxCommission) || 0,
-      specialConditions: formData.specialConditions || '',
-      agreeTerms: formData.agreeTerms,
-      note: formData.note || ''
+      agreeTerms: formData.agreeTerms
     };
 
     // console.log('📝 Sending request:', requestData);

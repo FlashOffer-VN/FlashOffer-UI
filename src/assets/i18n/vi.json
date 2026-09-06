@@ -215,8 +215,8 @@
         "STEP_1_DESC": "Vui lòng cung cấp thông tin liên hệ của bạn",
         "STEP_2_TITLE": "Thông tin doanh nghiệp",
         "STEP_2_DESC": "Cung cấp thông tin về doanh nghiệp của bạn",
-        "STEP_3_TITLE": "Thông tin sản phẩm & hoa hồng",
-        "STEP_3_DESC": "Cung cấp thông tin về sản phẩm và chính sách hoa hồng",
+        "STEP_3_TITLE": "Xác nhận đăng ký",
+        "STEP_3_DESC": "Kiểm tra lại thông tin trước khi gửi đăng ký",
         "STEP_4_TITLE": "Xác nhận đăng ký",
         "STEP_4_DESC": "Kiểm tra lại thông tin trước khi gửi đăng ký",
         "FULL_NAME": "Họ và tên",
@@ -245,6 +245,9 @@
         "BUSINESS_TYPE": "Loại hình doanh nghiệp",
         "BUSINESS_TYPE_PLACEHOLDER": "Chọn loại hình doanh nghiệp",
         "BUSINESS_TYPE_ERROR": "Vui lòng chọn loại hình doanh nghiệp",
+        "BUSINESS_FIELD": "Lĩnh vực hoạt động",
+        "BUSINESS_FIELD_PLACEHOLDER": "Chọn lĩnh vực hoạt động",
+        "BUSINESS_FIELD_ERROR": "Vui lòng chọn lĩnh vực hoạt động",
         "COMPANY_SIZE": "Quy mô doanh nghiệp",
         "COMPANY_SIZE_PLACEHOLDER": "Chọn quy mô doanh nghiệp",
         "COMPANY_SIZE_ERROR": "Vui lòng chọn quy mô doanh nghiệp",
@@ -875,7 +878,10 @@
             "CONNECTION_ERROR": "Không thể kết nối đến server"
         },
         "CONFIRM_DELETE": "Xác nhận xóa",
-        "CONFIRM_DELETE_MESSAGE": "Bạn có chắc chắn muốn xóa? Hành động này không thể hoàn tác."
+        "CONFIRM_DELETE_MESSAGE": "Bạn có chắc chắn muốn xóa? Hành động này không thể hoàn tác.",
+        "FROM_DATE": "Từ ngày",
+        "TO_DATE": "Đến ngày",
+        "CLEAR": "Xóa"
     },
     "PAGINATION": {
         "SHOWING": "Hiển thị",
@@ -895,6 +901,7 @@
             "PARTNER": "Đối tác",
             "SETTINGS": "Cài đặt",
             "BACK_TO_SITE": "Về trang người dùng",
+            "CRM": "CRM",
             "LOGOUT": "Đăng xuất"
         },
         "DASHBOARD": {
@@ -923,6 +930,30 @@
                 "CTV_REGISTRATION": "cộng tác viên",
                 "EMPTY": "Chưa có hoạt động nào"
             }
+        },
+        "CRM": {
+            "TITLE": "Thống kê CRM",
+            "SUBTITLE": "Tổng quan về offer, yêu cầu mua hàng, đăng ký CTV, đối tác và bài viết cộng đồng",
+            "REFRESH": "Làm mới",
+            "PENDING": "chờ duyệt",
+            "UNAVAILABLE": "Chưa tải được dữ liệu CRM",
+            "LAST_UPDATED": "Cập nhật lúc",
+            "TRENDS_TITLE": "Biểu đồ hoạt động",
+            "TRENDS_EMPTY": "Chưa có dữ liệu xu hướng",
+            "DISTRIBUTION_TITLE": "Phân bố theo trạng thái",
+            "DISTRIBUTION_OFFERS": "Offers",
+            "DISTRIBUTION_PURCHASES": "Yêu cầu mua hàng",
+            "DISTRIBUTION_CTV": "Đăng ký CTV",
+            "DISTRIBUTION_PARTNERS": "Đối tác",
+            "CATEGORIES_TITLE": "Top ngành hàng sản phẩm",
+            "CATEGORIES_EMPTY": "Chưa có dữ liệu ngành hàng",
+            "CATEGORIES_SERIES": "Lượt yêu cầu",
+            "SUMMARY_OFFERS": "Yêu cầu nhận offer",
+            "SUMMARY_PURCHASES": "Yêu cầu mua hàng",
+            "SUMMARY_GROUP_BUYING": "Yêu cầu mua chung",
+            "SUMMARY_CTV": "Đăng ký CTV",
+            "SUMMARY_PARTNERS": "Đối tác",
+            "SUMMARY_SOCIAL": "Bài viết cộng đồng"
         },
         "COMING_SOON": "Đang triển khai",
         "OFFERS": {
@@ -998,6 +1029,7 @@
         "SOCIAL": {
             "TITLE": "Duyệt bài viết cộng đồng",
             "LIST_TITLE": "Danh sách bài viết đang chờ duyệt",
+            "SEARCH_PLACEHOLDER": "Tìm kiếm theo tiêu đề đặ tên tác giả...",
             "AUTHOR": "Tác giả",
             "CONTENT": "Nội dung",
             "CREATED_AT": "Ngày tạo",
@@ -1008,7 +1040,9 @@
             "REJECT": "Từ chối",
             "APPROVED_SUCCESS": "Duyệt bài viết thành công",
             "REJECTED_SUCCESS": "Từ chối bài viết thành công",
-            "RESTORED_SUCCESS": "Khôi phục bài viết thành công"
+            "RESTORED_SUCCESS": "Khôi phục bài viết thành công",
+            "DELETE_CONFIRM": "Bạn có chắc muốn xóa bài viết \"{{name}}\"?",
+            "DELETED_SUCCESS": "Xóa bài viết thành công"
         },
         "CTV": {
             "TITLE": "Quản lý CTV",
@@ -1039,6 +1073,16 @@
             "RESTORED_SUCCESS": "Khôi phục CTV thành công",
             "DELETE_CONFIRM": "Bạn có chắc muốn xóa CTV \"{{name}}\"?",
             "DELETED_SUCCESS": "Xóa CTV thành công"
+        },
+        "BUSINESS_INFO": {
+            "TITLE": "Thông tin doanh nghiệp",
+            "COMPANY_NAME": "Tên doanh nghiệp",
+            "COMPANY_TAX": "Mã số thuế",
+            "COMPANY_ADDRESS": "Địa chỉ",
+            "COMPANY_WEBSITE": "Website",
+            "BUSINESS_TYPE": "Loại hình",
+            "COMPANY_SIZE": "Quy mô",
+            "BUSINESS_FIELD": "Lĩnh vực kinh doanh"
         },
         "PARTNER": {
             "TITLE": "Quản lý Đối tác",

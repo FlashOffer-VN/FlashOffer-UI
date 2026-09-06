@@ -1,0 +1,76 @@
+:host {
+    display: block;
+}
+
+.daterange {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.daterange__field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.daterange__label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.daterange__input {
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    background: #fff;
+    color: #374151;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-family: inherit;
+    outline: none;
+    min-width: 150px;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.daterange__input:focus {
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 3px rgb(124 58 237 / 0.12);
+}
+
+.daterange__sep {
+    color: #9ca3af;
+    font-size: 0.875rem;
+    padding-bottom: 0.5rem;
+}
+
+.daterange__clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #e5e7eb;
+    border-radius: 50%;
+    background: #fff;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 150ms ease;
+    margin-bottom: 2px;
+}
+
+.daterange__clear:hover {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #dc2626;
+}
+
+@media (max-width: 640px) {
+    .daterange__input {
+        min-width: 130px;
+    }
+}

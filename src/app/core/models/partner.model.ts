@@ -2,6 +2,8 @@
 // 1. ENUMS
 // ==============================
 
+import { BusinessInfo } from './business-info.model';
+
 export enum BusinessType {
     SME = 1,
     SoleProprietor = 2,
@@ -70,43 +72,27 @@ export interface PagedResponse<T> {
 // ==============================
 
 export interface PartnerRegisterRequest {
-    // Step 1: Personal Info
+    // Step 1: Personal Info (+ mã giới thiệu)
     fullName: string;
     email: string;
     phone: string;
     position: string;
-
-    // Step 2: Business Info
-    companyName: string;
-    companyTax: string;
-    companyAddress: string;
-    businessType: BusinessType;
-    companyWebsite?: string;
-    companySize: CompanySize;
-
-    // Step 3: Sales Info
-    products: ProductInfoRequest[];
-    commissionType: CommissionType;
-    commissionRate: number;
-    minOrderValue?: number;
-    maxCommission?: number;
-    specialConditions?: string;
-
-    // Step 4: Additional
     referralCode?: string;
-    note?: string;
+
+    // Step 2: Business Info (lĩnh vực hoạt động quản lý tập trung qua BusinessField)
+    companyName: string;
+    companyAddress: string;
+    businessFieldId?: string;
+    companySize: CompanySize;
+    products: ProductInfoRequest[];
+
+    // Step 3: Confirmation
     agreeTerms: boolean;
 }
 
 export interface ProductInfoRequest {
     name: string;
     description?: string;
-    category: ProductCategory;
-    retailPrice: number;
-    wholesalePrice: number;
-    minOrderQuantity: number;
-    images?: string[];
-    sku?: string;
 }
 
 // ==============================
@@ -159,6 +145,7 @@ export interface Partner {
     };
     commission?: PartnerCommission;
     products?: PartnerProduct[];
+    businessInfo?: BusinessInfo;
 }
 
 export interface PartnerCommission {

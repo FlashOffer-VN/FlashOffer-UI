@@ -6,7 +6,6 @@ import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { InputComponent } from '../../../../shared/components/input/input.component';
 import { PartnerSummaryComponent } from '../partner-summary/partner-summary.component';
 import { AppService } from '@core/services/app.service';
 
@@ -18,7 +17,6 @@ import { AppService } from '@core/services/app.service';
     ReactiveFormsModule,
     RouterLink,
     TranslateModule,
-    InputComponent,
     PartnerSummaryComponent
   ],
   templateUrl: './step-confirmation.component.html',

@@ -259,8 +259,8 @@
         "STEP_1_DESC": "Please provide your contact information",
         "STEP_2_TITLE": "Business Information",
         "STEP_2_DESC": "Provide information about your business",
-        "STEP_3_TITLE": "Products & Commission",
-        "STEP_3_DESC": "Provide information about products and commission policy",
+        "STEP_3_TITLE": "Confirmation",
+        "STEP_3_DESC": "Review your information before submitting",
         "STEP_4_TITLE": "Confirmation",
         "STEP_4_DESC": "Review your information before submitting",
         "FULL_NAME": "Full Name",
@@ -289,6 +289,9 @@
         "BUSINESS_TYPE": "Business Type",
         "BUSINESS_TYPE_PLACEHOLDER": "Select business type",
         "BUSINESS_TYPE_ERROR": "Please select your business type",
+        "BUSINESS_FIELD": "Field of Activity",
+        "BUSINESS_FIELD_PLACEHOLDER": "Select field of activity",
+        "BUSINESS_FIELD_ERROR": "Please select your field of activity",
         "COMPANY_SIZE": "Company Size",
         "COMPANY_SIZE_PLACEHOLDER": "Select company size",
         "COMPANY_SIZE_ERROR": "Please select your company size",
@@ -917,7 +920,10 @@
             "INVALID_DATA": "Invalid data",
             "SYSTEM_ERROR": "System is experiencing issues, please try again later",
             "CONNECTION_ERROR": "Cannot connect to server"
-        }
+        },
+        "FROM_DATE": "From",
+        "TO_DATE": "To",
+        "CLEAR": "Clear"
     },
     "PAGINATION": {
         "SHOWING": "Showing",
@@ -937,6 +943,7 @@
             "PARTNER": "Partner",
             "SETTINGS": "Settings",
             "BACK_TO_SITE": "Back to site",
+            "CRM": "CRM",
             "LOGOUT": "Logout"
         },
         "DASHBOARD": {
@@ -965,6 +972,30 @@
                 "CTV_REGISTRATION": "collaborator",
                 "EMPTY": "No recent activity"
             }
+        },
+        "CRM": {
+            "TITLE": "CRM Analytics",
+            "SUBTITLE": "Overview of offers, purchase requests, CTV registrations, partners and social posts",
+            "REFRESH": "Refresh",
+            "PENDING": "pending",
+            "UNAVAILABLE": "CRM data is unavailable right now",
+            "LAST_UPDATED": "Last updated",
+            "TRENDS_TITLE": "Activity trends",
+            "TRENDS_EMPTY": "No trend data",
+            "DISTRIBUTION_TITLE": "Status distribution",
+            "DISTRIBUTION_OFFERS": "Offers",
+            "DISTRIBUTION_PURCHASES": "Purchase requests",
+            "DISTRIBUTION_CTV": "CTV registrations",
+            "DISTRIBUTION_PARTNERS": "Partners",
+            "CATEGORIES_TITLE": "Top product categories",
+            "CATEGORIES_EMPTY": "No category data",
+            "CATEGORIES_SERIES": "Requests",
+            "SUMMARY_OFFERS": "Offer requests",
+            "SUMMARY_PURCHASES": "Purchase requests",
+            "SUMMARY_GROUP_BUYING": "Group buying",
+            "SUMMARY_CTV": "CTV registrations",
+            "SUMMARY_PARTNERS": "Partners",
+            "SUMMARY_SOCIAL": "Social posts"
         },
         "COMING_SOON": "Coming soon",
         "OFFERS": {
@@ -1040,6 +1071,7 @@
         "SOCIAL": {
             "TITLE": "Moderate community posts",
             "LIST_TITLE": "Posts pending approval",
+            "SEARCH_PLACEHOLDER": "Search by title or author name...",
             "AUTHOR": "Author",
             "CONTENT": "Content",
             "CREATED_AT": "Created at",
@@ -1050,7 +1082,9 @@
             "REJECT": "Reject",
             "APPROVED_SUCCESS": "Post approved successfully",
             "REJECTED_SUCCESS": "Post rejected successfully",
-            "RESTORED_SUCCESS": "Post restored successfully"
+            "RESTORED_SUCCESS": "Post restored successfully",
+            "DELETE_CONFIRM": "Are you sure you want to delete post \"{{name}}\"?",
+            "DELETED_SUCCESS": "Post deleted successfully"
         },
         "CTV": {
             "TITLE": "CTV Management",
@@ -1076,6 +1110,16 @@
             "RESTORED_SUCCESS": "CTV restored successfully",
             "DELETE_CONFIRM": "Are you sure you want to delete CTV \"{{name}}\"?",
             "DELETED_SUCCESS": "CTV deleted successfully"
+        },
+        "BUSINESS_INFO": {
+            "TITLE": "Business Information",
+            "COMPANY_NAME": "Company Name",
+            "COMPANY_TAX": "Tax Code",
+            "COMPANY_ADDRESS": "Address",
+            "COMPANY_WEBSITE": "Website",
+            "BUSINESS_TYPE": "Business Type",
+            "COMPANY_SIZE": "Company Size",
+            "BUSINESS_FIELD": "Business Field"
         },
         "PARTNER": {
             "TITLE": "Partner Management",

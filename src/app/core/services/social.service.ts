@@ -53,13 +53,34 @@ export class SocialService {
     /**
      * Admin: danh sách bài viết theo trạng thái (approved/pending/deleted/all).
      */
-    getAdminPosts(status: string | null, pageNumber = 1, pageSize = 10): Observable<PagedResponse<SocialPost>> {
+    getAdminPosts(
+        status: string | null,
+        pageNumber = 1,
+        pageSize = 10,
+        search = '',
+        fromDate?: string,
+        toDate?: string
+    ): Observable<PagedResponse<SocialPost>> {
+        // Backend yêu cầu pageSize trong [1, 100]
+        pageSize = this.clampPageSize(pageSize);
         const params: any = { pageNumber, pageSize };
         if (status) params.status = status;
+        if (search) params.search = search;
+        if (fromDate) params.fromDate = fromDate;
+        if (toDate) params.toDate = toDate;
         return this._apiService.get<PagedResponse<SocialPost>>(
             `${this._baseSocialUrl}/posts/admin`,
             params
         );
+    }
+
+    /**
+     * Đảm bảo pageSize trong khoảng hợp lệ mà backend cho phép ([1, 100]).
+     */
+    private clampPageSize(pageSize: number): number {
+        if (!pageSize || pageSize < 1) return 10;
+        if (pageSize > 100) return 100;
+        return pageSize;
     }
 
     /**

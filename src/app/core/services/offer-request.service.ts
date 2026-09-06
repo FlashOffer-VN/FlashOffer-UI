@@ -46,10 +46,14 @@ export class OfferRequestService {
         search = '',
         status?: OfferStatus,
         isOfferSent?: boolean,
-        includeDeleted?: boolean
+        includeDeleted?: boolean,
+        fromDate?: string,
+        toDate?: string
     ): Observable<OfferRequestPagedResponse> {
+        // Backend yêu cầu pageSize trong [1, 100] — không cho gửi 0/âm
+        pageSize = this.clampPageSize(pageSize);
         const params: any = {
-            pageNumber,
+            page: pageNumber, // API DTO dùng property "Page" (không phải "pageNumber")
             pageSize,
             search: search || ''
         };
@@ -62,6 +66,8 @@ export class OfferRequestService {
         if (includeDeleted !== undefined && includeDeleted !== null) {
             params.includeDeleted = includeDeleted;
         }
+        if (fromDate) params.fromDate = fromDate;
+        if (toDate) params.toDate = toDate;
         return this.apiService.get<OfferRequestPagedResponse>(this.endpoint, params);
     }
 
@@ -95,5 +101,14 @@ export class OfferRequestService {
      */
     restore(id: string): Observable<OfferRequestResponse> {
         return this.apiService.post<OfferRequestResponse>(`${this.endpoint}/${id}/restore`, {});
+    }
+
+    /**
+     * Đảm bảo pageSize trong khoảng hợp lệ mà backend cho phép ([1, 100]).
+     */
+    private clampPageSize(pageSize: number): number {
+        if (!pageSize || pageSize < 1) return 10;
+        if (pageSize > 100) return 100;
+        return pageSize;
     }
 }

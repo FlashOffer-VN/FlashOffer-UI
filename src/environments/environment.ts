@@ -1,4 +1,4 @@
 export const environment = {
-  production: true,
+  production: false,
   apiUrl: 'https://flashoffer-api.onrender.com/api/v1'
 };

@@ -1,0 +1,17 @@
+<div class="daterange">
+    <label class="daterange__field">
+        <span class="daterange__label">{{ 'COMMON.FROM_DATE' | translate }}</span>
+        <input type="date" class="daterange__input" [ngModel]="from"
+            (ngModelChange)="onFromChange($event)">
+    </label>
+    <span class="daterange__sep">—</span>
+    <label class="daterange__field">
+        <span class="daterange__label">{{ 'COMMON.TO_DATE' | translate }}</span>
+        <input type="date" class="daterange__input" [ngModel]="to"
+            (ngModelChange)="onToChange($event)">
+    </label>
+    <button type="button" class="daterange__clear" *ngIf="from || to"
+        (click)="clear()" [title]="'COMMON.CLEAR' | translate" aria-label="Clear date range">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+</div>

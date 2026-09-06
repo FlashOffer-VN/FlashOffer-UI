@@ -1,0 +1,35 @@
+<div *ngIf="data">
+    <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
+        <i class="fa-regular fa-building mr-2"></i> {{ getTitle() | translate }}
+    </h2>
+    <div class="space-y-3">
+        <div class="flex justify-between py-2 border-b border-gray-50" *ngIf="data.companyName">
+            <span class="text-sm text-gray-500">{{ 'ADMIN.BUSINESS_INFO.COMPANY_NAME' | translate }}</span>
+            <span class="text-sm font-medium text-gray-900">{{ data.companyName }}</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-gray-50" *ngIf="data.companyTax">
+            <span class="text-sm text-gray-500">{{ 'ADMIN.BUSINESS_INFO.COMPANY_TAX' | translate }}</span>
+            <span class="text-sm font-medium text-gray-900">{{ data.companyTax }}</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-gray-50" *ngIf="data.companyAddress">
+            <span class="text-sm text-gray-500">{{ 'ADMIN.BUSINESS_INFO.COMPANY_ADDRESS' | translate }}</span>
+            <span class="text-sm font-medium text-gray-900 text-right">{{ data.companyAddress }}</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-gray-50" *ngIf="data.companyWebsite">
+            <span class="text-sm text-gray-500">{{ 'ADMIN.BUSINESS_INFO.COMPANY_WEBSITE' | translate }}</span>
+            <span class="text-sm font-medium text-gray-900">{{ data.companyWebsite }}</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-gray-50" *ngIf="data.businessType">
+            <span class="text-sm text-gray-500">{{ 'ADMIN.BUSINESS_INFO.BUSINESS_TYPE' | translate }}</span>
+            <span class="text-sm font-medium text-gray-900">{{ getBusinessTypeLabel(data.businessType) | translate }}</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-gray-50" *ngIf="data.companySize">
+            <span class="text-sm text-gray-500">{{ 'ADMIN.BUSINESS_INFO.COMPANY_SIZE' | translate }}</span>
+            <span class="text-sm font-medium text-gray-900">{{ getCompanySizeLabel(data.companySize) | translate }}</span>
+        </div>
+        <div class="flex justify-between py-2" *ngIf="data.businessField">
+            <span class="text-sm text-gray-500">{{ 'ADMIN.BUSINESS_INFO.BUSINESS_FIELD' | translate }}</span>
+            <span class="text-sm font-medium text-gray-900 text-right">{{ data.businessField }}</span>
+        </div>
+    </div>
+</div>

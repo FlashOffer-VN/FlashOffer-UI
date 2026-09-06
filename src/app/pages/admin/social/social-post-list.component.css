@@ -49,8 +49,10 @@ table td:nth-child(3) {
 
 .post-modal {
     width: min(100%, 48rem);
+    max-width: 48rem;
     max-height: 90vh;
     overflow-y: auto;
+    overflow-x: hidden;
     border-radius: 0.75rem;
     background: #fff;
     box-shadow: 0 20px 40px rgb(0 0 0 / 20%);
@@ -99,10 +101,23 @@ table td:nth-child(3) {
     padding: 1.25rem;
     color: #374151;
     line-height: 1.65;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
-.post-modal-content :deep(img) {
+.post-modal-content :deep(img),
+.post-modal-content :deep(video),
+.post-modal-content :deep(iframe),
+.post-modal-content :deep(table),
+.post-modal-content :deep(pre),
+.post-modal-content :deep(code) {
     max-width: 100%;
+}
+
+.post-modal-content :deep(pre),
+.post-modal-content :deep(code) {
+    white-space: pre-wrap;
+    overflow-x: auto;
 }
 
 .post-modal-footer {

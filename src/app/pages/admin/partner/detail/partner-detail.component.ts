@@ -16,6 +16,7 @@ import {
     getCommissionTypeLabel,
     getProductCategoryLabel
 } from '@core/models/partner.model';
+import { BusinessInfo, toBusinessInfo } from '@core/models/business-info.model';
 import { ApiResponse } from '@core/models/paged-response.model';
 
 // Shared Components
@@ -23,6 +24,7 @@ import { ButtonComponent } from '@shared/components/button/button.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
+import { BusinessInfoComponent } from '@shared/components/business-info/business-info.component';
 
 @Component({
     selector: 'app-admin-partner-detail',
@@ -34,7 +36,8 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
         ButtonComponent,
         LoadingComponent,
         BadgeComponent,
-        ModalComponent
+        ModalComponent,
+        BusinessInfoComponent
     ],
     templateUrl: './partner-detail.component.html',
     styleUrls: ['./partner-detail.component.css']
@@ -120,6 +123,11 @@ export class AdminPartnerDetailComponent implements OnInit {
 
     getProductCategoryLabel(category: ProductCategory): string {
         return getProductCategoryLabel(category);
+    }
+
+    getBusinessInfo(): BusinessInfo | null {
+        if (!this.partner) return null;
+        return toBusinessInfo(this.partner.businessInfo ?? this.partner);
     }
 
     formatNumber(value: number): string {

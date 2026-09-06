@@ -17,6 +17,10 @@
                 </app-input>
             </div>
 
+            <!-- Date range -->
+            <ngx-filter-daterange [from]="fromDate" [to]="toDate" (rangeChange)="onRangeChange($event)">
+            </ngx-filter-daterange>
+
             <!-- Search Button -->
             <div>
                 <app-button variant="primary" (click)="onSearch()">
