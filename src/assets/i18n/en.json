@@ -935,7 +935,7 @@
         },
         "DASHBOARD": {
             "TITLE": "Admin overview",
-            "SUBTITLE": "Quick statistics from the available list APIs",
+            "SUBTITLE": "Quick statistics from system data",
             "REFRESH": "Refresh",
             "PARTNERS": "Partners",
             "COLLABORATORS": "Collaborators",
@@ -943,8 +943,22 @@
             "OFFER_REQUESTS": "Offer requests",
             "PURCHASE_REQUESTS": "Supplier requests",
             "GROUP_BUYING_REQUESTS": "Group buying requests",
+            "CTV_REGISTRATIONS": "Collaborator registrations",
+            "PENDING": "pending",
             "UNAVAILABLE": "Unavailable",
-            "LAST_UPDATED": "Last updated"
+            "LAST_UPDATED": "Last updated",
+            "QUICK_LINKS": "Quick links",
+            "RECENT_ACTIVITIES": "Recent activities",
+            "ACTIVITY": {
+                "CREATED": "created",
+                "REGISTERED": "registered",
+                "UPDATED": "updated",
+                "OFFER_REQUEST": "offer request",
+                "PURCHASE_REQUEST": "supplier request",
+                "GROUP_BUYING_REQUEST": "group buying request",
+                "CTV_REGISTRATION": "collaborator",
+                "EMPTY": "No recent activity"
+            }
         },
         "COMING_SOON": "Coming soon",
         "OFFERS": {

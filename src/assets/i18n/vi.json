@@ -894,7 +894,7 @@
         },
         "DASHBOARD": {
             "TITLE": "Tổng quan quản trị",
-            "SUBTITLE": "Thống kê nhanh từ các danh sách hiện có",
+            "SUBTITLE": "Thống kê nhanh từ dữ liệu hệ thống",
             "REFRESH": "Làm mới",
             "PARTNERS": "Đối tác",
             "COLLABORATORS": "Cộng tác viên",
@@ -902,8 +902,22 @@
             "OFFER_REQUESTS": "Yêu cầu nhận offer",
             "PURCHASE_REQUESTS": "Yêu cầu tìm nhà cung cấp",
             "GROUP_BUYING_REQUESTS": "Yêu cầu mua chung",
+            "CTV_REGISTRATIONS": "Đăng ký cộng tác viên",
+            "PENDING": "chờ duyệt",
             "UNAVAILABLE": "Không tải được",
-            "LAST_UPDATED": "Cập nhật lúc"
+            "LAST_UPDATED": "Cập nhật lúc",
+            "QUICK_LINKS": "Liên kết nhanh",
+            "RECENT_ACTIVITIES": "Hoạt động gần đây",
+            "ACTIVITY": {
+                "CREATED": "đã tạo",
+                "REGISTERED": "đã đăng ký",
+                "UPDATED": "đã cập nhật",
+                "OFFER_REQUEST": "yêu cầu nhận offer",
+                "PURCHASE_REQUEST": "yêu cầu tìm nhà cung cấp",
+                "GROUP_BUYING_REQUEST": "yêu cầu mua chung",
+                "CTV_REGISTRATION": "cộng tác viên",
+                "EMPTY": "Chưa có hoạt động nào"
+            }
         },
         "COMING_SOON": "Đang triển khai",
         "OFFERS": {
