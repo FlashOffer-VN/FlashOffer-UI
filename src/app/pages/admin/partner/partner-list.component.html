@@ -59,6 +59,9 @@
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             {{ 'ADMIN.PARTNER.BUSINESS_TYPE' | translate }}
                         </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'ADMIN.BUSINESS_INFO.BUSINESS_FIELD' | translate }}
+                        </th>
                         <th class="status-column px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             {{ 'ADMIN.PARTNER.STATUS' | translate }}
                         </th>
@@ -73,14 +76,14 @@
                 <tbody class="divide-y divide-gray-200">
                     <!-- Loading -->
                     <tr *ngIf="isLoading">
-                        <td colspan="10" class="px-4 py-8 text-center">
+                        <td colspan="11" class="px-4 py-8 text-center">
                             <app-loading></app-loading>
                         </td>
                     </tr>
 
                     <!-- No data -->
                     <tr *ngIf="!isLoading && partners.length === 0">
-                        <td colspan="10" class="px-4 py-8 text-center text-gray-500">
+                        <td colspan="11" class="px-4 py-8 text-center text-gray-500">
                             {{ 'PAGINATION.NO_ITEMS' | translate }}
                         </td>
                     </tr>
@@ -110,6 +113,9 @@
                         <td class="px-4 py-3 text-sm text-gray-600">
                             {{ getBusinessTypeLabel(partner.businessType) | translate }}
                         </td>
+                        <td class="px-4 py-3 text-sm text-gray-600">
+                            {{ partner.businessFieldName || '--' }}
+                        </td>
                         <td class="status-column px-3 py-3">
                             <app-badge size="sm" [status]="getStatusKey(partner.status)"
                                 [variant]="getStatusVariant(partner.status)">
@@ -119,10 +125,24 @@
                             {{ formatDate(partner.createdAt) }}
                         </td>
                         <td class="action-column px-3 py-3">
-                            <app-button variant="primary" size="sm"
-                                (click)="$event.stopPropagation(); navigateToDetail(partner.id)">
-                                {{ 'COMMON.BUTTON.VIEW_DETAIL' | translate }}
-                            </app-button>
+                            <div class="flex items-center gap-2">
+                                <app-button variant="primary" size="sm"
+                                    (click)="$event.stopPropagation(); navigateToDetail(partner.id)">
+                                    {{ 'COMMON.BUTTON.VIEW_DETAIL' | translate }}
+                                </app-button>
+                                <app-button *ngIf="activeTab === 'deleted'" variant="primary" size="sm"
+                                    [loading]="isRestoring"
+                                    (click)="$event.stopPropagation(); onRestore(partner)"
+                                    [title]="'COMMON.BUTTON.RESTORE' | translate">
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                </app-button>
+                                <app-button *ngIf="activeTab !== 'deleted'" variant="danger" size="sm"
+                                    [loading]="isDeleting"
+                                    (click)="$event.stopPropagation(); onDelete(partner)"
+                                    [title]="'COMMON.BUTTON.DELETE' | translate">
+                                    <i class="fa-solid fa-trash"></i>
+                                </app-button>
+                            </div>
                         </td>
                     </tr>
                 </tbody>

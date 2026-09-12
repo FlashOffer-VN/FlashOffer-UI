@@ -2,8 +2,15 @@
     display: block;
 }
 
+/*
+ * Bảng 11 cột, `table-layout: fixed` nên MỌI cột phải có width khai báo,
+ * nếu không cột đó bị ép về 0px (không hiển thị).
+ * Thứ tự cột: # | Mã | Họ tên | Công ty | Email | SĐT | Loại hình |
+ *             Lĩnh vực | Trạng thái | Ngày đăng ký | Thao tác
+ */
 table {
     width: 100%;
+    min-width: 1180px;
     table-layout: fixed;
 }
 
@@ -15,23 +22,35 @@ table td {
 }
 
 table th:nth-child(1),
-table td:nth-child(1) { width: 4%; }
+table td:nth-child(1) { width: 3%; }
+
 table th:nth-child(2),
-table td:nth-child(2) { width: 10%; }
+table td:nth-child(2) { width: 8%; }
+
 table th:nth-child(3),
-table td:nth-child(3) { width: 13%; }
+table td:nth-child(3) { width: 10%; }
+
 table th:nth-child(4),
-table td:nth-child(4) { width: 14%; }
+table td:nth-child(4) { width: 11%; }
+
 table th:nth-child(5),
-table td:nth-child(5) { width: 14%; }
+table td:nth-child(5) { width: 11%; }
+
 table th:nth-child(6),
-table td:nth-child(6) { width: 11%; }
+table td:nth-child(6) { width: 9%; }
+
 table th:nth-child(7),
-table td:nth-child(7) { width: 11%; }
+table td:nth-child(7) { width: 9%; }
+
+table th:nth-child(8),
+table td:nth-child(8) { width: 10%; }
 
 .status-column {
-    width: 10%;
+    width: 8%;
 }
+
+table th:nth-child(10),
+table td:nth-child(10) { width: 8%; }
 
 .action-column {
     width: 13%;
@@ -41,25 +60,4 @@ app-badge {
     display: inline-block;
     max-width: 100%;
     white-space: nowrap;
-}
-
-@media (max-width: 1100px) {
-    table th:nth-child(2),
-    table td:nth-child(2),
-    table th:nth-child(5),
-    table td:nth-child(5),
-    table th:nth-child(6),
-    table td:nth-child(6),
-    table th:nth-child(7),
-    table td:nth-child(7) {
-        display: none;
-    }
-
-    table th:nth-child(3),
-    table td:nth-child(3) { width: 22%; }
-    table th:nth-child(4),
-    table td:nth-child(4) { width: 25%; }
-
-    .status-column { width: 20%; }
-    .action-column { width: 20%; }
 }

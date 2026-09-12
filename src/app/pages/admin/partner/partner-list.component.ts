@@ -39,6 +39,8 @@ export class AdminPartnerListComponent implements OnInit {
     // Data
     partners: Partner[] = [];
     isLoading = true;
+    isDeleting = false;
+    isRestoring = false;
 
     // Search
     searchText = '';
@@ -80,7 +82,8 @@ export class AdminPartnerListComponent implements OnInit {
             { key: 'pending', label: this._appService.trans('COMMON.STATUS.PENDING') },
             { key: 'approved', label: this._appService.trans('COMMON.STATUS.APPROVED') },
             { key: 'rejected', label: this._appService.trans('COMMON.STATUS.REJECTED') },
-            { key: 'active', label: this._appService.trans('COMMON.STATUS.ACTIVE') }
+            { key: 'active', label: this._appService.trans('COMMON.STATUS.ACTIVE') },
+            { key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') }
         ];
     }
 
@@ -92,6 +95,24 @@ export class AdminPartnerListComponent implements OnInit {
 
     loadData(): void {
         this.isLoading = true;
+
+        const isDeleted = this.activeTab === 'deleted';
+
+        if (isDeleted) {
+            this._appService.partnerService
+                .getDeletedData(this.pageNumber, this.pageSize, this.searchText ?? '')
+                .subscribe({
+                    next: (response: PagedResponse<Partner>) => {
+                        this.applyPagedResponse(response);
+                        this.isLoading = false;
+                    },
+                    error: () => {
+                        this.isLoading = false;
+                        this._appService.showError(this._appService.trans('COMMON.ERROR.LOAD_FAILED'));
+                    }
+                });
+            return;
+        }
 
         let status: PartnerStatus | undefined;
         if (this.activeTab !== 'all') {
@@ -114,13 +135,7 @@ export class AdminPartnerListComponent implements OnInit {
             )
             .subscribe({
                 next: (response: PagedResponse<Partner>) => {
-                    this.partners = response.data;
-                    this.pageNumber = response.pageNumber;
-                    this.pageSize = response.pageSize;
-                    this.totalCount = response.totalCount;
-                    this.totalPages = response.totalPages;
-                    this.hasPreviousPage = response.hasPreviousPage;
-                    this.hasNextPage = response.hasNextPage;
+                    this.applyPagedResponse(response);
                     this.isLoading = false;
                 },
                 error: () => {
@@ -128,6 +143,16 @@ export class AdminPartnerListComponent implements OnInit {
                     this._appService.showError(this._appService.trans('COMMON.ERROR.LOAD_FAILED'));
                 }
             });
+    }
+
+    private applyPagedResponse(response: PagedResponse<Partner>): void {
+        this.partners = response.data;
+        this.pageNumber = response.pageNumber;
+        this.pageSize = response.pageSize;
+        this.totalCount = response.totalCount;
+        this.totalPages = response.totalPages;
+        this.hasPreviousPage = response.hasPreviousPage;
+        this.hasNextPage = response.hasNextPage;
     }
 
     onSearch(): void {
@@ -194,5 +219,40 @@ export class AdminPartnerListComponent implements OnInit {
 
     navigateToDetail(id: string): void {
         this._router.navigate(['/admin/partner', id]);
+    }
+
+    onDelete(partner: Partner): void {
+        this._appService.confirmDelete(
+            this._appService.trans('ADMIN.PARTNER.DELETE_CONFIRM', { name: partner.fullName })
+        ).then(confirmed => {
+            if (!confirmed) return;
+            this.isDeleting = true;
+            this._appService.partnerService.delete(partner.id).subscribe({
+                next: () => {
+                    this.isDeleting = false;
+                    this._appService.showSuccess(this._appService.trans('ADMIN.PARTNER.DELETED_SUCCESS'));
+                    this.loadData();
+                },
+                error: () => {
+                    this.isDeleting = false;
+                    this._appService.showError(this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+                }
+            });
+        });
+    }
+
+    onRestore(partner: Partner): void {
+        this.isRestoring = true;
+        this._appService.partnerService.restore(partner.id).subscribe({
+            next: () => {
+                this.isRestoring = false;
+                this._appService.showSuccess(this._appService.trans('ADMIN.PARTNER.RESTORED_SUCCESS'));
+                this.loadData();
+            },
+            error: () => {
+                this.isRestoring = false;
+                this._appService.showError(this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+            }
+        });
     }
 }

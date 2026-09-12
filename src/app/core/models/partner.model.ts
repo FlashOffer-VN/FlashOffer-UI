@@ -130,6 +130,8 @@ export interface Partner {
     businessType: BusinessType;
     companySize: CompanySize;
     companyWebsite?: string;
+    businessFieldId?: string | null;
+    businessFieldName?: string | null;
     referralCode?: string;
     note?: string;
     status: PartnerStatus;

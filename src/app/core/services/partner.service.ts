@@ -34,7 +34,8 @@ export class PartnerService {
         search = '',
         status?: PartnerStatus,
         fromDate?: string,
-        toDate?: string
+        toDate?: string,
+        isDeleted?: boolean
     ): Observable<PagedResponse<Partner>> {
         // Backend yêu cầu pageSize trong [1, 100]
         pageSize = this.clampPageSize(pageSize);
@@ -45,6 +46,9 @@ export class PartnerService {
         };
         if (status !== undefined && status !== null) {
             params.status = status;
+        }
+        if (isDeleted !== undefined && isDeleted !== null) {
+            params.isDeleted = isDeleted;
         }
         if (fromDate) params.fromDate = fromDate;
         if (toDate) params.toDate = toDate;
@@ -90,5 +94,35 @@ export class PartnerService {
 
     activate(id: string): Observable<ApiResponse<Partner>> {
         return this._apiService.post<ApiResponse<Partner>>(`${this._baseUrl}/${id}/activate`, {});
+    }
+
+    // ==============================
+    // SOFT DELETE & RESTORE (ADMIN)
+    // ==============================
+
+    /**
+     * Danh sách đối tác đã xóa mềm.
+     * GET /api/v1/partners/deleted?pageNumber&pageSize&search
+     */
+    getDeletedData(pageNumber = 1, pageSize = 10, search = ''): Observable<PagedResponse<Partner>> {
+        pageSize = this.clampPageSize(pageSize);
+        const params: any = { pageNumber, pageSize, search: search || '' };
+        return this._apiService.get<PagedResponse<Partner>>(`${this._baseUrl}/deleted`, params);
+    }
+
+    /**
+     * Xóa mềm đối tác.
+     * DELETE /api/v1/partners/{id}
+     */
+    delete(id: string): Observable<ApiResponse<{ message: string }>> {
+        return this._apiService.delete<ApiResponse<{ message: string }>>(`${this._baseUrl}/${id}`);
+    }
+
+    /**
+     * Khôi phục đối tác đã xóa.
+     * POST /api/v1/partners/{id}/restore
+     */
+    restore(id: string): Observable<ApiResponse<Partner>> {
+        return this._apiService.post<ApiResponse<Partner>>(`${this._baseUrl}/${id}/restore`, {});
     }
 }

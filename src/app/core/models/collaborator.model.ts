@@ -13,6 +13,8 @@ export interface Collaborator {
     experience?: string;
     agreeTerms: boolean;
     parentCollaboratorId?: string;
+    businessFieldId?: string | null;
+    businessFieldName?: string | null;
     level: number;
     referralCode?: string;
     status: CollaboratorStatus;

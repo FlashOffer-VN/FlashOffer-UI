@@ -61,6 +61,11 @@
                     translate }}</p>
             </div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.BUSINESS_INFO.BUSINESS_FIELD'
+                    | translate }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ partner.businessFieldName || '--' }}</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.PARTNER.COMPANY_SIZE' |
                     translate }}</p>
                 <p class="text-lg font-semibold text-gray-900 mt-1">{{ getCompanySizeLabel(partner.companySize) |

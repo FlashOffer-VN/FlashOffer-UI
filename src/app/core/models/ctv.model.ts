@@ -24,6 +24,8 @@ export interface CtvRegistration {
     email?: string;
     salesChannel?: SalesChannel;
     experience?: string;
+    businessFieldId?: string | null;
+    businessFieldName?: string | null;
     status: CTVRegistrationStatus;
     isApproved: boolean;
     approvedAt?: string;
