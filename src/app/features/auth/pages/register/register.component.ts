@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { ProvinceSelectComponent } from '@shared/components/province-select/province-select.component';
 import { AppService } from '@core/services/app.service';
 import { BusinessFieldOption, BusinessFieldService } from '@core/services/business-field.service';
 import { isBrowser } from '@core/utils/platform';
@@ -21,7 +22,8 @@ import { isBrowser } from '@core/utils/platform';
         RouterLink,
         InputComponent,
         ButtonComponent,
-        NgSelectWrapperComponent
+        NgSelectWrapperComponent,
+        ProvinceSelectComponent
     ],
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.css']
@@ -42,72 +44,6 @@ export class RegisterComponent implements OnInit {
         { value: 3, label: '51 - 200 nhân viên' },
         { value: 4, label: '201 - 500 nhân viên' },
         { value: 5, label: '500+ nhân viên' }
-    ];
-
-    provinces = [
-        { value: 'An Giang', label: 'An Giang' },
-        { value: 'Bà Rịa - Vũng Tàu', label: 'Bà Rịa - Vũng Tàu' },
-        { value: 'Bắc Giang', label: 'Bắc Giang' },
-        { value: 'Bắc Kạn', label: 'Bắc Kạn' },
-        { value: 'Bạc Liêu', label: 'Bạc Liêu' },
-        { value: 'Bắc Ninh', label: 'Bắc Ninh' },
-        { value: 'Bến Tre', label: 'Bến Tre' },
-        { value: 'Bình Định', label: 'Bình Định' },
-        { value: 'Bình Dương', label: 'Bình Dương' },
-        { value: 'Bình Phước', label: 'Bình Phước' },
-        { value: 'Bình Thuận', label: 'Bình Thuận' },
-        { value: 'Cà Mau', label: 'Cà Mau' },
-        { value: 'Cao Bằng', label: 'Cao Bằng' },
-        { value: 'Cần Thơ', label: 'Cần Thơ' },
-        { value: 'Đà Nẵng', label: 'Đà Nẵng' },
-        { value: 'Đắk Lắk', label: 'Đắk Lắk' },
-        { value: 'Đắk Nông', label: 'Đắk Nông' },
-        { value: 'Điện Biên', label: 'Điện Biên' },
-        { value: 'Đồng Nai', label: 'Đồng Nai' },
-        { value: 'Đồng Tháp', label: 'Đồng Tháp' },
-        { value: 'Gia Lai', label: 'Gia Lai' },
-        { value: 'Hà Giang', label: 'Hà Giang' },
-        { value: 'Hà Nam', label: 'Hà Nam' },
-        { value: 'Hà Nội', label: 'Hà Nội' },
-        { value: 'Hà Tĩnh', label: 'Hà Tĩnh' },
-        { value: 'Hải Dương', label: 'Hải Dương' },
-        { value: 'Hải Phòng', label: 'Hải Phòng' },
-        { value: 'Hậu Giang', label: 'Hậu Giang' },
-        { value: 'Hòa Bình', label: 'Hòa Bình' },
-        { value: 'Hưng Yên', label: 'Hưng Yên' },
-        { value: 'Khánh Hòa', label: 'Khánh Hòa' },
-        { value: 'Kiên Giang', label: 'Kiên Giang' },
-        { value: 'Kon Tum', label: 'Kon Tum' },
-        { value: 'Lai Châu', label: 'Lai Châu' },
-        { value: 'Lâm Đồng', label: 'Lâm Đồng' },
-        { value: 'Lạng Sơn', label: 'Lạng Sơn' },
-        { value: 'Lào Cai', label: 'Lào Cai' },
-        { value: 'Long An', label: 'Long An' },
-        { value: 'Nam Định', label: 'Nam Định' },
-        { value: 'Nghệ An', label: 'Nghệ An' },
-        { value: 'Ninh Bình', label: 'Ninh Bình' },
-        { value: 'Ninh Thuận', label: 'Ninh Thuận' },
-        { value: 'Phú Thọ', label: 'Phú Thọ' },
-        { value: 'Phú Yên', label: 'Phú Yên' },
-        { value: 'Quảng Bình', label: 'Quảng Bình' },
-        { value: 'Quảng Nam', label: 'Quảng Nam' },
-        { value: 'Quảng Ngãi', label: 'Quảng Ngãi' },
-        { value: 'Quảng Ninh', label: 'Quảng Ninh' },
-        { value: 'Quảng Trị', label: 'Quảng Trị' },
-        { value: 'Sóc Trăng', label: 'Sóc Trăng' },
-        { value: 'Sơn La', label: 'Sơn La' },
-        { value: 'Tây Ninh', label: 'Tây Ninh' },
-        { value: 'Thái Bình', label: 'Thái Bình' },
-        { value: 'Thái Nguyên', label: 'Thái Nguyên' },
-        { value: 'Thanh Hóa', label: 'Thanh Hóa' },
-        { value: 'Thừa Thiên Huế', label: 'Thừa Thiên Huế' },
-        { value: 'Tiền Giang', label: 'Tiền Giang' },
-        { value: 'TP. Hồ Chí Minh', label: 'TP. Hồ Chí Minh' },
-        { value: 'Trà Vinh', label: 'Trà Vinh' },
-        { value: 'Tuyên Quang', label: 'Tuyên Quang' },
-        { value: 'Vĩnh Long', label: 'Vĩnh Long' },
-        { value: 'Vĩnh Phúc', label: 'Vĩnh Phúc' },
-        { value: 'Yên Bái', label: 'Yên Bái' }
     ];
 
     constructor(

@@ -882,6 +882,8 @@
     },
     "COMMON": {
         "ALL": "All",
+        "PROVINCE": "Province/City",
+        "PROVINCE_PLACEHOLDER": "Select province/city",
         "STATUS": {
             "PENDING": "Pending",
             "APPROVED": "Approved",

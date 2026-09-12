@@ -125,12 +125,11 @@
 
                     <!-- Province -->
                     <div class="form-group">
-                        <app-ng-select-wrapper formControlName="address" [items]="provinces"
-                            [label]="'REGISTER.ADDRESS_PROVINCE' | translate"
-                            [placeholder]="'REGISTER.ADDRESS_PROVINCE_PLACEHOLDER' | translate" [required]="true"
-                            [isInvalid]="isFieldInvalid('address')" [errorMessage]="getErrorMessage('address')"
-                            [primaryColor]="'#7C3AED'" [primaryDark]="'#5B21B6'" [searchable]="true">
-                        </app-ng-select-wrapper>
+                        <app-province-select formControlName="address"
+                            [label]="'REGISTER.ADDRESS_PROVINCE'" [placeholder]="'REGISTER.ADDRESS_PROVINCE_PLACEHOLDER'"
+                            [required]="true" [colorRole]="'admin'" [isInvalid]="isFieldInvalid('address')"
+                            [errorMessage]="getErrorMessage('address')">
+                        </app-province-select>
                     </div>
                 </div>
 

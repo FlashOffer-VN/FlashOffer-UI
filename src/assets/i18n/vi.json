@@ -838,6 +838,8 @@
     },
     "COMMON": {
         "ALL": "Tất cả",
+        "PROVINCE": "Tỉnh/Thành phố",
+        "PROVINCE_PLACEHOLDER": "Chọn tỉnh/thành phố",
         "STATUS": {
             "PENDING": "Đang chờ",
             "APPROVED": "Đã duyệt",

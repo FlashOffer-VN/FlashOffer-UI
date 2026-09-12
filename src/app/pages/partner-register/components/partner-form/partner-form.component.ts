@@ -68,7 +68,7 @@ export class PartnerFormComponent implements OnInit {
 
             // Step 2: Business Info
             companyName: ['', [Validators.required, Validators.minLength(2)]],
-            companyAddress: ['', [Validators.required, Validators.minLength(5)]],
+            companyAddress: ['', [Validators.required]],
             businessFieldId: [null, Validators.required],
             companySize: [null, Validators.required],
             products: this.fb.array([]),

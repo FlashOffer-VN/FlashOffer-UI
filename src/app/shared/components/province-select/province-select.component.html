@@ -1,0 +1,7 @@
+<!-- province-select/province-select.component.html -->
+<app-ng-select-wrapper [items]="provinces" [ngModel]="value" (ngModelChange)="onValueChange($event)"
+    [ngModelOptions]="{ standalone: true }" [label]="label | translate" [placeholder]="placeholder | translate"
+    [required]="required" [isInvalid]="isInvalid" [errorMessage]="errorMessage" [disabled]="disabled"
+    [searchable]="searchable" [clearable]="clearable" [id]="id" [appendTo]="appendTo" [colorRole]="colorRole"
+    [primaryColor]="primaryColor" [primaryDark]="primaryDark">
+</app-ng-select-wrapper>

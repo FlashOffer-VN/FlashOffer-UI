@@ -34,14 +34,12 @@
             </app-ng-select-wrapper>
         </div>
 
-        <!-- Company Address -->
+        <!-- Company Address (chọn tỉnh/thành phố) -->
         <div class="form-group full-width">
-            <app-input formControlName="companyAddress" [label]="'PARTNER.COMPANY_ADDRESS' | translate"
-                [placeholder]="'PARTNER.COMPANY_ADDRESS_PLACEHOLDER' | translate" [id]="'companyAddress'">
-            </app-input>
-            @if (isFieldInvalid('companyAddress')) {
-            <span class="error-text">{{ getErrorMessage('companyAddress') }}</span>
-            }
+            <app-province-select formControlName="companyAddress" [label]="'PARTNER.COMPANY_ADDRESS'"
+                [id]="'companyAddress'" [required]="true" [colorRole]="'admin'"
+                [isInvalid]="isFieldInvalid('companyAddress')" [errorMessage]="getErrorMessage('companyAddress')">
+            </app-province-select>
         </div>
     </div>
 
