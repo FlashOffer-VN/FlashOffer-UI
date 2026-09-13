@@ -13,6 +13,16 @@ import {
     UpdatePartnerProductRequest
 } from '@core/models/partner.model';
 
+/** Hình dạng dữ liệu form — dùng chung cho cả giá trị gốc lẫn giá trị đang nhập. */
+interface ProductFormShape {
+    name: string;
+    description: string;
+    category: ProductCategory | null;
+    retailPrice: number | null;
+    wholesalePrice: number | null;
+    minOrderQuantity: number | null;
+}
+
 /**
  * Form sản phẩm của đối tác — dùng cho CẢ thêm mới và sửa.
  *
@@ -90,7 +100,8 @@ export class PartnerProductFormComponent implements OnInit {
     }
 
     private get hasChanges(): boolean {
-        return Object.keys(this.buildUpdatePayload()).length > 0;
+        return JSON.stringify(this.buildUpdatePayload())
+            !== JSON.stringify(this.toUpdatePayload(this.toFormShape(this.original)));
     }
 
     isFieldInvalid(fieldName: string): boolean {
@@ -116,6 +127,9 @@ export class PartnerProductFormComponent implements OnInit {
         }
 
         if (this.isEditMode) {
+            // Nút Lưu đã bị disable khi không có thay đổi; chặn thêm ở đây để phím
+            // Enter trong ô nhập cũng không gửi request vô nghĩa.
+            if (!this.hasChanges) return;
             this.update.emit(this.buildUpdatePayload());
         } else {
             this.create.emit(this.buildCreatePayload());
@@ -139,90 +153,74 @@ export class PartnerProductFormComponent implements OnInit {
     }
 
     private resetForm(): void {
-        const p = this.original;
+        this.form.reset(this.toFormShape(this.original));
+    }
 
-        this.form.reset({
+    /** PartnerProduct entity → hình dạng form (dùng cả cho reset lẫn so sánh). */
+    private toFormShape(p: PartnerProduct | null): ProductFormShape {
+        return {
             name: p?.name ?? '',
             description: p?.description ?? '',
             category: p?.category ?? null,
             retailPrice: p?.retailPrice ?? null,
             wholesalePrice: p?.wholesalePrice ?? null,
             minOrderQuantity: p?.minOrderQuantity ?? null
-        });
+        };
     }
 
     // ==============================
     // PAYLOAD
     // ==============================
 
-    /** Thêm mới — gửi name + mọi field admin có nhập. */
+    /** Thêm mới — gửi name + mọi field admin có nhập (field trống để backend gán mặc định). */
     private buildCreatePayload(): CreatePartnerProductRequest {
         const v = this.form.value;
-
-        return {
-            name: (v.name ?? '').toString().trim(),
-            description: (v.description ?? '').toString().trim(),
-            category: this.toNumberOrNull(v.category),
-            retailPrice: this.toNumberOrNull(v.retailPrice),
-            wholesalePrice: this.toNumberOrNull(v.wholesalePrice),
-            minOrderQuantity: this.toNumberOrNull(v.minOrderQuantity)
+        const payload: CreatePartnerProductRequest = {
+            name: this.text(v.name),
+            description: this.text(v.description)
         };
-    }
 
-    /** Sửa — chỉ gửi field thực sự khác bản gốc (partial update). */
-    private buildUpdatePayload(): UpdatePartnerProductRequest {
-        const p = this.original;
-        if (!p) return {};
+        const category = this.numberOrNull(v.category);
+        if (category !== null) payload.category = category as ProductCategory;
 
-        const v = this.form.value;
-        const payload: UpdatePartnerProductRequest = {};
+        const retailPrice = this.numberOrNull(v.retailPrice);
+        if (retailPrice !== null) payload.retailPrice = retailPrice;
 
-        this.assignText(payload, 'name', v.name, p.name);
-        this.assignText(payload, 'description', v.description, p.description);
+        const wholesalePrice = this.numberOrNull(v.wholesalePrice);
+        if (wholesalePrice !== null) payload.wholesalePrice = wholesalePrice;
 
-        if (v.category !== null && v.category !== undefined
-            && Number(v.category) !== Number(p.category)) {
-            payload.category = Number(v.category);
-        }
-
-        this.assignNumber(payload, 'retailPrice', v.retailPrice, p.retailPrice);
-        this.assignNumber(payload, 'wholesalePrice', v.wholesalePrice, p.wholesalePrice);
-        this.assignNumber(payload, 'minOrderQuantity', v.minOrderQuantity, p.minOrderQuantity);
+        const minOrderQuantity = this.numberOrNull(v.minOrderQuantity);
+        if (minOrderQuantity !== null) payload.minOrderQuantity = minOrderQuantity;
 
         return payload;
     }
 
     /**
-     * Text: chỉ gửi khi khác bản gốc.
-     * (khác vì bị xóa trắng → gửi '' = xóa field)
+     * Sửa — gửi TOÀN BỘ field của form, không phải chỉ field thay đổi.
+     * Backend là partial update (`Condition(srcMember != null)`) nên field không
+     * đổi gửi lại giá trị cũ cũng không hại, mà gửi đủ thì sau này form thêm
+     * field mới sẽ không bị bỏ sót. Ô số để trống → `null` = backend giữ nguyên.
      */
-    private assignText(
-        payload: UpdatePartnerProductRequest,
-        key: 'name' | 'description',
-        value: any,
-        originalValue: any
-    ): void {
-        const next = (value ?? '').toString().trim();
-        const current = (originalValue ?? '').toString().trim();
-        if (next !== current) {
-            payload[key] = next;
-        }
+    private buildUpdatePayload(): UpdatePartnerProductRequest {
+        return this.toUpdatePayload(this.form.value);
     }
 
-    private assignNumber(
-        payload: UpdatePartnerProductRequest,
-        key: 'retailPrice' | 'wholesalePrice' | 'minOrderQuantity',
-        value: any,
-        originalValue: any
-    ): void {
-        const next = this.toNumberOrNull(value);
-        // Ô để trống (null) → coi như admin không muốn đổi, không gửi lên
-        if (next !== null && next !== this.toNumberOrNull(originalValue)) {
-            payload[key] = next;
-        }
+    private toUpdatePayload(src: ProductFormShape): UpdatePartnerProductRequest {
+        return {
+            name: this.text(src.name),
+            description: this.text(src.description),
+            category: this.numberOrNull(src.category) as ProductCategory | null,
+            retailPrice: this.numberOrNull(src.retailPrice),
+            wholesalePrice: this.numberOrNull(src.wholesalePrice),
+            minOrderQuantity: this.numberOrNull(src.minOrderQuantity)
+        };
     }
 
-    private toNumberOrNull(value: any): number | null {
+    private text(value: any): string {
+        return (value ?? '').toString().trim();
+    }
+
+    private numberOrNull(value: any): number | null {
         if (value === null || value === undefined || value === '') return null;
         const num = Number(value);
         return isNaN(num) ? null : num;

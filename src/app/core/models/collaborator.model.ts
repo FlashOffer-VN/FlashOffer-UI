@@ -1,3 +1,5 @@
+import { BusinessInfo } from './business-info.model';
+
 export interface Collaborator {
     id: string;
     userId: string;
@@ -24,6 +26,16 @@ export interface Collaborator {
     rejectionReason?: string;
     createdAt: string;
     updatedAt?: string;
+
+    /**
+     * Thông tin doanh nghiệp — backend trả object lồng này khi có.
+     * Nếu backend chỉ trả field phẳng thì các field dưới đây là fallback.
+     */
+    businessInfo?: BusinessInfo;
+    businessName?: string;
+    address?: string;
+    website?: string;
+    businessSize?: number;
 }
 
 export enum CollaboratorStatus {

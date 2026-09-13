@@ -62,13 +62,15 @@
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             {{ 'ADMIN.BUSINESS_INFO.BUSINESS_FIELD' | translate }}
                         </th>
-                        <th class="status-column px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th
+                            class="status-column px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             {{ 'ADMIN.PARTNER.STATUS' | translate }}
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             {{ 'ADMIN.PARTNER.REGISTERED_AT' | translate }}
                         </th>
-                        <th class="action-column px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th
+                            class="action-column px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             {{ 'COMMON.BUTTON.ACTION' | translate }}
                         </th>
                     </tr>
@@ -131,14 +133,12 @@
                                     {{ 'COMMON.BUTTON.VIEW_DETAIL' | translate }}
                                 </app-button>
                                 <app-button *ngIf="activeTab === 'deleted'" variant="primary" size="sm"
-                                    [loading]="isRestoring"
-                                    (click)="$event.stopPropagation(); onRestore(partner)"
+                                    [loading]="isRestoring" (click)="$event.stopPropagation(); onRestore(partner)"
                                     [title]="'COMMON.BUTTON.RESTORE' | translate">
                                     <i class="fa-solid fa-rotate-left"></i>
                                 </app-button>
                                 <app-button *ngIf="activeTab !== 'deleted'" variant="danger" size="sm"
-                                    [loading]="isDeleting"
-                                    (click)="$event.stopPropagation(); onDelete(partner)"
+                                    [loading]="isDeleting" (click)="$event.stopPropagation(); onDelete(partner)"
                                     [title]="'COMMON.BUTTON.DELETE' | translate">
                                     <i class="fa-solid fa-trash"></i>
                                 </app-button>

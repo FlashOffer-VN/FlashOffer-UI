@@ -8,18 +8,40 @@ import { BusinessFieldOption, BusinessFieldService } from '@core/services/busine
 import {
     BUSINESS_TYPES,
     COMPANY_SIZES,
+    BusinessType,
+    CompanySize,
     Partner,
     UpdatePartnerRequest
 } from '@core/models/partner.model';
 
+/** Hình dạng dữ liệu form — dùng chung cho cả giá trị gốc lẫn giá trị đang nhập. */
+interface PartnerFormShape {
+    fullName: string;
+    email: string;
+    phone: string;
+    position: string;
+    companyName: string;
+    companyTax: string;
+    companyAddress: string;
+    companyWebsite: string;
+    businessType: BusinessType | null;
+    companySize: CompanySize | null;
+    businessFieldId: string | null;
+    note: string;
+}
+
 /**
- * Form sửa THÔNG TIN ĐỐI TÁC (PUT /partners/{id}) — partial update.
+ * Form sửa THÔNG TIN ĐỐI TÁC (PUT /partners/{id}).
  *
- * CHỈ gửi lên những field thực sự THAY ĐỔI so với dữ liệu gốc, nên:
- * - field admin không đụng tới sẽ không bị ghi đè (kể cả khi form hiển thị rỗng);
- * - admin xóa trắng một field text = field đó "thay đổi" → gửi `''` để xóa;
- * - select không khớp được giá trị cũ (vd. quy mô lạ) → giá trị null, KHÔNG gửi
- *   lên → backend giữ nguyên, không mất dữ liệu.
+ * Payload gửi lên là TOÀN BỘ field của form, không phải chỉ field thay đổi.
+ * Backend là partial update (`Condition(srcMember != null)`) nên field không đổi
+ * gửi lại giá trị cũ cũng không hại, mà gửi đủ thì sau này form thêm field mới
+ * sẽ không bị bỏ sót. Quy tắc giá trị:
+ * - field text để trống → gửi `''` (xóa giá trị);
+ * - select/enum không có giá trị → gửi `null` (backend giữ nguyên giá trị cũ).
+ *
+ * Nút Lưu chỉ bật khi có thay đổi so với dữ liệu gốc (`hasChanges`) để tránh
+ * ghi lại y nguyên — nhưng khi bấm Lưu thì vẫn gửi đủ field như trên.
  *
  * SẢN PHẨM KHÔNG nằm trong form này — backend tách sang API riêng
  * (`/partners/{id}/products`), dùng `PartnerProductFormComponent`.
@@ -72,7 +94,8 @@ export class PartnerEditFormComponent {
 
     /** Có thay đổi nào so với dữ liệu gốc không (dùng để disable nút Lưu). */
     get hasChanges(): boolean {
-        return Object.keys(this.buildPayload()).length > 0;
+        return JSON.stringify(this.buildPayload())
+            !== JSON.stringify(this.toPayload(this.toFormShape(this.original)));
     }
 
     isFieldInvalid(fieldName: string): boolean {
@@ -96,6 +119,11 @@ export class PartnerEditFormComponent {
             this.form.markAllAsTouched();
             return;
         }
+
+        // Nút Lưu đã bị disable khi không có thay đổi; chặn thêm ở đây để phím
+        // Enter trong ô nhập cũng không gửi request vô nghĩa.
+        if (!this.hasChanges) return;
+
         this.save.emit(this.buildPayload());
     }
 
@@ -124,9 +152,12 @@ export class PartnerEditFormComponent {
     }
 
     private resetForm(): void {
-        const p = this.original;
+        this.form.reset(this.toFormShape(this.original));
+    }
 
-        this.form.reset({
+    /** Partner entity → hình dạng form (dùng cả cho reset lẫn để so sánh thay đổi). */
+    private toFormShape(p: Partner | null): PartnerFormShape {
+        return {
             fullName: p?.fullName ?? '',
             email: p?.email ?? '',
             phone: p?.phone ?? '',
@@ -136,63 +167,48 @@ export class PartnerEditFormComponent {
             companyTax: p?.companyTax ?? '',
             companyAddress: p?.companyAddress ?? '',
             companyWebsite: p?.companyWebsite ?? '',
+
             businessType: p?.businessType ?? null,
             companySize: p?.companySize ?? null,
             businessFieldId: p?.businessFieldId ?? null,
             note: p?.note ?? ''
-        });
+        };
     }
 
     // ==============================
-    // PAYLOAD (chỉ field thay đổi)
+    // PAYLOAD (toàn bộ field)
     // ==============================
 
     private buildPayload(): UpdatePartnerRequest {
-        const p = this.original;
-        if (!p) return {};
-
-        const v = this.form.value;
-        const payload: UpdatePartnerRequest = {};
-
-        // Text: gửi khi khác bản gốc (kể cả khác vì bị xóa trắng → '' = xóa field)
-        this.assignText(payload, 'fullName', v.fullName, p.fullName);
-        this.assignText(payload, 'email', v.email, p.email);
-        this.assignText(payload, 'phone', v.phone, p.phone);
-        this.assignText(payload, 'position', v.position, p.position);
-        this.assignText(payload, 'companyName', v.companyName, p.companyName);
-        this.assignText(payload, 'companyTax', v.companyTax, p.companyTax);
-        this.assignText(payload, 'companyAddress', v.companyAddress, p.companyAddress);
-        this.assignText(payload, 'companyWebsite', v.companyWebsite, p.companyWebsite);
-        this.assignText(payload, 'note', v.note, p.note);
-
-        // Select/enum: chỉ gửi khi có giá trị mới VÀ khác bản gốc.
-        // (null = admin không chọn được / giá trị cũ lạ → để backend giữ nguyên)
-        if (v.businessType !== null && v.businessType !== undefined
-            && Number(v.businessType) !== Number(p.businessType)) {
-            payload.businessType = Number(v.businessType);
-        }
-        if (v.companySize !== null && v.companySize !== undefined
-            && Number(v.companySize) !== Number(p.companySize)) {
-            payload.companySize = Number(v.companySize);
-        }
-        if (v.businessFieldId && v.businessFieldId !== (p.businessFieldId ?? null)) {
-            payload.businessFieldId = v.businessFieldId;
-        }
-
-        return payload;
+        return this.toPayload(this.form.value);
     }
 
-    private assignText(
-        payload: UpdatePartnerRequest,
-        key: 'fullName' | 'email' | 'phone' | 'position' | 'companyName'
-            | 'companyTax' | 'companyAddress' | 'companyWebsite' | 'note',
-        value: any,
-        originalValue: any
-    ): void {
-        const next = (value ?? '').toString().trim();
-        const current = (originalValue ?? '').toString().trim();
-        if (next !== current) {
-            payload[key] = next;
-        }
+    private toPayload(src: PartnerFormShape): UpdatePartnerRequest {
+        return {
+            fullName: this.text(src.fullName),
+            email: this.text(src.email),
+            phone: this.text(src.phone),
+            position: this.text(src.position),
+
+            companyName: this.text(src.companyName),
+            companyTax: this.text(src.companyTax),
+            companyAddress: this.text(src.companyAddress),
+            companyWebsite: this.text(src.companyWebsite),
+            note: this.text(src.note),
+
+            businessType: this.numberOrNull(src.businessType) as BusinessType | null,
+            companySize: this.numberOrNull(src.companySize) as CompanySize | null,
+            businessFieldId: src.businessFieldId || null
+        };
+    }
+
+    private text(value: any): string {
+        return (value ?? '').toString().trim();
+    }
+
+    private numberOrNull(value: any): number | null {
+        if (value === null || value === undefined || value === '') return null;
+        const num = Number(value);
+        return isNaN(num) ? null : num;
     }
 }
