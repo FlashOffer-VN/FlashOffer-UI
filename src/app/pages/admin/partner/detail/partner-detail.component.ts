@@ -137,19 +137,36 @@ export class AdminPartnerDetailComponent implements OnInit {
         return getCommissionTypeLabel(type);
     }
 
+    /**
+     * Thông tin doanh nghiệp đã chuẩn hoá — `toBusinessInfo()` tự fallback theo
+     * từng field qua `businessInfo` → `companyInfo` → field phẳng ở root.
+     */
     getBusinessInfo(): BusinessInfo | null {
         if (!this.partner) return null;
-        return toBusinessInfo(this.partner.businessInfo ?? this.partner);
+        return toBusinessInfo(this.partner);
+    }
+
+    /** Tên doanh nghiệp — dùng được cả khi backend trả nested-only. */
+    getCompanyName(): string {
+        return toBusinessInfo(this.partner)?.companyName || '--';
+    }
+
+    /** Loại hình doanh nghiệp đã fallback (nested hoặc flat). */
+    getBusinessType(): BusinessType | undefined {
+        return toBusinessInfo(this.partner)?.businessType;
+    }
+
+    /** Quy mô doanh nghiệp đã fallback (nested hoặc flat). */
+    getCompanySize(): CompanySize | undefined {
+        return toBusinessInfo(this.partner)?.companySize;
     }
 
     /**
-     * Tên lĩnh vực hoạt động — ưu tiên field phẳng ở root (`businessFieldName`),
-     * fallback sang `businessInfo.businessField` khi backend chỉ trả dạng lồng.
+     * Tên lĩnh vực hoạt động — gom từ cả 3 tầng: field phẳng ở root
+     * (`businessFieldName`), rồi `businessInfo.businessField`, `companyInfo.businessField`.
      */
     getBusinessFieldName(): string {
-        return this.partner?.businessFieldName
-            || this.partner?.businessInfo?.businessField
-            || '--';
+        return toBusinessInfo(this.partner)?.businessField || '--';
     }
 
     formatNumber(value: number): string {

@@ -123,12 +123,12 @@ export class AdminCollaboratorDetailComponent implements OnInit {
     }
 
     /**
-     * Dữ liệu doanh nghiệp — ưu tiên object lồng `businessInfo`, fallback sang
-     * field phẳng nếu backend trả dạng đó.
+     * Dữ liệu doanh nghiệp — `toBusinessInfo()` tự ưu tiên object lồng
+     * (`businessInfo` / `companyInfo`) rồi mới fallback sang field phẳng ở root.
      */
     getBusinessInfo(): BusinessInfo | null {
         if (!this.collaborator) return null;
-        return toBusinessInfo(this.collaborator.businessInfo ?? this.collaborator);
+        return toBusinessInfo(this.collaborator);
     }
 
     canApprove(): boolean {

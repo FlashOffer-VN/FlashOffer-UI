@@ -28,10 +28,17 @@ export interface Collaborator {
     updatedAt?: string;
 
     /**
-     * Thông tin doanh nghiệp — backend trả object lồng này khi có.
-     * Nếu backend chỉ trả field phẳng thì các field dưới đây là fallback.
+     * Thông tin doanh nghiệp — backend trả object lồng `businessInfo` (contract cũ)
+     * hoặc `companyInfo` (response thực tế). Nếu backend chỉ trả field phẳng ở root
+     * thì các field dưới đây là fallback.
      */
     businessInfo?: BusinessInfo;
+    companyInfo?: BusinessInfo;
+    companyId?: string;
+    companyName?: string;
+    companyTax?: string;
+    companyAddress?: string;
+    companyWebsite?: string;
     businessName?: string;
     address?: string;
     website?: string;

@@ -6,6 +6,7 @@ import { CoreSharedModule } from '@shared';
 import { AppService } from '@core/services/app.service';
 import { BusinessFieldOption, BusinessFieldService } from '@core/services/business-field.service';
 import { BUSINESS_SIZES, Collaborator, UpdateCollaboratorRequest } from '@core/models/collaborator.model';
+import { toBusinessInfo } from '@core/models/business-info.model';
 import { getSalesChannelLabel, SalesChannel } from '@core/models/ctv.model';
 
 /** 5 kênh bán hàng (SalesChannel) — label lấy từ i18n. */
@@ -150,14 +151,15 @@ export class CollaboratorEditFormComponent {
 
     private resetForm(): void {
         const c = this.original;
-        // Dữ liệu doanh nghiệp ưu tiên object lồng `businessInfo`, fallback field phẳng
-        const info = c?.businessInfo;
+        // Dữ liệu doanh nghiệp: toBusinessInfo tự ưu tiên object lồng
+        // (`businessInfo` / `companyInfo`), fallback field phẳng
+        const info = toBusinessInfo(c);
 
         this.originalBusiness = {
-            businessName: (info?.companyName ?? c?.businessName ?? '').toString(),
-            address: (info?.companyAddress ?? c?.address ?? '').toString(),
-            website: (info?.companyWebsite ?? c?.website ?? '').toString(),
-            businessSize: (info?.companySize ?? c?.businessSize ?? null) as number | null
+            businessName: (info?.companyName ?? '').toString(),
+            address: (info?.companyAddress ?? '').toString(),
+            website: (info?.companyWebsite ?? '').toString(),
+            businessSize: (info?.companySize ?? null) as number | null
         };
 
         this.form.reset({
