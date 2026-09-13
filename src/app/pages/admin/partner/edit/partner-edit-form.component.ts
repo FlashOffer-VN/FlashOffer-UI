@@ -13,6 +13,7 @@ import {
     Partner,
     UpdatePartnerRequest
 } from '@core/models/partner.model';
+import { toBusinessInfo } from '@core/models/business-info.model';
 
 /** Hình dạng dữ liệu form — dùng chung cho cả giá trị gốc lẫn giá trị đang nhập. */
 interface PartnerFormShape {
@@ -155,21 +156,28 @@ export class PartnerEditFormComponent {
         this.form.reset(this.toFormShape(this.original));
     }
 
-    /** Partner entity → hình dạng form (dùng cả cho reset lẫn để so sánh thay đổi). */
+    /**
+     * Partner entity → hình dạng form (dùng cả cho reset lẫn để so sánh thay đổi).
+     *
+     * Nhóm doanh nghiệp đi qua `toBusinessInfo()` để fallback `businessInfo` /
+     * `companyInfo` / field phẳng. Form này PUT TOÀN BỘ field, nên nếu backend trả
+     * nested-only mà form đọc thẳng field phẳng thì sẽ hiện rỗng và ghi đè mất dữ liệu.
+     */
     private toFormShape(p: Partner | null): PartnerFormShape {
+        const info = toBusinessInfo(p);
         return {
             fullName: p?.fullName ?? '',
             email: p?.email ?? '',
             phone: p?.phone ?? '',
             position: p?.position ?? '',
 
-            companyName: p?.companyName ?? '',
-            companyTax: p?.companyTax ?? '',
-            companyAddress: p?.companyAddress ?? '',
-            companyWebsite: p?.companyWebsite ?? '',
+            companyName: info?.companyName ?? '',
+            companyTax: info?.companyTax ?? '',
+            companyAddress: info?.companyAddress ?? '',
+            companyWebsite: info?.companyWebsite ?? '',
 
-            businessType: p?.businessType ?? null,
-            companySize: p?.companySize ?? null,
+            businessType: info?.businessType ?? null,
+            companySize: info?.companySize ?? null,
             businessFieldId: p?.businessFieldId ?? null,
             note: p?.note ?? ''
         };

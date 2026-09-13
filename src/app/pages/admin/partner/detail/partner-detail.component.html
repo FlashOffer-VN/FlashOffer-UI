@@ -27,7 +27,7 @@
                     <div class="flex flex-wrap gap-x-6 gap-y-1 mt-1 text-sm text-gray-500">
                         <span><i class="fa-solid fa-envelope w-4"></i> {{ partner.email }}</span>
                         <span><i class="fa-solid fa-phone w-4"></i> {{ partner.phone }}</span>
-                        <span><i class="fa-regular fa-building w-4"></i> {{ partner.companyName }}</span>
+                        <span><i class="fa-regular fa-building w-4"></i> {{ getCompanyName() }}</span>
                         <span><i class="fa-regular fa-calendar w-4"></i> {{ formatDate(partner.createdAt) }}</span>
                     </div>
                 </div>
@@ -60,8 +60,11 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.PARTNER.BUSINESS_TYPE' |
                     translate }}</p>
-                <p class="text-lg font-semibold text-gray-900 mt-1">{{ getBusinessTypeLabel(partner.businessType) |
-                    translate }}</p>
+                @if (getBusinessType(); as businessType) {
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ getBusinessTypeLabel(businessType) | translate }}</p>
+                } @else {
+                <p class="text-lg font-semibold text-gray-900 mt-1">--</p>
+                }
             </div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.BUSINESS_INFO.BUSINESS_FIELD'
@@ -71,8 +74,11 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.PARTNER.COMPANY_SIZE' |
                     translate }}</p>
-                <p class="text-lg font-semibold text-gray-900 mt-1">{{ getCompanySizeLabel(partner.companySize) |
-                    translate }}</p>
+                @if (getCompanySize(); as companySize) {
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ getCompanySizeLabel(companySize) | translate }}</p>
+                } @else {
+                <p class="text-lg font-semibold text-gray-900 mt-1">--</p>
+                }
             </div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.PARTNER.REGISTERED_AT' |

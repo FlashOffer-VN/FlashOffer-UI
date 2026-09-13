@@ -205,7 +205,13 @@ export interface Partner {
     };
     commission?: PartnerCommission;
     products?: PartnerProduct[];
+    /**
+     * Thông tin doanh nghiệp dạng object lồng. Backend có thể trả `businessInfo`
+     * (contract cũ) hoặc `companyInfo`, hoặc chỉ field phẳng ở root
+     * (`companyName`, `companyTax`, ...). Dùng `toBusinessInfo()` để gom đủ 3 dạng.
+     */
     businessInfo?: BusinessInfo;
+    companyInfo?: BusinessInfo;
 }
 
 export interface PartnerCommission {
