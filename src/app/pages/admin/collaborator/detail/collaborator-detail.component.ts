@@ -4,9 +4,8 @@ import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
-import { CtvRegistration, CTVRegistrationStatus } from '@core/models/ctv.model';
-import { UpdateCollaboratorRequest } from '@core/models/collaborator.model';
-import { BusinessInfo } from '@core/models/business-info.model';
+import { Collaborator, CollaboratorStatus, UpdateCollaboratorRequest } from '@core/models/collaborator.model';
+import { BusinessInfo, toBusinessInfo } from '@core/models/business-info.model';
 import { ApiResponse } from '@core/models/paged-response.model';
 
 // Shared Components
@@ -35,7 +34,7 @@ import { CollaboratorEditFormComponent } from '../edit/collaborator-edit-form.co
     styleUrls: ['./collaborator-detail.component.css']
 })
 export class AdminCollaboratorDetailComponent implements OnInit {
-    collaborator: CtvRegistration | null = null;
+    collaborator: Collaborator | null = null;
     isLoading = true;
     isActionLoading = false;
 
@@ -45,7 +44,7 @@ export class AdminCollaboratorDetailComponent implements OnInit {
     showEditModal = false;
 
     /** Bản sao của collaborator truyền vào form sửa — đổi reference mỗi lần mở. */
-    editCollaborator: CtvRegistration | null = null;
+    editCollaborator: Collaborator | null = null;
 
     constructor(
         private _appService: AppService,
@@ -57,6 +56,11 @@ export class AdminCollaboratorDetailComponent implements OnInit {
         this.loadData();
     }
 
+    /**
+     * Chi tiết lấy từ CollaboratorService (`GET /Collaborators/{id}`) — trả đủ field
+     * để form sửa có dữ liệu (position, skills, interests, goals...). Các thao tác
+     * khác (danh sách, duyệt/từ chối, xóa/khôi phục) vẫn đi qua CtvService.
+     */
     loadData(): void {
         const id = this._route.snapshot.paramMap.get('id');
         if (!id) {
@@ -66,9 +70,9 @@ export class AdminCollaboratorDetailComponent implements OnInit {
         }
 
         this.isLoading = true;
-        this._appService.ctvService.getDetail(id).subscribe({
-            next: (response: ApiResponse<CtvRegistration>) => {
-                if (!response.data) {
+        this._appService.collaboratorService.getById(id).subscribe({
+            next: (response: ApiResponse<Collaborator>) => {
+                if (!response?.data) {
                     this._appService.showError(this._appService.trans('COMMON.ERROR.NOT_FOUND'));
                     this._router.navigate(['/admin/collaborator']);
                     return;
@@ -84,20 +88,24 @@ export class AdminCollaboratorDetailComponent implements OnInit {
         });
     }
 
-    getStatusVariant(status: CTVRegistrationStatus): BadgeVariant {
-        const variants: Record<CTVRegistrationStatus, BadgeVariant> = {
-            [CTVRegistrationStatus.Pending]: 'warning',
-            [CTVRegistrationStatus.Approved]: 'success',
-            [CTVRegistrationStatus.Rejected]: 'danger'
+    getStatusVariant(status: CollaboratorStatus): BadgeVariant {
+        const variants: Record<CollaboratorStatus, BadgeVariant> = {
+            [CollaboratorStatus.Pending]: 'warning',
+            [CollaboratorStatus.Approved]: 'success',
+            [CollaboratorStatus.Rejected]: 'danger',
+            [CollaboratorStatus.Suspended]: 'secondary',
+            [CollaboratorStatus.Active]: 'success'
         };
         return variants[status] || 'secondary';
     }
 
-    getStatusKey(status: CTVRegistrationStatus): string {
-        const keys: Record<CTVRegistrationStatus, string> = {
-            [CTVRegistrationStatus.Pending]: 'pending',
-            [CTVRegistrationStatus.Approved]: 'approved',
-            [CTVRegistrationStatus.Rejected]: 'rejected'
+    getStatusKey(status: CollaboratorStatus): string {
+        const keys: Record<CollaboratorStatus, string> = {
+            [CollaboratorStatus.Pending]: 'pending',
+            [CollaboratorStatus.Approved]: 'approved',
+            [CollaboratorStatus.Rejected]: 'rejected',
+            [CollaboratorStatus.Suspended]: 'suspended',
+            [CollaboratorStatus.Active]: 'active'
         };
         return keys[status] || 'pending';
     }
@@ -114,17 +122,21 @@ export class AdminCollaboratorDetailComponent implements OnInit {
         });
     }
 
+    /**
+     * Dữ liệu doanh nghiệp — ưu tiên object lồng `businessInfo`, fallback sang
+     * field phẳng nếu backend trả dạng đó.
+     */
     getBusinessInfo(): BusinessInfo | null {
-        // CTV chỉ nhận dữ liệu doanh nghiệp từ nested `businessInfo` (không có field phẳng)
-        return this.collaborator?.businessInfo ?? null;
+        if (!this.collaborator) return null;
+        return toBusinessInfo(this.collaborator.businessInfo ?? this.collaborator);
     }
 
     canApprove(): boolean {
-        return this.collaborator?.status === CTVRegistrationStatus.Pending;
+        return this.collaborator?.status === CollaboratorStatus.Pending;
     }
 
     canReject(): boolean {
-        return this.collaborator?.status === CTVRegistrationStatus.Pending;
+        return this.collaborator?.status === CollaboratorStatus.Pending;
     }
 
     onApprove(): void {
@@ -135,11 +147,11 @@ export class AdminCollaboratorDetailComponent implements OnInit {
         if (!this.collaborator) return;
         this.isActionLoading = true;
         this._appService.ctvService.approve(this.collaborator.id).subscribe({
-            next: (response: ApiResponse<CtvRegistration>) => {
-                this.collaborator = response.data;
+            next: () => {
                 this.isActionLoading = false;
                 this.showApproveModal = false;
                 this._appService.showSuccess(this._appService.trans('ADMIN.CTV.APPROVED_SUCCESS'));
+                // Load lại từ CollaboratorService để có đủ field cho form sửa
                 this.loadData();
             },
             error: () => {
@@ -158,8 +170,7 @@ export class AdminCollaboratorDetailComponent implements OnInit {
         if (!this.collaborator) return;
         this.isActionLoading = true;
         this._appService.ctvService.reject(this.collaborator.id).subscribe({
-            next: (response: ApiResponse<CtvRegistration>) => {
-                this.collaborator = response.data;
+            next: () => {
                 this.isActionLoading = false;
                 this.showRejectModal = false;
                 this._appService.showSuccess(this._appService.trans('ADMIN.CTV.REJECTED_SUCCESS'));

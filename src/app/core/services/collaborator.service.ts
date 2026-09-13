@@ -7,7 +7,7 @@ import {
     UpdateCollaboratorRequest,
     CollaboratorFilter
 } from '../models/collaborator.model';
-import { PagedResponse } from '@core/models/paged-response.model';
+import { ApiResponse, PagedResponse } from '@core/models/paged-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class CollaboratorService {
@@ -41,15 +41,15 @@ export class CollaboratorService {
     /**
      * Lấy CTV theo Id
      */
-    getById(id: string): Observable<{ success: boolean; message: string; data: Collaborator }> {
-        return this._apiService.get<{ success: boolean; message: string; data: Collaborator }>(`${this._baseUrl}/${id}`);
+    getById(id: string): Observable<ApiResponse<Collaborator>> {
+        return this._apiService.get<ApiResponse<Collaborator>>(`${this._baseUrl}/${id}`);
     }
 
     /**
-     * Cập nhật CTV
+     * Cập nhật CTV — partial update, field nào không gửi/null thì giữ nguyên.
      */
-    update(id: string, data: UpdateCollaboratorRequest): Observable<{ success: boolean; message: string; data: Collaborator }> {
-        return this._apiService.put<{ success: boolean; message: string; data: Collaborator }>(`${this._baseUrl}/${id}`, data);
+    update(id: string, data: UpdateCollaboratorRequest): Observable<ApiResponse<Collaborator>> {
+        return this._apiService.put<ApiResponse<Collaborator>>(`${this._baseUrl}/${id}`, data);
     }
 
     /**

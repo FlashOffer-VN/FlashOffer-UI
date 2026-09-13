@@ -84,14 +84,15 @@
 
                     <!-- Data rows -->
                     <tr *ngFor="let collaborator of collaborators; let i = index"
-                        class="hover:bg-gray-50 transition-colors cursor-pointer" (click)="navigateToDetail(collaborator.id)">
+                        class="hover:bg-gray-50 transition-colors cursor-pointer"
+                        (click)="navigateToDetail(collaborator.id)">
                         <td class="px-4 py-3 text-sm text-gray-500">
                             {{ (pageNumber - 1) * pageSize + i + 1 }}
                         </td>
                         <td class="px-4 py-3 text-sm font-mono text-gray-600">
                             {{ formatId(collaborator.id) }}
                         </td>
-                        <td class="px-4 py-3 text-sm font-medium text-gray-900">
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900 w-40">
                             {{ collaborator.fullName }}
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-600">
@@ -103,8 +104,9 @@
                         <td class="px-4 py-3 text-sm text-gray-600">
                             {{ collaborator.businessFieldName || '--' }}
                         </td>
-                        <td class="px-4 py-3">
-                            <app-badge [status]="getStatusKey(collaborator.status)" [variant]="getStatusVariant(collaborator.status)">
+                        <td class="px-4 py-3 status-column">
+                            <app-badge [status]="getStatusKey(collaborator.status)"
+                                [variant]="getStatusVariant(collaborator.status)" [size]="'sm'">
                             </app-badge>
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-500">
@@ -117,14 +119,12 @@
                                     {{ 'COMMON.BUTTON.VIEW_DETAIL' | translate }}
                                 </app-button>
                                 <app-button *ngIf="activeTab === 'deleted'" variant="primary" size="sm"
-                                    [loading]="isRestoring"
-                                    (click)="$event.stopPropagation(); onRestore(collaborator)"
+                                    [loading]="isRestoring" (click)="$event.stopPropagation(); onRestore(collaborator)"
                                     [title]="'COMMON.BUTTON.RESTORE' | translate">
                                     <i class="fa-solid fa-rotate-left"></i>
                                 </app-button>
                                 <app-button *ngIf="activeTab !== 'deleted'" variant="danger" size="sm"
-                                    [loading]="isDeleting"
-                                    (click)="$event.stopPropagation(); onDelete(collaborator)"
+                                    [loading]="isDeleting" (click)="$event.stopPropagation(); onDelete(collaborator)"
                                     [title]="'COMMON.BUTTON.DELETE' | translate">
                                     <i class="fa-solid fa-trash"></i>
                                 </app-button>
