@@ -346,6 +346,7 @@
         "COMPANY_SIZE_11_50": "11 - 50 employees",
         "COMPANY_SIZE_51_200": "51 - 200 employees",
         "COMPANY_SIZE_200_PLUS": "200+ employees",
+        "COMPANY_SIZE_500_PLUS": "500+ employees",
         "PRODUCT_CATEGORY_ELECTRONICS": "Electronics",
         "PRODUCT_CATEGORY_FASHION": "Fashion",
         "PRODUCT_CATEGORY_FOOD": "Food",

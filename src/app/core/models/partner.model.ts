@@ -17,7 +17,8 @@ export enum CompanySize {
     Size1_10 = 1,
     Size11_50 = 2,
     Size51_200 = 3,
-    Size200Plus = 4
+    Size200Plus = 4,
+    Size500Plus = 5
 }
 
 export enum PartnerStatus {
@@ -297,6 +298,7 @@ export function getCompanySizeLabel(size: CompanySize): string {
         [CompanySize.Size11_50]: 'PARTNER.COMPANY_SIZE_11_50',
         [CompanySize.Size51_200]: 'PARTNER.COMPANY_SIZE_51_200',
         [CompanySize.Size200Plus]: 'PARTNER.COMPANY_SIZE_200_PLUS'
+        [CompanySize.Size500Plus]: 'PARTNER.COMPANY_SIZE_500_PLUS'
     };
     return labels[size] || size.toString();
 }
