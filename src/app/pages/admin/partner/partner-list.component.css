@@ -3,17 +3,27 @@
 }
 
 /*
- * Bảng 11 cột, `table-layout: fixed` nên MỌI cột phải có width khai báo,
- * nếu không cột đó bị ép về 0px (không hiển thị).
- * Thứ tự cột: # | Mã | Họ tên | Công ty | Email | SĐT | Loại hình |
- *             Lĩnh vực | Trạng thái | Ngày đăng ký | Thao tác
+ * Bảng 11 cột dùng `table-layout: fixed`.
  *
- * Nội dung dài thì XUỐNG DÒNG (không cắt bằng ellipsis) để admin đọc được đủ;
- * bảng có `min-width` nên màn hình hẹp sẽ cuộn ngang.
+ * QUAN TRỌNG — đừng đặt width ở <td> trong tbody:
+ * với `table-layout: fixed`, độ rộng cột CHỈ lấy từ hàng đầu tiên (hàng <th>
+ * ở thead) hoặc <colgroup>. Width trên <td> của các hàng dữ liệu bị BỎ QUA,
+ * nên class Tailwind kiểu `w-60` đặt ở <td> cũng vô tác dụng.
+ * => Mọi độ rộng khai báo ở đây, cặp `th`/`td` cùng nth-child.
+ *
+ * Dùng px (không dùng %) để cột rộng đúng theo nội dung thật: % bị chia lại
+ * khi bảng co giãn nên cột ngắn bị bóp, cột dài bị phình.
+ * `min-width` = tổng các cột => màn hình hẹp thì cuộn ngang, không bóp cột.
+ *
+ * Thứ tự cột:
+ *   1 #  ·  2 Mã ĐT  ·  3 Họ tên  ·  4 Công ty  ·  5 Email  ·  6 SĐT
+ *   7 Loại hình  ·  8 Lĩnh vực  ·  9 Trạng thái  ·  10 Ngày ĐK  ·  11 Thao tác
+ *
+ * Nội dung dài XUỐNG DÒNG (không cắt ellipsis) để admin đọc được đủ.
  */
 table {
     width: 100%;
-    min-width: 1180px;
+    min-width: 1460px;
     table-layout: fixed;
 }
 
@@ -25,40 +35,49 @@ table td {
     vertical-align: top;
 }
 
+/* 1. # — 1-3 chữ số, nhưng phải chừa padding px-4 (32px) */
 table th:nth-child(1),
-table td:nth-child(1) { width: 3%; }
+table td:nth-child(1) { width: 56px; }
 
+/* 2. Mã đối tác — "PART-260712-9814", font mono nên cần rộng hơn số ký tự */
 table th:nth-child(2),
-table td:nth-child(2) { width: 8%; }
+table td:nth-child(2) { width: 150px; }
 
+/* 3. Họ tên — dài thì xuống dòng, không cần rộng tối đa */
 table th:nth-child(3),
-table td:nth-child(3) { width: 10%; }
+table td:nth-child(3) { width: 140px; }
 
+/* 4. Công ty */
 table th:nth-child(4),
-table td:nth-child(4) { width: 11%; }
+table td:nth-child(4) { width: 155px; }
 
+/* 5. Email — địa chỉ dài, rộng nhất trong nhóm text */
 table th:nth-child(5),
-table td:nth-child(5) { width: 11%; }
+table td:nth-child(5) { width: 175px; }
 
+/* 6. SĐT — 10-11 chữ số, tránh ngắt giữa số nên chừa đủ 1 dòng */
 table th:nth-child(6),
-table td:nth-child(6) { width: 9%; }
+table td:nth-child(6) { width: 112px; }
 
+/* 7. Loại hình — label dịch ("Công ty trách nhiệm hữu hạn") nên xuống dòng */
 table th:nth-child(7),
-table td:nth-child(7) { width: 9%; }
+table td:nth-child(7) { width: 120px; }
 
+/* 8. Lĩnh vực — "Thương mại điện tử" vừa 1 dòng */
 table th:nth-child(8),
-table td:nth-child(8) { width: 10%; }
+table td:nth-child(8) { width: 130px; }
 
-.status-column {
-    width: 8%;
-}
+/* 9. Trạng thái — badge (xem rule app-badge bên dưới: badge đã nowrap) */
+table th:nth-child(9),
+table td:nth-child(9) { width: 116px; }
 
+/* 10. Ngày đăng ký — "12/07/2026 11:48" vừa 1 dòng */
 table th:nth-child(10),
-table td:nth-child(10) { width: 8%; }
+table td:nth-child(10) { width: 136px; }
 
-.action-column {
-    width: 13%;
-}
+/* 11. Thao tác — nút "Xem chi tiết" + 1 nút icon (khôi phục HOẶC xóa) */
+table th:nth-child(11),
+table td:nth-child(11) { width: 170px; }
 
 app-badge {
     display: inline-block;

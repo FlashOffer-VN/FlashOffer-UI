@@ -55,6 +55,27 @@
                     [isInvalid]="isFieldInvalid('experience')" [errorMessage]="getErrorMessage('experience')">
                 </app-input>
             </div>
+
+            <div class="form-group full-width">
+                <app-input formControlName="skills" [label]="'ADMIN.CTV.SKILLS' | translate"
+                    [placeholder]="'ADMIN.CTV.SKILLS' | translate" [id]="'ctv_edit_skills'"
+                    [isInvalid]="isFieldInvalid('skills')" [errorMessage]="getErrorMessage('skills')">
+                </app-input>
+            </div>
+
+            <div class="form-group full-width">
+                <app-input formControlName="interests" [label]="'ADMIN.CTV.INTERESTS' | translate"
+                    [placeholder]="'ADMIN.CTV.INTERESTS' | translate" [id]="'ctv_edit_interests'"
+                    [isInvalid]="isFieldInvalid('interests')" [errorMessage]="getErrorMessage('interests')">
+                </app-input>
+            </div>
+
+            <div class="form-group full-width">
+                <app-input formControlName="goals" [label]="'ADMIN.CTV.GOALS' | translate"
+                    [placeholder]="'ADMIN.CTV.GOALS' | translate" [id]="'ctv_edit_goals'"
+                    [isInvalid]="isFieldInvalid('goals')" [errorMessage]="getErrorMessage('goals')">
+                </app-input>
+            </div>
         </div>
     </section>
 

@@ -264,12 +264,7 @@ export class AdminPartnerDetailComponent implements OnInit {
     onEditSubmit(payload: UpdatePartnerRequest): void {
         if (!this.partner) return;
 
-        if (Object.keys(payload).length === 0) {
-            this.showEditModal = false;
-            this._appService.showInfo(this._appService.trans('COMMON.NO_CHANGES'));
-            return;
-        }
-
+        // Payload luôn đủ field; form đã chặn submit khi không có thay đổi.
         this.isActionLoading = true;
         this._appService.partnerService.update(this.partner.id, payload).subscribe({
             next: () => {
@@ -322,12 +317,7 @@ export class AdminPartnerDetailComponent implements OnInit {
     onProductUpdate(payload: UpdatePartnerProductRequest): void {
         if (!this.partner || !this.editingProduct) return;
 
-        if (Object.keys(payload).length === 0) {
-            this.showProductModal = false;
-            this._appService.showInfo(this._appService.trans('COMMON.NO_CHANGES'));
-            return;
-        }
-
+        // Payload luôn đủ field; form đã chặn submit khi không có thay đổi.
         this.isActionLoading = true;
         this._appService.partnerService
             .updateProduct(this.partner.id, this.editingProduct.id, payload)

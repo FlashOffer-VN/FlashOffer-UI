@@ -5,8 +5,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CoreSharedModule } from '@shared';
 import { AppService } from '@core/services/app.service';
 import { BusinessFieldOption, BusinessFieldService } from '@core/services/business-field.service';
-import { BUSINESS_SIZES, UpdateCollaboratorRequest } from '@core/models/collaborator.model';
-import { CtvRegistration, getSalesChannelLabel, SalesChannel } from '@core/models/ctv.model';
+import { BUSINESS_SIZES, Collaborator, UpdateCollaboratorRequest } from '@core/models/collaborator.model';
+import { getSalesChannelLabel, SalesChannel } from '@core/models/ctv.model';
 
 /** 5 kênh bán hàng (SalesChannel) — label lấy từ i18n. */
 const SALES_CHANNELS = [
@@ -18,14 +18,19 @@ const SALES_CHANNELS = [
 ];
 
 /**
- * Form sửa CTV (PUT /collaborators/{id}) — partial update.
+ * Form sửa CTV (PUT /Collaborators/{id}) — partial update.
  *
- * Cùng nguyên tắc với form sửa Partner: chỉ gửi field thực sự THAY ĐỔI so với
- * dữ liệu gốc, select không khớp giá trị cũ thì không gửi (backend giữ nguyên).
+ * Dữ liệu đọc từ `CollaboratorService.getById()` (`GET /Collaborators/{id}`) nên
+ * có đủ field để điền sẵn form: position, skills, interests, goals, zalo...
  *
- * Dữ liệu doanh nghiệp của CTV nằm ở object lồng `businessInfo` khi đọc
- * (GET), nhưng API cập nhật nhận field PHẲNG (businessName, address, website,
- * businessSize) — component tự map hai chiều.
+ * CHỈ gửi field thực sự THAY ĐỔI so với dữ liệu gốc. Lý do an toàn: nếu backend
+ * không trả field nào đó (vd. thiếu `businessInfo`) thì form hiển thị rỗng, và
+ * gửi `''` lên sẽ XOÁ trắng giá trị cũ trên server. Diff giúp field không đọc
+ * được sẽ được giữ nguyên thay vì bị ghi đè.
+ *
+ * Dữ liệu doanh nghiệp đọc từ object lồng `businessInfo`, fallback sang field
+ * phẳng (businessName, address, website, businessSize); khi gửi lên thì dùng
+ * field PHẲNG đúng như UpdateCollaboratorDto.
  *
  * Không sửa được: collaboratorCode, status, userId, level, parentCollaboratorId.
  */
@@ -48,8 +53,8 @@ export class CollaboratorEditFormComponent {
     salesChannels: { value: number; label: string }[] = [];
     businessSizes: { value: number; label: string }[] = [];
 
-    private original: CtvRegistration | null = null;
-    /** Giá trị doanh nghiệp gốc (đã tách từ businessInfo) để so sánh thay đổi. */
+    private original: Collaborator | null = null;
+    /** Giá trị gốc của nhóm thông tin doanh nghiệp (đã tách từ businessInfo). */
     private originalBusiness: {
         businessName: string;
         address: string;
@@ -77,7 +82,7 @@ export class CollaboratorEditFormComponent {
 
     /** Truyền bản sao mới mỗi lần mở modal để form luôn dựng lại từ dữ liệu hiện tại. */
     @Input()
-    set collaborator(value: CtvRegistration | null) {
+    set collaborator(value: Collaborator | null) {
         this.original = value ?? null;
         this.resetForm();
     }
@@ -108,6 +113,11 @@ export class CollaboratorEditFormComponent {
             this.form.markAllAsTouched();
             return;
         }
+
+        // Nút Lưu đã bị disable khi không có thay đổi; chặn thêm ở đây để phím
+        // Enter trong ô nhập cũng không gửi request vô nghĩa.
+        if (!this.hasChanges) return;
+
         this.save.emit(this.buildPayload());
     }
 
@@ -125,6 +135,9 @@ export class CollaboratorEditFormComponent {
             position: ['', [Validators.maxLength(200)]],
             salesChannel: [null],
             experience: ['', [Validators.maxLength(2000)]],
+            skills: ['', [Validators.maxLength(2000)]],
+            interests: ['', [Validators.maxLength(2000)]],
+            goals: ['', [Validators.maxLength(2000)]],
 
             // Doanh nghiệp (field phẳng theo UpdateCollaboratorDto)
             businessName: ['', [Validators.maxLength(200)]],
@@ -137,14 +150,14 @@ export class CollaboratorEditFormComponent {
 
     private resetForm(): void {
         const c = this.original;
-        // Dữ liệu doanh nghiệp đọc từ object lồng `businessInfo`
+        // Dữ liệu doanh nghiệp ưu tiên object lồng `businessInfo`, fallback field phẳng
         const info = c?.businessInfo;
 
         this.originalBusiness = {
-            businessName: (info?.companyName ?? '').toString(),
-            address: (info?.companyAddress ?? '').toString(),
-            website: (info?.companyWebsite ?? '').toString(),
-            businessSize: (info?.companySize ?? null) as number | null
+            businessName: (info?.companyName ?? c?.businessName ?? '').toString(),
+            address: (info?.companyAddress ?? c?.address ?? '').toString(),
+            website: (info?.companyWebsite ?? c?.website ?? '').toString(),
+            businessSize: (info?.companySize ?? c?.businessSize ?? null) as number | null
         };
 
         this.form.reset({
@@ -152,9 +165,12 @@ export class CollaboratorEditFormComponent {
             phone: c?.phone ?? '',
             email: c?.email ?? '',
             zalo: c?.zalo ?? '',
-            position: '',
+            position: c?.position ?? '',
             salesChannel: c?.salesChannel ?? null,
             experience: c?.experience ?? '',
+            skills: c?.skills ?? '',
+            interests: c?.interests ?? '',
+            goals: c?.goals ?? '',
 
             businessName: this.originalBusiness.businessName,
             address: this.originalBusiness.address,
@@ -179,7 +195,11 @@ export class CollaboratorEditFormComponent {
         this.assignText(payload, 'phone', v.phone, c.phone);
         this.assignText(payload, 'email', v.email, c.email);
         this.assignText(payload, 'zalo', v.zalo, c.zalo);
+        this.assignText(payload, 'position', v.position, c.position);
         this.assignText(payload, 'experience', v.experience, c.experience);
+        this.assignText(payload, 'skills', v.skills, c.skills);
+        this.assignText(payload, 'interests', v.interests, c.interests);
+        this.assignText(payload, 'goals', v.goals, c.goals);
 
         this.assignText(payload, 'businessName', v.businessName, this.originalBusiness.businessName);
         this.assignText(payload, 'address', v.address, this.originalBusiness.address);
@@ -191,7 +211,7 @@ export class CollaboratorEditFormComponent {
             payload.salesChannel = Number(v.salesChannel);
         }
         if (v.businessSize !== null && v.businessSize !== undefined
-            && Number(v.businessSize) !== Number(this.originalBusiness.businessSize)) {
+            && Number(v.businessSize) !== this.toNumberOrNull(this.originalBusiness.businessSize)) {
             payload.businessSize = Number(v.businessSize);
         }
         if (v.businessFieldId && v.businessFieldId !== (c.businessFieldId ?? null)) {
@@ -203,7 +223,8 @@ export class CollaboratorEditFormComponent {
 
     private assignText(
         payload: UpdateCollaboratorRequest,
-        key: 'fullName' | 'phone' | 'email' | 'zalo' | 'experience'
+        key: 'fullName' | 'phone' | 'email' | 'zalo' | 'position' | 'experience'
+            | 'skills' | 'interests' | 'goals'
             | 'businessName' | 'address' | 'website',
         value: any,
         originalValue: any
@@ -213,5 +234,11 @@ export class CollaboratorEditFormComponent {
         if (next !== current) {
             payload[key] = next;
         }
+    }
+
+    private toNumberOrNull(value: any): number | null {
+        if (value === null || value === undefined || value === '') return null;
+        const num = Number(value);
+        return isNaN(num) ? null : num;
     }
 }
