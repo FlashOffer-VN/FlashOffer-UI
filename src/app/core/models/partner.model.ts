@@ -297,7 +297,7 @@ export function getCompanySizeLabel(size: CompanySize): string {
         [CompanySize.Size1_10]: 'PARTNER.COMPANY_SIZE_1_10',
         [CompanySize.Size11_50]: 'PARTNER.COMPANY_SIZE_11_50',
         [CompanySize.Size51_200]: 'PARTNER.COMPANY_SIZE_51_200',
-        [CompanySize.Size200Plus]: 'PARTNER.COMPANY_SIZE_200_PLUS'
+        [CompanySize.Size200Plus]: 'PARTNER.COMPANY_SIZE_200_PLUS',
         [CompanySize.Size500Plus]: 'PARTNER.COMPANY_SIZE_500_PLUS'
     };
     return labels[size] || size.toString();
