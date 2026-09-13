@@ -45,6 +45,9 @@
                         [loading]="isActionLoading">
                         <i class="fa-solid fa-play mr-1"></i> {{ 'ADMIN.PARTNER.ACTIVATE' | translate }}
                     </app-button>
+                    <app-button variant="primary" size="sm" (click)="openEdit()" [loading]="isActionLoading">
+                        <i class="fa-solid fa-pen mr-1"></i> {{ 'COMMON.BUTTON.EDIT' | translate }}
+                    </app-button>
                     <app-button variant="secondary" size="sm" (click)="goBack()">
                         <i class="fa-solid fa-arrow-left mr-1"></i> {{ 'COMMON.BUTTON.BACK' | translate }}
                     </app-button>
@@ -63,7 +66,7 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.BUSINESS_INFO.BUSINESS_FIELD'
                     | translate }}</p>
-                <p class="text-lg font-semibold text-gray-900 mt-1">{{ partner.businessFieldName || '--' }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ getBusinessFieldName() }}</p>
             </div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.PARTNER.COMPANY_SIZE' |
@@ -170,60 +173,21 @@
             </div>
         </div>
 
-        <!-- ====== 4. PRODUCTS TABLE ====== -->
+        <!-- ====== 4. PRODUCTS ====== -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">
                     <i class="fa-solid fa-box mr-2"></i> {{ 'ADMIN.PARTNER.PRODUCTS' | translate }}
                 </h2>
-                <span class="text-sm text-gray-500">{{ partner.products?.length || 0 }} sản phẩm</span>
+                <app-button variant="primary" size="sm" (click)="openAddProduct()">
+                    <i class="fa-solid fa-plus mr-1"></i> {{ 'PARTNER.ADD_PRODUCT' | translate }}
+                </app-button>
             </div>
 
-            <div *ngIf="partner.products && partner.products.length > 0; else noProducts">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <thead>
-                            <tr class="bg-gray-50 border-b border-gray-200">
-                                <th
-                                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    #</th>
-                                <th
-                                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ 'ADMIN.PARTNER.PRODUCT_NAME' | translate }}</th>
-                                <th
-                                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ 'ADMIN.PARTNER.PRODUCT_CATEGORY' | translate }}</th>
-                                <th
-                                    class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ 'ADMIN.PARTNER.RETAIL_PRICE' | translate }}</th>
-                                <th
-                                    class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ 'ADMIN.PARTNER.WHOLESALE_PRICE' | translate }}</th>
-                                <th
-                                    class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ 'ADMIN.PARTNER.MIN_ORDER_QTY' | translate }}</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            <tr *ngFor="let product of partner.products; let i = index"
-                                class="hover:bg-gray-50 transition-colors">
-                                <td class="px-4 py-3 text-gray-400">{{ i + 1 }}</td>
-                                <td class="px-4 py-3 font-medium text-gray-900">{{ product.name }}</td>
-                                <td class="px-4 py-3 text-gray-600">{{ getProductCategoryLabel(product.category) |
-                                    translate }}</td>
-                                <td class="px-4 py-3 text-right text-gray-600">{{ formatNumber(product.retailPrice) }}
-                                    VNĐ</td>
-                                <td class="px-4 py-3 text-right text-gray-600">{{ formatNumber(product.wholesalePrice)
-                                    }} VNĐ</td>
-                                <td class="px-4 py-3 text-center text-gray-600">{{ product.minOrderQuantity }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <ng-template #noProducts>
-                <p class="text-gray-500 text-sm py-4 text-center">{{ 'ADMIN.PARTNER.NO_PRODUCTS' | translate }}</p>
-            </ng-template>
+            <app-product-list [products]="partner.products || []" [colorRole]="'admin'" [editable]="true"
+                [isActionLoading]="isActionLoading" (edit)="openEditProduct($event)"
+                (delete)="onDeleteProduct($event)">
+            </app-product-list>
         </div>
     </div>
 </div>
@@ -248,4 +212,25 @@
     [confirmVariant]="'primary'" [loading]="isActionLoading" (confirm)="confirmActivate()"
     (cancel)="showActivateModal = false">
     <p class="text-gray-600">{{ 'ADMIN.PARTNER.ACTIVATE_CONFIRM' | translate }}</p>
+</app-modal>
+
+<!-- ====== EDIT PARTNER MODAL ====== -->
+<app-modal [(visible)]="showEditModal" [title]="'ADMIN.PARTNER.EDIT_TITLE' | translate" [showFooter]="false"
+    [customWidth]="'56rem'" (cancel)="showEditModal = false">
+    @if (showEditModal) {
+    <app-partner-edit-form [partner]="editPartner" [isSaving]="isActionLoading" (save)="onEditSubmit($event)"
+        (cancel)="showEditModal = false">
+    </app-partner-edit-form>
+    }
+</app-modal>
+
+<!-- ====== PRODUCT MODAL (thêm mới khi editingProduct = null) ====== -->
+<app-modal [(visible)]="showProductModal" [showFooter]="false"
+    [title]="(editingProduct ? 'ADMIN.PARTNER.PRODUCT_EDIT_TITLE' : 'ADMIN.PARTNER.PRODUCT_ADD_TITLE') | translate"
+    [customWidth]="'42rem'" (cancel)="showProductModal = false">
+    @if (showProductModal) {
+    <app-partner-product-form [product]="editingProduct" [isSaving]="isActionLoading" (create)="onProductCreate($event)"
+        (update)="onProductUpdate($event)" (cancel)="showProductModal = false">
+    </app-partner-product-form>
+    }
 </app-modal>

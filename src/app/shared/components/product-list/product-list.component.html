@@ -1,0 +1,98 @@
+<!-- shared/components/product-list/product-list.component.html -->
+
+<!-- ===== Filters ===== -->
+@if (showFilters) {
+<div class="product-filters">
+    <div class="product-filters__search">
+        <app-input [ngModel]="searchText" (ngModelChange)="onSearchChange($event)"
+            [placeholder]="'ADMIN.PARTNER.PRODUCTS_SEARCH_PLACEHOLDER' | translate" [id]="'productSearch'">
+        </app-input>
+    </div>
+
+    <div class="product-filters__category">
+        <app-ng-select-wrapper [ngModel]="selectedCategory" (ngModelChange)="onCategoryChange($event)"
+            [items]="categoryOptions" [placeholder]="'ADMIN.PARTNER.FILTER_CATEGORY' | translate"
+            [id]="'productCategoryFilter'" [colorRole]="colorRole">
+        </app-ng-select-wrapper>
+    </div>
+
+    @if (hasFilter) {
+    <button type="button" class="btn-clear-filter" (click)="clearFilters()">
+        <i class="fa-solid fa-filter-circle-xmark"></i>
+        {{ 'ADMIN.PARTNER.CLEAR_FILTER' | translate }}
+    </button>
+    }
+</div>
+}
+
+<!-- ===== Table ===== -->
+<div class="overflow-x-auto">
+    <table class="product-table">
+        <thead>
+            <tr class="bg-gray-50 border-b border-gray-200">
+                <th class="th">#</th>
+                <th class="th">{{ 'ADMIN.PARTNER.PRODUCT_CODE' | translate }}</th>
+                <th class="th">{{ 'ADMIN.PARTNER.PRODUCT_NAME' | translate }}</th>
+                @if (showDescription) {
+                <th class="th">{{ 'ADMIN.PARTNER.PRODUCT_DESC' | translate }}</th>
+                }
+                <th class="th">{{ 'ADMIN.PARTNER.PRODUCT_CATEGORY' | translate }}</th>
+                <th class="th th--right">{{ 'ADMIN.PARTNER.RETAIL_PRICE' | translate }}</th>
+                <th class="th th--right">{{ 'ADMIN.PARTNER.WHOLESALE_PRICE' | translate }}</th>
+                <th class="th th--center">{{ 'ADMIN.PARTNER.MIN_ORDER_QTY' | translate }}</th>
+                @if (editable) {
+                <th class="th th--center">{{ 'COMMON.BUTTON.ACTION' | translate }}</th>
+                }
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+            @for (product of filteredProducts; track product.id; let i = $index) {
+            <tr class="hover:bg-gray-50 transition-colors">
+                <td class="td text-gray-400">{{ i + 1 }}</td>
+                <td class="td font-mono text-gray-600">{{ product.partnerProductCode || '--' }}</td>
+                <td class="td font-medium text-gray-900">{{ product.name }}</td>
+                @if (showDescription) {
+                <td class="td td--desc text-gray-600">{{ product.description || '--' }}</td>
+                }
+                <td class="td text-gray-600">{{ getCategoryLabel(product.category) | translate }}</td>
+                <td class="td td--right text-gray-600">{{ formatNumber(product.retailPrice) }} VNĐ</td>
+                <td class="td td--right text-gray-600">{{ formatNumber(product.wholesalePrice) }} VNĐ</td>
+                <td class="td td--center text-gray-600">{{ product.minOrderQuantity }}</td>
+                @if (editable) {
+                <td class="td td--center">
+                    <div class="product-actions">
+                        <app-button variant="primary" size="sm" [disabled]="isActionLoading"
+                            [title]="'COMMON.BUTTON.EDIT' | translate"
+                            [attr.aria-label]="'COMMON.BUTTON.EDIT' | translate" (click)="edit.emit(product)">
+                            <i class="fa-solid fa-pen"></i>
+                        </app-button>
+                        <app-button variant="danger" size="sm" [disabled]="isActionLoading"
+                            [title]="'COMMON.BUTTON.DELETE' | translate"
+                            [attr.aria-label]="'COMMON.BUTTON.DELETE' | translate" (click)="delete.emit(product)">
+                            <i class="fa-solid fa-trash"></i>
+                        </app-button>
+                    </div>
+                </td>
+                }
+            </tr>
+            }
+
+            <!-- Không có dữ liệu -->
+            @if (filteredProducts.length === 0) {
+            <tr>
+                <td [attr.colspan]="columnCount" class="td text-center text-gray-500 py-8">
+                    {{ (products.length > 0 ? 'ADMIN.PARTNER.NO_FILTER_RESULT' : 'ADMIN.PARTNER.NO_PRODUCTS') | translate }}
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- ===== Số lượng ===== -->
+<div class="product-count">
+    {{ 'ADMIN.PARTNER.PRODUCTS_COUNT' | translate: { count: filteredProducts.length } }}
+    @if (hasFilter && products.length !== filteredProducts.length) {
+    <span class="text-gray-400">/ {{ products.length }}</span>
+    }
+</div>

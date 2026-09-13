@@ -8,6 +8,7 @@ import { CoreSharedModule } from './core-shared.module';
 import { BusinessInfoComponent } from './components/business-info/business-info.component';
 import { ContactFloatingComponent } from './components/contact-floating/contact-floating.component';
 import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
+import { ProductListComponent } from './components/product-list/product-list.component';
 import { ToastComponent } from './components/toast/toast.component';
 
 // ===== Layout (route shell) =====
@@ -17,6 +18,7 @@ import { UserLayoutComponent } from './components/layouts/user-layout/user-layou
 
 const HEAVY_COMPONENTS = [
     BusinessInfoComponent,
+    ProductListComponent,
     ContactFloatingComponent,
     LanguageSwitcherComponent,
     ToastComponent

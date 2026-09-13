@@ -51,8 +51,8 @@
                         </td>
                         <td class="max-w-md px-4 py-3 text-sm text-gray-600">
                             <button type="button" class="post-preview text-left" (click)="openPostDetail(post)">
-                                <div class="truncate font-medium">{{ post.title || '--' }}</div>
-                                <div class="line-clamp-2">{{ getContentPreview(post.content) }}</div>
+                                <div class="font-medium">{{ post.title || '--' }}</div>
+                                <div>{{ getContentPreview(post.content) }}</div>
                             </button>
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-500">{{ formatDate(post.createdAt) }}</td>

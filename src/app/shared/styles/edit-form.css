@@ -1,0 +1,125 @@
+/*
+ * shared/styles/edit-form.css
+ * Style dùng chung cho các form sửa trong admin (partner-edit-form,
+ * collaborator-edit-form...). Khai báo qua `styleUrls` với đường dẫn tương đối;
+ * Angular vẫn scope style theo từng component.
+ */
+
+:host {
+    display: block;
+}
+
+.form-section-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+}
+
+.form-hint {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin: -0.25rem 0 0.75rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.form-grid .full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group {
+    min-width: 0;
+}
+
+/* ===== Sản phẩm ===== */
+.product-row {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr auto;
+    align-items: end;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid #f3f4f6;
+    border-radius: 0.5rem;
+    background: #fafafa;
+}
+
+.product-row__index {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: #ede9fe;
+    color: #7c3aed;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.btn-remove {
+    margin-bottom: 0.35rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.5rem;
+    color: #ef4444;
+    background: #fef2f2;
+    transition: background 0.2s ease;
+}
+
+.btn-remove:hover:not(:disabled) {
+    background: #fee2e2;
+}
+
+.btn-remove:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.btn-add-product {
+    margin-top: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.85rem;
+    border: 1px dashed #c4b5fd;
+    border-radius: 0.5rem;
+    color: #7c3aed;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.btn-add-product:hover {
+    background: #f5f3ff;
+}
+
+/* ===== Actions ===== */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f3f4f6;
+}
+
+@media (max-width: 640px) {
+    .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .product-row {
+        grid-template-columns: auto 1fr auto;
+    }
+
+    .product-row .form-group:nth-of-type(2) {
+        grid-column: 2 / 3;
+    }
+}

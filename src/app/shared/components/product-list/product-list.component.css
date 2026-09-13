@@ -1,0 +1,108 @@
+/* shared/components/product-list/product-list.component.css */
+
+:host {
+    display: block;
+}
+
+/* ===== Filters ===== */
+.product-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.product-filters__search {
+    flex: 1 1 16rem;
+    min-width: 0;
+}
+
+.product-filters__category {
+    flex: 0 0 14rem;
+    min-width: 0;
+}
+
+.btn-clear-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.8125rem;
+    color: #6b7280;
+    background: #f3f4f6;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.btn-clear-filter:hover {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+/* ===== Table ===== */
+.product-table {
+    width: 100%;
+    font-size: 0.875rem;
+}
+
+.product-table .th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.product-table .th--right {
+    text-align: right;
+}
+
+.product-table .th--center {
+    text-align: center;
+}
+
+.product-table .td {
+    padding: 0.75rem 1rem;
+    vertical-align: top;
+}
+
+.product-table .td--right {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.product-table .td--center {
+    text-align: center;
+}
+
+/* Mô tả có thể dài — giới hạn để bảng không bị kéo rộng */
+.product-table .td--desc {
+    max-width: 20rem;
+    overflow-wrap: anywhere;
+}
+
+/* ===== Actions ===== */
+.product-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+/* ===== Count ===== */
+.product-count {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+@media (max-width: 640px) {
+    .product-filters__category {
+        flex: 1 1 100%;
+    }
+}

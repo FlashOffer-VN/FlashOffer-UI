@@ -1,0 +1,58 @@
+<!-- pages/admin/partner/edit/partner-product-form.component.html -->
+<form class="space-y-5" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-grid">
+        <div class="form-group full-width">
+            <app-input formControlName="name" [label]="'PARTNER.PRODUCT_NAME' | translate"
+                [placeholder]="'PARTNER.PRODUCT_NAME_PLACEHOLDER' | translate" [id]="'product_name'"
+                [isInvalid]="isFieldInvalid('name')" [errorMessage]="getErrorMessage('name')">
+            </app-input>
+        </div>
+
+        <div class="form-group full-width">
+            <app-input formControlName="description" [label]="'ADMIN.PARTNER.PRODUCT_DESC' | translate"
+                [placeholder]="'PARTNER.PRODUCT_DESC_PLACEHOLDER' | translate" [id]="'product_description'"
+                [isInvalid]="isFieldInvalid('description')" [errorMessage]="getErrorMessage('description')">
+            </app-input>
+        </div>
+
+        <div class="form-group">
+            <app-ng-select-wrapper formControlName="category" [items]="categoryOptions"
+                [label]="'PARTNER.PRODUCT_CATEGORY' | translate"
+                [placeholder]="'PARTNER.PRODUCT_CATEGORY_PLACEHOLDER' | translate" [id]="'product_category'"
+                [colorRole]="'admin'">
+            </app-ng-select-wrapper>
+        </div>
+
+        <div class="form-group">
+            <app-input formControlName="minOrderQuantity" type="number" [label]="'ADMIN.PARTNER.MIN_ORDER_QTY' | translate"
+                [placeholder]="'PARTNER.MIN_ORDER_QUANTITY_PLACEHOLDER' | translate" [id]="'product_minOrderQuantity'"
+                [isInvalid]="isFieldInvalid('minOrderQuantity')" [errorMessage]="getErrorMessage('minOrderQuantity')">
+            </app-input>
+        </div>
+
+        <div class="form-group">
+            <app-input formControlName="retailPrice" type="number" [label]="'ADMIN.PARTNER.RETAIL_PRICE' | translate"
+                [placeholder]="'PARTNER.RETAIL_PRICE_PLACEHOLDER' | translate" [id]="'product_retailPrice'"
+                [isInvalid]="isFieldInvalid('retailPrice')" [errorMessage]="getErrorMessage('retailPrice')">
+            </app-input>
+        </div>
+
+        <div class="form-group">
+            <app-input formControlName="wholesalePrice" type="number"
+                [label]="'ADMIN.PARTNER.WHOLESALE_PRICE' | translate"
+                [placeholder]="'PARTNER.WHOLESALE_PRICE_PLACEHOLDER' | translate" [id]="'product_wholesalePrice'"
+                [isInvalid]="isFieldInvalid('wholesalePrice')" [errorMessage]="getErrorMessage('wholesalePrice')">
+            </app-input>
+        </div>
+    </div>
+
+    <!-- ===== Actions ===== -->
+    <div class="form-actions">
+        <app-button variant="secondary" size="md" (click)="cancel.emit()">
+            {{ 'COMMON.BUTTON.CANCEL' | translate }}
+        </app-button>
+        <app-button variant="primary" size="md" type="submit" [loading]="isSaving" [disabled]="!canSubmit">
+            {{ 'COMMON.BUTTON.SAVE' | translate }}
+        </app-button>
+    </div>
+</form>

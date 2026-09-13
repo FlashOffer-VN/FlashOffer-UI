@@ -7,6 +7,9 @@
  * nếu không cột đó bị ép về 0px (không hiển thị).
  * Thứ tự cột: # | Mã | Họ tên | Công ty | Email | SĐT | Loại hình |
  *             Lĩnh vực | Trạng thái | Ngày đăng ký | Thao tác
+ *
+ * Nội dung dài thì XUỐNG DÒNG (không cắt bằng ellipsis) để admin đọc được đủ;
+ * bảng có `min-width` nên màn hình hẹp sẽ cuộn ngang.
  */
 table {
     width: 100%;
@@ -16,9 +19,10 @@ table {
 
 table th,
 table td {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    /* Cho phép wrap; chuỗi dài không có khoảng trắng (email, mã) vẫn ngắt được */
+    white-space: normal;
+    overflow-wrap: anywhere;
+    vertical-align: top;
 }
 
 table th:nth-child(1),

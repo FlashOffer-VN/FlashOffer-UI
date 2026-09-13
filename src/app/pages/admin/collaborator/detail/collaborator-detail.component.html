@@ -38,6 +38,9 @@
                         [loading]="isActionLoading">
                         <i class="fa-solid fa-xmark mr-1"></i> {{ 'ADMIN.CTV.REJECT' | translate }}
                     </app-button>
+                    <app-button variant="primary" size="sm" (click)="openEdit()" [loading]="isActionLoading">
+                        <i class="fa-solid fa-pen mr-1"></i> {{ 'COMMON.BUTTON.EDIT' | translate }}
+                    </app-button>
                     <app-button variant="secondary" size="sm" (click)="goBack()">
                         <i class="fa-solid fa-arrow-left mr-1"></i> {{ 'COMMON.BUTTON.BACK' | translate }}
                     </app-button>
@@ -130,4 +133,14 @@
     [confirmVariant]="'danger'" [loading]="isActionLoading" (confirm)="confirmReject()"
     (cancel)="showRejectModal = false">
     <p class="text-gray-600">{{ 'ADMIN.CTV.REJECT_CONFIRM' | translate }}</p>
+</app-modal>
+
+<!-- ====== EDIT MODAL ====== -->
+<app-modal [(visible)]="showEditModal" [title]="'ADMIN.CTV.EDIT_TITLE' | translate" [showFooter]="false"
+    [customWidth]="'56rem'" (cancel)="showEditModal = false">
+    @if (showEditModal) {
+    <app-collaborator-edit-form [collaborator]="editCollaborator" [isSaving]="isActionLoading"
+        (save)="onEditSubmit($event)" (cancel)="showEditModal = false">
+    </app-collaborator-edit-form>
+    }
 </app-modal>

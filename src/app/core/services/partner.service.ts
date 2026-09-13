@@ -3,11 +3,15 @@ import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import {
     Partner,
+    PartnerProduct,
     PartnerStatus,
     BusinessType,
     CompanySize,
     CommissionType,
     ProductCategory,
+    UpdatePartnerRequest,
+    CreatePartnerProductRequest,
+    UpdatePartnerProductRequest,
     getPartnerStatusLabel,
     getBusinessTypeLabel,
     getCompanySizeLabel,
@@ -94,6 +98,50 @@ export class PartnerService {
 
     activate(id: string): Observable<ApiResponse<Partner>> {
         return this._apiService.post<ApiResponse<Partner>>(`${this._baseUrl}/${id}/activate`, {});
+    }
+
+    // ==============================
+    // UPDATE (PARTIAL)
+    // ==============================
+
+    /**
+     * Cập nhật đối tác — partial update, field nào không gửi/null thì giữ nguyên.
+     * PUT /api/v1/partners/{id}
+     */
+    update(id: string, data: UpdatePartnerRequest): Observable<ApiResponse<Partner>> {
+        return this._apiService.put<ApiResponse<Partner>>(`${this._baseUrl}/${id}`, data);
+    }
+
+    // ==============================
+    // SẢN PHẨM (API RIÊNG)
+    // ==============================
+
+    /** Thêm sản phẩm cho đối tác. POST /api/v1/partners/{id}/products */
+    addProduct(partnerId: string, data: CreatePartnerProductRequest): Observable<ApiResponse<PartnerProduct>> {
+        return this._apiService.post<ApiResponse<PartnerProduct>>(
+            `${this._baseUrl}/${partnerId}/products`, data
+        );
+    }
+
+    /**
+     * Cập nhật sản phẩm — partial update, field nào không gửi/null thì giữ nguyên.
+     * PUT /api/v1/partners/{id}/products/{productId}
+     */
+    updateProduct(
+        partnerId: string,
+        productId: string,
+        data: UpdatePartnerProductRequest
+    ): Observable<ApiResponse<PartnerProduct>> {
+        return this._apiService.put<ApiResponse<PartnerProduct>>(
+            `${this._baseUrl}/${partnerId}/products/${productId}`, data
+        );
+    }
+
+    /** Xóa sản phẩm. DELETE /api/v1/partners/{id}/products/{productId} */
+    deleteProduct(partnerId: string, productId: string): Observable<ApiResponse<{ message: string }>> {
+        return this._apiService.delete<ApiResponse<{ message: string }>>(
+            `${this._baseUrl}/${partnerId}/products/${productId}`
+        );
     }
 
     // ==============================
