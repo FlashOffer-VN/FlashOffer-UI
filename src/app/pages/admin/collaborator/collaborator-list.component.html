@@ -54,6 +54,9 @@
                             {{ 'ADMIN.CTV.PHONE' | translate }}
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'ADMIN.BUSINESS_INFO.BUSINESS_FIELD' | translate }}
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             {{ 'ADMIN.CTV.STATUS' | translate }}
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -67,14 +70,14 @@
                 <tbody class="divide-y divide-gray-200">
                     <!-- Loading -->
                     <tr *ngIf="isLoading">
-                        <td colspan="8" class="px-4 py-8 text-center">
+                        <td colspan="9" class="px-4 py-8 text-center">
                             <app-loading></app-loading>
                         </td>
                     </tr>
 
                     <!-- No data -->
                     <tr *ngIf="!isLoading && collaborators.length === 0">
-                        <td colspan="8" class="px-4 py-8 text-center text-gray-500">
+                        <td colspan="9" class="px-4 py-8 text-center text-gray-500">
                             {{ 'PAGINATION.NO_ITEMS' | translate }}
                         </td>
                     </tr>
@@ -96,6 +99,9 @@
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-600">
                             {{ collaborator.phone }}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-600">
+                            {{ collaborator.businessFieldName || '--' }}
                         </td>
                         <td class="px-4 py-3">
                             <app-badge [status]="getStatusKey(collaborator.status)" [variant]="getStatusVariant(collaborator.status)">

@@ -25,6 +25,9 @@
       "@shared/*": [
         "./src/app/shared/*"
       ],
+      "@shared": [
+        "./src/app/shared/index.ts"
+      ],
       "@features/*": [
         "./src/app/features/*"
       ],

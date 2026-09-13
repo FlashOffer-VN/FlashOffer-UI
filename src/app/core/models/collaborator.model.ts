@@ -13,6 +13,8 @@ export interface Collaborator {
     experience?: string;
     agreeTerms: boolean;
     parentCollaboratorId?: string;
+    businessFieldId?: string | null;
+    businessFieldName?: string | null;
     level: number;
     referralCode?: string;
     status: CollaboratorStatus;
@@ -70,7 +72,30 @@ export interface UpdateCollaboratorRequest {
     goals?: string;
     salesChannel?: number;
     experience?: string;
+
+    // Thông tin doanh nghiệp
+    address?: string;
+    businessName?: string;
+    businessSize?: number;
+    website?: string;
+
+    /** Id lĩnh vực — ưu tiên hơn businessFieldName. */
+    businessFieldId?: string | null;
+    /** Tên lĩnh vực — fallback find-or-create cho client chưa gửi Id. */
+    businessFieldName?: string;
 }
+
+/**
+ * Quy mô doanh nghiệp của CTV (khác Partner: CTV có 5 mức, Partner 4 mức).
+ * value khớp `businessSize` mà backend nhận.
+ */
+export const BUSINESS_SIZES = [
+    { value: 1, label: 'COMMON.BUSINESS_SIZE.SIZE_1_10' },
+    { value: 2, label: 'COMMON.BUSINESS_SIZE.SIZE_11_50' },
+    { value: 3, label: 'COMMON.BUSINESS_SIZE.SIZE_51_200' },
+    { value: 4, label: 'COMMON.BUSINESS_SIZE.SIZE_201_500' },
+    { value: 5, label: 'COMMON.BUSINESS_SIZE.SIZE_500_PLUS' }
+];
 
 export interface CollaboratorFilter {
     search?: string;

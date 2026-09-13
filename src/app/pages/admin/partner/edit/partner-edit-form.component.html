@@ -1,0 +1,116 @@
+<!-- pages/admin/partner/edit/partner-edit-form.component.html -->
+<form class="space-y-5" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <!-- ===== Thông tin cá nhân ===== -->
+    <section>
+        <h3 class="form-section-title">
+            <i class="fa-regular fa-user mr-2"></i>{{ 'ADMIN.PARTNER.PERSONAL_INFO' | translate }}
+        </h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <app-input formControlName="fullName" [label]="'ADMIN.PARTNER.FULL_NAME' | translate"
+                    [placeholder]="'PARTNER.FULL_NAME_PLACEHOLDER' | translate" [id]="'edit_fullName'"
+                    [isInvalid]="isFieldInvalid('fullName')" [errorMessage]="getErrorMessage('fullName')">
+                </app-input>
+            </div>
+
+            <div class="form-group">
+                <app-input formControlName="email" [label]="'ADMIN.PARTNER.EMAIL' | translate"
+                    [placeholder]="'PARTNER.EMAIL_PLACEHOLDER' | translate" [id]="'edit_email'"
+                    [isInvalid]="isFieldInvalid('email')" [errorMessage]="getErrorMessage('email')">
+                </app-input>
+            </div>
+
+            <div class="form-group">
+                <app-input formControlName="phone" [label]="'ADMIN.PARTNER.PHONE' | translate"
+                    [placeholder]="'PARTNER.PHONE_PLACEHOLDER' | translate" [id]="'edit_phone'"
+                    [isInvalid]="isFieldInvalid('phone')" [errorMessage]="getErrorMessage('phone')">
+                </app-input>
+            </div>
+
+            <div class="form-group">
+                <app-input formControlName="position" [label]="'ADMIN.PARTNER.POSITION' | translate"
+                    [placeholder]="'PARTNER.POSITION_PLACEHOLDER' | translate" [id]="'edit_position'"
+                    [isInvalid]="isFieldInvalid('position')" [errorMessage]="getErrorMessage('position')">
+                </app-input>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Thông tin doanh nghiệp ===== -->
+    <section>
+        <h3 class="form-section-title">
+            <i class="fa-regular fa-building mr-2"></i>{{ 'ADMIN.PARTNER.BUSINESS_INFO' | translate }}
+        </h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <app-input formControlName="companyName" [label]="'ADMIN.PARTNER.COMPANY_NAME' | translate"
+                    [placeholder]="'PARTNER.COMPANY_NAME_PLACEHOLDER' | translate" [id]="'edit_companyName'"
+                    [isInvalid]="isFieldInvalid('companyName')" [errorMessage]="getErrorMessage('companyName')">
+                </app-input>
+            </div>
+
+            <div class="form-group">
+                <app-input formControlName="companyTax" [label]="'ADMIN.PARTNER.COMPANY_TAX' | translate"
+                    [placeholder]="'PARTNER.COMPANY_TAX_PLACEHOLDER' | translate" [id]="'edit_companyTax'"
+                    [isInvalid]="isFieldInvalid('companyTax')" [errorMessage]="getErrorMessage('companyTax')">
+                </app-input>
+            </div>
+
+            <div class="form-group">
+                <app-ng-select-wrapper formControlName="businessType" [items]="businessTypes"
+                    [label]="'ADMIN.PARTNER.BUSINESS_TYPE' | translate"
+                    [placeholder]="'PARTNER.BUSINESS_TYPE_PLACEHOLDER' | translate" [id]="'edit_businessType'"
+                    [colorRole]="'admin'">
+                </app-ng-select-wrapper>
+            </div>
+
+            <div class="form-group">
+                <app-ng-select-wrapper formControlName="companySize" [items]="companySizes"
+                    [label]="'ADMIN.PARTNER.COMPANY_SIZE' | translate"
+                    [placeholder]="'PARTNER.COMPANY_SIZE_PLACEHOLDER' | translate" [id]="'edit_companySize'"
+                    [colorRole]="'admin'">
+                </app-ng-select-wrapper>
+            </div>
+
+            <div class="form-group">
+                <app-ng-select-wrapper formControlName="businessFieldId" [items]="businessFields"
+                    [label]="'ADMIN.BUSINESS_INFO.BUSINESS_FIELD' | translate"
+                    [placeholder]="'PARTNER.BUSINESS_FIELD_PLACEHOLDER' | translate" [id]="'edit_businessFieldId'"
+                    [searchable]="true" [colorRole]="'admin'">
+                </app-ng-select-wrapper>
+            </div>
+
+            <div class="form-group">
+                <app-input formControlName="companyWebsite" [label]="'ADMIN.PARTNER.COMPANY_WEBSITE' | translate"
+                    [placeholder]="'PARTNER.COMPANY_WEBSITE_PLACEHOLDER' | translate" [id]="'edit_companyWebsite'"
+                    [isInvalid]="isFieldInvalid('companyWebsite')" [errorMessage]="getErrorMessage('companyWebsite')">
+                </app-input>
+            </div>
+
+            <div class="form-group full-width">
+                <app-input formControlName="companyAddress" [label]="'ADMIN.PARTNER.COMPANY_ADDRESS' | translate"
+                    [placeholder]="'PARTNER.COMPANY_ADDRESS_PLACEHOLDER' | translate" [id]="'edit_companyAddress'"
+                    [isInvalid]="isFieldInvalid('companyAddress')" [errorMessage]="getErrorMessage('companyAddress')">
+                </app-input>
+            </div>
+
+            <div class="form-group full-width">
+                <app-input formControlName="note" [label]="'ADMIN.PARTNER.NOTE' | translate"
+                    [placeholder]="'PARTNER.NOTE_PLACEHOLDER' | translate" [id]="'edit_note'"
+                    [isInvalid]="isFieldInvalid('note')" [errorMessage]="getErrorMessage('note')">
+                </app-input>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Actions ===== -->
+    <div class="form-actions">
+        <app-button variant="secondary" size="md" (click)="cancel.emit()">
+            {{ 'COMMON.BUTTON.CANCEL' | translate }}
+        </app-button>
+        <app-button variant="primary" size="md" type="submit" [loading]="isSaving" [disabled]="!hasChanges">
+            {{ 'COMMON.BUTTON.SAVE' | translate }}
+        </app-button>
+    </div>
+</form>

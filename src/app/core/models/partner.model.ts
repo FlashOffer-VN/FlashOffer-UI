@@ -95,6 +95,64 @@ export interface ProductInfoRequest {
     description?: string;
 }
 
+/**
+ * Cập nhật đối tác (PUT /partners/{id}) — partial update:
+ * field nào `null` thì backend giữ nguyên giá trị cũ.
+ *
+ * Không sửa được: partnerCode, status (có endpoint riêng), userId, referralCode.
+ *
+ * SẢN PHẨM KHÔNG nằm trong payload này — quản lý qua API riêng:
+ *   POST   /partners/{id}/products
+ *   PUT    /partners/{id}/products/{productId}
+ *   DELETE /partners/{id}/products/{productId}
+ */
+export interface UpdatePartnerRequest {
+    // Thông tin cá nhân
+    fullName?: string | null;
+    email?: string | null;
+    phone?: string | null;
+    position?: string | null;
+
+    // Thông tin doanh nghiệp
+    companyName?: string | null;
+    companyTax?: string | null;
+    companyAddress?: string | null;
+    companyWebsite?: string | null;
+    businessType?: BusinessType | null;
+    companySize?: CompanySize | null;
+    note?: string | null;
+
+    /** Lĩnh vực kinh doanh (BusinessField). */
+    businessFieldId?: string | null;
+}
+
+/**
+ * Tạo sản phẩm cho đối tác (POST /partners/{id}/products).
+ * Các field số/danh mục bỏ trống sẽ được backend gán mặc định
+ * (Category = Other, giá = 0, số lượng tối thiểu = 1).
+ */
+export interface CreatePartnerProductRequest {
+    name: string;
+    description?: string | null;
+    category?: ProductCategory | null;
+    retailPrice?: number | null;
+    wholesalePrice?: number | null;
+    minOrderQuantity?: number | null;
+}
+
+/**
+ * Cập nhật sản phẩm (PUT /partners/{id}/products/{productId}) — partial update:
+ * field nào `null` thì backend giữ nguyên.
+ */
+export interface UpdatePartnerProductRequest {
+    name?: string | null;
+    description?: string | null;
+    category?: ProductCategory | null;
+    retailPrice?: number | null;
+    wholesalePrice?: number | null;
+    minOrderQuantity?: number | null;
+}
+
 // ==============================
 // 4. RESPONSE MODELS (NHẬN TỪ API)
 // ==============================
@@ -130,6 +188,8 @@ export interface Partner {
     businessType: BusinessType;
     companySize: CompanySize;
     companyWebsite?: string;
+    businessFieldId?: string | null;
+    businessFieldName?: string | null;
     referralCode?: string;
     note?: string;
     status: PartnerStatus;
@@ -160,6 +220,8 @@ export interface PartnerCommission {
 
 export interface PartnerProduct {
     id: string;
+    /** Mã sản phẩm đối tác (vd. PRDP...) — backend tự cấp. */
+    partnerProductCode?: string | null;
     partnerId: string;
     name: string;
     description?: string;
@@ -167,6 +229,9 @@ export interface PartnerProduct {
     retailPrice: number;
     wholesalePrice: number;
     minOrderQuantity: number;
+    /** Lĩnh vực của sản phẩm — API trả kèm, hiện chưa hiển thị. */
+    businessFieldId?: string | null;
+    businessFieldName?: string | null;
 }
 
 // ==============================

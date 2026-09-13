@@ -6,15 +6,17 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import {
     Partner,
+    PartnerProduct,
     PartnerStatus,
     BusinessType,
     CompanySize,
     CommissionType,
-    ProductCategory,
+    UpdatePartnerRequest,
+    CreatePartnerProductRequest,
+    UpdatePartnerProductRequest,
     getBusinessTypeLabel,
     getCompanySizeLabel,
-    getCommissionTypeLabel,
-    getProductCategoryLabel
+    getCommissionTypeLabel
 } from '@core/models/partner.model';
 import { BusinessInfo, toBusinessInfo } from '@core/models/business-info.model';
 import { ApiResponse } from '@core/models/paged-response.model';
@@ -25,6 +27,9 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { BusinessInfoComponent } from '@shared/components/business-info/business-info.component';
+import { ProductListComponent } from '@shared/components/product-list/product-list.component';
+import { PartnerEditFormComponent } from '../edit/partner-edit-form.component';
+import { PartnerProductFormComponent } from '../edit/partner-product-form.component';
 
 @Component({
     selector: 'app-admin-partner-detail',
@@ -37,7 +42,10 @@ import { BusinessInfoComponent } from '@shared/components/business-info/business
         LoadingComponent,
         BadgeComponent,
         ModalComponent,
-        BusinessInfoComponent
+        BusinessInfoComponent,
+        ProductListComponent,
+        PartnerEditFormComponent,
+        PartnerProductFormComponent
     ],
     templateUrl: './partner-detail.component.html',
     styleUrls: ['./partner-detail.component.css']
@@ -51,6 +59,14 @@ export class AdminPartnerDetailComponent implements OnInit {
     showApproveModal = false;
     showRejectModal = false;
     showActivateModal = false;
+    showEditModal = false;
+    showProductModal = false;
+
+    /** Bản sao của partner truyền vào form sửa — đổi reference mỗi lần mở để form dựng lại. */
+    editPartner: Partner | null = null;
+
+    /** Sản phẩm đang sửa. null = modal đang ở chế độ THÊM MỚI. */
+    editingProduct: PartnerProduct | null = null;
 
     constructor(
         private _appService: AppService,
@@ -121,13 +137,19 @@ export class AdminPartnerDetailComponent implements OnInit {
         return getCommissionTypeLabel(type);
     }
 
-    getProductCategoryLabel(category: ProductCategory): string {
-        return getProductCategoryLabel(category);
-    }
-
     getBusinessInfo(): BusinessInfo | null {
         if (!this.partner) return null;
         return toBusinessInfo(this.partner.businessInfo ?? this.partner);
+    }
+
+    /**
+     * Tên lĩnh vực hoạt động — ưu tiên field phẳng ở root (`businessFieldName`),
+     * fallback sang `businessInfo.businessField` khi backend chỉ trả dạng lồng.
+     */
+    getBusinessFieldName(): string {
+        return this.partner?.businessFieldName
+            || this.partner?.businessInfo?.businessField
+            || '--';
     }
 
     formatNumber(value: number): string {
@@ -226,5 +248,123 @@ export class AdminPartnerDetailComponent implements OnInit {
 
     goBack(): void {
         this._router.navigate(['/admin/partner']);
+    }
+
+    // ==============================
+    // EDIT
+    // ==============================
+
+    openEdit(): void {
+        if (!this.partner) return;
+        // Copy sang object mới để form luôn dựng lại từ dữ liệu hiện tại
+        this.editPartner = { ...this.partner };
+        this.showEditModal = true;
+    }
+
+    onEditSubmit(payload: UpdatePartnerRequest): void {
+        if (!this.partner) return;
+
+        if (Object.keys(payload).length === 0) {
+            this.showEditModal = false;
+            this._appService.showInfo(this._appService.trans('COMMON.NO_CHANGES'));
+            return;
+        }
+
+        this.isActionLoading = true;
+        this._appService.partnerService.update(this.partner.id, payload).subscribe({
+            next: () => {
+                this.isActionLoading = false;
+                this.showEditModal = false;
+                this._appService.showSuccess(this._appService.trans('ADMIN.PARTNER.UPDATED_SUCCESS'));
+                this.loadData();
+            },
+            error: (err) => {
+                this.isActionLoading = false;
+                this._appService.showError(err?.message || this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+            }
+        });
+    }
+
+    // ==============================
+    // SẢN PHẨM (API riêng: /partners/{id}/products)
+    // ==============================
+
+    /** Mở modal THÊM sản phẩm. */
+    openAddProduct(): void {
+        this.editingProduct = null;
+        this.showProductModal = true;
+    }
+
+    /** Mở modal SỬA sản phẩm. */
+    openEditProduct(product: PartnerProduct): void {
+        this.editingProduct = { ...product };
+        this.showProductModal = true;
+    }
+
+    onProductCreate(payload: CreatePartnerProductRequest): void {
+        if (!this.partner) return;
+
+        this.isActionLoading = true;
+        this._appService.partnerService.addProduct(this.partner.id, payload).subscribe({
+            next: () => {
+                this.isActionLoading = false;
+                this.showProductModal = false;
+                this._appService.showSuccess(this._appService.trans('ADMIN.PARTNER.PRODUCT_ADDED_SUCCESS'));
+                this.loadData();
+            },
+            error: (err) => {
+                this.isActionLoading = false;
+                this._appService.showError(err?.message || this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+            }
+        });
+    }
+
+    onProductUpdate(payload: UpdatePartnerProductRequest): void {
+        if (!this.partner || !this.editingProduct) return;
+
+        if (Object.keys(payload).length === 0) {
+            this.showProductModal = false;
+            this._appService.showInfo(this._appService.trans('COMMON.NO_CHANGES'));
+            return;
+        }
+
+        this.isActionLoading = true;
+        this._appService.partnerService
+            .updateProduct(this.partner.id, this.editingProduct.id, payload)
+            .subscribe({
+                next: () => {
+                    this.isActionLoading = false;
+                    this.showProductModal = false;
+                    this._appService.showSuccess(this._appService.trans('ADMIN.PARTNER.PRODUCT_UPDATED_SUCCESS'));
+                    this.loadData();
+                },
+                error: (err) => {
+                    this.isActionLoading = false;
+                    this._appService.showError(err?.message || this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+                }
+            });
+    }
+
+    onDeleteProduct(product: PartnerProduct): void {
+        if (!this.partner) return;
+
+        this._appService.confirmDelete(
+            this._appService.trans('ADMIN.PARTNER.PRODUCT_DELETE_CONFIRM', { name: product.name })
+        ).then(confirmed => {
+            if (!confirmed || !this.partner) return;
+
+            this.isActionLoading = true;
+            this._appService.partnerService.deleteProduct(this.partner.id, product.id).subscribe({
+                next: () => {
+                    this.isActionLoading = false;
+                    this._appService.showSuccess(this._appService.trans('ADMIN.PARTNER.PRODUCT_DELETED_SUCCESS'));
+                    this.loadData();
+                },
+                error: (err) => {
+                    this.isActionLoading = false;
+                    this._appService.showError(err?.message || this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+                }
+            });
+        });
     }
 }

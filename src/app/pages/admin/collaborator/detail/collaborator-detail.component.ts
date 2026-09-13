@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
 import { CtvRegistration, CTVRegistrationStatus } from '@core/models/ctv.model';
+import { UpdateCollaboratorRequest } from '@core/models/collaborator.model';
 import { BusinessInfo } from '@core/models/business-info.model';
 import { ApiResponse } from '@core/models/paged-response.model';
 
@@ -14,6 +15,7 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { BusinessInfoComponent } from '@shared/components/business-info/business-info.component';
+import { CollaboratorEditFormComponent } from '../edit/collaborator-edit-form.component';
 
 @Component({
     selector: 'app-admin-collaborator-detail',
@@ -26,7 +28,8 @@ import { BusinessInfoComponent } from '@shared/components/business-info/business
         LoadingComponent,
         BadgeComponent,
         ModalComponent,
-        BusinessInfoComponent
+        BusinessInfoComponent,
+        CollaboratorEditFormComponent
     ],
     templateUrl: './collaborator-detail.component.html',
     styleUrls: ['./collaborator-detail.component.css']
@@ -39,6 +42,10 @@ export class AdminCollaboratorDetailComponent implements OnInit {
     // Modal
     showApproveModal = false;
     showRejectModal = false;
+    showEditModal = false;
+
+    /** Bản sao của collaborator truyền vào form sửa — đổi reference mỗi lần mở. */
+    editCollaborator: CtvRegistration | null = null;
 
     constructor(
         private _appService: AppService,
@@ -168,5 +175,40 @@ export class AdminCollaboratorDetailComponent implements OnInit {
 
     goBack(): void {
         this._router.navigate(['/admin/collaborator']);
+    }
+
+    // ==============================
+    // EDIT
+    // ==============================
+
+    openEdit(): void {
+        if (!this.collaborator) return;
+        // Copy sang object mới để form luôn dựng lại từ dữ liệu hiện tại
+        this.editCollaborator = { ...this.collaborator };
+        this.showEditModal = true;
+    }
+
+    onEditSubmit(payload: UpdateCollaboratorRequest): void {
+        if (!this.collaborator) return;
+
+        if (Object.keys(payload).length === 0) {
+            this.showEditModal = false;
+            this._appService.showInfo(this._appService.trans('COMMON.NO_CHANGES'));
+            return;
+        }
+
+        this.isActionLoading = true;
+        this._appService.collaboratorService.update(this.collaborator.id, payload).subscribe({
+            next: () => {
+                this.isActionLoading = false;
+                this.showEditModal = false;
+                this._appService.showSuccess(this._appService.trans('ADMIN.CTV.UPDATED_SUCCESS'));
+                this.loadData();
+            },
+            error: (err) => {
+                this.isActionLoading = false;
+                this._appService.showError(err?.message || this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+            }
+        });
     }
 }

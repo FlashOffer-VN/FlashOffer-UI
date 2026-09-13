@@ -1,0 +1,115 @@
+<!-- pages/admin/collaborator/edit/collaborator-edit-form.component.html -->
+<form class="space-y-5" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <!-- ===== Thông tin cá nhân ===== -->
+    <section>
+        <h3 class="form-section-title">
+            <i class="fa-regular fa-user mr-2"></i>{{ 'ADMIN.CTV.PERSONAL_INFO' | translate }}
+        </h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <app-input formControlName="fullName" [label]="'ADMIN.CTV.FULL_NAME' | translate"
+                    [placeholder]="'PARTNER.FULL_NAME_PLACEHOLDER' | translate" [id]="'ctv_edit_fullName'"
+                    [isInvalid]="isFieldInvalid('fullName')" [errorMessage]="getErrorMessage('fullName')">
+                </app-input>
+            </div>
+
+            <div class="form-group">
+                <app-input formControlName="phone" [label]="'ADMIN.CTV.PHONE' | translate"
+                    [placeholder]="'PARTNER.PHONE_PLACEHOLDER' | translate" [id]="'ctv_edit_phone'"
+                    [isInvalid]="isFieldInvalid('phone')" [errorMessage]="getErrorMessage('phone')">
+                </app-input>
+            </div>
+
+            <div class="form-group">
+                <app-input formControlName="email" [label]="'ADMIN.CTV.EMAIL' | translate"
+                    [placeholder]="'PARTNER.EMAIL_PLACEHOLDER' | translate" [id]="'ctv_edit_email'"
+                    [isInvalid]="isFieldInvalid('email')" [errorMessage]="getErrorMessage('email')">
+                </app-input>
+            </div>
+
+            <div class="form-group">
+                <app-input formControlName="zalo" [label]="'ADMIN.CTV.ZALO' | translate" [placeholder]="'Zalo'"
+                    [id]="'ctv_edit_zalo'" [isInvalid]="isFieldInvalid('zalo')"
+                    [errorMessage]="getErrorMessage('zalo')">
+                </app-input>
+            </div>
+
+            <div class="form-group">
+                <app-input formControlName="position" [label]="'ADMIN.PARTNER.POSITION' | translate"
+                    [placeholder]="'PARTNER.POSITION_PLACEHOLDER' | translate" [id]="'ctv_edit_position'"
+                    [isInvalid]="isFieldInvalid('position')" [errorMessage]="getErrorMessage('position')">
+                </app-input>
+            </div>
+
+            <div class="form-group">
+                <app-ng-select-wrapper formControlName="salesChannel" [items]="salesChannels"
+                    [label]="'ADMIN.CTV.SALES_CHANNEL' | translate" [placeholder]="'COMMON.SELECT_PLACEHOLDER' | translate"
+                    [id]="'ctv_edit_salesChannel'" [colorRole]="'admin'">
+                </app-ng-select-wrapper>
+            </div>
+
+            <div class="form-group full-width">
+                <app-input formControlName="experience" [label]="'ADMIN.CTV.EXPERIENCE' | translate"
+                    [placeholder]="'ADMIN.CTV.EXPERIENCE' | translate" [id]="'ctv_edit_experience'"
+                    [isInvalid]="isFieldInvalid('experience')" [errorMessage]="getErrorMessage('experience')">
+                </app-input>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Thông tin doanh nghiệp ===== -->
+    <section>
+        <h3 class="form-section-title">
+            <i class="fa-regular fa-building mr-2"></i>{{ 'ADMIN.BUSINESS_INFO.TITLE' | translate }}
+        </h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <app-input formControlName="businessName" [label]="'ADMIN.BUSINESS_INFO.COMPANY_NAME' | translate"
+                    [placeholder]="'PARTNER.COMPANY_NAME_PLACEHOLDER' | translate" [id]="'ctv_edit_businessName'"
+                    [isInvalid]="isFieldInvalid('businessName')" [errorMessage]="getErrorMessage('businessName')">
+                </app-input>
+            </div>
+
+            <div class="form-group">
+                <app-ng-select-wrapper formControlName="businessSize" [items]="businessSizes"
+                    [label]="'ADMIN.BUSINESS_INFO.COMPANY_SIZE' | translate"
+                    [placeholder]="'COMMON.SELECT_PLACEHOLDER' | translate" [id]="'ctv_edit_businessSize'"
+                    [colorRole]="'admin'">
+                </app-ng-select-wrapper>
+            </div>
+
+            <div class="form-group">
+                <app-ng-select-wrapper formControlName="businessFieldId" [items]="businessFields"
+                    [label]="'ADMIN.BUSINESS_INFO.BUSINESS_FIELD' | translate"
+                    [placeholder]="'PARTNER.BUSINESS_FIELD_PLACEHOLDER' | translate" [id]="'ctv_edit_businessFieldId'"
+                    [searchable]="true" [colorRole]="'admin'">
+                </app-ng-select-wrapper>
+            </div>
+
+            <div class="form-group">
+                <app-input formControlName="website" [label]="'ADMIN.BUSINESS_INFO.COMPANY_WEBSITE' | translate"
+                    [placeholder]="'PARTNER.COMPANY_WEBSITE_PLACEHOLDER' | translate" [id]="'ctv_edit_website'"
+                    [isInvalid]="isFieldInvalid('website')" [errorMessage]="getErrorMessage('website')">
+                </app-input>
+            </div>
+
+            <div class="form-group full-width">
+                <app-input formControlName="address" [label]="'ADMIN.BUSINESS_INFO.COMPANY_ADDRESS' | translate"
+                    [placeholder]="'PARTNER.COMPANY_ADDRESS_PLACEHOLDER' | translate" [id]="'ctv_edit_address'"
+                    [isInvalid]="isFieldInvalid('address')" [errorMessage]="getErrorMessage('address')">
+                </app-input>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Actions ===== -->
+    <div class="form-actions">
+        <app-button variant="secondary" size="md" (click)="cancel.emit()">
+            {{ 'COMMON.BUTTON.CANCEL' | translate }}
+        </app-button>
+        <app-button variant="primary" size="md" type="submit" [loading]="isSaving" [disabled]="!hasChanges">
+            {{ 'COMMON.BUTTON.SAVE' | translate }}
+        </app-button>
+    </div>
+</form>

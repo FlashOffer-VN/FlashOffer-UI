@@ -3,11 +3,15 @@ import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import {
     Partner,
+    PartnerProduct,
     PartnerStatus,
     BusinessType,
     CompanySize,
     CommissionType,
     ProductCategory,
+    UpdatePartnerRequest,
+    CreatePartnerProductRequest,
+    UpdatePartnerProductRequest,
     getPartnerStatusLabel,
     getBusinessTypeLabel,
     getCompanySizeLabel,
@@ -34,7 +38,8 @@ export class PartnerService {
         search = '',
         status?: PartnerStatus,
         fromDate?: string,
-        toDate?: string
+        toDate?: string,
+        isDeleted?: boolean
     ): Observable<PagedResponse<Partner>> {
         // Backend yêu cầu pageSize trong [1, 100]
         pageSize = this.clampPageSize(pageSize);
@@ -45,6 +50,9 @@ export class PartnerService {
         };
         if (status !== undefined && status !== null) {
             params.status = status;
+        }
+        if (isDeleted !== undefined && isDeleted !== null) {
+            params.isDeleted = isDeleted;
         }
         if (fromDate) params.fromDate = fromDate;
         if (toDate) params.toDate = toDate;
@@ -90,5 +98,79 @@ export class PartnerService {
 
     activate(id: string): Observable<ApiResponse<Partner>> {
         return this._apiService.post<ApiResponse<Partner>>(`${this._baseUrl}/${id}/activate`, {});
+    }
+
+    // ==============================
+    // UPDATE (PARTIAL)
+    // ==============================
+
+    /**
+     * Cập nhật đối tác — partial update, field nào không gửi/null thì giữ nguyên.
+     * PUT /api/v1/partners/{id}
+     */
+    update(id: string, data: UpdatePartnerRequest): Observable<ApiResponse<Partner>> {
+        return this._apiService.put<ApiResponse<Partner>>(`${this._baseUrl}/${id}`, data);
+    }
+
+    // ==============================
+    // SẢN PHẨM (API RIÊNG)
+    // ==============================
+
+    /** Thêm sản phẩm cho đối tác. POST /api/v1/partners/{id}/products */
+    addProduct(partnerId: string, data: CreatePartnerProductRequest): Observable<ApiResponse<PartnerProduct>> {
+        return this._apiService.post<ApiResponse<PartnerProduct>>(
+            `${this._baseUrl}/${partnerId}/products`, data
+        );
+    }
+
+    /**
+     * Cập nhật sản phẩm — partial update, field nào không gửi/null thì giữ nguyên.
+     * PUT /api/v1/partners/{id}/products/{productId}
+     */
+    updateProduct(
+        partnerId: string,
+        productId: string,
+        data: UpdatePartnerProductRequest
+    ): Observable<ApiResponse<PartnerProduct>> {
+        return this._apiService.put<ApiResponse<PartnerProduct>>(
+            `${this._baseUrl}/${partnerId}/products/${productId}`, data
+        );
+    }
+
+    /** Xóa sản phẩm. DELETE /api/v1/partners/{id}/products/{productId} */
+    deleteProduct(partnerId: string, productId: string): Observable<ApiResponse<{ message: string }>> {
+        return this._apiService.delete<ApiResponse<{ message: string }>>(
+            `${this._baseUrl}/${partnerId}/products/${productId}`
+        );
+    }
+
+    // ==============================
+    // SOFT DELETE & RESTORE (ADMIN)
+    // ==============================
+
+    /**
+     * Danh sách đối tác đã xóa mềm.
+     * GET /api/v1/partners/deleted?pageNumber&pageSize&search
+     */
+    getDeletedData(pageNumber = 1, pageSize = 10, search = ''): Observable<PagedResponse<Partner>> {
+        pageSize = this.clampPageSize(pageSize);
+        const params: any = { pageNumber, pageSize, search: search || '' };
+        return this._apiService.get<PagedResponse<Partner>>(`${this._baseUrl}/deleted`, params);
+    }
+
+    /**
+     * Xóa mềm đối tác.
+     * DELETE /api/v1/partners/{id}
+     */
+    delete(id: string): Observable<ApiResponse<{ message: string }>> {
+        return this._apiService.delete<ApiResponse<{ message: string }>>(`${this._baseUrl}/${id}`);
+    }
+
+    /**
+     * Khôi phục đối tác đã xóa.
+     * POST /api/v1/partners/{id}/restore
+     */
+    restore(id: string): Observable<ApiResponse<Partner>> {
+        return this._apiService.post<ApiResponse<Partner>>(`${this._baseUrl}/${id}/restore`, {});
     }
 }

@@ -69,7 +69,8 @@ export class PostCardComponent {
     getAuthorCode(author: any): string {
         if (!author) return '';
         if (author.userCode) {
-            return `${author.userCode} - ${author.username || author.fullName || ''}`;
+            // return `${author.userCode} - ${author.username || author.fullName || ''}`;
+            return `${author.userCode}`;
         }
         return author.username || author.fullName || '';
     }

@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { InputComponent } from '@shared/components/input/input.component';
 import { COMPANY_SIZES } from '@core/models/partner.model';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { ProvinceSelectComponent } from '@shared/components/province-select/province-select.component';
 import { AppService } from '@core/services/app.service';
 
 @Component({
@@ -17,7 +18,8 @@ import { AppService } from '@core/services/app.service';
     ReactiveFormsModule,
     TranslateModule,
     InputComponent,
-    NgSelectWrapperComponent
+    NgSelectWrapperComponent,
+    ProvinceSelectComponent
   ],
   templateUrl: './step-business.component.html',
   styleUrls: ['./step-business.component.css']

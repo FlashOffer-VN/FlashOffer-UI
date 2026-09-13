@@ -882,6 +882,17 @@
     },
     "COMMON": {
         "ALL": "All",
+        "PROVINCE": "Province/City",
+        "PROVINCE_PLACEHOLDER": "Select province/city",
+        "SELECT_PLACEHOLDER": "Select...",
+        "NO_CHANGES": "There are no changes to save",
+        "BUSINESS_SIZE": {
+            "SIZE_1_10": "1 - 10 employees",
+            "SIZE_11_50": "11 - 50 employees",
+            "SIZE_51_200": "51 - 200 employees",
+            "SIZE_201_500": "201 - 500 employees",
+            "SIZE_500_PLUS": "500+ employees"
+        },
         "STATUS": {
             "PENDING": "Pending",
             "APPROVED": "Approved",
@@ -1089,7 +1100,7 @@
         "CTV": {
             "TITLE": "CTV Management",
             "LIST_TITLE": "CTV List",
-            "SEARCH_PLACEHOLDER": "Search by name, email, phone...",
+            "SEARCH_PLACEHOLDER": "Search by name, email, phone, field...",
             "FILTER_STATUS": "Filter by status",
             "CODE": "CTV Code",
             "FULL_NAME": "Full Name",
@@ -1109,7 +1120,9 @@
             "REJECT": "Reject CTV",
             "RESTORED_SUCCESS": "CTV restored successfully",
             "DELETE_CONFIRM": "Are you sure you want to delete CTV \"{{name}}\"?",
-            "DELETED_SUCCESS": "CTV deleted successfully"
+            "DELETED_SUCCESS": "CTV deleted successfully",
+            "EDIT_TITLE": "Edit CTV",
+            "UPDATED_SUCCESS": "CTV updated successfully"
         },
         "BUSINESS_INFO": {
             "TITLE": "Business Information",
@@ -1125,7 +1138,7 @@
             "TITLE": "Partner Management",
             "LIST_TITLE": "Partner List",
             "DETAIL_TITLE": "Partner Detail",
-            "SEARCH_PLACEHOLDER": "Search by name, email, company, tax code...",
+            "SEARCH_PLACEHOLDER": "Search by name, email, company, tax code, field...",
             "FILTER_STATUS": "Filter by status",
             "CODE": "Partner Code",
             "FULL_NAME": "Full Name",
@@ -1144,6 +1157,17 @@
             "APPROVED_SUCCESS": "Partner approved successfully",
             "REJECTED_SUCCESS": "Partner rejected successfully",
             "ACTIVATED_SUCCESS": "Partner activated successfully",
+            "RESTORED_SUCCESS": "Partner restored successfully",
+            "DELETE_CONFIRM": "Are you sure you want to delete Partner \"{{name}}\"?",
+            "DELETED_SUCCESS": "Partner deleted successfully",
+            "EDIT_TITLE": "Edit Partner",
+            "UPDATED_SUCCESS": "Partner updated successfully",
+            "PRODUCT_ADD_TITLE": "Add product",
+            "PRODUCT_EDIT_TITLE": "Edit product",
+            "PRODUCT_ADDED_SUCCESS": "Product added successfully",
+            "PRODUCT_UPDATED_SUCCESS": "Product updated successfully",
+            "PRODUCT_DELETED_SUCCESS": "Product deleted successfully",
+            "PRODUCT_DELETE_CONFIRM": "Are you sure you want to delete product \"{{name}}\"?",
             "PERSONAL_INFO": "Personal Information",
             "BUSINESS_INFO": "Business Information",
             "SYSTEM_INFO": "System Information",
@@ -1165,7 +1189,16 @@
             "MIN_ORDER_VALUE": "Min Order Value",
             "MAX_COMMISSION": "Max Commission",
             "PRODUCTS": "Products",
-            "APPROVED_AT": "Approved Date"
+            "APPROVED_AT": "Approved Date",
+            "PRODUCT_CODE": "Product Code",
+            "PRODUCT_DESC": "Description",
+            "PRODUCTS_COUNT": "{{count}} products",
+            "FILTER_CATEGORY": "Filter by category",
+            "PRODUCTS_SEARCH_PLACEHOLDER": "Search by name or product code...",
+            "CLEAR_FILTER": "Clear filter",
+            "NO_FILTER_RESULT": "No products match the filter",
+            "NO_PRODUCTS": "No products yet",
+            "SPECIAL_CONDITIONS": "Special conditions"
         }
     }
 }
