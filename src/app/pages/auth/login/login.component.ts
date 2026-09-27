@@ -1,4 +1,4 @@
-// src/app/features/auth/pages/login/login.component.ts
+// src/app/pages/auth/login/login.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';

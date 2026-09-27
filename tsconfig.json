@@ -28,9 +28,6 @@
       "@shared": [
         "./src/app/shared/index.ts"
       ],
-      "@features/*": [
-        "./src/app/features/*"
-      ],
       "@pages/*": [
         "./src/app/pages/*"
       ],

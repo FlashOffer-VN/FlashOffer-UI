@@ -12,7 +12,7 @@ import { AppService } from '@core/services/app.service';
   standalone: true,
   imports: [CommonModule, TranslateModule, AvatarPipe],
   templateUrl: './post-detail-modal.component.html',
-  styleUrls: ['./post-detail-modal.component.scss']
+  styleUrls: ['./post-detail-modal.component.css']
 })
 export class PostDetailModalComponent implements OnInit {
   @Input() post: SocialPost | null = null;
