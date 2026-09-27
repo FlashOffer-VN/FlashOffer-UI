@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * CI check: every public (non-auth) route in app.routes.ts must have a
- * matching entry in app.routes.server.ts, so new pages get prerendered
- * (and thus SEO-indexable) by default.
+ * CI check: every public (non-auth) route declared in app.routes.ts /
+ * core/routes/*.routes.ts must have a matching entry in app.routes.server.ts,
+ * so new pages get prerendered (and thus SEO-indexable) by default.
  *
  * Brace-aware tokenizer. Each object that declares a `path` AND contains
  * `children:` is a layout parent — its path is pushed onto a parent stack
@@ -14,12 +14,28 @@
  * Exits non-zero (failing CI) if any public route is missing from the
  * server route config.
  */
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const root = process.cwd();
-const routesSrc = readFileSync(resolve(root, 'src/app/app.routes.ts'), 'utf8');
 const serverSrc = readFileSync(resolve(root, 'src/app/app.routes.server.ts'), 'utf8');
+
+/**
+ * Route khai ở app.routes.ts + từng file trong core/routes (guest/admin/user) nên phải gom lại
+ * trước khi so với app.routes.server.ts.
+ */
+function readRouteFiles(dir) {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const full = resolve(dir, entry.name);
+    if (entry.isDirectory()) return readRouteFiles(full);
+    return entry.name.endsWith('.routes.ts') ? [readFileSync(full, 'utf8')] : [];
+  });
+}
+
+const routesSrc = [
+  readFileSync(resolve(root, 'src/app/app.routes.ts'), 'utf8'),
+  ...readRouteFiles(resolve(root, 'src/app/core/routes')),
+].join('\n');
 
 const AUTH_PARENTS = ['admin', 'user'];
 

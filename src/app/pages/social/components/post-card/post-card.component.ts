@@ -17,7 +17,7 @@ import { MediaUrlPipe } from '@shared/pipes/media-url.pipe';
     imports: [CommonModule, TranslateModule, AvatarPipe, SanitizeHtmlPipe, TimeAgoPipe,
         MediaUrlPipe,],
     templateUrl: './post-card.component.html',
-    styleUrls: ['./post-card.component.scss']
+    styleUrls: ['./post-card.component.css']
 })
 export class PostCardComponent {
     @Input() post!: SocialPost;

@@ -22,12 +22,12 @@
 .app-input__label {
     font-size: 0.875rem;
     font-weight: 600;
-    color: #374151;
+    color: var(--text-secondary);
     transition: color 0.2s ease;
 }
 
 .app-input__required {
-    color: #EF4444;
+    color: var(--danger);
     margin-left: 0.25rem;
 }
 
@@ -43,7 +43,7 @@
     left: 0.75rem;
     top: 50%;
     transform: translateY(-50%);
-    color: #9CA3AF;
+    color: var(--text-subtle);
     font-size: 1.125rem;
     pointer-events: none;
     transition: color 0.2s ease;
@@ -53,12 +53,12 @@
 .app-input__control {
     width: 100%;
     padding: 0.75rem 1rem;
-    border: 2px solid #e5e7eb;
+    border: 2px solid var(--border);
     border-radius: 0.75rem;
     font-size: 0.875rem;
     font-family: inherit;
-    background: #ffffff;
-    color: #1F2937;
+    background: var(--white);
+    color: var(--text);
     transition: all 0.2s ease;
     outline: none;
     box-sizing: border-box;
@@ -73,48 +73,48 @@
 
 /* ✅ Focus state */
 .app-input__control:focus {
-    border-color: #7C3AED;
+    border-color: var(--accent);
     box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
 }
 
 /* ✅ Invalid state */
 .app-input__control.is-invalid {
-    border-color: #EF4444 !important;
+    border-color: var(--danger) !important;
 }
 
 .app-input__control.is-invalid:focus {
-    border-color: #EF4444 !important;
+    border-color: var(--danger) !important;
     box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1) !important;
 }
 
 /* ✅ Disabled state */
 .app-input__control.is-disabled {
-    background: #f3f4f6;
+    background: var(--surface-muted);
     cursor: not-allowed;
     opacity: 0.6;
 }
 
 /* ✅ Readonly state */
 .app-input__control.is-readonly {
-    background: #f9fafb;
+    background: var(--surface);
     cursor: default;
 }
 
 /* ✅ Placeholder */
 .app-input__control::placeholder {
-    color: #9CA3AF;
+    color: var(--text-subtle);
 }
 
 /* ✅ Hint */
 .app-input__hint {
     font-size: 0.75rem;
-    color: #6B7280;
+    color: var(--text-muted);
 }
 
 /* ✅ Error message */
 .app-input__error {
     font-size: 0.75rem;
-    color: #EF4444;
+    color: var(--danger);
     animation: shake 0.3s ease;
 }
 

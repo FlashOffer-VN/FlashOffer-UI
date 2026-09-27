@@ -39,6 +39,29 @@ export class GetOfferComponent {
             note: [''],
             agreeTerms: [false, [Validators.requiredTrue]]
         });
+
+        // Người đã đăng nhập không phải nhập lại thông tin liên hệ — handler tự lấy từ tài khoản
+        this.applyGuestValidators();
+    }
+
+    get isAuthenticated(): boolean {
+        return this._appService.isAuthenticated();
+    }
+
+    /** Khách chưa đăng nhập bắt buộc nhập họ tên + SĐT + email (để tạo tài khoản và liên hệ) */
+    private applyGuestValidators(): void {
+        const guest = !this.isAuthenticated;
+        const fullName = this.offerForm.get('fullName');
+        const phone = this.offerForm.get('phone');
+        const email = this.offerForm.get('email');
+
+        fullName?.setValidators(guest ? [Validators.required, Validators.minLength(2)] : []);
+        phone?.setValidators(guest ? [Validators.required, Validators.pattern(/^0[0-9]{9,10}$/)] : []);
+        email?.setValidators(guest ? [Validators.required, Validators.email] : []);
+
+        fullName?.updateValueAndValidity();
+        phone?.updateValueAndValidity();
+        email?.updateValueAndValidity();
     }
 
     get f() {
@@ -47,7 +70,8 @@ export class GetOfferComponent {
 
     get formProgress(): number {
         const controls = this.offerForm.controls;
-        const requiredFields = ['productName', 'currentPrice', 'quantity', 'unit', 'fullName', 'phone', 'email', 'agreeTerms'];
+        const requiredFields = ['productName', 'currentPrice', 'quantity', 'unit',
+            ...(this.isAuthenticated ? [] : ['fullName', 'phone', 'email']), 'agreeTerms'];
         let total = requiredFields.length;
         let filled = 0;
 
@@ -139,6 +163,14 @@ export class GetOfferComponent {
 
         const cleanPrice = (val: string) => Number(String(val).replace(/[,.\s]/g, ''));
 
+        // Người đã đăng nhập: để trống thông tin liên hệ, handler tự bù từ hồ sơ tài khoản
+        const contact = this.isAuthenticated ? null : {
+            fullName: formValue.fullName.trim(),
+            phone: formValue.phone.trim(),
+            zalo: formValue.zalo?.trim() || undefined,
+            email: formValue.email.trim().toLowerCase()
+        };
+
         const requestData = {
             productName: formValue.productName.trim(),
             productLink: formValue.productLink?.trim() || undefined,
@@ -146,10 +178,10 @@ export class GetOfferComponent {
             expectedPrice: formValue.expectedPrice ? cleanPrice(formValue.expectedPrice) : undefined,
             quantity: Number(formValue.quantity),
             unit: formValue.unit.trim(),
-            fullName: formValue.fullName.trim(),
-            phone: formValue.phone.trim(),
-            zalo: formValue.zalo?.trim() || undefined,
-            email: formValue.email.trim().toLowerCase(),
+            fullName: contact?.fullName ?? '',
+            phone: contact?.phone ?? '',
+            zalo: contact?.zalo,
+            email: contact?.email ?? '',
             note: formValue.note?.trim() || undefined
         };
 

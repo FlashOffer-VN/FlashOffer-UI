@@ -24,45 +24,45 @@
 .lang-icon {
     width: 18px;
     height: 18px;
-    color: #6B7280;
+    color: var(--text-muted);
     flex-shrink: 0;
     transition: color 0.2s ease;
 }
 
 .lang-toggle:hover .lang-icon {
-    color: #7C3AED;
+    color: var(--accent);
 }
 
 .lang-text {
     font-weight: 700;
     font-size: 0.6rem;
     letter-spacing: 0.3px;
-    color: #6B7280;
+    color: var(--text-muted);
     min-width: 16px;
     text-align: center;
     transition: color 0.2s ease;
 }
 
 .lang-toggle:hover .lang-text {
-    color: #7C3AED;
+    color: var(--accent);
 }
 
 /* Dark mode */
 @media (prefers-color-scheme: dark) {
     .lang-icon {
-        color: #9CA3AF;
+        color: var(--text-subtle);
     }
 
     .lang-toggle:hover .lang-icon {
-        color: #A78BFA;
+        color: var(--accent-light);
     }
 
     .lang-text {
-        color: #9CA3AF;
+        color: var(--text-subtle);
     }
 
     .lang-toggle:hover .lang-text {
-        color: #A78BFA;
+        color: var(--accent-light);
     }
 
     .lang-toggle:hover {

@@ -4,7 +4,7 @@
 
 /* Hover effect for table rows */
 tr:hover {
-    background-color: #f9fafb;
+    background-color: var(--surface);
 }
 
 /* Sticky header */

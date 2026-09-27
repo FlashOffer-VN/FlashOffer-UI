@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { finalize } from 'rxjs/operators';
 
 import { AppService } from '@core/services/app.service';
+import { isBrowser } from '@core/utils/platform';
 import { GroupBuyingDetail, GroupBuyingStatus, JoinGroupBuyingResult } from '@core/models/group-buying-request.model';
 import { AccountCreatedNoticeComponent } from '@shared/components/account-created-notice/account-created-notice.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
@@ -23,6 +24,10 @@ export class GroupBuyingDetailModalComponent implements OnChanges {
     @Input() visible = false;
     /** Id yêu cầu mua chung cần xem chi tiết */
     @Input() requestId: string | null = null;
+    /** Mã đơn mua chung — dùng khi mở từ link chia sẻ thay cho requestId */
+    @Input() requestCode: string | null = null;
+    /** Nhúng vào trang (bỏ lớp phủ, nút đóng) thay vì hiện dạng modal */
+    @Input() embedded = false;
 
     /** Đóng modal */
     @Output() closed = new EventEmitter<void>();
@@ -74,11 +79,15 @@ export class GroupBuyingDetailModalComponent implements OnChanges {
     }
 
     loadDetail(): void {
-        if (!this.requestId) return;
+        if (!this.requestId && !this.requestCode) return;
 
         this.isLoading = true;
         this.loadError = '';
-        this._appService.groupBuyingRequest.getPublicDetail(this.requestId)
+        const detail$ = this.requestCode
+            ? this._appService.groupBuyingRequest.getPublicDetailByCode(this.requestCode)
+            : this._appService.groupBuyingRequest.getPublicDetail(this.requestId!);
+
+        detail$
             .pipe(finalize(() => this.isLoading = false))
             .subscribe({
                 next: (response) => {
@@ -162,6 +171,38 @@ export class GroupBuyingDetailModalComponent implements OnChanges {
                         || this._appService.trans('GROUP_BUYING.ERROR.SUBMIT_FAILED'));
                 }
             });
+    }
+
+    /** Admin và người mở nhóm xem được liên hệ đầy đủ; người dùng khác chỉ thấy dạng che */
+    get canSeeContacts(): boolean {
+        return this._appService.isAdmin() || this.detail?.isMine === true;
+    }
+
+    /** Link công khai của đơn mua chung — CTV gửi cho khách để xem và tham gia */
+    get shareUrl(): string {
+        const code = this.detail?.groupBuyingRequestCode;
+        if (!code || !isBrowser()) return '';
+        return `${window.location.origin}/mua-chung/${code}`;
+    }
+
+    copyShareLink(): void {
+        const url = this.shareUrl;
+        if (!url) return;
+
+        const successMessage = this._appService.trans('GROUP_BUYING.DETAIL.COPY_LINK_SUCCESS');
+
+        navigator.clipboard.writeText(url).then(() => {
+            this._appService.showSuccess(successMessage);
+        }).catch(() => {
+            // Fallback: tạo input tạm để copy khi trình duyệt không cho dùng clipboard API
+            const input = document.createElement('input');
+            input.value = url;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            this._appService.showSuccess(successMessage);
+        });
     }
 
     goToLogin(): void {

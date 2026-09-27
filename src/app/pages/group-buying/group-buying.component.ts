@@ -38,6 +38,29 @@ export class GroupBuyingComponent {
             note: [''],
             agreeTerms: [false, [Validators.requiredTrue]]
         });
+
+        // Người đã đăng nhập không phải nhập lại thông tin liên hệ — service tự lấy từ tài khoản
+        this.applyGuestValidators();
+    }
+
+    get isAuthenticated(): boolean {
+        return this._appService.isAuthenticated();
+    }
+
+    /** Khách chưa đăng nhập bắt buộc nhập họ tên + SĐT + email (để tạo tài khoản và liên hệ) */
+    private applyGuestValidators(): void {
+        const guest = !this.isAuthenticated;
+        const fullName = this.groupForm.get('fullName');
+        const phone = this.groupForm.get('phone');
+        const email = this.groupForm.get('email');
+
+        fullName?.setValidators(guest ? [Validators.required, Validators.minLength(2)] : []);
+        phone?.setValidators(guest ? [Validators.required, Validators.pattern(/^0[0-9]{9,10}$/)] : []);
+        email?.setValidators(guest ? [Validators.required, Validators.email] : []);
+
+        fullName?.updateValueAndValidity();
+        phone?.updateValueAndValidity();
+        email?.updateValueAndValidity();
     }
 
     get f() {
@@ -46,7 +69,8 @@ export class GroupBuyingComponent {
 
     get formProgress(): number {
         const controls = this.groupForm.controls;
-        const requiredFields = ['productName', 'targetPrice', 'targetPeopleCount', 'fullName', 'phone', 'email', 'agreeTerms'];
+        const requiredFields = ['productName', 'targetPrice', 'targetPeopleCount',
+            ...(this.isAuthenticated ? [] : ['fullName', 'phone', 'email']), 'agreeTerms'];
         let total = requiredFields.length;
         let filled = 0;
 
@@ -136,15 +160,23 @@ export class GroupBuyingComponent {
         const formValue = this.groupForm.value;
 
         // Prepare request data
+        // Người đã đăng nhập: để trống thông tin liên hệ, service tự bù từ hồ sơ tài khoản
+        const contact = this.isAuthenticated ? null : {
+            fullName: formValue.fullName.trim(),
+            phone: formValue.phone.trim(),
+            zalo: formValue.zalo?.trim() || undefined,
+            email: formValue.email.trim().toLowerCase()
+        };
+
         const requestData: CreateGroupBuyingRequest = {
             productName: formValue.productName.trim(),
             productLink: formValue.productLink?.trim() || undefined,
             targetPeopleCount: Number(formValue.targetPeopleCount),
             targetPrice: Number(formValue.targetPrice),
-            fullName: formValue.fullName.trim(),
-            phone: formValue.phone.trim(),
-            zalo: formValue.zalo?.trim() || undefined,
-            email: formValue.email.trim().toLowerCase(),
+            fullName: contact?.fullName ?? '',
+            phone: contact?.phone ?? '',
+            zalo: contact?.zalo,
+            email: contact?.email ?? '',
             note: formValue.note?.trim() || undefined
         };
 

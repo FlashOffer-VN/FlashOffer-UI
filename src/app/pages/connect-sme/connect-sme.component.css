@@ -2,7 +2,7 @@
 :host {
     display: block;
     min-height: 100vh;
-    background: linear-gradient(180deg, #f0f9ff 0%, #f8fafc 50%, #ffffff 100%);
+    background: linear-gradient(180deg, #f0f9ff 0%, var(--surface-soft) 50%, var(--white) 100%);
     position: relative;
 }
 
@@ -66,7 +66,7 @@
 .connect-sme-badge {
     display: inline-block;
     background: linear-gradient(135deg, rgba(0, 127, 148, 0.1), rgba(0, 127, 148, 0.05));
-    color: #007f94;
+    color: var(--primary);
     font-size: 13px;
     font-weight: 600;
     padding: 6px 18px;
@@ -93,14 +93,14 @@
 .connect-sme-hero h1 {
     font-size: 40px;
     font-weight: 800;
-    color: #0a1a2b;
+    color: var(--text-strong);
     margin-bottom: 12px;
     letter-spacing: -0.02em;
     line-height: 1.2;
 }
 
 .connect-sme-hero h1 .highlight {
-    color: #007f94;
+    color: var(--primary);
     position: relative;
 }
 
@@ -117,7 +117,7 @@
 }
 
 .connect-sme-hero p {
-    color: #5a6c7e;
+    color: var(--text-slate-soft);
     font-size: 18px;
     line-height: 1.7;
     max-width: 560px;
@@ -132,10 +132,10 @@
     max-width: 780px;
     margin: 0 auto 48px;
     padding: 28px 36px;
-    background: #ffffff;
+    background: var(--white);
     border-radius: 20px;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
-    border: 1px solid #e8edf3;
+    border: 1px solid var(--page-bg);
     backdrop-filter: blur(10px);
 }
 
@@ -183,7 +183,7 @@
     display: block;
     font-size: 28px;
     font-weight: 800;
-    color: #007f94;
+    color: var(--primary);
     animation: numberCount 1s ease forwards;
 }
 
@@ -205,7 +205,7 @@
 
 .stat-item span {
     font-size: 14px;
-    color: #5a6c7e;
+    color: var(--text-slate-soft);
     font-weight: 500;
 }
 
@@ -227,8 +227,8 @@
 
 /* ===== Card Base ===== */
 .connect-card {
-    background: #ffffff;
-    border: 1.5px solid #e8edf3;
+    background: var(--white);
+    border: 1.5px solid var(--page-bg);
     border-radius: 20px;
     padding: 32px 24px 28px;
     text-decoration: none;
@@ -330,22 +330,22 @@
 }
 
 .connect-card--find:hover {
-    border-color: #007f94;
+    border-color: var(--primary);
     box-shadow: 0 16px 48px rgba(0, 127, 148, 0.10);
 }
 
 .connect-card--group:hover {
-    border-color: #f59e0b;
+    border-color: var(--warning);
     box-shadow: 0 16px 48px rgba(245, 158, 11, 0.10);
 }
 
 .connect-card--offer:hover {
-    border-color: #8B5CF6;
+    border-color: var(--accent-subtle);
     box-shadow: 0 16px 48px rgba(139, 92, 246, 0.10);
 }
 
 .connect-card--partner:hover {
-    border-color: #F59E0B;
+    border-color: var(--warning);
     box-shadow: 0 16px 48px rgba(245, 158, 11, 0.15);
     background: linear-gradient(145deg, #FFFDF5, #FFFBF0);
 }
@@ -365,22 +365,22 @@
 
 .connect-card--find .connect-card__icon-wrapper {
     background: linear-gradient(135deg, rgba(0, 127, 148, 0.12), rgba(0, 127, 148, 0.04));
-    color: #007f94;
+    color: var(--primary);
 }
 
 .connect-card--group .connect-card__icon-wrapper {
     background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.04));
-    color: #f59e0b;
+    color: var(--warning);
 }
 
 .connect-card--offer .connect-card__icon-wrapper {
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(139, 92, 246, 0.04));
-    color: #8B5CF6;
+    color: var(--accent-subtle);
 }
 
 .connect-card--partner .connect-card__icon-wrapper {
     background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
-    color: #F59E0B;
+    color: var(--warning);
 }
 
 .connect-card:hover .connect-card__icon-wrapper {
@@ -391,30 +391,30 @@
 .connect-card h3 {
     font-size: 18px;
     font-weight: 700;
-    color: #0a1a2b;
+    color: var(--text-strong);
     margin: 0 0 8px;
     transition: color 0.3s ease;
 }
 
 .connect-card--find:hover h3 {
-    color: #007f94;
+    color: var(--primary);
 }
 
 .connect-card--group:hover h3 {
-    color: #f59e0b;
+    color: var(--warning);
 }
 
 .connect-card--offer:hover h3 {
-    color: #8B5CF6;
+    color: var(--accent-subtle);
 }
 
 .connect-card--partner:hover h3 {
-    color: #F59E0B;
+    color: var(--warning);
 }
 
 /* Card Description */
 .connect-card p {
-    color: #5a6c7e;
+    color: var(--text-slate-soft);
     font-size: 14px;
     line-height: 1.6;
     margin: 0 0 16px;
@@ -431,7 +431,7 @@
 
 .connect-card__features li {
     font-size: 13px;
-    color: #1a2a3a;
+    color: var(--text-navy);
     padding: 5px 0;
     display: flex;
     align-items: center;
@@ -448,19 +448,19 @@
 }
 
 .connect-card--find .connect-card__features li::before {
-    color: #007f94;
+    color: var(--primary);
 }
 
 .connect-card--group .connect-card__features li::before {
-    color: #f59e0b;
+    color: var(--warning);
 }
 
 .connect-card--offer .connect-card__features li::before {
-    color: #8B5CF6;
+    color: var(--accent-subtle);
 }
 
 .connect-card--partner .connect-card__features li::before {
-    color: #F59E0B;
+    color: var(--warning);
 }
 
 .connect-card:nth-child(1) .connect-card__features li:nth-child(1) {
@@ -542,19 +542,19 @@
 }
 
 .connect-card--find .connect-card__arrow {
-    color: #007f94;
+    color: var(--primary);
 }
 
 .connect-card--group .connect-card__arrow {
-    color: #f59e0b;
+    color: var(--warning);
 }
 
 .connect-card--offer .connect-card__arrow {
-    color: #8B5CF6;
+    color: var(--accent-subtle);
 }
 
 .connect-card--partner .connect-card__arrow {
-    color: #F59E0B;
+    color: var(--warning);
 }
 
 .connect-card:hover .connect-card__arrow {

@@ -1,4 +1,4 @@
-// src/app/features/auth/pages/register/register.component.ts
+// src/app/pages/auth/register/register.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';

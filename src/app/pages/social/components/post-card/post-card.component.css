@@ -54,7 +54,7 @@
     padding: 2px;
     background: linear-gradient(135deg, var(--primary), var(--primary-light), var(--primary));
     background-size: 200% 200%;
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(var(--white) 0 0) content-box, linear-gradient(var(--white) 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     animation: borderRotate 3s linear infinite;
@@ -116,12 +116,12 @@
 
 .author-code {
     font-size: 12px;
-    color: #9CA3AF;
+    color: var(--text-subtle);
 }
 
 .author-role {
     font-size: 13px;
-    color: #6B7280;
+    color: var(--text-muted);
 }
 
 .post-meta {
@@ -130,7 +130,7 @@
     gap: 4px;
     flex-wrap: wrap;
     font-size: 12px;
-    color: #9CA3AF;
+    color: var(--text-subtle);
     margin-top: 2px;
 }
 
@@ -143,8 +143,8 @@
     font-size: 10px;
     font-weight: 500;
     line-height: 18px;
-    background: #FEF3C7;
-    color: #B45309;
+    background: var(--warning-soft);
+    color: var(--warning-dark);
 }
 
 .pinned-badge i {
@@ -152,13 +152,13 @@
 }
 
 .meta-separator {
-    color: #D1D5DB;
+    color: var(--border-strong);
     font-size: 10px;
 }
 
 .post-time {
     font-size: 12px;
-    color: #9CA3AF;
+    color: var(--text-subtle);
 }
 
 .post-type,
@@ -180,39 +180,39 @@
 
 /* Type colors */
 .post-type.type-1 {
-    background: #EFF6FF;
-    color: #3B82F6;
+    background: var(--blue-bg);
+    color: var(--blue-light);
 }
 
 .post-type.type-2 {
-    background: #FEF3C7;
-    color: #D97706;
+    background: var(--warning-soft);
+    color: var(--warning-strong);
 }
 
 .post-type.type-3 {
-    background: #D1FAE5;
-    color: #059669;
+    background: var(--success-soft);
+    color: var(--success-dark);
 }
 
 .post-type.type-4 {
     background: #FCE4EC;
-    color: #DC2626;
+    color: var(--danger-dark);
 }
 
 /* Privacy colors */
 .post-privacy.privacy-1 {
-    background: #ECFDF5;
-    color: #059669;
+    background: var(--success-bg);
+    color: var(--success-dark);
 }
 
 .post-privacy.privacy-2 {
-    background: #EFF6FF;
-    color: #3B82F6;
+    background: var(--blue-bg);
+    color: var(--blue-light);
 }
 
 .post-privacy.privacy-3 {
-    background: #F3F4F6;
-    color: #6B7280;
+    background: var(--surface-muted);
+    color: var(--text-muted);
 }
 
 .post-actions {
@@ -227,7 +227,7 @@
     background: transparent;
     border-radius: 8px;
     cursor: pointer;
-    color: #9CA3AF;
+    color: var(--text-subtle);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -235,12 +235,12 @@
 }
 
 .actions-toggle:hover {
-    background: #F3F4F6;
-    color: #374151;
+    background: var(--surface-muted);
+    color: var(--text-secondary);
 }
 
 .actions-toggle.active {
-    background: #F3F4F6;
+    background: var(--surface-muted);
     color: var(--primary);
 }
 
@@ -283,12 +283,12 @@
     cursor: pointer;
     border-radius: 8px;
     transition: all 0.2s ease;
-    color: #374151;
+    color: var(--text-secondary);
     font-size: 14px;
 }
 
 .action-item:hover {
-    background: #F9FAFB;
+    background: var(--surface);
 }
 
 .action-item:active {
@@ -306,18 +306,18 @@
 }
 
 .edit-icon {
-    background: #EFF6FF;
-    color: #3B82F6;
+    background: var(--blue-bg);
+    color: var(--blue-light);
 }
 
 .delete-icon {
-    background: #FEF2F2;
-    color: #EF4444;
+    background: var(--danger-soft);
+    color: var(--danger);
 }
 
 .pin-icon {
-    background: #FEF3C7;
-    color: #B45309;
+    background: var(--warning-soft);
+    color: var(--warning-dark);
 }
 
 .action-label {
@@ -328,24 +328,24 @@
 
 .action-shortcut {
     font-size: 11px;
-    color: #9CA3AF;
-    background: #F3F4F6;
+    color: var(--text-subtle);
+    background: var(--surface-muted);
     padding: 2px 8px;
     border-radius: 4px;
     font-weight: 400;
 }
 
 .action-item.danger .action-label {
-    color: #EF4444;
+    color: var(--danger);
 }
 
 .action-item.danger:hover {
-    background: #FEF2F2;
+    background: var(--danger-soft);
 }
 
 .dropdown-divider {
     height: 1px;
-    background: #F3F4F6;
+    background: var(--surface-muted);
     margin: 4px 8px;
 }
 
@@ -385,7 +385,7 @@
     height: 180px;
     object-fit: cover;
     border-radius: 10px;
-    background: #f3f4f6;
+    background: var(--surface-muted);
 }
 
 .post-images:has(> img:only-child) {
@@ -412,7 +412,7 @@
 .post-text {
     font-size: 15px;
     line-height: 1.7;
-    color: #374151;
+    color: var(--text-secondary);
     margin: 0 0 8px 0;
     position: relative;
 
@@ -481,7 +481,7 @@
     margin: 8px 0;
     padding: 8px 16px;
     border-left: 4px solid var(--primary);
-    background: #F9FAFB;
+    background: var(--surface);
     border-radius: 0 4px 4px 0;
 }
 
@@ -533,7 +533,7 @@
     display: flex;
     gap: 16px;
     padding-top: 12px;
-    border-top: 1px solid #F3F4F6;
+    border-top: 1px solid var(--surface-muted);
 }
 
 .action-btn {
@@ -543,7 +543,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: #6B7280;
+    color: var(--text-muted);
     font-size: 14px;
     padding: 4px 8px;
     border-radius: 6px;
@@ -551,8 +551,8 @@
 }
 
 .action-btn:hover {
-    background: #F3F4F6;
-    color: #1F2937;
+    background: var(--surface-muted);
+    color: var(--text);
 }
 
 .action-btn i {
@@ -560,7 +560,7 @@
 }
 
 .action-btn .liked {
-    color: #EF4444;
+    color: var(--danger);
 }
 
 .action-btn .saved {

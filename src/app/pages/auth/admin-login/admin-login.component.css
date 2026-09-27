@@ -7,7 +7,7 @@
     align-items: center;
     min-height: 100vh;
     padding: 1.5rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--indigo) 0%, #764ba2 100%);
     position: relative;
     overflow: hidden;
 }
@@ -38,7 +38,7 @@
 /* ========== Card ========== */
 .admin-login-card {
     position: relative;
-    background: #ffffff;
+    background: var(--white);
     border-radius: 1.25rem;
     padding: 2.5rem 2.5rem 2rem;
     width: 100%;
@@ -72,7 +72,7 @@
     width: 72px;
     height: 72px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--indigo) 0%, #764ba2 100%);
     color: white;
     font-size: 2rem;
     margin-bottom: 1rem;
@@ -93,7 +93,7 @@
 }
 
 .admin-login-header p {
-    color: #6b7280;
+    color: var(--text-muted);
     margin: 0.5rem 0 0;
     font-size: 0.9375rem;
 }
@@ -113,7 +113,7 @@
     transform: translateY(-50%);
     background: transparent;
     border: none;
-    color: #9ca3af;
+    color: var(--text-subtle);
     cursor: pointer;
     padding: 0.25rem 0.5rem;
     font-size: 1rem;
@@ -122,7 +122,7 @@
 }
 
 .admin-login-password-toggle:hover {
-    color: #4b5563;
+    color: var(--text-slate);
 }
 
 /* ========== Options row ========== */
@@ -138,33 +138,33 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #4b5563;
+    color: var(--text-slate);
     cursor: pointer;
     font-weight: 400;
     transition: color 0.2s ease;
 }
 
 .admin-login-remember:hover {
-    color: #1f2937;
+    color: var(--text);
 }
 
 .admin-login-remember input[type="checkbox"] {
     width: 1.125rem;
     height: 1.125rem;
     border-radius: 0.25rem;
-    border: 2px solid #d1d5db;
-    accent-color: #667eea;
+    border: 2px solid var(--border-strong);
+    accent-color: var(--indigo);
     cursor: pointer;
     flex-shrink: 0;
     transition: all 0.2s ease;
 }
 
 .admin-login-remember input[type="checkbox"]:checked {
-    border-color: #667eea;
+    border-color: var(--indigo);
 }
 
 .admin-login-forgot {
-    color: #667eea;
+    color: var(--indigo);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s ease;
@@ -179,7 +179,7 @@
 .admin-login-footer {
     text-align: center;
     padding-top: 0.5rem;
-    border-top: 1px solid #f3f4f6;
+    border-top: 1px solid var(--surface-muted);
     margin-top: 0.5rem;
 }
 
@@ -187,7 +187,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    color: #6b7280;
+    color: var(--text-muted);
     text-decoration: none;
     font-size: 0.875rem;
     transition: color 0.2s ease;
@@ -198,7 +198,7 @@
 }
 
 .admin-login-back:hover {
-    color: #1f2937;
+    color: var(--text);
 }
 
 /* ========== Responsive ========== */

@@ -112,6 +112,15 @@
                     </small>
                 </div>
 
+                <!-- Người đã đăng nhập: dùng thông tin trong tài khoản, không phải nhập lại -->
+                <div class="form-group full-width" *ngIf="isAuthenticated">
+                    <div class="signed-in-note">
+                        <i class="fas fa-user-check"></i>
+                        {{ 'FIND_SUPPLIER.USE_ACCOUNT_INFO' | translate }}
+                    </div>
+                </div>
+
+                <ng-container *ngIf="!isAuthenticated">
                 <!-- Full Name -->
                 <div class="form-group">
                     <label>{{ 'FIND_SUPPLIER.FULL_NAME' | translate }} <span class="required">*</span></label>
@@ -163,6 +172,7 @@
                         {{ getErrorMessage('email') }}
                     </div>
                 </div>
+                </ng-container>
 
                 <!-- Note -->
                 <div class="form-group full-width">

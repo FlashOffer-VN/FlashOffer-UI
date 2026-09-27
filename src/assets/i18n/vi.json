@@ -439,6 +439,7 @@
         "SUBMIT": "Gửi yêu cầu",
         "SUBMITTING": "Đang gửi...",
         "SECURE_NOTE": "Thông tin của bạn được bảo mật tuyệt đối",
+        "USE_ACCOUNT_INFO": "Bạn đã đăng nhập — hệ thống dùng thông tin liên hệ trong tài khoản của bạn.",
         "ERROR": {
             "REQUIRED": "Trường này là bắt buộc",
             "PRODUCT_NAME_REQUIRED": "Vui lòng nhập tên sản phẩm",
@@ -494,6 +495,7 @@
         "SUBMIT": "Tạo nhóm ngay",
         "SUBMITTING": "Đang tạo nhóm...",
         "SECURE_NOTE": "Thông tin của bạn được bảo mật tuyệt đối",
+        "USE_ACCOUNT_INFO": "Bạn đã đăng nhập — hệ thống dùng thông tin liên hệ trong tài khoản của bạn.",
         "ERROR": {
             "REQUIRED": "Trường này là bắt buộc",
             "PRODUCT_NAME_REQUIRED": "Vui lòng nhập tên sản phẩm",
@@ -545,7 +547,10 @@
             "PARTICIPANTS": "Người đã tham gia",
             "OWNER": "Người mở",
             "YOU": "Bạn",
-            "LOGIN_TO_SEE_CONTACT": "Đăng nhập để xem đầy đủ số điện thoại/Zalo/email liên hệ."
+            "CONTACT_PROTECTED": "Thông tin liên hệ của thành viên được bảo mật.",
+            "SHARE_LINK": "Chia sẻ",
+            "COPY_LINK_SUCCESS": "Đã sao chép link đơn mua chung!",
+            "COPY_LINK_FAILED": "Không sao chép được link, vui lòng thử lại."
         },
         "ACCOUNT": {
             "CREATED_TITLE": "Tài khoản của bạn đã được tạo",
@@ -595,6 +600,7 @@
         "SUBMIT": "Tìm nhà cung cấp",
         "SUBMITTING": "Đang tìm kiếm...",
         "SECURE_NOTE": "Thông tin của bạn được bảo mật tuyệt đối",
+        "USE_ACCOUNT_INFO": "Bạn đã đăng nhập — hệ thống dùng thông tin liên hệ trong tài khoản của bạn.",
         "SALES_CHANNEL_RETAIL": "Bán lẻ",
         "SALES_CHANNEL_WHOLESALE": "Bán sỉ",
         "SALES_CHANNEL_ONLINE": "Online",
@@ -638,7 +644,7 @@
         "FIND_FEATURE_1": "Kết nối với nhà cung cấp đã xác thực",
         "FIND_FEATURE_2": "So sánh giá từ nhiều nguồn",
         "FIND_FEATURE_3": "Đánh giá chất lượng từ cộng đồng",
-        "CARD_GROUP_BUYING": "Mua chung",
+        "CARD_GROUP_BUYING": "Tạo yêu cầu Mua chung",
         "CARD_GROUP_DESC": "Gom nhóm để có giá tốt nhất, tiết kiệm chi phí nhập hàng",
         "GROUP_FEATURE_1": "Tạo nhóm mua chung dễ dàng",
         "GROUP_FEATURE_2": "Giá ưu đãi theo số lượng",

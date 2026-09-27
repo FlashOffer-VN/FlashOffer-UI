@@ -7,8 +7,8 @@
     flex-wrap: wrap;
     gap: 6px;
     padding: 8px 12px;
-    border-bottom: 1px solid #e5e7eb;
-    background: #fff;
+    border-bottom: 1px solid var(--border);
+    background: var(--white);
 }
 
 .tab-btn {
@@ -17,8 +17,8 @@
     gap: 6px;
     border: 1px solid transparent;
     border-radius: 999px;
-    background: #f3f4f6;
-    color: #6b7280;
+    background: var(--surface-muted);
+    color: var(--text-muted);
     padding: 6px 14px;
     font-size: 13px;
     font-weight: 500;
@@ -32,13 +32,13 @@
 }
 
 .tab-btn:hover {
-    background: #e5e7eb;
-    color: #374151;
+    background: var(--border);
+    color: var(--text-secondary);
 }
 
 .tab-btn.active {
-    background: #7c3aed;
-    color: #fff;
+    background: var(--accent);
+    color: var(--white);
 }
 
 .tab-count {
@@ -50,8 +50,8 @@
 }
 
 .tab-btn:not(.active) .tab-count {
-    background: #e5e7eb;
-    color: #6b7280;
+    background: var(--border);
+    color: var(--text-muted);
 }
 
 @media (max-width: 600px) {
