@@ -2,12 +2,12 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { finalize } from 'rxjs/operators';
 
 import { AppService } from '@core/services/app.service';
-import { buildGroupBuyingShareUrl, copyToClipboard, readReferralCodeFromQuery } from '@core/utils/share-link';
+import { buildGroupBuyingShareUrl, copyToClipboard, resolveReferralCode } from '@core/utils/share-link';
 import { GroupBuyingDetail, GroupBuyingStatus, JoinGroupBuyingResult } from '@core/models/group-buying-request.model';
 import { AccountCreatedNoticeComponent } from '@shared/components/account-created-notice/account-created-notice.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
@@ -54,8 +54,7 @@ export class GroupBuyingDetailModalComponent implements OnInit, OnChanges {
     constructor(
         private _fb: FormBuilder,
         private _appService: AppService,
-        private _router: Router,
-        private _route: ActivatedRoute
+        private _router: Router
     ) {
         this.joinForm = this._fb.group({
             fullName: [''],
@@ -99,8 +98,7 @@ export class GroupBuyingDetailModalComponent implements OnInit, OnChanges {
      */
     private resolveReferralCodes(): void {
         this.incomingReferralCode = (this.referralCodeFromUrl ?? '').trim()
-            || this._route.snapshot.queryParamMap.get('ref')
-            || readReferralCodeFromQuery();
+            || resolveReferralCode();
 
         if (!this.isAuthenticated) {
             this.myReferralCode = null;
@@ -170,8 +168,7 @@ export class GroupBuyingDetailModalComponent implements OnInit, OnChanges {
         // Mã chia sẻ trên link người dùng mở: ghi nhận cho người đã chia sẻ link này.
         // Đọc lại ngay lúc gửi để không phụ thuộc thời điểm modal được tạo.
         const referralCode = this.incomingReferralCode
-            ?? this._route.snapshot.queryParamMap.get('ref')
-            ?? readReferralCodeFromQuery()
+            ?? resolveReferralCode()
             ?? undefined;
         const payload = this.isAuthenticated
             ? { note: value.note?.trim() || undefined, referralCode }

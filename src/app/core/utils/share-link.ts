@@ -27,6 +27,26 @@ export function readReferralCodeFromQuery(search?: string | null): string | null
     return value?.trim() || null;
 }
 
+/** Khoá lưu mã chia sẻ đã gặp trong phiên hiện tại */
+const REFERRAL_STORAGE_KEY = 'kindi_referral_code';
+
+/**
+ * Mã chia sẻ dùng cho các luồng ghi nhận: ưu tiên mã trên URL (?ref=) rồi ghi nhớ trong phiên,
+ * để khách mở link vẫn ghi nhận đúng người chia sẻ dù có chuyển trang trước khi tham gia.
+ */
+export function resolveReferralCode(): string | null {
+    const fromQuery = readReferralCodeFromQuery();
+
+    if (!isBrowser()) return fromQuery;
+
+    if (fromQuery) {
+        sessionStorage.setItem(REFERRAL_STORAGE_KEY, fromQuery);
+        return fromQuery;
+    }
+
+    return sessionStorage.getItem(REFERRAL_STORAGE_KEY);
+}
+
 /** Copy văn bản vào clipboard; trình duyệt chặn Clipboard API thì dùng input tạm */
 export function copyToClipboard(text: string): Promise<void> {
     if (!text || !isBrowser()) return Promise.resolve();

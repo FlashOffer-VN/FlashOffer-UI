@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
-import { readReferralCodeFromQuery } from '@core/utils/share-link';
+import { resolveReferralCode } from '@core/utils/share-link';
 import {
     UNIT_OPTIONS,
     PRODUCT_CATEGORY_OPTIONS,
@@ -203,7 +203,7 @@ export class FindSupplierComponent implements OnInit {
             email: contact?.email ?? '',
             note: formValue.note?.trim() || null,
             // Người dùng mở form từ link chia sẻ (?ref=) thì ghi nhận mã của người chia sẻ
-            referralCode: readReferralCodeFromQuery() ?? undefined
+            referralCode: resolveReferralCode() ?? undefined
         };
 
         // Call API
