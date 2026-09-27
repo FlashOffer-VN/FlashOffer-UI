@@ -1131,6 +1131,7 @@
             "SEARCH_PLACEHOLDER": "Tìm kiếm theo tên, email, SĐT, lĩnh vực...",
             "FILTER_STATUS": "Lọc theo trạng thái",
             "CODE": "Mã cộng tác viên",
+            "REFERRAL_CODE": "Mã chia sẻ",
             "FULL_NAME": "Họ tên",
             "EMAIL": "Email",
             "PHONE": "SĐT",

@@ -223,9 +223,14 @@ export class GroupBuyingDetailModalComponent implements OnChanges {
      * link chia sẻ lại sẽ thay bằng mã của họ → phải xác nhận trước khi copy.
      */
     get needsReferralConfirm(): boolean {
-        const incoming = (this.incomingReferralCode ?? '').toUpperCase();
+        const incoming = (this.attributionReferralCode ?? '').toUpperCase();
         const mine = (this.myReferralCode ?? '').toUpperCase();
         return !!incoming && !!mine && incoming !== mine;
+    }
+
+    /** Mã chia sẻ đang gắn với đơn: mã trên URL, hoặc mã đã ghi nhận sẵn trên đơn */
+    get attributionReferralCode(): string | null {
+        return this.incomingReferralCode ?? this.detail?.referralCode ?? null;
     }
 
     copyShareLink(): void {
@@ -233,7 +238,7 @@ export class GroupBuyingDetailModalComponent implements OnChanges {
         if (!url) return;
 
         if (this.needsReferralConfirm) {
-            const params = { old: this.incomingReferralCode ?? '', mine: this.myReferralCode ?? '' };
+            const params = { old: this.attributionReferralCode ?? '', mine: this.myReferralCode ?? '' };
 
             this._appService.confirm({
                 title: this._appService.trans('GROUP_BUYING.DETAIL.SHARE_REF_CONFIRM_TITLE'),

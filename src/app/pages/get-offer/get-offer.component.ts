@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
+import { readReferralCodeFromQuery } from '@core/utils/share-link';
 import { finalize } from 'rxjs/operators';
 
 @Component({
@@ -182,7 +183,9 @@ export class GetOfferComponent {
             phone: contact?.phone ?? '',
             zalo: contact?.zalo,
             email: contact?.email ?? '',
-            note: formValue.note?.trim() || undefined
+            note: formValue.note?.trim() || undefined,
+            // Người dùng mở form từ link chia sẻ (?ref=) thì ghi nhận mã của người chia sẻ
+            referralCode: readReferralCodeFromQuery() ?? undefined
         };
 
         this._appService.offerRequest.create(requestData)

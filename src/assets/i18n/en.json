@@ -1173,6 +1173,7 @@
             "SEARCH_PLACEHOLDER": "Search by name, email, phone, field...",
             "FILTER_STATUS": "Filter by status",
             "CODE": "Collaborator Code",
+            "REFERRAL_CODE": "Share code",
             "FULL_NAME": "Full Name",
             "EMAIL": "Email",
             "PHONE": "Phone",
