@@ -81,6 +81,10 @@ export interface BusinessGroupMember {
     role: GroupMemberRole;
     status: GroupMemberStatus;
     isGuestAccount: boolean;
+    /** Mã chia sẻ riêng của người đã mời thành viên này vào nhóm */
+    referralCode?: string | null;
+    /** Tên chủ mã chia sẻ (CTV giới thiệu) */
+    referralName?: string | null;
     joinedAt?: string | null;
     approvedAt?: string | null;
     rejectionReason?: string | null;
@@ -102,6 +106,12 @@ export interface BusinessGroupPost {
     type: GroupPostType;
     refId?: string | null;
     refCode?: string | null;
+    /** Mã chia sẻ riêng của người chuyển tiếp — dùng để gắn vào link chia sẻ trong bài */
+    referralCode?: string | null;
+    /** Tên chủ mã chia sẻ (CTV giới thiệu) */
+    referralName?: string | null;
+    /** Bài chuyển tiếp có kèm link chia sẻ mời tham gia */
+    withShareLink: boolean;
     isPrivateToAdmin: boolean;
     isPinned: boolean;
     isHidden: boolean;
@@ -170,6 +180,8 @@ export interface JoinBusinessGroupRequest {
     zalo?: string;
     email?: string;
     note?: string;
+    /** Mã chia sẻ riêng trên link người dùng mở (?ref=) — ghi nhận cho người đã chia sẻ */
+    referralCode?: string;
 }
 
 export interface CreateCommunityGroupRequest {
@@ -200,6 +212,8 @@ export interface CreateGroupPostRequest {
     refId?: string | null;
     refCode?: string;
     isPrivateToAdmin?: boolean;
+    /** true = bài chuyển tiếp kèm link chia sẻ mời tham gia */
+    withShareLink?: boolean;
 }
 
 export interface UpdateGroupPostRequest {

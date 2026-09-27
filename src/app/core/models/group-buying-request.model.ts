@@ -19,6 +19,8 @@ export interface GroupBuyingRequest {
     status: GroupBuyingStatus;
     businessFieldId?: string | null;
     businessFieldName?: string | null;
+    /** Mã chia sẻ riêng (refcode) ghi nhận cho người đã chia sẻ bản ghi này */
+    referralCode?: string | null;
     createdAt: string;
     approvedAt?: string | null;
     closedReason?: string | null;
@@ -57,6 +59,8 @@ export interface CreateGroupBuyingRequest {
     zalo?: string;
     email: string;
     note?: string;
+    /** Mã chia sẻ riêng của người tạo — có khi người tạo mở form từ link chia sẻ */
+    referralCode?: string;
 }
 
 // ===== Tab "Mua chung" trên trang social =====
@@ -93,6 +97,10 @@ export interface GroupBuyingParticipant {
     zalo: string | null;
     email: string | null;
     note: string | null;
+    /** Mã chia sẻ riêng ghi nhận cho người đã chia sẻ link mà thành viên này tham gia */
+    referralCode?: string | null;
+    /** Tên chủ mã chia sẻ (CTV giới thiệu) */
+    referralName?: string | null;
     isCreator: boolean;
     isGuestAccount: boolean;
     status: number;
@@ -121,6 +129,10 @@ export interface GroupBuyingDetail {
     creatorPhone: string;
     creatorZalo: string | null;
     creatorEmail: string | null;
+    /** Mã chia sẻ riêng của người đã chia sẻ link tạo ra đơn này */
+    referralCode?: string | null;
+    /** Tên chủ mã chia sẻ (CTV giới thiệu) */
+    referralName?: string | null;
     isMine: boolean;
     isJoinedByMe: boolean;
     canJoin: boolean;
@@ -135,6 +147,8 @@ export interface JoinGroupBuyingPayload {
     zalo?: string;
     email?: string;
     note?: string;
+    /** Mã chia sẻ riêng trên link người dùng mở (?ref=) — ghi nhận cho người đã chia sẻ */
+    referralCode?: string;
 }
 
 export interface JoinGroupBuyingResult {

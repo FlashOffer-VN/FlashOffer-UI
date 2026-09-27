@@ -250,6 +250,12 @@ export class AdminGroupBuyingDetailComponent implements OnInit {
         return Math.max(0, Math.min(100, Math.round(value)));
     }
 
+    /** Mã chia sẻ riêng + tên CTV giới thiệu (mã ghi nhận từ link chia sẻ) */
+    referralText(name?: string | null, code?: string | null): string {
+        const parts = [code, name].filter(value => !!value);
+        return parts.length > 0 ? parts.join(' · ') : '--';
+    }
+
     goBack(): void {
         this._router.navigate(['/admin/group-buying']);
     }

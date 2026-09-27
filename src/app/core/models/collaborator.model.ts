@@ -2,6 +2,11 @@
 
 import { AccountCredentials } from './account.model';
 
+/** Mã chia sẻ riêng của tài khoản đang đăng nhập (GET /Collaborators/me/referral-code) */
+export interface MyReferralCode {
+    referralCode: string | null;
+}
+
 export interface Collaborator {
     id: string;
     userId: string;

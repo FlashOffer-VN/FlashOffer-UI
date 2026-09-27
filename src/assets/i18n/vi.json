@@ -550,7 +550,11 @@
             "CONTACT_PROTECTED": "Thông tin liên hệ của thành viên được bảo mật.",
             "SHARE_LINK": "Chia sẻ",
             "COPY_LINK_SUCCESS": "Đã sao chép link đơn mua chung!",
-            "COPY_LINK_FAILED": "Không sao chép được link, vui lòng thử lại."
+            "COPY_LINK_FAILED": "Không sao chép được link, vui lòng thử lại.",
+            "SHARE_REF_NOTICE": "Link bạn đang mở có mã chia sẻ {{old}}. Link bạn chia sẻ lại sẽ ghi nhận cho mã của bạn ({{mine}}).",
+            "SHARE_REF_CONFIRM_TITLE": "Chia sẻ lại link này?",
+            "SHARE_REF_CONFIRM_MESSAGE": "Link đang có mã chia sẻ {{old}}. Link sắp sao chép dùng mã của bạn ({{mine}}) — người tham gia từ link đó sẽ được ghi nhận cho bạn.",
+            "SHARE_REF_CONFIRM_OK": "Đồng ý, dùng mã của tôi"
         },
         "ACCOUNT": {
             "CREATED_TITLE": "Tài khoản của bạn đã được tạo",
@@ -1051,6 +1055,7 @@
             "NOTE": "Ghi chú",
             "ZALO": "Zalo",
             "EMAIL": "Email",
+            "REFERRAL": "CTV giới thiệu",
             "APPROVE": "Duyệt",
             "REJECT": "Từ chối",
             "EXPIRE": "Đánh dấu hết hạn",
@@ -1084,6 +1089,7 @@
             "NOTE": "Ghi chú",
             "ZALO": "Zalo",
             "EMAIL": "Email",
+            "REFERRAL": "CTV giới thiệu",
             "CONTACT": "Đã liên hệ",
             "CONTACT_CONFIRM": "Bạn có chắc chắn đánh dấu đã liên hệ với yêu cầu này không?",
             "CONTACTED_SUCCESS": "Đã đánh dấu đã liên hệ thành công",
@@ -1258,6 +1264,7 @@
             "JOINED_AT": "Tham gia lúc",
             "OWNER": "Người mở",
             "GUEST_ACCOUNT": "Tài khoản tự tạo",
+            "REFERRAL": "CTV giới thiệu",
             "APPROVE": "Duyệt yêu cầu",
             "APPROVE_CONFIRM": "Duyệt yêu cầu này để hiển thị công khai trên tab Mua chung?",
             "APPROVE_SUCCESS": "Duyệt yêu cầu mua chung thành công",
@@ -1315,6 +1322,7 @@
             "MEMBER_NAME": "Thành viên",
             "MEMBER_CONTACT": "Liên hệ",
             "MEMBER_JOINED": "Ngày tham gia",
+            "REFERRAL": "CTV giới thiệu",
             "MEMBER_STATUS_SUCCESS": "Cập nhật trạng thái thành viên thành công",
             "MEMBER_REMOVED": "Đã xoá thành viên khỏi nhóm",
             "NO_MEMBERS": "Chưa có thành viên",
@@ -1326,6 +1334,7 @@
             "POST_TYPE": "Loại bài",
             "REF_CODE": "Mã tham chiếu",
             "REF_CODE_PLACEHOLDER": "Ví dụ: GBR-XXXXXX, OFR-XXXXXX",
+            "WITH_SHARE_LINK": "Kèm link chia sẻ",
             "POST_CONTENT_PLACEHOLDER": "Nội dung gửi tới thành viên nhóm...",
             "PUBLISH": "Đăng vào nhóm",
             "POST_SUCCESS": "Đã đăng bài vào nhóm",
@@ -1525,6 +1534,11 @@
         "ALREADY_ALL_SENT": "Các nhóm đã chọn đều đã có thông tin này, không gửi lại",
         "SENT_GROUPS_TITLE": "Nhóm đã có (không gửi lại)",
         "UNSENT_GROUPS_TITLE": "Nhóm chưa có (có thể gửi)",
-        "BUTTON_SHORT": "Chuyển tiếp"
+        "BUTTON_SHORT": "Chuyển tiếp",
+        "WITH_SHARE_LINK": "Kèm link chia sẻ mời tham gia",
+        "WITH_SHARE_LINK_HINT": "Link gắn mã chia sẻ riêng của bạn — người tham gia từ link này sẽ được ghi nhận cho bạn.",
+        "SHARE_LINK_LABEL": "Link chia sẻ gửi cho khách",
+        "COPY_SHARE_LINK": "Sao chép link",
+        "COPY_LINK_SUCCESS": "Đã sao chép link chia sẻ!"
     }
 }

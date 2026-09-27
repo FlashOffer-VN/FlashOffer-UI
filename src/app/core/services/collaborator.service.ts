@@ -1,21 +1,51 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError, map, shareReplay } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import {
     Collaborator,
     CollaboratorStatus,
     CreateCollaboratorRequest,
+    MyReferralCode,
     UpdateCollaboratorRequest,
     SalesChannelOption,
     SALES_CHANNEL_OPTIONS
 } from '../models/collaborator.model';
 import { ApiResponse, PagedResponse } from '@core/models/paged-response.model';
+import { storageGet } from '../utils/storage';
 
 @Injectable({ providedIn: 'root' })
 export class CollaboratorService {
     private readonly _baseUrl = 'Collaborators';
 
+    /** Cache mã chia sẻ riêng theo phiên đăng nhập — tránh gọi lại API ở mỗi nơi cần gắn link */
+    private _myReferralCodeToken = '';
+    private _myReferralCode$?: Observable<string | null>;
+
     constructor(private _apiService: ApiService) { }
+
+    /**
+     * Mã chia sẻ riêng của tài khoản đang đăng nhập (cần đăng nhập)
+     * GET /api/v1/Collaborators/me/referral-code
+     */
+    getMyReferralCode(): Observable<string | null> {
+        // Đổi tài khoản (token khác) thì lấy lại mã của tài khoản mới
+        const token = storageGet('token') ?? '';
+
+        if (!this._myReferralCode$ || token !== this._myReferralCodeToken) {
+            this._myReferralCodeToken = token;
+            this._myReferralCode$ = this._apiService
+                .get<ApiResponse<MyReferralCode>>(`${this._baseUrl}/me/referral-code`)
+                .pipe(
+                    map((response) => response?.data?.referralCode ?? null),
+                    // Không lấy được mã (chưa đăng nhập / lỗi mạng) thì coi như chưa có mã
+                    catchError(() => of(null)),
+                    shareReplay(1)
+                );
+        }
+
+        return this._myReferralCode$;
+    }
 
     /**
      * Đăng ký cộng tác viên mới

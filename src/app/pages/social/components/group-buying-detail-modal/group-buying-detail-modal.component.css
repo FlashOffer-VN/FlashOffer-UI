@@ -136,6 +136,20 @@
     font-size: 14px;
 }
 
+/* Nhắc người dùng: link chia sẻ lại sẽ ghi nhận mã chia sẻ của chính họ */
+.referral-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: var(--warning-bg);
+    border: 1px solid var(--warning-light);
+    color: var(--warning-deep);
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
 .info-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);

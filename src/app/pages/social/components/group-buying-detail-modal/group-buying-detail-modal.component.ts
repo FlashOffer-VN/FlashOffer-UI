@@ -2,12 +2,12 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { finalize } from 'rxjs/operators';
 
 import { AppService } from '@core/services/app.service';
-import { isBrowser } from '@core/utils/platform';
+import { buildGroupBuyingShareUrl, copyToClipboard, readReferralCodeFromQuery } from '@core/utils/share-link';
 import { GroupBuyingDetail, GroupBuyingStatus, JoinGroupBuyingResult } from '@core/models/group-buying-request.model';
 import { AccountCreatedNoticeComponent } from '@shared/components/account-created-notice/account-created-notice.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
@@ -28,6 +28,8 @@ export class GroupBuyingDetailModalComponent implements OnChanges {
     @Input() requestCode: string | null = null;
     /** Nhúng vào trang (bỏ lớp phủ, nút đóng) thay vì hiện dạng modal */
     @Input() embedded = false;
+    /** Mã chia sẻ trên URL (?ref=) — trang công khai truyền vào khi khách mở link được chia sẻ */
+    @Input() referralCodeFromUrl: string | null = null;
 
     /** Đóng modal */
     @Output() closed = new EventEmitter<void>();
@@ -42,12 +44,18 @@ export class GroupBuyingDetailModalComponent implements OnChanges {
     /** Kết quả sau khi đăng ký thành công (chứa tài khoản vừa tạo cho khách) */
     joinResult: JoinGroupBuyingResult | null = null;
 
+    /** Mã chia sẻ riêng của tài khoản đang đăng nhập — gắn vào link chia sẻ */
+    myReferralCode: string | null = null;
+    /** Mã chia sẻ có trên URL khi người dùng mở link do người khác chia sẻ */
+    incomingReferralCode: string | null = null;
+
     joinForm: FormGroup;
 
     constructor(
         private _fb: FormBuilder,
         private _appService: AppService,
-        private _router: Router
+        private _router: Router,
+        private _route: ActivatedRoute
     ) {
         this.joinForm = this._fb.group({
             fullName: [''],
@@ -71,11 +79,30 @@ export class GroupBuyingDetailModalComponent implements OnChanges {
             if (this.visible) {
                 this.resetState();
                 this.applyGuestValidators();
+                this.resolveReferralCodes();
                 this.loadDetail();
             } else {
                 this.resetState();
             }
         }
+    }
+
+    /**
+     * Mã chia sẻ: lấy mã của tài khoản đang đăng nhập (để gắn vào link chia sẻ)
+     * và mã có trên URL khi người dùng mở link do người khác chia sẻ.
+     */
+    private resolveReferralCodes(): void {
+        this.incomingReferralCode = (this.referralCodeFromUrl ?? '').trim()
+            || this._route.snapshot.queryParamMap.get('ref')
+            || readReferralCodeFromQuery();
+
+        if (!this.isAuthenticated) {
+            this.myReferralCode = null;
+            return;
+        }
+
+        this._appService.collaboratorService.getMyReferralCode()
+            .subscribe((code) => this.myReferralCode = code);
     }
 
     loadDetail(): void {
@@ -134,14 +161,17 @@ export class GroupBuyingDetailModalComponent implements OnChanges {
         }
 
         const value = this.joinForm.value;
+        // Mã chia sẻ trên link người dùng mở: ghi nhận cho người đã chia sẻ link này
+        const referralCode = this.incomingReferralCode ?? undefined;
         const payload = this.isAuthenticated
-            ? { note: value.note?.trim() || undefined }
+            ? { note: value.note?.trim() || undefined, referralCode }
             : {
                 fullName: value.fullName?.trim(),
                 phone: value.phone?.trim(),
                 zalo: value.zalo?.trim() || undefined,
                 email: value.email?.trim() || undefined,
-                note: value.note?.trim() || undefined
+                note: value.note?.trim() || undefined,
+                referralCode
             };
 
         this.isSubmitting = true;
@@ -178,31 +208,51 @@ export class GroupBuyingDetailModalComponent implements OnChanges {
         return this._appService.isAdmin() || this.detail?.isMine === true;
     }
 
-    /** Link công khai của đơn mua chung — CTV gửi cho khách để xem và tham gia */
+    /** Link công khai của đơn mua chung — gắn mã chia sẻ riêng của người đang đăng nhập */
     get shareUrl(): string {
-        const code = this.detail?.groupBuyingRequestCode;
-        if (!code || !isBrowser()) return '';
-        return `${window.location.origin}/mua-chung/${code}`;
+        return buildGroupBuyingShareUrl(this.detail?.groupBuyingRequestCode, this.myReferralCode);
+    }
+
+    /** Chỉ chia sẻ được khi đã đăng nhập (link luôn ghi nhận mã của người chia sẻ) */
+    get canShareLink(): boolean {
+        return this.isAuthenticated && !!this.shareUrl;
+    }
+
+    /**
+     * Người dùng mở link do người khác chia sẻ (URL có ?ref khác mã của chính họ):
+     * link chia sẻ lại sẽ thay bằng mã của họ → phải xác nhận trước khi copy.
+     */
+    get needsReferralConfirm(): boolean {
+        const incoming = (this.incomingReferralCode ?? '').toUpperCase();
+        const mine = (this.myReferralCode ?? '').toUpperCase();
+        return !!incoming && !!mine && incoming !== mine;
     }
 
     copyShareLink(): void {
         const url = this.shareUrl;
         if (!url) return;
 
+        if (this.needsReferralConfirm) {
+            const params = { old: this.incomingReferralCode ?? '', mine: this.myReferralCode ?? '' };
+
+            this._appService.confirm({
+                title: this._appService.trans('GROUP_BUYING.DETAIL.SHARE_REF_CONFIRM_TITLE'),
+                message: this._appService.trans('GROUP_BUYING.DETAIL.SHARE_REF_CONFIRM_MESSAGE', params),
+                confirmText: this._appService.trans('GROUP_BUYING.DETAIL.SHARE_REF_CONFIRM_OK')
+            }).then((confirmed) => {
+                if (confirmed) this.writeShareLink(url);
+            });
+            return;
+        }
+
+        this.writeShareLink(url);
+    }
+
+    /** Copy link vào clipboard (có phương án dự phòng khi trình duyệt chặn Clipboard API) */
+    private writeShareLink(url: string): void {
         const successMessage = this._appService.trans('GROUP_BUYING.DETAIL.COPY_LINK_SUCCESS');
 
-        navigator.clipboard.writeText(url).then(() => {
-            this._appService.showSuccess(successMessage);
-        }).catch(() => {
-            // Fallback: tạo input tạm để copy khi trình duyệt không cho dùng clipboard API
-            const input = document.createElement('input');
-            input.value = url;
-            document.body.appendChild(input);
-            input.select();
-            document.execCommand('copy');
-            document.body.removeChild(input);
-            this._appService.showSuccess(successMessage);
-        });
+        copyToClipboard(url).then(() => this._appService.showSuccess(successMessage));
     }
 
     goToLogin(): void {

@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { CreateGroupBuyingRequest } from '@core/models/group-buying-request.model';
@@ -19,10 +19,16 @@ export class GroupBuyingComponent {
     groupForm: FormGroup;
     isSubmitting = false;
 
+    /** Mã chia sẻ riêng trên link (?ref=) khi người dùng mở form từ link được chia sẻ */
+    private _referralCode: string | null = null;
+
     constructor(
         private fb: FormBuilder,
-        private _appService: AppService
+        private _appService: AppService,
+        private _route: ActivatedRoute
     ) {
+        this._referralCode = this._route.snapshot.queryParamMap.get('ref');
+
         this.groupForm = this.fb.group({
             // Product info
             productName: ['', [Validators.required, Validators.minLength(3)]],
@@ -177,7 +183,9 @@ export class GroupBuyingComponent {
             phone: contact?.phone ?? '',
             zalo: contact?.zalo,
             email: contact?.email ?? '',
-            note: formValue.note?.trim() || undefined
+            note: formValue.note?.trim() || undefined,
+            // Đơn tạo từ link được chia sẻ: ghi nhận mã chia sẻ của người đã gửi link
+            referralCode: this._referralCode ?? undefined
         };
 
         this._appService.groupBuyingRequest.create(requestData)

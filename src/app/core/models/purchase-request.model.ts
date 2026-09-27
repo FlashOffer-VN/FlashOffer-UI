@@ -20,6 +20,8 @@ export interface PurchaseRequest {
     email: string;
     note: string | null;
     status: PurchaseRequestStatus;
+    /** Mã chia sẻ riêng ghi nhận cho người đã chia sẻ link tạo ra yêu cầu này */
+    referralCode?: string | null;
     createdAt: string;
 }
 
@@ -34,6 +36,8 @@ export interface CreatePurchaseRequestDto {
     zalo?: string | null;
     email: string;
     note?: string | null;
+    /** Mã chia sẻ riêng trên link người dùng mở (?ref=) — ghi nhận cho người đã chia sẻ */
+    referralCode?: string | null;
 }
 
 export interface UpdatePurchaseRequestStatusDto {

@@ -594,7 +594,11 @@
             "CONTACT_PROTECTED": "Member contact details are kept private.",
             "SHARE_LINK": "Share",
             "COPY_LINK_SUCCESS": "Group buying link copied!",
-            "COPY_LINK_FAILED": "Could not copy the link, please try again."
+            "COPY_LINK_FAILED": "Could not copy the link, please try again.",
+            "SHARE_REF_NOTICE": "The link you opened carries share code {{old}}. Links you share will be credited to your own code ({{mine}}).",
+            "SHARE_REF_CONFIRM_TITLE": "Share this link again?",
+            "SHARE_REF_CONFIRM_MESSAGE": "This link carries share code {{old}}. The link you are about to copy uses your own code ({{mine}}) — people joining from it will be credited to you.",
+            "SHARE_REF_CONFIRM_OK": "Yes, use my code"
         },
         "ACCOUNT": {
             "CREATED_TITLE": "Your account has been created",
@@ -1093,6 +1097,7 @@
             "NOTE": "Note",
             "ZALO": "Zalo",
             "EMAIL": "Email",
+            "REFERRAL": "Referrer",
             "APPROVE": "Approve",
             "REJECT": "Reject",
             "EXPIRE": "Mark as expired",
@@ -1126,6 +1131,7 @@
             "NOTE": "Note",
             "ZALO": "Zalo",
             "EMAIL": "Email",
+            "REFERRAL": "Referrer",
             "CONTACT": "Contacted",
             "CONTACT_CONFIRM": "Are you sure you want to mark this request as contacted?",
             "CONTACTED_SUCCESS": "Request marked as contacted successfully",
@@ -1295,6 +1301,7 @@
             "JOINED_AT": "Joined at",
             "OWNER": "Owner",
             "GUEST_ACCOUNT": "Auto-created account",
+            "REFERRAL": "Referrer",
             "APPROVE": "Approve",
             "APPROVE_CONFIRM": "Approve this request so it shows publicly in the Group buying tab?",
             "APPROVE_SUCCESS": "Group buying request approved",
@@ -1352,6 +1359,7 @@
             "MEMBER_NAME": "Member",
             "MEMBER_CONTACT": "Contact",
             "MEMBER_JOINED": "Joined at",
+            "REFERRAL": "Referrer",
             "MEMBER_STATUS_SUCCESS": "Member status updated",
             "MEMBER_REMOVED": "Member removed from the group",
             "NO_MEMBERS": "No members yet",
@@ -1363,6 +1371,7 @@
             "POST_TYPE": "Post type",
             "REF_CODE": "Reference code",
             "REF_CODE_PLACEHOLDER": "e.g. GBR-XXXXXX, OFR-XXXXXX",
+            "WITH_SHARE_LINK": "With share link",
             "POST_CONTENT_PLACEHOLDER": "Content sent to group members...",
             "PUBLISH": "Post to group",
             "POST_SUCCESS": "Posted to the group",
@@ -1562,6 +1571,11 @@
         "ALREADY_ALL_SENT": "Selected groups already have this, nothing to re-send",
         "SENT_GROUPS_TITLE": "Groups that already have it",
         "UNSENT_GROUPS_TITLE": "Groups without it yet",
-        "BUTTON_SHORT": "Forward"
+        "BUTTON_SHORT": "Forward",
+        "WITH_SHARE_LINK": "Attach an invitation share link",
+        "WITH_SHARE_LINK_HINT": "The link carries your own share code — people joining from it will be credited to you.",
+        "SHARE_LINK_LABEL": "Share link to send to customers",
+        "COPY_SHARE_LINK": "Copy link",
+        "COPY_LINK_SUCCESS": "Share link copied!"
     }
 }

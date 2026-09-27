@@ -20,6 +20,8 @@ export interface OfferRequest {
     status: OfferStatus;
     isOfferSent: boolean;
     businessFieldId?: string | null;
+    /** Mã chia sẻ riêng ghi nhận cho người đã chia sẻ link tạo ra yêu cầu này */
+    referralCode?: string | null;
     createdAt: string;
     updatedAt?: string;
 }
@@ -43,6 +45,8 @@ export interface CreateOfferRequest {
     zalo?: string;
     email?: string;
     note?: string;
+    /** Mã chia sẻ riêng trên link người dùng mở (?ref=) — ghi nhận cho người đã chia sẻ */
+    referralCode?: string;
 }
 
 export interface OfferRequestOfferSentStatus {
