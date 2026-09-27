@@ -51,6 +51,29 @@ export class FindSupplierComponent implements OnInit {
             note: [''],
             agreeTerms: [false, [Validators.requiredTrue]]
         });
+
+        // Người đã đăng nhập không phải nhập lại thông tin liên hệ — service tự lấy từ tài khoản
+        this.applyGuestValidators();
+    }
+
+    get isAuthenticated(): boolean {
+        return this._appService.isAuthenticated();
+    }
+
+    /** Khách chưa đăng nhập bắt buộc nhập họ tên + SĐT + email (để tạo tài khoản và liên hệ) */
+    private applyGuestValidators(): void {
+        const guest = !this.isAuthenticated;
+        const fullName = this.findForm.get('fullName');
+        const phone = this.findForm.get('phone');
+        const email = this.findForm.get('email');
+
+        fullName?.setValidators(guest ? [Validators.required, Validators.minLength(2)] : []);
+        phone?.setValidators(guest ? [Validators.required, Validators.pattern(/^0[0-9]{9,10}$/)] : []);
+        email?.setValidators(guest ? [Validators.required, Validators.email] : []);
+
+        fullName?.updateValueAndValidity();
+        phone?.updateValueAndValidity();
+        email?.updateValueAndValidity();
     }
 
     ngOnInit(): void {
@@ -64,7 +87,8 @@ export class FindSupplierComponent implements OnInit {
 
     get formProgress(): number {
         const controls = this.findForm.controls;
-        const requiredFields = ['productName', 'quantity', 'unit', 'fullName', 'phone', 'email', 'agreeTerms'];
+        const requiredFields = ['productName', 'quantity', 'unit',
+            ...(this.isAuthenticated ? [] : ['fullName', 'phone', 'email']), 'agreeTerms'];
         let total = requiredFields.length;
         let filled = 0;
 
@@ -158,16 +182,24 @@ export class FindSupplierComponent implements OnInit {
         const formValue = this.findForm.value;
 
         // Prepare data for API
+        // Người đã đăng nhập: để trống thông tin liên hệ, service tự bù từ hồ sơ tài khoản
+        const contact = this.isAuthenticated ? null : {
+            fullName: formValue.fullName.trim(),
+            phone: formValue.phone.trim(),
+            zalo: formValue.zalo?.trim() || null,
+            email: formValue.email.trim().toLowerCase()
+        };
+
         const requestData: CreatePurchaseRequestDto = {
             productName: formValue.productName.trim(),
             productCategory: formValue.productCategory || null,
             quantity: Number(formValue.quantity),
             unit: formValue.unit,
             expectedPrice: formValue.expectedPrice ? Number(formValue.expectedPrice) : null,
-            fullName: formValue.fullName.trim(),
-            phone: formValue.phone.trim(),
-            zalo: formValue.zalo?.trim() || null,
-            email: formValue.email.trim().toLowerCase(),
+            fullName: contact?.fullName ?? '',
+            phone: contact?.phone ?? '',
+            zalo: contact?.zalo,
+            email: contact?.email ?? '',
             note: formValue.note?.trim() || null
         };
 

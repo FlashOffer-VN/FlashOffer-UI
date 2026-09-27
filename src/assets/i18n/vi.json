@@ -439,6 +439,7 @@
         "SUBMIT": "Gửi yêu cầu",
         "SUBMITTING": "Đang gửi...",
         "SECURE_NOTE": "Thông tin của bạn được bảo mật tuyệt đối",
+        "USE_ACCOUNT_INFO": "Bạn đã đăng nhập — hệ thống dùng thông tin liên hệ trong tài khoản của bạn.",
         "ERROR": {
             "REQUIRED": "Trường này là bắt buộc",
             "PRODUCT_NAME_REQUIRED": "Vui lòng nhập tên sản phẩm",
@@ -494,6 +495,7 @@
         "SUBMIT": "Tạo nhóm ngay",
         "SUBMITTING": "Đang tạo nhóm...",
         "SECURE_NOTE": "Thông tin của bạn được bảo mật tuyệt đối",
+        "USE_ACCOUNT_INFO": "Bạn đã đăng nhập — hệ thống dùng thông tin liên hệ trong tài khoản của bạn.",
         "ERROR": {
             "REQUIRED": "Trường này là bắt buộc",
             "PRODUCT_NAME_REQUIRED": "Vui lòng nhập tên sản phẩm",
@@ -598,6 +600,7 @@
         "SUBMIT": "Tìm nhà cung cấp",
         "SUBMITTING": "Đang tìm kiếm...",
         "SECURE_NOTE": "Thông tin của bạn được bảo mật tuyệt đối",
+        "USE_ACCOUNT_INFO": "Bạn đã đăng nhập — hệ thống dùng thông tin liên hệ trong tài khoản của bạn.",
         "SALES_CHANNEL_RETAIL": "Bán lẻ",
         "SALES_CHANNEL_WHOLESALE": "Bán sỉ",
         "SALES_CHANNEL_ONLINE": "Online",

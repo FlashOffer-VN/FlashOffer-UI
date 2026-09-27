@@ -483,6 +483,7 @@
         "SUBMIT": "Submit request",
         "SUBMITTING": "Submitting...",
         "SECURE_NOTE": "Your information is completely secure",
+        "USE_ACCOUNT_INFO": "You are signed in — we use the contact details in your account.",
         "ERROR": {
             "REQUIRED": "This field is required",
             "PRODUCT_NAME_REQUIRED": "Please enter product name",
@@ -538,6 +539,7 @@
         "SUBMIT": "Create group now",
         "SUBMITTING": "Creating group...",
         "SECURE_NOTE": "Your information is completely secure",
+        "USE_ACCOUNT_INFO": "You are signed in — we use the contact details in your account.",
         "ERROR": {
             "REQUIRED": "This field is required",
             "PRODUCT_NAME_REQUIRED": "Please enter product name",
@@ -642,6 +644,7 @@
         "SUBMIT": "Find suppliers",
         "SUBMITTING": "Searching...",
         "SECURE_NOTE": "Your information is completely secure",
+        "USE_ACCOUNT_INFO": "You are signed in — we use the contact details in your account.",
         "SALES_CHANNEL_RETAIL": "Retail",
         "SALES_CHANNEL_WHOLESALE": "Wholesale",
         "SALES_CHANNEL_ONLINE": "Online",
