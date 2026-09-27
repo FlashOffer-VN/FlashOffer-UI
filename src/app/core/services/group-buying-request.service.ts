@@ -61,6 +61,14 @@ export class GroupBuyingRequestService {
     }
 
     /**
+     * Chi tiết mua chung theo mã đơn — dùng cho link chia sẻ (người nhận không cần biết id)
+     * GET /api/v1/GroupBuyingRequests/code/{code}/public
+     */
+    getPublicDetailByCode(code: string): Observable<GroupBuyingDetailResponse> {
+        return this.apiService.get<GroupBuyingDetailResponse>(`${this.endpoint}/code/${encodeURIComponent(code)}/public`);
+    }
+
+    /**
      * Đăng ký tham gia nhóm mua chung.
      * Khách chưa đăng nhập gửi kèm họ tên/SĐT/Zalo/email → hệ thống tạo tài khoản (username user<sđt>, mật khẩu = sđt).
      * POST /api/v1/GroupBuyingRequests/{id}/join

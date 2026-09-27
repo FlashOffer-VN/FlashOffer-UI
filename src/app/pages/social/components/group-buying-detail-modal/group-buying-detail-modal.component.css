@@ -21,6 +21,46 @@
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
 }
 
+/* Nhúng vào trang công khai của đơn mua chung: bỏ lớp phủ, khung nổi */
+.gb-modal-overlay.embedded {
+    position: static;
+    inset: auto;
+    background: transparent;
+    padding: 0;
+    display: block;
+}
+
+.gb-modal--embedded {
+    max-width: 100%;
+    max-height: none;
+    border: 1px solid #e5e7eb;
+    box-shadow: none;
+}
+
+.head-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.share-btn {
+    border: 1px solid #ddd6fe;
+    background: #f5f3ff;
+    color: #6d28d9;
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s ease;
+}
+
+.share-btn:hover { background: #ede9fe; }
+
 .gb-modal-head {
     display: flex;
     align-items: flex-start;

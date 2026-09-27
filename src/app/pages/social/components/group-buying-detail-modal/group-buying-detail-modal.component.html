@@ -1,5 +1,5 @@
-﻿<div class="gb-modal-overlay" *ngIf="visible" (click)="close()">
-    <div class="gb-modal" (click)="stopPropagation($event)">
+﻿<div class="gb-modal-overlay" [class.embedded]="embedded" *ngIf="visible" (click)="close()">
+    <div class="gb-modal" [class.gb-modal--embedded]="embedded" (click)="stopPropagation($event)">
         <!-- Header -->
         <div class="gb-modal-head">
             <div class="head-left">
@@ -11,7 +11,12 @@
                     <i class="fas fa-hashtag"></i> {{ detail?.groupBuyingRequestCode }}
                 </span>
             </div>
-            <button class="close-btn" (click)="close()"><i class="fas fa-times"></i></button>
+            <div class="head-actions">
+                <button type="button" class="share-btn" *ngIf="shareUrl" (click)="copyShareLink()">
+                    <i class="fas fa-share-nodes"></i> {{ 'GROUP_BUYING.DETAIL.SHARE_LINK' | translate }}
+                </button>
+                <button class="close-btn" *ngIf="!embedded" (click)="close()"><i class="fas fa-times"></i></button>
+            </div>
         </div>
 
         <div class="gb-modal-body">
@@ -90,8 +95,8 @@
                             </span>
                         </div>
                     </div>
-                    <p class="hint" *ngIf="!isAuthenticated">
-                        <i class="fas fa-circle-info"></i> {{ 'GROUP_BUYING.DETAIL.LOGIN_TO_SEE_CONTACT' | translate }}
+                    <p class="hint" *ngIf="!canSeeContacts">
+                        <i class="fas fa-shield-halved"></i> {{ 'GROUP_BUYING.DETAIL.CONTACT_PROTECTED' | translate }}
                     </p>
                     <p class="hint" *ngIf="detail.closedReason">
                         <i class="fas fa-circle-info"></i> {{ detail.closedReason }}
@@ -194,7 +199,7 @@
                         </div>
 
                         <div class="actions">
-                            <button type="button" class="btn-secondary" (click)="close()">
+                            <button type="button" class="btn-secondary" *ngIf="!embedded" (click)="close()">
                                 {{ 'COMMON.BUTTON.CANCEL' | translate }}
                             </button>
                             <button type="submit" class="btn-primary" [disabled]="isSubmitting">

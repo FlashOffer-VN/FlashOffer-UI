@@ -45,6 +45,8 @@ export const routes: Routes = [
             { path: 'connect-sme', loadComponent: () => import('./pages/connect-sme/connect-sme.component').then(m => m.ConnectSmeComponent) },
             { path: 'find-supplier', loadComponent: () => import('./pages/find-supplier/find-supplier.component').then(m => m.FindSupplierComponent) },
             { path: 'group-buying', loadComponent: () => import('./pages/group-buying/group-buying.component').then(m => m.GroupBuyingComponent) },
+            // Link chia sẻ của một đơn mua chung (xem + tham gia không cần đăng nhập)
+            { path: 'mua-chung/:code', loadComponent: () => import('./pages/group-buying/detail/group-buying-detail.component').then(m => m.GroupBuyingDetailPageComponent) },
             { path: 'groups', loadComponent: () => import('./pages/groups/groups.component').then(m => m.GroupsComponent) },
             { path: 'groups/:id', loadComponent: () => import('./pages/groups/detail/group-detail.component').then(m => m.GroupDetailComponent) },
             { path: 'get-offer', loadComponent: () => import('./pages/get-offer/get-offer.component').then(m => m.GetOfferComponent) },

@@ -589,7 +589,10 @@
             "PARTICIPANTS": "Participants",
             "OWNER": "Owner",
             "YOU": "You",
-            "LOGIN_TO_SEE_CONTACT": "Sign in to see the full phone/Zalo/email contact."
+            "CONTACT_PROTECTED": "Member contact details are kept private.",
+            "SHARE_LINK": "Share",
+            "COPY_LINK_SUCCESS": "Group buying link copied!",
+            "COPY_LINK_FAILED": "Could not copy the link, please try again."
         },
         "ACCOUNT": {
             "CREATED_TITLE": "Your account has been created",

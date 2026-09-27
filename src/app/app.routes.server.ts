@@ -27,6 +27,8 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'connect-sme', renderMode: RenderMode.Prerender },
   { path: 'find-supplier', renderMode: RenderMode.Prerender },
   { path: 'group-buying', renderMode: RenderMode.Prerender },
+  // Link chia sẻ đơn mua chung: mã đơn không biết trước ở build time → render client-side
+  { path: 'mua-chung/:code', renderMode: RenderMode.Client },
   { path: 'groups', renderMode: RenderMode.Prerender },
   // Chi tiết nhóm: id không biết trước ở build time → render client-side (giống social/:postId)
   { path: 'groups/:id', renderMode: RenderMode.Client },

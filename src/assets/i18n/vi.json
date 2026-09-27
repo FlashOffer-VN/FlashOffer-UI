@@ -545,7 +545,10 @@
             "PARTICIPANTS": "Người đã tham gia",
             "OWNER": "Người mở",
             "YOU": "Bạn",
-            "LOGIN_TO_SEE_CONTACT": "Đăng nhập để xem đầy đủ số điện thoại/Zalo/email liên hệ."
+            "CONTACT_PROTECTED": "Thông tin liên hệ của thành viên được bảo mật.",
+            "SHARE_LINK": "Chia sẻ",
+            "COPY_LINK_SUCCESS": "Đã sao chép link đơn mua chung!",
+            "COPY_LINK_FAILED": "Không sao chép được link, vui lòng thử lại."
         },
         "ACCOUNT": {
             "CREATED_TITLE": "Tài khoản của bạn đã được tạo",
