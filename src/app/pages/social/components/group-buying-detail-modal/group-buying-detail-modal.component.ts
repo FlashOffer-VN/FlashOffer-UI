@@ -1,5 +1,5 @@
 ﻿// components/group-buying-detail-modal/group-buying-detail-modal.component.ts
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +19,7 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
     templateUrl: './group-buying-detail-modal.component.html',
     styleUrls: ['./group-buying-detail-modal.component.css']
 })
-export class GroupBuyingDetailModalComponent implements OnChanges {
+export class GroupBuyingDetailModalComponent implements OnInit, OnChanges {
     /** Mở/đóng modal */
     @Input() visible = false;
     /** Id yêu cầu mua chung cần xem chi tiết */
@@ -72,6 +72,12 @@ export class GroupBuyingDetailModalComponent implements OnChanges {
 
     get f() {
         return this.joinForm.controls;
+    }
+
+    ngOnInit(): void {
+        // Trang công khai nhúng modal với [visible] = true (giá trị không đổi) nên đọc mã
+        // chia sẻ ngay khi tạo component, không chỉ dựa vào ngOnChanges của `visible`.
+        this.resolveReferralCodes();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -161,8 +167,12 @@ export class GroupBuyingDetailModalComponent implements OnChanges {
         }
 
         const value = this.joinForm.value;
-        // Mã chia sẻ trên link người dùng mở: ghi nhận cho người đã chia sẻ link này
-        const referralCode = this.incomingReferralCode ?? undefined;
+        // Mã chia sẻ trên link người dùng mở: ghi nhận cho người đã chia sẻ link này.
+        // Đọc lại ngay lúc gửi để không phụ thuộc thời điểm modal được tạo.
+        const referralCode = this.incomingReferralCode
+            ?? this._route.snapshot.queryParamMap.get('ref')
+            ?? readReferralCodeFromQuery()
+            ?? undefined;
         const payload = this.isAuthenticated
             ? { note: value.note?.trim() || undefined, referralCode }
             : {
