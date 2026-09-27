@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
+import { readReferralCodeFromQuery } from '@core/utils/share-link';
 import {
     BusinessGroupComment,
     BusinessGroupDetail,
@@ -15,6 +16,7 @@ import {
     GroupApprovalStatus,
     GroupMemberStatus,
     GroupPostType,
+    JoinBusinessGroupRequest,
     JoinBusinessGroupResult
 } from '@core/models/business-group.model';
 import { AccountCreatedNoticeComponent } from '@shared/components/account-created-notice/account-created-notice.component';
@@ -210,7 +212,13 @@ export class GroupDetailComponent implements OnInit {
         }
 
         this.joining = true;
-        this._appService.businessGroupService.join(this.group.id, this.joinForm.value).subscribe({
+        // Người dùng mở trang từ link chia sẻ (?ref=) thì ghi nhận mã của người chia sẻ
+        const payload: JoinBusinessGroupRequest = {
+            ...this.joinForm.value,
+            referralCode: readReferralCodeFromQuery() ?? undefined
+        };
+
+        this._appService.businessGroupService.join(this.group.id, payload).subscribe({
             next: (response) => {
                 this.joining = false;
                 this.joinResult = response?.data ?? null;

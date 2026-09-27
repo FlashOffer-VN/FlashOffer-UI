@@ -390,4 +390,10 @@ export class AdminGroupDetailComponent implements OnInit {
             default: return 'ADMIN.GROUPS.MEMBER_PENDING';
         }
     }
+
+    /** Mã chia sẻ riêng + tên CTV giới thiệu (mã ghi nhận từ link chia sẻ) */
+    referralText(name?: string | null, code?: string | null): string {
+        const parts = [code, name].filter(value => !!value);
+        return parts.length > 0 ? parts.join(' · ') : '--';
+    }
 }

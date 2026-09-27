@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { catchError, forkJoin, map, of } from 'rxjs';
 import { AppService } from '@core/services/app.service';
 import { isBrowser } from '@core/utils/platform';
+import { buildGroupBuyingShareUrl, copyToClipboard } from '@core/utils/share-link';
 import { BusinessGroup, ForwardedGroup, GroupPostType } from '@core/models/business-group.model';
 import { ButtonComponent, ButtonSize } from '@shared/components/button/button.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
@@ -64,6 +65,9 @@ export class ShareToGroupComponent implements OnDestroy {
     sentGroups: ForwardedGroup[] = [];
     loadingSentGroups = false;
 
+    /** Mã chia sẻ riêng của người đang đăng nhập — gắn vào link chia sẻ kèm bài chuyển tiếp */
+    myReferralCode: string | null = null;
+
     /** Popup được tách ra document.body (xem escapeFromAncestors) */
     private modalEl?: HTMLElement;
     private modalAnchor?: Comment;
@@ -75,8 +79,49 @@ export class ShareToGroupComponent implements OnDestroy {
     ) {
         this.form = this.fb.group({
             groupId: ['', [Validators.required]],
-            note: ['', [Validators.maxLength(500)]]
+            note: ['', [Validators.maxLength(500)]],
+            withShareLink: [false]
         });
+    }
+
+    /** Người dùng đã đăng nhập mới chuyển tiếp được (chưa đăng nhập thì ẩn nút) */
+    get isAuthenticated(): boolean {
+        return this._appService.isAuthenticated();
+    }
+
+    /** Chỉ bài chuyển tiếp mua chung mới có link công khai để mời tham gia */
+    get canAttachShareLink(): boolean {
+        return this.postType === GroupPostType.GroupBuyingRequest && !!this.refCode;
+    }
+
+    /** Link chia sẻ gửi cho khách: gắn mã chia sẻ riêng của người chuyển tiếp */
+    get shareUrl(): string {
+        if (!this.canAttachShareLink) return '';
+        return buildGroupBuyingShareUrl(this.refCode, this.myReferralCode);
+    }
+
+    /** Người chuyển tiếp đang bật kèm link chia sẻ */
+    get withShareLink(): boolean {
+        return this.form.get('withShareLink')?.value === true;
+    }
+
+    /** Copy link chia sẻ để gửi trực tiếp cho khách */
+    copyShareLink(): void {
+        const url = this.shareUrl;
+        if (!url) return;
+
+        copyToClipboard(url).then(() => this._appService.showSuccess(this._appService.trans('SHARE_TO_GROUP.COPY_LINK_SUCCESS')));
+    }
+
+    /** Mở modal: chỉ lấy mã chia sẻ khi bài chuyển tiếp có kèm link chia sẻ */
+    private loadMyReferralCode(): void {
+        if (!this.isAuthenticated || !this.canAttachShareLink) {
+            this.myReferralCode = null;
+            return;
+        }
+
+        this._appService.collaboratorService.getMyReferralCode()
+            .subscribe((code) => this.myReferralCode = code);
     }
 
     get filteredGroups(): BusinessGroup[] {
@@ -209,10 +254,11 @@ export class ShareToGroupComponent implements OnDestroy {
 
         this.escapeFromAncestors();
         this.visible = true;
-        this.form.reset({ groupId: '', note: '' });
+        this.form.reset({ groupId: '', note: '', withShareLink: false });
         this.selectedGroupIds = [];
         this.searchText = '';
         this.sentGroups = [];
+        this.loadMyReferralCode();
         this.loadGroups();
         this.loadSentGroups();
     }
@@ -337,7 +383,9 @@ export class ShareToGroupComponent implements OnDestroy {
             content: this.buildContent(),
             type: this.postType,
             refId: this.refId,
-            refCode: this.refCode ?? undefined
+            refCode: this.refCode ?? undefined,
+            // Bài chuyển tiếp kèm link chia sẻ mời tham gia (chỉ khi người gửi bật lựa chọn)
+            withShareLink: this.withShareLink
         };
     }
 

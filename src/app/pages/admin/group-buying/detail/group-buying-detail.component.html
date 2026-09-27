@@ -137,6 +137,10 @@
                     <span class="text-sm text-gray-500">{{ 'ADMIN.GROUP_BUYING.EMAIL' | translate }}</span>
                     <span class="text-sm font-medium text-gray-800">{{ detail.creatorEmail || '--' }}</span>
                 </div>
+                <div class="flex justify-between py-2 border-b border-gray-50">
+                    <span class="text-sm text-gray-500">{{ 'ADMIN.GROUP_BUYING.REFERRAL' | translate }}</span>
+                    <span class="text-sm font-medium text-gray-800 text-right">{{ referralText(detail.referralName, detail.referralCode) }}</span>
+                </div>
                 <div class="flex justify-between py-2">
                     <span class="text-sm text-gray-500">{{ 'ADMIN.GROUP_BUYING.APPROVED_AT' | translate }}</span>
                     <span class="text-sm font-medium text-gray-800">{{ formatDate(detail.approvedAt) }}</span>
@@ -169,6 +173,8 @@
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Zalo / Email</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                {{ 'ADMIN.GROUP_BUYING.REFERRAL' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 {{ 'ADMIN.GROUP_BUYING.JOINED_AT' | translate }}</th>
                             <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 {{ 'COMMON.BUTTON.ACTION' | translate }}</th>
@@ -176,7 +182,7 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         <tr *ngIf="detail.participants.length === 0">
-                            <td colspan="7" class="px-4 py-8 text-center text-gray-500">
+                            <td colspan="8" class="px-4 py-8 text-center text-gray-500">
                                 {{ 'PAGINATION.NO_ITEMS' | translate }}
                             </td>
                         </tr>
@@ -199,6 +205,7 @@
                                 <div *ngIf="p.collaboratorCode">CTV: {{ p.collaboratorCode }}</div>
                                 <div *ngIf="p.userCode">{{ p.userCode }}</div>
                             </td>
+                            <td class="px-4 py-3 text-xs text-gray-600">{{ referralText(p.referralName, p.referralCode) }}</td>
                             <td class="px-4 py-3 text-sm text-gray-500">{{ formatDate(p.createdAt) }}</td>
                             <td class="px-4 py-3 text-right">
                                 <app-button *ngIf="!p.isCreator" variant="danger" size="sm"

@@ -5,7 +5,9 @@
             <i class="fas fa-arrow-left mr-2"></i>{{ 'GROUP_BUYING.TITLE' | translate }}
         </a>
 
-        <app-group-buying-detail-modal [visible]="true" [embedded]="true" [requestCode]="code">
+        <!-- Mã chia sẻ trên link (?ref=) được truyền vào để ghi nhận cho người đã chia sẻ khi khách tham gia -->
+        <app-group-buying-detail-modal [visible]="true" [embedded]="true" [requestCode]="code"
+            [referralCodeFromUrl]="referralCode">
         </app-group-buying-detail-modal>
     </div>
 </main>

@@ -17,10 +17,13 @@ import { GroupBuyingDetailModalComponent } from '@pages/social/components/group-
 export class GroupBuyingDetailPageComponent implements OnInit {
     /** Mã đơn mua chung lấy từ URL: /mua-chung/:code */
     code: string | null = null;
+    /** Mã chia sẻ riêng trên link: /mua-chung/:code?ref=<mã người chia sẻ> */
+    referralCode: string | null = null;
 
     constructor(private _route: ActivatedRoute) { }
 
     ngOnInit(): void {
         this.code = this._route.snapshot.paramMap.get('code');
+        this.referralCode = this._route.snapshot.queryParamMap.get('ref');
     }
 }

@@ -12,7 +12,7 @@
                 </span>
             </div>
             <div class="head-actions">
-                <button type="button" class="share-btn" *ngIf="shareUrl" (click)="copyShareLink()">
+                <button type="button" class="share-btn" *ngIf="canShareLink" (click)="copyShareLink()">
                     <i class="fas fa-share-nodes"></i> {{ 'GROUP_BUYING.DETAIL.SHARE_LINK' | translate }}
                 </button>
                 <button class="close-btn" *ngIf="!embedded" (click)="close()"><i class="fas fa-times"></i></button>
@@ -27,6 +27,14 @@
             </div>
 
             <ng-container *ngIf="!isLoading && detail">
+                <!-- Người dùng mở link do người khác chia sẻ: link chia sẻ lại sẽ ghi nhận mã của chính họ -->
+                <div class="referral-notice" *ngIf="needsReferralConfirm">
+                    <i class="fas fa-circle-info"></i>
+                    <span>
+                        {{ 'GROUP_BUYING.DETAIL.SHARE_REF_NOTICE' | translate:{ old: incomingReferralCode, mine: myReferralCode } }}
+                    </span>
+                </div>
+
                 <!-- Thông tin cơ bản -->
                 <div class="info-grid">
                     <div class="info-item">
