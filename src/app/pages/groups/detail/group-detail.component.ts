@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
-import { readReferralCodeFromQuery } from '@core/utils/share-link';
+import { resolveReferralCode } from '@core/utils/share-link';
 import {
     BusinessGroupComment,
     BusinessGroupDetail,
@@ -215,7 +215,7 @@ export class GroupDetailComponent implements OnInit {
         // Người dùng mở trang từ link chia sẻ (?ref=) thì ghi nhận mã của người chia sẻ
         const payload: JoinBusinessGroupRequest = {
             ...this.joinForm.value,
-            referralCode: readReferralCodeFromQuery() ?? undefined
+            referralCode: resolveReferralCode() ?? undefined
         };
 
         this._appService.businessGroupService.join(this.group.id, payload).subscribe({
