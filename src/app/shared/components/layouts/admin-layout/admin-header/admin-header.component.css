@@ -4,13 +4,13 @@
 }
 
 .text-secondary {
-    color: #1F2937;
+    color: var(--text);
 }
 
 .bg-danger {
-    background-color: #EF4444;
+    background-color: var(--danger);
 }
 
 .bg-primary {
-    background-color: #7C3AED;
+    background-color: var(--accent);
 }

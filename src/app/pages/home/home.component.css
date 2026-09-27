@@ -3,7 +3,7 @@
     align-items: center;
     background:
         radial-gradient(circle at 80% 20%, rgba(0, 127, 148, 0.12), transparent 30%),
-        linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
+        linear-gradient(135deg, var(--surface-soft) 0%, var(--page-bg-muted) 100%);
     display: grid;
     gap: 40px;
     grid-template-columns: 1fr 1fr;
@@ -16,7 +16,7 @@
 .sme-pill {
     background: rgba(0, 127, 148, 0.12);
     border-radius: 999px;
-    color: #007f94;
+    color: var(--primary);
     display: inline-flex;
     font-size: 13px;
     font-weight: 600;
@@ -25,7 +25,7 @@
 }
 
 .sme-hero h1 {
-    color: #0a1a2b;
+    color: var(--text-strong);
     font-size: clamp(36px, 4.5vw, 56px);
     letter-spacing: -0.04em;
     line-height: 1.05;
@@ -34,7 +34,7 @@
 }
 
 .sme-hero__text {
-    color: #5a6c7e;
+    color: var(--text-slate-soft);
     font-size: 16px;
     line-height: 1.6;
     margin: 0 0 28px;
@@ -72,19 +72,19 @@
 }
 
 .sme-button--primary {
-    background: #007f94;
-    color: #fff;
+    background: var(--primary);
+    color: var(--white);
     box-shadow: 0 4px 16px rgba(0, 127, 148, 0.3);
 }
 
 .sme-button--primary:hover {
-    background: #006b7e;
+    background: var(--primary-deep);
     box-shadow: 0 8px 24px rgba(0, 127, 148, 0.4);
 }
 
 .sme-button--light {
-    background: #fff;
-    color: #1a2a3a;
+    background: var(--white);
+    color: var(--text-navy);
     border: 1px solid #dce3eb;
 }
 
@@ -95,13 +95,13 @@
 
 .sme-button--outline {
     background: transparent;
-    border: 2px solid #1a2a3a;
-    color: #1a2a3a;
+    border: 2px solid var(--text-navy);
+    color: var(--text-navy);
 }
 
 .sme-button--outline:hover {
-    background: #1a2a3a;
-    color: #fff;
+    background: var(--text-navy);
+    color: var(--white);
 }
 
 .sme-button--large {
@@ -112,9 +112,9 @@
 
 /* Hero Visual */
 .sme-hero__visual {
-    background: #fff;
+    background: var(--white);
     border-radius: 16px;
-    border: 1px solid #e8edf3;
+    border: 1px solid var(--page-bg);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
     padding: 20px;
     position: relative;
@@ -133,7 +133,7 @@
 }
 
 .sme-dashboard {
-    background: #0a1a2b;
+    background: var(--text-strong);
     border-radius: 12px;
     overflow: hidden;
     position: relative;
@@ -176,7 +176,7 @@
 
 .sme-sidebar span:first-child,
 .sme-sidebar span:nth-child(3) {
-    background: #24c7d7;
+    background: var(--primary-light);
     width: 70%;
 }
 
@@ -194,7 +194,7 @@
 }
 
 .sme-chart span {
-    background: linear-gradient(180deg, #2bd0de, #0d7890);
+    background: linear-gradient(180deg, var(--primary-bright), var(--teal-dark));
     border-radius: 4px 4px 0 0;
     flex: 1;
 }
@@ -210,8 +210,8 @@
 
 /* Stats */
 .sme-stats {
-    background: #0a1a2b;
-    color: #fff;
+    background: var(--text-strong);
+    color: var(--white);
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     padding: 40px 24px;
@@ -225,13 +225,13 @@
 }
 
 .sme-stats strong {
-    color: #24c7d7;
+    color: var(--primary-light);
     font-size: 28px;
     line-height: 1;
 }
 
 .sme-stats span {
-    color: #a0b8c8;
+    color: var(--text-slate-line);
     font-size: 13px;
     font-weight: 400;
 }
@@ -251,7 +251,7 @@
 
 .sme-section h2,
 .sme-cta h2 {
-    color: #0a1a2b;
+    color: var(--text-strong);
     font-size: clamp(28px, 3vw, 38px);
     letter-spacing: -0.04em;
     line-height: 1.1;
@@ -260,7 +260,7 @@
 
 .sme-section__intro p,
 .sme-cta p {
-    color: #5a6c7e;
+    color: var(--text-slate-soft);
     margin: 0;
     font-size: 16px;
     line-height: 1.6;
@@ -274,8 +274,8 @@
 }
 
 .sme-card {
-    background: #fff;
-    border: 1px solid #e8edf3;
+    background: var(--white);
+    border: 1px solid var(--page-bg);
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
     min-height: 170px;
@@ -295,8 +295,8 @@
 }
 
 .sme-card--dark {
-    background: #0a1a2b;
-    color: #fff;
+    background: var(--text-strong);
+    color: var(--white);
     grid-row: span 2;
 }
 
@@ -306,7 +306,7 @@
 
 .sme-icon {
     background: rgba(0, 127, 148, 0.1);
-    color: #007f94;
+    color: var(--primary);
     display: inline-flex;
     font-size: 18px;
     height: 36px;
@@ -319,7 +319,7 @@
 
 .sme-icon--dark {
     background: rgba(36, 199, 215, 0.15);
-    color: #24c7d7;
+    color: var(--primary-light);
 }
 
 .sme-card h3 {
@@ -332,14 +332,14 @@
 
 .sme-card p,
 .sme-card li {
-    color: #5a6c7e;
+    color: var(--text-slate-soft);
     font-size: 14px;
     line-height: 1.5;
     margin: 0;
 }
 
 .sme-card--dark p {
-    color: #a0b8c8;
+    color: var(--text-slate-line);
 }
 
 .sme-card ul {
@@ -351,14 +351,14 @@
 }
 
 .sme-card li::before {
-    color: #007f94;
+    color: var(--primary);
     content: "\2713";
     font-weight: 700;
     margin-right: 8px;
 }
 
 .sme-card__media {
-    border: 1px solid #e8edf3;
+    border: 1px solid var(--page-bg);
     border-radius: 8px;
     height: 64px;
     margin-top: 16px;
@@ -367,7 +367,7 @@
 .sme-card__media--savings {
     background:
         linear-gradient(12deg, transparent 52%, rgba(0, 127, 148, 0.08) 52% 62%, transparent 62%),
-        linear-gradient(90deg, #f5f7fa, #eef2f7);
+        linear-gradient(90deg, #f5f7fa, var(--page-bg-muted));
 }
 
 .sme-talent-list {
@@ -378,7 +378,7 @@
 }
 
 .sme-talent-list span:nth-child(odd) {
-    background: #007f94;
+    background: var(--primary);
     border-radius: 6px;
     height: 24px;
 }
@@ -424,9 +424,9 @@
 
 .sme-avatar-stack span {
     background: #e8f7fb;
-    border: 2px solid #fff;
+    border: 2px solid var(--white);
     border-radius: 50%;
-    color: #007f94;
+    color: var(--primary);
     display: inline-flex;
     font-size: 11px;
     font-weight: 700;
@@ -438,7 +438,7 @@
 }
 
 .sme-avatar-stack span:last-child {
-    background: #24c7d7;
+    background: var(--primary-light);
     color: #063247;
 }
 
@@ -454,8 +454,8 @@
 }
 
 .sme-testimonial {
-    background: #fff;
-    border: 1px solid #e8edf3;
+    background: var(--white);
+    border: 1px solid var(--page-bg);
     border-radius: 12px;
     padding: 24px;
     transition: all 0.3s ease;
@@ -467,7 +467,7 @@
 }
 
 .sme-stars {
-    color: #f59e0b;
+    color: var(--warning);
     font-size: 14px;
     letter-spacing: 0.08em;
     margin-bottom: 14px;
@@ -488,9 +488,9 @@
 }
 
 .sme-author span {
-    background: #0a1a2b;
+    background: var(--text-strong);
     border-radius: 50%;
-    color: #fff;
+    color: var(--white);
     display: inline-flex;
     font-size: 12px;
     font-weight: 700;
@@ -628,7 +628,7 @@
 
 /* Dashboard */
 .sme-dashboard {
-    background: #0a1a2b;
+    background: var(--text-strong);
     border-radius: 16px;
     overflow: hidden;
     position: relative;
@@ -659,21 +659,21 @@
 }
 
 .sme-dashboard__dots span:first-child {
-    background: #ef4444;
+    background: var(--danger);
 }
 
 .sme-dashboard__dots span:nth-child(2) {
-    background: #f59e0b;
+    background: var(--warning);
 }
 
 .sme-dashboard__dots span:last-child {
-    background: #10b981;
+    background: var(--success);
 }
 
 .sme-dashboard__badge {
     font-size: 10px;
     font-weight: 700;
-    color: #10b981;
+    color: var(--success);
     background: rgba(16, 185, 129, 0.15);
     padding: 2px 10px;
     border-radius: 999px;
@@ -716,7 +716,7 @@
 }
 
 .sme-sidebar__item.active {
-    background: #24c7d7;
+    background: var(--primary-light);
     width: 80%;
 }
 
@@ -762,7 +762,7 @@
 
 .sme-chart__bar {
     flex: 1;
-    background: linear-gradient(180deg, #2bd0de, #0d7890);
+    background: linear-gradient(180deg, var(--primary-bright), var(--teal-dark));
     border-radius: 4px 4px 0 0;
     position: relative;
     transition: all 0.3s ease;
@@ -843,7 +843,7 @@
     left: 50%;
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.8);
-    color: #fff;
+    color: var(--white);
     font-size: 9px;
     padding: 2px 6px;
     border-radius: 4px;
@@ -933,7 +933,7 @@
 
 .sme-chart__bar {
     flex: 1;
-    background: linear-gradient(180deg, #2bd0de, #0d7890);
+    background: linear-gradient(180deg, var(--primary-bright), var(--teal-dark));
     border-radius: 4px 4px 0 0;
     position: relative;
     min-height: 8px;
@@ -1035,7 +1035,7 @@
     left: 50%;
     transform: translateX(-50%) scale(0.8);
     background: rgba(0, 0, 0, 0.85);
-    color: #fff;
+    color: var(--white);
     font-size: 10px;
     font-weight: 600;
     padding: 4px 8px;
@@ -1102,7 +1102,7 @@
 
 /* Hiệu ứng cho dashboard container */
 .sme-dashboard {
-    background: #0a1a2b;
+    background: var(--text-strong);
     border-radius: 16px;
     overflow: hidden;
     position: relative;
@@ -1157,7 +1157,7 @@
 
 .sme-section h2,
 .sme-cta h2 {
-    color: #0a1a2b;
+    color: var(--text-strong);
     font-size: clamp(28px, 3vw, 38px);
     letter-spacing: -0.04em;
     line-height: 1.1;
@@ -1166,7 +1166,7 @@
 
 .sme-section__intro p,
 .sme-cta p {
-    color: #5a6c7e;
+    color: var(--text-slate-soft);
     margin: 0;
     font-size: 16px;
     line-height: 1.6;
@@ -1181,8 +1181,8 @@
 
 /* Card base */
 .sme-card {
-    background: #fff;
-    border: 1px solid #e8edf3;
+    background: var(--white);
+    border: 1px solid var(--page-bg);
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
     min-height: 170px;
@@ -1236,8 +1236,8 @@
 }
 
 .sme-card--dark {
-    background: #0a1a2b;
-    color: #fff;
+    background: var(--text-strong);
+    color: var(--white);
     grid-row: span 2;
 }
 
@@ -1249,7 +1249,7 @@
 /* Icon animation */
 .sme-icon {
     background: rgba(0, 127, 148, 0.1);
-    color: #007f94;
+    color: var(--primary);
     display: inline-flex;
     font-size: 18px;
     height: 36px;
@@ -1268,7 +1268,7 @@
 
 .sme-icon--dark {
     background: rgba(36, 199, 215, 0.15);
-    color: #24c7d7;
+    color: var(--primary-light);
 }
 
 .sme-card--dark:hover .sme-icon--dark {
@@ -1286,16 +1286,16 @@
 }
 
 .sme-card:hover h3 {
-    color: #007f94;
+    color: var(--primary);
 }
 
 .sme-card--dark:hover h3 {
-    color: #24c7d7;
+    color: var(--primary-light);
 }
 
 /* Card media animation */
 .sme-card__media {
-    border: 1px solid #e8edf3;
+    border: 1px solid var(--page-bg);
     border-radius: 8px;
     height: 64px;
     margin-top: 16px;
@@ -1305,19 +1305,19 @@
 }
 
 .sme-card:hover .sme-card__media {
-    border-color: #007f94;
+    border-color: var(--primary);
 }
 
 .sme-card__media--savings {
     background:
         linear-gradient(12deg, transparent 52%, rgba(0, 127, 148, 0.08) 52% 62%, transparent 62%),
-        linear-gradient(90deg, #f5f7fa, #eef2f7);
+        linear-gradient(90deg, #f5f7fa, var(--page-bg-muted));
 }
 
 .sme-card:hover .sme-card__media--savings {
     background:
         linear-gradient(12deg, transparent 52%, rgba(0, 127, 148, 0.15) 52% 62%, transparent 62%),
-        linear-gradient(90deg, #eef2f7, #e8edf3);
+        linear-gradient(90deg, var(--page-bg-muted), var(--page-bg));
 }
 
 /* Talent list animation */
@@ -1329,14 +1329,14 @@
 }
 
 .sme-talent-list span:nth-child(odd) {
-    background: #007f94;
+    background: var(--primary);
     border-radius: 6px;
     height: 24px;
     transition: all 0.4s ease;
 }
 
 .sme-card:hover .sme-talent-list span:nth-child(odd) {
-    background: #24c7d7;
+    background: var(--primary-light);
     transform: scaleX(1.05);
 }
 
@@ -1360,8 +1360,8 @@
 }
 
 .sme-card:hover .sme-talent-list em {
-    background: #24c7d7;
-    color: #0a1a2b;
+    background: var(--primary-light);
+    color: var(--text-strong);
 }
 
 /* Card photo animation */
@@ -1395,9 +1395,9 @@
 
 .sme-avatar-stack span {
     background: #e8f7fb;
-    border: 2px solid #fff;
+    border: 2px solid var(--white);
     border-radius: 50%;
-    color: #007f94;
+    color: var(--primary);
     display: inline-flex;
     font-size: 11px;
     font-weight: 700;
@@ -1414,12 +1414,12 @@
 }
 
 .sme-avatar-stack span:last-child {
-    background: #24c7d7;
+    background: var(--primary-light);
     color: #063247;
 }
 
 .sme-card:hover .sme-avatar-stack span:last-child {
-    background: #2bd0de;
+    background: var(--primary-bright);
 }
 
 /* List items animation */
@@ -1433,7 +1433,7 @@
 }
 
 .sme-card li::before {
-    color: #007f94;
+    color: var(--primary);
     content: "\2713";
     font-weight: 700;
     margin-right: 8px;
@@ -1485,7 +1485,7 @@
 .sme-cta {
     background:
         radial-gradient(circle at 50% 0%, rgba(0, 127, 148, 0.08), transparent 40%),
-        linear-gradient(180deg, #f5f8fb 0%, #eef2f7 100%);
+        linear-gradient(180deg, #f5f8fb 0%, var(--page-bg-muted) 100%);
     margin-top: 72px;
     padding: 80px 24px 88px;
     position: relative;
@@ -1541,7 +1541,7 @@
 }
 
 .sme-cta h2 {
-    color: #0a1a2b;
+    color: var(--text-strong);
     font-size: clamp(30px, 3.5vw, 42px);
     letter-spacing: -0.04em;
     line-height: 1.1;
@@ -1549,7 +1549,7 @@
 }
 
 .sme-cta p {
-    color: #5a6c7e;
+    color: var(--text-slate-soft);
     font-size: 18px;
     line-height: 1.6;
     max-width: 560px;
@@ -1592,28 +1592,28 @@
 
 /* CTA Button hover effect */
 .sme-cta .sme-button--primary {
-    background: #007f94;
-    color: #fff;
+    background: var(--primary);
+    color: var(--white);
     box-shadow: 0 4px 20px rgba(0, 127, 148, 0.3);
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .sme-cta .sme-button--primary:hover {
-    background: #006b7e;
+    background: var(--primary-deep);
     transform: translateY(-3px) scale(1.02);
     box-shadow: 0 8px 32px rgba(0, 127, 148, 0.4);
 }
 
 .sme-cta .sme-button--outline {
     background: transparent;
-    border: 2px solid #0a1a2b;
-    color: #0a1a2b;
+    border: 2px solid var(--text-strong);
+    color: var(--text-strong);
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .sme-cta .sme-button--outline:hover {
-    background: #0a1a2b;
-    color: #fff;
+    background: var(--text-strong);
+    color: var(--white);
     transform: translateY(-3px) scale(1.02);
     box-shadow: 0 8px 32px rgba(10, 26, 43, 0.2);
 }
@@ -1671,7 +1671,7 @@
 .sme-pill {
     background: rgba(0, 127, 148, 0.12);
     border-radius: 999px;
-    color: #007f94;
+    color: var(--primary);
     display: inline-flex;
     font-size: 13px;
     font-weight: 600;
@@ -1696,7 +1696,7 @@
 
 /* Title animation - từng chữ */
 .sme-hero h1 {
-    color: #0a1a2b;
+    color: var(--text-strong);
     font-size: clamp(36px, 4.5vw, 56px);
     letter-spacing: -0.04em;
     line-height: 1.05;
@@ -1721,7 +1721,7 @@
 
 /* Description animation */
 .sme-hero__text {
-    color: #5a6c7e;
+    color: var(--text-slate-soft);
     font-size: 16px;
     line-height: 1.6;
     margin: 0 0 28px;
@@ -1779,9 +1779,9 @@
 
 /* Hero visual animation (dashboard) */
 .sme-hero__visual {
-    background: #fff;
+    background: var(--white);
     border-radius: 16px;
-    border: 1px solid #e8edf3;
+    border: 1px solid var(--page-bg);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
     padding: 20px;
     position: relative;
@@ -1831,8 +1831,8 @@
 
 /* Stats Section */
 .sme-stats {
-    background: #0a1a2b;
-    color: #fff;
+    background: var(--text-strong);
+    color: var(--white);
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     padding: 60px 24px;
@@ -1906,7 +1906,7 @@
 }
 
 .sme-stats strong {
-    color: #24c7d7;
+    color: var(--primary-light);
     font-size: 36px;
     line-height: 1;
     font-weight: 800;
@@ -1917,11 +1917,11 @@
 /* Hover effect */
 .sme-stats div:hover strong {
     transform: scale(1.08);
-    color: #2bd0de;
+    color: var(--primary-bright);
 }
 
 .sme-stats span {
-    color: #a0b8c8;
+    color: var(--text-slate-line);
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.02em;

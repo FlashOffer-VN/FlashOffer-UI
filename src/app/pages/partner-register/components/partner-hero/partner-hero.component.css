@@ -1,6 +1,6 @@
 /* partner-hero/partner-hero.component.css */
 .partner-hero {
-    background: linear-gradient(135deg, #1F2937 0%, #374151 100%);
+    background: linear-gradient(135deg, var(--text) 0%, var(--text-secondary) 100%);
     padding: 4rem 2rem;
     text-align: center;
     position: relative;
@@ -39,7 +39,7 @@
 .partner-badge {
     display: inline-block;
     background: rgba(124, 58, 237, 0.2);
-    color: #A78BFA;
+    color: var(--accent-light);
     padding: 0.5rem 1.5rem;
     border-radius: 9999px;
     font-size: 0.875rem;
@@ -59,11 +59,11 @@
 }
 
 .partner-hero h1 span {
-    color: #A78BFA;
+    color: var(--accent-light);
 }
 
 .partner-hero p {
-    color: #9CA3AF;
+    color: var(--text-subtle);
     font-size: 1.25rem;
     max-width: 600px;
     margin: 0 auto;

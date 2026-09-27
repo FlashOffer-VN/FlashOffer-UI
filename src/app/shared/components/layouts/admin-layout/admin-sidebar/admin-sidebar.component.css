@@ -4,23 +4,23 @@
 }
 
 .bg-secondary {
-    background-color: #1F2937;
+    background-color: var(--text);
 }
 
 .bg-secondary-light {
-    background-color: #374151;
+    background-color: var(--text-secondary);
 }
 
 .bg-primary {
-    background-color: #7C3AED;
+    background-color: var(--accent);
 }
 
 .text-gray-300 {
-    color: #D1D5DB;
+    color: var(--border-strong);
 }
 
 .text-gray-400 {
-    color: #9CA3AF;
+    color: var(--text-subtle);
 }
 
 .text-red-400 {

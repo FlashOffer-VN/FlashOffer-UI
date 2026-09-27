@@ -3,7 +3,7 @@
 }
 
 tr:hover {
-    background-color: #f9fafb;
+    background-color: var(--surface);
 }
 
 thead {

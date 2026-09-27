@@ -33,7 +33,7 @@ table td:nth-child(3) {
 }
 
 .post-preview:hover .font-medium {
-    color: #7c3aed;
+    color: var(--accent);
 }
 
 .post-modal-backdrop {
@@ -54,7 +54,7 @@ table td:nth-child(3) {
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 0.75rem;
-    background: #fff;
+    background: var(--white);
     box-shadow: 0 20px 40px rgb(0 0 0 / 20%);
 }
 
@@ -68,38 +68,38 @@ table td:nth-child(3) {
 }
 
 .post-modal-header {
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--border);
 }
 
 .post-modal-header h2 {
     margin: 0;
-    color: #111827;
+    color: var(--text-heading);
     font-size: 1.125rem;
     font-weight: 700;
 }
 
 .post-modal-header p {
     margin: 0.25rem 0 0;
-    color: #6b7280;
+    color: var(--text-muted);
     font-size: 0.8rem;
 }
 
 .close-button {
     border: 0;
     background: transparent;
-    color: #9ca3af;
+    color: var(--text-subtle);
     cursor: pointer;
     font-size: 1.25rem;
 }
 
 .close-button:hover {
-    color: #374151;
+    color: var(--text-secondary);
 }
 
 .post-modal-content {
     min-height: 8rem;
     padding: 1.25rem;
-    color: #374151;
+    color: var(--text-secondary);
     line-height: 1.65;
     overflow-wrap: break-word;
     word-break: break-word;
@@ -122,5 +122,5 @@ table td:nth-child(3) {
 
 .post-modal-footer {
     justify-content: flex-end;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid var(--border);
 }

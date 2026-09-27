@@ -6,9 +6,103 @@
 
 @layer base {
     :root {
+        /* Thương hiệu (đổi theo theme: mặc định teal, admin tím, user hồng) */
         --primary: #007f94;
         --primary-light: #24c7d7;
         --primary-dark: #006b80;
+
+        /* Màu nhấn */
+        --accent: #7c3aed;
+        --accent-light: #a78bfa;
+        --accent-dark: #5b21b6;
+        --accent-strong: #6d28d9;
+        --accent-subtle: #8b5cf6;
+        --pink: #ec4899;
+
+        /* Chữ */
+        --text-strong: #0a1a2b;
+        --text-navy: #1a2a3a;
+        --text: #1f2937;
+        --text-heading: #111827;
+        --text-secondary: #374151;
+        --text-muted: #6b7280;
+        --text-subtle: #9ca3af;
+        --text-slate: #4b5563;
+        --text-slate-soft: #5a6c7e;
+        --text-slate-muted: #6b7a8a;
+        --text-slate-faint: #8a9aa8;
+        --text-slate-line: #a0b8c8;
+
+        /* Nền */
+        --white: #ffffff;
+        --surface: #f9fafb;
+        --surface-soft: #f8fafc;
+        --surface-muted: #f3f4f6;
+        --surface-subtle: #f1f5f9;
+        --page-bg: #e8edf3;
+        --page-bg-soft: #f0f4f8;
+        --page-bg-muted: #eef2f7;
+
+        /* Viền */
+        --border: #e5e7eb;
+        --border-strong: #d1d5db;
+        --border-slate: #e2e8f0;
+
+        /* Trạng thái */
+        --danger: #ef4444;
+        --danger-dark: #dc2626;
+        --danger-soft: #fef2f2;
+        --warning: #f59e0b;
+        --warning-soft: #fef3c7;
+        --success: #10b981;
+        --orange: #f97316;
+
+        /* Trạng thái — sắc độ đậm/nhạt */
+        --danger-light: #fecaca;
+        --danger-bg: #fee2e2;
+        --danger-deep: #b91c1c;
+        --warning-light: #fbbf24;
+        --warning-strong: #d97706;
+        --warning-dark: #b45309;
+        --warning-deep: #92400e;
+        --warning-bg: #fffbeb;
+        --orange-light: #fb923c;
+        --orange-dark: #ea580c;
+        --orange-soft: #ffedd5;
+        --success-bg: #ecfdf5;
+        --success-bg-soft: #dcfce7;
+        --success-soft: #d1fae5;
+        --success-dark: #059669;
+        --success-strong: #047857;
+        --pink-dark: #db2777;
+        --pink-soft: #fce7f3;
+
+        /* Tím — sắc độ phụ */
+        --accent-bright: #a855f7;
+        --accent-border: #ddd6fe;
+        --accent-bg: #f5f3ff;
+        --accent-bg-soft: #faf5ff;
+        --accent-soft: #ede9fe;
+
+        /* Xanh lam / teal mở rộng */
+        --indigo: #667eea;
+        --blue: #2563eb;
+        --blue-light: #3b82f6;
+        --blue-bg: #eff6ff;
+        --blue-soft: #dbeafe;
+        --teal: #0d9488;
+        --teal-dark: #0d7890;
+        --teal-deep: #0f766e;
+        --primary-bright: #2bd0de;
+        --primary-deep: #006b7e;
+
+        /* Thang xám slate */
+        --slate-900: #0f172a;
+        --slate-700: #334155;
+        --slate-600: #475569;
+        --slate-500: #64748b;
+        --slate-400: #94a3b8;
+        --slate-300: #cbd5e1;
 
         /* Scrollbar — mảnh, trung tính, hợp cả nền sáng */
         --scrollbar-thumb: rgba(148, 163, 184, 0.45);
@@ -169,7 +263,7 @@ body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 15px;
     line-height: 1.7;
-    color: #1F2937;
+    color: var(--text);
 }
 
 /* Font cho tiêu đề bài viết */
@@ -187,7 +281,7 @@ body {
     font-size: inherit;
     line-height: inherit;
     font-style: normal;
-    color: #4B5563;
+    color: var(--text-slate);
     border-left: 4px solid var(--primary);
     padding-left: 16px;
     margin: 12px 0;
@@ -201,7 +295,7 @@ body {
 
 .kindi-quill .ql-toolbar.ql-snow,
 .kindi-quill .ql-container.ql-snow {
-    border-color: #E2E8F0;
+    border-color: var(--border-slate);
 }
 
 .kindi-quill .ql-toolbar.ql-snow {
@@ -265,12 +359,12 @@ body {
    ========================================================================== */
 
 .ng-dropdown-panel {
-    border: 1px solid #E5E7EB !important;
+    border: 1px solid var(--border) !important;
     border-radius: 14px !important;
     box-shadow: 0 14px 34px rgba(15, 23, 42, 0.14) !important;
     margin-top: 6px;
     overflow: hidden;
-    background: #FFFFFF;
+    background: var(--white);
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items {
@@ -282,26 +376,26 @@ body {
     padding: 10px 14px !important;
     border-radius: 10px;
     font-size: 14px;
-    color: #1F2937;
+    color: var(--text);
     transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
-    background: #F1F5F9 !important;
+    background: var(--surface-subtle) !important;
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
-    background: color-mix(in srgb, var(--primary) 10%, #FFFFFF) !important;
+    background: color-mix(in srgb, var(--primary) 10%, var(--white)) !important;
     color: var(--primary) !important;
     font-weight: 600;
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected.ng-option-marked {
-    background: color-mix(in srgb, var(--primary) 16%, #FFFFFF) !important;
+    background: color-mix(in srgb, var(--primary) 16%, var(--white)) !important;
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-disabled {
-    color: #CBD5E1;
+    color: var(--slate-300);
 }
 
 /* ô tìm kiếm trong panel */
@@ -315,7 +409,7 @@ body {
 .ng-dropdown-panel .ng-dropdown-header,
 .ng-dropdown-panel .ng-dropdown-footer {
     padding: 8px 14px;
-    border-color: #F1F5F9;
+    border-color: var(--surface-subtle);
 }
 
 /* ô select lúc đang mở */

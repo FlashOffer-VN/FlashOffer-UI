@@ -27,12 +27,12 @@
 .ng-select-wrapper__label {
     font-size: 0.875rem;
     font-weight: 600;
-    color: #374151;
+    color: var(--text-secondary);
     transition: color 0.2s ease;
 }
 
 .ng-select-wrapper__required {
-    color: #ef4444;
+    color: var(--danger);
     margin-left: 0.25rem;
 }
 
@@ -44,7 +44,7 @@
     margin-top: 0.25rem;
     font-size: 0.75rem;
     font-weight: 400;
-    color: #ef4444;
+    color: var(--danger);
     animation: shake 0.3s ease;
 }
 
@@ -75,10 +75,10 @@
 ::ng-deep .ng-select .ng-select-container {
     min-height: 44px !important;
     padding: 0.75rem 1rem !important;
-    border: 2px solid #e5e7eb !important;
+    border: 2px solid var(--border) !important;
     border-radius: 0.75rem !important;
-    background: #ffffff !important;
-    color: #1F2937 !important;
+    background: var(--white) !important;
+    color: var(--text) !important;
     transition: all 0.2s ease;
     font-size: 0.875rem;
     font-family: inherit;
@@ -86,18 +86,18 @@
 }
 
 ::ng-deep .ng-select:hover .ng-select-container {
-    border-color: #9ca3af !important;
+    border-color: var(--text-subtle) !important;
 }
 
 /* ✅ SỬA: dùng --select-primary thay vì --primary */
 ::ng-deep .ng-select.ng-select-focused .ng-select-container {
-    border-color: var(--select-primary, var(--primary, #007f94)) !important;
+    border-color: var(--select-primary, var(--primary, var(--primary))) !important;
     box-shadow: 0 0 0 4px rgba(0, 127, 148, 0.1) !important;
 }
 
 ::ng-deep .ng-select.is-invalid .ng-select-container {
-    border-color: #ef4444 !important;
-    background: #ffffff !important;
+    border-color: var(--danger) !important;
+    background: var(--white) !important;
 }
 
 ::ng-deep .ng-select.is-invalid .ng-select-container {
@@ -105,7 +105,7 @@
 }
 
 ::ng-deep .ng-select.ng-select-disabled .ng-select-container {
-    background: #f3f4f6 !important;
+    background: var(--surface-muted) !important;
     cursor: not-allowed;
     opacity: 0.6;
 }
@@ -115,12 +115,12 @@
 ========================================================== */
 
 ::ng-deep .ng-select .ng-placeholder {
-    color: #9ca3af;
+    color: var(--text-subtle);
     font-size: 0.875rem;
 }
 
 ::ng-deep .ng-select .ng-value-label {
-    color: #1F2937;
+    color: var(--text);
     font-size: 0.875rem;
     font-weight: 500;
 }
@@ -134,12 +134,12 @@
 }
 
 ::ng-deep .ng-select .ng-arrow {
-    border-color: #6b7280 transparent transparent !important;
+    border-color: var(--text-muted) transparent transparent !important;
     border-width: 5px 4px 0 !important;
 }
 
 ::ng-deep .ng-select.ng-select-focused .ng-arrow {
-    border-top-color: var(--select-primary, var(--primary, #007f94)) !important;
+    border-top-color: var(--select-primary, var(--primary, var(--primary))) !important;
 }
 
 /* ==========================================================
@@ -148,9 +148,9 @@
 
 ::ng-deep .ng-dropdown-panel {
     margin-top: 6px !important;
-    border: 1px solid #e5e7eb !important;
+    border: 1px solid var(--border) !important;
     border-radius: 12px !important;
-    background: #fff !important;
+    background: var(--white) !important;
     overflow: hidden !important;
     box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12), 0 2px 8px rgba(15, 23, 42, 0.08) !important;
     animation: dropdownFade 0.18s ease-out;
@@ -172,12 +172,12 @@
 }
 
 ::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: var(--slate-300);
     border-radius: 999px;
 }
 
 ::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: var(--slate-400);
 }
 
 /* Option */
@@ -188,29 +188,29 @@
     margin: 2px 0;
     padding: 10px 14px;
     border-radius: 8px;
-    color: #334155;
+    color: var(--slate-700);
     font-size: 14px;
     font-weight: 500;
     transition: background-color 0.18s, color 0.18s, transform 0.15s;
 }
 
 ::ng-deep .ng-dropdown-panel .ng-option:hover {
-    background: #f8fafc;
+    background: var(--surface-soft);
 }
 
 /* ✅ SỬA: dùng --select-primary */
 ::ng-deep .ng-dropdown-panel .ng-option.ng-option-marked {
     background: rgba(0, 127, 148, 0.08);
-    color: var(--select-primary, var(--primary, #007f94));
+    color: var(--select-primary, var(--primary, var(--primary)));
 }
 
 /* ✅ SỬA: dùng --select-primary và --select-primary-dark */
 ::ng-deep .ng-dropdown-panel .ng-option.ng-option-selected {
     position: relative;
     background: linear-gradient(90deg,
-            var(--select-primary, var(--primary, #007f94)),
-            var(--select-primary-dark, var(--primary-dark, #006b80))) !important;
-    color: #fff;
+            var(--select-primary, var(--primary, var(--primary))),
+            var(--select-primary-dark, var(--primary-dark, var(--primary-dark)))) !important;
+    color: var(--white);
     font-weight: 600;
     padding-right: 38px;
 }
@@ -239,7 +239,7 @@
 
 ::ng-deep .ng-dropdown-panel .ng-empty {
     padding: 14px;
-    color: #94a3b8;
+    color: var(--slate-400);
     text-align: center;
     font-size: 13px;
 }
@@ -251,14 +251,14 @@
 ::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected,
 ::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected.ng-option-marked {
     background: linear-gradient(90deg,
-            var(--select-primary, var(--primary, #007f94)),
-            var(--select-primary-dark, var(--primary-dark, #006b80))) !important;
+            var(--select-primary, var(--primary, var(--primary))),
+            var(--select-primary-dark, var(--primary-dark, var(--primary-dark)))) !important;
     background-color: transparent !important;
-    color: #fff !important;
+    color: var(--white) !important;
 }
 
 ::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected .ng-option-label {
-    color: #fff !important;
+    color: var(--white) !important;
 }
 
 ::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected:hover {

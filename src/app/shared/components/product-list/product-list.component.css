@@ -30,14 +30,14 @@
     padding: 0.5rem 0.75rem;
     border-radius: 0.5rem;
     font-size: 0.8125rem;
-    color: #6b7280;
-    background: #f3f4f6;
+    color: var(--text-muted);
+    background: var(--surface-muted);
     transition: background 0.2s ease, color 0.2s ease;
 }
 
 .btn-clear-filter:hover {
-    background: #e5e7eb;
-    color: #374151;
+    background: var(--border);
+    color: var(--text-secondary);
 }
 
 /* ===== Table ===== */
@@ -51,7 +51,7 @@
     text-align: left;
     font-size: 0.75rem;
     font-weight: 500;
-    color: #6b7280;
+    color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     white-space: nowrap;
@@ -98,7 +98,7 @@
 .product-count {
     margin-top: 0.75rem;
     font-size: 0.875rem;
-    color: #6b7280;
+    color: var(--text-muted);
 }
 
 @media (max-width: 640px) {
