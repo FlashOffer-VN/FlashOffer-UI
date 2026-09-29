@@ -59,11 +59,19 @@ export class ApiService {
 
     private handleError(error: any): Observable<never> {
         const status = error.status;
+        // Mã lỗi nghiệp vụ API trả về (wrong_request, validation_error, not_found...) để màn hình bắt theo mã.
+        const apiStatus: string | undefined = error.error?.status;
         let message = this._translate.instant('COMMON.ERROR.UNKNOWN');
         let isSystemError = false;
         let errors: string[] = [];
 
-        if (status >= 400 && status < 500) {
+        if (apiStatus && apiStatus !== 'system_error') {
+            // API đã trả mã lỗi + message đã dịch: luôn hiển thị message đó, kể cả khi HTTP là 5xx.
+            message = error.error?.errors?.[0]
+                || error.error?.message
+                || this._translate.instant('COMMON.ERROR.INVALID_DATA');
+            errors = error.error?.errors || [];
+        } else if (status >= 400 && status < 500) {
             message = error.error?.errors?.[0]
                 || error.error?.message
                 || error.message
@@ -83,6 +91,7 @@ export class ApiService {
 
         return throwError(() => ({
             status,
+            apiStatus,
             message,
             errors,
             isSystemError,

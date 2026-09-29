@@ -125,7 +125,7 @@ export class AdminGroupBuyingDetailComponent implements OnInit {
         this.updateStatus(GroupBuyingStatus.CANCELLED, 'ADMIN.GROUP_BUYING.CANCEL_SUCCESS', () => {
             this.showCancelModal = false;
             this.cancelReason = '';
-        });
+        }, this.cancelReason.trim());
     }
 
     confirmReopen(): void {

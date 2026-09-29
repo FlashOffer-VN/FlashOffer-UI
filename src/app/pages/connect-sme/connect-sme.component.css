@@ -302,8 +302,8 @@
     background: radial-gradient(circle, rgba(139, 92, 246, 0.06), transparent 60%);
 }
 
-.connect-card--partner::before {
-    background: radial-gradient(circle, rgba(245, 158, 11, 0.08), transparent 60%);
+.connect-card--groups::before {
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.06), transparent 60%);
 }
 
 /* Card Shimmer */
@@ -344,10 +344,9 @@
     box-shadow: 0 16px 48px rgba(139, 92, 246, 0.10);
 }
 
-.connect-card--partner:hover {
-    border-color: var(--warning);
-    box-shadow: 0 16px 48px rgba(245, 158, 11, 0.15);
-    background: linear-gradient(145deg, #FFFDF5, #FFFBF0);
+.connect-card--groups:hover {
+    border-color: var(--success);
+    box-shadow: 0 16px 48px rgba(16, 185, 129, 0.10);
 }
 
 /* Card Icon */
@@ -378,9 +377,9 @@
     color: var(--accent-subtle);
 }
 
-.connect-card--partner .connect-card__icon-wrapper {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
-    color: var(--warning);
+.connect-card--groups .connect-card__icon-wrapper {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.04));
+    color: var(--success);
 }
 
 .connect-card:hover .connect-card__icon-wrapper {
@@ -408,8 +407,8 @@
     color: var(--accent-subtle);
 }
 
-.connect-card--partner:hover h3 {
-    color: var(--warning);
+.connect-card--groups:hover h3 {
+    color: var(--success);
 }
 
 /* Card Description */
@@ -459,8 +458,8 @@
     color: var(--accent-subtle);
 }
 
-.connect-card--partner .connect-card__features li::before {
-    color: var(--warning);
+.connect-card--groups .connect-card__features li::before {
+    color: var(--success);
 }
 
 .connect-card:nth-child(1) .connect-card__features li:nth-child(1) {
@@ -553,8 +552,8 @@
     color: var(--accent-subtle);
 }
 
-.connect-card--partner .connect-card__arrow {
-    color: var(--warning);
+.connect-card--groups .connect-card__arrow {
+    color: var(--success);
 }
 
 .connect-card:hover .connect-card__arrow {

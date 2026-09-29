@@ -35,7 +35,7 @@
 
     <!-- Cards Grid -->
     <div class="connect-sme-grid">
-        <!-- Card 1: Tìm hàng -->
+        <!-- Card 1: Tìm nhà cung cấp -->
         <a routerLink="/find-supplier" class="connect-card connect-card--find">
             <div class="connect-card__icon-wrapper">
                 <i class="fas fa-search"></i>
@@ -52,41 +52,7 @@
             </span>
         </a>
 
-        <!-- Card 2: Mua chung -->
-        <a routerLink="/group-buying" class="connect-card connect-card--group">
-            <div class="connect-card__icon-wrapper">
-                <i class="fas fa-users"></i>
-            </div>
-            <h3>{{ 'CONNECT_SME.CARD_GROUP_BUYING' | translate }}</h3>
-            <p>{{ 'CONNECT_SME.CARD_GROUP_DESC' | translate }}</p>
-            <ul class="connect-card__features">
-                <li>{{ 'CONNECT_SME.GROUP_FEATURE_1' | translate }}</li>
-                <li>{{ 'CONNECT_SME.GROUP_FEATURE_2' | translate }}</li>
-                <li>{{ 'CONNECT_SME.GROUP_FEATURE_3' | translate }}</li>
-            </ul>
-            <span class="connect-card__arrow">
-                {{ 'CONNECT_SME.START' | translate }} <i class="fas fa-arrow-right"></i>
-            </span>
-        </a>
-
-        <!-- Card: Nhóm theo lĩnh vực kinh doanh -->
-        <a routerLink="/groups" class="connect-card connect-card--group">
-            <div class="connect-card__icon-wrapper">
-                <i class="fas fa-people-roof"></i>
-            </div>
-            <h3>{{ 'CONNECT_SME.CARD_GROUPS' | translate }}</h3>
-            <p>{{ 'CONNECT_SME.CARD_GROUPS_DESC' | translate }}</p>
-            <ul class="connect-card__features">
-                <li>{{ 'CONNECT_SME.GROUPS_FEATURE_1' | translate }}</li>
-                <li>{{ 'CONNECT_SME.GROUPS_FEATURE_2' | translate }}</li>
-                <li>{{ 'CONNECT_SME.GROUPS_FEATURE_3' | translate }}</li>
-            </ul>
-            <span class="connect-card__arrow">
-                {{ 'CONNECT_SME.START' | translate }} <i class="fas fa-arrow-right"></i>
-            </span>
-        </a>
-
-        <!-- Card 3: Nhận Offer -->
+        <!-- Card 2: Tìm offer giá tốt -->
         <a routerLink="/get-offer" class="connect-card connect-card--offer">
             <div class="connect-card__icon-wrapper">
                 <i class="fas fa-tags"></i>
@@ -103,20 +69,37 @@
             </span>
         </a>
 
-        <!-- Card 4: Đối tác doanh nghiệp -->
-        <a routerLink="/partner" class="connect-card connect-card--partner">
+        <!-- Card 3: Tạo yêu cầu mua chung -->
+        <a routerLink="/group-buying" class="connect-card connect-card--group">
             <div class="connect-card__icon-wrapper">
-                <i class="fas fa-handshake"></i>
+                <i class="fas fa-users"></i>
             </div>
-            <h3>{{ 'CONNECT_SME.CARD_PARTNER' | translate }}</h3>
-            <p>{{ 'CONNECT_SME.CARD_PARTNER_DESC' | translate }}</p>
+            <h3>{{ 'CONNECT_SME.CARD_GROUP_BUYING' | translate }}</h3>
+            <p>{{ 'CONNECT_SME.CARD_GROUP_DESC' | translate }}</p>
             <ul class="connect-card__features">
-                <li>{{ 'CONNECT_SME.PARTNER_FEATURE_1' | translate }}</li>
-                <li>{{ 'CONNECT_SME.PARTNER_FEATURE_2' | translate }}</li>
-                <li>{{ 'CONNECT_SME.PARTNER_FEATURE_3' | translate }}</li>
+                <li>{{ 'CONNECT_SME.GROUP_FEATURE_1' | translate }}</li>
+                <li>{{ 'CONNECT_SME.GROUP_FEATURE_2' | translate }}</li>
+                <li>{{ 'CONNECT_SME.GROUP_FEATURE_3' | translate }}</li>
             </ul>
             <span class="connect-card__arrow">
-                {{ 'CONNECT_SME.REGISTER' | translate }} <i class="fas fa-arrow-right"></i>
+                {{ 'CONNECT_SME.START' | translate }} <i class="fas fa-arrow-right"></i>
+            </span>
+        </a>
+
+        <!-- Card 4: Tham gia nhóm ngành -->
+        <a routerLink="/groups" class="connect-card connect-card--groups">
+            <div class="connect-card__icon-wrapper">
+                <i class="fas fa-people-roof"></i>
+            </div>
+            <h3>{{ 'CONNECT_SME.CARD_GROUPS' | translate }}</h3>
+            <p>{{ 'CONNECT_SME.CARD_GROUPS_DESC' | translate }}</p>
+            <ul class="connect-card__features">
+                <li>{{ 'CONNECT_SME.GROUPS_FEATURE_1' | translate }}</li>
+                <li>{{ 'CONNECT_SME.GROUPS_FEATURE_2' | translate }}</li>
+                <li>{{ 'CONNECT_SME.GROUPS_FEATURE_3' | translate }}</li>
+            </ul>
+            <span class="connect-card__arrow">
+                {{ 'CONNECT_SME.START' | translate }} <i class="fas fa-arrow-right"></i>
             </span>
         </a>
     </div>
