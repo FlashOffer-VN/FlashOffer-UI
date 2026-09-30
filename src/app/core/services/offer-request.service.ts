@@ -37,8 +37,8 @@ export class OfferRequestService {
     }
 
     /**
-     * Lấy danh sách phân trang yêu cầu nhận offer (Admin)
-     * GET /api/v1/OfferRequests?pageNumber=&pageSize=&search=&status=
+     * Lấy danh sách phân trang yêu cầu nhận offer (admin thấy tất cả, người dùng thường chỉ thấy yêu cầu của chính mình)
+     * GET /api/v1/OfferRequests?pageNumber=&pageSize=&search=&status=&mineOnly=
      */
     getData(
         pageNumber = 1,
@@ -48,7 +48,8 @@ export class OfferRequestService {
         isOfferSent?: boolean,
         includeDeleted?: boolean,
         fromDate?: string,
-        toDate?: string
+        toDate?: string,
+        mineOnly?: boolean
     ): Observable<OfferRequestPagedResponse> {
         // Backend yêu cầu pageSize trong [1, 100] — không cho gửi 0/âm
         pageSize = this.clampPageSize(pageSize);
@@ -68,6 +69,7 @@ export class OfferRequestService {
         }
         if (fromDate) params.fromDate = fromDate;
         if (toDate) params.toDate = toDate;
+        if (mineOnly) params.mineOnly = true;
         return this.apiService.get<OfferRequestPagedResponse>(this.endpoint, params);
     }
 

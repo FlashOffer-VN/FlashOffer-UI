@@ -91,7 +91,7 @@
                                 {{ (pageNumber - 1) * pageSize + i + 1 }}
                             </td>
                             <td class="px-4 py-3 text-sm font-mono text-gray-600">
-                                {{ formatId(collaborator.id) }}
+                                {{ collaborator.id | shortId }}
                             </td>
                             <td class="px-4 py-3 text-sm font-medium text-gray-900 w-40">
                                 {{ collaborator.fullName }}
@@ -111,7 +111,7 @@
                                 </app-badge>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-500">
-                                {{ formatDate(collaborator.createdAt) }}
+                                {{ collaborator.createdAt | appDate }}
                             </td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center gap-2">

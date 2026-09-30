@@ -108,8 +108,7 @@
                             [label]="'REGISTER.BUSINESS_FIELD' | translate"
                             [placeholder]="'REGISTER.BUSINESS_FIELD_PLACEHOLDER' | translate" [required]="true"
                             [isInvalid]="isFieldInvalid('businessFieldId')"
-                            [errorMessage]="getErrorMessage('businessFieldId')" [primaryColor]="'#7C3AED'"
-                            [primaryDark]="'#5B21B6'">
+                            [errorMessage]="getErrorMessage('businessFieldId')">
                         </app-ng-select-wrapper>
                     </div>
                     <!-- Business Size -->
@@ -118,8 +117,7 @@
                             [label]="'REGISTER.BUSINESS_SIZE' | translate"
                             [placeholder]="'REGISTER.BUSINESS_SIZE_PLACEHOLDER' | translate" [required]="true"
                             [isInvalid]="isFieldInvalid('businessSize')"
-                            [errorMessage]="getErrorMessage('businessSize')" [primaryColor]="'#7C3AED'"
-                            [primaryDark]="'#5B21B6'">
+                            [errorMessage]="getErrorMessage('businessSize')">
                         </app-ng-select-wrapper>
                     </div>
 
@@ -127,7 +125,7 @@
                     <div class="form-group">
                         <app-province-select formControlName="address"
                             [label]="'REGISTER.ADDRESS_PROVINCE'" [placeholder]="'REGISTER.ADDRESS_PROVINCE_PLACEHOLDER'"
-                            [required]="true" [colorRole]="'admin'" [isInvalid]="isFieldInvalid('address')"
+                            [required]="true" [isInvalid]="isFieldInvalid('address')"
                             [errorMessage]="getErrorMessage('address')">
                         </app-province-select>
                     </div>

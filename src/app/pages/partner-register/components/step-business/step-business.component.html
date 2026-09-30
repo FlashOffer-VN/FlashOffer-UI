@@ -18,9 +18,8 @@
         <div class="form-group">
             <app-ng-select-wrapper formControlName="businessFieldId" [items]="businessFields"
                 [label]="'PARTNER.BUSINESS_FIELD' | translate"
-                [placeholder]="'PARTNER.BUSINESS_FIELD_PLACEHOLDER' | translate" [required]="true"
-                [primaryColor]="'#7C3AED'" [isInvalid]="isFieldInvalid('businessFieldId')"
-                [errorMessage]="getErrorMessage('businessFieldId')" [primaryColor]="'#7C3AED'" [primaryDark]="'#5B21B6'">
+                [placeholder]="'PARTNER.BUSINESS_FIELD_PLACEHOLDER' | translate" [required]="true" [isInvalid]="isFieldInvalid('businessFieldId')"
+                [errorMessage]="getErrorMessage('businessFieldId')">
             </app-ng-select-wrapper>
         </div>
 
@@ -28,16 +27,15 @@
         <div class="form-group">
             <app-ng-select-wrapper formControlName="companySize" [items]="companySizes"
                 [label]="'PARTNER.COMPANY_SIZE' | translate"
-                [placeholder]="'PARTNER.COMPANY_SIZE_PLACEHOLDER' | translate" [required]="true"
-                [primaryColor]="'#7C3AED'" [isInvalid]="isFieldInvalid('companySize')"
-                [errorMessage]="getErrorMessage('companySize')" [primaryColor]="'#7C3AED'" [primaryDark]="'#5B21B6'">
+                [placeholder]="'PARTNER.COMPANY_SIZE_PLACEHOLDER' | translate" [required]="true" [isInvalid]="isFieldInvalid('companySize')"
+                [errorMessage]="getErrorMessage('companySize')">
             </app-ng-select-wrapper>
         </div>
 
         <!-- Company Address (chọn tỉnh/thành phố) -->
         <div class="form-group full-width">
             <app-province-select formControlName="companyAddress" [label]="'PARTNER.COMPANY_ADDRESS'"
-                [id]="'companyAddress'" [required]="true" [colorRole]="'admin'"
+                [id]="'companyAddress'" [required]="true"
                 [isInvalid]="isFieldInvalid('companyAddress')" [errorMessage]="getErrorMessage('companyAddress')">
             </app-province-select>
         </div>

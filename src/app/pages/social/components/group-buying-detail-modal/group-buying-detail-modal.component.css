@@ -168,7 +168,7 @@
 
 .info-item .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
 .info-item .value { font-size: 15px; font-weight: 700; color: var(--text-heading); }
-.info-item .value.purple { color: var(--accent); }
+.info-item .value.accent { color: var(--accent); }
 
 .progress-block .bar {
     height: 10px;

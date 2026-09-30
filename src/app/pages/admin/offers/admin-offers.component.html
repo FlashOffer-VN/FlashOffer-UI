@@ -87,7 +87,7 @@
                                 {{ (pageNumber - 1) * pageSize + i + 1 }}
                             </td>
                             <td class="px-4 py-3 text-sm font-mono text-gray-600">
-                                {{ offer.offerRequestCode || formatId(offer.id) }}
+                                {{ offer.offerRequestCode || (offer.id | shortId) }}
                             </td>
                             <td class="px-4 py-3 text-sm font-medium text-gray-900">
                                 {{ offer.productName }}
@@ -103,7 +103,7 @@
                                 </app-badge>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-500">
-                                {{ formatDate(offer.createdAt) }}
+                                {{ offer.createdAt | appDate }}
                             </td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center gap-2">

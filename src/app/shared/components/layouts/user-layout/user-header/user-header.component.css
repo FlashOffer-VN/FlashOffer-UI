@@ -1,0 +1,4 @@
+/* shared/components/layouts/user-layout/user-header/user-header.component.css */
+:host {
+    display: block;
+}

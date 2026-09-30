@@ -28,7 +28,7 @@
                         <span><i class="fa-solid fa-envelope w-4"></i> {{ partner.email }}</span>
                         <span><i class="fa-solid fa-phone w-4"></i> {{ partner.phone }}</span>
                         <span><i class="fa-regular fa-building w-4"></i> {{ getCompanyName() }}</span>
-                        <span><i class="fa-regular fa-calendar w-4"></i> {{ formatDate(partner.createdAt) }}</span>
+                        <span><i class="fa-regular fa-calendar w-4"></i> {{ partner.createdAt | appDate }}</span>
                     </div>
                 </div>
                 <!-- Actions -->
@@ -83,12 +83,12 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.PARTNER.REGISTERED_AT' |
                     translate }}</p>
-                <p class="text-lg font-semibold text-gray-900 mt-1">{{ formatDate(partner.createdAt) }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ partner.createdAt | appDate }}</p>
             </div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.PARTNER.APPROVED_AT' |
                     translate }}</p>
-                <p class="text-lg font-semibold text-gray-900 mt-1">{{ formatDate(partner.approvedAt) || '--' }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ partner.approvedAt | appDate }}</p>
             </div>
         </div>
 
@@ -190,7 +190,7 @@
                 </app-button>
             </div>
 
-            <app-product-list [products]="partner.products || []" [colorRole]="'admin'" [editable]="true"
+            <app-product-list [products]="partner.products || []" [editable]="true"
                 [isActionLoading]="isActionLoading" (edit)="openEditProduct($event)"
                 (delete)="onDeleteProduct($event)">
             </app-product-list>

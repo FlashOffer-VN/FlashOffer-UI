@@ -170,8 +170,10 @@ export interface GetPublicGroupBuyingQuery {
     search?: string;
     sortBy?: string;
     sortOrder?: string;
-    /** true = chỉ lấy nhóm do chính mình mở (kể cả đang chờ duyệt). */
+    /** true = chỉ lấy nhóm do chính mình mở (mọi trạng thái, kể cả đã hoàn thành/đã hủy). */
     mineOnly?: boolean;
+    /** Lọc theo trạng thái (tab trong khu vực thành viên); bỏ trống = tất cả. */
+    status?: GroupBuyingStatus;
 }
 
 export interface GetAdminGroupBuyingQuery {

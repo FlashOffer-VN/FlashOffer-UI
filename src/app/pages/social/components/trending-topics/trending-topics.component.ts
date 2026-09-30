@@ -43,7 +43,7 @@ import { TranslateModule } from '@ngx-translate/core';
             transition: all 0.2s ease;
         }
         .trending-topic:hover {
-            background: #7C3AED;
+            background: var(--primary);
             color: white;
         }
     `]

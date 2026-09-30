@@ -130,7 +130,7 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    background: rgba(124, 58, 237, 0.1);
+    background: rgba(0, 127, 148, 0.1);
     color: var(--accent);
     border: 2px dashed var(--accent);
     border-radius: 0.75rem;
@@ -141,7 +141,7 @@
 }
 
 .btn-add-product:hover {
-    background: rgba(124, 58, 237, 0.2);
+    background: rgba(0, 127, 148, 0.2);
     border-color: var(--accent);
 }
 

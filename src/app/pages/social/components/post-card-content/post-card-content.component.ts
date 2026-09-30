@@ -61,7 +61,7 @@ import { ReadMorePipe } from '@shared/pipes/read-more.pipe';
         }
         .post-card__tags .tag {
             font-size: 13px;
-            color: #7C3AED;
+            color: var(--primary);
             background: #f3e8ff;
             padding: 4px 12px;
             border-radius: 999px;

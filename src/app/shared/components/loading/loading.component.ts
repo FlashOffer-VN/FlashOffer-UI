@@ -183,7 +183,7 @@ export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | '
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      background: #7C3AED;
+      background: var(--primary);
       animation: dotBounce 1.2s ease-in-out infinite;
     }
     @keyframes dotBounce {

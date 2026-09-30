@@ -18,6 +18,18 @@ export function buildGroupBuyingShareUrl(
     return ref ? `${url}?ref=${encodeURIComponent(ref)}` : url;
 }
 
+/**
+ * Link chia sẻ chung của tài khoản: mở link rồi tạo đơn / gửi yêu cầu / tham gia nhóm
+ * thì bản ghi sinh ra ghi nhận mã của người chia sẻ.
+ * Trả chuỗi rỗng khi chưa có mã hoặc khi đang chạy ở môi trường không có `window` (prerender).
+ */
+export function buildReferralShareUrl(referralCode?: string | null): string {
+    const ref = (referralCode ?? '').trim();
+    if (!ref || !isBrowser()) return '';
+
+    return `${window.location.origin}/?ref=${encodeURIComponent(ref)}`;
+}
+
 /** Mã chia sẻ đang có trên URL (?ref=...) — mã người chia sẻ đã gắn vào link người dùng đang mở */
 export function readReferralCodeFromQuery(search?: string | null): string | null {
     const query = search ?? (isBrowser() ? window.location.search : '');

@@ -6,17 +6,17 @@
 
 @layer base {
     :root {
-        /* Thương hiệu (đổi theo theme: mặc định teal, admin tím, user hồng) */
+        /* Thương hiệu (teal) */
         --primary: #007f94;
         --primary-light: #24c7d7;
         --primary-dark: #006b80;
 
         /* Màu nhấn */
-        --accent: #7c3aed;
-        --accent-light: #a78bfa;
-        --accent-dark: #5b21b6;
-        --accent-strong: #6d28d9;
-        --accent-subtle: #8b5cf6;
+        --accent: #007f94;
+        --accent-light: #24c7d7;
+        --accent-dark: #006b80;
+        --accent-strong: #006b7e;
+        --accent-subtle: #2bd0de;
         --pink: #ec4899;
 
         /* Chữ */
@@ -77,12 +77,12 @@
         --pink-dark: #db2777;
         --pink-soft: #fce7f3;
 
-        /* Tím — sắc độ phụ */
-        --accent-bright: #a855f7;
-        --accent-border: #ddd6fe;
-        --accent-bg: #f5f3ff;
-        --accent-bg-soft: #faf5ff;
-        --accent-soft: #ede9fe;
+        /* Teal — sắc độ phụ */
+        --accent-bright: #2bd0de;
+        --accent-border: #bfe3ea;
+        --accent-bg: #eef7f9;
+        --accent-bg-soft: #f4fafb;
+        --accent-soft: #e0f0f4;
 
         /* Xanh lam / teal mở rộng */
         --indigo: #667eea;
@@ -109,19 +109,6 @@
         --scrollbar-thumb-hover: rgba(100, 116, 139, 0.7);
     }
 
-    /* Admin role - giữ màu tím */
-    body.admin-role {
-        --primary: #7C3AED;
-        --primary-light: #A78BFA;
-        --primary-dark: #5B21B6;
-    }
-
-    /* User role - màu hồng (hoặc giữ teal) */
-    body.user-role {
-        --primary: #EC4899;
-        --primary-light: #F472B6;
-        --primary-dark: #BE185D;
-    }
 }
 
 /* ==========================================================================

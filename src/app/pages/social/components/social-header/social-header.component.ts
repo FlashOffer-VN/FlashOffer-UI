@@ -47,7 +47,7 @@ import { TranslateModule } from '@ngx-translate/core';
             right: -10%;
             width: 300px;
             height: 300px;
-            background: radial-gradient(circle, rgba(124, 58, 237, 0.2), transparent);
+            background: radial-gradient(circle, rgba(0, 127, 148, 0.2), transparent);
             border-radius: 50%;
         }
         .social-header::after {
@@ -70,7 +70,7 @@ import { TranslateModule } from '@ngx-translate/core';
             margin: 0 0 8px;
         }
         .social-header h1 i {
-            color: #A78BFA;
+            color: var(--primary-light);
             margin-right: 12px;
         }
         .social-header p {

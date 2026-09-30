@@ -3,11 +3,9 @@ import {
     EventEmitter,
     forwardRef,
     Input,
-    OnDestroy,
     Output
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { isBrowser } from '@core/utils/platform';
 import {
     ControlValueAccessor,
     FormsModule,
@@ -35,7 +33,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
         }
     ]
 })
-export class NgSelectWrapperComponent implements ControlValueAccessor, OnDestroy {
+export class NgSelectWrapperComponent implements ControlValueAccessor {
 
     @Input() items: any[] = [];
 
@@ -51,20 +49,12 @@ export class NgSelectWrapperComponent implements ControlValueAccessor, OnDestroy
 
     @Input() disabled = false;
 
-    @Input() primaryColor = '';
-
-    @Input() primaryDark = '';
-
-    @Input() textColor = '#1a2a3a';
-
     /**
      * body | '.selector' | null
      */
     @Input() appendTo: string | null = 'body';
 
     @Input() searchable = false;
-
-    @Input() colorRole?: 'default' | 'admin' | 'user' | 'custom';
 
     @Input() clearable = false;
 
@@ -76,57 +66,7 @@ export class NgSelectWrapperComponent implements ControlValueAccessor, OnDestroy
 
     @Input() id = '';
 
-    @Input() colorMode: 'default' | 'admin' | 'user' | 'custom' = 'default';
-
     value: any = null;
-
-    private readonly roleColors = {
-        default: { primary: '#007f94', dark: '#006b80' },
-        admin: { primary: '#7C3AED', dark: '#5B21B6' },
-        user: { primary: '#EC4899', dark: '#BE185D' },
-        custom: { primary: '', dark: '' }
-    } as const;
-
-    private get effectiveColorMode(): 'default' | 'admin' | 'user' | 'custom' {
-        return this.colorRole ?? this.colorMode;
-    }
-
-    get primaryColorFinal(): string {
-        if (this.primaryColor) {
-            return this.primaryColor;
-        }
-
-        return this.roleColors[this.effectiveColorMode].primary;
-    }
-
-    get primaryDarkFinal(): string {
-        if (this.primaryDark) {
-            return this.primaryDark;
-        }
-
-        return this.roleColors[this.effectiveColorMode].dark || this.roleColors[this.effectiveColorMode].primary;
-    }
-
-    onOpen(): void {
-        if (this.appendTo === 'body' && isBrowser()) {
-            document.body.style.setProperty('--select-primary', this.primaryColorFinal);
-            document.body.style.setProperty('--select-primary-dark', this.primaryDarkFinal);
-        }
-    }
-
-    onClose(): void {
-        if (this.appendTo === 'body' && isBrowser()) {
-            document.body.style.removeProperty('--select-primary');
-            document.body.style.removeProperty('--select-primary-dark');
-        }
-    }
-
-    ngOnDestroy(): void {
-        if (this.appendTo === 'body' && isBrowser()) {
-            document.body.style.removeProperty('--select-primary');
-            document.body.style.removeProperty('--select-primary-dark');
-        }
-    }
 
     private hasBlurred = false;
 

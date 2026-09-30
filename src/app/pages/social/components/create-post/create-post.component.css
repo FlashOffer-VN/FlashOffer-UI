@@ -15,7 +15,7 @@
 }
 
 .create-post:focus-within {
-    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.12);
+    box-shadow: 0 4px 20px rgba(0, 127, 148, 0.12);
     border-color: var(--accent);
 }
 
@@ -39,7 +39,7 @@
 }
 
 .create-post:focus-within .create-post__avatar img {
-    border-color: rgba(124, 58, 237, 0.3);
+    border-color: rgba(0, 127, 148, 0.3);
 }
 
 .create-post__form {
@@ -63,7 +63,7 @@
 .create-post__input-wrapper:focus-within {
     background: var(--white);
     border: none;
-    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+    box-shadow: 0 0 0 3px rgba(0, 127, 148, 0.1);
 }
 
 .create-post__title {
@@ -138,7 +138,7 @@
 }
 
 .create-post__editor .ql-toolbar button.ql-active {
-    background: rgba(124, 58, 237, 0.12);
+    background: rgba(0, 127, 148, 0.12);
     color: var(--accent);
 }
 
@@ -250,12 +250,12 @@
 }
 
 .action-btn:hover {
-    background: rgba(124, 58, 237, 0.08);
+    background: rgba(0, 127, 148, 0.08);
     color: var(--accent);
 }
 
 .action-btn.toggle-btn.active {
-    background: rgba(124, 58, 237, 0.12);
+    background: rgba(0, 127, 148, 0.12);
     color: var(--accent);
 }
 
@@ -351,7 +351,7 @@
     border-color: var(--accent);
     background: var(--accent);
     color: var(--white);
-    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.25);
+    box-shadow: 0 2px 8px rgba(0, 127, 148, 0.25);
 }
 
 .option-btn i {
@@ -394,7 +394,7 @@
 
 .tag-input:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08);
+    box-shadow: 0 0 0 3px rgba(0, 127, 148, 0.08);
 }
 
 .tag-input::placeholder {
@@ -419,7 +419,7 @@
 .tag-add-btn:hover {
     background: var(--accent-strong);
     transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 127, 148, 0.3);
 }
 
 .tag-list {
@@ -649,7 +649,7 @@
 
 .submit-btn:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.35);
+    box-shadow: 0 4px 20px rgba(0, 127, 148, 0.35);
 }
 
 .submit-btn:active:not(:disabled) {

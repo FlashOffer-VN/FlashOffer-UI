@@ -1,12 +1,54 @@
-import { Component } from '@angular/core';
+// shared/components/layouts/user-layout/user-layout.component.ts
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
+import { Subscription } from 'rxjs';
+
+import { UserSidebarComponent } from './user-sidebar/user-sidebar.component';
+import { UserHeaderComponent } from './user-header/user-header.component';
+import { AppService } from '../../../../core/services/app.service';
 
 @Component({
-  selector: 'app-user-layout',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet],
-  template: `<router-outlet></router-outlet>`,
-  styleUrls: ['./user-layout.component.css']
+    selector: 'app-user-layout',
+    standalone: true,
+    imports: [
+        CommonModule,
+        RouterOutlet,
+        UserSidebarComponent,
+        UserHeaderComponent
+    ],
+    templateUrl: './user-layout.component.html',
+    styleUrls: ['./user-layout.component.css']
 })
-export class UserLayoutComponent {}
+export class UserLayoutComponent implements OnInit, OnDestroy {
+    isSidebarOpen = true;
+    logoPath = 'logo-full-vn.svg';
+    private langSubscription: Subscription | null = null;
+
+    constructor(private _appService: AppService) { }
+
+    ngOnInit(): void {
+        this.updateLogo();
+
+        this.langSubscription = this._appService.onLanguageChange().subscribe(() => {
+            this.updateLogo();
+        });
+    }
+
+    private updateLogo(): void {
+        const lang = this._appService.getCurrentLang();
+        this.logoPath = lang === 'en'
+            ? 'logo-full-en.svg'
+            : 'logo-full-vn.svg';
+    }
+
+    toggleSidebar(): void {
+        this.isSidebarOpen = !this.isSidebarOpen;
+    }
+
+    ngOnDestroy(): void {
+        if (this.langSubscription) {
+            this.langSubscription.unsubscribe();
+        }
+    }
+}

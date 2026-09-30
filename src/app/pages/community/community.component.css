@@ -32,7 +32,7 @@
 
 .community-badge {
     display: inline-block;
-    background: rgba(139, 92, 246, 0.1);
+    background: rgba(36, 199, 215, 0.1);
     color: var(--accent-subtle);
     font-size: 13px;
     font-weight: 600;
@@ -77,7 +77,7 @@
 .btn-primary:hover {
     background: var(--accent);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 8px 24px rgba(36, 199, 215, 0.3);
 }
 
 .btn-secondary {
@@ -304,7 +304,7 @@
 .community-cta .btn-cta:hover {
     background: var(--accent);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 8px 24px rgba(36, 199, 215, 0.3);
 }
 
 /* ===== Responsive ===== */

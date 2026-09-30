@@ -242,21 +242,30 @@ export class StringHelper {
     // ==================== MASK / ẨN DỮ LIỆU ====================
 
     static maskEmail(value: string | null | undefined): string {
-        if (StringHelper.isNullOrWhitespace(value)) return '';
-        const [username, domain] = value!.split('@');
-        if (!domain) return value!;
-        const maskedUsername = username.length <= 2
-            ? username
-            : username.substring(0, 2) + '*'.repeat(Math.min(username.length - 2, 4));
-        return `${maskedUsername}@${domain}`;
+        if (StringHelper.isNullOrWhitespace(value)) return '***';
+        const email = value!.trim();
+        const at = email.indexOf('@');
+        return at <= 1 ? '***' : `${email.charAt(0)}***${email.substring(at)}`;
     }
 
     static maskPhone(value: string | null | undefined): string {
-        if (StringHelper.isNullOrWhitespace(value)) return '';
-        if (value!.length <= 4) return value!;
-        const start = value!.substring(0, 3);
-        const end = value!.substring(value!.length - 3);
-        return `${start}****${end}`;
+        if (StringHelper.isNullOrWhitespace(value)) return '***';
+        const phone = value!.trim();
+        if (phone.length < 7) return '***';
+        return `${phone.substring(0, 3)}***${phone.substring(phone.length - 3)}`;
+    }
+
+    static maskName(value: string | null | undefined): string {
+        if (StringHelper.isNullOrWhitespace(value)) return '***';
+
+        const parts = value!.trim().split(/\s+/);
+        const first = parts[0] ?? '';
+        const last = parts[parts.length - 1] ?? '';
+
+        if (parts.length === 1) return first;
+        if (parts.length === 2) return `${first} ${(last.charAt(0) || '').toUpperCase()}.`;
+
+        return `${first} *** ${last}`;
     }
 
     static mask(value: string | null | undefined, visibleStart: number = 2, visibleEnd: number = 2): string {

@@ -18,6 +18,9 @@ import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.
 
 import { GroupPostType } from '@core/models/business-group.model';
 import { ShareToGroupComponent } from '@shared/components/share-to-group/share-to-group.component';
+import { AppDatePipe } from '@shared/pipes/app-date.pipe';
+import { AppPricePipe } from '@shared/pipes/app-price.pipe';
+import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 
 @Component({
     selector: 'app-admin-group-buying-list',
@@ -26,7 +29,11 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
         CommonModule, RouterModule, FormsModule, TranslateModule,
         ButtonComponent, InputComponent, LoadingComponent, PaginationComponent,
         BadgeComponent, StatusTabsComponent,
-        ShareToGroupComponent,],
+        ShareToGroupComponent,
+        AppDatePipe,
+        AppPricePipe,
+        ShortIdPipe
+    ],
     templateUrl: './group-buying-list.component.html',
     styleUrls: ['./group-buying-list.component.css']
 })
@@ -131,20 +138,6 @@ export class AdminGroupBuyingListComponent implements OnInit {
             [GroupBuyingStatus.CANCELLED]: 'GROUP_BUYING.STATUS.CANCELLED'
         };
         return keys[status] || 'GROUP_BUYING.STATUS.PENDING';
-    }
-
-    formatId(id: string): string {
-        return id.substring(0, 8).toUpperCase();
-    }
-
-    formatDate(dateString: string): string {
-        const date = new Date(dateString);
-        return date.toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-    }
-
-    formatPrice(value?: number | null): string {
-        if (value === undefined || value === null) return '--';
-        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(value);
     }
 
     navigateToDetail(id: string): void {

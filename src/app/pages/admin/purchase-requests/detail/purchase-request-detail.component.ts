@@ -11,6 +11,9 @@ import { ButtonComponent } from '@shared/components/button/button.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
+import { AppDatePipe } from '@shared/pipes/app-date.pipe';
+import { AppPricePipe } from '@shared/pipes/app-price.pipe';
+import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 
 @Component({
     selector: 'app-admin-purchase-request-detail',
@@ -22,7 +25,10 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
         ButtonComponent,
         LoadingComponent,
         BadgeComponent,
-        ModalComponent
+        ModalComponent,
+        AppDatePipe,
+        AppPricePipe,
+        ShortIdPipe
     ],
     templateUrl: './purchase-request-detail.component.html',
     styleUrls: ['./purchase-request-detail.component.css']
@@ -89,31 +95,6 @@ export class AdminPurchaseRequestDetailComponent implements OnInit {
             [PurchaseRequestStatus.COMPLETED]: 'completed'
         };
         return keys[status] || 'pending';
-    }
-
-    formatId(id: string): string {
-        return id.substring(0, 8).toUpperCase();
-    }
-
-    formatDate(dateString?: string): string {
-        if (!dateString) return '--';
-        const date = new Date(dateString);
-        return date.toLocaleString('vi-VN', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    }
-
-    formatPrice(value?: number | null): string {
-        if (value === undefined || value === null) return '--';
-        return new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-            maximumFractionDigits: 0
-        }).format(value);
     }
 
     canMarkContacted(): boolean {

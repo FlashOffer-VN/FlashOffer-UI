@@ -52,8 +52,8 @@ export class PurchaseRequestService {
     }
 
     /**
-     * Lấy danh sách phân trang (Admin)
-     * GET /api/v1/PurchaseRequests?pageNumber=&pageSize=&search=&status=
+     * Lấy danh sách phân trang (admin thấy tất cả, người dùng thường chỉ thấy yêu cầu của chính mình)
+     * GET /api/v1/PurchaseRequests?pageNumber=&pageSize=&search=&status=&mineOnly=
      */
     getData(
         pageNumber = 1,
@@ -61,7 +61,8 @@ export class PurchaseRequestService {
         search = '',
         status?: PurchaseRequestStatus,
         fromDate?: string,
-        toDate?: string
+        toDate?: string,
+        mineOnly?: boolean
     ): Observable<PagedResponse<PurchaseRequest>> {
         // Backend yêu cầu pageSize trong [1, 100]
         pageSize = this.clampPageSize(pageSize);
@@ -75,6 +76,7 @@ export class PurchaseRequestService {
         }
         if (fromDate) params.fromDate = fromDate;
         if (toDate) params.toDate = toDate;
+        if (mineOnly) params.mineOnly = true;
         return this.apiService.get<PagedResponse<PurchaseRequest>>(this.endpoint, params);
     }
 

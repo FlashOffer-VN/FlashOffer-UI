@@ -104,7 +104,7 @@ export class DashboardComponent implements OnInit {
                 key: 'CTV_REGISTRATIONS',
                 label: 'ADMIN.DASHBOARD.CTV_REGISTRATIONS',
                 icon: 'fa-solid fa-user-plus',
-                color: 'purple',
+                color: 'teal',
                 total: s.totalCTVRegistrations,
                 pending: s.pendingCTVRegistrations
             }

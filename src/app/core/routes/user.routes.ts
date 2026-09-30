@@ -21,6 +21,31 @@ export const userRoutes: Routes = [
                 canActivate: [CredentialsGuard],
                 loadComponent: () => import('@pages/profile/profile.component').then(m => m.ProfileComponent)
             },
+            {
+                path: 'my-group-buying',
+                canActivate: [CredentialsGuard],
+                loadComponent: () => import('@pages/user/my-group-buying/my-group-buying.component').then(m => m.MyGroupBuyingPageComponent)
+            },
+            {
+                path: 'my-referral',
+                canActivate: [CredentialsGuard],
+                loadComponent: () => import('@pages/user/my-referral/my-referral.component').then(m => m.MyReferralPageComponent)
+            },
+            {
+                path: 'my-requests',
+                canActivate: [CredentialsGuard],
+                loadComponent: () => import('@pages/user/my-requests/my-requests.component').then(m => m.MyRequestsPageComponent)
+            },
+            {
+                path: 'my-posts',
+                canActivate: [CredentialsGuard],
+                loadComponent: () => import('@pages/user/my-posts/my-posts.component').then(m => m.MyPostsPageComponent)
+            },
+            {
+                path: 'my-groups',
+                canActivate: [CredentialsGuard],
+                loadComponent: () => import('@pages/user/my-groups/my-groups.component').then(m => m.MyGroupsPageComponent)
+            },
         
         ]
     }
