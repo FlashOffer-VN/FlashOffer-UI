@@ -8,6 +8,7 @@ import { AppService } from '@core/services/app.service';
 import { PagedResponse } from '@core/models/paged-response.model';
 import { GetPostsQuery, SocialPost } from '@core/models/social.model';
 
+import { isBrowser } from '@core/utils/platform';
 import { copyToClipboard } from '@core/utils/share-link';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { BadgeComponent } from '@shared/components/badge/badge.component';
@@ -157,7 +158,10 @@ export class MyPostsPageComponent implements OnInit {
     }
 
     sharePost(post: SocialPost): void {
-        copyToClipboard(`${window.location.origin}/social/${post.id}`).then(() => this._appService.showSuccess(this._appService.trans('SOCIAL.SHARE_SUCCESS')));
+        if (isBrowser()) {
+            copyToClipboard(`${window.location.origin}/social/${post.id}`)
+                .then(() => this._appService.showSuccess(this._appService.trans('SOCIAL.SHARE_SUCCESS')));
+        }
 
         this._appService.socialService.sharePost(post.id).subscribe({
             next: () => {
