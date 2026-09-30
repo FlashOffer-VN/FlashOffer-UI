@@ -746,7 +746,8 @@
             "BACK_TO_SITE": "Back to site",
             "LOGOUT": "Logout",
             "MY_REFERRAL": "My referral code",
-            "MY_REQUESTS": "My requests"
+            "MY_REQUESTS": "My requests",
+            "MY_POSTS": "My posts"
         },
         "MY_GROUP_BUYING": {
             "TITLE": "My group buying orders",
@@ -805,6 +806,15 @@
             "EMPTY": "You have not sent any request yet.",
             "EMPTY_HINT": "Requests you send will appear here with their status.",
             "DETAIL_TITLE": "Request detail"
+        },
+        "MY_POSTS": {
+            "TITLE": "My posts",
+            "DESCRIPTION": "Posts you published on the feed, with their approval status.",
+            "CREATE_NEW": "Write a post",
+            "APPROVED": "Approved",
+            "PENDING": "Pending approval",
+            "EMPTY": "You have no posts yet.",
+            "EMPTY_HINT": "Posts you publish on the feed are managed here."
         }
     },
     "REGISTER": {

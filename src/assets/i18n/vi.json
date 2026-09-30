@@ -702,7 +702,8 @@
             "BACK_TO_SITE": "Về trang chủ",
             "LOGOUT": "Đăng xuất",
             "MY_REFERRAL": "Mã chia sẻ của tôi",
-            "MY_REQUESTS": "Yêu cầu của tôi"
+            "MY_REQUESTS": "Yêu cầu của tôi",
+            "MY_POSTS": "Bài viết của tôi"
         },
         "MY_GROUP_BUYING": {
             "TITLE": "Đơn mua chung của tôi",
@@ -761,6 +762,15 @@
             "EMPTY": "Bạn chưa gửi yêu cầu nào.",
             "EMPTY_HINT": "Yêu cầu bạn gửi sẽ được hiển thị tại đây kèm trạng thái xử lý.",
             "DETAIL_TITLE": "Chi tiết yêu cầu"
+        },
+        "MY_POSTS": {
+            "TITLE": "Bài viết của tôi",
+            "DESCRIPTION": "Các bài viết bạn đã đăng trên bảng tin, kèm trạng thái duyệt.",
+            "CREATE_NEW": "Viết bài mới",
+            "APPROVED": "Đã duyệt",
+            "PENDING": "Chờ duyệt",
+            "EMPTY": "Bạn chưa có bài viết nào.",
+            "EMPTY_HINT": "Bài viết bạn đăng trên bảng tin sẽ được quản lý tại đây."
         }
     },
     "REGISTER": {

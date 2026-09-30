@@ -36,6 +36,11 @@ export const userRoutes: Routes = [
                 canActivate: [CredentialsGuard],
                 loadComponent: () => import('@pages/user/my-requests/my-requests.component').then(m => m.MyRequestsPageComponent)
             },
+            {
+                path: 'my-posts',
+                canActivate: [CredentialsGuard],
+                loadComponent: () => import('@pages/user/my-posts/my-posts.component').then(m => m.MyPostsPageComponent)
+            },
         
         ]
     }

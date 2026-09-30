@@ -149,4 +149,8 @@ export interface GetPostsQuery {
     type?: PostType;
     privacy?: PrivacyType;
     tag?: string;
+    /** Chỉ lấy bài viết của chính mình (khu vực thành viên) */
+    mineOnly?: boolean;
+    /** Lọc theo trạng thái duyệt: true = đã duyệt, false = chờ duyệt */
+    isApproved?: boolean;
 }

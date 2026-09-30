@@ -34,6 +34,8 @@ export class SocialService {
         if (query.type) params.type = query.type;
         if (query.privacy) params.privacy = query.privacy;
         if (query.tag) params.tag = query.tag;
+        if (query.mineOnly) params.mineOnly = true;
+        if (query.isApproved !== undefined && query.isApproved !== null) params.isApproved = query.isApproved;
 
         return this._apiService.get<PagedResponse<SocialPost>>(
             `${this._baseSocialUrl}/posts`,
