@@ -734,14 +734,20 @@
         }
     },
     "USER": {
-        "WELCOME_LABEL": "Member area",
         "WELCOME_TITLE": "Welcome back!",
         "WELCOME_DESCRIPTION": "Your account is ready. More member features will be available soon.",
         "USERNAME": "Username",
         "EMAIL": "Email",
         "COMING_SOON": "We are preparing more exciting features for you.",
-        "BACK_HOME": "Back home",
-        "LOGOUT": "Log out"
+        "SIDEBAR": {
+            "PANEL": "Member area",
+            "PROFILE": "My profile",
+            "ACCOUNT": "Account & password",
+            "BACK_TO_SITE": "Back to site",
+            "LOGOUT": "Logout"
+        },
+        "LOGOUT_TITLE": "Sign out of the member area?",
+        "LOGOUT_MESSAGE": "You will need to sign in again to continue."
     },
     "REGISTER": {
         "TITLE": "BECOME A KINDI PARTNER",

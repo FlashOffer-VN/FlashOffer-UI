@@ -1,0 +1,36 @@
+/* shared/components/layouts/user-layout/user-sidebar/user-sidebar.component.css */
+:host {
+    display: block;
+}
+
+.bg-secondary {
+    background-color: var(--text);
+}
+
+.bg-secondary-light {
+    background-color: var(--text-secondary);
+}
+
+.bg-primary {
+    background-color: var(--accent);
+}
+
+.text-gray-300 {
+    color: var(--border-strong);
+}
+
+.text-gray-400 {
+    color: var(--text-subtle);
+}
+
+.text-red-400 {
+    color: #F87171;
+}
+
+.hover\:bg-red-500\/10:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+.hover\:text-red-300:hover {
+    color: #FCA5A5;
+}

@@ -690,14 +690,20 @@
         }
     },
     "USER": {
-        "WELCOME_LABEL": "Khu vực thành viên",
         "WELCOME_TITLE": "Chào mừng bạn trở lại!",
         "WELCOME_DESCRIPTION": "Tài khoản của bạn đã sẵn sàng. Các tính năng dành cho thành viên sẽ được cập nhật sớm.",
         "USERNAME": "Tên đăng nhập",
         "EMAIL": "Email",
         "COMING_SOON": "Chúng tôi đang chuẩn bị thêm nhiều tính năng thú vị cho bạn.",
-        "BACK_HOME": "Về trang chủ",
-        "LOGOUT": "Đăng xuất"
+        "SIDEBAR": {
+            "PANEL": "Khu vực thành viên",
+            "PROFILE": "Hồ sơ của tôi",
+            "ACCOUNT": "Tài khoản & mật khẩu",
+            "BACK_TO_SITE": "Về trang chủ",
+            "LOGOUT": "Đăng xuất"
+        },
+        "LOGOUT_TITLE": "Đăng xuất khỏi khu vực thành viên?",
+        "LOGOUT_MESSAGE": "Bạn sẽ cần đăng nhập lại để tiếp tục sử dụng."
     },
     "REGISTER": {
         "TITLE": "TRỞ THÀNH ĐỐI TÁC KINDI",
