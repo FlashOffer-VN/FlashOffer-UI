@@ -15,7 +15,7 @@ module.exports = {
                     light: '#374151',
                     dark: '#111827',
                 },
-                accent: '#EC4899',
+                accent: '#007f94',
 
                 // Feature - Màu tính năng đặc trưng
                 offer: {
@@ -29,9 +29,9 @@ module.exports = {
                     dark: '#F59E0B',
                 },
                 community: {
-                    DEFAULT: '#8B5CF6',
-                    light: '#A78BFA',
-                    dark: '#7C3AED',
+                    DEFAULT: '#007f94',
+                    light: '#24c7d7',
+                    dark: '#006b80',
                 },
 
                 // Status - Trạng thái

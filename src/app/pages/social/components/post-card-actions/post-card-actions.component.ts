@@ -69,7 +69,7 @@ import { SocialPost } from '@core/models/social.model';
         .action-btn:hover { background: #f3f4f6; }
         .action-btn.liked { color: #EF4444; }
         .action-btn.liked i { animation: heartBeat 0.3s ease; }
-        .action-btn.save-btn.saved { color: #7C3AED; }
+        .action-btn.save-btn.saved { color: var(--primary); }
         @keyframes heartBeat {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.2); }

@@ -150,7 +150,7 @@ import { BusinessGroup } from '@core/models/business-group.model';
             align-items: baseline;
             justify-content: center;
             min-width: 52px;
-            background: #f5f3ff;
+            background: var(--accent-bg);
             border-radius: 8px;
             padding: 6px 8px;
             flex-shrink: 0;
@@ -159,7 +159,7 @@ import { BusinessGroup } from '@core/models/business-group.model';
         .gb-badge-count .current {
             font-size: 18px;
             font-weight: 700;
-            color: #7C3AED;
+            color: var(--primary);
             line-height: 1.1;
         }
 

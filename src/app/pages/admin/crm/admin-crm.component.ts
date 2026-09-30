@@ -9,7 +9,7 @@ import { AppService } from '@core/services/app.service';
 import { isBrowser } from '@core/utils/platform';
 import { CrmDashboardStats, CrmEntityType } from '@core/models/crm.model';
 
-const CHART_PALETTE = ['#7c3aed', '#0891b2', '#16a34a', '#ea580c', '#db2777', '#2563eb'];
+const CHART_PALETTE = ['#007f94', '#7c3aed', '#ea580c', '#16a34a', '#db2777', '#2563eb'];
 
 @Component({
     selector: 'app-admin-crm',
@@ -111,7 +111,7 @@ export class AdminCrmComponent implements OnInit, OnDestroy {
                 key: 'CTV',
                 label: 'ADMIN.CRM.SUMMARY_CTV',
                 icon: 'fa-solid fa-user-plus',
-                color: 'purple',
+                color: 'teal',
                 total: s.totalCtvRegistrations,
                 pending: s.pendingCtvRegistrations,
                 showPending: true

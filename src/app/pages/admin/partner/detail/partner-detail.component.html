@@ -190,7 +190,7 @@
                 </app-button>
             </div>
 
-            <app-product-list [products]="partner.products || []" [colorRole]="'admin'" [editable]="true"
+            <app-product-list [products]="partner.products || []" [editable]="true"
                 [isActionLoading]="isActionLoading" (edit)="openEditProduct($event)"
                 (delete)="onDeleteProduct($event)">
             </app-product-list>

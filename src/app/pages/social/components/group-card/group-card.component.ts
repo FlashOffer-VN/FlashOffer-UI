@@ -41,7 +41,7 @@ import { SocialGroup } from '@core/models/social.model';
             position: relative;
             display: inline-block;
             font-size: 40px;
-            color: #7C3AED;
+            color: var(--primary);
             margin-bottom: 12px;
         }
         .group-card__icon .private-badge {
@@ -80,17 +80,17 @@ import { SocialGroup } from '@core/models/social.model';
         .group-card__stats i { margin-right: 4px; }
         .join-btn {
             padding: 6px 24px;
-            border: 1px solid #7C3AED;
+            border: 1px solid var(--primary);
             border-radius: 999px;
             background: transparent;
-            color: #7C3AED;
+            color: var(--primary);
             font-size: 13px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
         }
         .join-btn:hover {
-            background: #7C3AED;
+            background: var(--primary);
             color: white;
         }
         .join-btn.joined {

@@ -104,7 +104,6 @@ export class AuthService {
                     const user = response.data;
                     storageSet('user', JSON.stringify(user));
                     this.currentUserSubject.next(user);
-                    this.setBodyRoleClass(user.role);
                 }
             })
         );
@@ -153,7 +152,6 @@ export class AuthService {
         storageRemove('refreshToken');
         storageRemove('user');
         this.currentUserSubject.next(null);
-        this.clearBodyRoleClass();
         this.stopRefreshTokenTimer();
     }
 
@@ -221,7 +219,6 @@ export class AuthService {
 
         storageSet('user', JSON.stringify(user));
         this.currentUserSubject.next(user);
-        this.setBodyRoleClass(user.role);
         this.startRefreshTokenTimer();
 
         this.redirectAfterLogin(user, isAdmin);
@@ -285,7 +282,6 @@ export class AuthService {
 
         storageSet('user', JSON.stringify(user));
         this.currentUserSubject.next(user);
-        this.setBodyRoleClass(user.role);
     }
 
     /**
@@ -299,7 +295,6 @@ export class AuthService {
             try {
                 const user = JSON.parse(userStr) as User;
                 this.currentUserSubject.next(user);
-                this.setBodyRoleClass(user.role);
                 if (this.getToken()) {
                     this.startRefreshTokenTimer();
                 }
@@ -322,26 +317,4 @@ export class AuthService {
         return String(role);
     }
 
-    /**
-     * Set class cho body dựa trên role
-     */
-    private setBodyRoleClass(role: string | UserRole): void {
-        if (!isBrowser()) return;
-        this.clearBodyRoleClass();
-        const roleStr = this.normalizeRole(role);
-
-        if (roleStr === UserRole.ADMIN || roleStr === 'Admin' || roleStr === 'admin') {
-            document.body.classList.add('admin-role');
-        } else if (roleStr === UserRole.USER || roleStr === 'User' || roleStr === 'user') {
-            document.body.classList.add('user-role');
-        }
-    }
-
-    /**
-     * Xóa class role trên body
-     */
-    private clearBodyRoleClass(): void {
-        if (!isBrowser()) return;
-        document.body.classList.remove('admin-role', 'user-role');
-    }
 }

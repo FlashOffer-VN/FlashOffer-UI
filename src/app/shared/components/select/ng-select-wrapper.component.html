@@ -1,7 +1,6 @@
 <!-- select/ng-select-wrapper.component.html -->
 
-<div class="ng-select-wrapper" [style.--select-primary]="primaryColorFinal || undefined"
-    [style.--select-primary-dark]="primaryDarkFinal || undefined">
+<div class="ng-select-wrapper">
 
     @if (label) {
     <label [for]="id" class="ng-select-wrapper__label">
@@ -15,9 +14,7 @@
     <ng-select [id]="id" [items]="items" bindLabel="label" bindValue="value" [(ngModel)]="value"
         (ngModelChange)="onValueChange($event)" (blur)="onBlur()" [placeholder]="placeholder" [disabled]="disabled"
         [required]="required" [searchable]="searchable" [clearable]="clearable" [closeOnSelect]="closeOnSelect"
-        [appendTo]="appendTo || ''" dropdownPosition="bottom" [class.is-invalid]="showInvalid" (open)="onOpen()"
-        (close)="onClose()" [style.--select-primary]="primaryColorFinal || undefined"
-        [style.--select-primary-dark]="primaryDarkFinal || undefined">
+        [appendTo]="appendTo || ''" dropdownPosition="bottom" [class.is-invalid]="showInvalid">
     </ng-select>
 
     @if (showInvalid && errorMessage) {

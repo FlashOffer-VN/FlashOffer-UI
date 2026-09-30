@@ -74,7 +74,7 @@
 /* ✅ Focus state */
 .app-input__control:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+    box-shadow: 0 0 0 4px rgba(0, 127, 148, 0.1);
 }
 
 /* ✅ Invalid state */

@@ -25,7 +25,7 @@
     left: -20%;
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.03) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(36, 199, 215, 0.03) 0%, transparent 70%);
     pointer-events: none;
     z-index: 0;
 }
@@ -299,7 +299,7 @@
 }
 
 .connect-card--offer::before {
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.06), transparent 60%);
+    background: radial-gradient(circle, rgba(36, 199, 215, 0.06), transparent 60%);
 }
 
 .connect-card--groups::before {
@@ -341,7 +341,7 @@
 
 .connect-card--offer:hover {
     border-color: var(--accent-subtle);
-    box-shadow: 0 16px 48px rgba(139, 92, 246, 0.10);
+    box-shadow: 0 16px 48px rgba(36, 199, 215, 0.10);
 }
 
 .connect-card--groups:hover {
@@ -373,7 +373,7 @@
 }
 
 .connect-card--offer .connect-card__icon-wrapper {
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(139, 92, 246, 0.04));
+    background: linear-gradient(135deg, rgba(36, 199, 215, 0.12), rgba(36, 199, 215, 0.04));
     color: var(--accent-subtle);
 }
 

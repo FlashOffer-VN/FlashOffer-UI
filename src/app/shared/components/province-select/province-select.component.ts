@@ -14,7 +14,7 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
  * ```html
  * <app-province-select formControlName="companyAddress" [required]="true"
  *     [isInvalid]="isFieldInvalid('companyAddress')"
- *     [errorMessage]="getErrorMessage('companyAddress')" [colorRole]="'admin'">
+ *     [errorMessage]="getErrorMessage('companyAddress')">
  * </app-province-select>
  * ```
  *
@@ -62,12 +62,6 @@ export class ProvinceSelectComponent implements ControlValueAccessor, OnInit {
 
     /** body | '.selector' | null */
     @Input() appendTo: string | null = 'body';
-
-    @Input() colorRole: 'default' | 'admin' | 'user' | 'custom' = 'default';
-
-    @Input() primaryColor = '';
-
-    @Input() primaryDark = '';
 
     provinces: ProvinceOption[] = [];
 

@@ -149,7 +149,7 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
         .gb-price .value {
             font-size: 16px;
             font-weight: 700;
-            color: #7c3aed;
+            color: var(--primary);
         }
 
         .bar {
@@ -161,7 +161,7 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
 
         .bar .fill {
             height: 100%;
-            background: linear-gradient(90deg, #7c3aed, #a855f7);
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
             border-radius: 999px;
             transition: width 0.3s ease;
         }
@@ -220,7 +220,7 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
 
         .join-btn {
             border: none;
-            background: #7c3aed;
+            background: var(--primary);
             color: white;
             font-size: 13px;
             font-weight: 600;
@@ -231,7 +231,7 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
             white-space: nowrap;
         }
 
-        .join-btn:hover { background: #6d28d9; }
+        .join-btn:hover { background: var(--primary-dark); }
         .join-btn.disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
 
         @media (max-width: 480px) {

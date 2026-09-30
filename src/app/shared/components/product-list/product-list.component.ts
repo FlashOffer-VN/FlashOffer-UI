@@ -78,8 +78,6 @@ export class ProductListComponent implements OnInit {
     @Input() isActionLoading = false;
 
     /** Màu cho app-ng-select-wrapper: 'admin' | 'user' | 'default' | 'custom'. */
-    @Input() colorRole: 'default' | 'admin' | 'user' | 'custom' = 'admin';
-
     /** Phát khi bấm nút sửa một sản phẩm. */
     @Output() edit = new EventEmitter<PartnerProduct>();
 
