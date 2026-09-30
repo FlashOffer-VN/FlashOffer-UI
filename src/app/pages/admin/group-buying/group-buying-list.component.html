@@ -64,9 +64,9 @@
                             <td class="px-4 py-3 text-sm text-gray-500">{{ (pageNumber - 1) * pageSize + i + 1 }}</td>
                             <td class="px-4 py-3">
                                 <div class="text-sm font-medium text-gray-900">{{ request.productName }}</div>
-                                <div class="text-xs text-gray-400">#{{ request.groupBuyingRequestCode || formatId(request.id) }}</div>
+                                <div class="text-xs text-gray-400">#{{ request.groupBuyingRequestCode || (request.id | shortId) }}</div>
                             </td>
-                            <td class="px-4 py-3 text-sm text-gray-700">{{ formatPrice(request.targetPrice) }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-700">{{ request.targetPrice | appPrice }}</td>
                             <td class="px-4 py-3 text-sm text-gray-700">
                                 <span class="font-semibold text-primary">{{ request.currentPeopleCount }}</span>
                                 / {{ request.targetPeopleCount }}

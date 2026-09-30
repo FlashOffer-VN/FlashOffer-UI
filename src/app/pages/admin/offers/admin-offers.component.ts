@@ -16,6 +16,7 @@ import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.com
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
+import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 
 @Component({
     selector: 'app-admin-offers',
@@ -32,7 +33,8 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
         BadgeComponent,
         StatusTabsComponent,
         NgxFilterDaterangeComponent,
-        AppDatePipe
+        AppDatePipe,
+        ShortIdPipe
     ],
     templateUrl: './admin-offers.component.html',
     styleUrls: ['./admin-offers.component.css']
@@ -206,18 +208,6 @@ export class AdminOffersComponent implements OnInit {
             [OfferStatus.EXPIRED]: 'expired'
         };
         return keys[status] || 'pending';
-    }
-
-    formatId(id: string): string {
-        return id.substring(0, 8).toUpperCase();
-    }
-
-    formatPrice(value: number): string {
-        return new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-            maximumFractionDigits: 0
-        }).format(value);
     }
 
     navigateToDetail(id: string): void {

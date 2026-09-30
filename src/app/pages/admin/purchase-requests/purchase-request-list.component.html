@@ -87,7 +87,7 @@
                                 {{ (pageNumber - 1) * pageSize + i + 1 }}
                             </td>
                             <td class="px-4 py-3 text-sm font-mono text-gray-600">
-                                {{ request.purchaseRequestCode || formatId(request.id) }}
+                                {{ request.purchaseRequestCode || (request.id | shortId) }}
                             </td>
                             <td class="px-4 py-3 text-sm font-medium text-gray-900">
                                 {{ request.productName }}

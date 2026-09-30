@@ -22,6 +22,7 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
 import { GroupPostType } from '@core/models/business-group.model';
 import { ShareToGroupComponent } from '@shared/components/share-to-group/share-to-group.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
+import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 
 @Component({
     selector: 'app-admin-group-buying-detail',
@@ -30,7 +31,8 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
         CommonModule, FormsModule, RouterModule, TranslateModule,
         ButtonComponent, LoadingComponent, BadgeComponent, ModalComponent,
         ShareToGroupComponent,
-        AppDatePipe
+        AppDatePipe,
+        AppPricePipe
     ],
     templateUrl: './group-buying-detail.component.html',
     styleUrls: ['./group-buying-detail.component.css']
@@ -233,11 +235,6 @@ export class AdminGroupBuyingDetailComponent implements OnInit {
             [GroupBuyingStatus.CANCELLED]: 'GROUP_BUYING.STATUS.CANCELLED'
         };
         return status ? (keys[status] || '') : '';
-    }
-
-    formatPrice(value?: number | null): string {
-        if (value === undefined || value === null) return '--';
-        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(value);
     }
 
     percent(): number {

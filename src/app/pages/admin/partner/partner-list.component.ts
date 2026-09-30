@@ -204,10 +204,6 @@ export class AdminPartnerListComponent implements OnInit {
         return this.businessTypeKeys[type] || type.toString();
     }
 
-    formatId(id: string): string {
-        return id.substring(0, 8).toUpperCase();
-    }
-
     navigateToDetail(id: string): void {
         this._router.navigate(['/admin/partner', id]);
     }

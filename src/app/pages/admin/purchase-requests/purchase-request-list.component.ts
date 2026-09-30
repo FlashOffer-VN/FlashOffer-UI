@@ -19,6 +19,7 @@ import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange
 import { GroupPostType } from '@core/models/business-group.model';
 import { ShareToGroupComponent } from '@shared/components/share-to-group/share-to-group.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
+import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 
 @Component({
     selector: 'app-admin-purchase-request-list',
@@ -36,7 +37,8 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
         StatusTabsComponent,
         NgxFilterDaterangeComponent,
         ShareToGroupComponent,
-        AppDatePipe
+        AppDatePipe,
+        ShortIdPipe
     ],
     templateUrl: './purchase-request-list.component.html',
     styleUrls: ['./purchase-request-list.component.css']
@@ -166,19 +168,6 @@ export class AdminPurchaseRequestListComponent implements OnInit {
             [PurchaseRequestStatus.COMPLETED]: 'completed'
         };
         return keys[status] || 'pending';
-    }
-
-    formatId(id: string): string {
-        return id.substring(0, 8).toUpperCase();
-    }
-
-    formatPrice(value?: number | null): string {
-        if (value === undefined || value === null) return '--';
-        return new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-            maximumFractionDigits: 0
-        }).format(value);
     }
 
     navigateToDetail(id: string): void {

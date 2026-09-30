@@ -23,7 +23,7 @@
                         <app-badge [status]="getStatusKey(offer.status)" size="lg"></app-badge>
                     </div>
                     <div class="flex flex-wrap gap-x-6 gap-y-1 mt-1 text-sm text-gray-500">
-                        <span><i class="fa-solid fa-tag w-4"></i> {{ offer.offerRequestCode || formatId(offer.id) }}</span>
+                        <span><i class="fa-solid fa-tag w-4"></i> {{ offer.offerRequestCode || (offer.id | shortId) }}</span>
                         <span><i class="fa-solid fa-phone w-4"></i> {{ offer.phone }}</span>
                         <span><i class="fa-solid fa-envelope w-4"></i> {{ offer.email || '--' }}</span>
                         <span><i class="fa-regular fa-calendar w-4"></i> {{ offer.createdAt | appDate }}</span>
@@ -61,12 +61,12 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.OFFERS.CURRENT_PRICE' |
                     translate }}</p>
-                <p class="text-lg font-semibold text-gray-900 mt-1">{{ formatPrice(offer.currentPrice) }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ offer.currentPrice | appPrice }}</p>
             </div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.OFFERS.EXPECTED_PRICE'
                     | translate }}</p>
-                <p class="text-lg font-semibold text-gray-900 mt-1">{{ formatPrice(offer.expectedPrice) }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ offer.expectedPrice | appPrice }}</p>
             </div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.OFFERS.QUANTITY' |
@@ -105,11 +105,11 @@
                     </div>
                     <div class="flex justify-between py-2 border-b border-gray-50">
                         <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.CURRENT_PRICE' | translate }}</span>
-                        <span class="text-sm font-medium text-gray-900">{{ formatPrice(offer.currentPrice) }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ offer.currentPrice | appPrice }}</span>
                     </div>
                     <div class="flex justify-between py-2 border-b border-gray-50">
                         <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.EXPECTED_PRICE' | translate }}</span>
-                        <span class="text-sm font-medium text-gray-900">{{ formatPrice(offer.expectedPrice) }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ offer.expectedPrice | appPrice }}</span>
                     </div>
                     <div class="flex justify-between py-2 border-b border-gray-50">
                         <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.QUANTITY' | translate }}</span>

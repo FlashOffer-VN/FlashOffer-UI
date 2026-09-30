@@ -15,6 +15,8 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
 import { GroupPostType } from '@core/models/business-group.model';
 import { ShareToGroupComponent } from '@shared/components/share-to-group/share-to-group.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
+import { AppPricePipe } from '@shared/pipes/app-price.pipe';
+import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 
 @Component({
     selector: 'app-admin-offer-detail',
@@ -28,7 +30,9 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
         BadgeComponent,
         ModalComponent,
         ShareToGroupComponent,
-        AppDatePipe
+        AppDatePipe,
+        AppPricePipe,
+        ShortIdPipe
     ],
     templateUrl: './offer-detail.component.html',
     styleUrls: ['./offer-detail.component.css']
@@ -101,19 +105,6 @@ export class AdminOfferDetailComponent implements OnInit {
             [OfferStatus.EXPIRED]: 'expired'
         };
         return keys[status] || 'pending';
-    }
-
-    formatId(id: string): string {
-        return id.substring(0, 8).toUpperCase();
-    }
-
-    formatPrice(value?: number | null): string {
-        if (value === undefined || value === null) return '--';
-        return new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-            maximumFractionDigits: 0
-        }).format(value);
     }
 
     canApprove(): boolean {
