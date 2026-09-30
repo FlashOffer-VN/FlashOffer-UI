@@ -700,7 +700,8 @@
             "MY_GROUP_BUYING": "Đơn mua chung của tôi",
             "ACCOUNT": "Tài khoản & mật khẩu",
             "BACK_TO_SITE": "Về trang chủ",
-            "LOGOUT": "Đăng xuất"
+            "LOGOUT": "Đăng xuất",
+            "MY_REFERRAL": "Mã chia sẻ của tôi"
         },
         "MY_GROUP_BUYING": {
             "TITLE": "Đơn mua chung của tôi",
@@ -717,7 +718,27 @@
             "CREATE_NEW": "Tạo đơn mua chung"
         },
         "LOGOUT_TITLE": "Đăng xuất khỏi khu vực thành viên?",
-        "LOGOUT_MESSAGE": "Bạn sẽ cần đăng nhập lại để tiếp tục sử dụng."
+        "LOGOUT_MESSAGE": "Bạn sẽ cần đăng nhập lại để tiếp tục sử dụng.",
+        "MY_REFERRAL": {
+            "TITLE": "Mã chia sẻ của tôi",
+            "DESCRIPTION": "Chia sẻ mã hoặc đường dẫn dưới đây. Bản ghi phát sinh từ link của bạn sẽ được ghi nhận người giới thiệu.",
+            "CODE_LABEL": "Mã chia sẻ",
+            "CODE_HINT": "Mã riêng của tài khoản bạn, dùng để gắn vào link chia sẻ (?ref=...).",
+            "LINK_LABEL": "Đường dẫn chia sẻ",
+            "LINK_HINT": "Người mở đường dẫn này rồi tạo đơn, gửi yêu cầu hoặc tham gia nhóm thì hệ thống ghi nhận cho bạn.",
+            "COPY_CODE": "Sao chép mã",
+            "COPY_LINK": "Sao chép đường dẫn",
+            "COPY_CODE_SUCCESS": "Đã sao chép mã chia sẻ",
+            "COPY_LINK_SUCCESS": "Đã sao chép đường dẫn chia sẻ",
+            "EMPTY": "Chưa lấy được mã chia sẻ, vui lòng thử lại sau.",
+            "USED_TITLE": "Mã chia sẻ được ghi nhận khi nào",
+            "USED_DESCRIPTION": "Mã của bạn được lưu trên bản ghi khi người dùng đến từ link chia sẻ của bạn:",
+            "USED_GROUP_BUYING_CREATE": "Mở đơn mua chung mới",
+            "USED_GROUP_BUYING_JOIN": "Tham gia một đơn mua chung",
+            "USED_PURCHASE_REQUEST": "Gửi yêu cầu tìm nhà cung cấp",
+            "USED_OFFER_REQUEST": "Gửi yêu cầu nhận offer",
+            "USED_GROUP_POST": "Bài viết chia sẻ vào nhóm ngành / hội nhóm"
+        }
     },
     "REGISTER": {
         "TITLE": "TRỞ THÀNH ĐỐI TÁC KINDI",

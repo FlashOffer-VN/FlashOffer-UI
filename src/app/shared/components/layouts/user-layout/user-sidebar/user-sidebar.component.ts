@@ -19,6 +19,7 @@ export class UserSidebarComponent {
     menuItems: MenuItem[] = [
         { path: '/user/profile', icon: 'fa-solid fa-id-card', label: 'USER.SIDEBAR.PROFILE' },
         { path: '/user/my-group-buying', icon: 'fa-solid fa-people-group', label: 'USER.SIDEBAR.MY_GROUP_BUYING' },
+        { path: '/user/my-referral', icon: 'fa-solid fa-share-nodes', label: 'USER.SIDEBAR.MY_REFERRAL' },
         { path: '/user/change-credentials', icon: 'fa-solid fa-key', label: 'USER.SIDEBAR.ACCOUNT' },
         { path: '/', icon: 'fa-solid fa-house', label: 'USER.SIDEBAR.BACK_TO_SITE' },
     ];

@@ -26,6 +26,11 @@ export const userRoutes: Routes = [
                 canActivate: [CredentialsGuard],
                 loadComponent: () => import('@pages/user/my-group-buying/my-group-buying.component').then(m => m.MyGroupBuyingPageComponent)
             },
+            {
+                path: 'my-referral',
+                canActivate: [CredentialsGuard],
+                loadComponent: () => import('@pages/user/my-referral/my-referral.component').then(m => m.MyReferralPageComponent)
+            },
         
         ]
     }
