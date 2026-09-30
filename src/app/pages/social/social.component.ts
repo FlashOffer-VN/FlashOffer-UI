@@ -3,14 +3,10 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { QUILL_MODULES } from '@core/configs/quill.config';
-import { apiOrigin } from '@shared/pipes/media-url.pipe';
-import { QuillModule } from 'ngx-quill';
 import { AppService } from '@core/services/app.service';
 import { SocialPost, SocialMember, SocialGroup } from '@core/models/social.model';
 import { BusinessGroup, BusinessGroupType, GroupApprovalStatus } from '@core/models/business-group.model';
 import { GroupBuyingFeedItem } from '@core/models/group-buying-request.model';
-import { PostType, PrivacyType } from '@core/models/social.model';
 import { UserRole } from '@core/models/auth.model';
 import { User } from '@core/models/auth.model';
 import { isBrowser } from '@core/utils/platform';
@@ -18,6 +14,7 @@ import { isBrowser } from '@core/utils/platform';
 import { SocialHeaderComponent } from './components/social-header/social-header.component';
 import { CreatePostComponent } from './components/create-post/create-post.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
+import { PostEditModalComponent } from './components/post-edit-modal/post-edit-modal.component';
 import { TrendingTopicsComponent } from './components/trending-topics/trending-topics.component';
 import { SocialSidebarComponent } from './components/social-sidebar/social-sidebar.component';
 import { GroupBuyingCardComponent } from './components/group-buying-card/group-buying-card.component';
@@ -35,7 +32,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
     selector: 'app-social',
     standalone: true,
     imports: [
-        CommonModule, FormsModule, TranslateModule, QuillModule, SocialHeaderComponent, CreatePostComponent, PostCardComponent, 
+        CommonModule, FormsModule, TranslateModule, SocialHeaderComponent, CreatePostComponent, PostCardComponent, PostEditModalComponent, 
         TrendingTopicsComponent, SocialSidebarComponent, GroupBuyingCardComponent, GroupBuyingDetailModalComponent, MemberCardComponent,
         ReactiveFormsModule,
         InputComponent,
@@ -92,34 +89,8 @@ export class SocialComponent implements OnInit, AfterViewInit {
     private _pendingPostId: string | null = null;
     private _isInitialized = false;
 
-    // Edit Modal
-    showEditModal = false;
-    isSaving = false;
-    editingPostId: string | null = null;
-    editTagInput = '';
-    editorKey = 0;
-    showQuillEditor = true;
-
-    editPostData: Partial<SocialPost> & {
-        type?: PostType;
-        privacy?: PrivacyType;
-    } = {};
-
-    readonly editorConfig = QUILL_MODULES;
-
-    // Options for edit modal
-    readonly postTypes = [
-        { value: PostType.Post, label: 'SOCIAL.TYPE_POST', icon: 'fa-file-alt' },
-        { value: PostType.Question, label: 'SOCIAL.TYPE_QUESTION', icon: 'fa-question-circle' },
-        { value: PostType.Event, label: 'SOCIAL.TYPE_EVENT', icon: 'fa-calendar' },
-        { value: PostType.Announcement, label: 'SOCIAL.TYPE_ANNOUNCEMENT', icon: 'fa-bullhorn' }
-    ];
-
-    readonly privacyOptions = [
-        { value: PrivacyType.Public, label: 'SOCIAL.PRIVACY_PUBLIC', icon: 'fa-globe' },
-        { value: PrivacyType.Friends, label: 'SOCIAL.PRIVACY_FRIENDS', icon: 'fa-user-friends' },
-        { value: PrivacyType.Private, label: 'SOCIAL.PRIVACY_PRIVATE', icon: 'fa-lock' }
-    ];
+    // Bài đang sửa trong modal sửa bài viết
+    editingPost: SocialPost | null = null;
 
     ngAfterViewInit(): void {
         this._isInitialized = true;
@@ -222,42 +193,6 @@ export class SocialComponent implements OnInit, AfterViewInit {
     /**
      * Tab "Hội nhóm": hội đã được admin duyệt + hội của chính mình (kèm trạng thái chờ duyệt / bị từ chối).
      */
-
-    /**
-     * Nút "chèn ảnh" trong Quill của bảng tin: upload ảnh lên API rồi chèn URL tuyệt đối vào bài viết
-     * (không nhồi base64 vào nội dung — tránh vượt giới hạn ký tự của API).
-     */
-    onEditorCreated(quill: any): void {
-        quill?.getModule('toolbar')?.addHandler('image', () => this.pickAndUploadImage(quill));
-    }
-
-    private pickAndUploadImage(quill: any): void {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'image/*';
-
-        input.onchange = () => {
-            const file = input.files?.[0];
-            if (!file) return;
-
-            this._appService.socialService.uploadImage(file, file.name).subscribe({
-                next: (result: { url: string }) => {
-                    if (!result?.url) {
-                        this._appService.showError(this._appService.trans('SOCIAL.IMAGE_UPLOAD_FAILED'));
-                        return;
-                    }
-
-                    const range = quill.getSelection(true);
-                    const index = range?.index ?? 0;
-                    quill.insertEmbed(index, 'image', `${apiOrigin()}${result.url}`, 'user');
-                    quill.setSelection(index + 1);
-                },
-                error: () => this._appService.showError(this._appService.trans('SOCIAL.IMAGE_UPLOAD_FAILED'))
-            });
-        };
-
-        input.click();
-    }
 
     loadClubs(): void {
         this.clubsLoading = true;
@@ -471,127 +406,18 @@ export class SocialComponent implements OnInit, AfterViewInit {
         post.isExpanded = !post.isExpanded;
     }
 
-    // ===== EDIT MODAL =====
+    // ===== MODAL SỬA BÀI VIẾT =====
     openEditModal(post: SocialPost): void {
         if (!this.canEditPost(post)) {
             this._appService.showWarning(this._appService.trans('SOCIAL.NO_PERMISSION'));
             return;
         }
-        this.editingPostId = post.id;
-        this.editPostData = {
-            title: post.title || '',
-            content: post.content,
-            tags: [...post.tags],
-            type: post.type,
-            privacy: post.privacy
-        };
-        this.editTagInput = '';
-        this.showEditModal = true;
-        // Force re-render quill
-        this.showQuillEditor = false;
-        setTimeout(() => {
-            this.showQuillEditor = true;
-        }, 0);
+        this.editingPost = post;
     }
 
-    closeEditModal(): void {
-        this.showEditModal = false;
-        this.editPostData = {};
-        this.editTagInput = '';
-        this.editingPostId = null;
-        this.isSaving = false;
-        // Reset quill
-        this.showQuillEditor = true;
-    }
-
-    selectEditType(type: PostType): void {
-        this.editPostData.type = type;
-    }
-
-    selectEditPrivacy(privacy: PrivacyType): void {
-        this.editPostData.privacy = privacy;
-    }
-
-    getEditTypeLabel(type: PostType): string {
-        const found = this.postTypes.find(t => t.value === type);
-        return found ? found.label : 'SOCIAL.TYPE_POST';
-    }
-
-    getEditPrivacyLabel(privacy: PrivacyType): string {
-        const found = this.privacyOptions.find(p => p.value === privacy);
-        return found ? found.label : 'SOCIAL.PRIVACY_PUBLIC';
-    }
-
-    getEditPrivacyIcon(privacy: PrivacyType): string {
-        const found = this.privacyOptions.find(p => p.value === privacy);
-        return found ? found.icon : 'fa-globe';
-    }
-
-    addEditTag(): void {
-        const tag = this.editTagInput.trim().replace(/^#/, '').toLowerCase();
-        if (!tag) {
-            this._appService.showWarning(this._appService.trans('SOCIAL.TAG_EMPTY'));
-            return;
-        }
-        if (tag.length > 20) {
-            this._appService.showWarning(this._appService.trans('SOCIAL.TAG_TOO_LONG'));
-            return;
-        }
-        if (this.editPostData.tags && this.editPostData.tags.length >= 5) {
-            this._appService.showWarning(this._appService.trans('SOCIAL.TAG_MAX'));
-            return;
-        }
-        if (this.editPostData.tags?.includes(tag)) {
-            this._appService.showWarning(this._appService.trans('SOCIAL.TAG_EXISTS'));
-            return;
-        }
-        if (!this.editPostData.tags) {
-            this.editPostData.tags = [];
-        }
-        this.editPostData.tags.push(tag);
-        this.editTagInput = '';
-    }
-
-    removeEditTag(index: number): void {
-        if (this.editPostData.tags) {
-            this.editPostData.tags.splice(index, 1);
-        }
-    }
-
-    saveEditPost(): void {
-        if (!this.editingPostId) return;
-
-        const content = this.editPostData.content || '';
-        if (!content.replace(/<[^>]*>/g, '').trim()) {
-            this._appService.showWarning(this._appService.trans('SOCIAL.CONTENT_REQUIRED'));
-            return;
-        }
-
-        this.isSaving = true;
-        const updateData = {
-            title: this.editPostData.title?.trim() || undefined,
-            content: this.editPostData.content,
-            tags: this.editPostData.tags || [],
-            type: this.editPostData.type || PostType.Post,
-            privacy: this.editPostData.privacy || PrivacyType.Public
-        };
-
-        this._appService.socialService.updatePost(this.editingPostId, updateData).subscribe({
-            next: (updatedPost) => {
-                const index = this.posts.findIndex(p => p.id === this.editingPostId);
-                if (index !== -1) {
-                    this.posts[index] = { ...this.posts[index], ...updatedPost };
-                }
-                this._appService.showSuccess(this._appService.trans('SOCIAL.UPDATE_POST_SUCCESS'));
-                this.closeEditModal();
-                this.isSaving = false;
-                this.loadPosts();
-            },
-            error: () => {
-                this._appService.showError(this._appService.trans('SOCIAL.UPDATE_POST_ERROR'));
-                this.isSaving = false;
-            }
-        });
+    onPostSaved(): void {
+        this.editingPost = null;
+        this.loadPosts();
     }
 
     async deletePost(post: SocialPost): Promise<void> {

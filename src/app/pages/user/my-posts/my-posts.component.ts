@@ -20,6 +20,7 @@ import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.
 
 import { PostCardComponent } from '@pages/social/components/post-card/post-card.component';
 import { PostDetailModalComponent } from '@pages/social/components/post-detail-modal/post-detail-modal.component';
+import { PostEditModalComponent } from '@pages/social/components/post-edit-modal/post-edit-modal.component';
 
 /** Bài viết của tôi: bài do chính mình đăng, kèm trạng thái duyệt */
 @Component({
@@ -28,7 +29,7 @@ import { PostDetailModalComponent } from '@pages/social/components/post-detail-m
     imports: [
         CommonModule, TranslateModule, AppDatePipe,
         BadgeComponent, ButtonComponent, LoadingComponent,
-        PaginationComponent, StatusTabsComponent, PostCardComponent
+        PaginationComponent, StatusTabsComponent, PostCardComponent, PostEditModalComponent
     ],
     template: `
         <div class="space-y-6">
@@ -69,8 +70,9 @@ import { PostDetailModalComponent } from '@pages/social/components/post-detail-m
                         </app-button>
                     </div>
 
-                    <app-post-card [post]="post" [canEdit]="false" [canDelete]="true" [canPin]="false"
+                    <app-post-card [post]="post" [canEdit]="true" [canDelete]="true" [canPin]="false"
                         (like)="toggleLike($event)" (share)="sharePost($event)" (save)="toggleSave($event)"
+                        (edit)="openEdit($event)"
                         (toggleReadMore)="toggleReadMore($event)" (delete)="deletePost($event)">
                     </app-post-card>
                 </div>
@@ -84,11 +86,18 @@ import { PostDetailModalComponent } from '@pages/social/components/post-detail-m
             </section>
             }
         </div>
+
+        <!-- Modal sửa bài viết (component dùng chung) -->
+        <app-post-edit-modal [post]="editingPost" (saved)="onPostSaved()" (closed)="editingPost = null">
+        </app-post-edit-modal>
     `,
 })
 export class MyPostsPageComponent implements OnInit {
     posts: SocialPost[] = [];
     isLoading = true;
+
+    /** Bài đang sửa trong modal sửa bài viết */
+    editingPost: SocialPost | null = null;
 
     activeTab = 'all';
     tabs: { key: string; label: string }[] = [];
@@ -169,6 +178,16 @@ export class MyPostsPageComponent implements OnInit {
             },
             error: () => { }
         });
+    }
+
+    /** Mở modal sửa bài viết (dùng chung với bảng tin) */
+    openEdit(post: SocialPost): void {
+        this.editingPost = post;
+    }
+
+    onPostSaved(): void {
+        this.editingPost = null;
+        this.loadData();
     }
 
     /** Mở chi tiết bài viết bằng modal dùng chung của bảng tin */
