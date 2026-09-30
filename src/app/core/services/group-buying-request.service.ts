@@ -34,7 +34,8 @@ export class GroupBuyingRequestService {
     }
 
     /**
-     * Feed mua chung cho tab "Mua chung": nhóm đã duyệt + nhóm của chính mình (kể cả chờ duyệt)
+     * Feed mua chung cho tab "Mua chung": nhóm đã duyệt + nhóm của chính mình (kể cả chờ duyệt).
+     * Truyền `mineOnly: true` để lấy đơn của chính mình (mọi trạng thái) cho khu vực thành viên.
      * GET /api/v1/GroupBuyingRequests/public
      */
     getPublic(query: GetPublicGroupBuyingQuery = {}): Observable<GroupBuyingFeedResponse> {
@@ -48,6 +49,7 @@ export class GroupBuyingRequestService {
             mineOnly: query.mineOnly ?? false
         };
         if (query.search?.trim()) params['search'] = query.search.trim();
+        if (query.status) params['status'] = query.status;
 
         return this.apiService.get<GroupBuyingFeedResponse>(`${this.endpoint}/public`, params);
     }

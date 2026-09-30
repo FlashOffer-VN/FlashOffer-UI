@@ -21,6 +21,11 @@ export const userRoutes: Routes = [
                 canActivate: [CredentialsGuard],
                 loadComponent: () => import('@pages/profile/profile.component').then(m => m.ProfileComponent)
             },
+            {
+                path: 'my-group-buying',
+                canActivate: [CredentialsGuard],
+                loadComponent: () => import('@pages/user/my-group-buying/my-group-buying.component').then(m => m.MyGroupBuyingPageComponent)
+            },
         
         ]
     }

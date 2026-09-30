@@ -697,9 +697,24 @@
         "SIDEBAR": {
             "PANEL": "Khu vực thành viên",
             "PROFILE": "Hồ sơ của tôi",
+            "MY_GROUP_BUYING": "Đơn mua chung của tôi",
             "ACCOUNT": "Tài khoản & mật khẩu",
             "BACK_TO_SITE": "Về trang chủ",
             "LOGOUT": "Đăng xuất"
+        },
+        "MY_GROUP_BUYING": {
+            "TITLE": "Đơn mua chung của tôi",
+            "DESCRIPTION": "Theo dõi các đơn mua chung bạn đã mở, kể cả đơn đang chờ duyệt.",
+            "SEARCH_LABEL": "Tìm kiếm",
+            "SEARCH_PLACEHOLDER": "Mã đơn hoặc tên sản phẩm...",
+            "PRODUCT": "Sản phẩm",
+            "TARGET_PRICE": "Giá mục tiêu",
+            "PEOPLE": "Số người",
+            "CREATED_AT": "Ngày tạo",
+            "STATUS": "Trạng thái",
+            "EMPTY": "Bạn chưa mở đơn mua chung nào.",
+            "EMPTY_HINT": "Tạo đơn mua chung để mời mọi người cùng mua với giá tốt hơn.",
+            "CREATE_NEW": "Tạo đơn mua chung"
         },
         "LOGOUT_TITLE": "Đăng xuất khỏi khu vực thành viên?",
         "LOGOUT_MESSAGE": "Bạn sẽ cần đăng nhập lại để tiếp tục sử dụng."

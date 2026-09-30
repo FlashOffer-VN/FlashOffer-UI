@@ -741,9 +741,24 @@
         "SIDEBAR": {
             "PANEL": "Member area",
             "PROFILE": "My profile",
+            "MY_GROUP_BUYING": "My group buying orders",
             "ACCOUNT": "Account & password",
             "BACK_TO_SITE": "Back to site",
             "LOGOUT": "Logout"
+        },
+        "MY_GROUP_BUYING": {
+            "TITLE": "My group buying orders",
+            "DESCRIPTION": "Track the group buying orders you created, including the ones waiting for approval.",
+            "SEARCH_LABEL": "Search",
+            "SEARCH_PLACEHOLDER": "Order code or product name...",
+            "PRODUCT": "Product",
+            "TARGET_PRICE": "Target price",
+            "PEOPLE": "Members",
+            "CREATED_AT": "Created at",
+            "STATUS": "Status",
+            "EMPTY": "You have not created any group buying order yet.",
+            "EMPTY_HINT": "Create a group buying order to invite people to buy together at a better price.",
+            "CREATE_NEW": "Create group buying order"
         },
         "LOGOUT_TITLE": "Sign out of the member area?",
         "LOGOUT_MESSAGE": "You will need to sign in again to continue."
