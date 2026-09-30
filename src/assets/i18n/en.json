@@ -745,7 +745,8 @@
             "ACCOUNT": "Account & password",
             "BACK_TO_SITE": "Back to site",
             "LOGOUT": "Logout",
-            "MY_REFERRAL": "My referral code"
+            "MY_REFERRAL": "My referral code",
+            "MY_REQUESTS": "My requests"
         },
         "MY_GROUP_BUYING": {
             "TITLE": "My group buying orders",
@@ -782,6 +783,28 @@
             "USED_PURCHASE_REQUEST": "Sending a supplier request",
             "USED_OFFER_REQUEST": "Sending an offer request",
             "USED_GROUP_POST": "Post shared to an industry group / community group"
+        },
+        "MY_REQUESTS": {
+            "TITLE": "My requests",
+            "DESCRIPTION": "Requests you have sent and their current status.",
+            "TYPE_PURCHASE": "Supplier requests",
+            "TYPE_OFFER": "Offer requests",
+            "SEARCH_LABEL": "Search",
+            "SEARCH_PLACEHOLDER": "Request code or product name...",
+            "CODE": "Request code",
+            "PRODUCT": "Product",
+            "CATEGORY": "Category",
+            "PRODUCT_LINK": "Product link",
+            "QUANTITY": "Quantity",
+            "CURRENT_PRICE": "Current price",
+            "EXPECTED_PRICE": "Expected price",
+            "CREATED_AT": "Sent at",
+            "STATUS": "Status",
+            "NOTE": "Note",
+            "CONTACT": "My contact",
+            "EMPTY": "You have not sent any request yet.",
+            "EMPTY_HINT": "Requests you send will appear here with their status.",
+            "DETAIL_TITLE": "Request detail"
         }
     },
     "REGISTER": {

@@ -701,7 +701,8 @@
             "ACCOUNT": "Tài khoản & mật khẩu",
             "BACK_TO_SITE": "Về trang chủ",
             "LOGOUT": "Đăng xuất",
-            "MY_REFERRAL": "Mã chia sẻ của tôi"
+            "MY_REFERRAL": "Mã chia sẻ của tôi",
+            "MY_REQUESTS": "Yêu cầu của tôi"
         },
         "MY_GROUP_BUYING": {
             "TITLE": "Đơn mua chung của tôi",
@@ -738,6 +739,28 @@
             "USED_PURCHASE_REQUEST": "Gửi yêu cầu tìm nhà cung cấp",
             "USED_OFFER_REQUEST": "Gửi yêu cầu nhận offer",
             "USED_GROUP_POST": "Bài viết chia sẻ vào nhóm ngành / hội nhóm"
+        },
+        "MY_REQUESTS": {
+            "TITLE": "Yêu cầu của tôi",
+            "DESCRIPTION": "Các yêu cầu bạn đã gửi và trạng thái xử lý hiện tại.",
+            "TYPE_PURCHASE": "Tìm nhà cung cấp",
+            "TYPE_OFFER": "Nhận offer",
+            "SEARCH_LABEL": "Tìm kiếm",
+            "SEARCH_PLACEHOLDER": "Mã yêu cầu hoặc tên sản phẩm...",
+            "CODE": "Mã yêu cầu",
+            "PRODUCT": "Sản phẩm",
+            "CATEGORY": "Danh mục",
+            "PRODUCT_LINK": "Đường dẫn sản phẩm",
+            "QUANTITY": "Số lượng",
+            "CURRENT_PRICE": "Giá hiện tại",
+            "EXPECTED_PRICE": "Giá mong muốn",
+            "CREATED_AT": "Ngày gửi",
+            "STATUS": "Trạng thái",
+            "NOTE": "Ghi chú",
+            "CONTACT": "Liên hệ của tôi",
+            "EMPTY": "Bạn chưa gửi yêu cầu nào.",
+            "EMPTY_HINT": "Yêu cầu bạn gửi sẽ được hiển thị tại đây kèm trạng thái xử lý.",
+            "DETAIL_TITLE": "Chi tiết yêu cầu"
         }
     },
     "REGISTER": {

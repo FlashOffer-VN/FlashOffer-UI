@@ -31,6 +31,11 @@ export const userRoutes: Routes = [
                 canActivate: [CredentialsGuard],
                 loadComponent: () => import('@pages/user/my-referral/my-referral.component').then(m => m.MyReferralPageComponent)
             },
+            {
+                path: 'my-requests',
+                canActivate: [CredentialsGuard],
+                loadComponent: () => import('@pages/user/my-requests/my-requests.component').then(m => m.MyRequestsPageComponent)
+            },
         
         ]
     }
