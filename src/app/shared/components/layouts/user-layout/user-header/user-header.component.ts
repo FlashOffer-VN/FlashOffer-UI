@@ -3,11 +3,12 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AppService } from '../../../../../core/services/app.service';
+import { LanguageSwitcherComponent } from '../../../language-switcher/language-switcher.component';
 
 @Component({
     selector: 'app-user-header',
     standalone: true,
-    imports: [CommonModule, RouterLink],
+    imports: [CommonModule, RouterLink, LanguageSwitcherComponent ],
     templateUrl: './user-header.component.html',
     styleUrls: ['./user-header.component.css']
 })

@@ -26,7 +26,7 @@
                         <span><i class="fa-solid fa-tag w-4"></i> {{ request.purchaseRequestCode || formatId(request.id) }}</span>
                         <span><i class="fa-solid fa-phone w-4"></i> {{ request.phone }}</span>
                         <span><i class="fa-solid fa-envelope w-4"></i> {{ request.email || '--' }}</span>
-                        <span><i class="fa-regular fa-calendar w-4"></i> {{ formatDate(request.createdAt) }}</span>
+                        <span><i class="fa-regular fa-calendar w-4"></i> {{ request.createdAt | appDate }}</span>
                     </div>
                 </div>
                 <!-- Actions -->
@@ -66,7 +66,7 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ 'ADMIN.PURCHASE_REQUESTS.CREATED_AT' |
                     translate }}</p>
-                <p class="text-lg font-semibold text-gray-900 mt-1">{{ formatDate(request.createdAt) }}</p>
+                <p class="text-lg font-semibold text-gray-900 mt-1">{{ request.createdAt | appDate }}</p>
             </div>
         </div>
 
@@ -129,7 +129,7 @@
                     </div>
                     <div class="flex justify-between py-2 border-b border-gray-50">
                         <span class="text-sm text-gray-500">{{ 'ADMIN.PURCHASE_REQUESTS.CREATED_AT' | translate }}</span>
-                        <span class="text-sm font-medium text-gray-900">{{ formatDate(request.createdAt) }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ request.createdAt | appDate }}</span>
                     </div>
                     <div class="flex justify-between py-2">
                         <span class="text-sm text-gray-500">{{ 'ADMIN.PURCHASE_REQUESTS.STATUS' | translate }}</span>

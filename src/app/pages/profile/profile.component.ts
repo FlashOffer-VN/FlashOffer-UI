@@ -49,11 +49,6 @@ import { ChangeCredentialsFormComponent } from '@shared/components/change-creden
 
                 <app-change-credentials-form (changed)="onCredentialsChanged()"></app-change-credentials-form>
             </section>
-
-            <div class="rounded-2xl border border-dashed border-cyan-200 bg-cyan-50 p-5 text-center text-cyan-900">
-                <i class="fas fa-rocket mb-3 text-2xl text-primary"></i>
-                <p class="font-medium">{{ 'USER.COMING_SOON' | translate }}</p>
-            </div>
         </div>
     `,
 })

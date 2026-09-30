@@ -30,6 +30,7 @@ import { BusinessInfoComponent } from '@shared/components/business-info/business
 import { ProductListComponent } from '@shared/components/product-list/product-list.component';
 import { PartnerEditFormComponent } from '../edit/partner-edit-form.component';
 import { PartnerProductFormComponent } from '../edit/partner-product-form.component';
+import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 
 @Component({
     selector: 'app-admin-partner-detail',
@@ -45,7 +46,8 @@ import { PartnerProductFormComponent } from '../edit/partner-product-form.compon
         BusinessInfoComponent,
         ProductListComponent,
         PartnerEditFormComponent,
-        PartnerProductFormComponent
+        PartnerProductFormComponent,
+        AppDatePipe
     ],
     templateUrl: './partner-detail.component.html',
     styleUrls: ['./partner-detail.component.css']
@@ -171,18 +173,6 @@ export class AdminPartnerDetailComponent implements OnInit {
 
     formatNumber(value: number): string {
         return new Intl.NumberFormat('vi-VN').format(value);
-    }
-
-    formatDate(dateString?: string): string {
-        if (!dateString) return '--';
-        const date = new Date(dateString);
-        return date.toLocaleString('vi-VN', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
     }
 
     canApprove(): boolean {

@@ -15,6 +15,7 @@ import { PaginationComponent } from '@shared/components/pagination/pagination.co
 import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.component';
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
+import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 
 @Component({
     selector: 'app-admin-partner-list',
@@ -30,7 +31,8 @@ import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange
         PaginationComponent,
         BadgeComponent,
         StatusTabsComponent,
-        NgxFilterDaterangeComponent
+        NgxFilterDaterangeComponent,
+        AppDatePipe
     ],
     templateUrl: './partner-list.component.html',
     styleUrls: ['./partner-list.component.css']
@@ -204,17 +206,6 @@ export class AdminPartnerListComponent implements OnInit {
 
     formatId(id: string): string {
         return id.substring(0, 8).toUpperCase();
-    }
-
-    formatDate(dateString: string): string {
-        const date = new Date(dateString);
-        return date.toLocaleString('vi-VN', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
     }
 
     navigateToDetail(id: string): void {

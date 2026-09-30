@@ -12,6 +12,7 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
+import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 
 @Component({
     selector: 'app-admin-social-post-list',
@@ -26,7 +27,8 @@ import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange
         LoadingComponent,
         PaginationComponent,
         StatusTabsComponent,
-        NgxFilterDaterangeComponent
+        NgxFilterDaterangeComponent,
+        AppDatePipe
     ],
     templateUrl: './social-post-list.component.html',
     styleUrls: ['./social-post-list.component.css']
@@ -221,9 +223,5 @@ export class AdminSocialPostListComponent implements OnInit {
         this.pageSize = size;
         this.pageNumber = 1;
         this.loadPosts();
-    }
-
-    formatDate(value: string): string {
-        return new Date(value).toLocaleString('vi-VN');
     }
 }

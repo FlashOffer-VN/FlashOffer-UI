@@ -14,6 +14,7 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
 
 import { GroupPostType } from '@core/models/business-group.model';
 import { ShareToGroupComponent } from '@shared/components/share-to-group/share-to-group.component';
+import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 
 @Component({
     selector: 'app-admin-offer-detail',
@@ -26,7 +27,9 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
         LoadingComponent,
         BadgeComponent,
         ModalComponent,
-        ShareToGroupComponent,],
+        ShareToGroupComponent,
+        AppDatePipe
+    ],
     templateUrl: './offer-detail.component.html',
     styleUrls: ['./offer-detail.component.css']
 })
@@ -102,18 +105,6 @@ export class AdminOfferDetailComponent implements OnInit {
 
     formatId(id: string): string {
         return id.substring(0, 8).toUpperCase();
-    }
-
-    formatDate(dateString?: string): string {
-        if (!dateString) return '--';
-        const date = new Date(dateString);
-        return date.toLocaleString('vi-VN', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
     }
 
     formatPrice(value?: number | null): string {

@@ -75,7 +75,7 @@
                                 <div class="text-sm text-gray-900">{{ request.fullName }}</div>
                                 <div class="text-xs text-gray-500">{{ request.phone }}</div>
                             </td>
-                            <td class="px-4 py-3 text-sm text-gray-500">{{ formatDate(request.createdAt) }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-500">{{ request.createdAt | appDate }}</td>
                             <td class="px-4 py-3">
                                 <app-badge [status]="getStatusKey(request.status)" [variant]="getStatusVariant(request.status)"
                                     [label]="getStatusKey(request.status) | translate"></app-badge>

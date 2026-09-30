@@ -15,6 +15,7 @@ import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.com
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { BusinessInfoComponent } from '@shared/components/business-info/business-info.component';
 import { CollaboratorEditFormComponent } from '../edit/collaborator-edit-form.component';
+import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 
 @Component({
     selector: 'app-admin-collaborator-detail',
@@ -28,7 +29,8 @@ import { CollaboratorEditFormComponent } from '../edit/collaborator-edit-form.co
         BadgeComponent,
         ModalComponent,
         BusinessInfoComponent,
-        CollaboratorEditFormComponent
+        CollaboratorEditFormComponent,
+        AppDatePipe
     ],
     templateUrl: './collaborator-detail.component.html',
     styleUrls: ['./collaborator-detail.component.css']
@@ -108,18 +110,6 @@ export class AdminCollaboratorDetailComponent implements OnInit {
             [CollaboratorStatus.Active]: 'active'
         };
         return keys[status] || 'pending';
-    }
-
-    formatDate(dateString?: string): string {
-        if (!dateString) return '--';
-        const date = new Date(dateString);
-        return date.toLocaleString('vi-VN', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
     }
 
     /**

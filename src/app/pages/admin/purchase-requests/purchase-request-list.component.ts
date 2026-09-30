@@ -18,6 +18,7 @@ import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange
 
 import { GroupPostType } from '@core/models/business-group.model';
 import { ShareToGroupComponent } from '@shared/components/share-to-group/share-to-group.component';
+import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 
 @Component({
     selector: 'app-admin-purchase-request-list',
@@ -34,7 +35,9 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
         BadgeComponent,
         StatusTabsComponent,
         NgxFilterDaterangeComponent,
-        ShareToGroupComponent,],
+        ShareToGroupComponent,
+        AppDatePipe
+    ],
     templateUrl: './purchase-request-list.component.html',
     styleUrls: ['./purchase-request-list.component.css']
 })
@@ -167,17 +170,6 @@ export class AdminPurchaseRequestListComponent implements OnInit {
 
     formatId(id: string): string {
         return id.substring(0, 8).toUpperCase();
-    }
-
-    formatDate(dateString: string): string {
-        const date = new Date(dateString);
-        return date.toLocaleString('vi-VN', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
     }
 
     formatPrice(value?: number | null): string {
