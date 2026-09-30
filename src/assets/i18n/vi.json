@@ -703,7 +703,8 @@
             "LOGOUT": "Đăng xuất",
             "MY_REFERRAL": "Mã chia sẻ của tôi",
             "MY_REQUESTS": "Yêu cầu của tôi",
-            "MY_POSTS": "Bài viết của tôi"
+            "MY_POSTS": "Bài viết của tôi",
+            "MY_GROUPS": "Nhóm của tôi"
         },
         "MY_GROUP_BUYING": {
             "TITLE": "Đơn mua chung của tôi",
@@ -771,6 +772,28 @@
             "PENDING": "Chờ duyệt",
             "EMPTY": "Bạn chưa có bài viết nào.",
             "EMPTY_HINT": "Bài viết bạn đăng trên bảng tin sẽ được quản lý tại đây."
+        },
+        "MY_GROUPS": {
+            "TITLE": "Nhóm của tôi",
+            "DESCRIPTION": "Nhóm bạn đã tạo và nhóm bạn đã tham gia, kèm số thành viên chờ duyệt.",
+            "CREATE_NEW": "Tạo hội nhóm",
+            "CREATED_BY_ME": "Nhóm tôi tạo",
+            "JOINED": "Nhóm đã tham gia",
+            "TYPE_INDUSTRY": "Nhóm ngành",
+            "TYPE_COMMUNITY": "Hội nhóm",
+            "OWNER": "Bạn tạo nhóm",
+            "APPROVAL_PENDING": "Chờ duyệt mở nhóm",
+            "APPROVAL_REJECTED": "Bị từ chối mở nhóm",
+            "MY_STATUS_PENDING": "Chờ duyệt vào nhóm",
+            "MEMBERS": "thành viên",
+            "POSTS": "bài viết",
+            "PENDING_MEMBERS": "{{count}} người chờ duyệt vào nhóm",
+            "VIEW_GROUP": "Xem nhóm",
+            "MANAGE_GROUP": "Quản lý nhóm",
+            "SEARCH_LABEL": "Tìm kiếm",
+            "SEARCH_PLACEHOLDER": "Tên nhóm hoặc chủ đề...",
+            "EMPTY": "Bạn chưa có nhóm nào.",
+            "EMPTY_HINT": "Nhóm bạn tạo hoặc tham gia sẽ được quản lý tại đây."
         }
     },
     "REGISTER": {

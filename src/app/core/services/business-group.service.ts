@@ -73,6 +73,18 @@ export class BusinessGroupService {
         return this.api.get<BusinessGroupListResponse>(`${this.endpoint}/community`, params);
     }
 
+    /** Nhóm của tôi: nhóm mình tạo và/hoặc nhóm mình đã tham gia (nhóm ngành + hội nhóm) */
+    getMine(query: BusinessGroupQuery = {}): Observable<BusinessGroupListResponse> {
+        const params: Record<string, unknown> = {
+            page: query.page ?? 1,
+            pageSize: query.pageSize ?? 12
+        };
+        if (query.search?.trim()) params['search'] = query.search.trim();
+        if (query.mineRole) params['mineRole'] = query.mineRole;
+
+        return this.api.get<BusinessGroupListResponse>(`${this.endpoint}/mine`, params);
+    }
+
     /** Người dùng tạo hội nhóm theo chủ đề (chờ admin duyệt mở hội) */
     createCommunity(request: CreateCommunityGroupRequest): Observable<BusinessGroupResponse> {
         return this.api.post<BusinessGroupResponse>(`${this.endpoint}/community`, request);

@@ -747,7 +747,8 @@
             "LOGOUT": "Logout",
             "MY_REFERRAL": "My referral code",
             "MY_REQUESTS": "My requests",
-            "MY_POSTS": "My posts"
+            "MY_POSTS": "My posts",
+            "MY_GROUPS": "My groups"
         },
         "MY_GROUP_BUYING": {
             "TITLE": "My group buying orders",
@@ -815,6 +816,28 @@
             "PENDING": "Pending approval",
             "EMPTY": "You have no posts yet.",
             "EMPTY_HINT": "Posts you publish on the feed are managed here."
+        },
+        "MY_GROUPS": {
+            "TITLE": "My groups",
+            "DESCRIPTION": "Groups you created and groups you joined, with pending member requests.",
+            "CREATE_NEW": "Create a group",
+            "CREATED_BY_ME": "Created by me",
+            "JOINED": "Joined",
+            "TYPE_INDUSTRY": "Industry group",
+            "TYPE_COMMUNITY": "Community group",
+            "OWNER": "You own this group",
+            "APPROVAL_PENDING": "Waiting for approval",
+            "APPROVAL_REJECTED": "Group request rejected",
+            "MY_STATUS_PENDING": "Waiting to join",
+            "MEMBERS": "members",
+            "POSTS": "posts",
+            "PENDING_MEMBERS": "{{count}} member(s) waiting for approval",
+            "VIEW_GROUP": "View group",
+            "MANAGE_GROUP": "Manage group",
+            "SEARCH_LABEL": "Search",
+            "SEARCH_PLACEHOLDER": "Group name or topic...",
+            "EMPTY": "You have no groups yet.",
+            "EMPTY_HINT": "Groups you create or join are managed here."
         }
     },
     "REGISTER": {

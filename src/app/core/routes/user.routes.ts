@@ -41,6 +41,11 @@ export const userRoutes: Routes = [
                 canActivate: [CredentialsGuard],
                 loadComponent: () => import('@pages/user/my-posts/my-posts.component').then(m => m.MyPostsPageComponent)
             },
+            {
+                path: 'my-groups',
+                canActivate: [CredentialsGuard],
+                loadComponent: () => import('@pages/user/my-groups/my-groups.component').then(m => m.MyGroupsPageComponent)
+            },
         
         ]
     }

@@ -17,6 +17,12 @@ export enum GroupApprovalStatus {
     Rejected = 3
 }
 
+/** Vai trò của mình với nhóm trong danh sách "nhóm của tôi" (khớp enum API GroupMineRole) */
+export enum GroupMineRole {
+    Created = 1,
+    Joined = 2
+}
+
 /** Vai trò thành viên trong nhóm (khớp enum API GroupMemberRole) */
 export enum GroupMemberRole {
     Member = 1,
@@ -149,6 +155,8 @@ export interface BusinessGroupQuery {
     search?: string;
     businessFieldId?: string | null;
     mineOnly?: boolean;
+    /** Danh sách "nhóm của tôi": nhóm mình tạo hay nhóm mình đã tham gia (bỏ trống = cả hai) */
+    mineRole?: GroupMineRole | null;
 }
 
 export interface AdminBusinessGroupQuery extends BusinessGroupQuery {
