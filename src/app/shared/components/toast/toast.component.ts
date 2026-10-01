@@ -1,6 +1,7 @@
 // shared/components/toast/toast.component.ts
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { isBrowser } from '@core/utils/platform';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -286,6 +287,9 @@ export class ToastComponent implements OnInit, OnDestroy {
   }
 
   startTimer() {
+    // Chỉ chạy ở trình duyệt: hẹn giờ trên server khiến prerender không bao giờ ổn định (build treo)
+    if (!isBrowser()) return;
+
     const interval = 30;
     const totalSteps = this.duration / interval;
 
