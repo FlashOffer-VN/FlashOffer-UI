@@ -1,10 +1,10 @@
-﻿// src/app/core/models/auth.model.ts
+// src/app/core/models/auth.model.ts
 
 export interface User {
     id: any;
     username: string;
     email: string;
-    role: UserRole | string;
+    role: UserRole;
     fullName?: string;
     /** Tài khoản tạo tự động từ form công khai → bắt buộc đổi tên đăng nhập + mật khẩu ở lần đăng nhập đầu */
     mustChangeCredentials?: boolean;
@@ -13,10 +13,19 @@ export interface User {
     updatedAt?: string;
 }
 
+/** Vai trò tài khoản — giá trị số khớp enum UserRole của API (Customer = 1, CTV = 2, Admin = 3). */
 export enum UserRole {
-    ADMIN = 'ADMIN',
-    USER = 'USER',
-    GUEST = 'GUEST'
+    Customer = 1,
+    CTV = 2,
+    Admin = 3
+}
+
+/** Chuẩn hoá vai trò nhận từ API (chuỗi số) hoặc từ dữ liệu cũ về enum. */
+export function toUserRole(value: unknown): UserRole {
+    const role = Number(value);
+    return role === UserRole.Admin || role === UserRole.CTV || role === UserRole.Customer
+        ? role
+        : UserRole.Customer;
 }
 
 export enum UserStatus {

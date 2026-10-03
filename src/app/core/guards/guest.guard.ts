@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AppService } from '../services/app.service';
+import { UserRole } from '../models/auth.model';
 
 @Injectable({
     providedIn: 'root'
@@ -15,7 +16,7 @@ export class GuestGuard implements CanActivate {
         // Đã login -> redirect về home
         if (this._appService.auth.isAuthenticated()) {
             const user = this._appService.auth.getCurrentUser();
-            if (user?.role === 'ADMIN') {
+            if (user?.role === UserRole.Admin) {
                 this.router.navigate(['/admin/dashboard']);
             } else {
                 this.router.navigate(['/home']);

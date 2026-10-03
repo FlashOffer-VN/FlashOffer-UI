@@ -1,4 +1,4 @@
-﻿// core/services/app.service.ts
+// core/services/app.service.ts
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from './auth.service';
@@ -78,13 +78,13 @@ export class AppService {
     isAdmin(): boolean {
         const user = this.getCurrentUser();
         if (!user) return false;
-        return user.role?.toUpperCase() === UserRole.ADMIN.toUpperCase();
+        return user.role === UserRole.Admin;
     }
 
     isUser(): boolean {
         const user = this.getCurrentUser();
         if (!user) return false;
-        return user.role?.toUpperCase() === UserRole.USER.toUpperCase();
+        return user.role === UserRole.Customer;
     }
 
     // ========== Toast ==========
