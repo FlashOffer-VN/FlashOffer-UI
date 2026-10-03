@@ -947,6 +947,11 @@
             "PASSWORD_WEAK": "Password must have at least 1 uppercase, 1 lowercase, 1 number and 1 special character (@$!%*?&)"
         }
     },
+    "USER_ROLE": {
+        "CUSTOMER": "Member",
+        "CTV": "Collaborator",
+        "ADMIN": "Administrator"
+    },
     "SOCIAL": {
         "TITLE": "Ecomecial Social Network",
         "DESC": "Connect, share and grow with the entrepreneur community",

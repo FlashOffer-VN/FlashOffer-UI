@@ -903,6 +903,11 @@
             "PASSWORD_WEAK": "Mật khẩu phải có ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt (@$!%*?&)"
         }
     },
+    "USER_ROLE": {
+        "CUSTOMER": "Thành viên",
+        "CTV": "Cộng tác viên",
+        "ADMIN": "Quản trị viên"
+    },
     "SOCIAL": {
         "TITLE": "Nền tảng kết nối cơ hội",
         "DESC": "Thông tin của bạn là tài sản. Kindi giúp bạn tối ưu hóa giá trị từ mạng lưới.",

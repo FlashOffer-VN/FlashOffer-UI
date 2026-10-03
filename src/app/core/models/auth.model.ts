@@ -20,6 +20,14 @@ export enum UserRole {
     Admin = 3
 }
 
+/** Khoá i18n cho nhãn vai trò — nhận cả số 1/2/3 và dữ liệu cũ dạng chữ. */
+export function userRoleLabelKey(value: unknown): string {
+    const raw = String(value ?? '').trim().toUpperCase();
+    if (raw === 'ADMIN' || raw === '3') return 'USER_ROLE.ADMIN';
+    if (raw === 'CTV' || raw === '2') return 'USER_ROLE.CTV';
+    return 'USER_ROLE.CUSTOMER';
+}
+
 /** Chuẩn hoá vai trò nhận từ API (chuỗi số) hoặc từ dữ liệu cũ về enum. */
 export function toUserRole(value: unknown): UserRole {
     const role = Number(value);

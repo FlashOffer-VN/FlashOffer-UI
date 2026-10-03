@@ -3,11 +3,12 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SocialPost } from '@core/models/social.model';
 import { AvatarPipe } from '@shared/pipes/avatar.pipe';
+import { UserRoleLabelPipe } from '@shared/pipes/user-role-label.pipe';
 
 @Component({
     selector: 'app-post-card-header',
     standalone: true,
-    imports: [CommonModule, AvatarPipe],
+    imports: [CommonModule, AvatarPipe, UserRoleLabelPipe],
     template: `
         <div class="post-card__header">
             <div class="post-author">
@@ -17,7 +18,7 @@ import { AvatarPipe } from '@shared/pipes/avatar.pipe';
                         {{ post.author.fullName }}
                         <i *ngIf="post.author.isVerified" class="fas fa-check-circle verified"></i>
                     </span>
-                    <span class="role">{{ post.author.role }}</span>
+                    <span class="role">{{ post.author.role | userRoleLabel }}</span>
                     <span class="time">{{ timeAgo }}</span>
                 </div>
             </div>
