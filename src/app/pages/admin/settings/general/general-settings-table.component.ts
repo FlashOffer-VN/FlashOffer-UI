@@ -14,6 +14,8 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 import { CURRENCY_OPTIONS, SelectOption, timeZoneOptions, withCurrentOption } from '@core/constants/format-options';
+import { openExternalLink } from '@core/utils/link';
+import { copyToClipboard } from '@core/utils/share-link';
 
 /** Kiểu điều khiển của một trường cài đặt. */
 type SettingFieldType = 'text' | 'number' | 'email' | 'phone' | 'url' | 'bool' | 'language' | 'select';
@@ -508,15 +510,12 @@ export class AdminGeneralSettingsComponent implements OnInit {
         const value = this.displayCurrent(field);
         if (!value) return;
 
-        navigator.clipboard?.writeText(value)
-            .then(() => this._appService.showSuccess(this._appService.trans('ADMIN.SETTINGS.UTILITY_COPIED')))
-            .catch(() => this._appService.showError(this._appService.trans('COMMON.ERROR.UNKNOWN')));
+        copyToClipboard(value).then(() => this._appService.showSuccess(this._appService.trans('ADMIN.SETTINGS.UTILITY_COPIED')));
     }
 
     /** Mở liên kết (hoặc số điện thoại, email) của trường ở tab mới. */
     openLink(target: string): void {
-        if (!target) return;
-        window.open(target, '_blank', 'noopener');
+        openExternalLink(target);
     }
 
     /** Giá trị đang lưu, đã đổi sang chuỗi hiển thị. */
