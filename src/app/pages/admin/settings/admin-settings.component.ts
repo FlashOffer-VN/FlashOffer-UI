@@ -6,7 +6,7 @@ import { AppService } from '@core/services/app.service';
 import { Permission } from '@core/models/permission.model';
 
 import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-tabs/status-tabs.component';
-import { AdminPermissionMatrixComponent } from '@pages/admin/permissions/permission-matrix.component';
+import { AdminPermissionSettingsComponent } from '@pages/admin/permissions/permission-settings.component';
 import { AdminAuditLogListComponent } from '@pages/admin/settings/audit-log/audit-log-list.component';
 
 /**
@@ -19,7 +19,7 @@ import { AdminAuditLogListComponent } from '@pages/admin/settings/audit-log/audi
 @Component({
     selector: 'app-admin-settings',
     standalone: true,
-    imports: [CommonModule, TranslateModule, StatusTabsComponent, AdminPermissionMatrixComponent, AdminAuditLogListComponent],
+    imports: [CommonModule, TranslateModule, StatusTabsComponent, AdminPermissionSettingsComponent, AdminAuditLogListComponent],
     template: `
         <div class="page">
             <header>
@@ -34,7 +34,7 @@ import { AdminAuditLogListComponent } from '@pages/admin/settings/audit-log/audi
 
             <div class="tab-content">
                 @if (activeTab === 'permissions') {
-                    <app-admin-permission-matrix></app-admin-permission-matrix>
+                    <app-admin-permission-settings></app-admin-permission-settings>
                 } @else if (activeTab === 'audit') {
                     <app-admin-audit-log-list></app-admin-audit-log-list>
                 } @else {

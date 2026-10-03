@@ -117,6 +117,8 @@ export enum Permission {
     ViewSuperAdminAccount = 'P102',
     /** P103 */
     ViewFullAuditLogs = 'P103',
+    /** P104 */
+    UpdateUserPermissions = 'P104',
 }
 
 /** Một quyền trong danh mục API trả về. */
@@ -142,6 +144,34 @@ export interface RolePermission {
 export interface PermissionMatrix {
     permissions: PermissionItem[];
     roles: RolePermission[];
+}
+
+/** Tài khoản chọn được ở màn cấu hình quyền riêng. */
+export interface UserPermissionCandidate {
+    id: string;
+    username: string;
+    fullName: string;
+    /** Giá trị số của vai trò (1 User, 2 Partner, 3 Admin). */
+    role: string;
+    roleName: string;
+}
+
+/** Quyền của một tài khoản: theo vai trò, phần bật thêm, phần tắt riêng và quyền hiệu lực. */
+export interface UserPermissionDetail {
+    userId: string;
+    username: string;
+    fullName: string;
+    role: string;
+    roleName: string;
+    rolePermissionCodes: string[];
+    grantedCodes: string[];
+    deniedCodes: string[];
+    effectiveCodes: string[];
+}
+
+/** Kết quả áp quyền cho nhiều tài khoản. */
+export interface UpdateUsersPermissionsResult {
+    updatedUsers: number;
 }
 
 /** Chuẩn hoá một mã quyền về dạng P### (nhận cả 'p20', 'P020', số 20). */

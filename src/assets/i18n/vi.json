@@ -1771,6 +1771,10 @@
         "COPY_LINK_SUCCESS": "Đã sao chép link chia sẻ!"
     },
     "PERMISSION": {
+        "TAB_ROLE": "Theo vai trò",
+        "TAB_USER": "Theo người dùng",
+        "USER": {"SEARCH_PLACEHOLDER": "Tìm theo tên đăng nhập hoặc họ tên...", "EMPTY": "Không tìm thấy tài khoản nào", "NO_USER_SELECTED": "Chọn một hoặc nhiều tài khoản ở cột bên trái để cấu hình quyền.", "SELECTED": "Đang cấu hình cho", "MIXED": "không đồng nhất", "GRANTED_EXTRA": "bật riêng", "DENIED_OVERRIDE": "tắt riêng"},
+
         "TITLE": "Phân quyền",
         "DESCRIPTION": "Quyền theo mã P### cho từng vai trò. Chỉ tài khoản quản trị tối cao được sửa.",
         "SAVE": "Lưu thay đổi",

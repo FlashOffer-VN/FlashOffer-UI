@@ -1808,6 +1808,10 @@
         "COPY_LINK_SUCCESS": "Share link copied!"
     },
     "PERMISSION": {
+        "TAB_ROLE": "By role",
+        "TAB_USER": "By account",
+        "USER": {"SEARCH_PLACEHOLDER": "Search by username or full name...", "EMPTY": "No account found", "NO_USER_SELECTED": "Select one or more accounts on the left to configure permissions.", "SELECTED": "Configuring for", "MIXED": "mixed", "GRANTED_EXTRA": "granted for account", "DENIED_OVERRIDE": "denied for account"},
+
         "TITLE": "Permissions",
         "DESCRIPTION": "Permissions by P### code for each role. Only the super administrator can edit.",
         "SAVE": "Save changes",
