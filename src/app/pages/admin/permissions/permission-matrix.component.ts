@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
 import { UserRole } from '@core/models/auth.model';
-import { Permission, PermissionItem, RolePermission } from '@core/models/permission.model';
+import { Permission, PermissionGroupItem, PermissionItem, RolePermission } from '@core/models/permission.model';
 
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
@@ -20,10 +20,14 @@ interface RoleColumn {
 
 /** Một nhóm quyền trong cây phân quyền. */
 interface PermissionGroup {
-    /** Khoá nhóm: mã nhóm chức năng, hoặc 'member' cho quyền của trang thành viên. */
+    /** Mã nhóm quyền (quyền trỏ tới nhóm qua ParentCode). */
     key: string;
-    /** Khoá i18n tên nhóm. */
-    label: string;
+    /** Tên nhóm đọc từ DB của máy chủ; máy chủ cũ không trả về thì để rỗng. */
+    name: string;
+    /** Tên nhóm tiếng Anh đọc từ DB. */
+    nameEn: string;
+    /** Khoá i18n tên nhóm — dùng khi máy chủ chưa trả về tên nhóm. */
+    labelKey: string;
     /** Nhóm quyền gắn với trang của thành viên (quản trị viên không có trang đó). */
     isMemberArea: boolean;
     permissions: PermissionItem[];
@@ -54,7 +58,10 @@ export class AdminPermissionMatrixComponent implements OnInit {
     searchText = '';
 
     /** Nhóm dành riêng cho quyền gắn với trang của thành viên. */
-    private readonly memberGroupKey = 'member';
+    private readonly memberGroupKey = 'MEMBER';
+
+    /** Nhóm quyền do máy chủ trả về (tên và thứ tự đọc từ bảng PermissionGroups). */
+    private apiGroups: PermissionGroupItem[] = [];
 
     /** Nhóm đang mở; mặc định thu gọn để cây phân quyền gọn hơn. */
     expandedGroups: Record<string, boolean> = {};
@@ -73,7 +80,10 @@ export class AdminPermissionMatrixComponent implements OnInit {
     /** Bản gốc để biết vai trò nào cần lưu. */
     private original: Record<string, Set<string>> = {};
 
-    constructor(private _appService: AppService) { }
+    constructor(
+        private _appService: AppService,
+        private _translate: TranslateService
+    ) { }
 
     ngOnInit(): void {
         this.loadMatrix();
@@ -86,6 +96,7 @@ export class AdminPermissionMatrixComponent implements OnInit {
             next: (response) => {
                 const matrix = response.data;
                 this.permissions = matrix?.permissions ?? [];
+                this.apiGroups = matrix?.groups ?? [];
                 this.applyRoles(matrix?.roles ?? []);
                 this.isLoading = false;
             },
@@ -105,6 +116,7 @@ export class AdminPermissionMatrixComponent implements OnInit {
             item.code.toLowerCase().includes(keyword)
             || item.name.toLowerCase().includes(keyword)
             || item.module.toLowerCase().includes(keyword)
+            || (item.parentCode ?? '').toLowerCase().includes(keyword)
             || (item.route ?? '').toLowerCase().includes(keyword)
             || (item.endpoints ?? '').toLowerCase().includes(keyword));
     }
@@ -121,12 +133,19 @@ export class AdminPermissionMatrixComponent implements OnInit {
         }
 
         return [...buckets.entries()]
-            .map(([key, permissions]) => ({
-                key,
-                label: key === this.memberGroupKey ? 'PERMISSION.GROUP.MEMBER' : this.moduleKey(key),
-                isMemberArea: key === this.memberGroupKey,
-                permissions
-            }))
+            .map(([key, permissions]) => {
+                const group = this.apiGroups.find(item => item.code.toUpperCase() === key.toUpperCase());
+                return {
+                    key,
+                    name: group?.name ?? '',
+                    nameEn: group?.nameEn ?? '',
+                    labelKey: key.toUpperCase() === this.memberGroupKey
+                        ? 'PERMISSION.GROUP.MEMBER'
+                        : this.moduleKey(key),
+                    isMemberArea: key.toUpperCase() === this.memberGroupKey,
+                    permissions
+                };
+            })
             .sort((left, right) => this.groupOrder(left.key) - this.groupOrder(right.key));
     }
 
@@ -143,16 +162,30 @@ export class AdminPermissionMatrixComponent implements OnInit {
         this.expandedGroups[key] = !this.isExpanded(key);
     }
 
-    /** Nhóm của một quyền: quyền gắn với trang thành viên (/user/**) gom riêng vì quản trị viên không có trang đó. */
+    /**
+     * Nhóm của một quyền: lấy mã nhóm (ParentCode) do máy chủ trả về — nhóm đọc từ bảng PermissionGroups.
+     * Máy chủ cũ không trả về ParentCode thì suy nhóm từ module và gom riêng quyền của trang thành viên.
+     */
     private groupKey(item: PermissionItem): string {
-        return (item.route ?? '').startsWith('/user') ? this.memberGroupKey : item.module.toLowerCase();
+        const parentCode = (item.parentCode ?? '').trim();
+        if (parentCode) return parentCode;
+        return (item.route ?? '').startsWith('/user') ? this.memberGroupKey : item.module.toUpperCase();
     }
 
-    /** Thứ tự nhóm hiển thị: nhóm chức năng trước, nhóm thành viên ngay sau nhóm Người dùng. */
+    /** Thứ tự nhóm: theo SortOrder của bảng PermissionGroups, máy chủ cũ thì theo thứ tự nhóm chức năng. */
     private groupOrder(key: string): number {
-        const order = ['system', 'user', this.memberGroupKey, 'partner', 'purchase', 'group', 'community', 'referral', 'superadmin'];
-        const index = order.indexOf(key);
-        return index < 0 ? order.length : index;
+        const group = this.apiGroups.find(item => item.code.toUpperCase() === key.toUpperCase());
+        if (group) return group.sortOrder;
+
+        const fallback = ['SYSTEM', 'USER', this.memberGroupKey, 'PARTNER', 'PURCHASE', 'GROUP', 'COMMUNITY', 'REFERRAL', 'COMMISSION', 'SUPERADMIN'];
+        const index = fallback.indexOf(key.toUpperCase());
+        return index < 0 ? 1000 : (index + 1) * 10;
+    }
+
+    /** Tên nhóm hiển thị: ưu tiên tên đọc từ DB theo ngôn ngữ đang dùng, chưa có thì lấy khoá i18n. */
+    groupName(group: PermissionGroup): string {
+        const name = this._translate.currentLang === 'en' ? group.nameEn : group.name;
+        return name || this._appService.trans(group.labelKey);
     }
 
     /** Tài khoản hiện tại có được sửa quyền (chỉ SuperAdmin có quyền P101). */
