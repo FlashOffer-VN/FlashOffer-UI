@@ -1,7 +1,7 @@
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <!-- Step 1 -->
     @if (currentStep === 1) {
-    <app-step-personal [formGroup]="registerForm" [isReferralValid]="isReferralValid"></app-step-personal>
+    <app-step-personal [formGroup]="registerForm"></app-step-personal>
     }
 
     <!-- Step 2 -->

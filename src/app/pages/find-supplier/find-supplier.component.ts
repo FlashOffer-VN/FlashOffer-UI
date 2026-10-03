@@ -203,7 +203,7 @@ export class FindSupplierComponent implements OnInit {
             email: contact?.email ?? '',
             note: formValue.note?.trim() || null,
             // Người dùng mở form từ link chia sẻ (?ref=) thì ghi nhận mã của người chia sẻ
-            referralCode: resolveReferralCode() ?? undefined
+            referralCode: resolveReferralCode() ?? ''
         };
 
         // Call API

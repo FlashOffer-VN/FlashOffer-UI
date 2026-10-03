@@ -22,10 +22,6 @@ export class PartnerRegisterService {
         return this.api.post<PartnerRegisterResponse>(this.endpoint + '/register', data);
     }
 
-    checkReferralCode(code: string): Observable<{ success: boolean; message: string }> {
-        return this.api.get<{ success: boolean; message: string }>(this.endpoint + `/check-referral/${code}`);
-    }
-
     getBusinessTypes(): any[] {
         return [
             { value: 1, label: this.translate.instant('PARTNER.BUSINESS_TYPE_SME') },

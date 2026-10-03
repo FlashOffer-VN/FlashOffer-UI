@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
+import { resolveReferralCode } from '@core/utils/share-link';
 import { CreateGroupBuyingRequest } from '@core/models/group-buying-request.model';
 import { finalize } from 'rxjs/operators';
 
@@ -27,7 +28,8 @@ export class GroupBuyingComponent {
         private _appService: AppService,
         private _route: ActivatedRoute
     ) {
-        this._referralCode = this._route.snapshot.queryParamMap.get('ref');
+        // Mã chia sẻ của CTV: lấy mã đã ghi nhận trong máy (từ link ?ref=) hoặc mã trên link đang mở
+        this._referralCode = resolveReferralCode() ?? this._route.snapshot.queryParamMap.get('ref');
 
         this.groupForm = this.fb.group({
             // Product info
@@ -185,7 +187,7 @@ export class GroupBuyingComponent {
             email: contact?.email ?? '',
             note: formValue.note?.trim() || undefined,
             // Đơn tạo từ link được chia sẻ: ghi nhận mã chia sẻ của người đã gửi link
-            referralCode: this._referralCode ?? undefined
+            referralCode: this._referralCode ?? ''
         };
 
         this._appService.groupBuyingRequest.create(requestData)
