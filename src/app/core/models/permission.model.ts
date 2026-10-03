@@ -119,6 +119,12 @@ export enum Permission {
     ViewFullAuditLogs = 'P103',
     /** P104 */
     UpdateUserPermissions = 'P104',
+    /** P105 */
+    ViewCommissionConfigs = 'P105',
+    /** P106 */
+    UpdateCommissionConfigs = 'P106',
+    /** P013 */
+    ViewMyCommission = 'P013',
 }
 
 /** Một quyền trong danh mục API trả về. */

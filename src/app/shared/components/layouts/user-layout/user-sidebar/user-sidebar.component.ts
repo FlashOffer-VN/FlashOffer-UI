@@ -24,6 +24,7 @@ export class UserSidebarComponent {
         { path: '/user/my-requests', icon: 'fa-solid fa-file-lines', label: 'USER.SIDEBAR.MY_REQUESTS', permission: Permission.ViewMyRequests },
         { path: '/user/my-posts', icon: 'fa-solid fa-newspaper', label: 'USER.SIDEBAR.MY_POSTS', permission: Permission.ViewMyPosts },
         { path: '/user/my-groups', icon: 'fa-solid fa-people-roof', label: 'USER.SIDEBAR.MY_GROUPS', permission: Permission.ViewMyGroups },
+        { path: '/user/my-commission', icon: 'fa-solid fa-percent', label: 'USER.SIDEBAR.MY_COMMISSION', permission: Permission.ViewMyCommission },
         { path: '/user/change-credentials', icon: 'fa-solid fa-key', label: 'USER.SIDEBAR.ACCOUNT' },
         { path: '/', icon: 'fa-solid fa-house', label: 'USER.SIDEBAR.BACK_TO_SITE' },
     ];

@@ -1,4 +1,45 @@
 {
+    "COMMISSION": {
+    "BENEFICIARY_REFERRER": "Referrer",
+    "BENEFICIARY_PARTNER": "Partner",
+    "SCOPE_TITLE": "Applies to",
+    "SCOPE_GLOBAL": "All accounts",
+    "SCOPE_USERS": "Selected accounts",
+    "SELECTED": "Selected",
+    "FORM_TITLE": "Commission rate",
+    "TYPE": "Type",
+    "RATE": "Commission",
+    "RATE_PERCENT": "% of value",
+    "RATE_FIXED": "amount",
+    "MIN_ORDER": "Minimum order",
+    "MAX_COMMISSION": "Maximum commission",
+    "TIERS": "Tiers",
+    "TIER_ADD": "Add tier",
+    "TIER_FROM": "From",
+    "TIER_TO": "To",
+    "TIER_RATE": "Rate",
+    "TIER_COUNT": "tiers",
+    "TIER_NO_LIMIT": "No limit",
+    "NOTE": "Internal note",
+    "ACTIVE": "Active",
+    "PAUSED": "Paused",
+    "SAVE": "Save configuration",
+    "SAVE_SUCCESS": "Commission configuration saved",
+    "SAVE_FAILED": "Failed to save commission configuration",
+    "LOAD_FAILED": "Failed to load commission configuration",
+    "CANCEL_EDIT": "Cancel edit",
+    "EXISTING": "Active configurations",
+    "EMPTY": "No configuration yet",
+    "BADGE_GLOBAL": "Shared",
+    "BADGE_PERSONAL": "Personal",
+    "ALL_USERS": "All accounts",
+    "NO_TARGET": "Select at least one account or apply to all accounts",
+    "DELETE": "Delete",
+    "DELETE_CONFIRM": "Delete this commission configuration?",
+    "DELETE_SUCCESS": "Commission configuration deleted",
+    "DELETE_FAILED": "Failed to delete commission configuration",
+    "UPDATED_AT": "Updated"
+    },
     "APP_TITLE": "Kindi",
     "APP_NAME": "Kindi - SME Platform",
     "NAV_SOLUTIONS": "Solutions",
@@ -731,11 +772,23 @@
         }
     },
     "USER": {
+        "COMMISSION": {
+        "TITLE": "My referral commission",
+        "SUBTITLE": "Commission rates applied to your account as a referrer or a partner.",
+        "REFERRER_TITLE": "As a referrer",
+        "PARTNER_TITLE": "As a partner",
+        "BADGE_PERSONAL": "Your own rate",
+        "BADGE_GLOBAL": "Shared rate",
+        "EMPTY": "No commission rate for this part yet.",
+        "PAUSED": "This rate is paused.",
+        "HINT": "Your own rate always applies before the shared rate. Contact an administrator to adjust."
+        },
         "WELCOME_TITLE": "Welcome back!",
         "WELCOME_DESCRIPTION": "Your account is ready. More member features will be available soon.",
         "USERNAME": "Username",
         "EMAIL": "Email",
         "SIDEBAR": {
+            "MY_COMMISSION": "My commission",
             "PANEL": "Member area",
             "PROFILE": "My profile",
             "MY_GROUP_BUYING": "My group buying orders",
@@ -1055,6 +1108,10 @@
         }
     },
     "COMMON": {
+        "USER_PICKER": {
+        "SEARCH_PLACEHOLDER": "Search by username or full name...",
+        "EMPTY": "No account found"
+        },
         "BUTTON": {
             "SEARCH": "Search",
             "ACTION": "Action",
@@ -1316,6 +1373,7 @@
             "REFERRED_BY": "Referred by"
         },
         "SETTINGS_PAGE": {
+            "TAB_COMMISSION": "Commission",
             "TITLE": "System settings",
             "SUBTITLE": "Manage administration configuration and preferences",
             "CARD_TITLE": "Settings are being built",
