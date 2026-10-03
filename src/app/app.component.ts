@@ -1,6 +1,6 @@
 // app.component.ts
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
+import { Router, NavigationEnd, NavigationError, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
@@ -11,6 +11,7 @@ import { ContactFloatingComponent } from "@shared/components/contact-floating/co
 import { SeoService } from './core/services/seo.service';
 import { SEO_CONFIG } from './core/configs/seo.config';
 import { isBrowser } from './core/utils/platform';
+import { isStaleVersionError, reloadForNewVersion } from './core/utils/version-reload';
 import {
     captureReferralCode,
     isReferralCodeSynced,
@@ -39,6 +40,21 @@ export class AppComponent implements OnInit {
         // Ghi nhận mã chia sẻ (?ref=) của mọi trang khách mở vào máy + tài khoản đang đăng nhập
         this.captureReferral();
 
+        // Bản mới phát lên trong lúc trang đang mở thì mô-đun của bản cũ không còn tải được,
+        // tải lại trang để người dùng không nhìn thấy màn hình trắng.
+        this.router.events.pipe(
+            filter(event => event instanceof NavigationError)
+        ).subscribe(event => {
+            this.recoverFromStaleVersion((event as NavigationError).error);
+        });
+
+        if (isBrowser()) {
+            // Trường hợp không đi qua bộ định tuyến (một thành phần được nạp muộn trong trang).
+            window.addEventListener('unhandledrejection', event => {
+                this.recoverFromStaleVersion(event.reason);
+            });
+        }
+
         // ✅ Cuộn lên đầu khi chuyển trang + Cập nhật SEO
         this.router.events.pipe(
             filter(event => event instanceof NavigationEnd)
@@ -52,6 +68,13 @@ export class AppComponent implements OnInit {
             // 👇 Cập nhật SEO cho trang hiện tại
             this.updateSEO();
         });
+    }
+
+    /** Tải lại trang khi lỗi đến từ tệp mô-đun của bản cũ (không phải lỗi nghiệp vụ). */
+    private recoverFromStaleVersion(error: unknown): void {
+        if (isStaleVersionError(error)) {
+            reloadForNewVersion();
+        }
     }
 
     /**
