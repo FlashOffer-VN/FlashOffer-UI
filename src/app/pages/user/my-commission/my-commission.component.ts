@@ -332,15 +332,7 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
                 </section>
 
                 <section class="bg-white rounded-xl border border-gray-200 p-5">
-                    <div class="flex flex-wrap items-center justify-between gap-2">
-                        <h2 class="text-base font-semibold text-gray-900">{{ 'USER.COMMISSION.BANK_TITLE' | translate }}</h2>
-                        @if (bankAccount && !isEditingBank) {
-                            <span class="px-2 py-0.5 rounded text-xs"
-                                [class]="bankAccount.isVerified ? 'bg-teal-50 text-teal-700' : 'bg-amber-50 text-amber-700'">
-                                {{ (bankAccount.isVerified ? 'USER.COMMISSION.BANK_VERIFIED' : 'USER.COMMISSION.BANK_UNVERIFIED') | translate }}
-                            </span>
-                        }
-                    </div>
+                    <h2 class="text-base font-semibold text-gray-900">{{ 'USER.COMMISSION.BANK_TITLE' | translate }}</h2>
 
                     @if (isEditingBank) {
                         <form [formGroup]="bankForm" (ngSubmit)="saveBankAccount()" class="mt-4 space-y-4">
@@ -387,24 +379,40 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
                             </div>
                         </form>
                     } @else if (bankAccount) {
-                        <dl class="grid gap-3 text-sm mt-3 sm:grid-cols-2">
-                            <div>
-                                <dt class="text-gray-500">{{ 'USER.COMMISSION.BANK_NAME' | translate }}</dt>
-                                <dd class="font-medium text-gray-800">{{ bankAccount.bankName }}</dd>
+                        <!-- Mặt thẻ hiển thị tài khoản nhận tiền: ngân hàng, số tài khoản, chủ tài khoản và trạng thái xác minh -->
+                        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary-dark via-primary to-primary-light p-5 text-white shadow-lg mt-4">
+                            <span class="pointer-events-none absolute -right-12 -bottom-16 h-48 w-48 rounded-full bg-white/10"></span>
+                            <span class="pointer-events-none absolute -top-20 -left-16 h-40 w-40 rounded-full bg-white/5"></span>
+
+                            <div class="relative flex items-start justify-between gap-3">
+                                <div class="min-w-0">
+                                    <p class="text-[11px] uppercase tracking-wider text-white/75">{{ 'USER.COMMISSION.BANK_NAME' | translate }}</p>
+                                    <p class="font-semibold leading-snug">{{ bankAccount.bankName }}</p>
+                                    @if (bankAccount.branch) {
+                                        <p class="text-xs text-white/80">{{ bankAccount.branch }}</p>
+                                    }
+                                </div>
+                                <!-- Chip trên mặt thẻ -->
+                                <span class="h-7 w-10 flex-none rounded-md bg-gradient-to-br from-amber-200 to-amber-500 ring-1 ring-inset ring-white/40" aria-hidden="true"></span>
                             </div>
-                            <div>
-                                <dt class="text-gray-500">{{ 'USER.COMMISSION.BANK_BRANCH' | translate }}</dt>
-                                <dd class="text-gray-700">{{ bankAccount.branch || '—' }}</dd>
+
+                            <div class="relative mt-6">
+                                <p class="text-[11px] uppercase tracking-wider text-white/75">{{ 'USER.COMMISSION.BANK_NUMBER' | translate }}</p>
+                                <p class="font-mono text-xl tracking-widest">{{ accountNumberDisplay }}</p>
                             </div>
-                            <div>
-                                <dt class="text-gray-500">{{ 'USER.COMMISSION.BANK_NUMBER' | translate }}</dt>
-                                <dd class="font-medium text-gray-800">{{ bankAccount.accountNumber }}</dd>
+
+                            <div class="relative mt-5 flex flex-wrap items-end justify-between gap-3">
+                                <div class="min-w-0">
+                                    <p class="text-[11px] uppercase tracking-wider text-white/75">{{ 'USER.COMMISSION.BANK_HOLDER' | translate }}</p>
+                                    <p class="font-semibold uppercase leading-snug">{{ bankAccount.accountHolder }}</p>
+                                </div>
+                                <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs"
+                                    [class]="bankAccount.isVerified ? 'bg-white/25 text-white' : 'bg-amber-400/90 text-amber-950'">
+                                    <i class="fa-solid" [class]="bankAccount.isVerified ? 'fa-circle-check' : 'fa-clock'"></i>
+                                    {{ (bankAccount.isVerified ? 'USER.COMMISSION.BANK_VERIFIED' : 'USER.COMMISSION.BANK_UNVERIFIED') | translate }}
+                                </span>
                             </div>
-                            <div>
-                                <dt class="text-gray-500">{{ 'USER.COMMISSION.BANK_HOLDER' | translate }}</dt>
-                                <dd class="text-gray-700">{{ bankAccount.accountHolder }}</dd>
-                            </div>
-                        </dl>
+                        </div>
                         @if (!bankAccount.isVerified) {
                             <p class="bg-amber-50 rounded-lg px-3 py-2 text-xs text-amber-800 mt-3">{{ 'USER.COMMISSION.BANK_UNVERIFIED_HINT' | translate }}</p>
 
@@ -562,6 +570,11 @@ export class MyCommissionPageComponent implements OnInit {
         return (this.wallet?.recentPayouts ?? [])
             .filter(item => item.periodLabel === label)
             .reduce((total, item) => total + item.netAmount, 0);
+    }
+
+    /** Số tài khoản hiển thị trên mặt thẻ, nhóm 4 số cho dễ đọc. */
+    get accountNumberDisplay(): string {
+        return (this.bankAccount?.accountNumber ?? '').replace(/\s+/g, '').replace(/(.{4})(?=.)/g, '$1 ');
     }
 
     /** Lớp hiển thị cho huy hiệu trạng thái chi trả. */
