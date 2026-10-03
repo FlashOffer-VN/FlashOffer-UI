@@ -44,6 +44,10 @@ export interface PayoutPeriod {
 /** Một lần chi trả hoa hồng của tài khoản. */
 export interface PayoutStatement {
     id: string;
+    /** Tài khoản nhận hoa hồng (màn quản trị cần để đối chiếu). */
+    userId?: string;
+    username?: string | null;
+    fullName?: string | null;
     type: PayoutType;
     /** Hoa hồng ghi nhận trong kỳ (hoặc số tiền yêu cầu khi rút sớm). */
     accruedAmount: number;
@@ -91,6 +95,23 @@ export interface MyWallet {
 }
 
 /** Thông tin ngân hàng nhận giải ngân của tài khoản. */
+export interface SaveBankAccountRequest {
+    bankName: string;
+    branch?: string | null;
+    accountNumber: string;
+    accountHolder: string;
+}
+
+export interface PayoutQuery {
+    pageNumber?: number;
+    pageSize?: number;
+    type?: PayoutType | null;
+    status?: PayoutStatus | null;
+    userId?: string | null;
+    payoutPeriodId?: string | null;
+    search?: string | null;
+}
+
 export interface BankAccount {
     id: string;
     bankName: string;

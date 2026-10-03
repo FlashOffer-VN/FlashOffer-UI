@@ -28,6 +28,9 @@ export const adminRoutes: Routes = [
             { path: 'group-buying/:id', loadComponent: () => import('@pages/admin/group-buying/detail/group-buying-detail.component').then(m => m.AdminGroupBuyingDetailComponent) },
             { path: 'settings', canActivate: [PermissionGuard], data: { permission: Permission.ViewSystemSettings },
               loadComponent: () => import('@pages/admin/settings/admin-settings.component').then(m => m.AdminSettingsComponent) },
+            // Duyệt yêu cầu rút hoa hồng sớm và các lần chi trả theo kỳ
+            { path: 'payouts', canActivate: [PermissionGuard], data: { permission: Permission.ViewPayouts },
+              loadComponent: () => import('@pages/admin/payouts/payout-list.component').then(m => m.AdminPayoutListComponent) },
             // Đường dẫn cũ của màn hình phân quyền, nay nằm trong tab của mục Cài đặt
             { path: 'permissions', redirectTo: 'settings' },
             { path: 'demo', loadComponent: () => import('@pages/demo/demo.component').then(m => m.DemoComponent) },
