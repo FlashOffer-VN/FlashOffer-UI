@@ -1,4 +1,4 @@
-﻿// social.component.ts
+// social.component.ts
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -50,6 +50,9 @@ export class SocialComponent implements OnInit, AfterViewInit {
         private _appService: AppService,
         private _route: ActivatedRoute
     ) { }
+
+    /** Khách chưa đăng nhập không hiện khối soạn bài. */
+    isLoggedIn = false;
 
     posts: SocialPost[] = [];
     members: SocialMember[] = [];
@@ -118,6 +121,7 @@ export class SocialComponent implements OnInit, AfterViewInit {
             }
         });
         this.getCurrentUser();
+        this.updateAuthState();
         this.loadPosts();
         this.loadMembers();
         this.loadClubs();
@@ -129,6 +133,10 @@ export class SocialComponent implements OnInit, AfterViewInit {
 
     getCurrentUser(): void {
         this.currentUser = this._appService.getCurrentUser();
+    }
+
+    updateAuthState(): void {
+        this.isLoggedIn = this._appService.isAuthenticated();
     }
 
     canEditPost(post: SocialPost): boolean {
