@@ -13,6 +13,8 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-tabs/status-tabs.component';
 import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
+import { ButtonComponent } from '@shared/components/button/button.component';
+import { InputComponent } from '@shared/components/input/input.component';
 
 /**
  * Nhật ký hoạt động đầy đủ: nhật ký thao tác dữ liệu và nhật ký đăng nhập, lọc theo khoảng thời gian
@@ -28,7 +30,9 @@ import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange
         LoadingComponent,
         PaginationComponent,
         StatusTabsComponent,
-        NgxFilterDaterangeComponent
+        NgxFilterDaterangeComponent,
+        ButtonComponent,
+        InputComponent
     ],
     template: `
         <div class="space-y-4">
@@ -40,18 +44,18 @@ import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange
                 <ngx-filter-daterange [from]="fromDate" [to]="toDate" (rangeChange)="onRangeChange($event)">
                 </ngx-filter-daterange>
 
-                <input type="text" [(ngModel)]="keyword" (keyup.enter)="loadData()"
-                    [placeholder]="(activeTab === 'auth' ? 'ADMIN.AUDIT_LOG.SEARCH_USERNAME' : 'ADMIN.AUDIT_LOG.SEARCH_ENTITY') | translate"
-                    class="h-10 px-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-64" />
+                <div class="w-64">
+                    <app-input [(ngModel)]="keyword" (keyup.enter)="loadData()" [id]="'audit_log_keyword'"
+                        [placeholder]="(activeTab === 'auth' ? 'ADMIN.AUDIT_LOG.SEARCH_USERNAME' : 'ADMIN.AUDIT_LOG.SEARCH_ENTITY') | translate">
+                    </app-input>
+                </div>
 
-                <button type="button" (click)="onSearch()"
-                    class="h-10 px-4 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700">
+                <app-button variant="primary" [loading]="isLoading" (click)="onSearch()">
                     <i class="fa-solid fa-magnifying-glass mr-1"></i>{{ 'ADMIN.AUDIT_LOG.SEARCH' | translate }}
-                </button>
-                <button type="button" (click)="onReset()"
-                    class="h-10 px-4 rounded-lg border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50">
+                </app-button>
+                <app-button variant="outline" (click)="onReset()">
                     <i class="fa-solid fa-rotate-left mr-1"></i>{{ 'ADMIN.AUDIT_LOG.RESET' | translate }}
-                </button>
+                </app-button>
 
                 <span class="ml-auto h-10 flex items-center text-sm text-gray-500">
                     {{ 'ADMIN.AUDIT_LOG.TOTAL' | translate }}: <strong>{{ totalCount }}</strong>

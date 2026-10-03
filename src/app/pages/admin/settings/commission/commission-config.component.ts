@@ -13,6 +13,10 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { UserPickerComponent, UserPickerItem } from '@shared/components/user-picker/user-picker.component';
 import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-tabs/status-tabs.component';
+import { ButtonComponent } from '@shared/components/button/button.component';
+import { InputComponent } from '@shared/components/input/input.component';
+import { BadgeComponent } from '@shared/components/badge/badge.component';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 
 /**
  * Cấu hình mức hoa hồng cho người giới thiệu và đối tác: một bản dùng chung cho mọi tài khoản
@@ -29,7 +33,11 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
         AppPricePipe,
         LoadingComponent,
         UserPickerComponent,
-        StatusTabsComponent
+        StatusTabsComponent,
+        ButtonComponent,
+        InputComponent,
+        BadgeComponent,
+        NgSelectWrapperComponent
     ],
     template: `
         <div class="grid gap-4 lg:grid-cols-[1fr_380px]">
@@ -67,53 +75,48 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
                     <p class="text-sm font-semibold text-gray-700">{{ 'COMMISSION.FORM_TITLE' | translate }}</p>
 
                     <div class="grid gap-3 md:grid-cols-2">
-                        <label class="flex flex-col text-sm text-gray-700">
-                            {{ 'COMMISSION.TYPE' | translate }}
-                            <select [(ngModel)]="type" class="mt-auto h-10 w-full px-3 border border-gray-300 rounded-lg text-sm">
-                                @for (option of typeOptions; track option.value) {
-                                    <option [ngValue]="option.value">{{ option.label | translate }}</option>
-                                }
-                            </select>
-                        </label>
+                        <app-ng-select-wrapper [(ngModel)]="type" [items]="typeOptions"
+                            [label]="'COMMISSION.TYPE' | translate"
+                            [placeholder]="'COMMON.SELECT_PLACEHOLDER' | translate"
+                            [id]="'commission_type'">
+                        </app-ng-select-wrapper>
 
-                        <label class="flex flex-col text-sm text-gray-700">
-                            {{ 'COMMISSION.RATE' | translate }} ({{ rateUnitKey | translate }})
-                            <input type="number" min="0" [(ngModel)]="rate"
-                                class="mt-auto h-10 w-full px-3 border border-gray-300 rounded-lg text-sm" />
-                        </label>
+                        <app-input [(ngModel)]="rate" [type]="'number'" [id]="'commission_rate'"
+                            [label]="('COMMISSION.RATE' | translate) + ' (' + (rateUnitKey | translate) + ')'">
+                        </app-input>
 
-                        <label class="flex flex-col text-sm text-gray-700">
-                            {{ 'COMMISSION.MIN_ORDER' | translate }}
-                            <input type="number" min="0" [(ngModel)]="minOrderValue"
-                                class="mt-auto h-10 w-full px-3 border border-gray-300 rounded-lg text-sm" />
-                        </label>
+                        <app-input [(ngModel)]="minOrderValue" [type]="'number'" [id]="'commission_min_order'"
+                            [label]="'COMMISSION.MIN_ORDER' | translate">
+                        </app-input>
 
-                        <label class="flex flex-col text-sm text-gray-700">
-                            {{ 'COMMISSION.MAX_COMMISSION' | translate }}
-                            <input type="number" min="0" [(ngModel)]="maxCommission"
-                                class="mt-auto h-10 w-full px-3 border border-gray-300 rounded-lg text-sm" />
-                        </label>
+                        <app-input [(ngModel)]="maxCommission" [type]="'number'" [id]="'commission_max'"
+                            [label]="'COMMISSION.MAX_COMMISSION' | translate">
+                        </app-input>
                     </div>
 
                     @if (isTiered) {
                         <div class="border-t border-gray-100 pt-3">
                             <div class="flex items-center justify-between">
                                 <p class="text-sm font-medium text-gray-700">{{ 'COMMISSION.TIERS' | translate }}</p>
-                                <button type="button" (click)="addTier()" class="text-sm text-blue-600 hover:underline">
+                                <app-button variant="ghost" size="sm" (click)="addTier()">
                                     <i class="fa-solid fa-plus mr-1"></i>{{ 'COMMISSION.TIER_ADD' | translate }}
-                                </button>
+                                </app-button>
                             </div>
                             @for (tier of tiers; track $index) {
-                                <div class="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-center mt-2">
-                                    <input type="number" [(ngModel)]="tier.fromValue" [placeholder]="'COMMISSION.TIER_FROM' | translate"
-                                        class="h-10 w-full px-2 border border-gray-300 rounded-lg text-sm" />
-                                    <input type="number" [(ngModel)]="tier.toValue" [placeholder]="'COMMISSION.TIER_TO' | translate"
-                                        class="h-10 w-full px-2 border border-gray-300 rounded-lg text-sm" />
-                                    <input type="number" [(ngModel)]="tier.rate" [placeholder]="'COMMISSION.TIER_RATE' | translate"
-                                        class="h-10 w-full px-2 border border-gray-300 rounded-lg text-sm" />
-                                    <button type="button" (click)="removeTier($index)" class="h-10 w-10 grid place-items-center text-red-500 rounded-lg hover:bg-red-50">
+                                <div class="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-end mt-2">
+                                    <app-input [(ngModel)]="tier.fromValue" [type]="'number'"
+                                        [placeholder]="'COMMISSION.TIER_FROM' | translate">
+                                    </app-input>
+                                    <app-input [(ngModel)]="tier.toValue" [type]="'number'"
+                                        [placeholder]="'COMMISSION.TIER_TO' | translate">
+                                    </app-input>
+                                    <app-input [(ngModel)]="tier.rate" [type]="'number'"
+                                        [placeholder]="'COMMISSION.TIER_RATE' | translate">
+                                    </app-input>
+                                    <app-button variant="ghost" size="sm" [title]="'COMMON.BUTTON.DELETE' | translate"
+                                        (click)="removeTier($index)">
                                         <i class="fa-solid fa-trash"></i>
-                                    </button>
+                                    </app-button>
                                 </div>
                             }
                         </div>
@@ -130,15 +133,13 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
                     </label>
 
                     <div class="flex items-center gap-2 pt-1">
-                        <button type="button" (click)="save()" [disabled]="isSaving"
-                            class="h-10 px-4 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-60">
+                        <app-button variant="primary" [loading]="isSaving" (click)="save()">
                             <i class="fa-solid fa-floppy-disk mr-1"></i>{{ 'COMMISSION.SAVE' | translate }}
-                        </button>
+                        </app-button>
                         @if (editingId) {
-                            <button type="button" (click)="resetForm()"
-                                class="h-10 px-3 rounded-lg border border-gray-300 text-sm text-gray-700">
+                            <app-button variant="outline" (click)="resetForm()">
                                 {{ 'COMMISSION.CANCEL_EDIT' | translate }}
-                            </button>
+                            </app-button>
                         }
                     </div>
                 </div>
@@ -158,10 +159,10 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
                         <div class="border border-gray-200 rounded-lg p-3 mt-3">
                             <div class="flex items-start justify-between gap-2">
                                 <div>
-                                    <span class="inline-block px-2 py-0.5 rounded text-xs"
-                                        [class]="config.isGlobal ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700'">
-                                        {{ (config.isGlobal ? 'COMMISSION.BADGE_GLOBAL' : 'COMMISSION.BADGE_PERSONAL') | translate }}
-                                    </span>
+                                    <app-badge size="sm" [showDot]="false"
+                                        [variant]="config.isGlobal ? 'info' : 'warning'"
+                                        [label]="(config.isGlobal ? 'COMMISSION.BADGE_GLOBAL' : 'COMMISSION.BADGE_PERSONAL') | translate">
+                                    </app-badge>
                                     <p class="text-sm text-gray-900 mt-1">
                                         {{ config.isGlobal ? ('COMMISSION.ALL_USERS' | translate) : (config.userFullName || config.username) }}
                                     </p>
@@ -170,12 +171,14 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
                                     }
                                 </div>
                                 <div class="flex gap-1">
-                                    <button type="button" (click)="edit(config)" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded">
+                                    <app-button variant="ghost" size="sm" [title]="'COMMON.BUTTON.EDIT' | translate"
+                                        (click)="edit(config)">
                                         <i class="fa-solid fa-pen"></i>
-                                    </button>
-                                    <button type="button" (click)="remove(config)" class="p-1.5 text-red-600 hover:bg-red-50 rounded">
+                                    </app-button>
+                                    <app-button variant="ghost" size="sm" [title]="'COMMON.BUTTON.DELETE' | translate"
+                                        (click)="remove(config)">
                                         <i class="fa-solid fa-trash"></i>
-                                    </button>
+                                    </app-button>
                                 </div>
                             </div>
 
@@ -248,11 +251,8 @@ export class AdminCommissionConfigComponent implements OnInit {
             { key: 'referrer', label: this._appService.trans('COMMISSION.BENEFICIARY_REFERRER'), icon: 'fa-solid fa-user-group' },
             { key: 'partner', label: this._appService.trans('COMMISSION.BENEFICIARY_PARTNER'), icon: 'fa-solid fa-handshake' }
         ];
-        this.typeOptions = [
-            { value: CommissionType.Percentage, label: getCommissionTypeLabel(CommissionType.Percentage) },
-            { value: CommissionType.Fixed, label: getCommissionTypeLabel(CommissionType.Fixed) },
-            { value: CommissionType.Tiered, label: getCommissionTypeLabel(CommissionType.Tiered) }
-        ];
+        this.typeOptions = [CommissionType.Percentage, CommissionType.Fixed, CommissionType.Tiered]
+            .map(value => ({ value, label: this._appService.trans(getCommissionTypeLabel(value)) }));
         this.loadConfigs();
     }
 
