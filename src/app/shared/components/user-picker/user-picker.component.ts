@@ -25,9 +25,9 @@ export interface UserPickerItem {
         <div class="flex gap-2">
             <input type="text" [(ngModel)]="search" (keyup.enter)="emitSearch()"
                 [placeholder]="'COMMON.USER_PICKER.SEARCH_PLACEHOLDER' | translate"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            <button type="button" (click)="emitSearch()"
-                class="shrink-0 px-3 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50">
+                class="h-10 w-full px-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <button type="button" (click)="emitSearch()" [title]="'COMMON.BUTTON.SEARCH' | translate"
+                class="h-10 w-10 shrink-0 grid place-items-center rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
         </div>

@@ -67,31 +67,31 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
                     <p class="text-sm font-semibold text-gray-700">{{ 'COMMISSION.FORM_TITLE' | translate }}</p>
 
                     <div class="grid gap-3 md:grid-cols-2">
-                        <label class="block text-sm text-gray-700">
+                        <label class="flex flex-col text-sm text-gray-700">
                             {{ 'COMMISSION.TYPE' | translate }}
-                            <select [(ngModel)]="type" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                            <select [(ngModel)]="type" class="mt-auto h-10 w-full px-3 border border-gray-300 rounded-lg text-sm">
                                 @for (option of typeOptions; track option.value) {
                                     <option [ngValue]="option.value">{{ option.label | translate }}</option>
                                 }
                             </select>
                         </label>
 
-                        <label class="block text-sm text-gray-700">
+                        <label class="flex flex-col text-sm text-gray-700">
                             {{ 'COMMISSION.RATE' | translate }} ({{ rateUnitKey | translate }})
                             <input type="number" min="0" [(ngModel)]="rate"
-                                class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+                                class="mt-auto h-10 w-full px-3 border border-gray-300 rounded-lg text-sm" />
                         </label>
 
-                        <label class="block text-sm text-gray-700">
+                        <label class="flex flex-col text-sm text-gray-700">
                             {{ 'COMMISSION.MIN_ORDER' | translate }}
                             <input type="number" min="0" [(ngModel)]="minOrderValue"
-                                class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+                                class="mt-auto h-10 w-full px-3 border border-gray-300 rounded-lg text-sm" />
                         </label>
 
-                        <label class="block text-sm text-gray-700">
+                        <label class="flex flex-col text-sm text-gray-700">
                             {{ 'COMMISSION.MAX_COMMISSION' | translate }}
                             <input type="number" min="0" [(ngModel)]="maxCommission"
-                                class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+                                class="mt-auto h-10 w-full px-3 border border-gray-300 rounded-lg text-sm" />
                         </label>
                     </div>
 
@@ -106,12 +106,12 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
                             @for (tier of tiers; track $index) {
                                 <div class="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-center mt-2">
                                     <input type="number" [(ngModel)]="tier.fromValue" [placeholder]="'COMMISSION.TIER_FROM' | translate"
-                                        class="w-full px-2 py-1.5 border border-gray-300 rounded-lg text-sm" />
+                                        class="h-10 w-full px-2 border border-gray-300 rounded-lg text-sm" />
                                     <input type="number" [(ngModel)]="tier.toValue" [placeholder]="'COMMISSION.TIER_TO' | translate"
-                                        class="w-full px-2 py-1.5 border border-gray-300 rounded-lg text-sm" />
+                                        class="h-10 w-full px-2 border border-gray-300 rounded-lg text-sm" />
                                     <input type="number" [(ngModel)]="tier.rate" [placeholder]="'COMMISSION.TIER_RATE' | translate"
-                                        class="w-full px-2 py-1.5 border border-gray-300 rounded-lg text-sm" />
-                                    <button type="button" (click)="removeTier($index)" class="px-2 text-red-500">
+                                        class="h-10 w-full px-2 border border-gray-300 rounded-lg text-sm" />
+                                    <button type="button" (click)="removeTier($index)" class="h-10 w-10 grid place-items-center text-red-500 rounded-lg hover:bg-red-50">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </div>
@@ -119,10 +119,10 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
                         </div>
                     }
 
-                    <label class="block text-sm text-gray-700">
+                    <label class="flex flex-col text-sm text-gray-700">
                         {{ 'COMMISSION.NOTE' | translate }}
                         <textarea rows="2" [(ngModel)]="note"
-                            class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"></textarea>
+                            class="mt-auto w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"></textarea>
                     </label>
 
                     <label class="flex items-center gap-2 text-sm text-gray-700">
@@ -131,12 +131,12 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
 
                     <div class="flex items-center gap-2 pt-1">
                         <button type="button" (click)="save()" [disabled]="isSaving"
-                            class="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-60">
+                            class="h-10 px-4 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-60">
                             <i class="fa-solid fa-floppy-disk mr-1"></i>{{ 'COMMISSION.SAVE' | translate }}
                         </button>
                         @if (editingId) {
                             <button type="button" (click)="resetForm()"
-                                class="px-3 py-2 rounded-lg border border-gray-300 text-sm text-gray-700">
+                                class="h-10 px-3 rounded-lg border border-gray-300 text-sm text-gray-700">
                                 {{ 'COMMISSION.CANCEL_EDIT' | translate }}
                             </button>
                         }
