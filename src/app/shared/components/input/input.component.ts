@@ -35,6 +35,8 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     @Input() placeholder = '';
     @Input() hint = '';
     @Input() icon = '';
+    /** Gợi ý điền tự động của trình duyệt (username, current-password, new-password…). */
+    @Input() autocomplete = '';
     @Input() readonly = false;
     @Input() isDisabled = false;
     @Input() errorMessage = '';  // ✅ Thêm input này

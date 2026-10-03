@@ -759,7 +759,7 @@
         "USERNAME": "Username",
         "USERNAME_PLACEHOLDER": "Enter email or phone number",
         "PASSWORD": "Password",
-        "PASSWORD_PLACEHOLDER": "Enter phone number",
+        "PASSWORD_PLACEHOLDER": "Enter password",
         "REMEMBER_ME": "Remember me",
         "FORGOT_PASSWORD": "Forgot password?",
         "BUTTON": "Login",
