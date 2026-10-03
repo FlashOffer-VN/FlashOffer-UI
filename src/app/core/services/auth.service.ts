@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import {
     User,
     UserRole,
+    isAdminRole,
     toUserRole,
     LoginRequest,
     RegisterRequest,
@@ -207,7 +208,8 @@ export class AuthService {
             email: data.email || data.username || '',
             role: roleValue,
             fullName: data.fullName || '',
-            mustChangeCredentials: data.mustChangeCredentials === true
+            mustChangeCredentials: data.mustChangeCredentials === true,
+            permissions: data.permissions ?? []
         };
 
         if (data.token) {
@@ -235,7 +237,7 @@ export class AuthService {
             return;
         }
 
-        if (isAdmin || user.role === UserRole.Admin) {
+        if (isAdmin || isAdminRole(user.role)) {
             this.router.navigate(['/admin/dashboard']);
         } else {
             this.router.navigate(['/social']);
@@ -278,7 +280,8 @@ export class AuthService {
             email: data.email || current?.email || data.username || '',
             role: toUserRole(data.role ?? current?.role),
             fullName: data.fullName || current?.fullName || '',
-            mustChangeCredentials: data.mustChangeCredentials === true
+            mustChangeCredentials: data.mustChangeCredentials === true,
+            permissions: data.permissions ?? current?.permissions ?? []
         };
 
         storageSet('user', JSON.stringify(user));

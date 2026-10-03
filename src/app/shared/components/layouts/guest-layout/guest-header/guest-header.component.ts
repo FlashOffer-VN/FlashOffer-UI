@@ -5,7 +5,7 @@ import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { AppService } from '../../../../../core/services/app.service';
-import { UserRole } from '../../../../../core/models/auth.model';
+import { isAdminRole } from '../../../../../core/models/auth.model';
 import { isBrowser } from '../../../../../core/utils/platform';
 import { LanguageSwitcherComponent } from '../../../language-switcher/language-switcher.component';
 
@@ -53,7 +53,7 @@ export class GuestHeaderComponent implements OnInit, OnDestroy {
     checkAuth(): void {
         this.authSubscription = this._appService.auth.currentUser$.subscribe(user => {
             this.isLoggedIn = !!user;
-            this.isAdmin = user?.role === UserRole.Admin;
+            this.isAdmin = isAdminRole(user?.role);
             this.username = user?.username || '';
         });
     }

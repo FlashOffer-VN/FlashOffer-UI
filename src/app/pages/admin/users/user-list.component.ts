@@ -6,7 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { AdminUser } from '@core/models/user.model';
 import { PagedResponse } from '@core/models/paged-response.model';
-import { userRoleLabelKey } from '@core/models/auth.model';
+import { isAdminRole, userRoleLabelKey } from '@core/models/auth.model';
 
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
@@ -126,7 +126,7 @@ export class AdminUserListComponent implements OnInit {
     }
 
     private isAdmin(user: AdminUser): boolean {
-        return userRoleLabelKey(user.role) === 'USER_ROLE.ADMIN';
+        return isAdminRole(user.role);
     }
 
     private applyPagedResponse(response: PagedResponse<AdminUser>): void {

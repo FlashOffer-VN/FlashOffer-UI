@@ -1,4 +1,4 @@
-﻿{
+{
     "APP_TITLE": "Kindi",
     "APP_NAME": "Kindi - SME Platform",
     "NAV_SOLUTIONS": "Solutions",
@@ -945,9 +945,10 @@
         }
     },
     "USER_ROLE": {
-        "CUSTOMER": "Member",
-        "CTV": "Collaborator",
-        "ADMIN": "Administrator"
+        "USER": "User",
+        "PARTNER": "Strategic partner",
+        "ADMIN": "Administrator",
+        "SUPER_ADMIN": "Super administrator"
     },
     "SOCIAL": {
         "TITLE": "Kindi - The opportunity network",
@@ -1055,7 +1056,22 @@
     },
     "COMMON": {
         "BUTTON": {
-            "CLOSE": "Close"
+            "SEARCH": "Search",
+            "ACTION": "Action",
+            "VIEW_DETAIL": "View Detail",
+            "EDIT": "Edit",
+            "DELETE": "Delete",
+            "BACK": "Back",
+            "SUBMIT": "Submit",
+            "CANCEL": "Cancel",
+            "SAVE": "Save",
+            "CREATE": "Create",
+            "UPDATE": "Update",
+            "CONFIRM": "Confirm",
+            "APPLY": "Apply",
+            "OK": "OK",
+            "RESTORE": "Restore",
+            "SEE_MORE": "See more"
         },
         "CHART_TYPE": {
             "BAR": "Column",
@@ -1085,24 +1101,6 @@
             "EXPIRED": "Expired",
             "CONTACTED": "Contacted",
             "DELETED": "Deleted"
-        },
-        "BUTTON": {
-            "SEARCH": "Search",
-            "ACTION": "Action",
-            "VIEW_DETAIL": "View Detail",
-            "EDIT": "Edit",
-            "DELETE": "Delete",
-            "BACK": "Back",
-            "SUBMIT": "Submit",
-            "CANCEL": "Cancel",
-            "SAVE": "Save",
-            "CREATE": "Create",
-            "UPDATE": "Update",
-            "CONFIRM": "Confirm",
-            "APPLY": "Apply",
-            "OK": "OK",
-            "RESTORE": "Restore",
-            "SEE_MORE": "See more"
         },
         "ERROR": {
             "LOAD_FAILED": "An error occurred while loading data!",
@@ -1198,7 +1196,8 @@
             "REFERRAL_STATS": "Referral statistics",
             "LOGOUT": "Logout",
             "GROUP_BUYING": "Group buying requests",
-            "GROUPS": "Groups"
+            "GROUPS": "Groups",
+            "PERMISSIONS": "Permissions"
         },
         "DASHBOARD": {
             "TITLE": "Admin overview",
@@ -1778,5 +1777,32 @@
         "SHARE_LINK_LABEL": "Share link to send to customers",
         "COPY_SHARE_LINK": "Copy link",
         "COPY_LINK_SUCCESS": "Share link copied!"
+    },
+    "PERMISSION": {
+        "TITLE": "Permissions",
+        "DESCRIPTION": "Permissions by P### code for each role. Only the super administrator can edit.",
+        "SAVE": "Save changes",
+        "SAVE_SUCCESS": "Role permissions saved",
+        "SAVE_FAILED": "Saving permissions failed",
+        "LOAD_FAILED": "Could not load the permission catalogue",
+        "READ_ONLY": "You have view-only access to the permission matrix.",
+        "SEARCH_PLACEHOLDER": "Search by code, name, module or API",
+        "SUPER_ADMIN_ALL": "All permissions",
+        "COL": {
+            "PERMISSION": "Permission"
+        },
+        "MODULE": {
+            "SYSTEM": "System",
+            "USER": "User",
+            "PARTNER": "Partner",
+            "PURCHASE": "Purchase",
+            "GROUP": "Group",
+            "COMMUNITY": "Community",
+            "SUPERADMIN": "Super admin"
+        },
+        "KIND": {
+            "VIEW": "Screen",
+            "ACTION": "Action"
+        }
     }
 }

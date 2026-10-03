@@ -1,6 +1,7 @@
 // src/app/core/routes/admin.routes.ts
 import { Routes } from '@angular/router';
-import { AdminGuard, CredentialsGuard } from '@core/guards';
+import { AdminGuard, CredentialsGuard, PermissionGuard } from '@core/guards';
+import { Permission } from '@core/models/permission.model';
 import { AdminLayoutComponent } from '@shared/components/layouts/admin-layout/admin-layout.component';
 
 /** Route cho quản trị viên (layout admin, yêu cầu role Admin). */
@@ -34,6 +35,9 @@ export const adminRoutes: Routes = [
             { path: 'collaborator', loadComponent: () => import('@pages/admin/collaborator/collaborator-list.component').then(m => m.AdminCollaboratorListComponent) },
             { path: 'collaborator/:id', loadComponent: () => import('@pages/admin/collaborator/detail/collaborator-detail.component').then(m => m.AdminCollaboratorDetailComponent) },
             // Partner Management
+            // Phân quyền: chỉ tài khoản có quyền xem ma trận quyền (P100) mới vào được
+            { path: 'permissions', canActivate: [PermissionGuard], data: { permission: Permission.ViewPermissions },
+              loadComponent: () => import('@pages/admin/permissions/permission-matrix.component').then(m => m.AdminPermissionMatrixComponent) },
             { path: 'partner', loadComponent: () => import('@pages/admin/partner/partner-list.component').then(m => m.AdminPartnerListComponent) },
             { path: 'partner/:id', loadComponent: () => import('@pages/admin/partner/detail/partner-detail.component').then(m => m.AdminPartnerDetailComponent) },
         

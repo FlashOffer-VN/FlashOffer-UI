@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AppService } from '../services/app.service';
-import { UserRole } from '../models/auth.model';
+import { isAdminRole } from '../models/auth.model';
 
 @Injectable({
     providedIn: 'root'
@@ -19,9 +19,9 @@ export class AdminGuard implements CanActivate {
             return false;
         }
 
-        // Kiểm tra role admin
+        // Kiểm tra role quản trị (Admin hoặc SuperAdmin)
         const user = this._appService.auth.getCurrentUser();
-        if (user?.role === UserRole.Admin) {
+        if (isAdminRole(user?.role)) {
             return true;
         }
 
