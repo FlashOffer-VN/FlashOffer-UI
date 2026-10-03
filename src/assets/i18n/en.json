@@ -1980,7 +1980,8 @@
             "GROUP": "Group",
             "COMMUNITY": "Community",
             "SUPERADMIN": "Super admin",
-            "REFERRAL": "Referral"
+            "REFERRAL": "Referral",
+            "COMMISSION": "Commission & payout"
         },
         "KIND": {
             "VIEW": "Screen",

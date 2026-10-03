@@ -172,10 +172,12 @@ import { InputComponent } from '@shared/components/input/input.component';
                     }
                 </div>
 
-                <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [totalCount]="totalCount"
-                    [totalPages]="totalPages" [hasPreviousPage]="hasPreviousPage" [hasNextPage]="hasNextPage"
-                    (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
-                </app-pagination>
+                <div class="border-t border-gray-200 px-4 py-3">
+                    <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [totalCount]="totalCount"
+                        [totalPages]="totalPages" [hasPreviousPage]="hasPreviousPage" [hasNextPage]="hasNextPage"
+                        (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
+                    </app-pagination>
+                </div>
             </div>
         </div>
     `

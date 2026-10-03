@@ -1943,7 +1943,8 @@
             "GROUP": "Nhóm",
             "COMMUNITY": "Cộng đồng",
             "SUPERADMIN": "Quản trị tối cao",
-            "REFERRAL": "Giới thiệu"
+            "REFERRAL": "Giới thiệu",
+            "COMMISSION": "Hoa hồng & giải ngân"
         },
         "KIND": {
             "VIEW": "Màn hình",
