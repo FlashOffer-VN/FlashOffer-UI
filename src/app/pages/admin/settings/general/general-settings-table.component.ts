@@ -24,7 +24,12 @@ import {
 } from '@core/constants/format-options';
 import { openExternalLink } from '@core/utils/link';
 import { copyToClipboard } from '@core/utils/share-link';
-import { QUILL_MODULES_LEGAL } from '@core/configs/quill.config';
+import {
+    QUILL_MODULES_LEGAL,
+    horizontalRuleRegistered,
+    registerQuillHorizontalRule
+} from '@core/configs/quill.config';
+import { isBrowser } from '@core/utils/platform';
 
 /** Kiểu điều khiển của một trường cài đặt. */
 type SettingFieldType = 'text' | 'number' | 'email' | 'phone' | 'url' | 'bool' | 'language' | 'select' | 'html';
@@ -235,7 +240,7 @@ interface SettingSection {
                                                     </div>
                                                 </td>
                                             </tr>
-                                            @if (field.type === 'html') {
+                                            @if (field.type === 'html' && legalEditorReady) {
                                                 <tr>
                                                     <td colspan="4" class="px-4 pb-4">
                                                         <quill-editor [formControlName]="field.key"
@@ -400,6 +405,9 @@ export class AdminGeneralSettingsComponent implements OnInit {
     /** Bộ công cụ soạn thảo cho nội dung pháp lý (tiêu đề mục, danh sách, liên kết). */
     readonly legalQuillModules = QUILL_MODULES_LEGAL;
 
+    /** Sẵn sàng dựng khung soạn thảo nội dung pháp lý (chờ Quill đăng ký đường kẻ ngang). */
+    legalEditorReady = !isBrowser() || horizontalRuleRegistered();
+
     /** Chiều cao tối thiểu của khung soạn thảo. */
     readonly legalEditorStyles = { minHeight: '240px' };
 
@@ -447,6 +455,19 @@ export class AdminGeneralSettingsComponent implements OnInit {
         return options;
     }
 
+    /**
+     * Quill được nạp muộn nên định dạng đường kẻ ngang chỉ đăng ký được sau khi có module;
+     * chờ đăng ký xong mới dựng khung soạn thảo để thanh công cụ có đủ nút.
+     */
+    private prepareLegalEditor(): void {
+        if (!isBrowser() || horizontalRuleRegistered()) return;
+
+        import('quill')
+            .then(quillModule => registerQuillHorizontalRule(quillModule))
+            .catch(() => { /* thiếu nút đường kẻ ngang, phần soạn thảo vẫn dùng được */ })
+            .finally(() => this.legalEditorReady = true);
+    }
+
     /** Dựng lại danh sách nhóm và tuỳ chọn của các ô chọn (sau khi nạp, lưu hoặc khôi phục cài đặt). */
     private rebuildOptions(): void {
         this._fieldOptions.clear();
@@ -465,6 +486,8 @@ export class AdminGeneralSettingsComponent implements OnInit {
         private readonly _settingService: SystemSettingService,
         private readonly _fb: FormBuilder
     ) {
+        this.prepareLegalEditor();
+
         this.form = this._fb.group({
             systemName: ['', [Validators.required, Validators.maxLength(200)]],
             supportPhone: ['', [Validators.maxLength(50)]],
