@@ -11,10 +11,10 @@ import { ButtonComponent } from '@shared/components/button/button.component';
   template: `
     <div
       *ngIf="visible"
-      class="fixed inset-0 z-50 flex items-end justify-center p-0 sm:p-4 sm:items-center bg-black/50 backdrop-blur-sm animate-fadeIn"
+      class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/50 backdrop-blur-sm animate-fadeIn"
       (click)="onBackdropClick($event)">
       <div
-        class="bg-white w-full flex flex-col max-h-[92vh] sm:max-h-[85vh] overflow-hidden rounded-t-2xl sm:rounded-2xl shadow-2xl ring-1 ring-black/5 animate-slideUp"
+        class="bg-white w-full flex flex-col max-h-[90vh] sm:max-h-[85vh] overflow-hidden rounded-2xl shadow-2xl ring-1 ring-black/5 animate-slideUp"
         [class]="getSizeClass()"
         [style.max-width]="customWidth || 'auto'"
         (click)="$event.stopPropagation()">
