@@ -1184,6 +1184,7 @@
             "OFFERS": "Offers",
             "PURCHASE_REQUESTS": "Purchase requests",
             "COLLABORATOR": "Collaborator",
+            "USERS": "Users",
             "SOCIAL_POSTS": "Social Posts",
             "PARTNER": "Partner",
             "SETTINGS": "Settings",
@@ -1337,6 +1338,23 @@
             "RESTORED_SUCCESS": "Post restored successfully",
             "DELETE_CONFIRM": "Are you sure you want to delete post \"{{name}}\"?",
             "DELETED_SUCCESS": "Post deleted successfully"
+        },
+        "USERS": {
+            "TITLE": "User Management",
+            "LIST_TITLE": "User List",
+            "SEARCH_PLACEHOLDER": "Search by username, full name, phone, email...",
+            "USERNAME": "Username",
+            "FULL_NAME": "Full Name",
+            "PHONE": "Phone",
+            "EMAIL": "Email",
+            "ROLE": "Role",
+            "STATUS": "Status",
+            "MUST_CHANGE": "Must change password",
+            "LAST_LOGIN": "Last sign-in",
+            "RESET_PASSWORD": "Reset password",
+            "RESET_CONFIRM_TITLE": "Reset password",
+            "RESET_CONFIRM_MESSAGE": "The new password will be the account's phone number and the user must change it at next sign-in.",
+            "RESET_SUCCESS": "Password reset. The new password is"
         },
         "CTV": {
             "TITLE": "Collaborator Management",
