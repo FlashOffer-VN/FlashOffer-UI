@@ -1,4 +1,4 @@
-﻿// shared/components/button/button.component.ts
+// shared/components/button/button.component.ts
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -41,6 +41,7 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
     }
     button {
       cursor: pointer;
+      height: var(--control-h, auto);
       transition: all 0.2s ease;
       font-weight: 600;
       border: none;

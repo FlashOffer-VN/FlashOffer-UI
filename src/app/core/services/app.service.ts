@@ -22,6 +22,7 @@ import { BusinessGroupService } from './business-group.service';
 import { ReferralService } from './referral.service';
 import { PermissionService } from './permission.service';
 import { CommissionService } from './commission.service';
+import { MembershipService } from './membership.service';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 
 @Injectable({
@@ -46,7 +47,8 @@ export class AppService {
         public businessGroupService: BusinessGroupService,
         public referralService: ReferralService,
         public permissionService: PermissionService,
-        public commissionService: CommissionService
+        public commissionService: CommissionService,
+        public membershipService: MembershipService
     ) { }
 
     // ========== Auth ==========

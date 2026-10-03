@@ -15,6 +15,7 @@ import {
     ChangeCredentialsRequest
 } from '../models/auth.model';
 import { isBrowser } from '../utils/platform';
+import { UpdateMyProfileRequest } from '../models/auth.model';
 import { storageGet, storageRemove, storageSet } from '../utils/storage';
 
 @Injectable({
@@ -104,6 +105,21 @@ export class AuthService {
             tap(response => {
                 if (response.success && response.data) {
                     const user = response.data;
+                    storageSet('user', JSON.stringify(user));
+                    this.currentUserSubject.next(user);
+                }
+            })
+        );
+    }
+
+    /**
+     * Cập nhật thông tin cá nhân của chính người đang đăng nhập (PUT auth/me)
+     */
+    updateMe(payload: UpdateMyProfileRequest): Observable<ApiResponse<User>> {
+        return this.api.put<ApiResponse<User>>('auth/me', payload).pipe(
+            tap(response => {
+                if (response.success && response.data) {
+                    const user = { ...(this.getCurrentUser() ?? ({} as User)), ...response.data } as User;
                     storageSet('user', JSON.stringify(user));
                     this.currentUserSubject.next(user);
                 }

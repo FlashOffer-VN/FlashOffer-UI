@@ -41,7 +41,7 @@ import { InputComponent } from '@shared/components/input/input.component';
             </app-status-tabs>
 
             <!-- Bộ lọc -->
-            <div class="flex flex-wrap items-end gap-3 bg-white p-3 rounded-lg border border-gray-200">
+            <div class="flex flex-wrap items-end gap-3 bg-white p-3 rounded-lg border border-gray-200" style="--control-h: 2.5rem">
                 <ngx-filter-daterange [from]="fromDate" [to]="toDate" (rangeChange)="onRangeChange($event)">
                 </ngx-filter-daterange>
 
@@ -193,7 +193,7 @@ export class AdminAuditLogListComponent implements OnInit {
     isLoading = false;
 
     pageNumber = 1;
-    pageSize = 20;
+    pageSize = 10;
     totalCount = 0;
     totalPages = 0;
     hasPreviousPage = false;

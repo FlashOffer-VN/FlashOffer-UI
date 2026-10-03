@@ -64,6 +64,7 @@
     box-sizing: border-box;
     -webkit-appearance: none;
     appearance: none;
+    height: var(--control-h, auto);
 }
 
 /* ✅ Có icon thì thêm padding trái */

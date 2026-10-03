@@ -6,6 +6,7 @@ import { AppService } from '@core/services/app.service';
 import { CommissionService } from '@core/services/commission.service';
 import { CommissionConfig } from '@core/models/commission.model';
 import { CommissionType, getCommissionTypeLabel } from '@core/models/partner.model';
+import { UserRole, toUserRole } from '@core/models/auth.model';
 
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
@@ -18,8 +19,8 @@ interface CommissionCard {
 }
 
 /**
- * Mức hoa hồng giới thiệu của cá nhân: mức đang áp khi tài khoản là người giới thiệu
- * hoặc là đối tác. Mức riêng của tài khoản được ưu tiên hơn mức chung.
+ * Mức hoa hồng giới thiệu của cá nhân. Mỗi tài khoản chỉ nhận một vai trò: đối tác chiến lược
+ * nhận mức của bên nhận đối tác, các tài khoản còn lại nhận mức của người giới thiệu.
  */
 @Component({
     selector: 'app-my-commission-page',
@@ -123,18 +124,20 @@ export class MyCommissionPageComponent implements OnInit {
         this._commissionService.getMine().subscribe({
             next: response => {
                 const mine = response.data;
-                this.cards = [
-                    {
-                        key: 'referrer',
-                        titleKey: 'USER.COMMISSION.REFERRER_TITLE',
-                        config: mine?.referrer ?? null
-                    },
-                    {
+                // Hoa hồng hiển thị theo vai trò của tài khoản: đối tác chiến lược xem mức của đối tác,
+                // các tài khoản còn lại xem mức của người giới thiệu.
+                const isPartner = toUserRole(this._appService.auth.getCurrentUser()?.role) === UserRole.Partner;
+                this.cards = isPartner
+                    ? [{
                         key: 'partner',
                         titleKey: 'USER.COMMISSION.PARTNER_TITLE',
                         config: mine?.partner ?? null
-                    }
-                ];
+                    }]
+                    : [{
+                        key: 'referrer',
+                        titleKey: 'USER.COMMISSION.REFERRER_TITLE',
+                        config: mine?.referrer ?? null
+                    }];
                 this.isLoading = false;
             },
             error: () => {

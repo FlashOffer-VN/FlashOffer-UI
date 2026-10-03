@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Observable, forkJoin, of } from 'rxjs';
 
 import { AppService } from '@core/services/app.service';
 import { PermissionService } from '@core/services/permission.service';
 import { ApiResponse } from '@core/models/auth.model';
 import {
+    PermissionGroupItem,
     PermissionItem,
     UpdateUsersPermissionsResult,
     UserPermissionCandidate,
@@ -18,9 +19,10 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 
-/** Nhóm quyền theo module để hiển thị thành từng khối. */
+/** Nhóm quyền để hiển thị thành từng khối: khoá nhóm và tên đã hiển thị được. */
 interface PermissionGroup {
-    module: string;
+    key: string;
+    label: string;
     items: PermissionItem[];
 }
 
@@ -78,10 +80,10 @@ interface PermissionGroup {
                     </div>
 
                     <div class="grid gap-4 md:grid-cols-2">
-                        @for (group of groups; track group.module) {
+                        @for (group of groups; track group.key) {
                             <div class="border border-gray-200 rounded-lg">
                                 <p class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50 border-b border-gray-200">
-                                    {{ group.module }}
+                                    {{ group.label }}
                                 </p>
                                 <div class="p-2">
                                     @for (item of group.items; track item.code) {
@@ -129,10 +131,14 @@ export class AdminUserPermissionComponent implements OnInit {
     isSaving = false;
 
     private _details = new Map<string, UserPermissionDetail>();
+    /** Tên nhóm quyền theo mã nhóm, đọc từ bảng PermissionGroups. */
+    private _groupNames = new Map<string, string>();
+    private _groupOrders = new Map<string, number>();
 
     constructor(
         private readonly _appService: AppService,
-        private readonly _permissionService: PermissionService
+        private readonly _permissionService: PermissionService,
+        private readonly _translate: TranslateService
     ) { }
 
     ngOnInit(): void {
@@ -227,21 +233,58 @@ export class AdminUserPermissionComponent implements OnInit {
         });
     }
 
-    /** Danh mục quyền dùng chung với ma trận quyền, gom theo module. */
+    /** Danh mục quyền dùng chung với ma trận quyền: gom theo nhóm (parentCode) do API trả về. */
     private loadCatalog(): void {
         this._permissionService.getMatrix().subscribe({
             next: response => {
                 const permissions = response.data?.permissions ?? [];
-                const byModule = new Map<string, PermissionItem[]>();
+                const apiGroups: PermissionGroupItem[] = response.data?.groups ?? [];
+                this._groupNames = new Map(apiGroups.map(group => [group.code.toUpperCase(), this.groupName(group)]));
+                this._groupOrders = new Map(apiGroups.map(group => [group.code.toUpperCase(), group.sortOrder]));
+
+                const byGroup = new Map<string, PermissionItem[]>();
                 for (const item of permissions) {
-                    const bucket = byModule.get(item.module) ?? [];
+                    const key = this.groupKey(item);
+                    const bucket = byGroup.get(key) ?? [];
                     bucket.push(item);
-                    byModule.set(item.module, bucket);
+                    byGroup.set(key, bucket);
                 }
-                this.groups = Array.from(byModule, ([module, items]) => ({ module, items }));
+
+                this.groups = Array.from(byGroup, ([key, items]) => ({ key, label: this.groupLabel(key), items }))
+                    .sort((left, right) => this.groupOrder(left.key) - this.groupOrder(right.key));
             },
             error: () => this._appService.showError(this._appService.trans('PERMISSION.LOAD_FAILED'))
         });
+    }
+
+    /** Tên nhóm theo ngôn ngữ đang dùng; máy chủ cũ chưa trả nhóm thì lùi về khoá i18n rồi tới mã nhóm. */
+    private groupName(group: PermissionGroupItem): string {
+        return this._translate.currentLang === 'en'
+            ? (group.nameEn || group.name)
+            : (group.name || group.nameEn);
+    }
+
+    private groupLabel(key: string): string {
+        const fromDb = this._groupNames.get(key.toUpperCase());
+        if (fromDb) return fromDb;
+        const i18nKey = `PERMISSION.GROUP.${key.toUpperCase()}`;
+        const translated = this._appService.trans(i18nKey);
+        return translated && translated !== i18nKey ? translated : key;
+    }
+
+    private groupOrder(key: string): number {
+        const order = this._groupOrders.get(key.toUpperCase());
+        if (order !== undefined) return order;
+        const fallback = ['SYSTEM', 'USER', 'MEMBER', 'PARTNER', 'PURCHASE', 'GROUP', 'COMMUNITY', 'REFERRAL', 'COMMISSION', 'SUPERADMIN'];
+        const index = fallback.indexOf(key.toUpperCase());
+        return index < 0 ? 1000 : (index + 1) * 10;
+    }
+
+    /** Nhóm của một quyền: ưu tiên parentCode, máy chủ cũ thì suy từ module/đường dẫn. */
+    private groupKey(item: PermissionItem): string {
+        const parent = (item.parentCode ?? '').trim();
+        if (parent) return parent;
+        return (item.route ?? '').startsWith('/user') ? 'MEMBER' : item.module.toUpperCase();
     }
 
     /** Nạp quyền hiệu lực của các tài khoản đang chọn rồi gộp thành trạng thái tích chung. */
