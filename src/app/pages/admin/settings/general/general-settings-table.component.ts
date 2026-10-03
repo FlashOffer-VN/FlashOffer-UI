@@ -417,21 +417,43 @@ export class AdminGeneralSettingsComponent implements OnInit {
     defaults: SystemSetting | null = null;
 
     /** Danh sách nhóm cài đặt cho ô chọn (kèm số trường của từng nhóm). */
+    private _sectionOptions: SelectOption[] = [];
+
+    /** Tuỳ chọn của từng ô chọn, dựng sẵn theo khoá trường. */
+    private readonly _fieldOptions = new Map<string, SelectOption[]>();
+
+    /**
+     * Danh sách nhóm cài đặt cho ô chọn.
+     * Trả về đúng mảng đã dựng sẵn: nếu dựng mảng mới ở mỗi lượt kiểm tra thay đổi thì ô chọn
+     * liên tục dựng lại các lựa chọn và bấm chuột không chọn được.
+     */
     get sectionOptions(): SelectOption[] {
-        return this.sections.map(section => ({
-            value: section.title,
-            label: `${this._appService.trans(section.title)} (${section.fields.length})`
-        }));
+        return this._sectionOptions;
     }
 
     /** Tuỳ chọn của ô chọn; giá trị đang lưu luôn được thêm vào để ô chọn không hiện trống. */
     optionsOf(field: SettingField): SelectOption[] {
-        if (field.key === 'timeZone') return withCurrentOption(this._timeZones, this.current?.timeZone);
-        if (field.key === 'currencySymbol') return withCurrentOption(CURRENCY_OPTIONS, this.current?.currencySymbol);
-        if (field.key === 'workingHours') return withCurrentOption(WORKING_HOURS_OPTIONS, this.current?.workingHours);
-        if (field.key === 'dateFormat') return withCurrentOption(DATE_FORMAT_OPTIONS, this.current?.dateFormat);
+        const cached = this._fieldOptions.get(field.key);
+        if (cached) return cached;
 
-        return field.options ?? [];
+        let options: SelectOption[];
+        if (field.key === 'timeZone') options = withCurrentOption(this._timeZones, this.current?.timeZone);
+        else if (field.key === 'currencySymbol') options = withCurrentOption(CURRENCY_OPTIONS, this.current?.currencySymbol);
+        else if (field.key === 'workingHours') options = withCurrentOption(WORKING_HOURS_OPTIONS, this.current?.workingHours);
+        else if (field.key === 'dateFormat') options = withCurrentOption(DATE_FORMAT_OPTIONS, this.current?.dateFormat);
+        else options = field.options ?? [];
+
+        this._fieldOptions.set(field.key, options);
+        return options;
+    }
+
+    /** Dựng lại danh sách nhóm và tuỳ chọn của các ô chọn (sau khi nạp, lưu hoặc khôi phục cài đặt). */
+    private rebuildOptions(): void {
+        this._fieldOptions.clear();
+        this._sectionOptions = this.sections.map(section => ({
+            value: section.title,
+            label: `${this._appService.trans(section.title)} (${section.fields.length})`
+        }));
     }
 
     isLoading = false;
@@ -516,6 +538,7 @@ export class AdminGeneralSettingsComponent implements OnInit {
         this._settingService.get().subscribe({
             next: response => {
                 this.current = response.data ?? null;
+                this.rebuildOptions();
                 this.form.patchValue(this.current ?? {});
                 this.isLoading = false;
             },
@@ -546,6 +569,7 @@ export class AdminGeneralSettingsComponent implements OnInit {
             next: response => {
                 this.isSaving = false;
                 this.current = response.data ?? this.current;
+                this.rebuildOptions();
                 this.form.patchValue(this.current ?? {});
                 this._appService.showSuccess(this._appService.trans('ADMIN.SETTINGS.SAVED'));
             },
@@ -571,6 +595,7 @@ export class AdminGeneralSettingsComponent implements OnInit {
                 next: response => {
                     this.isResetting = false;
                     this.current = response.data ?? null;
+                    this.rebuildOptions();
                     this.form.patchValue(this.current ?? {});
                     this._appService.showSuccess(this._appService.trans('ADMIN.SETTINGS.RESET_DONE'));
                 },

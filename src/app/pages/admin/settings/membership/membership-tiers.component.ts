@@ -181,11 +181,11 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
                                             }
                                         </td>
                                         <td class="px-4 py-3 text-center text-gray-700">{{ tier.approvalPriority }}</td>
-                                        <td class="px-4 py-3">
+                                        <td class="px-4 py-3 w-px whitespace-nowrap">
                                             @if (tier.isActive) {
-                                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-teal-50 text-teal-700">{{ 'ADMIN.MEMBERSHIP.ACTIVE' | translate }}</span>
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-teal-50 text-teal-700 whitespace-nowrap">{{ 'ADMIN.MEMBERSHIP.ACTIVE' | translate }}</span>
                                             } @else {
-                                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">{{ 'ADMIN.MEMBERSHIP.INACTIVE' | translate }}</span>
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 whitespace-nowrap">{{ 'ADMIN.MEMBERSHIP.INACTIVE' | translate }}</span>
                                             }
                                         </td>
                                         <td class="px-4 py-3 text-gray-600 max-w-xs">{{ tier.description || '—' }}</td>
