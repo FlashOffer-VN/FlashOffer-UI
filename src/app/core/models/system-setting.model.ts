@@ -8,6 +8,11 @@ export interface SystemSetting {
     facebookUrl?: string | null;
     youtubeUrl?: string | null;
     zaloUrl?: string | null;
+    tiktokUrl?: string | null;
+    instagramUrl?: string | null;
+    xUrl?: string | null;
+    threadsUrl?: string | null;
+    linkedinUrl?: string | null;
     copyrightText?: string | null;
 
     defaultLanguage: string;
@@ -52,6 +57,11 @@ export interface PublicSystemSetting {
     facebookUrl?: string | null;
     youtubeUrl?: string | null;
     zaloUrl?: string | null;
+    tiktokUrl?: string | null;
+    instagramUrl?: string | null;
+    xUrl?: string | null;
+    threadsUrl?: string | null;
+    linkedinUrl?: string | null;
     copyrightText?: string | null;
     defaultLanguage: string;
     timeZone: string;
