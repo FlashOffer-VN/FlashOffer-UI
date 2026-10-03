@@ -241,6 +241,7 @@ export class AdminCommissionConfigComponent implements OnInit {
     typeOptions: { value: CommissionType; label: string }[] = [];
 
     readonly tiered = CommissionType.Tiered;
+    readonly fixed = CommissionType.Fixed;
     readonly getCommissionTypeLabel = getCommissionTypeLabel;
 
     constructor(
