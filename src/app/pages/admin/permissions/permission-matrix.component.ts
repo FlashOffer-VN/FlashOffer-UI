@@ -139,9 +139,7 @@ export class AdminPermissionMatrixComponent implements OnInit {
                     key,
                     name: group?.name ?? '',
                     nameEn: group?.nameEn ?? '',
-                    labelKey: key.toUpperCase() === this.memberGroupKey
-                        ? 'PERMISSION.GROUP.MEMBER'
-                        : this.moduleKey(key),
+                    labelKey: this.groupLabelKey(key),
                     isMemberArea: key.toUpperCase() === this.memberGroupKey,
                     permissions
                 };
@@ -177,7 +175,7 @@ export class AdminPermissionMatrixComponent implements OnInit {
         const group = this.apiGroups.find(item => item.code.toUpperCase() === key.toUpperCase());
         if (group) return group.sortOrder;
 
-        const fallback = ['SYSTEM', 'USER', this.memberGroupKey, 'PARTNER', 'PURCHASE', 'GROUP', 'COMMUNITY', 'REFERRAL', 'COMMISSION', 'SUPERADMIN'];
+        const fallback = ['ADMIN', this.memberGroupKey, 'SHARED', 'SYSTEM', 'USER', 'PARTNER', 'PURCHASE', 'GROUP', 'COMMUNITY', 'REFERRAL', 'COMMISSION', 'SUPERADMIN'];
         const index = fallback.indexOf(key.toUpperCase());
         return index < 0 ? 1000 : (index + 1) * 10;
     }
@@ -257,6 +255,16 @@ export class AdminPermissionMatrixComponent implements OnInit {
     }
 
     /** Nhãn nhóm chức năng. */
+    /**
+     * Khoá i18n cho nhãn nhóm: ba nhóm theo khu vực dùng khoá PERMISSION.GROUP, máy chủ cũ trả mã module thì dùng PERMISSION.MODULE.
+     */
+    groupLabelKey(key: string): string {
+        const upper = key.toUpperCase();
+        return ['ADMIN', this.memberGroupKey, 'SHARED'].includes(upper)
+            ? `PERMISSION.GROUP.${upper}`
+            : this.moduleKey(upper);
+    }
+
     moduleKey(module: string): string {
         return `PERMISSION.MODULE.${module.toUpperCase()}`;
     }
