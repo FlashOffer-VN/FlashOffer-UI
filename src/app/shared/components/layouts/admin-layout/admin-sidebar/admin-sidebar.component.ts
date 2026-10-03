@@ -19,6 +19,7 @@ export class AdminSidebarComponent {
     menuItems: MenuItem[] = [
         { path: '/admin/dashboard', icon: 'fa-solid fa-house', label: 'Dashboard' },
         { path: '/admin/admin-crm', icon: 'fa-solid fa-chart-pie', label: 'ADMIN.SIDEBAR.CRM' },
+        { path: '/admin/referral-stats', icon: 'fa-solid fa-share-nodes', label: 'ADMIN.SIDEBAR.REFERRAL_STATS' },
         { path: '/admin/offers', icon: 'fa-solid fa-tags', label: 'ADMIN.SIDEBAR.OFFERS' },
         { path: '/admin/purchase-requests', icon: 'fa-solid fa-cart-shopping', label: 'ADMIN.SIDEBAR.PURCHASE_REQUESTS' },
         { path: '/admin/group-buying', icon: 'fa-solid fa-people-group', label: 'ADMIN.SIDEBAR.GROUP_BUYING' },

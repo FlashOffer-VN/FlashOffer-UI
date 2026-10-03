@@ -13,6 +13,8 @@ export const adminRoutes: Routes = [
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
             { path: 'dashboard', loadComponent: () => import('@pages/dashboard/dashboard.component').then(m => m.DashboardComponent) },
             { path: 'admin-crm', loadComponent: () => import('@pages/admin/crm/admin-crm.component').then(m => m.AdminCrmComponent) },
+            // Thống kê tình hình giới thiệu theo mã chia sẻ của cộng tác viên
+            { path: 'referral-stats', loadComponent: () => import('@pages/admin/referral-stats/referral-stats.component').then(m => m.AdminReferralStatsComponent) },
             { path: 'offers', loadComponent: () => import('@pages/admin/offers/admin-offers.component').then(m => m.AdminOffersComponent) },
             { path: 'offers/:id', loadComponent: () => import('@pages/admin/offers/detail/offer-detail.component').then(m => m.AdminOfferDetailComponent) },
             // Purchase Request Management

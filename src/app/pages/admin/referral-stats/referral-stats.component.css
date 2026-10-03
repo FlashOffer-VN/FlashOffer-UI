@@ -1,0 +1,149 @@
+/* ===== Header ===== */
+.btn-refresh {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    border: 1px solid var(--border, #e5e7eb);
+    border-radius: 0.5rem;
+    background: var(--white, #fff);
+    padding: 0.5rem 0.9rem;
+    color: var(--text-secondary, #374151);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-refresh:disabled {
+    cursor: default;
+    opacity: 0.6;
+}
+
+.dashboard-error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid #fecaca;
+    border-radius: 0.75rem;
+    background: #fef2f2;
+    padding: 0.85rem 1rem;
+    color: #b91c1c;
+    font-size: 0.9rem;
+}
+
+/* ===== Thẻ tổng quan ===== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.stat-card {
+    border: 1px solid var(--border, #e5e7eb);
+    border-radius: 0.75rem;
+    background: var(--white, #fff);
+    padding: 1.25rem;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
+}
+
+.stat-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.stat-icon {
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    place-items: center;
+    border-radius: 0.65rem;
+    font-size: 1.15rem;
+}
+
+.stat-pending-badge {
+    color: var(--text-muted, #6b7280);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: right;
+}
+
+.stat-label {
+    margin-top: 1rem;
+    color: var(--text-muted, #6b7280);
+    font-size: 0.875rem;
+}
+
+.stat-value {
+    margin-top: 0.25rem;
+    color: var(--text-heading, #111827);
+    font-size: 1.875rem;
+    font-weight: 700;
+}
+
+.stat-card-blue .stat-icon { background: #e0f2fe; color: #0369a1; }
+.stat-card-teal .stat-icon { background: #ccfbf1; color: #0f766e; }
+.stat-card-green .stat-icon { background: #dcfce7; color: #16a34a; }
+.stat-card-orange .stat-icon { background: #ffedd5; color: #c2410c; }
+.stat-card-pink .stat-icon { background: #fce7f3; color: #be185d; }
+.stat-card-cyan .stat-icon { background: #cffafe; color: #0891b2; }
+
+/* ===== Section + chart ===== */
+.dashboard-section {
+    margin-top: 1.75rem;
+}
+
+.section-title {
+    margin: 0 0 0.85rem;
+    color: var(--text-secondary, #374151);
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.chart-card {
+    border: 1px solid var(--border, #e5e7eb);
+    border-radius: 0.75rem;
+    background: var(--white, #fff);
+    padding: 1.25rem;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
+}
+
+.chart-empty {
+    margin: 0;
+    padding: 1.25rem 0;
+    color: var(--text-subtle, #9ca3af);
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.chart-empty + * {
+    display: none;
+}
+
+/* ===== Bảng ===== */
+.row-selected {
+    background: #f0f9fb;
+}
+
+.guest-tag {
+    margin-left: 0.4rem;
+    border-radius: 9999px;
+    background: #f3f4f6;
+    padding: 0.1rem 0.5rem;
+    color: #6b7280;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .stats-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

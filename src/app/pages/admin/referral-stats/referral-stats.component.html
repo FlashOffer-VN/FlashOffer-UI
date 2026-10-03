@@ -1,0 +1,209 @@
+<div class="p-6">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">{{ 'ADMIN.REFERRAL_STATS.TITLE' | translate }}</h1>
+            <p class="text-gray-500 text-sm">{{ 'ADMIN.REFERRAL_STATS.SUBTITLE' | translate }}</p>
+        </div>
+        <button type="button" class="btn-refresh" (click)="loadData()" [disabled]="isLoading">
+            <i class="fa-solid fa-rotate" [class.fa-spin]="isLoading"></i>
+            {{ 'ADMIN.REFERRAL_STATS.REFRESH' | translate }}
+        </button>
+    </div>
+
+    <div *ngIf="hasError" class="dashboard-error">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        {{ 'ADMIN.REFERRAL_STATS.UNAVAILABLE' | translate }}
+    </div>
+
+    <ng-container *ngIf="!hasError">
+        <!-- Thẻ tổng quan -->
+        <div class="stats-grid">
+            <div *ngFor="let card of cards" [class]="'stat-card stat-card-' + card.color">
+                <div class="stat-card-top">
+                    <div class="stat-icon"><i [class]="card.icon"></i></div>
+                    <span class="stat-pending-badge" *ngIf="card.note">{{ card.note }}</span>
+                </div>
+                <div class="stat-label">{{ card.label | translate }}</div>
+                <div class="stat-value">{{ isLoading ? '-' : (card.total | number) }}</div>
+            </div>
+        </div>
+
+        <!-- Biểu đồ phát sinh theo ngày -->
+        <section class="dashboard-section">
+            <h2 class="section-title">{{ 'ADMIN.REFERRAL_STATS.CHART_TITLE' | translate }}</h2>
+            <div class="chart-card">
+                <apx-chart
+                    *ngIf="isBrowser() && chartOptions"
+                    [chart]="chartOptions.chart"
+                    [series]="chartOptions.series"
+                    [colors]="chartOptions.colors"
+                    [plotOptions]="chartOptions.plotOptions"
+                    [dataLabels]="chartOptions.dataLabels"
+                    [grid]="chartOptions.grid"
+                    [xaxis]="chartOptions.xaxis"
+                    [yaxis]="chartOptions.yaxis"
+                    [legend]="chartOptions.legend"
+                    [tooltip]="chartOptions.tooltip"
+                    [noData]="chartOptions.noData"
+                ></apx-chart>
+                <p class="chart-empty" *ngIf="!isLoading && !chartOptions">{{ 'PAGINATION.NO_ITEMS' | translate }}</p>
+            </div>
+        </section>
+
+        <!-- Bộ lọc -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 my-6">
+            <div class="flex flex-col sm:flex-row gap-3 items-end">
+                <div class="flex-1 min-w-0">
+                    <app-input [(ngModel)]="searchText" [placeholder]="'ADMIN.REFERRAL_STATS.SEARCH_PLACEHOLDER' | translate"
+                        (keyup.enter)="onSearch()" class="w-full">
+                    </app-input>
+                </div>
+                <ngx-filter-daterange [from]="fromDate" [to]="toDate" (rangeChange)="onRangeChange($event)">
+                </ngx-filter-daterange>
+                <div class="flex-shrink-0">
+                    <app-button variant="primary" (click)="onSearch()">
+                        {{ 'COMMON.BUTTON.SEARCH' | translate }}
+                    </app-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bảng thống kê theo mã chia sẻ -->
+        <h2 class="section-title">{{ 'ADMIN.REFERRAL_STATS.TABLE_TITLE' | translate }}</h2>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_CODE' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_NAME' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_REFERRED' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_GROUP_BUYING' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_JOINS' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_PURCHASE_REQUESTS' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_OFFER_REQUESTS' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_GROUP_MEMBERS' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_PARTNERS' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_CANCELLED' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_TOTAL' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_LAST_EVENT' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr *ngIf="isLoading">
+                            <td colspan="14" class="px-4 py-8 text-center"><app-loading></app-loading></td>
+                        </tr>
+                        <tr *ngIf="!isLoading && items.length === 0">
+                            <td colspan="14" class="px-4 py-8 text-center text-gray-500">{{ 'PAGINATION.NO_ITEMS' | translate }}</td>
+                        </tr>
+                        <ng-container *ngIf="!isLoading">
+                            <tr *ngFor="let item of items; let i = index"
+                                class="hover:bg-gray-50 transition-colors"
+                                [class.row-selected]="selectedCode === item.referralCode">
+                                <td class="px-4 py-3 text-sm text-gray-500">{{ (pageNumber - 1) * pageSize + i + 1 }}</td>
+                                <td class="px-4 py-3 text-sm font-mono text-gray-700 font-medium">{{ item.referralCode }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-900">{{ item.referrerName || '--' }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-900">
+                                    {{ item.referredUsers }}
+                                    <div class="text-xs text-gray-400" *ngIf="item.referredGuestUsers > 0">
+                                        {{ 'ADMIN.REFERRAL_STATS.GUEST_NOTE' | translate: { count: item.referredGuestUsers } }}
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-600">{{ item.groupBuyingRequests }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-600">{{ item.groupBuyingJoins }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-600">{{ item.purchaseRequests }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-600">{{ item.offerRequests }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-600">{{ item.groupMemberJoins }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-600">{{ item.partnerRegisters }}</td>
+                                <td class="px-4 py-3 text-sm">
+                                    <span [class.text-gray-400]="item.cancelledEvents === 0">{{ item.cancelledEvents }}</span>
+                                </td>
+                                <td class="px-4 py-3 text-sm font-semibold text-gray-900">{{ item.totalEvents }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-500">{{ item.lastEventAt ? (item.lastEventAt | appDate) : '--' }}</td>
+                                <td class="px-4 py-3">
+                                    <app-button variant="primary" size="sm" (click)="toggleEvents(item)">
+                                        {{ (selectedCode === item.referralCode
+                                            ? 'ADMIN.REFERRAL_STATS.HIDE_EVENTS'
+                                            : 'ADMIN.REFERRAL_STATS.VIEW_EVENTS') | translate }}
+                                    </app-button>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+
+            <app-pagination
+                [pageNumber]="pageNumber"
+                [pageSize]="pageSize"
+                [totalCount]="totalCount"
+                [totalPages]="totalPages"
+                [hasPreviousPage]="hasPreviousPage"
+                [hasNextPage]="hasNextPage"
+                (pageChange)="onPageChange($event)"
+                (pageSizeChange)="onPageSizeChange($event)">
+            </app-pagination>
+        </div>
+
+        <!-- Phát sinh của mã đang chọn -->
+        <ng-container *ngIf="selectedCode">
+            <h2 class="section-title mt-6">
+                {{ 'ADMIN.REFERRAL_STATS.EVENTS_TITLE' | translate: { code: selectedCode } }}
+            </h2>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_TIME' | translate }}</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_EVENT_TYPE' | translate }}</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_REFERRED_USER' | translate }}</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_TARGET' | translate }}</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_AMOUNT' | translate }}</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.REFERRAL_STATS.COL_STATUS' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr *ngIf="eventsLoading">
+                                <td colspan="6" class="px-4 py-8 text-center"><app-loading></app-loading></td>
+                            </tr>
+                            <tr *ngIf="!eventsLoading && events.length === 0">
+                                <td colspan="6" class="px-4 py-8 text-center text-gray-500">{{ 'ADMIN.REFERRAL_STATS.EVENTS_EMPTY' | translate }}</td>
+                            </tr>
+                            <tr *ngFor="let event of events" class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-3 text-sm text-gray-500">{{ event.createdAt | appDate }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-900">{{ eventTypeKey(event.eventType) | translate }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-900">
+                                    {{ event.referredUserName || '--' }}
+                                    <span class="guest-tag" *ngIf="event.isGuestAccount">{{ 'ADMIN.REFERRAL_STATS.GUEST_TAG' | translate }}</span>
+                                </td>
+                                <td class="px-4 py-3 text-sm font-mono text-gray-600">{{ event.refEntityCode || '--' }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-600">
+                                    {{ event.amount ? (event.amount | number:'1.0-0') : '--' }}
+                                </td>
+                                <td class="px-4 py-3">
+                                    <app-badge [label]="eventStatusKey(event.status)"
+                                        [variant]="eventStatusVariant(event.status)" [size]="'sm'">
+                                    </app-badge>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <app-pagination
+                    [pageNumber]="eventsPage"
+                    [pageSize]="eventsPageSize"
+                    [totalCount]="eventsTotalCount"
+                    [totalPages]="eventsTotalPages"
+                    [hasPreviousPage]="eventsHasPreviousPage"
+                    [hasNextPage]="eventsHasNextPage"
+                    (pageChange)="onEventsPageChange($event)"
+                    (pageSizeChange)="onEventsPageSizeChange($event)">
+                </app-pagination>
+            </div>
+        </ng-container>
+    </ng-container>
+</div>

@@ -3,7 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ApiService } from './api.service';
-import { ApiResponse } from '@core/models/paged-response.model';
+import { ApiResponse, PagedResponse } from '@core/models/paged-response.model';
+import {
+    ReferralEventItem,
+    ReferralEventQuery,
+    ReferralStatsItem,
+    ReferralStatsOverview,
+    ReferralStatsQuery
+} from '@core/models/referral-stats.model';
 
 @Injectable({ providedIn: 'root' })
 export class ReferralService {
@@ -24,5 +31,32 @@ export class ReferralService {
                 // Chưa đăng nhập / lỗi mạng thì bỏ qua, không chặn trang
                 catchError(() => of(null))
             );
+    }
+
+    /**
+     * Thống kê theo từng mã chia sẻ (màn quản trị).
+     * GET /api/v1/Referrals/stats
+     */
+    getStats(query: ReferralStatsQuery): Observable<PagedResponse<ReferralStatsItem>> {
+        return this._apiService.get<PagedResponse<ReferralStatsItem>>(`${this._baseUrl}/stats`, query);
+    }
+
+    /**
+     * Số liệu tổng hợp + số phát sinh theo ngày cho board thống kê (màn quản trị).
+     * GET /api/v1/Referrals/stats/overview
+     */
+    getOverview(query: ReferralStatsQuery): Observable<ApiResponse<ReferralStatsOverview>> {
+        return this._apiService.get<ApiResponse<ReferralStatsOverview>>(`${this._baseUrl}/stats/overview`, query);
+    }
+
+    /**
+     * Danh sách phát sinh của một mã chia sẻ (màn quản trị).
+     * GET /api/v1/Referrals/stats/{referralCode}/events
+     */
+    getEvents(referralCode: string, query: ReferralEventQuery): Observable<PagedResponse<ReferralEventItem>> {
+        return this._apiService.get<PagedResponse<ReferralEventItem>>(
+            `${this._baseUrl}/stats/${encodeURIComponent(referralCode)}/events`,
+            query
+        );
     }
 }
