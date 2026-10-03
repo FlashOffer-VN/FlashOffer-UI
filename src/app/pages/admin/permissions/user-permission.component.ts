@@ -295,13 +295,18 @@ export class AdminUserPermissionComponent implements OnInit {
             return;
         }
 
+        // Chốt danh sách tài khoản tại thời điểm gọi: người dùng có thể bỏ chọn giữa chừng nên khi
+        // response về không được đọc lại this.selected theo chỉ số (sẽ truy cập .id của undefined).
+        const targets = [...this.selected];
+
         this.isLoadingDetail = true;
-        forkJoin(this.selected.map(user =>
+        forkJoin(targets.map(user =>
             this._details.has(user.id) ? of(null) : this._permissionService.getUserPermissions(user.id))).subscribe({
             next: responses => {
                 responses.forEach((response, index) => {
-                    if (response?.data) {
-                        this._details.set(this.selected[index].id, response.data);
+                    const userId = targets[index]?.id;
+                    if (response?.data && userId) {
+                        this._details.set(userId, response.data);
                     }
                 });
                 this.rebuildState();

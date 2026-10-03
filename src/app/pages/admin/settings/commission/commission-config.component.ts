@@ -186,8 +186,10 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
                                 {{ getCommissionTypeLabel(config.type) | translate }} ·
                                 @if (config.type === tiered) {
                                     {{ config.tiers.length }} {{ 'COMMISSION.TIER_COUNT' | translate }}
-                                } @else {
+                                } @else if (config.type === fixed) {
                                     <strong>{{ config.rate | appPrice }}</strong>
+                                } @else {
+                                    <strong>{{ config.rate }}%</strong>
                                 }
                             </p>
                             @if (!config.isActive) {
@@ -239,6 +241,7 @@ export class AdminCommissionConfigComponent implements OnInit {
     typeOptions: { value: CommissionType; label: string }[] = [];
 
     readonly tiered = CommissionType.Tiered;
+    readonly fixed = CommissionType.Fixed;
     readonly getCommissionTypeLabel = getCommissionTypeLabel;
 
     constructor(
@@ -256,7 +259,7 @@ export class AdminCommissionConfigComponent implements OnInit {
         this.loadConfigs();
     }
 
-    /** Cách tính đang là bậc thang. */
+    /** Cách tính đang là theo hạn mức. */
     get isTiered(): boolean {
         return this.type === CommissionType.Tiered;
     }
