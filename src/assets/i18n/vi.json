@@ -39,7 +39,7 @@
     "DELETE_SUCCESS": "Đã xoá cấu hình hoa hồng",
     "DELETE_FAILED": "Xoá cấu hình hoa hồng thất bại",
     "UPDATED_AT": "Cập nhật"
-    },
+        },
     "APP_TITLE": "Kindi",
     "APP_NAME": "Kindi - Nền tảng kết nối SME",
     "NAV_SOLUTIONS": "Giải Pháp",
@@ -827,8 +827,18 @@
         "BANK_NUMBER_PLACEHOLDER": "Nhập số tài khoản",
         "BANK_HOLDER_PLACEHOLDER": "Tên chủ tài khoản (không dấu)",
         "BANK_ERROR_REQUIRED": "Thông tin này là bắt buộc.",
-        "BANK_ERROR_NUMBER": "Số tài khoản chỉ gồm chữ số, từ 6 đến 30 ký tự."
-        },
+        "BANK_ERROR_NUMBER": "Số tài khoản chỉ gồm chữ số, từ 6 đến 30 ký tự.",
+        "BANK_CODE_TITLE": "Mã xác thực chuyển khoản",
+        "BANK_CODE_AMOUNT": "Số tiền chuyển",
+        "BANK_CODE_COPY": "Chép nội dung",
+        "BANK_CODE_RENEW": "Tạo mã mới",
+        "BANK_CODE_HINT": "Chuyển khoản tới đúng số tài khoản trên với nội dung này; bộ phận tài chính đối chiếu rồi xác thực tài khoản cho bạn.",
+        "BANK_CODE_EXPIRES": "Mã hết hiệu lực",
+        "BANK_CODE_CREATE": "Tạo mã xác thực",
+        "BANK_CODE_CREATE_HINT": "Tạo mã để chuyển khoản xác thực tài khoản nhận tiền.",
+        "BANK_CODE_ISSUED": "Đã tạo mã xác thực chuyển khoản.",
+        "BANK_CODE_COPIED": "Đã chép nội dung chuyển khoản."
+    },
         "WELCOME_TITLE": "Chào mừng bạn trở lại!",
         "WELCOME_DESCRIPTION": "Tài khoản của bạn đã sẵn sàng. Các tính năng dành cho thành viên sẽ được cập nhật sớm.",
         "USERNAME": "Tên đăng nhập",
@@ -1369,7 +1379,11 @@
             "CONFIRM_UNVERIFY_TITLE": "Bỏ xác thực tài khoản ngân hàng",
             "CONFIRM_UNVERIFY_MESSAGE": "Thông tin này sẽ trở về trạng thái chờ xác thực và không nên chi trả cho tới khi xác thực lại.",
             "SUCCESS_VERIFY": "Đã xác thực tài khoản ngân hàng.",
-            "SUCCESS_UNVERIFY": "Đã bỏ xác thực tài khoản ngân hàng."
+            "SUCCESS_UNVERIFY": "Đã bỏ xác thực tài khoản ngân hàng.",
+            "COL_TRANSFER_CODE": "Nội dung chuyển khoản",
+            "NO_TRANSFER_CODE": "Chưa tạo mã",
+            "CODE_COPY": "Chép mã",
+            "CODE_COPIED": "Đã chép mã đối chiếu."
         },
         "BANK_ACCOUNTS": {
             "TITLE": "Xác thực tài khoản ngân hàng",

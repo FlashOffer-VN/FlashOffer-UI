@@ -39,7 +39,7 @@
     "DELETE_SUCCESS": "Commission configuration deleted",
     "DELETE_FAILED": "Failed to delete commission configuration",
     "UPDATED_AT": "Updated"
-    },
+        },
     "APP_TITLE": "Kindi",
     "APP_NAME": "Kindi - SME Platform",
     "NAV_SOLUTIONS": "Solutions",
@@ -871,8 +871,18 @@
         "BANK_NUMBER_PLACEHOLDER": "Enter account number",
         "BANK_HOLDER_PLACEHOLDER": "Account holder name (no accents)",
         "BANK_ERROR_REQUIRED": "This field is required.",
-        "BANK_ERROR_NUMBER": "Account number must be 6–30 digits."
-        },
+        "BANK_ERROR_NUMBER": "Account number must be 6–30 digits.",
+        "BANK_CODE_TITLE": "Transfer verification code",
+        "BANK_CODE_AMOUNT": "Transfer amount",
+        "BANK_CODE_COPY": "Copy content",
+        "BANK_CODE_RENEW": "New code",
+        "BANK_CODE_HINT": "Transfer to the account number above with this content; our finance team will match it and verify your account.",
+        "BANK_CODE_EXPIRES": "Code expires",
+        "BANK_CODE_CREATE": "Create verification code",
+        "BANK_CODE_CREATE_HINT": "Create a code to transfer and verify your payout account.",
+        "BANK_CODE_ISSUED": "Transfer verification code created.",
+        "BANK_CODE_COPIED": "Transfer content copied."
+    },
         "WELCOME_TITLE": "Welcome back!",
         "WELCOME_DESCRIPTION": "Your account is ready. More member features will be available soon.",
         "USERNAME": "Username",
@@ -1411,7 +1421,11 @@
             "CONFIRM_UNVERIFY_TITLE": "Unverify bank account",
             "CONFIRM_UNVERIFY_MESSAGE": "This will return to pending; do not pay out until it is verified again.",
             "SUCCESS_VERIFY": "Bank account verified.",
-            "SUCCESS_UNVERIFY": "Bank account verification removed."
+            "SUCCESS_UNVERIFY": "Bank account verification removed.",
+            "COL_TRANSFER_CODE": "Transfer reference",
+            "NO_TRANSFER_CODE": "No code",
+            "CODE_COPY": "Copy code",
+            "CODE_COPIED": "Reference code copied."
         },
         "BANK_ACCOUNTS": {
             "TITLE": "Bank account verification",
