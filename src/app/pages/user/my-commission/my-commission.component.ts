@@ -23,6 +23,7 @@ import {
 import { CommissionType, getCommissionTypeLabel } from '@core/models/partner.model';
 import { UserRole, toUserRole } from '@core/models/auth.model';
 import { bankSelectOptions, buildAccountQr } from '@core/constants/bank-catalog';
+import { copyToClipboard } from '@core/utils/share-link';
 
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
@@ -678,9 +679,7 @@ export class MyCommissionPageComponent implements OnInit {
         const content = this.verificationCode?.transferContent;
         if (!content) return;
 
-        navigator.clipboard?.writeText(content)
-            .then(() => this._appService.showSuccess(this._appService.trans('USER.COMMISSION.BANK_CODE_COPIED')))
-            .catch(() => this._appService.showError(this._appService.trans('COMMON.ERROR.UNKNOWN')));
+        copyToClipboard(content).then(() => this._appService.showSuccess(this._appService.trans('USER.COMMISSION.BANK_CODE_COPIED')));
     }
 
     /** Ô nhập ngân hàng đang lỗi và người dùng đã chạm vào. */

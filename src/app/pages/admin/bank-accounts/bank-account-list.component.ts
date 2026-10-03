@@ -16,6 +16,7 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { buildAccountQr } from '@core/constants/bank-catalog';
+import { copyToClipboard } from '@core/utils/share-link';
 
 /**
  * Xác thực tài khoản ngân hàng nhận giải ngân của thành viên.
@@ -332,9 +333,7 @@ export class BankAccountListComponent implements OnInit {
     copyCode(code: string | null | undefined): void {
         if (!code) return;
 
-        navigator.clipboard?.writeText(code)
-            .then(() => this._appService.showSuccess(this._appService.trans('ADMIN.BANK_ACCOUNTS.CODE_COPIED')))
-            .catch(() => this._appService.showError(this._appService.trans('COMMON.ERROR.UNKNOWN')));
+        copyToClipboard(code).then(() => this._appService.showSuccess(this._appService.trans('ADMIN.BANK_ACCOUNTS.CODE_COPIED')));
     }
 
     loadData(): void {
