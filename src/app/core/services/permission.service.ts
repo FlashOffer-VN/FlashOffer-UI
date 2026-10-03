@@ -69,11 +69,17 @@ export class PermissionService {
 
     /** Tìm tài khoản để cấu hình quyền riêng. GET /api/v1/permissions/users */
     searchUsers(search: string): Observable<ApiResponse<UserPermissionCandidate[]>> {
-        return this._apiService.get<ApiResponse<UserPermissionCandidate[]>>(`${this._baseUrl}/users`, {
-            search: search || undefined,
+        // Không truyền undefined vào params: HttpParams sẽ gửi thành chuỗi "undefined" và API lọc theo
+        // từ khoá đó nên trả về danh sách rỗng. Chỉ gắn tham số khi thực sự có từ khoá.
+        const params: Record<string, string | number> = {
             pageNumber: 1,
             pageSize: 50
-        });
+        };
+
+        const keyword = (search ?? '').trim();
+        if (keyword) params['search'] = keyword;
+
+        return this._apiService.get<ApiResponse<UserPermissionCandidate[]>>(`${this._baseUrl}/users`, params);
     }
 
     /** Quyền hiệu lực của một tài khoản. GET /api/v1/permissions/users/{userId} */
