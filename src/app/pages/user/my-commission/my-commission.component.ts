@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -9,13 +10,23 @@ import { AppService } from '@core/services/app.service';
 import { CommissionService } from '@core/services/commission.service';
 import { PayoutService } from '@core/services/payout.service';
 import { CommissionConfig } from '@core/models/commission.model';
-import { BankAccount, MyWallet, PayoutPeriodStatus, PayoutStatus, getPayoutStatusLabel, getPayoutTypeLabel } from '@core/models/payout.model';
+import {
+    BankAccount,
+    MyWallet,
+    PayoutPeriodStatus,
+    PayoutStatus,
+    SaveBankAccountRequest,
+    getPayoutStatusLabel,
+    getPayoutTypeLabel
+} from '@core/models/payout.model';
 import { CommissionType, getCommissionTypeLabel } from '@core/models/partner.model';
 import { UserRole, toUserRole } from '@core/models/auth.model';
 
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
+import { InputComponent } from '@shared/components/input/input.component';
+import { ButtonComponent } from '@shared/components/button/button.component';
 
 /**
  * Trang hoa hồng của tôi: mức hoa hồng đang áp dụng, ví hoa hồng (khả dụng, chờ duyệt, đã nhận),
@@ -25,7 +36,17 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 @Component({
     selector: 'app-my-commission-page',
     standalone: true,
-    imports: [CommonModule, RouterLink, TranslateModule, AppPricePipe, AppDatePipe, LoadingComponent],
+    imports: [
+        CommonModule,
+        RouterLink,
+        ReactiveFormsModule,
+        TranslateModule,
+        AppPricePipe,
+        AppDatePipe,
+        LoadingComponent,
+        InputComponent,
+        ButtonComponent
+    ],
     template: `
         <div class="space-y-5">
             <section class="bg-gradient-to-r from-teal-50 via-white to-blue-50 border border-gray-200 rounded-2xl p-5">
@@ -306,7 +327,7 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
                 <section class="bg-white rounded-xl border border-gray-200 p-5">
                     <div class="flex flex-wrap items-center justify-between gap-2">
                         <h2 class="text-base font-semibold text-gray-900">{{ 'USER.COMMISSION.BANK_TITLE' | translate }}</h2>
-                        @if (bankAccount) {
+                        @if (bankAccount && !isEditingBank) {
                             <span class="px-2 py-0.5 rounded text-xs"
                                 [class]="bankAccount.isVerified ? 'bg-teal-50 text-teal-700' : 'bg-amber-50 text-amber-700'">
                                 {{ (bankAccount.isVerified ? 'USER.COMMISSION.BANK_VERIFIED' : 'USER.COMMISSION.BANK_UNVERIFIED') | translate }}
@@ -314,7 +335,51 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
                         }
                     </div>
 
-                    @if (bankAccount) {
+                    @if (isEditingBank) {
+                        <form [formGroup]="bankForm" (ngSubmit)="saveBankAccount()" class="mt-4 space-y-4">
+                            <div class="grid gap-4 sm:grid-cols-2">
+                                <app-input formControlName="bankName" type="text" icon="fas fa-university"
+                                    [label]="'USER.COMMISSION.BANK_NAME' | translate"
+                                    [placeholder]="'USER.COMMISSION.BANK_NAME_PLACEHOLDER' | translate"
+                                    [required]="true"
+                                    [isInvalid]="isBankInvalid('bankName')"
+                                    [errorMessage]="bankError('bankName')">
+                                </app-input>
+
+                                <app-input formControlName="branch" type="text" icon="fas fa-code-branch"
+                                    [label]="'USER.COMMISSION.BANK_BRANCH' | translate"
+                                    [placeholder]="'USER.COMMISSION.BANK_BRANCH_PLACEHOLDER' | translate">
+                                </app-input>
+
+                                <app-input formControlName="accountNumber" type="text" icon="fas fa-hashtag"
+                                    [label]="'USER.COMMISSION.BANK_NUMBER' | translate"
+                                    [placeholder]="'USER.COMMISSION.BANK_NUMBER_PLACEHOLDER' | translate"
+                                    [required]="true"
+                                    [isInvalid]="isBankInvalid('accountNumber')"
+                                    [errorMessage]="bankError('accountNumber')">
+                                </app-input>
+
+                                <app-input formControlName="accountHolder" type="text" icon="fas fa-user"
+                                    [label]="'USER.COMMISSION.BANK_HOLDER' | translate"
+                                    [placeholder]="'USER.COMMISSION.BANK_HOLDER_PLACEHOLDER' | translate"
+                                    [required]="true"
+                                    [isInvalid]="isBankInvalid('accountHolder')"
+                                    [errorMessage]="bankError('accountHolder')">
+                                </app-input>
+                            </div>
+
+                            <p class="bg-amber-50 rounded-lg px-3 py-2 text-xs text-amber-800">{{ 'USER.COMMISSION.BANK_EDIT_HINT' | translate }}</p>
+
+                            <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                                <app-button type="button" variant="outline" (click)="cancelBankEdit()">
+                                    {{ 'USER.COMMISSION.BANK_CANCEL' | translate }}
+                                </app-button>
+                                <app-button type="submit" variant="primary" [loading]="isSavingBank" [disabled]="isSavingBank">
+                                    <i class="fas fa-floppy-disk mr-2"></i>{{ 'USER.COMMISSION.BANK_SAVE' | translate }}
+                                </app-button>
+                            </div>
+                        </form>
+                    } @else if (bankAccount) {
                         <dl class="grid gap-3 text-sm mt-3 sm:grid-cols-2">
                             <div>
                                 <dt class="text-gray-500">{{ 'USER.COMMISSION.BANK_NAME' | translate }}</dt>
@@ -336,8 +401,18 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
                         @if (!bankAccount.isVerified) {
                             <p class="bg-amber-50 rounded-lg px-3 py-2 text-xs text-amber-800 mt-3">{{ 'USER.COMMISSION.BANK_UNVERIFIED_HINT' | translate }}</p>
                         }
+                        <div class="flex justify-end mt-4">
+                            <app-button type="button" variant="outline" (click)="startBankEdit()">
+                                <i class="fas fa-pen mr-2"></i>{{ 'USER.COMMISSION.BANK_UPDATE' | translate }}
+                            </app-button>
+                        </div>
                     } @else {
                         <p class="bg-amber-50 rounded-lg px-3 py-2 text-sm text-amber-800 mt-3">{{ 'USER.COMMISSION.BANK_EMPTY' | translate }}</p>
+                        <div class="flex justify-end mt-4">
+                            <app-button type="button" variant="primary" (click)="startBankEdit()">
+                                <i class="fas fa-plus mr-2"></i>{{ 'USER.COMMISSION.BANK_ADD' | translate }}
+                            </app-button>
+                        </div>
                     }
 
                     <p class="text-xs text-gray-500 mt-3">{{ 'USER.COMMISSION.BANK_HINT' | translate }}</p>
@@ -354,6 +429,11 @@ export class MyCommissionPageComponent implements OnInit {
     config: CommissionConfig | null = null;
     isLoading = false;
 
+    /** Form thông tin ngân hàng nhận tiền của thành viên. */
+    readonly bankForm: FormGroup;
+    isEditingBank = false;
+    isSavingBank = false;
+
     readonly tiered = CommissionType.Tiered;
     readonly fixed = CommissionType.Fixed;
 
@@ -368,8 +448,16 @@ export class MyCommissionPageComponent implements OnInit {
     constructor(
         private readonly _appService: AppService,
         private readonly _commissionService: CommissionService,
-        private readonly _payoutService: PayoutService
-    ) { }
+        private readonly _payoutService: PayoutService,
+        private readonly _fb: FormBuilder
+    ) {
+        this.bankForm = this._fb.group({
+            bankName: ['', [Validators.required, Validators.maxLength(200)]],
+            branch: ['', [Validators.maxLength(200)]],
+            accountNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{6,30}$/)]],
+            accountHolder: ['', [Validators.required, Validators.maxLength(200)]]
+        });
+    }
 
     ngOnInit(): void {
         this.isLoading = true;
@@ -450,4 +538,70 @@ export class MyCommissionPageComponent implements OnInit {
     /** Nhãn trạng thái và loại chi trả (key i18n). */
     getPayoutStatusLabel = getPayoutStatusLabel;
     getPayoutTypeLabel = getPayoutTypeLabel;
+
+    /** Mở form nhập thông tin ngân hàng nhận tiền, điền sẵn dữ liệu đang có. */
+    startBankEdit(): void {
+        this.bankForm.reset({
+            bankName: this.bankAccount?.bankName ?? '',
+            branch: this.bankAccount?.branch ?? '',
+            accountNumber: this.bankAccount?.accountNumber ?? '',
+            accountHolder: this.bankAccount?.accountHolder ?? ''
+        });
+        this.isEditingBank = true;
+    }
+
+    /** Đóng form nhập mà không lưu. */
+    cancelBankEdit(): void {
+        this.isEditingBank = false;
+    }
+
+    /**
+     * Lưu thông tin ngân hàng nhận tiền. Đổi số tài khoản thì API đặt lại trạng thái xác minh,
+     * nên sau khi lưu phải nạp lại ví để huy hiệu xác minh hiển thị đúng.
+     */
+    saveBankAccount(): void {
+        if (this.bankForm.invalid) {
+            this.bankForm.markAllAsTouched();
+            return;
+        }
+
+        const request = this.bankForm.getRawValue() as SaveBankAccountRequest;
+        this.isSavingBank = true;
+
+        this._payoutService.saveMyBankAccount(request).subscribe({
+            next: response => {
+                this.isSavingBank = false;
+                this.isEditingBank = false;
+                this.bankAccount = response.data ?? this.bankAccount;
+                this.reloadWallet();
+                this._appService.showSuccess(this._appService.trans('USER.COMMISSION.BANK_SAVED'));
+            },
+            error: error => {
+                this.isSavingBank = false;
+                this._appService.showError(this._appService.extractErrorMessage(error));
+            }
+        });
+    }
+
+    /** Ô nhập ngân hàng đang lỗi và người dùng đã chạm vào. */
+    isBankInvalid(field: string): boolean {
+        const control = this.bankForm.get(field);
+        return !!control && control.invalid && (control.touched || control.dirty);
+    }
+
+    /** Thông báo lỗi của ô nhập ngân hàng (đã dịch). */
+    bankError(field: string): string {
+        const control = this.bankForm.get(field);
+        if (!control || !control.errors) return '';
+        if (control.errors['pattern']) return this._appService.trans('USER.COMMISSION.BANK_ERROR_NUMBER');
+        return this._appService.trans('USER.COMMISSION.BANK_ERROR_REQUIRED');
+    }
+
+    /** Nạp lại ví hoa hồng (trạng thái ngân hàng có thể đổi sau khi lưu). */
+    private reloadWallet(): void {
+        this._payoutService.getMyWallet().subscribe({
+            next: response => { this.wallet = response.data ?? this.wallet; },
+            error: () => { }
+        });
+    }
 }

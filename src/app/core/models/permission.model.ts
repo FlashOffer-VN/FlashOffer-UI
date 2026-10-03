@@ -137,6 +137,8 @@ export enum Permission {
     ManageMembershipTiers = 'P109',
     /** P110 */
     VerifyBankAccounts = 'P110',
+    /** P111 */
+    UpdateSystemSettings = 'P111',
 }
 
 /** Nhóm quyền (bảng PermissionGroups): mã, tên hiển thị và thứ tự. */

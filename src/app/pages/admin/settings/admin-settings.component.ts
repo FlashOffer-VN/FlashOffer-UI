@@ -8,6 +8,7 @@ import { Permission } from '@core/models/permission.model';
 import { AdminPermissionSettingsComponent } from '@pages/admin/permissions/permission-settings.component';
 import { AdminAuditLogListComponent } from '@pages/admin/settings/audit-log/audit-log-list.component';
 import { AdminCommissionConfigComponent } from '@pages/admin/settings/commission/commission-config.component';
+import { AdminGeneralSettingsComponent } from '@pages/admin/settings/general/general-settings.component';
 
 /** Một mục trong danh sách cài đặt (cột dọc bên trái). */
 interface SettingsTab {
@@ -27,7 +28,7 @@ interface SettingsTab {
 @Component({
     selector: 'app-admin-settings',
     standalone: true,
-    imports: [CommonModule, TranslateModule, AdminPermissionSettingsComponent, AdminAuditLogListComponent, AdminCommissionConfigComponent],
+    imports: [CommonModule, TranslateModule, AdminPermissionSettingsComponent, AdminAuditLogListComponent, AdminCommissionConfigComponent, AdminGeneralSettingsComponent],
     template: `
         <div class="settings">
             <header class="settings-head">
@@ -63,29 +64,7 @@ interface SettingsTab {
                     } @else if (activeTab === 'audit') {
                         <app-admin-audit-log-list></app-admin-audit-log-list>
                     } @else {
-                        <div class="card intro-card">
-                            <span class="intro-card__icon"><i class="fa-solid fa-gear"></i></span>
-                            <div>
-                                <h2>{{ 'ADMIN.SETTINGS_PAGE.CARD_TITLE' | translate }}</h2>
-                                <p>{{ 'ADMIN.SETTINGS_PAGE.CARD_TEXT' | translate }}</p>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <h2>{{ 'ADMIN.SETTINGS_PAGE.PLANNED_TITLE' | translate }}</h2>
-                            <ul class="planned">
-                                <li>
-                                    <span class="planned__icon"><i class="fa-solid fa-language"></i></span>
-                                    <span class="planned__label">{{ 'ADMIN.SETTINGS_PAGE.LANGUAGE' | translate }}</span>
-                                    <span class="planned__badge">{{ 'ADMIN.SETTINGS_PAGE.COMING_SOON' | translate }}</span>
-                                </li>
-                                <li>
-                                    <span class="planned__icon"><i class="fa-solid fa-server"></i></span>
-                                    <span class="planned__label">{{ 'ADMIN.SETTINGS_PAGE.SYSTEM' | translate }}</span>
-                                    <span class="planned__badge">{{ 'ADMIN.SETTINGS_PAGE.COMING_SOON' | translate }}</span>
-                                </li>
-                            </ul>
-                        </div>
+                        <app-admin-general-settings></app-admin-general-settings>
                     }
                 </section>
             </div>

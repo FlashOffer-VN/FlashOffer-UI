@@ -3,7 +3,8 @@ import { Observable } from 'rxjs';
 
 import { ApiService } from './api.service';
 import { ApiResponse } from '../models/auth.model';
-import { BankAccount, MyWallet } from '../models/payout.model';
+import { PagedResponse } from '../models/paged-response.model';
+import { BankAccount, MyWallet, PayoutQuery, PayoutStatement, SaveBankAccountRequest } from '../models/payout.model';
 
 /** Ví hoa hồng và thông tin ngân hàng nhận giải ngân của tài khoản đang đăng nhập. */
 @Injectable({ providedIn: 'root' })
@@ -21,5 +22,30 @@ export class PayoutService {
     /** Thông tin ngân hàng nhận tiền của tôi; trả về rỗng khi chưa khai. GET /api/v1/BankAccounts/me */
     getMyBankAccount(): Observable<ApiResponse<BankAccount | null>> {
         return this._apiService.get<ApiResponse<BankAccount | null>>(`${this._bankAccountUrl}/me`);
+    }
+
+    /** Lưu thông tin ngân hàng nhận tiền của tôi. PUT /api/v1/BankAccounts/me */
+    saveMyBankAccount(request: SaveBankAccountRequest): Observable<ApiResponse<BankAccount>> {
+        return this._apiService.put<ApiResponse<BankAccount>>(`${this._bankAccountUrl}/me`, request);
+    }
+
+    /** Danh sách chi trả hoa hồng cho quản trị viên, lọc theo loại và trạng thái. GET /api/v1/Payouts */
+    getPaged(query: PayoutQuery): Observable<PagedResponse<PayoutStatement>> {
+        return this._apiService.get<PagedResponse<PayoutStatement>>(this._baseUrl, { ...query });
+    }
+
+    /** Duyệt một lần chi trả. POST /api/v1/Payouts/{id}/approve */
+    approvePayout(id: string, note?: string): Observable<ApiResponse<PayoutStatement>> {
+        return this._apiService.post<ApiResponse<PayoutStatement>>(`${this._baseUrl}/${id}/approve`, { note: note ?? null });
+    }
+
+    /** Từ chối một lần chi trả. POST /api/v1/Payouts/{id}/reject */
+    rejectPayout(id: string, note?: string): Observable<ApiResponse<PayoutStatement>> {
+        return this._apiService.post<ApiResponse<PayoutStatement>>(`${this._baseUrl}/${id}/reject`, { note: note ?? null });
+    }
+
+    /** Xác nhận đã chuyển khoản một lần chi trả. POST /api/v1/Payouts/{id}/paid */
+    markPayoutPaid(id: string, note?: string): Observable<ApiResponse<PayoutStatement>> {
+        return this._apiService.post<ApiResponse<PayoutStatement>>(`${this._baseUrl}/${id}/paid`, { note: note ?? null });
     }
 }
