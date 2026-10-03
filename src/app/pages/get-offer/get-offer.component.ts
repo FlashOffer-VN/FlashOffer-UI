@@ -185,7 +185,7 @@ export class GetOfferComponent {
             email: contact?.email ?? '',
             note: formValue.note?.trim() || undefined,
             // Người dùng mở form từ link chia sẻ (?ref=) thì ghi nhận mã của người chia sẻ
-            referralCode: resolveReferralCode() ?? undefined
+            referralCode: resolveReferralCode() ?? ''
         };
 
         this._appService.offerRequest.create(requestData)

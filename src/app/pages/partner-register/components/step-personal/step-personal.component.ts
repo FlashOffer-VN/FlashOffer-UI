@@ -22,7 +22,6 @@ import { AppService } from '@core/services/app.service';  // ✅ Import AppServi
 })
 export class StepPersonalComponent {
   @Input() formGroup!: FormGroup;
-  @Input() isReferralValid = false;
 
   constructor(private _appService: AppService) { }
 

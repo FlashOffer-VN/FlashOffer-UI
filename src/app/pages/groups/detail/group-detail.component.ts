@@ -215,7 +215,7 @@ export class GroupDetailComponent implements OnInit {
         // Người dùng mở trang từ link chia sẻ (?ref=) thì ghi nhận mã của người chia sẻ
         const payload: JoinBusinessGroupRequest = {
             ...this.joinForm.value,
-            referralCode: resolveReferralCode() ?? undefined
+            referralCode: resolveReferralCode() ?? ''
         };
 
         this._appService.businessGroupService.join(this.group.id, payload).subscribe({

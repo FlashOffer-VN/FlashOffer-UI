@@ -10,8 +10,8 @@ import { StepPersonalComponent } from '../step-personal/step-personal.component'
 import { StepBusinessComponent } from '../step-business/step-business.component';
 import { StepConfirmationComponent } from '../step-confirmation/step-confirmation.component';
 
-import { PartnerRegisterService } from '../../../../core/services/partner-register.service';
 import { BusinessFieldOption, BusinessFieldService } from '../../../../core/services/business-field.service';
+import { resolveReferralCode } from '../../../../core/utils/share-link';
 
 @Component({
     selector: 'app-partner-form',
@@ -36,23 +36,19 @@ export class PartnerFormComponent implements OnInit {
     @Output() submit = new EventEmitter<void>();
 
     registerForm!: FormGroup;
-    isReferralValid = false;
 
     /** Danh sách lĩnh vực hoạt động lấy từ API (BusinessField — quản lý tập trung). */
     businessFields: BusinessFieldOption[] = [];
 
-    private referralCheckTimeout: any;
     private isSubmitting = false;
 
     constructor(
         private fb: FormBuilder,
-        private partnerService: PartnerRegisterService,
         private businessFieldService: BusinessFieldService
     ) { }
 
     ngOnInit(): void {
         this.initForm();
-        this.watchReferralCode();
         this.loadBusinessFields();
         this.watchBusinessField();
     }
@@ -64,7 +60,8 @@ export class PartnerFormComponent implements OnInit {
             email: ['', [Validators.required, Validators.email]],
             phone: ['', [Validators.required, Validators.pattern(/^(0|\+84)[0-9]{9,10}$/)]],
             position: ['', [Validators.required, Validators.minLength(2)]],
-            referralCode: [''],
+            // Mã chia sẻ của CTV lấy từ link (?ref=) — không nhập tay ở form, gửi lên API cùng hồ sơ
+            referralCode: [resolveReferralCode() ?? ''],
 
             // Step 2: Business Info
             companyName: ['', [Validators.required, Validators.minLength(2)]],
@@ -117,28 +114,6 @@ export class PartnerFormComponent implements OnInit {
     watchBusinessField(): void {
         this.registerForm.get('businessFieldId')?.valueChanges.subscribe((id: string) => {
             this.registerForm.get('businessFieldName')?.setValue(this.getBusinessFieldName(id));
-        });
-    }
-
-    watchReferralCode(): void {
-        this.registerForm.get('referralCode')?.valueChanges.subscribe((code: string) => {
-            if (this.referralCheckTimeout) {
-                clearTimeout(this.referralCheckTimeout);
-            }
-            if (!code || code.trim().length < 3) {
-                this.isReferralValid = false;
-                return;
-            }
-            this.referralCheckTimeout = setTimeout(() => {
-                this.partnerService.checkReferralCode(code.trim()).subscribe({
-                    next: (response) => {
-                        this.isReferralValid = response.success;
-                    },
-                    error: () => {
-                        this.isReferralValid = false;
-                    }
-                });
-            }, 1000);
         });
     }
 
