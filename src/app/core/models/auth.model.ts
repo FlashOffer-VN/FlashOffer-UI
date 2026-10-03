@@ -100,7 +100,6 @@ export interface AuthResponse {
     data: {
         id?: string;
         token: string;
-        refreshToken?: string;
         expiresAt: string;
         username: string;
         fullName: string;

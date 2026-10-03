@@ -77,13 +77,6 @@ export class AuthService {
     }
 
     /**
-     * Lấy refresh token từ localStorage
-     */
-    getRefreshToken(): string | null {
-        return storageGet('refreshToken');
-    }
-
-    /**
      * Kiểm tra đã đăng nhập chưa
      */
     isAuthenticated(): boolean {
@@ -128,19 +121,19 @@ export class AuthService {
     }
 
     /**
-     * Refresh token
+     * Làm mới token đang dùng. Máy chủ đọc token cũ từ header Authorization, cấp token mới kèm
+     * quyền mới nhất và vô hiệu hóa token cũ ngay sau đó.
      */
     refreshToken(): Observable<any> {
-        const refreshToken = this.getRefreshToken();
-        if (!refreshToken) {
-            return throwError(() => new Error('No refresh token'));
+        if (!this.getToken()) {
+            return throwError(() => new Error('Chưa đăng nhập'));
         }
-        return this.api.post('auth/refresh', { refreshToken }).pipe(
+        return this.api.post('auth/refresh', {}).pipe(
             tap((response: any) => {
                 const newToken = response?.data?.token || response?.token;
                 if (newToken) {
                     storageSet('token', newToken);
-                    this.startRefreshTokenTimer();
+                    this.startRefreshTokenTimer(response?.data?.expiresAt || response?.expiresAt);
                 }
             })
         );
@@ -167,30 +160,34 @@ export class AuthService {
      */
     private clearSession(): void {
         storageRemove('token');
-        storageRemove('refreshToken');
         storageRemove('user');
         this.currentUserSubject.next(null);
         this.stopRefreshTokenTimer();
     }
 
     /**
-     * Bắt đầu timer refresh token
+     * Hẹn làm mới token trước khi hết hạn 5 phút. Thời hạn thật đọc từ trường ExpiresAt của máy chủ
+     * (cấu hình Thời hạn token trong Cài đặt chung); không đọc được thì hẹn 55 phút.
      */
-    private startRefreshTokenTimer(): void {
-        const token = this.getToken();
-        if (!token) return;
+    private startRefreshTokenTimer(expiresAt?: string): void {
+        if (!this.getToken()) return;
 
-        const expiresIn = 55 * 60 * 1000;
         this.stopRefreshTokenTimer();
+
+        const expires = expiresAt ? Date.parse(expiresAt) : NaN;
+        const delay = Number.isNaN(expires)
+            ? 55 * 60 * 1000
+            : Math.max(expires - Date.now() - 5 * 60 * 1000, 60 * 1000);
+
         this.refreshTokenTimeout = setTimeout(() => {
             this.refreshToken().subscribe({
                 next: () => console.log('✅ Token refreshed successfully'),
-                error: (error) => {
-                    console.error('❌ Token refresh failed:', error);
+                error: () => {
+                    // Hết hạn làm mới được thì kết thúc phiên, không giữ token đã chết.
                     this.logout();
                 }
             });
-        }, expiresIn);
+        }, delay);
     }
 
     /**
@@ -232,13 +229,9 @@ export class AuthService {
             storageSet('token', data.token);
         }
 
-        if (data.refreshToken) {
-            storageSet('refreshToken', data.refreshToken);
-        }
-
         storageSet('user', JSON.stringify(user));
         this.currentUserSubject.next(user);
-        this.startRefreshTokenTimer();
+        this.startRefreshTokenTimer(data.expiresAt);
 
         this.redirectAfterLogin(user, isAdmin);
     }
