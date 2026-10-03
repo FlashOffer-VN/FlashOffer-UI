@@ -735,6 +735,15 @@
             "COPY_LINK_SUCCESS": "Đã sao chép đường dẫn chia sẻ",
             "EMPTY": "Chưa lấy được mã chia sẻ, vui lòng thử lại sau.",
             "USED_TITLE": "Mã chia sẻ được ghi nhận khi nào",
+            "STATS_TITLE": "Hiệu quả giới thiệu của bạn",
+            "STATS_DESCRIPTION": "Số liệu phát sinh từ mã chia sẻ của bạn — phát sinh đã huỷ được trừ ra khỏi số liệu.",
+            "STATS_CHART_TITLE": "Phát sinh theo ngày",
+            "STATS_EVENTS_TITLE": "Phát sinh gần đây",
+            "STATS_EVENTS_EMPTY": "Chưa có phát sinh nào từ mã của bạn",
+            "STATS_COL_TIME": "Thời gian",
+            "STATS_COL_TYPE": "Loại phát sinh",
+            "STATS_COL_TARGET": "Đối tượng",
+            "STATS_COL_STATUS": "Trạng thái",
             "USED_DESCRIPTION": "Mã của bạn được lưu trên bản ghi khi người dùng đến từ link chia sẻ của bạn:",
             "USED_GROUP_BUYING_CREATE": "Mở đơn mua chung mới",
             "USED_GROUP_BUYING_JOIN": "Tham gia một đơn mua chung",
@@ -893,6 +902,11 @@
             "SKILLS_MAXLENGTH": "Kỹ năng không được vượt quá 500 ký tự",
             "PASSWORD_WEAK": "Mật khẩu phải có ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt (@$!%*?&)"
         }
+    },
+    "USER_ROLE": {
+        "CUSTOMER": "Thành viên",
+        "CTV": "Cộng tác viên",
+        "ADMIN": "Quản trị viên"
     },
     "SOCIAL": {
         "TITLE": "Nền tảng kết nối cơ hội",
@@ -1066,6 +1080,63 @@
         "NO_ITEMS": "Không có dữ liệu"
     },
     "ADMIN": {
+        "REFERRAL_STATS": {
+            "TITLE": "Thống kê giới thiệu",
+            "SUBTITLE": "Tình hình phát sinh từ mã chia sẻ của từng cộng tác viên. Phát sinh đã huỷ được trừ ra khỏi số liệu.",
+            "REFRESH": "Làm mới",
+            "UNAVAILABLE": "Không tải được dữ liệu thống kê giới thiệu",
+            "SEARCH_PLACEHOLDER": "Tìm theo mã chia sẻ hoặc tên cộng tác viên",
+            "CARD_REFERRERS": "Mã có phát sinh",
+            "CARD_REFERRED_USERS": "Người được giới thiệu",
+            "CARD_GROUP_BUYING": "Đơn mua chung",
+            "CARD_PURCHASE_REQUESTS": "Yêu cầu tìm hàng",
+            "CARD_OFFER_REQUESTS": "Yêu cầu nhận offer",
+            "CARD_CANCELLED": "Phát sinh đã huỷ",
+            "GUEST_NOTE": "{{count}} tài khoản khách",
+            "CANCELLED_NOTE": "Đã trừ khỏi thống kê",
+            "CHART_TITLE": "Phát sinh theo ngày",
+            "CHART_SERIES": "Số phát sinh",
+            "TABLE_TITLE": "Chi tiết theo mã chia sẻ",
+            "COL_CODE": "Mã chia sẻ",
+            "COL_NAME": "Cộng tác viên",
+            "COL_REFERRED": "Người được mời",
+            "COL_GROUP_BUYING": "Đơn mua chung",
+            "COL_JOINS": "Lượt tham gia",
+            "COL_PURCHASE_REQUESTS": "Tìm hàng",
+            "COL_OFFER_REQUESTS": "Offer",
+            "COL_GROUP_MEMBERS": "Vào nhóm",
+            "COL_PARTNERS": "Đối tác",
+            "COL_CANCELLED": "Đã huỷ",
+            "COL_TOTAL": "Tổng",
+            "COL_LAST_EVENT": "Gần nhất",
+            "COL_TIME": "Thời gian",
+            "COL_EVENT_TYPE": "Loại phát sinh",
+            "COL_REFERRED_USER": "Người phát sinh",
+            "COL_TARGET": "Đối tượng",
+            "COL_AMOUNT": "Giá trị",
+            "COL_STATUS": "Trạng thái",
+            "VIEW_EVENTS": "Xem phát sinh",
+            "HIDE_EVENTS": "Ẩn phát sinh",
+            "EVENTS_TITLE": "Phát sinh của mã {{code}}",
+            "EVENTS_EMPTY": "Chưa có phát sinh nào từ mã này",
+            "GUEST_TAG": "Tài khoản khách",
+            "EVENT_TYPE": {
+                "USER_REFERRED": "Ghi nhận người giới thiệu",
+                "GROUP_BUYING_REQUEST": "Tạo đơn mua chung",
+                "GROUP_BUYING_JOIN": "Tham gia đơn mua chung",
+                "PURCHASE_REQUEST": "Gửi yêu cầu tìm hàng",
+                "OFFER_REQUEST": "Gửi yêu cầu nhận offer",
+                "GROUP_MEMBER_JOIN": "Xin vào nhóm",
+                "PARTNER_REGISTER": "Đăng ký đối tác"
+            },
+            "EVENT_STATUS": {
+                "PENDING": "Đang ghi nhận",
+                "APPROVED": "Hợp lệ",
+                "REJECTED": "Không hợp lệ",
+                "CANCELLED": "Đã huỷ",
+                "PAID": "Đã chi hoa hồng"
+            }
+        },
         "SIDEBAR": {
             "PANEL": "Trang quản trị",
             "OFFERS": "Offers",
@@ -1076,6 +1147,7 @@
             "SETTINGS": "Cài đặt",
             "BACK_TO_SITE": "Về trang người dùng",
             "CRM": "CRM",
+            "REFERRAL_STATS": "Thống kê giới thiệu",
             "LOGOUT": "Đăng xuất",
             "GROUP_BUYING": "Yêu cầu mua chung",
             "GROUPS": "Nhóm ngành"
@@ -1164,7 +1236,8 @@
             "EXPIRED_SUCCESS": "Đã đánh dấu hết hạn thành công",
             "DELETE_CONFIRM": "Bạn có chắc chắn muốn xóa yêu cầu \"{{name}}\"?",
             "DELETED_SUCCESS": "Đã xóa yêu cầu offer thành công",
-            "RESTORED_SUCCESS": "Khôi phục yêu cầu offer thành công"
+            "RESTORED_SUCCESS": "Khôi phục yêu cầu offer thành công",
+            "REFERRED_BY": "Được giới thiệu bởi"
         },
         "PURCHASE_REQUESTS": {
             "TITLE": "Quản lý yêu cầu tìm nhà cung cấp",
@@ -1192,7 +1265,8 @@
             "CONTACTED_SUCCESS": "Đã đánh dấu đã liên hệ thành công",
             "COMPLETE": "Hoàn thành",
             "COMPLETE_CONFIRM": "Bạn có chắc chắn đánh dấu yêu cầu này hoàn thành không?",
-            "COMPLETED_SUCCESS": "Đã đánh dấu hoàn thành thành công"
+            "COMPLETED_SUCCESS": "Đã đánh dấu hoàn thành thành công",
+            "REFERRED_BY": "Được giới thiệu bởi"
         },
         "SETTINGS_PAGE": {
             "TITLE": "Cài đặt hệ thống",
@@ -1256,7 +1330,8 @@
             "DELETE_CONFIRM": "Bạn có chắc muốn xóa cộng tác viên \"{{name}}\"?",
             "DELETED_SUCCESS": "Xóa cộng tác viên thành công",
             "EDIT_TITLE": "Sửa cộng tác viên",
-            "UPDATED_SUCCESS": "Cập nhật cộng tác viên thành công"
+            "UPDATED_SUCCESS": "Cập nhật cộng tác viên thành công",
+            "REFERRED_BY": "Được giới thiệu bởi"
         },
         "BUSINESS_INFO": {
             "TITLE": "Thông tin doanh nghiệp",
@@ -1332,7 +1407,8 @@
             "CLEAR_FILTER": "Bỏ lọc",
             "NO_FILTER_RESULT": "Không có sản phẩm nào khớp bộ lọc",
             "NO_PRODUCTS": "Chưa có sản phẩm",
-            "SPECIAL_CONDITIONS": "Điều kiện đặc biệt"
+            "SPECIAL_CONDITIONS": "Điều kiện đặc biệt",
+            "REFERRED_BY": "Được giới thiệu bởi"
         },
         "GROUP_BUYING": {
             "TITLE": "Quản lý yêu cầu mua chung",
@@ -1379,7 +1455,8 @@
             "REMOVE_CONFIRM": "Xóa {{name}} khỏi nhóm mua chung này?",
             "REMOVE_SUCCESS": "Đã xóa người tham gia khỏi nhóm",
             "EDIT_TITLE": "Sửa yêu cầu mua chung",
-            "UPDATE_SUCCESS": "Cập nhật yêu cầu mua chung thành công"
+            "UPDATE_SUCCESS": "Cập nhật yêu cầu mua chung thành công",
+            "REFERRED_BY": "Được giới thiệu bởi"
         },
         "GROUPS": {
             "TITLE": "Quản lý nhóm",
@@ -1444,7 +1521,8 @@
             "HIDDEN": "Đang ẩn",
             "PRIVATE_HINT": "Yêu cầu kín do thành viên gửi riêng cho admin, các thành viên khác không đọc được.",
             "NO_PRIVATE": "Chưa có yêu cầu kín",
-            "NO_POSTS": "Chưa có bài nào"
+            "NO_POSTS": "Chưa có bài nào",
+            "REFERRED_BY": "Được giới thiệu bởi"
         },
         "LOGOUT_TITLE": "Đăng xuất khỏi trang quản trị?",
         "LOGOUT_MESSAGE": "Bạn sẽ cần đăng nhập lại để tiếp tục quản trị.",

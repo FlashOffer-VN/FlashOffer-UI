@@ -53,7 +53,7 @@ export class GuestHeaderComponent implements OnInit, OnDestroy {
     checkAuth(): void {
         this.authSubscription = this._appService.auth.currentUser$.subscribe(user => {
             this.isLoggedIn = !!user;
-            this.isAdmin = user?.role?.toLowerCase() === UserRole.ADMIN.toLowerCase();
+            this.isAdmin = user?.role === UserRole.Admin;
             this.username = user?.username || '';
         });
     }

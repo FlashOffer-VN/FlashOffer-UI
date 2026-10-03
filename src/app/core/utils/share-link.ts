@@ -1,4 +1,5 @@
 import { isBrowser } from './platform';
+import { storageGet, storageSet } from './storage';
 
 /**
  * Dựng link công khai của một đơn mua chung, gắn kèm mã chia sẻ riêng của người gửi (refcode)
@@ -39,24 +40,46 @@ export function readReferralCodeFromQuery(search?: string | null): string | null
     return value?.trim() || null;
 }
 
-/** Khoá lưu mã chia sẻ đã gặp trong phiên hiện tại */
+/** Khoá lưu mã chia sẻ đã gặp — để trong localStorage cho bền qua các phiên sử dụng */
 const REFERRAL_STORAGE_KEY = 'kindi_referral_code';
 
+/** Khoá lưu mã đã đồng bộ lên tài khoản — tránh gọi lại API ở mỗi lần chuyển trang */
+const REFERRAL_SYNCED_STORAGE_KEY = 'kindi_referral_code_synced';
+
 /**
- * Mã chia sẻ dùng cho các luồng ghi nhận: ưu tiên mã trên URL (?ref=) rồi ghi nhớ trong phiên,
- * để khách mở link vẫn ghi nhận đúng người chia sẻ dù có chuyển trang trước khi tham gia.
+ * Ghi nhận mã chia sẻ trên link vào `localStorage` (bền qua các phiên, không phụ thuộc link):
+ * chỉ ghi LẦN ĐẦU — sau đó mở link của CTV khác cũng KHÔNG ghi đè.
+ * Trả mã đang ghi nhận trong máy, `null` khi chưa từng mở link chia sẻ nào.
+ */
+export function captureReferralCode(): string | null {
+    if (!isBrowser()) return null;
+
+    const stored = storageGet(REFERRAL_STORAGE_KEY);
+    if (stored) return stored;
+
+    const fromQuery = readReferralCodeFromQuery();
+    if (!fromQuery) return null;
+
+    storageSet(REFERRAL_STORAGE_KEY, fromQuery);
+    return fromQuery;
+}
+
+/**
+ * Mã chia sẻ dùng cho các luồng ghi nhận (tạo đơn / gửi yêu cầu / tham gia nhóm…):
+ * lấy mã đã ghi nhận trong máy, chưa có thì lấy từ link đang mở (?ref=).
  */
 export function resolveReferralCode(): string | null {
-    const fromQuery = readReferralCodeFromQuery();
+    return captureReferralCode();
+}
 
-    if (!isBrowser()) return fromQuery;
+/** Mã chia sẻ này đã đồng bộ lên tài khoản đang đăng nhập chưa? */
+export function isReferralCodeSynced(referralCode: string): boolean {
+    return storageGet(REFERRAL_SYNCED_STORAGE_KEY) === referralCode;
+}
 
-    if (fromQuery) {
-        sessionStorage.setItem(REFERRAL_STORAGE_KEY, fromQuery);
-        return fromQuery;
-    }
-
-    return sessionStorage.getItem(REFERRAL_STORAGE_KEY);
+/** Đánh dấu mã chia sẻ đã đồng bộ lên tài khoản (gọi sau khi API ghi nhận thành công). */
+export function markReferralCodeSynced(referralCode: string): void {
+    storageSet(REFERRAL_SYNCED_STORAGE_KEY, referralCode);
 }
 
 /** Copy văn bản vào clipboard; trình duyệt chặn Clipboard API thì dùng input tạm */

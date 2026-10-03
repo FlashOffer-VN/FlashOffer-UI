@@ -94,6 +94,8 @@
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ request.fullName }}
+                                <div class="text-xs text-gray-400">{{ 'ADMIN.PURCHASE_REQUESTS.REFERRED_BY' | translate }}:
+                                    {{ request.referredByName || request.referredByCode || '--' }}</div>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ request.phone }}

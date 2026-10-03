@@ -1,4 +1,4 @@
-﻿// core/services/app.service.ts
+// core/services/app.service.ts
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from './auth.service';
@@ -18,6 +18,7 @@ import { CollaboratorService } from './collaborator.service';
 import { DashboardService } from './dashboard.service';
 import { CrmService } from './crm.service';
 import { BusinessGroupService } from './business-group.service';
+import { ReferralService } from './referral.service';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 
 @Injectable({
@@ -38,7 +39,8 @@ export class AppService {
         public collaboratorService: CollaboratorService,
         public dashboardService: DashboardService,
         public crmService: CrmService,
-        public businessGroupService: BusinessGroupService
+        public businessGroupService: BusinessGroupService,
+        public referralService: ReferralService
     ) { }
 
     // ========== Auth ==========
@@ -76,13 +78,13 @@ export class AppService {
     isAdmin(): boolean {
         const user = this.getCurrentUser();
         if (!user) return false;
-        return user.role?.toUpperCase() === UserRole.ADMIN.toUpperCase();
+        return user.role === UserRole.Admin;
     }
 
     isUser(): boolean {
         const user = this.getCurrentUser();
         if (!user) return false;
-        return user.role?.toUpperCase() === UserRole.USER.toUpperCase();
+        return user.role === UserRole.Customer;
     }
 
     // ========== Toast ==========

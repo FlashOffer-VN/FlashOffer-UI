@@ -21,7 +21,7 @@ export class AdminGuard implements CanActivate {
 
         // Kiểm tra role admin
         const user = this._appService.auth.getCurrentUser();
-        if (user?.role?.toLowerCase() === UserRole.ADMIN.toLowerCase()) {
+        if (user?.role === UserRole.Admin) {
             return true;
         }
 

@@ -9,6 +9,7 @@ import { ButtonComponent } from '@shared/components/button/button.component';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 import { ProvinceSelectComponent } from '@shared/components/province-select/province-select.component';
 import { AppService } from '@core/services/app.service';
+import { UserRole } from '@core/models/auth.model';
 import { BusinessFieldOption, BusinessFieldService } from '@core/services/business-field.service';
 import { isBrowser } from '@core/utils/platform';
 
@@ -197,7 +198,7 @@ export class RegisterComponent implements OnInit {
             ...this.registerForm.value,
             businessFieldId,
             businessFieldName: this.getBusinessFieldName(businessFieldId),
-            role: 'USER'
+            role: UserRole.Customer
         };
 
         this._appService.collaboratorService.register(formData).subscribe({

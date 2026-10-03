@@ -779,6 +779,15 @@
             "COPY_LINK_SUCCESS": "Referral link copied",
             "EMPTY": "Cannot load your referral code, please try again later.",
             "USED_TITLE": "When your referral code is recorded",
+            "STATS_TITLE": "Your referral performance",
+            "STATS_DESCRIPTION": "Activity generated from your referral code — cancelled activity is excluded from the totals.",
+            "STATS_CHART_TITLE": "Activity by day",
+            "STATS_EVENTS_TITLE": "Recent activity",
+            "STATS_EVENTS_EMPTY": "No activity from your code yet",
+            "STATS_COL_TIME": "Time",
+            "STATS_COL_TYPE": "Activity type",
+            "STATS_COL_TARGET": "Reference",
+            "STATS_COL_STATUS": "Status",
             "USED_DESCRIPTION": "Your code is stored on the record when a user comes from your share link:",
             "USED_GROUP_BUYING_CREATE": "Opening a new group buying request",
             "USED_GROUP_BUYING_JOIN": "Joining a group buying request",
@@ -938,8 +947,13 @@
             "PASSWORD_WEAK": "Password must have at least 1 uppercase, 1 lowercase, 1 number and 1 special character (@$!%*?&)"
         }
     },
+    "USER_ROLE": {
+        "CUSTOMER": "Member",
+        "CTV": "Collaborator",
+        "ADMIN": "Administrator"
+    },
     "SOCIAL": {
-        "TITLE": "Ecomecial Social Network",
+        "TITLE": "Kindi - The opportunity network",
         "DESC": "Connect, share and grow with the entrepreneur community",
         "TAGLINE": "Connect • Share • Collaborate • Grow",
         "STATS_MEMBERS": "Members",
@@ -1108,6 +1122,63 @@
         "NO_ITEMS": "No data"
     },
     "ADMIN": {
+        "REFERRAL_STATS": {
+            "TITLE": "Referral statistics",
+            "SUBTITLE": "Activity generated from each collaborator referral code. Cancelled activity is excluded from the totals.",
+            "REFRESH": "Refresh",
+            "UNAVAILABLE": "Unable to load referral statistics",
+            "SEARCH_PLACEHOLDER": "Search by referral code or collaborator name",
+            "CARD_REFERRERS": "Codes with activity",
+            "CARD_REFERRED_USERS": "Referred users",
+            "CARD_GROUP_BUYING": "Group buying orders",
+            "CARD_PURCHASE_REQUESTS": "Sourcing requests",
+            "CARD_OFFER_REQUESTS": "Offer requests",
+            "CARD_CANCELLED": "Cancelled activity",
+            "GUEST_NOTE": "{{count}} guest accounts",
+            "CANCELLED_NOTE": "Excluded from totals",
+            "CHART_TITLE": "Activity by day",
+            "CHART_SERIES": "Activity",
+            "TABLE_TITLE": "Breakdown by referral code",
+            "COL_CODE": "Referral code",
+            "COL_NAME": "Collaborator",
+            "COL_REFERRED": "Referred users",
+            "COL_GROUP_BUYING": "Group buying",
+            "COL_JOINS": "Joins",
+            "COL_PURCHASE_REQUESTS": "Sourcing",
+            "COL_OFFER_REQUESTS": "Offer",
+            "COL_GROUP_MEMBERS": "Group joins",
+            "COL_PARTNERS": "Partners",
+            "COL_CANCELLED": "Cancelled",
+            "COL_TOTAL": "Total",
+            "COL_LAST_EVENT": "Latest",
+            "COL_TIME": "Time",
+            "COL_EVENT_TYPE": "Activity type",
+            "COL_REFERRED_USER": "Referred user",
+            "COL_TARGET": "Reference",
+            "COL_AMOUNT": "Value",
+            "COL_STATUS": "Status",
+            "VIEW_EVENTS": "View activity",
+            "HIDE_EVENTS": "Hide activity",
+            "EVENTS_TITLE": "Activity of code {{code}}",
+            "EVENTS_EMPTY": "No activity from this code yet",
+            "GUEST_TAG": "Guest account",
+            "EVENT_TYPE": {
+                "USER_REFERRED": "Referrer recorded",
+                "GROUP_BUYING_REQUEST": "Group buying order created",
+                "GROUP_BUYING_JOIN": "Joined group buying order",
+                "PURCHASE_REQUEST": "Sourcing request sent",
+                "OFFER_REQUEST": "Offer request sent",
+                "GROUP_MEMBER_JOIN": "Requested to join group",
+                "PARTNER_REGISTER": "Partner registered"
+            },
+            "EVENT_STATUS": {
+                "PENDING": "Recorded",
+                "APPROVED": "Approved",
+                "REJECTED": "Invalid",
+                "CANCELLED": "Cancelled",
+                "PAID": "Commission paid"
+            }
+        },
         "SIDEBAR": {
             "PANEL": "Admin Panel",
             "OFFERS": "Offers",
@@ -1118,6 +1189,7 @@
             "SETTINGS": "Settings",
             "BACK_TO_SITE": "Back to site",
             "CRM": "CRM",
+            "REFERRAL_STATS": "Referral statistics",
             "LOGOUT": "Logout",
             "GROUP_BUYING": "Group buying requests",
             "GROUPS": "Groups"
@@ -1206,7 +1278,8 @@
             "EXPIRED_SUCCESS": "Offer request marked as expired successfully",
             "DELETE_CONFIRM": "Are you sure you want to delete \"{{name}}\"?",
             "DELETED_SUCCESS": "Offer request deleted successfully",
-            "RESTORED_SUCCESS": "Offer request restored successfully"
+            "RESTORED_SUCCESS": "Offer request restored successfully",
+            "REFERRED_BY": "Referred by"
         },
         "PURCHASE_REQUESTS": {
             "TITLE": "Purchase Request Management",
@@ -1234,7 +1307,8 @@
             "CONTACTED_SUCCESS": "Request marked as contacted successfully",
             "COMPLETE": "Complete",
             "COMPLETE_CONFIRM": "Are you sure you want to mark this request as completed?",
-            "COMPLETED_SUCCESS": "Request marked as completed successfully"
+            "COMPLETED_SUCCESS": "Request marked as completed successfully",
+            "REFERRED_BY": "Referred by"
         },
         "SETTINGS_PAGE": {
             "TITLE": "System settings",
@@ -1293,7 +1367,8 @@
             "DELETE_CONFIRM": "Are you sure you want to delete collaborator \"{{name}}\"?",
             "DELETED_SUCCESS": "Collaborator deleted successfully",
             "EDIT_TITLE": "Edit collaborator",
-            "UPDATED_SUCCESS": "Collaborator updated successfully"
+            "UPDATED_SUCCESS": "Collaborator updated successfully",
+            "REFERRED_BY": "Referred by"
         },
         "BUSINESS_INFO": {
             "TITLE": "Business Information",
@@ -1369,7 +1444,8 @@
             "CLEAR_FILTER": "Clear filter",
             "NO_FILTER_RESULT": "No products match the filter",
             "NO_PRODUCTS": "No products yet",
-            "SPECIAL_CONDITIONS": "Special conditions"
+            "SPECIAL_CONDITIONS": "Special conditions",
+            "REFERRED_BY": "Referred by"
         },
         "GROUP_BUYING": {
             "TITLE": "Group buying management",
@@ -1416,7 +1492,8 @@
             "REMOVE_CONFIRM": "Remove {{name}} from this group buying request?",
             "REMOVE_SUCCESS": "Participant removed",
             "EDIT_TITLE": "Edit group buying request",
-            "UPDATE_SUCCESS": "Group buying request updated"
+            "UPDATE_SUCCESS": "Group buying request updated",
+            "REFERRED_BY": "Referred by"
         },
         "GROUPS": {
             "TITLE": "Group management",
@@ -1481,7 +1558,8 @@
             "HIDDEN": "Hidden",
             "PRIVATE_HINT": "Private requests are sent by members to admins only.",
             "NO_PRIVATE": "No private requests",
-            "NO_POSTS": "No posts yet"
+            "NO_POSTS": "No posts yet",
+            "REFERRED_BY": "Referred by"
         },
         "LOGOUT_TITLE": "Sign out of the admin area?",
         "LOGOUT_MESSAGE": "You will need to sign in again to continue managing.",

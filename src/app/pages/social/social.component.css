@@ -101,6 +101,13 @@
     gap: 16px;
 }
 
+@media (max-width: 992px) {
+    .social-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+}
+
 @media (max-width: 768px) {
     .social-tabs {
         overflow-x: auto;

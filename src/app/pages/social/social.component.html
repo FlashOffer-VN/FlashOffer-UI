@@ -1,4 +1,4 @@
-﻿<div class="social-container">
+<div class="social-container">
     <app-social-header></app-social-header>
 
     <div class="social-tabs">
@@ -16,7 +16,9 @@
     <div class="social-grid">
         <div class="social-feed">
             @if (selectedTab === 'feed') {
+            @if (isLoggedIn) {
             <app-create-post (postCreated)="onPostCreated($event)"></app-create-post>
+            }
 
             @if (isLoadingPosts) {
             <div class="loading-posts">

@@ -1,4 +1,4 @@
-﻿import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, tap, throwError } from 'rxjs';
 import { ApiService } from './api.service';
 import { Router } from '@angular/router';
@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import {
     User,
     UserRole,
+    toUserRole,
     LoginRequest,
     RegisterRequest,
     AuthResponse,
@@ -198,13 +199,13 @@ export class AuthService {
             return;
         }
 
-        const roleValue = data.role || 'GUEST';
+        const roleValue = toUserRole(data.role);
 
         const user: User = {
             id: data.id ?? '',
             username: data.username || '',
             email: data.email || data.username || '',
-            role: roleValue as UserRole,
+            role: roleValue,
             fullName: data.fullName || '',
             mustChangeCredentials: data.mustChangeCredentials === true
         };
@@ -234,7 +235,7 @@ export class AuthService {
             return;
         }
 
-        if (isAdmin || user.role === UserRole.ADMIN) {
+        if (isAdmin || user.role === UserRole.Admin) {
             this.router.navigate(['/admin/dashboard']);
         } else {
             this.router.navigate(['/social']);
@@ -275,7 +276,7 @@ export class AuthService {
             id: current?.id ?? data.id ?? 0,
             username: data.username || current?.username || '',
             email: data.email || current?.email || data.username || '',
-            role: (data.role || current?.role || 'USER') as UserRole,
+            role: toUserRole(data.role ?? current?.role),
             fullName: data.fullName || current?.fullName || '',
             mustChangeCredentials: data.mustChangeCredentials === true
         };
@@ -293,7 +294,8 @@ export class AuthService {
         const userStr = storageGet('user');
         if (userStr) {
             try {
-                const user = JSON.parse(userStr) as User;
+                const stored = JSON.parse(userStr) as User;
+                const user: User = { ...stored, role: toUserRole(stored.role) };
                 this.currentUserSubject.next(user);
                 if (this.getToken()) {
                     this.startRefreshTokenTimer();
@@ -302,19 +304,6 @@ export class AuthService {
                 console.error('Failed to parse user from localStorage', error);
             }
         }
-    }
-
-    /**
-     * Chuẩn hóa role về string
-     */
-    private normalizeRole(role: string | UserRole): string {
-        if (typeof role === 'string') {
-            return role;
-        }
-        if (role === UserRole.ADMIN) return 'ADMIN';
-        if (role === UserRole.USER) return 'USER';
-        if (role === UserRole.GUEST) return 'GUEST';
-        return String(role);
     }
 
 }
