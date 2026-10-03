@@ -18,14 +18,14 @@ export class UserSidebarComponent {
     @Output() toggle = new EventEmitter<void>();
 
     menuItems: MenuItem[] = [
-        { path: '/user/profile', icon: 'fa-solid fa-id-card', label: 'USER.SIDEBAR.PROFILE' },
+        { path: '/user/account', icon: 'fa-solid fa-id-card', label: 'USER.SIDEBAR.ACCOUNT_INFO' },
         { path: '/user/my-group-buying', icon: 'fa-solid fa-people-group', label: 'USER.SIDEBAR.MY_GROUP_BUYING', permission: Permission.ViewMyGroupBuying },
         { path: '/user/my-referral', icon: 'fa-solid fa-share-nodes', label: 'USER.SIDEBAR.MY_REFERRAL', permission: Permission.ViewMyReferralStats },
         { path: '/user/my-requests', icon: 'fa-solid fa-file-lines', label: 'USER.SIDEBAR.MY_REQUESTS', permission: Permission.ViewMyRequests },
         { path: '/user/my-posts', icon: 'fa-solid fa-newspaper', label: 'USER.SIDEBAR.MY_POSTS', permission: Permission.ViewMyPosts },
         { path: '/user/my-groups', icon: 'fa-solid fa-people-roof', label: 'USER.SIDEBAR.MY_GROUPS', permission: Permission.ViewMyGroups },
         { path: '/user/my-commission', icon: 'fa-solid fa-percent', label: 'USER.SIDEBAR.MY_COMMISSION', permission: Permission.ViewMyCommission },
-        { path: '/user/change-credentials', icon: 'fa-solid fa-key', label: 'USER.SIDEBAR.ACCOUNT' },
+        { path: '/user/my-membership', icon: 'fa-solid fa-crown', label: 'USER.SIDEBAR.MY_MEMBERSHIP', permission: Permission.ViewMyCommission },
         { path: '/', icon: 'fa-solid fa-house', label: 'USER.SIDEBAR.BACK_TO_SITE' },
     ];
 

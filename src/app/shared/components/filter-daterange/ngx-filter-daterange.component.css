@@ -32,6 +32,7 @@
     font-size: 0.875rem;
     font-family: inherit;
     outline: none;
+    height: var(--control-h, auto);
     min-width: 150px;
     transition: border-color 150ms ease, box-shadow 150ms ease;
 }

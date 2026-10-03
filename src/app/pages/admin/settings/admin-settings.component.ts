@@ -80,11 +80,6 @@ interface SettingsTab {
                                     <span class="planned__badge">{{ 'ADMIN.SETTINGS_PAGE.COMING_SOON' | translate }}</span>
                                 </li>
                                 <li>
-                                    <span class="planned__icon"><i class="fa-solid fa-user-shield"></i></span>
-                                    <span class="planned__label">{{ 'ADMIN.SETTINGS_PAGE.SECURITY' | translate }}</span>
-                                    <span class="planned__badge">{{ 'ADMIN.SETTINGS_PAGE.COMING_SOON' | translate }}</span>
-                                </li>
-                                <li>
                                     <span class="planned__icon"><i class="fa-solid fa-server"></i></span>
                                     <span class="planned__label">{{ 'ADMIN.SETTINGS_PAGE.SYSTEM' | translate }}</span>
                                     <span class="planned__badge">{{ 'ADMIN.SETTINGS_PAGE.COMING_SOON' | translate }}</span>

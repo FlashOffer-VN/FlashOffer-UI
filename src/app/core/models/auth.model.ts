@@ -6,6 +6,12 @@ export interface User {
     email: string;
     role: UserRole;
     fullName?: string;
+    /** Mã tài khoản hiển thị cho thành viên (UserCode). */
+    userCode?: string;
+    phone?: string;
+    zalo?: string;
+    /** Thời điểm đăng nhập gần nhất. */
+    lastLoginAt?: string;
     /** Tài khoản tạo tự động từ form công khai → bắt buộc đổi tên đăng nhập + mật khẩu ở lần đăng nhập đầu */
     mustChangeCredentials?: boolean;
     /** Mã quyền (P###) của tài khoản — pipe/directive quyền và menu dùng để ẩn/hiện */
@@ -77,6 +83,14 @@ export interface ChangeCredentialsRequest {
     newUsername: string;
     newPassword: string;
     confirmNewPassword: string;
+}
+
+/** Thông tin cá nhân người dùng tự cập nhật ở khu vực thành viên. */
+export interface UpdateMyProfileRequest {
+    fullName?: string;
+    phone?: string;
+    email?: string;
+    zalo?: string;
 }
 
 // ✅ AuthResponse có thể chứa data

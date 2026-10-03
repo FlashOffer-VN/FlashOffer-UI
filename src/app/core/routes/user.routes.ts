@@ -11,16 +11,24 @@ export const userRoutes: Routes = [
         component: UserLayoutComponent,
         canActivate: [AuthGuard],
         children: [
-            { path: '', redirectTo: 'profile', pathMatch: 'full' },
+            { path: '', redirectTo: 'account', pathMatch: 'full' },
             // Bắt buộc đổi tên đăng nhập + mật khẩu ở lần đăng nhập đầu (không gắn CredentialsGuard để tránh vòng lặp)
             {
                 path: 'change-credentials',
                 loadComponent: () => import('@pages/profile/change-credentials/change-credentials.component').then(m => m.ChangeCredentialsPageComponent)
             },
+            // Đường dẫn cũ của trang hồ sơ vẫn dùng được — nội dung nay nằm ở trang thông tin tài khoản
+            { path: 'profile', redirectTo: 'account', pathMatch: 'full' },
             {
-                path: 'profile',
+                path: 'account',
                 canActivate: [CredentialsGuard],
-                loadComponent: () => import('@pages/profile/profile.component').then(m => m.ProfileComponent)
+                loadComponent: () => import('@pages/user/account/account.component').then(m => m.AccountPageComponent)
+            },
+            {
+                path: 'my-membership',
+                canActivate: [CredentialsGuard, PermissionGuard],
+                data: { permission: Permission.ViewMyCommission },
+                loadComponent: () => import('@pages/user/my-membership/my-membership.component').then(m => m.MyMembershipPageComponent)
             },
             {
                 path: 'my-group-buying',
