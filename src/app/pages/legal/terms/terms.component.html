@@ -7,6 +7,9 @@
         </header>
 
         <article class="legal-page__content">
+            @if (content) {
+                <div class="legal-rich" [innerHTML]="content"></div>
+            } @else {
             <p>
                 Các điều khoản và điều kiện của trang web <a href="https://www.kindi.vn" target="_blank" rel="noopener">www.kindi.vn</a> mô tả các điều khoản mà công ty cung cấp cho bạn quyền truy cập vào trang web.
             </p>
@@ -85,6 +88,7 @@
             <p>
                 Nếu bạn cần làm rõ thêm hoặc cần thêm thông tin, vui lòng gửi email đến <a href="mailto:info@kindi.vn">info@kindi.vn</a>. Chúng tôi sẽ liên hệ lại với bạn với thông tin chính xác.
             </p>
+            }
         </article>
     </div>
 </div>

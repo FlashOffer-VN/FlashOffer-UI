@@ -14,6 +14,8 @@ export interface SystemSetting {
     threadsUrl?: string | null;
     linkedinUrl?: string | null;
     copyrightText?: string | null;
+    privacyPolicy?: string | null;
+    termsOfService?: string | null;
 
     defaultLanguage: string;
     timeZone: string;
@@ -63,6 +65,8 @@ export interface PublicSystemSetting {
     threadsUrl?: string | null;
     linkedinUrl?: string | null;
     copyrightText?: string | null;
+    privacyPolicy?: string | null;
+    termsOfService?: string | null;
     defaultLanguage: string;
     timeZone: string;
     currencySymbol: string;

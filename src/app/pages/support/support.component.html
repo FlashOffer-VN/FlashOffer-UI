@@ -1,0 +1,63 @@
+<div class="support-page">
+    <div class="support-page__inner">
+        <header class="support-page__header">
+            <span class="support-page__badge">{{ 'FOOTER_SUPPORT' | translate }}</span>
+            <h1>{{ 'SUPPORT_TITLE' | translate }}</h1>
+            <p class="support-page__intro">{{ 'SUPPORT_INTRO' | translate }}</p>
+        </header>
+
+        <section class="support-page__section">
+            <h2>{{ 'SUPPORT_CONTACT_TITLE' | translate }}</h2>
+            <div class="support-cards">
+                <a class="support-card" [href]="'tel:' + phone">
+                    <i class="fa-solid fa-phone support-card__icon"></i>
+                    <span class="support-card__label">{{ 'SUPPORT_HOTLINE' | translate }}</span>
+                    <strong class="support-card__value">{{ phone }}</strong>
+                </a>
+
+                <a class="support-card" [href]="'mailto:' + email">
+                    <i class="fa-regular fa-envelope support-card__icon"></i>
+                    <span class="support-card__label">{{ 'SUPPORT_EMAIL' | translate }}</span>
+                    <strong class="support-card__value">{{ email }}</strong>
+                </a>
+
+                @if (setting?.workingHours) {
+                    <div class="support-card support-card--static">
+                        <i class="fa-regular fa-clock support-card__icon"></i>
+                        <span class="support-card__label">{{ 'SUPPORT_HOURS' | translate }}</span>
+                        <strong class="support-card__value">{{ setting?.workingHours }}</strong>
+                    </div>
+                }
+
+                @if (setting?.address) {
+                    <div class="support-card support-card--static">
+                        <i class="fa-solid fa-location-dot support-card__icon"></i>
+                        <span class="support-card__label">{{ 'SUPPORT_ADDRESS' | translate }}</span>
+                        <strong class="support-card__value">{{ setting?.address }}</strong>
+                    </div>
+                }
+            </div>
+        </section>
+
+        @if (channels.length > 0) {
+            <section class="support-page__section">
+                <h2>{{ 'SUPPORT_SOCIAL_TITLE' | translate }}</h2>
+                <div class="support-channels">
+                    @for (channel of channels; track channel.url) {
+                        <a class="support-channel" [href]="channel.url" target="_blank" rel="noopener"
+                            [title]="channel.label" [attr.aria-label]="channel.label">
+                            <i [class]="channel.icon"></i>
+                            <span>{{ channel.label }}</span>
+                        </a>
+                    }
+                </div>
+            </section>
+        }
+
+        <section class="support-cta">
+            <h2>{{ 'SUPPORT_CTA_TITLE' | translate }}</h2>
+            <p>{{ 'SUPPORT_CTA_TEXT' | translate }}</p>
+            <a class="support-cta__button" routerLink="/connect-sme">{{ 'SUPPORT_CTA_BUTTON' | translate }}</a>
+        </section>
+    </div>
+</div>

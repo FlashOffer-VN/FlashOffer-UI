@@ -1,4 +1,4 @@
-﻿/** Cấu hình Quill dùng chung cho MỌI nơi soạn bài viết trong app:
+/** Cấu hình Quill dùng chung cho MỌI nơi soạn bài viết trong app:
  *  bài viết trang Cộng đồng, bài viết trong Nhóm ngành / Hội nhóm (kể cả trang admin). */
 
 /** Định dạng văn bản cơ bản dùng cho mọi loại bài viết */
@@ -16,6 +16,17 @@ export const QUILL_MODULES = {
 /** Bài viết trong nhóm/hội: KHÔNG chèn ảnh (API giới hạn 4000 ký tự và bảng bài nhóm không có trường ảnh) */
 export const QUILL_MODULES_GROUP_POST = {
     toolbar: [...TEXT_FORMATS, ['link'], ['clean']]
+};
+
+/** Văn bản pháp lý ở Cài đặt chung: có tiêu đề mục, danh sách, liên kết; gõ/dán link trần sẽ tự nhận. */
+export const QUILL_MODULES_LEGAL = {
+    toolbar: [
+        [{ header: [2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['blockquote', 'link'],
+        ['clean']
+    ]
 };
 
 /** Lấy phần chữ thật của nội dung Quill (bỏ thẻ HTML) để kiểm tra rỗng trước khi gửi */

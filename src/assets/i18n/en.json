@@ -1400,7 +1400,18 @@
             "NO_PERMISSION": "You do not have permission to view the general configuration.",
             "ERROR_FORM_INVALID": "Some fields are invalid, please review before saving.",
             "FIELD_REFERRAL_CODE_PREFIX_HINT": "Referral code prefix, e.g. CTV.",
-          "SECTION_SELECT": "Settings group"
+          "SECTION_SELECT": "Settings group",
+          "SECTION_LEGAL": "Legal content",
+          "SECTION_LEGAL_DESC": "Privacy policy and terms of service shown in the footer.",
+          "FIELD_PRIVACY_POLICY": "Privacy policy",
+          "FIELD_TERMS_OF_SERVICE": "Terms of service",
+          "FIELD_LEGAL_HINT": "Write like a post: headings, lists, bold, links. Leave empty to keep the default content.",
+          "CURRENT_HTML": "Content ready",
+          "CURRENT_HTML_CHARS": "characters",
+          "FIELD_LEGAL_EDITOR_HINT": "The content is written in the editor below (headings, lists, links…).",
+          "FIELD_LEGAL_PLACEHOLDER": "Write the page content…"
+        
+        
         
         },
         "BANK_ACCOUNTS":
@@ -2276,5 +2287,29 @@
         "EMAIL": "Send email",
         "FACEBOOK": "Facebook",
         "TOP": "Back to top"
-    }
+    },
+  "SUPPORT_TITLE": "Support center",
+  "SUPPORT_INTRO": "Everything you need to reach Kindi: call, email, or leave a request — we reply during working hours.",
+  "SUPPORT_CONTACT_TITLE": "Direct contact",
+  "SUPPORT_HOTLINE": "Hotline",
+  "SUPPORT_EMAIL": "Support email",
+  "SUPPORT_ADDRESS": "Address",
+  "SUPPORT_HOURS": "Working hours",
+  "SUPPORT_SOCIAL_TITLE": "Other channels",
+  "SUPPORT_CTA_TITLE": "Can't find an answer?",
+  "SUPPORT_CTA_TEXT": "Send us a request and the Kindi team will get back to you.",
+  "SUPPORT_CTA_BUTTON": "Send a request",
+  "SUPPORT_TITLE": "Support center",
+  "SUPPORT_INTRO": "Everything you need to reach Kindi: call, email, or leave a request — we reply during working hours.",
+  "SUPPORT_CONTACT_TITLE": "Direct contact",
+  "SUPPORT_HOTLINE": "Hotline",
+  "SUPPORT_EMAIL": "Support email",
+  "SUPPORT_ADDRESS": "Address",
+  "SUPPORT_HOURS": "Working hours",
+  "SUPPORT_SOCIAL_TITLE": "Other channels",
+  "SUPPORT_CTA_TITLE": "Can't find an answer?",
+  "SUPPORT_CTA_TEXT": "Send us a request and the Kindi team will get back to you.",
+  "SUPPORT_CTA_BUTTON": "Send a request"
+
+
 }

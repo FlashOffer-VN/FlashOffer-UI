@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { QuillModule } from 'ngx-quill';
 
 import { AppService } from '@core/services/app.service';
 import { SystemSettingService } from '@core/services/system-setting.service';
@@ -23,9 +24,10 @@ import {
 } from '@core/constants/format-options';
 import { openExternalLink } from '@core/utils/link';
 import { copyToClipboard } from '@core/utils/share-link';
+import { QUILL_MODULES_LEGAL } from '@core/configs/quill.config';
 
 /** Kiểu điều khiển của một trường cài đặt. */
-type SettingFieldType = 'text' | 'number' | 'email' | 'phone' | 'url' | 'bool' | 'language' | 'select';
+type SettingFieldType = 'text' | 'number' | 'email' | 'phone' | 'url' | 'bool' | 'language' | 'select' | 'html';
 
 interface SettingField {
     /** Tên trường trong cài đặt chung. */
@@ -62,7 +64,8 @@ interface SettingSection {
         InputComponent,
         LoadingComponent,
         AppDatePipe,
-        NgSelectWrapperComponent
+        NgSelectWrapperComponent,
+        QuillModule
     ],
     template: `
         <div class="space-y-4">
@@ -125,7 +128,12 @@ interface SettingSection {
                                                 </td>
 
                                                 <td class="px-4 py-3 align-top text-gray-700 break-words whitespace-normal">
-                                                    @if (displayCurrent(field) === '') {
+                                                    @if (field.type === 'html') {
+                                                        <span class="{{ displayCurrent(field) ? 'text-gray-700' : 'text-gray-400' }}">
+                                                            {{ displayCurrent(field) ? ('ADMIN.SETTINGS.CURRENT_HTML' | translate) : ('ADMIN.SETTINGS.CURRENT_EMPTY' | translate) }}
+                                                            @if (displayCurrent(field)) { · {{ plainLength(field) }} {{ 'ADMIN.SETTINGS.CURRENT_HTML_CHARS' | translate }} }
+                                                        </span>
+                                                    } @else if (displayCurrent(field) === '') {
                                                         <span class="text-gray-400">{{ 'ADMIN.SETTINGS.CURRENT_EMPTY' | translate }}</span>
                                                     } @else if (field.type === 'url') {
                                                         <a [href]="displayCurrent(field)" target="_blank" rel="noopener"
@@ -173,6 +181,11 @@ interface SettingSection {
                                                                 [isInvalid]="isInvalid(field.key)"
                                                                 [errorMessage]="errorOf(field.key)">
                                                             </app-ng-select-wrapper>
+                                                        }
+                                                        @case ('html') {
+                                                            <p class="text-xs text-gray-500">
+                                                                {{ 'ADMIN.SETTINGS.FIELD_LEGAL_EDITOR_HINT' | translate }}
+                                                            </p>
                                                         }
                                                         @default {
                                                             <app-input [formControlName]="field.key"
@@ -222,6 +235,17 @@ interface SettingSection {
                                                     </div>
                                                 </td>
                                             </tr>
+                                            @if (field.type === 'html') {
+                                                <tr>
+                                                    <td colspan="4" class="px-4 pb-4">
+                                                        <quill-editor [formControlName]="field.key"
+                                                            [modules]="legalQuillModules"
+                                                            [styles]="legalEditorStyles"
+                                                            [placeholder]="'ADMIN.SETTINGS.FIELD_LEGAL_PLACEHOLDER' | translate">
+                                                        </quill-editor>
+                                                    </td>
+                                                </tr>
+                                            }
                                         }
                                     </tbody>
                                 </table>
@@ -360,8 +384,24 @@ export class AdminGeneralSettingsComponent implements OnInit {
                 { key: 'note', label: 'ADMIN.SETTINGS.FIELD_NOTE', type: 'text',
                   placeholder: 'Ghi chú nội bộ cho quản trị viên' }
             ]
+        },
+        {
+            title: 'ADMIN.SETTINGS.SECTION_LEGAL',
+            description: 'ADMIN.SETTINGS.SECTION_LEGAL_DESC',
+            fields: [
+                { key: 'privacyPolicy', label: 'ADMIN.SETTINGS.FIELD_PRIVACY_POLICY', type: 'html',
+                  hint: 'ADMIN.SETTINGS.FIELD_LEGAL_HINT' },
+                { key: 'termsOfService', label: 'ADMIN.SETTINGS.FIELD_TERMS_OF_SERVICE', type: 'html',
+                  hint: 'ADMIN.SETTINGS.FIELD_LEGAL_HINT' }
+            ]
         }
     ];
+
+    /** Bộ công cụ soạn thảo cho nội dung pháp lý (tiêu đề mục, danh sách, liên kết). */
+    readonly legalQuillModules = QUILL_MODULES_LEGAL;
+
+    /** Chiều cao tối thiểu của khung soạn thảo. */
+    readonly legalEditorStyles = { minHeight: '240px' };
 
     /** Nhóm cài đặt đang mở — chọn ở ô chọn phía trên để không phải cuộn cả trang. */
     openSection: string = this.sections[0].title;
@@ -410,6 +450,8 @@ export class AdminGeneralSettingsComponent implements OnInit {
             address: ['', [Validators.maxLength(300)]],
             workingHours: ['', [Validators.maxLength(200)]],
             copyrightText: ['', [Validators.maxLength(300)]],
+            privacyPolicy: [''],
+            termsOfService: [''],
             facebookUrl: ['', [Validators.pattern(/^https?:\/\/.+/)]],
             youtubeUrl: ['', [Validators.pattern(/^https?:\/\/.+/)]],
             tiktokUrl: ['', [Validators.pattern(/^https?:\/\/.+/)]],
@@ -573,6 +615,12 @@ export class AdminGeneralSettingsComponent implements OnInit {
             return this._appService.trans(value ? 'ADMIN.SETTINGS.YES' : 'ADMIN.SETTINGS.NO');
         }
         return String(value).trim();
+    }
+
+    /** Số ký tự chữ thật của nội dung đã soạn (bỏ thẻ HTML) để hiển thị ở cột giá trị hiện tại. */
+    plainLength(field: SettingField): number {
+        const value = this.current ? (this.current as unknown as Record<string, unknown>)[field.key] : null;
+        return String(value ?? '').replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').trim().length;
     }
 
     /** Trường đã bị đổi so với giá trị đang lưu. */

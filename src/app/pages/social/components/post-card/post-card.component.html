@@ -59,7 +59,7 @@
         <h3 *ngIf="post.title" class="post-title">{{ post.title }}</h3>
 
         <!-- 👈 SỬA: Bỏ pipe formatHtml, chỉ giữ sanitizeHtml -->
-        <div class="post-text" [class.expanded]="post.isExpanded" [innerHTML]="post.content | sanitizeHtml">
+        <div class="post-text" #postText [class.expanded]="post.isExpanded" [class.has-overflow]="hasOverflow" [innerHTML]="post.content | sanitizeHtml">
         </div>
 
         <!-- 👈 SỬA: Dùng shouldShowReadMore thay vì post.content.length -->

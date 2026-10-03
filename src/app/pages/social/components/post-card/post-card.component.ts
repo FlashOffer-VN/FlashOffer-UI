@@ -1,8 +1,7 @@
-import { Component, EventEmitter, Input, Output, HostListener, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, Output, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { SocialPost } from '@core/models/social.model';
-import { isBrowser } from '@core/utils/platform';
 import { PostType, PrivacyType } from '@core/models/social.model';
 import { AvatarPipe } from '@shared/pipes/avatar.pipe';
 import { SanitizeHtmlPipe } from '@shared/pipes/sanitize-html.pipe';
@@ -20,7 +19,7 @@ import { UserRoleLabelPipe } from '@shared/pipes/user-role-label.pipe';
     templateUrl: './post-card.component.html',
     styleUrls: ['./post-card.component.css']
 })
-export class PostCardComponent {
+export class PostCardComponent implements AfterViewChecked {
     @Input() post!: SocialPost;
     @Input() timeAgo = '';
     @Input() canEdit = false;
@@ -39,33 +38,52 @@ export class PostCardComponent {
     showActions = false;
     isFocused = false;
 
-    // ===== 👇 THÊM METHOD NÀY =====
-    /**
-     * Kiểm tra xem có nên hiển thị nút "Xem thêm" không
-     * Dựa trên độ dài text content (bỏ qua HTML tags)
-     */
+    @ViewChild('postText') postText!: ElementRef<HTMLElement>;
+
+    /** Nội dung dài hơn khung đang hiển thị nên mới cần nút "Xem thêm" và vệt mờ ở dòng cuối. */
+    hasOverflow = false;
+
+    /** Bài đã đo, tránh đo lại ở mỗi lần kiểm tra giao diện. */
+    private _measuredKey = '';
+
+    constructor(private readonly _cdr: ChangeDetectorRef) { }
+
+    /** Nút "Xem thêm" chỉ hiện khi nội dung thật sự vượt khung (đo trên DOM, không đoán theo số ký tự). */
     get shouldShowReadMore(): boolean {
-        if (!this.post?.content) return false;
+        return this.hasOverflow;
+    }
 
-        const trimmedText = this.extractTextContent(this.post.content).trim();
+    ngAfterViewChecked(): void {
+        this.measureOverflow();
+    }
 
-        // Ngưỡng 200 ký tự - có thể điều chỉnh
-        return trimmedText.length > 200;
+    /** Đổi kích thước cửa sổ thì đo lại. */
+    @HostListener('window:resize')
+    onResize(): void {
+        this._measuredKey = '';
     }
 
     /**
-     * Lấy text content từ HTML. Trên server (prerender) không có `document` —
-     * fallback sang regex strip tags để không crash build-time render.
+     * So chiều cao thật của nội dung với chiều cao khung để biết có bị cắt hay không.
+     * Đang mở rộng thì giữ kết quả đo trước đó (để vẫn còn nút "Thu gọn").
      */
-    private extractTextContent(html: string): string {
-        if (isBrowser()) {
-            const temp = document.createElement('div');
-            temp.innerHTML = html;
-            return temp.textContent || '';
-        }
-        return html.replace(/<[^>]*>/g, ' ');
+    private measureOverflow(): void {
+        const element = this.postText?.nativeElement;
+        if (!element || !this.post || this.post.isExpanded) return;
+
+        const key = `${this.post.id}|${this.post.content?.length ?? 0}`;
+        if (key === this._measuredKey) return;
+        this._measuredKey = key;
+
+        // Đo ra ngoài lượt kiểm tra hiện tại để không làm giao diện thay đổi giữa chừng.
+        setTimeout(() => {
+            const overflow = element.scrollHeight > element.clientHeight + 2;
+            if (overflow !== this.hasOverflow) {
+                this.hasOverflow = overflow;
+                this._cdr.detectChanges();
+            }
+        });
     }
-    // ===== 👆 END THÊM METHOD =====
 
     /**
      * Dòng nhỏ mờ dưới tên: "UserCode - username" (fallback username/fullName).

@@ -38,6 +38,9 @@ export const guestRoutes: Routes = [
             { path: 'privacy', loadComponent: () => import('@pages/legal/privacy/privacy.component').then(m => m.PrivacyComponent) },
             { path: 'terms', loadComponent: () => import('@pages/legal/terms/terms.component').then(m => m.TermsComponent) },
 
+            // Trang tổng hợp thông tin liên hệ
+            { path: 'support', loadComponent: () => import('@pages/support/support.component').then(m => m.SupportComponent) },
+
             // Các trang chức năng
             { path: 'connect-sme', loadComponent: () => import('@pages/connect-sme/connect-sme.component').then(m => m.ConnectSmeComponent) },
             { path: 'find-supplier', loadComponent: () => import('@pages/find-supplier/find-supplier.component').then(m => m.FindSupplierComponent) },
