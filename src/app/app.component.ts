@@ -11,6 +11,12 @@ import { ContactFloatingComponent } from "@shared/components/contact-floating/co
 import { SeoService } from './core/services/seo.service';
 import { SEO_CONFIG } from './core/configs/seo.config';
 import { isBrowser } from './core/utils/platform';
+import {
+    captureReferralCode,
+    isReferralCodeSynced,
+    markReferralCodeSynced,
+    resolveReferralCode
+} from './core/utils/share-link';
 
 @Component({
     selector: 'app-root',
@@ -30,10 +36,14 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
+        // Ghi nhận mã chia sẻ (?ref=) của mọi trang khách mở vào máy + tài khoản đang đăng nhập
+        this.captureReferral();
+
         // ✅ Cuộn lên đầu khi chuyển trang + Cập nhật SEO
         this.router.events.pipe(
             filter(event => event instanceof NavigationEnd)
         ).subscribe(() => {
+            this.captureReferral();
             // Cuộn lên đầu trang (browser-only — `window` doesn't exist during prerender)
             if (isBrowser()) {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -41,6 +51,23 @@ export class AppComponent implements OnInit {
 
             // 👇 Cập nhật SEO cho trang hiện tại
             this.updateSEO();
+        });
+    }
+
+    /**
+     * Ghi nhận mã chia sẻ trên link (?ref=) vào máy, và đồng bộ vào tài khoản khi đã đăng nhập.
+     * Mã lấy lần đầu được giữ nguyên — mở link của CTV khác sau đó không ghi đè.
+     */
+    private captureReferral(): void {
+        if (!isBrowser()) return;
+
+        const referralCode = captureReferralCode();
+        if (!referralCode) return;
+
+        if (!this.app.isAuthenticated() || isReferralCodeSynced(referralCode)) return;
+
+        this.app.referralService.saveMyReferralCode(referralCode).subscribe(() => {
+            markReferralCodeSynced(referralCode);
         });
     }
 

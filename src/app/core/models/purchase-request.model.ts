@@ -23,6 +23,10 @@ export interface PurchaseRequest {
     /** Mã chia sẻ riêng ghi nhận cho người đã chia sẻ link tạo ra yêu cầu này */
     referralCode?: string | null;
     createdAt: string;
+    /** Mã chia sẻ của người đã giới thiệu người tạo bản ghi — ghi nhận trên tài khoản (màn quản trị) */
+    referredByCode?: string | null;
+    /** Tên chủ mã chia sẻ của người tạo bản ghi */
+    referredByName?: string | null;
 }
 
 export interface CreatePurchaseRequestDto {

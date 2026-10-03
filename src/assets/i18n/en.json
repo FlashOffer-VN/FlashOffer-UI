@@ -1206,7 +1206,8 @@
             "EXPIRED_SUCCESS": "Offer request marked as expired successfully",
             "DELETE_CONFIRM": "Are you sure you want to delete \"{{name}}\"?",
             "DELETED_SUCCESS": "Offer request deleted successfully",
-            "RESTORED_SUCCESS": "Offer request restored successfully"
+            "RESTORED_SUCCESS": "Offer request restored successfully",
+            "REFERRED_BY": "Referred by"
         },
         "PURCHASE_REQUESTS": {
             "TITLE": "Purchase Request Management",
@@ -1234,7 +1235,8 @@
             "CONTACTED_SUCCESS": "Request marked as contacted successfully",
             "COMPLETE": "Complete",
             "COMPLETE_CONFIRM": "Are you sure you want to mark this request as completed?",
-            "COMPLETED_SUCCESS": "Request marked as completed successfully"
+            "COMPLETED_SUCCESS": "Request marked as completed successfully",
+            "REFERRED_BY": "Referred by"
         },
         "SETTINGS_PAGE": {
             "TITLE": "System settings",
@@ -1293,7 +1295,8 @@
             "DELETE_CONFIRM": "Are you sure you want to delete collaborator \"{{name}}\"?",
             "DELETED_SUCCESS": "Collaborator deleted successfully",
             "EDIT_TITLE": "Edit collaborator",
-            "UPDATED_SUCCESS": "Collaborator updated successfully"
+            "UPDATED_SUCCESS": "Collaborator updated successfully",
+            "REFERRED_BY": "Referred by"
         },
         "BUSINESS_INFO": {
             "TITLE": "Business Information",
@@ -1369,7 +1372,8 @@
             "CLEAR_FILTER": "Clear filter",
             "NO_FILTER_RESULT": "No products match the filter",
             "NO_PRODUCTS": "No products yet",
-            "SPECIAL_CONDITIONS": "Special conditions"
+            "SPECIAL_CONDITIONS": "Special conditions",
+            "REFERRED_BY": "Referred by"
         },
         "GROUP_BUYING": {
             "TITLE": "Group buying management",
@@ -1416,7 +1420,8 @@
             "REMOVE_CONFIRM": "Remove {{name}} from this group buying request?",
             "REMOVE_SUCCESS": "Participant removed",
             "EDIT_TITLE": "Edit group buying request",
-            "UPDATE_SUCCESS": "Group buying request updated"
+            "UPDATE_SUCCESS": "Group buying request updated",
+            "REFERRED_BY": "Referred by"
         },
         "GROUPS": {
             "TITLE": "Group management",
@@ -1481,7 +1486,8 @@
             "HIDDEN": "Hidden",
             "PRIVATE_HINT": "Private requests are sent by members to admins only.",
             "NO_PRIVATE": "No private requests",
-            "NO_POSTS": "No posts yet"
+            "NO_POSTS": "No posts yet",
+            "REFERRED_BY": "Referred by"
         },
         "LOGOUT_TITLE": "Sign out of the admin area?",
         "LOGOUT_MESSAGE": "You will need to sign in again to continue managing.",

@@ -18,6 +18,7 @@ import { CollaboratorService } from './collaborator.service';
 import { DashboardService } from './dashboard.service';
 import { CrmService } from './crm.service';
 import { BusinessGroupService } from './business-group.service';
+import { ReferralService } from './referral.service';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 
 @Injectable({
@@ -38,7 +39,8 @@ export class AppService {
         public collaboratorService: CollaboratorService,
         public dashboardService: DashboardService,
         public crmService: CrmService,
-        public businessGroupService: BusinessGroupService
+        public businessGroupService: BusinessGroupService,
+        public referralService: ReferralService
     ) { }
 
     // ========== Auth ==========

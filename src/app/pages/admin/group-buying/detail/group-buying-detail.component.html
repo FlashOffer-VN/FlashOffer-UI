@@ -141,6 +141,10 @@
                     <span class="text-sm text-gray-500">{{ 'ADMIN.GROUP_BUYING.REFERRAL' | translate }}</span>
                     <span class="text-sm font-medium text-gray-800 text-right">{{ referralText(detail.referralName, detail.referralCode) }}</span>
                 </div>
+                <div class="flex justify-between py-2 border-b border-gray-50">
+                    <span class="text-sm text-gray-500">{{ 'ADMIN.GROUP_BUYING.REFERRED_BY' | translate }}</span>
+                    <span class="text-sm font-medium text-gray-800 text-right">{{ referralText(detail.referredByName, detail.referredByCode) }}</span>
+                </div>
                 <div class="flex justify-between py-2">
                     <span class="text-sm text-gray-500">{{ 'ADMIN.GROUP_BUYING.APPROVED_AT' | translate }}</span>
                     <span class="text-sm font-medium text-gray-800">{{ detail.approvedAt | appDate }}</span>
@@ -205,7 +209,11 @@
                                 <div *ngIf="p.collaboratorCode">CTV: {{ p.collaboratorCode }}</div>
                                 <div *ngIf="p.userCode">{{ p.userCode }}</div>
                             </td>
-                            <td class="px-4 py-3 text-xs text-gray-600">{{ referralText(p.referralName, p.referralCode) }}</td>
+                            <td class="px-4 py-3 text-xs text-gray-600">
+                                <p>{{ referralText(p.referralName, p.referralCode) }}</p>
+                                <p class="text-gray-400">{{ 'ADMIN.GROUP_BUYING.REFERRED_BY' | translate }}:
+                                    {{ referralText(p.referredByName, p.referredByCode) }}</p>
+                            </td>
                             <td class="px-4 py-3 text-sm text-gray-500">{{ p.createdAt | appDate }}</td>
                             <td class="px-4 py-3 text-right">
                                 <app-button *ngIf="!p.isCreator" variant="danger" size="sm"
