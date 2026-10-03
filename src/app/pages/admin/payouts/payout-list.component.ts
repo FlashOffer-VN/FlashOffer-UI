@@ -139,6 +139,7 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
                                             }
                                         </td>
                                         <td class="px-4 py-3 text-sm whitespace-nowrap">
+                                            <div class="flex flex-wrap items-center gap-2">
                                             @if (canProcess && isPending(item)) {
                                                 <app-button size="sm" variant="primary" (click)="approve(item)">
                                                     <i class="fa-solid fa-check mr-1"></i>{{ 'ADMIN.PAYOUTS.ACTION_APPROVE' | translate }}
@@ -156,6 +157,7 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
                                             } @else {
                                                 <span class="text-gray-400">—</span>
                                             }
+                                            </div>
                                         </td>
                                     </tr>
                                 }

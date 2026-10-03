@@ -4,7 +4,15 @@ import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { ApiResponse } from '../models/auth.model';
 import { PagedResponse } from '../models/paged-response.model';
-import { BankAccount, MyWallet, PayoutQuery, PayoutStatement, SaveBankAccountRequest } from '../models/payout.model';
+import {
+    BankAccount,
+    BankAccountQuery,
+    MyWallet,
+    PayoutQuery,
+    PayoutStatement,
+    SaveBankAccountRequest,
+    VerifyBankAccountRequest
+} from '../models/payout.model';
 
 /** Ví hoa hồng và thông tin ngân hàng nhận giải ngân của tài khoản đang đăng nhập. */
 @Injectable({ providedIn: 'root' })
@@ -27,6 +35,16 @@ export class PayoutService {
     /** Lưu thông tin ngân hàng nhận tiền của tôi. PUT /api/v1/BankAccounts/me */
     saveMyBankAccount(request: SaveBankAccountRequest): Observable<ApiResponse<BankAccount>> {
         return this._apiService.put<ApiResponse<BankAccount>>(`${this._bankAccountUrl}/me`, request);
+    }
+
+    /** Danh sách tài khoản ngân hàng chờ xác thực. GET /api/v1/BankAccounts */
+    getBankAccounts(query: BankAccountQuery): Observable<PagedResponse<BankAccount>> {
+        return this._apiService.get<PagedResponse<BankAccount>>(this._bankAccountUrl, { ...query });
+    }
+
+    /** Ghi nhận xác thực thông tin ngân hàng của một tài khoản. PUT /api/v1/BankAccounts/{userId}/verification */
+    verifyBankAccount(userId: string, request: VerifyBankAccountRequest): Observable<ApiResponse<BankAccount>> {
+        return this._apiService.put<ApiResponse<BankAccount>>(`${this._bankAccountUrl}/${userId}/verification`, request);
     }
 
     /** Danh sách chi trả hoa hồng cho quản trị viên, lọc theo loại và trạng thái. GET /api/v1/Payouts */
