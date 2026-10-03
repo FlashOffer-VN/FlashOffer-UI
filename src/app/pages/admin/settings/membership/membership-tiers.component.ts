@@ -80,23 +80,27 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 
                         <app-input formControlName="minAccumulatedValue" type="number" [id]="'tier_min'"
                             [label]="'ADMIN.MEMBERSHIP.FIELD_MIN_VALUE' | translate"
-                            [required]="true"
+                            [placeholder]="'1000000'" [required]="true"
                             [isInvalid]="isInvalid('minAccumulatedValue')" [errorMessage]="errorOf('minAccumulatedValue')">
                         </app-input>
 
                         <app-input formControlName="earlyWithdrawalFeeRate" type="number" [id]="'tier_fee'"
                             [label]="'ADMIN.MEMBERSHIP.FIELD_FEE' | translate"
+                            [placeholder]="'5'"
+
                             [isInvalid]="isInvalid('earlyWithdrawalFeeRate')" [errorMessage]="errorOf('earlyWithdrawalFeeRate')">
                         </app-input>
 
                         <app-input formControlName="monthlyWithdrawalLimit" type="number" [id]="'tier_limit'"
                             [label]="'ADMIN.MEMBERSHIP.FIELD_LIMIT' | translate"
+                            [placeholder]="'20000000'"
+
                             [isInvalid]="isInvalid('monthlyWithdrawalLimit')" [errorMessage]="errorOf('monthlyWithdrawalLimit')">
                         </app-input>
 
                         <app-input formControlName="approvalPriority" type="number" [id]="'tier_priority'"
                             [label]="'ADMIN.MEMBERSHIP.FIELD_PRIORITY' | translate"
-                            [required]="true"
+                            [placeholder]="'1'" [required]="true"
                             [isInvalid]="isInvalid('approvalPriority')" [errorMessage]="errorOf('approvalPriority')">
                         </app-input>
 
@@ -155,8 +159,8 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
                             } @else {
                                 @for (tier of tiers; track tier.id) {
                                     <tr class="hover:bg-gray-50 align-top">
-                                        <td class="px-4 py-3">
-                                            <span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                                        <td class="px-4 py-3 w-px whitespace-nowrap">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700 whitespace-nowrap">
                                                 {{ 'ADMIN.MEMBERSHIP.LEVEL' | translate }} {{ tier.level }}
                                             </span>
                                         </td>

@@ -55,18 +55,22 @@ import { ChangeCredentialsFormComponent } from '@shared/components/change-creden
                     } @else {
                         <form [formGroup]="profileForm" class="grid gap-4 sm:grid-cols-2">
                             <app-input formControlName="fullName" [id]="'account_full_name'"
-                                [label]="'USER.ACCOUNT.FULL_NAME' | translate"></app-input>
+                                [label]="'USER.ACCOUNT.FULL_NAME' | translate"
+                                [placeholder]="'USER.ACCOUNT.FULL_NAME_PLACEHOLDER' | translate"></app-input>
 
                             <app-input formControlName="phone" [id]="'account_phone'" [type]="'tel'"
                                 [label]="'USER.ACCOUNT.PHONE' | translate"
-                                [hint]="'USER.ACCOUNT.PHONE_HINT' | translate"></app-input>
+                                [hint]="'USER.ACCOUNT.PHONE_HINT' | translate"
+                                [placeholder]="'USER.ACCOUNT.PHONE_PLACEHOLDER' | translate"></app-input>
 
                             <app-input formControlName="email" [id]="'account_email'" [type]="'email'"
-                                [label]="'USER.ACCOUNT.EMAIL' | translate"></app-input>
+                                [label]="'USER.ACCOUNT.EMAIL' | translate"
+                                [placeholder]="'USER.ACCOUNT.EMAIL_PLACEHOLDER' | translate"></app-input>
 
                             <app-input formControlName="zalo" [id]="'account_zalo'"
                                 [label]="'USER.ACCOUNT.ZALO' | translate"
-                                [hint]="'USER.ACCOUNT.ZALO_HINT' | translate"></app-input>
+                                [hint]="'USER.ACCOUNT.ZALO_HINT' | translate"
+                                [placeholder]="'USER.ACCOUNT.ZALO_PLACEHOLDER' | translate"></app-input>
                         </form>
 
                         <div class="mt-4 flex justify-end">

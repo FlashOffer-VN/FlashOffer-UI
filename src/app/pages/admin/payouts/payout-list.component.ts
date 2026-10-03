@@ -22,6 +22,9 @@ import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
+import { ModalComponent } from '@shared/components/modal/modal.component';
+import { PaymentQrComponent } from '@shared/components/payment-qr/payment-qr.component';
+import { buildAccountQr } from '@core/constants/bank-catalog';
 
 /**
  * Duyệt chi trả hoa hồng: yêu cầu rút sớm của thành viên và các kỳ chi trả theo tháng.
@@ -40,7 +43,9 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
         ButtonComponent,
         InputComponent,
         AppPricePipe,
-        AppDatePipe
+        AppDatePipe,
+        ModalComponent,
+        PaymentQrComponent
     ],
     template: `
         <div class="space-y-4">
@@ -140,6 +145,13 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
                                         </td>
                                         <td class="px-4 py-3 text-sm whitespace-nowrap">
                                             <div class="flex flex-wrap items-center gap-2">
+                                            @if (qrUrlOf(item)) {
+                                                <app-button size="sm" variant="outline"
+                                                    [title]="'ADMIN.PAYOUTS.ACTION_QR' | translate"
+                                                    (click)="openQr(item)">
+                                                    <i class="fa-solid fa-qrcode"></i>
+                                                </app-button>
+                                            }
                                             @if (canProcess && isPending(item)) {
                                                 <app-button size="sm" variant="primary" (click)="approve(item)">
                                                     <i class="fa-solid fa-check mr-1"></i>{{ 'ADMIN.PAYOUTS.ACTION_APPROVE' | translate }}
@@ -173,6 +185,28 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
                     </app-pagination>
                 </div>
             </div>
+
+            <!-- QR chuyển khoản: quét bằng app ngân hàng là ra đúng tài khoản và số tiền chi trả -->
+            <app-modal [(visible)]="isQrVisible" [title]="'ADMIN.PAYOUTS.QR_TITLE' | translate" size="md"
+                [showFooter]="false" (closed)="isQrVisible = false">
+                @if (qrItem && qrItemUrl) {
+                    <div class="space-y-3">
+                        <div class="text-sm text-gray-700">
+                            <div class="font-medium text-gray-900">{{ qrItem.fullName || qrItem.username || '—' }}</div>
+                            @if (qrItem.periodLabel) {
+                                <div class="text-xs text-gray-500">{{ qrItem.periodLabel }}</div>
+                            }
+                        </div>
+
+                        <app-payment-qr [url]="qrItemUrl" [accountHolder]="qrItem.bankAccountHolder"
+                            [accountNumber]="qrItem.bankAccountNumber" [bankName]="qrItem.bankName"
+                            [amount]="qrItem.netAmount">
+                        </app-payment-qr>
+
+                        <p class="text-xs text-gray-500 text-center">{{ 'ADMIN.PAYOUTS.QR_HINT' | translate }}</p>
+                    </div>
+                }
+            </app-modal>
         </div>
     `
 })
@@ -325,6 +359,30 @@ export class AdminPayoutListComponent implements OnInit {
     /** Nhãn trạng thái và loại chi trả (khoá i18n). */
     getPayoutStatusLabel = getPayoutStatusLabel;
     getPayoutTypeLabel = getPayoutTypeLabel;
+
+    /** Yêu cầu/phiếu chi đang xem QR để chuyển khoản. */
+    qrItem: PayoutStatement | null = null;
+    isQrVisible = false;
+
+    /** Mở hộp thoại QR chuyển khoản của một dòng chi trả. */
+    openQr(item: PayoutStatement): void {
+        this.qrItem = item;
+        this.isQrVisible = true;
+    }
+
+    /** URL QR của dòng đang xem: đúng tài khoản nhận tiền + số tiền thực chuyển. */
+    get qrItemUrl(): string | null {
+        return this.qrItem ? this.qrUrlOf(this.qrItem) : null;
+    }
+
+    /** QR chuyển khoản của một dòng chi trả; chưa nhận ra ngân hàng thì không hiện nút. */
+    qrUrlOf(item: PayoutStatement): string | null {
+        return buildAccountQr({
+            bankName: item.bankName,
+            accountNumber: item.bankAccountNumber,
+            accountHolder: item.bankAccountHolder
+        }, item.netAmount);
+    }
 
     loadData(): void {
         this.isLoading = true;

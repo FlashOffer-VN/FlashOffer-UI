@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
@@ -13,7 +13,14 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
-import { CURRENCY_OPTIONS, SelectOption, timeZoneOptions, withCurrentOption } from '@core/constants/format-options';
+import {
+    CURRENCY_OPTIONS,
+    DATE_FORMAT_OPTIONS,
+    SelectOption,
+    WORKING_HOURS_OPTIONS,
+    timeZoneOptions,
+    withCurrentOption
+} from '@core/constants/format-options';
 import { openExternalLink } from '@core/utils/link';
 import { copyToClipboard } from '@core/utils/share-link';
 
@@ -48,6 +55,7 @@ interface SettingSection {
     standalone: true,
     imports: [
         CommonModule,
+        FormsModule,
         ReactiveFormsModule,
         TranslateModule,
         ButtonComponent,
@@ -72,8 +80,19 @@ interface SettingSection {
                     </p>
                 }
 
+                <!-- Chọn nhóm cài đặt: mỗi lần mở một nhóm để trang không phải cuộn dài -->
+                <div class="bg-white rounded-xl border border-gray-200 px-4 py-3">
+                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1.5">
+                        {{ 'ADMIN.SETTINGS.SECTION_SELECT' | translate }}
+                    </label>
+                    <app-ng-select-wrapper [(ngModel)]="openSection" [items]="sectionOptions"
+                        [id]="'setting_section'" [searchable]="false" [clearable]="false">
+                    </app-ng-select-wrapper>
+                </div>
+
                 <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
                     @for (section of sections; track section.title) {
+                        @if (section.title === openSection) {
                         <section class="bg-white rounded-xl border border-gray-200">
                             <div class="px-5 py-4 border-b border-gray-200">
                                 <h2 class="text-base font-semibold text-gray-900">{{ section.title | translate }}</h2>
@@ -208,6 +227,7 @@ interface SettingSection {
                                 </table>
                             </div>
                         </section>
+                        }
                     }
 
                     <!-- Thanh lưu -->
@@ -243,12 +263,18 @@ export class AdminGeneralSettingsComponent implements OnInit {
             title: 'ADMIN.SETTINGS.SECTION_PLATFORM',
             description: 'ADMIN.SETTINGS.SECTION_PLATFORM_DESC',
             fields: [
-                { key: 'systemName', label: 'ADMIN.SETTINGS.FIELD_SYSTEM_NAME', type: 'text' },
-                { key: 'supportPhone', label: 'ADMIN.SETTINGS.FIELD_SUPPORT_PHONE', type: 'phone' },
-                { key: 'supportEmail', label: 'ADMIN.SETTINGS.FIELD_SUPPORT_EMAIL', type: 'email' },
-                { key: 'address', label: 'ADMIN.SETTINGS.FIELD_ADDRESS', type: 'text' },
-                { key: 'workingHours', label: 'ADMIN.SETTINGS.FIELD_WORKING_HOURS', type: 'text' },
-                { key: 'copyrightText', label: 'ADMIN.SETTINGS.FIELD_COPYRIGHT', type: 'text' }
+                { key: 'systemName', label: 'ADMIN.SETTINGS.FIELD_SYSTEM_NAME', type: 'text',
+                  placeholder: 'Kindi - Nền tảng kết nối doanh nghiệp SME' },
+                { key: 'supportPhone', label: 'ADMIN.SETTINGS.FIELD_SUPPORT_PHONE', type: 'phone',
+                  placeholder: '1900 1234' },
+                { key: 'supportEmail', label: 'ADMIN.SETTINGS.FIELD_SUPPORT_EMAIL', type: 'email',
+                  placeholder: 'hotro@kindi.vn' },
+                { key: 'address', label: 'ADMIN.SETTINGS.FIELD_ADDRESS', type: 'text',
+                  placeholder: 'Số 1 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh' },
+                { key: 'workingHours', label: 'ADMIN.SETTINGS.FIELD_WORKING_HOURS', type: 'select',
+                  placeholder: 'Chọn khung giờ làm việc' },
+                { key: 'copyrightText', label: 'ADMIN.SETTINGS.FIELD_COPYRIGHT', type: 'text',
+                  placeholder: '© 2026 Kindi. All rights reserved.' }
             ]
         },
         {
@@ -256,21 +282,21 @@ export class AdminGeneralSettingsComponent implements OnInit {
             description: 'ADMIN.SETTINGS.SECTION_SOCIAL_DESC',
             fields: [
                 { key: 'facebookUrl', label: 'ADMIN.SETTINGS.FIELD_FACEBOOK', type: 'url',
-                  placeholder: 'ADMIN.SETTINGS.FIELD_URL_PLACEHOLDER' },
+                  placeholder: 'https://facebook.com/ten-trang' },
                 { key: 'youtubeUrl', label: 'ADMIN.SETTINGS.FIELD_YOUTUBE', type: 'url',
-                  placeholder: 'ADMIN.SETTINGS.FIELD_URL_PLACEHOLDER' },
+                  placeholder: 'https://youtube.com/@ten-kenh' },
                 { key: 'tiktokUrl', label: 'ADMIN.SETTINGS.FIELD_TIKTOK', type: 'url',
-                  placeholder: 'ADMIN.SETTINGS.FIELD_URL_PLACEHOLDER' },
+                  placeholder: 'https://tiktok.com/@ten-tai-khoan' },
                 { key: 'zaloUrl', label: 'ADMIN.SETTINGS.FIELD_ZALO', type: 'url',
-                  placeholder: 'ADMIN.SETTINGS.FIELD_URL_PLACEHOLDER' },
+                  placeholder: 'https://zalo.me/0900000000' },
                 { key: 'instagramUrl', label: 'ADMIN.SETTINGS.FIELD_INSTAGRAM', type: 'url',
-                  placeholder: 'ADMIN.SETTINGS.FIELD_URL_PLACEHOLDER' },
+                  placeholder: 'https://instagram.com/ten-tai-khoan' },
                 { key: 'xUrl', label: 'ADMIN.SETTINGS.FIELD_X', type: 'url',
-                  placeholder: 'ADMIN.SETTINGS.FIELD_URL_PLACEHOLDER' },
+                  placeholder: 'https://x.com/ten-tai-khoan' },
                 { key: 'threadsUrl', label: 'ADMIN.SETTINGS.FIELD_THREADS', type: 'url',
-                  placeholder: 'ADMIN.SETTINGS.FIELD_URL_PLACEHOLDER' },
+                  placeholder: 'https://threads.net/@ten-tai-khoan' },
                 { key: 'linkedinUrl', label: 'ADMIN.SETTINGS.FIELD_LINKEDIN', type: 'url',
-                  placeholder: 'ADMIN.SETTINGS.FIELD_URL_PLACEHOLDER' }
+                  placeholder: 'https://linkedin.com/company/ten-cong-ty' }
             ]
         },
         {
@@ -278,10 +304,12 @@ export class AdminGeneralSettingsComponent implements OnInit {
             description: 'ADMIN.SETTINGS.SECTION_FORMAT_DESC',
             fields: [
                 { key: 'defaultLanguage', label: 'ADMIN.SETTINGS.FIELD_DEFAULT_LANGUAGE', type: 'language' },
-                { key: 'timeZone', label: 'ADMIN.SETTINGS.FIELD_TIME_ZONE', type: 'select' },
-                { key: 'currencySymbol', label: 'ADMIN.SETTINGS.FIELD_CURRENCY_SYMBOL', type: 'select' },
-                { key: 'dateFormat', label: 'ADMIN.SETTINGS.FIELD_DATE_FORMAT', type: 'text',
-                  hint: 'ADMIN.SETTINGS.FIELD_DATE_FORMAT_HINT' }
+                { key: 'timeZone', label: 'ADMIN.SETTINGS.FIELD_TIME_ZONE', type: 'select',
+                  placeholder: 'Chọn múi giờ' },
+                { key: 'currencySymbol', label: 'ADMIN.SETTINGS.FIELD_CURRENCY_SYMBOL', type: 'select',
+                  placeholder: 'Chọn ký hiệu tiền' },
+                { key: 'dateFormat', label: 'ADMIN.SETTINGS.FIELD_DATE_FORMAT', type: 'select',
+                  placeholder: 'Chọn định dạng ngày', hint: 'ADMIN.SETTINGS.FIELD_DATE_FORMAT_HINT' }
             ]
         },
         {
@@ -291,19 +319,21 @@ export class AdminGeneralSettingsComponent implements OnInit {
                 { key: 'allowRegistration', label: 'ADMIN.SETTINGS.FIELD_ALLOW_REGISTRATION', type: 'bool' },
                 { key: 'requireEmailVerification', label: 'ADMIN.SETTINGS.FIELD_REQUIRE_EMAIL_VERIFICATION', type: 'bool' },
                 { key: 'minPasswordLength', label: 'ADMIN.SETTINGS.FIELD_MIN_PASSWORD_LENGTH', type: 'number',
-                  hint: 'ADMIN.SETTINGS.FIELD_MIN_PASSWORD_LENGTH_HINT' },
+                  placeholder: '8', hint: 'ADMIN.SETTINGS.FIELD_MIN_PASSWORD_LENGTH_HINT' },
                 { key: 'accessTokenMinutes', label: 'ADMIN.SETTINGS.FIELD_ACCESS_TOKEN_MINUTES', type: 'number',
-                  hint: 'ADMIN.SETTINGS.FIELD_ACCESS_TOKEN_MINUTES_HINT' },
-                { key: 'refreshTokenDays', label: 'ADMIN.SETTINGS.FIELD_REFRESH_TOKEN_DAYS', type: 'number' },
-                { key: 'maxFailedLoginAttempts', label: 'ADMIN.SETTINGS.FIELD_MAX_FAILED_LOGIN_ATTEMPTS', type: 'number' },
+                  placeholder: '120', hint: 'ADMIN.SETTINGS.FIELD_ACCESS_TOKEN_MINUTES_HINT' },
+                { key: 'refreshTokenDays', label: 'ADMIN.SETTINGS.FIELD_REFRESH_TOKEN_DAYS', type: 'number',
+                  placeholder: '30' },
+                { key: 'maxFailedLoginAttempts', label: 'ADMIN.SETTINGS.FIELD_MAX_FAILED_LOGIN_ATTEMPTS', type: 'number',
+                  placeholder: '5' },
                 { key: 'lockoutMinutes', label: 'ADMIN.SETTINGS.FIELD_LOCKOUT_MINUTES', type: 'number',
-                  hint: 'ADMIN.SETTINGS.FIELD_LOCKOUT_MINUTES_HINT' },
+                  placeholder: '15', hint: 'ADMIN.SETTINGS.FIELD_LOCKOUT_MINUTES_HINT' },
                 { key: 'referralCodePrefix', label: 'ADMIN.SETTINGS.FIELD_REFERRAL_CODE_PREFIX', type: 'text',
-                  hint: 'ADMIN.SETTINGS.FIELD_REFERRAL_CODE_PREFIX_HINT' },
+                  placeholder: 'CTV-', hint: 'ADMIN.SETTINGS.FIELD_REFERRAL_CODE_PREFIX_HINT' },
                 { key: 'referralCodeLength', label: 'ADMIN.SETTINGS.FIELD_REFERRAL_CODE_LENGTH', type: 'number',
-                  hint: 'ADMIN.SETTINGS.FIELD_REFERRAL_CODE_LENGTH_HINT' },
+                  placeholder: '6', hint: 'ADMIN.SETTINGS.FIELD_REFERRAL_CODE_LENGTH_HINT' },
                 { key: 'commissionAttributionDays', label: 'ADMIN.SETTINGS.FIELD_ATTRIBUTION_DAYS', type: 'number',
-                  hint: 'ADMIN.SETTINGS.FIELD_ATTRIBUTION_DAYS_HINT' }
+                  placeholder: '30', hint: 'ADMIN.SETTINGS.FIELD_ATTRIBUTION_DAYS_HINT' }
             ]
         },
         {
@@ -311,23 +341,30 @@ export class AdminGeneralSettingsComponent implements OnInit {
             description: 'ADMIN.SETTINGS.SECTION_CONTENT_DESC',
             fields: [
                 { key: 'maxUploadSizeMb', label: 'ADMIN.SETTINGS.FIELD_MAX_UPLOAD_SIZE', type: 'number',
-                  hint: 'ADMIN.SETTINGS.FIELD_MAX_UPLOAD_SIZE_HINT' },
+                  placeholder: '10', hint: 'ADMIN.SETTINGS.FIELD_MAX_UPLOAD_SIZE_HINT' },
                 { key: 'allowedImageExtensions', label: 'ADMIN.SETTINGS.FIELD_IMAGE_EXTENSIONS', type: 'text',
-                  hint: 'ADMIN.SETTINGS.FIELD_EXTENSIONS_HINT' },
+                  placeholder: 'jpg,jpeg,png,webp', hint: 'ADMIN.SETTINGS.FIELD_EXTENSIONS_HINT' },
                 { key: 'allowedDocumentExtensions', label: 'ADMIN.SETTINGS.FIELD_DOCUMENT_EXTENSIONS', type: 'text',
-                  hint: 'ADMIN.SETTINGS.FIELD_EXTENSIONS_HINT' },
-                { key: 'maxImagesPerPost', label: 'ADMIN.SETTINGS.FIELD_MAX_IMAGES_PER_POST', type: 'number' },
+                  placeholder: 'pdf,doc,docx,xlsx', hint: 'ADMIN.SETTINGS.FIELD_EXTENSIONS_HINT' },
+                { key: 'maxImagesPerPost', label: 'ADMIN.SETTINGS.FIELD_MAX_IMAGES_PER_POST', type: 'number',
+                  placeholder: '10' },
                 { key: 'requirePostApproval', label: 'ADMIN.SETTINGS.FIELD_REQUIRE_POST_APPROVAL', type: 'bool' },
                 { key: 'requireGroupApproval', label: 'ADMIN.SETTINGS.FIELD_REQUIRE_GROUP_APPROVAL', type: 'bool' },
                 { key: 'auditLogRetentionDays', label: 'ADMIN.SETTINGS.FIELD_AUDIT_RETENTION', type: 'number',
-                  hint: 'ADMIN.SETTINGS.FIELD_AUDIT_RETENTION_HINT' },
+                  placeholder: '365', hint: 'ADMIN.SETTINGS.FIELD_AUDIT_RETENTION_HINT' },
                 { key: 'enableEmailNotification', label: 'ADMIN.SETTINGS.FIELD_ENABLE_EMAIL_NOTIFICATION', type: 'bool' },
-                { key: 'notificationSenderName', label: 'ADMIN.SETTINGS.FIELD_NOTIFICATION_SENDER_NAME', type: 'text' },
-                { key: 'notificationReplyTo', label: 'ADMIN.SETTINGS.FIELD_NOTIFICATION_REPLY_TO', type: 'email' },
-                { key: 'note', label: 'ADMIN.SETTINGS.FIELD_NOTE', type: 'text' }
+                { key: 'notificationSenderName', label: 'ADMIN.SETTINGS.FIELD_NOTIFICATION_SENDER_NAME', type: 'text',
+                  placeholder: 'Kindi' },
+                { key: 'notificationReplyTo', label: 'ADMIN.SETTINGS.FIELD_NOTIFICATION_REPLY_TO', type: 'email',
+                  placeholder: 'no-reply@kindi.vn' },
+                { key: 'note', label: 'ADMIN.SETTINGS.FIELD_NOTE', type: 'text',
+                  placeholder: 'Ghi chú nội bộ cho quản trị viên' }
             ]
         }
     ];
+
+    /** Nhóm cài đặt đang mở — chọn ở ô chọn phía trên để không phải cuộn cả trang. */
+    openSection: string = this.sections[0].title;
 
     /** Múi giờ lấy từ trình duyệt (kèm chênh lệch UTC), tính một lần cho cả màn hình. */
     private readonly _timeZones: SelectOption[] = timeZoneOptions();
@@ -339,10 +376,20 @@ export class AdminGeneralSettingsComponent implements OnInit {
     /** Giá trị mặc định (nút khôi phục mặc định của từng trường). */
     defaults: SystemSetting | null = null;
 
+    /** Danh sách nhóm cài đặt cho ô chọn (kèm số trường của từng nhóm). */
+    get sectionOptions(): SelectOption[] {
+        return this.sections.map(section => ({
+            value: section.title,
+            label: `${this._appService.trans(section.title)} (${section.fields.length})`
+        }));
+    }
+
     /** Tuỳ chọn của ô chọn; giá trị đang lưu luôn được thêm vào để ô chọn không hiện trống. */
     optionsOf(field: SettingField): SelectOption[] {
         if (field.key === 'timeZone') return withCurrentOption(this._timeZones, this.current?.timeZone);
         if (field.key === 'currencySymbol') return withCurrentOption(CURRENCY_OPTIONS, this.current?.currencySymbol);
+        if (field.key === 'workingHours') return withCurrentOption(WORKING_HOURS_OPTIONS, this.current?.workingHours);
+        if (field.key === 'dateFormat') return withCurrentOption(DATE_FORMAT_OPTIONS, this.current?.dateFormat);
 
         return field.options ?? [];
     }

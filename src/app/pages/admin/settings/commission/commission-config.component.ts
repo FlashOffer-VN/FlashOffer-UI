@@ -82,14 +82,17 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
                         </app-ng-select-wrapper>
 
                         <app-input [(ngModel)]="rate" [type]="'number'" [id]="'commission_rate'"
+                            [placeholder]="'5'"
                             [label]="('COMMISSION.RATE' | translate) + ' (' + (rateUnitKey | translate) + ')'">
                         </app-input>
 
                         <app-input [(ngModel)]="minOrderValue" [type]="'number'" [id]="'commission_min_order'"
+                            [placeholder]="'500000'"
                             [label]="'COMMISSION.MIN_ORDER' | translate">
                         </app-input>
 
                         <app-input [(ngModel)]="maxCommission" [type]="'number'" [id]="'commission_max'"
+                            [placeholder]="'500000'"
                             [label]="'COMMISSION.MAX_COMMISSION' | translate">
                         </app-input>
                     </div>
@@ -125,6 +128,7 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
                     <label class="flex flex-col text-sm text-gray-700">
                         {{ 'COMMISSION.NOTE' | translate }}
                         <textarea rows="2" [(ngModel)]="note"
+                            [placeholder]="'COMMISSION.NOTE_PLACEHOLDER' | translate"
                             class="mt-auto w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"></textarea>
                     </label>
 
