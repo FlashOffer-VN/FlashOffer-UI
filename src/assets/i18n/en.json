@@ -38,7 +38,9 @@
     "DELETE_CONFIRM": "Delete this commission configuration?",
     "DELETE_SUCCESS": "Commission configuration deleted",
     "DELETE_FAILED": "Failed to delete commission configuration",
-    "UPDATED_AT": "Updated"
+    "UPDATED_AT": "Updated",
+          "NOTE_PLACEHOLDER": "Internal note for administrators"
+        
         },
     "APP_TITLE": "Kindi",
     "APP_NAME": "Kindi - SME Platform",
@@ -780,7 +782,12 @@
         "MUST_CHANGE": "This auto-created account must change its username and password before continuing.",
         "SAVE_SUCCESS": "Account information updated",
         "SAVE_FAILED": "Could not update your account information",
-        "ERROR_INVALID": "Please review the information you entered"
+        "ERROR_INVALID": "Please review the information you entered",
+      "FULL_NAME_PLACEHOLDER": "John Smith",
+      "PHONE_PLACEHOLDER": "0900 000 000",
+      "EMAIL_PLACEHOLDER": "name@email.com",
+      "ZALO_PLACEHOLDER": "0900 000 000"
+    
     },
         "COMMISSION": {
         "KICKER": "Referral income",
@@ -1392,7 +1399,9 @@
             "NO": "Off",
             "NO_PERMISSION": "You do not have permission to view the general configuration.",
             "ERROR_FORM_INVALID": "Some fields are invalid, please review before saving.",
-            "FIELD_REFERRAL_CODE_PREFIX_HINT": "Referral code prefix, e.g. CTV."
+            "FIELD_REFERRAL_CODE_PREFIX_HINT": "Referral code prefix, e.g. CTV.",
+          "SECTION_SELECT": "Settings group"
+        
         },
         "BANK_ACCOUNTS":
         {
@@ -1469,7 +1478,12 @@
             "SUCCESS_APPROVE": "Payout approved.",
             "SUCCESS_REJECT": "Payout rejected.",
             "SUCCESS_PAID": "Transfer recorded.",
-            "NO_FEE": "No fee"
+            "NO_FEE": "No fee",
+          "ACTION_QR": "View transfer QR",
+          "QR_TITLE": "Payout transfer QR",
+          "QR_HINT": "Scan the code in a banking app to transfer to the right account and amount.",
+          "QR_AMOUNT": "Transfer amount"
+        
         },
         "REFERRAL_STATS": {
             "TITLE": "Referral statistics",

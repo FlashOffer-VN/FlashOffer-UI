@@ -64,6 +64,27 @@ function offsetHours(zone: string): number {
     return sign * (Number(match[2]) + Number(match[3] ?? 0) / 60);
 }
 
+/** Khung giờ làm việc thường dùng của bộ phận hỗ trợ; giá trị lưu chính là nhãn hiển thị. */
+export const WORKING_HOURS_OPTIONS: SelectOption[] = [
+    { value: 'Thứ 2 - Thứ 6, 8:00 - 17:00', label: 'Thứ 2 - Thứ 6 · 8:00 - 17:00' },
+    { value: 'Thứ 2 - Thứ 6, 8:00 - 17:30', label: 'Thứ 2 - Thứ 6 · 8:00 - 17:30' },
+    { value: 'Thứ 2 - Thứ 6, 8:30 - 18:00', label: 'Thứ 2 - Thứ 6 · 8:30 - 18:00' },
+    { value: 'Thứ 2 - Thứ 6, 9:00 - 18:00', label: 'Thứ 2 - Thứ 6 · 9:00 - 18:00' },
+    { value: 'Thứ 2 - Thứ 7, 8:00 - 17:00', label: 'Thứ 2 - Thứ 7 · 8:00 - 17:00' },
+    { value: 'Thứ 2 - Thứ 7, 8:00 - 17:30', label: 'Thứ 2 - Thứ 7 · 8:00 - 17:30' },
+    { value: 'Thứ 2 - Chủ nhật, 8:00 - 21:00', label: 'Cả tuần · 8:00 - 21:00' },
+    { value: 'Hỗ trợ 24/7', label: 'Hỗ trợ 24/7' }
+];
+
+/** Định dạng ngày hiển thị; giá trị lưu chính là mẫu định dạng. */
+export const DATE_FORMAT_OPTIONS: SelectOption[] = [
+    { value: 'dd/MM/yyyy', label: 'dd/MM/yyyy · 31/12/2026' },
+    { value: 'dd-MM-yyyy', label: 'dd-MM-yyyy · 31-12-2026' },
+    { value: 'MM/dd/yyyy', label: 'MM/dd/yyyy · 12/31/2026' },
+    { value: 'yyyy-MM-dd', label: 'yyyy-MM-dd · 2026-12-31' },
+    { value: 'dd/MM/yyyy HH:mm', label: 'dd/MM/yyyy HH:mm · 31/12/2026 23:59' }
+];
+
 /**
  * Bổ sung giá trị đang lưu vào danh sách chọn nếu danh sách chưa có, để ô chọn không hiện trống.
  */

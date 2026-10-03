@@ -85,7 +85,7 @@ interface PermissionGroup {
                                 <p class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50 border-b border-gray-200">
                                     {{ group.label }}
                                 </p>
-                                <div class="p-2">
+                                <div class="p-2 max-h-72 overflow-y-auto">
                                     @for (item of group.items; track item.code) {
                                         <label class="flex items-start gap-2 px-1 py-1.5 rounded hover:bg-gray-50 cursor-pointer">
                                             <input type="checkbox" class="mt-1" [checked]="isChecked(item.code)"

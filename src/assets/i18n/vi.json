@@ -38,7 +38,9 @@
     "DELETE_CONFIRM": "Bạn có chắc muốn xoá cấu hình hoa hồng này?",
     "DELETE_SUCCESS": "Đã xoá cấu hình hoa hồng",
     "DELETE_FAILED": "Xoá cấu hình hoa hồng thất bại",
-    "UPDATED_AT": "Cập nhật"
+    "UPDATED_AT": "Cập nhật",
+          "NOTE_PLACEHOLDER": "Ghi chú nội bộ cho quản trị viên"
+        
         },
     "APP_TITLE": "Kindi",
     "APP_NAME": "Kindi - Nền tảng kết nối SME",
@@ -736,7 +738,12 @@
         "MUST_CHANGE": "Tài khoản tạo tự động cần đổi tên đăng nhập và mật khẩu trước khi tiếp tục.",
         "SAVE_SUCCESS": "Cập nhật thông tin tài khoản thành công",
         "SAVE_FAILED": "Cập nhật thông tin tài khoản thất bại",
-        "ERROR_INVALID": "Vui lòng kiểm tra lại thông tin đã nhập"
+        "ERROR_INVALID": "Vui lòng kiểm tra lại thông tin đã nhập",
+      "FULL_NAME_PLACEHOLDER": "Nguyễn Văn A",
+      "PHONE_PLACEHOLDER": "0900 000 000",
+      "EMAIL_PLACEHOLDER": "ten@email.com",
+      "ZALO_PLACEHOLDER": "0900 000 000"
+    
     },
         "COMMISSION": {
         "KICKER": "Thu nhập từ giới thiệu",
@@ -1350,7 +1357,9 @@
             "NO": "Tắt",
             "NO_PERMISSION": "Tài khoản của bạn không có quyền xem cấu hình chung.",
             "ERROR_FORM_INVALID": "Có trường chưa hợp lệ, kiểm tra lại trước khi lưu.",
-            "FIELD_REFERRAL_CODE_PREFIX_HINT": "Tiền tố mã giới thiệu, ví dụ CTV."
+            "FIELD_REFERRAL_CODE_PREFIX_HINT": "Tiền tố mã giới thiệu, ví dụ CTV.",
+          "SECTION_SELECT": "Nhóm cài đặt"
+        
         },
         "BANK_ACCOUNTS":
         {
@@ -1427,7 +1436,12 @@
             "SUCCESS_APPROVE": "Đã duyệt lần chi trả.",
             "SUCCESS_REJECT": "Đã từ chối lần chi trả.",
             "SUCCESS_PAID": "Đã ghi nhận chuyển khoản.",
-            "NO_FEE": "Không phí"
+            "NO_FEE": "Không phí",
+          "ACTION_QR": "Xem QR chuyển khoản",
+          "QR_TITLE": "QR chuyển khoản chi trả",
+          "QR_HINT": "Quét mã bằng app ngân hàng để chuyển đúng số tài khoản và số tiền cần chi trả.",
+          "QR_AMOUNT": "Số tiền chi trả"
+        
         },
         "REFERRAL_STATS": {
             "TITLE": "Thống kê giới thiệu",

@@ -15,6 +15,7 @@ import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { ModalComponent } from '@shared/components/modal/modal.component';
+import { PaymentQrComponent } from '@shared/components/payment-qr/payment-qr.component';
 import { buildAccountQr } from '@core/constants/bank-catalog';
 import { copyToClipboard } from '@core/utils/share-link';
 
@@ -35,7 +36,8 @@ import { copyToClipboard } from '@core/utils/share-link';
         ButtonComponent,
         InputComponent,
         AppDatePipe,
-        ModalComponent
+        ModalComponent,
+        PaymentQrComponent
     ],
     template: `
         <div class="space-y-4">
@@ -187,11 +189,6 @@ import { copyToClipboard } from '@core/utils/share-link';
                     [showFooter]="false" (closed)="isQrVisible = false">
                     @if (qrItem) {
                         <div class="space-y-3">
-                            <div class="text-sm text-gray-700">
-                                <div class="font-medium text-gray-900">{{ qrItem.accountHolder }}</div>
-                                <div>{{ qrItem.accountNumber }} · {{ qrItem.bankName }}</div>
-                            </div>
-
                             @if (qrItem.verificationCode) {
                                 <div class="flex flex-wrap items-center gap-2 text-sm text-gray-700">
                                     <span>{{ 'ADMIN.BANK_ACCOUNTS.COL_TRANSFER_CODE' | translate }}:</span>
@@ -204,10 +201,11 @@ import { copyToClipboard } from '@core/utils/share-link';
                             }
 
                             @if (qrItemUrl) {
-                                <div class="flex justify-center">
-                                    <img [src]="qrItemUrl" alt="QR chuyển khoản của thành viên"
-                                        class="w-60 h-60 rounded-lg border border-gray-200 bg-white p-1">
-                                </div>
+                                <app-payment-qr [url]="qrItemUrl" [accountHolder]="qrItem.accountHolder"
+                                    [accountNumber]="qrItem.accountNumber" [bankName]="qrItem.bankName"
+                                    [amount]="qrItem.verificationCode ? 1000 : null"
+                                    [content]="qrItem.verificationCode">
+                                </app-payment-qr>
                             }
 
                             <p class="text-xs text-gray-500">{{ 'ADMIN.BANK_ACCOUNTS.QR_HINT' | translate }}</p>

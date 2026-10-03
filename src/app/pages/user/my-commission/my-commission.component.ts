@@ -24,6 +24,7 @@ import { CommissionType, getCommissionTypeLabel } from '@core/models/partner.mod
 import { UserRole, toUserRole } from '@core/models/auth.model';
 import { bankSelectOptions, buildAccountQr } from '@core/constants/bank-catalog';
 import { copyToClipboard } from '@core/utils/share-link';
+import { PaymentQrComponent } from '@shared/components/payment-qr/payment-qr.component';
 
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
@@ -50,7 +51,8 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
         LoadingComponent,
         InputComponent,
         ButtonComponent,
-        NgSelectWrapperComponent
+        NgSelectWrapperComponent,
+        PaymentQrComponent
     ],
     template: `
         <div class="space-y-5">
@@ -428,13 +430,14 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
 
                                     <!-- QR chuyển khoản: quét bằng app ngân hàng là ra đúng tài khoản, số tiền và nội dung -->
                                     @if (verificationQr) {
-                                        <div class="mt-3 flex flex-wrap items-center gap-3">
-                                            <img [src]="verificationQr" alt="QR chuyển khoản xác thực tài khoản"
-                                                class="w-40 h-40 rounded-lg border border-teal-200 bg-white p-1">
-                                            <div class="text-xs text-teal-800 space-y-1">
+                                        <div class="mt-3">
+                                            <app-payment-qr [url]="verificationQr" [accountHolder]="bankAccount.accountHolder"
+                                                [accountNumber]="bankAccount.accountNumber" [bankName]="bankAccount.bankName"
+                                                [amount]="verificationCode.amount" [content]="verificationCode.transferContent">
+                                            </app-payment-qr>
+                                            <div class="text-xs text-teal-800 space-y-1 mt-2">
                                                 <div class="font-medium">{{ 'USER.COMMISSION.BANK_QR_TITLE' | translate }}</div>
                                                 <div>{{ 'USER.COMMISSION.BANK_QR_HINT' | translate }}</div>
-                                                <div>{{ 'USER.COMMISSION.BANK_QR_BANK' | translate }}: {{ bankAccount.bankName }}</div>
                                             </div>
                                         </div>
                                     }
