@@ -40,11 +40,10 @@ export class AuthInterceptor implements HttpInterceptor {
 
         return next.handle(authReq).pipe(
             catchError((error: HttpErrorResponse) => {
-                if (error.status === 401 && !authReq.url.includes('auth/refresh')) {
+                // Chỉ làm mới khi đang có phiên đăng nhập. Khách chưa đăng nhập gọi API cần quyền
+                // thì để lỗi trôi qua, không làm mới và không kết thúc phiên.
+                if (error.status === 401 && this.authService.getToken() && !authReq.url.includes('auth/refresh')) {
                     return this.handle401Error(authReq, next);
-                }
-                if (error.status === 403) {
-                    this.authService.logout();
                 }
                 return throwError(() => error);
             })
@@ -73,6 +72,9 @@ export class AuthInterceptor implements HttpInterceptor {
                 }),
                 catchError((error) => {
                     this.isRefreshing = false;
+                    // Báo lỗi cho các request đang chờ để chúng không treo, rồi dựng lại luồng chờ.
+                    this.refreshTokenSubject.error(error);
+                    this.refreshTokenSubject = new BehaviorSubject<string | null>(null);
                     this.authService.logout();
                     return throwError(() => error);
                 })
