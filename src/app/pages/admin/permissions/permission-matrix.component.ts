@@ -18,6 +18,17 @@ interface RoleColumn {
     isSuperAdmin: boolean;
 }
 
+/** Một nhóm quyền trong cây phân quyền. */
+interface PermissionGroup {
+    /** Khoá nhóm: mã nhóm chức năng, hoặc 'member' cho quyền của trang thành viên. */
+    key: string;
+    /** Khoá i18n tên nhóm. */
+    label: string;
+    /** Nhóm quyền gắn với trang của thành viên (quản trị viên không có trang đó). */
+    isMemberArea: boolean;
+    permissions: PermissionItem[];
+}
+
 /**
  * Ma trận phân quyền: danh mục quyền theo mã P### (API đọc từ enum) và quyền bật cho từng vai trò.
  * Chỉ tài khoản có quyền P101 mới sửa được; SuperAdmin luôn toàn quyền nên không cấu hình.
@@ -41,6 +52,12 @@ export class AdminPermissionMatrixComponent implements OnInit {
     isLoading = true;
     isSaving = false;
     searchText = '';
+
+    /** Nhóm dành riêng cho quyền gắn với trang của thành viên. */
+    private readonly memberGroupKey = 'member';
+
+    /** Nhóm đang mở; mặc định thu gọn để cây phân quyền gọn hơn. */
+    expandedGroups: Record<string, boolean> = {};
 
     permissions: PermissionItem[] = [];
     roleColumns: RoleColumn[] = [
@@ -79,7 +96,7 @@ export class AdminPermissionMatrixComponent implements OnInit {
         });
     }
 
-    /** Danh mục quyền lọc theo ô tìm kiếm (mã, tên, nhóm hoặc API). */
+    /** Danh mục quyền lọc theo ô tìm kiếm (mã, tên, nhóm, trang hoặc API). */
     get filteredPermissions(): PermissionItem[] {
         const keyword = this.searchText.trim().toLowerCase();
         if (!keyword) return this.permissions;
@@ -88,7 +105,54 @@ export class AdminPermissionMatrixComponent implements OnInit {
             item.code.toLowerCase().includes(keyword)
             || item.name.toLowerCase().includes(keyword)
             || item.module.toLowerCase().includes(keyword)
+            || (item.route ?? '').toLowerCase().includes(keyword)
             || (item.endpoints ?? '').toLowerCase().includes(keyword));
+    }
+
+    /** Các nhóm quyền sau khi lọc, xếp theo thứ tự nhóm chức năng. */
+    get groups(): PermissionGroup[] {
+        const buckets = new Map<string, PermissionItem[]>();
+
+        for (const item of this.filteredPermissions) {
+            const key = this.groupKey(item);
+            const bucket = buckets.get(key);
+            if (bucket) bucket.push(item);
+            else buckets.set(key, [item]);
+        }
+
+        return [...buckets.entries()]
+            .map(([key, permissions]) => ({
+                key,
+                label: key === this.memberGroupKey ? 'PERMISSION.GROUP.MEMBER' : this.moduleKey(key),
+                isMemberArea: key === this.memberGroupKey,
+                permissions
+            }))
+            .sort((left, right) => this.groupOrder(left.key) - this.groupOrder(right.key));
+    }
+
+    /** Đang tìm kiếm thì mở hết nhóm để thấy ngay kết quả. */
+    get isSearching(): boolean {
+        return this.searchText.trim().length > 0;
+    }
+
+    isExpanded(key: string): boolean {
+        return this.isSearching || (this.expandedGroups[key] ?? false);
+    }
+
+    toggleGroup(key: string): void {
+        this.expandedGroups[key] = !this.isExpanded(key);
+    }
+
+    /** Nhóm của một quyền: quyền gắn với trang thành viên (/user/**) gom riêng vì quản trị viên không có trang đó. */
+    private groupKey(item: PermissionItem): string {
+        return (item.route ?? '').startsWith('/user') ? this.memberGroupKey : item.module.toLowerCase();
+    }
+
+    /** Thứ tự nhóm hiển thị: nhóm chức năng trước, nhóm thành viên ngay sau nhóm Người dùng. */
+    private groupOrder(key: string): number {
+        const order = ['system', 'user', this.memberGroupKey, 'partner', 'purchase', 'group', 'community', 'referral', 'superadmin'];
+        const index = order.indexOf(key);
+        return index < 0 ? order.length : index;
     }
 
     /** Tài khoản hiện tại có được sửa quyền (chỉ SuperAdmin có quyền P101). */

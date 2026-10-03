@@ -1867,6 +1867,8 @@
     },
     "PERMISSION": {
         "TAB_ROLE": "By role",
+        "GROUP": {"MEMBER": "Member area"},
+        "MEMBER_AREA_HINT": "permissions for member pages",
         "TAB_USER": "By account",
         "USER": {"SEARCH_PLACEHOLDER": "Search by username or full name...", "EMPTY": "No account found", "NO_USER_SELECTED": "Select one or more accounts on the left to configure permissions.", "SELECTED": "Configuring for", "MIXED": "mixed", "GRANTED_EXTRA": "granted for account", "DENIED_OVERRIDE": "denied for account"},
 
@@ -1889,7 +1891,8 @@
             "PURCHASE": "Purchase",
             "GROUP": "Group",
             "COMMUNITY": "Community",
-            "SUPERADMIN": "Super admin"
+            "SUPERADMIN": "Super admin",
+            "REFERRAL": "Referral"
         },
         "KIND": {
             "VIEW": "Screen",

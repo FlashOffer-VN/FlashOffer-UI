@@ -1830,6 +1830,8 @@
     },
     "PERMISSION": {
         "TAB_ROLE": "Theo vai trò",
+        "GROUP": {"MEMBER": "Khu vực thành viên"},
+        "MEMBER_AREA_HINT": "quyền cho trang của thành viên",
         "TAB_USER": "Theo người dùng",
         "USER": {"SEARCH_PLACEHOLDER": "Tìm theo tên đăng nhập hoặc họ tên...", "EMPTY": "Không tìm thấy tài khoản nào", "NO_USER_SELECTED": "Chọn một hoặc nhiều tài khoản ở cột bên trái để cấu hình quyền.", "SELECTED": "Đang cấu hình cho", "MIXED": "không đồng nhất", "GRANTED_EXTRA": "bật riêng", "DENIED_OVERRIDE": "tắt riêng"},
 
@@ -1852,7 +1854,8 @@
             "PURCHASE": "Mua hàng",
             "GROUP": "Nhóm",
             "COMMUNITY": "Cộng đồng",
-            "SUPERADMIN": "Quản trị tối cao"
+            "SUPERADMIN": "Quản trị tối cao",
+            "REFERRAL": "Giới thiệu"
         },
         "KIND": {
             "VIEW": "Màn hình",
