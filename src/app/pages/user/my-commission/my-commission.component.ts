@@ -15,7 +15,9 @@ import {
     BankAccountVerificationCode,
     MyWallet,
     PayoutPeriodStatus,
+    PayoutStatement,
     PayoutStatus,
+    PayoutType,
     SaveBankAccountRequest,
     getPayoutStatusLabel,
     getPayoutTypeLabel
@@ -24,6 +26,7 @@ import { CommissionType, getCommissionTypeLabel } from '@core/models/partner.mod
 import { UserRole, toUserRole } from '@core/models/auth.model';
 import { bankSelectOptions, buildAccountQr } from '@core/constants/bank-catalog';
 import { copyToClipboard } from '@core/utils/share-link';
+import { scrollToSection } from '@core/utils/scroll';
 import { PaymentQrComponent } from '@shared/components/payment-qr/payment-qr.component';
 
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
@@ -278,8 +281,49 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
 
                         @if (!wallet?.isEarlyWithdrawalEnabled) {
                             <p class="bg-amber-50 rounded-lg px-3 py-2 text-xs text-amber-800 mt-3">{{ 'USER.COMMISSION.EARLY_DISABLED' | translate }}</p>
+                        } @else if (!wallet?.hasBankAccount) {
+                            <p class="bg-amber-50 rounded-lg px-3 py-2 text-xs text-amber-800 mt-3">{{ 'USER.COMMISSION.WITHDRAW_NEED_BANK' | translate }}</p>
+                            <div class="flex justify-end mt-3">
+                                <app-button size="sm" variant="outline" (click)="goToBankSection()">
+                                    <i class="fas fa-building-columns mr-1"></i>{{ 'USER.COMMISSION.WITHDRAW_TO_BANK' | translate }}
+                                </app-button>
+                            </div>
+                        } @else if (!wallet?.bankAccountVerified) {
+                            <p class="bg-amber-50 rounded-lg px-3 py-2 text-xs text-amber-800 mt-3">{{ 'USER.COMMISSION.WITHDRAW_NEED_VERIFY' | translate }}</p>
+                            <div class="flex justify-end mt-3">
+                                <app-button size="sm" variant="outline" (click)="goToBankSection()">
+                                    <i class="fas fa-shield-halved mr-1"></i>{{ 'USER.COMMISSION.WITHDRAW_TO_BANK' | translate }}
+                                </app-button>
+                            </div>
                         } @else {
-                            <p class="bg-gray-50 rounded-lg px-3 py-2 text-xs text-gray-600 mt-3">{{ 'USER.COMMISSION.EARLY_HINT' | translate }}</p>
+                            <form [formGroup]="withdrawForm" (ngSubmit)="submitWithdrawal()" class="mt-3 space-y-3">
+                                <app-input formControlName="amount" type="number" icon="fas fa-money-bill-wave"
+                                    [label]="'USER.COMMISSION.WITHDRAW_AMOUNT' | translate"
+                                    [placeholder]="'USER.COMMISSION.WITHDRAW_AMOUNT_PLACEHOLDER' | translate"
+                                    [required]="true"
+                                    [isInvalid]="isWithdrawInvalid('amount')"
+                                    [errorMessage]="withdrawError('amount')">
+                                </app-input>
+
+                                <dl class="rounded-lg bg-gray-50 px-3 py-2 text-sm space-y-1">
+                                    <div class="flex justify-between gap-3">
+                                        <dt class="text-gray-500">{{ 'USER.COMMISSION.EARLY_FEE' | translate }}</dt>
+                                        <dd class="text-gray-700">{{ withdrawalFee | appPrice }} ({{ wallet?.earlyWithdrawalFeeRate ?? 0 }}%)</dd>
+                                    </div>
+                                    <div class="flex justify-between gap-3">
+                                        <dt class="text-gray-500">{{ 'USER.COMMISSION.WITHDRAW_NET' | translate }}</dt>
+                                        <dd class="font-semibold text-gray-900">{{ withdrawalNet | appPrice }}</dd>
+                                    </div>
+                                </dl>
+
+                                <p class="bg-gray-50 rounded-lg px-3 py-2 text-xs text-gray-600">{{ 'USER.COMMISSION.EARLY_HINT' | translate }}</p>
+
+                                <div class="flex justify-end">
+                                    <app-button type="submit" variant="primary" [loading]="isSubmittingWithdrawal" [disabled]="isSubmittingWithdrawal">
+                                        <i class="fas fa-paper-plane mr-2"></i>{{ 'USER.COMMISSION.WITHDRAW_SUBMIT' | translate }}
+                                    </app-button>
+                                </div>
+                            </form>
                         }
                     </div>
                 </section>
@@ -300,6 +344,7 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
                                         <th class="py-2 text-right">{{ 'USER.COMMISSION.COL_NET' | translate }}</th>
                                         <th class="py-2">{{ 'USER.COMMISSION.COL_STATUS' | translate }}</th>
                                         <th class="py-2">{{ 'USER.COMMISSION.COL_TIME' | translate }}</th>
+                                        <th class="py-2">{{ 'USER.COMMISSION.COL_ACTION' | translate }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -321,6 +366,14 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
                                                 </span>
                                             </td>
                                             <td class="py-2 text-xs text-gray-500">{{ (item.requestedAt || item.createdAt) | appDate }}</td>
+                                            <td class="py-2">
+                                                @if (canCancel(item)) {
+                                                    <app-button size="sm" variant="outline" [loading]="cancellingId === item.id"
+                                                        (click)="cancelWithdrawal(item)">
+                                                        {{ 'USER.COMMISSION.WITHDRAW_CANCEL' | translate }}
+                                                    </app-button>
+                                                }
+                                            </td>
                                         </tr>
                                     }
                                 </tbody>
@@ -331,7 +384,7 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
                     }
                 </section>
 
-                <section class="bg-white rounded-xl border border-gray-200 p-5">
+                <section id="bank-account" class="bg-white rounded-xl border border-gray-200 p-5">
                     <h2 class="text-base font-semibold text-gray-900">{{ 'USER.COMMISSION.BANK_TITLE' | translate }}</h2>
 
                     @if (isEditingBank) {
@@ -495,6 +548,13 @@ export class MyCommissionPageComponent implements OnInit {
     isEditingBank = false;
     isSavingBank = false;
 
+    /** Form gửi yêu cầu rút hoa hồng sớm của thành viên. */
+    readonly withdrawForm: FormGroup;
+    isSubmittingWithdrawal = false;
+
+    /** Yêu cầu rút đang huỷ, dùng để hiện trạng thái chờ trên đúng dòng. */
+    cancellingId: string | null = null;
+
     /** Danh mục ngân hàng cho ô chọn (kèm mã BIN để dựng QR chuyển khoản). */
     readonly bankOptions = bankSelectOptions();
 
@@ -524,6 +584,10 @@ export class MyCommissionPageComponent implements OnInit {
             branch: ['', [Validators.maxLength(200)]],
             accountNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{6,30}$/)]],
             accountHolder: ['', [Validators.required, Validators.maxLength(200)]]
+        });
+
+        this.withdrawForm = this._fb.group({
+            amount: [null, [Validators.required, Validators.min(1)]]
         });
     }
 
@@ -710,6 +774,110 @@ export class MyCommissionPageComponent implements OnInit {
         if (!control || !control.errors) return '';
         if (control.errors['pattern']) return this._appService.trans('USER.COMMISSION.BANK_ERROR_NUMBER');
         return this._appService.trans('USER.COMMISSION.BANK_ERROR_REQUIRED');
+    }
+
+    /** Số tiền tối đa được rút: không vượt hoa hồng khả dụng và hạn mức còn lại của hạng. */
+    get withdrawalMax(): number {
+        const available = this.wallet?.availableAmount ?? 0;
+        const remaining = this.wallet?.remainingLimit;
+        return remaining == null ? available : Math.min(available, remaining);
+    }
+
+    /** Phí rút sớm tính theo đúng cách máy chủ tính: tỷ lệ của hạng, kẹp trong khoảng min/max, làm tròn nửa lên. */
+    get withdrawalFee(): number {
+        const amount = Number(this.withdrawForm.value['amount'] ?? 0) || 0;
+        if (amount <= 0 || !this.wallet) return 0;
+
+        let fee = Math.round((amount * (this.wallet.earlyWithdrawalFeeRate ?? 0)) / 100);
+        if (this.wallet.minEarlyWithdrawalFee != null) fee = Math.max(fee, this.wallet.minEarlyWithdrawalFee);
+        if (this.wallet.maxEarlyWithdrawalFee != null) fee = Math.min(fee, this.wallet.maxEarlyWithdrawalFee);
+        return Math.min(fee, amount);
+    }
+
+    /** Số tiền thực nhận sau khi trừ phí rút sớm. */
+    get withdrawalNet(): number {
+        const amount = Number(this.withdrawForm.value['amount'] ?? 0) || 0;
+        return Math.max(0, amount - this.withdrawalFee);
+    }
+
+    /** Ô nhập số tiền rút đang lỗi và người dùng đã chạm vào. */
+    isWithdrawInvalid(field: string): boolean {
+        const control = this.withdrawForm.get(field);
+        return !!control && control.invalid && (control.touched || control.dirty);
+    }
+
+    /** Thông báo lỗi của ô nhập số tiền rút (đã dịch). */
+    withdrawError(field: string): string {
+        const control = this.withdrawForm.get(field);
+        if (!control || !control.errors) return '';
+
+        if (control.errors['required']) return this._appService.trans('USER.COMMISSION.WITHDRAW_ERROR_REQUIRED');
+        if (control.errors['min']) return this._appService.trans('USER.COMMISSION.WITHDRAW_ERROR_MIN');
+        return '';
+    }
+
+    /** Gửi yêu cầu rút hoa hồng sớm; kiểm tra trước theo đúng luật máy chủ đang áp. */
+    submitWithdrawal(): void {
+        if (!this.wallet) return;
+
+        if (this.withdrawForm.invalid) {
+            this.withdrawForm.markAllAsTouched();
+            return;
+        }
+
+        const amount = Number(this.withdrawForm.value['amount'] ?? 0);
+        if (!Number.isInteger(amount)) {
+            this._appService.showError(this._appService.trans('USER.COMMISSION.WITHDRAW_ERROR_WHOLE'));
+            return;
+        }
+
+        if (amount > this.withdrawalMax) {
+            const isLimit = this.wallet.remainingLimit != null && this.withdrawalMax === this.wallet.remainingLimit;
+            this._appService.showError(this._appService.trans(
+                isLimit ? 'USER.COMMISSION.WITHDRAW_ERROR_LIMIT' : 'USER.COMMISSION.WITHDRAW_ERROR_MAX'));
+            return;
+        }
+
+        this.isSubmittingWithdrawal = true;
+        this._payoutService.createWithdrawal(amount).subscribe({
+            next: () => {
+                this.isSubmittingWithdrawal = false;
+                this.withdrawForm.reset({ amount: null });
+                this.reloadWallet();
+                this._appService.showSuccess(this._appService.trans('USER.COMMISSION.WITHDRAW_SUCCESS'));
+            },
+            error: error => {
+                this.isSubmittingWithdrawal = false;
+                this._appService.showError(this._appService.extractErrorMessage(error));
+            }
+        });
+    }
+
+    /** Huỷ một yêu cầu rút còn chờ duyệt. */
+    cancelWithdrawal(item: PayoutStatement): void {
+        this.cancellingId = item.id;
+
+        this._payoutService.cancelPayout(item.id).subscribe({
+            next: () => {
+                this.cancellingId = null;
+                this.reloadWallet();
+                this._appService.showSuccess(this._appService.trans('USER.COMMISSION.WITHDRAW_CANCEL_SUCCESS'));
+            },
+            error: error => {
+                this.cancellingId = null;
+                this._appService.showError(this._appService.extractErrorMessage(error));
+            }
+        });
+    }
+
+    /** Yêu cầu rút sớm còn chờ duyệt thì còn huỷ được. */
+    canCancel(item: PayoutStatement): boolean {
+        return item.type === PayoutType.Early && item.status === PayoutStatus.Pending;
+    }
+
+    /** Đưa người dùng xuống khối ngân hàng nhận tiền để khai hoặc xác minh. */
+    goToBankSection(): void {
+        scrollToSection('bank-account');
     }
 
     /** Nạp lại ví hoa hồng (trạng thái ngân hàng có thể đổi sau khi lưu). */
