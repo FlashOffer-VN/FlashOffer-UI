@@ -14,6 +14,8 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
+import { ModalComponent } from '@shared/components/modal/modal.component';
+import { buildAccountQr } from '@core/constants/bank-catalog';
 
 /**
  * Xác thực tài khoản ngân hàng nhận giải ngân của thành viên.
@@ -31,7 +33,8 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
         StatusTabsComponent,
         ButtonComponent,
         InputComponent,
-        AppDatePipe
+        AppDatePipe,
+        ModalComponent
     ],
     template: `
         <div class="space-y-4">
@@ -137,6 +140,14 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
                                         <td class="px-4 py-3 text-sm text-gray-600 max-w-xs">{{ item.note || '—' }}</td>
                                         <td class="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">{{ item.updatedAt | appDate:'datetime' }}</td>
                                         <td class="px-4 py-3 text-sm whitespace-nowrap">
+                                            <div class="flex flex-wrap items-center gap-2">
+                                                @if (qrUrlOf(item)) {
+                                                    <app-button size="sm" variant="outline"
+                                                        [title]="'ADMIN.BANK_ACCOUNTS.ACTION_QR' | translate"
+                                                        (click)="openQr(item)">
+                                                        <i class="fa-solid fa-qrcode"></i>
+                                                    </app-button>
+                                                }
                                             @if (canVerify) {
                                                 <div class="flex flex-wrap items-center gap-2">
                                                     @if (item.isVerified) {
@@ -152,6 +163,7 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
                                             } @else {
                                                 <span class="text-gray-400">—</span>
                                             }
+                                            </div>
                                         </td>
                                     </tr>
                                 }
@@ -168,6 +180,39 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
                         </app-pagination>
                     </div>
                 }
+
+                <!-- QR chuyển khoản: quét bằng app ngân hàng để kiểm tra tài khoản nhận tiền có tồn tại -->
+                <app-modal [(visible)]="isQrVisible" [title]="'ADMIN.BANK_ACCOUNTS.QR_TITLE' | translate" size="md"
+                    [showFooter]="false" (closed)="isQrVisible = false">
+                    @if (qrItem) {
+                        <div class="space-y-3">
+                            <div class="text-sm text-gray-700">
+                                <div class="font-medium text-gray-900">{{ qrItem.accountHolder }}</div>
+                                <div>{{ qrItem.accountNumber }} · {{ qrItem.bankName }}</div>
+                            </div>
+
+                            @if (qrItem.verificationCode) {
+                                <div class="flex flex-wrap items-center gap-2 text-sm text-gray-700">
+                                    <span>{{ 'ADMIN.BANK_ACCOUNTS.COL_TRANSFER_CODE' | translate }}:</span>
+                                    <code class="px-2 py-1 rounded bg-gray-50 border border-gray-200 font-mono text-xs text-gray-800">{{ qrItem.verificationCode }}</code>
+                                    <app-button size="sm" variant="outline" [title]="'ADMIN.BANK_ACCOUNTS.CODE_COPY' | translate"
+                                        (click)="copyCode(qrItem.verificationCode)">
+                                        <i class="fa-regular fa-copy"></i>
+                                    </app-button>
+                                </div>
+                            }
+
+                            @if (qrItemUrl) {
+                                <div class="flex justify-center">
+                                    <img [src]="qrItemUrl" alt="QR chuyển khoản của thành viên"
+                                        class="w-60 h-60 rounded-lg border border-gray-200 bg-white p-1">
+                                </div>
+                            }
+
+                            <p class="text-xs text-gray-500">{{ 'ADMIN.BANK_ACCOUNTS.QR_HINT' | translate }}</p>
+                        </div>
+                    }
+                </app-modal>
             </div>
         </div>
     `
@@ -261,6 +306,26 @@ export class BankAccountListComponent implements OnInit {
 
             this.saveVerification(item, false, 'ADMIN.BANK_ACCOUNTS.SUCCESS_UNVERIFY');
         });
+    }
+
+    /** QR đang xem để đối chiếu tài khoản nhận tiền của thành viên. */
+    qrItem: BankAccount | null = null;
+    isQrVisible = false;
+
+    /** Mở hộp thoại QR chuyển khoản của một tài khoản. */
+    openQr(item: BankAccount): void {
+        this.qrItem = item;
+        this.isQrVisible = true;
+    }
+
+    /** URL ảnh QR của tài khoản đang xem (kèm số tiền và nội dung xác thực nếu có). */
+    get qrItemUrl(): string | null {
+        return this.qrItem ? this.qrUrlOf(this.qrItem) : null;
+    }
+
+    /** QR chuyển khoản của một tài khoản; chưa nhận ra ngân hàng thì trả về null. */
+    qrUrlOf(item: BankAccount): string | null {
+        return buildAccountQr(item, item.verificationCode ? 1000 : null, item.verificationCode ?? null);
     }
 
     /** Chép mã đối chiếu để đối chiếu với sao kê ngân hàng. */
