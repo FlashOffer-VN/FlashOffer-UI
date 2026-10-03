@@ -1,4 +1,4 @@
-import { Component, HostListener, Inject, PLATFORM_ID, afterNextRender } from '@angular/core';
+import { Component, HostListener, Inject, OnInit, PLATFORM_ID, afterNextRender } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -20,7 +20,7 @@ const DEFAULT_EMAIL = 'info@kindi.vn';
     templateUrl: './contact-floating.component.html',
     styleUrls: ['./contact-floating.component.css']
 })
-export class ContactFloatingComponent {
+export class ContactFloatingComponent implements OnInit {
     phone = DEFAULT_PHONE;
     phoneDisplay = ContactFloatingComponent._formatPhone(DEFAULT_PHONE);
     email = DEFAULT_EMAIL;
@@ -36,8 +36,13 @@ export class ContactFloatingComponent {
         @Inject(PLATFORM_ID) private platformId: any,
         private readonly _settingService: SystemSettingService
     ) {
-        // Trang được prerender nên chỉ tải ở trình duyệt: tải lúc build sẽ "đóng băng" thông tin theo bản build.
+        // Sau khi trang chạy ở trình duyệt thì nạp lại, tránh giữ giá trị của bản dựng sẵn.
         afterNextRender(() => this.loadContact());
+    }
+
+    /** Nạp thông tin liên hệ ngay từ đầu để bản dựng sẵn cũng có nút, không lệch khi thuỷ hợp hoá. */
+    ngOnInit(): void {
+        this.loadContact();
     }
 
     /** Nạp thông tin liên hệ từ cài đặt chung (hotline, email, Zalo, Facebook). */
