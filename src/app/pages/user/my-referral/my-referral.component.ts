@@ -121,14 +121,28 @@ interface MyReferralCard {
                     </div>
 
                     <div class="mt-6" *ngIf="isBrowser() && chartOptions">
-                        <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
-                            {{ 'USER.MY_REFERRAL.STATS_CHART_TITLE' | translate }}
-                        </p>
+                        <div class="mb-2 flex flex-wrap items-center justify-between gap-3">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                {{ 'USER.MY_REFERRAL.STATS_CHART_TITLE' | translate }}
+                            </p>
+                            <div class="flex items-center gap-2">
+                                <app-button [variant]="chartType === 'bar' ? 'primary' : 'secondary'" [size]="'sm'"
+                                    (onClick)="setChartType('bar')">
+                                    {{ 'COMMON.CHART_TYPE.BAR' | translate }}
+                                </app-button>
+                                <app-button [variant]="chartType === 'line' ? 'primary' : 'secondary'" [size]="'sm'"
+                                    (onClick)="setChartType('line')">
+                                    {{ 'COMMON.CHART_TYPE.LINE' | translate }}
+                                </app-button>
+                            </div>
+                        </div>
                         <apx-chart
                             [chart]="chartOptions.chart"
                             [series]="chartOptions.series"
                             [colors]="chartOptions.colors"
                             [plotOptions]="chartOptions.plotOptions"
+                            [stroke]="chartOptions.stroke"
+                            [markers]="chartOptions.markers"
                             [dataLabels]="chartOptions.dataLabels"
                             [grid]="chartOptions.grid"
                             [xaxis]="chartOptions.xaxis"
@@ -225,6 +239,8 @@ export class MyReferralPageComponent implements OnInit, OnDestroy {
     overview: ReferralStatsOverview | null = null;
     statCards: MyReferralCard[] = [];
     chartOptions: ApexOptions | null = null;
+    /** Kiểu biểu đồ phát sinh theo ngày — dạng đường dễ nhìn hơn khi nhiều mốc. */
+    chartType: 'bar' | 'line' = 'line';
 
     events: ReferralEventItem[] = [];
     eventsLoading = false;
@@ -342,6 +358,15 @@ export class MyReferralPageComponent implements OnInit, OnDestroy {
         ];
     }
 
+    setChartType(chartType: 'bar' | 'line'): void {
+        if (this.chartType === chartType) {
+            return;
+        }
+
+        this.chartType = chartType;
+        this.buildChart();
+    }
+
     private buildChart(): void {
         const timeline = this.overview?.timeline ?? [];
         if (timeline.length === 0) {
@@ -349,14 +374,18 @@ export class MyReferralPageComponent implements OnInit, OnDestroy {
             return;
         }
 
+        const isLine = this.chartType === 'line';
+
         this.chartOptions = {
-            chart: { type: 'bar', height: 260, toolbar: { show: false }, fontFamily: 'inherit' },
+            chart: { type: this.chartType, height: 260, toolbar: { show: false }, fontFamily: 'inherit' },
             series: [{
                 name: this._appService.trans('USER.MY_REFERRAL.STATS_CHART_TITLE'),
                 data: timeline.map(x => x.count)
             }],
             colors: [CHART_PALETTE[0]],
-            plotOptions: { bar: { borderRadius: 4, columnWidth: '45%' } },
+            plotOptions: isLine ? {} : { bar: { borderRadius: 4, columnWidth: '45%' } },
+            stroke: isLine ? { curve: 'smooth', width: 3 } : { width: 0 },
+            markers: isLine ? { size: 4, strokeWidth: 2, hover: { size: 6 } } : { size: 0 },
             dataLabels: { enabled: false },
             grid: { borderColor: '#e2e8f0', strokeDashArray: 4 },
             xaxis: {

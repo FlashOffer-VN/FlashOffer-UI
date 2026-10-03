@@ -31,7 +31,19 @@
 
         <!-- Biểu đồ phát sinh theo ngày -->
         <section class="dashboard-section">
-            <h2 class="section-title">{{ 'ADMIN.REFERRAL_STATS.CHART_TITLE' | translate }}</h2>
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <h2 class="section-title">{{ 'ADMIN.REFERRAL_STATS.CHART_TITLE' | translate }}</h2>
+                <div class="flex items-center gap-2">
+                    <app-button [variant]="chartType === 'bar' ? 'primary' : 'secondary'" [size]="'sm'"
+                        (onClick)="setChartType('bar')">
+                        {{ 'COMMON.CHART_TYPE.BAR' | translate }}
+                    </app-button>
+                    <app-button [variant]="chartType === 'line' ? 'primary' : 'secondary'" [size]="'sm'"
+                        (onClick)="setChartType('line')">
+                        {{ 'COMMON.CHART_TYPE.LINE' | translate }}
+                    </app-button>
+                </div>
+            </div>
             <div class="chart-card">
                 <apx-chart
                     *ngIf="isBrowser() && chartOptions"
@@ -39,6 +51,8 @@
                     [series]="chartOptions.series"
                     [colors]="chartOptions.colors"
                     [plotOptions]="chartOptions.plotOptions"
+                    [stroke]="chartOptions.stroke"
+                    [markers]="chartOptions.markers"
                     [dataLabels]="chartOptions.dataLabels"
                     [grid]="chartOptions.grid"
                     [xaxis]="chartOptions.xaxis"

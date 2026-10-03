@@ -1056,6 +1056,10 @@
         }
     },
     "COMMON": {
+        "CHART_TYPE": {
+            "BAR": "Column",
+            "LINE": "Line"
+        },
         "ALL": "All",
         "PROVINCE": "Province/City",
         "PROVINCE_PLACEHOLDER": "Select province/city",
