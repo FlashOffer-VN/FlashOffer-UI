@@ -1,18 +1,35 @@
 <div class="contact-floating-wrap">
+    <!-- Nút Zalo -->
+    @if (zaloLink) {
+        <a class="contact-floating-btn" [href]="zaloLink" target="_blank" rel="noopener"
+            [attr.aria-label]="'CONTACT_FLOATING.ZALO' | translate" [title]="'CONTACT_FLOATING.ZALO' | translate">
+            <i class="fa-solid fa-comment-dots"></i>
+        </a>
+    }
+
     <!-- Nút gọi điện -->
-    <a class="contact-floating-btn" [href]="'tel:' + phone" [attr.aria-label]="'Gọi điện ' + phoneDisplay"
-        [title]="'Gọi ' + phoneDisplay">
+    <a class="contact-floating-btn" [href]="'tel:' + phone" [attr.aria-label]="'CONTACT_FLOATING.CALL' | translate"
+        [title]="('CONTACT_FLOATING.CALL' | translate) + ' ' + phoneDisplay">
         <i class="fa-solid fa-phone"></i>
     </a>
 
     <!-- Nút email -->
-    <a class="contact-floating-btn" [href]="'mailto:' + email" aria-label="Gửi email" [title]="'Email: ' + email">
+    <a class="contact-floating-btn" [href]="'mailto:' + email" [attr.aria-label]="'CONTACT_FLOATING.EMAIL' | translate"
+        [title]="('CONTACT_FLOATING.EMAIL' | translate) + ': ' + email">
         <i class="fa-solid fa-envelope"></i>
     </a>
 
-    <!-- Nút scroll-to-top - NHÚNG TRỰC TIẾP VÀO ĐÂY -->
+    <!-- Nút Facebook (chỉ hiện khi đã cấu hình) -->
+    @if (facebookLink) {
+        <a class="contact-floating-btn" [href]="facebookLink" target="_blank" rel="noopener"
+            [attr.aria-label]="'CONTACT_FLOATING.FACEBOOK' | translate" [title]="'CONTACT_FLOATING.FACEBOOK' | translate">
+            <i class="fa-brands fa-facebook-f"></i>
+        </a>
+    }
+
+    <!-- Nút scroll-to-top -->
     <button class="contact-floating-btn scroll-top-btn" [class.visible]="isVisible" (click)="scrollToTop()"
-        aria-label="Scroll to top">
+        [attr.aria-label]="'CONTACT_FLOATING.TOP' | translate" [title]="'CONTACT_FLOATING.TOP' | translate">
         <svg class="scroll-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
             stroke-linecap="round" stroke-linejoin="round">
             <polyline points="18 15 12 9 6 15"></polyline>

@@ -22,12 +22,14 @@ import {
 } from '@core/models/payout.model';
 import { CommissionType, getCommissionTypeLabel } from '@core/models/partner.model';
 import { UserRole, toUserRole } from '@core/models/auth.model';
+import { bankSelectOptions, buildAccountQr } from '@core/constants/bank-catalog';
 
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 
 /**
  * Trang hoa hồng của tôi: mức hoa hồng đang áp dụng, ví hoa hồng (khả dụng, chờ duyệt, đã nhận),
@@ -46,7 +48,8 @@ import { ButtonComponent } from '@shared/components/button/button.component';
         AppDatePipe,
         LoadingComponent,
         InputComponent,
-        ButtonComponent
+        ButtonComponent,
+        NgSelectWrapperComponent
     ],
     template: `
         <div class="space-y-5">
@@ -339,13 +342,13 @@ import { ButtonComponent } from '@shared/components/button/button.component';
                     @if (isEditingBank) {
                         <form [formGroup]="bankForm" (ngSubmit)="saveBankAccount()" class="mt-4 space-y-4">
                             <div class="grid gap-4 sm:grid-cols-2">
-                                <app-input formControlName="bankName" type="text" icon="fas fa-university"
+                                <app-ng-select-wrapper formControlName="bankName" [items]="bankOptions"
                                     [label]="'USER.COMMISSION.BANK_NAME' | translate"
                                     [placeholder]="'USER.COMMISSION.BANK_NAME_PLACEHOLDER' | translate"
-                                    [required]="true"
+                                    [required]="true" [searchable]="true" [id]="'bankAccountName'"
                                     [isInvalid]="isBankInvalid('bankName')"
                                     [errorMessage]="bankError('bankName')">
-                                </app-input>
+                                </app-ng-select-wrapper>
 
                                 <app-input formControlName="branch" type="text" icon="fas fa-code-branch"
                                     [label]="'USER.COMMISSION.BANK_BRANCH' | translate"
@@ -421,6 +424,19 @@ import { ButtonComponent } from '@shared/components/button/button.component';
                                     </div>
 
                                     <p class="text-xs text-teal-800 mt-2">{{ 'USER.COMMISSION.BANK_CODE_HINT' | translate }}</p>
+
+                                    <!-- QR chuyển khoản: quét bằng app ngân hàng là ra đúng tài khoản, số tiền và nội dung -->
+                                    @if (verificationQr) {
+                                        <div class="mt-3 flex flex-wrap items-center gap-3">
+                                            <img [src]="verificationQr" alt="QR chuyển khoản xác thực tài khoản"
+                                                class="w-40 h-40 rounded-lg border border-teal-200 bg-white p-1">
+                                            <div class="text-xs text-teal-800 space-y-1">
+                                                <div class="font-medium">{{ 'USER.COMMISSION.BANK_QR_TITLE' | translate }}</div>
+                                                <div>{{ 'USER.COMMISSION.BANK_QR_HINT' | translate }}</div>
+                                                <div>{{ 'USER.COMMISSION.BANK_QR_BANK' | translate }}: {{ bankAccount.bankName }}</div>
+                                            </div>
+                                        </div>
+                                    }
                                     @if (verificationCode.expiresAt) {
                                         <p class="text-xs text-teal-700 mt-1">{{ 'USER.COMMISSION.BANK_CODE_EXPIRES' | translate }}: {{ verificationCode.expiresAt | appDate }}</p>
                                     }
@@ -466,6 +482,9 @@ export class MyCommissionPageComponent implements OnInit {
     readonly bankForm: FormGroup;
     isEditingBank = false;
     isSavingBank = false;
+
+    /** Danh mục ngân hàng cho ô chọn (kèm mã BIN để dựng QR chuyển khoản). */
+    readonly bankOptions = bankSelectOptions();
 
     /** Mã đối chiếu chuyển khoản để xác thực thông tin ngân hàng. */
     verificationCode: BankAccountVerificationCode | null = null;
@@ -622,6 +641,17 @@ export class MyCommissionPageComponent implements OnInit {
                 this._appService.showError(this._appService.extractErrorMessage(error));
             }
         });
+    }
+
+    /** QR chuyển khoản của tài khoản nhận tiền kèm nội dung xác thực; chưa nhận ra ngân hàng thì không hiện. */
+    get verificationQr(): string | null {
+        if (!this.bankAccount) return null;
+
+        return buildAccountQr(
+            this.bankAccount,
+            this.verificationCode?.amount ?? 1000,
+            this.verificationCode?.transferContent ?? this.bankAccount.verificationCode ?? null
+        );
     }
 
     /** Tạo mã đối chiếu chuyển khoản để xác thực thông tin ngân hàng. */

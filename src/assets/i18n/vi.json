@@ -837,7 +837,10 @@
         "BANK_CODE_CREATE": "Tạo mã xác thực",
         "BANK_CODE_CREATE_HINT": "Tạo mã để chuyển khoản xác thực tài khoản nhận tiền.",
         "BANK_CODE_ISSUED": "Đã tạo mã xác thực chuyển khoản.",
-        "BANK_CODE_COPIED": "Đã chép nội dung chuyển khoản."
+        "BANK_CODE_COPIED": "Đã chép nội dung chuyển khoản.",
+        "BANK_QR_TITLE": "QR chuyển khoản xác thực",
+        "BANK_QR_HINT": "Quét mã bằng app ngân hàng để điền sẵn tài khoản, số tiền và nội dung.",
+        "BANK_QR_BANK": "Ngân hàng"
     },
         "WELCOME_TITLE": "Chào mừng bạn trở lại!",
         "WELCOME_DESCRIPTION": "Tài khoản của bạn đã sẵn sàng. Các tính năng dành cho thành viên sẽ được cập nhật sớm.",
@@ -1349,7 +1352,8 @@
             "ERROR_FORM_INVALID": "Có trường chưa hợp lệ, kiểm tra lại trước khi lưu.",
             "FIELD_REFERRAL_CODE_PREFIX_HINT": "Tiền tố mã giới thiệu, ví dụ CTV."
         },
-        "BANK_ACCOUNTS": {
+        "BANK_ACCOUNTS":
+        {
             "TITLE": "Xác thực tài khoản ngân hàng",
             "SUBTITLE": "Đối chiếu thông tin ngân hàng thành viên khai báo trước khi chi trả hoa hồng.",
             "TAB_ALL": "Tất cả",
@@ -1383,39 +1387,10 @@
             "COL_TRANSFER_CODE": "Nội dung chuyển khoản",
             "NO_TRANSFER_CODE": "Chưa tạo mã",
             "CODE_COPY": "Chép mã",
-            "CODE_COPIED": "Đã chép mã đối chiếu."
-        },
-        "BANK_ACCOUNTS": {
-            "TITLE": "Xác thực tài khoản ngân hàng",
-            "SUBTITLE": "Đối chiếu thông tin ngân hàng thành viên khai báo trước khi chi trả hoa hồng.",
-            "TAB_ALL": "Tất cả",
-            "TAB_PENDING": "Chờ xác thực",
-            "TAB_VERIFIED": "Đã xác thực",
-            "SEARCH_PLACEHOLDER": "Tìm theo tên, tài khoản hoặc số tài khoản",
-            "SEARCH": "Tìm kiếm",
-            "RESET": "Đặt lại",
-            "TOTAL": "Tổng số",
-            "EMPTY": "Chưa có thông tin ngân hàng nào.",
-            "COL_MEMBER": "Thành viên",
-            "COL_BANK": "Ngân hàng",
-            "COL_ACCOUNT": "Số tài khoản",
-            "COL_HOLDER": "Chủ tài khoản",
-            "COL_STATUS": "Trạng thái",
-            "COL_NOTE": "Ghi chú",
-            "COL_UPDATED": "Cập nhật",
-            "COL_ACTIONS": "Xử lý",
-            "NO_BRANCH": "Không ghi chi nhánh",
-            "STATUS_VERIFIED": "Đã xác thực",
-            "STATUS_PENDING": "Chờ xác thực",
-            "VERIFIED_AT": "Xác thực lúc",
-            "ACTION_VERIFY": "Xác thực",
-            "ACTION_UNVERIFY": "Bỏ xác thực",
-            "CONFIRM_VERIFY_TITLE": "Xác thực tài khoản ngân hàng",
-            "CONFIRM_VERIFY_MESSAGE": "Ghi nhận thông tin ngân hàng này đã đối chiếu đúng với thành viên?",
-            "CONFIRM_UNVERIFY_TITLE": "Bỏ xác thực tài khoản ngân hàng",
-            "CONFIRM_UNVERIFY_MESSAGE": "Thông tin này sẽ trở về trạng thái chờ xác thực và không nên chi trả cho tới khi xác thực lại.",
-            "SUCCESS_VERIFY": "Đã xác thực tài khoản ngân hàng.",
-            "SUCCESS_UNVERIFY": "Đã bỏ xác thực tài khoản ngân hàng."
+            "CODE_COPIED": "Đã chép mã đối chiếu.",
+            "ACTION_QR": "Xem QR chuyển khoản",
+            "QR_TITLE": "QR chuyển khoản của thành viên",
+            "QR_HINT": "Mở app ngân hàng và quét mã để kiểm tra tài khoản nhận tiền có tồn tại, sau đó ghi nhận xác thực."
         },
         "PAYOUTS": {
             "TITLE": "Duyệt chi trả hoa hồng",
@@ -2243,5 +2218,12 @@
             "VIEW": "Màn hình",
             "ACTION": "Thao tác"
         }
+    },
+    "CONTACT_FLOATING": {
+        "CALL": "Gọi điện",
+        "ZALO": "Chat Zalo",
+        "EMAIL": "Gửi email",
+        "FACEBOOK": "Facebook",
+        "TOP": "Lên đầu trang"
     }
 }

@@ -12,9 +12,11 @@ import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { CURRENCY_OPTIONS, SelectOption, timeZoneOptions, withCurrentOption } from '@core/constants/format-options';
 
 /** Kiểu điều khiển của một trường cài đặt. */
-type SettingFieldType = 'text' | 'number' | 'email' | 'phone' | 'url' | 'bool' | 'language';
+type SettingFieldType = 'text' | 'number' | 'email' | 'phone' | 'url' | 'bool' | 'language' | 'select';
 
 interface SettingField {
     /** Tên trường trong cài đặt chung. */
@@ -25,6 +27,8 @@ interface SettingField {
     hint?: string;
     type: SettingFieldType;
     placeholder?: string;
+    /** Tuỳ chọn cho trường dạng chọn (mặc định lấy theo trường). */
+    options?: SelectOption[];
 }
 
 interface SettingSection {
@@ -47,7 +51,8 @@ interface SettingSection {
         ButtonComponent,
         InputComponent,
         LoadingComponent,
-        AppDatePipe
+        AppDatePipe,
+        NgSelectWrapperComponent
     ],
     template: `
         <div class="space-y-4">
@@ -74,19 +79,19 @@ interface SettingSection {
                             </div>
 
                             <div class="overflow-x-auto">
-                                <table class="w-full text-sm">
+                                <table class="w-full text-sm table-fixed">
                                     <thead class="bg-gray-50 border-b border-gray-200">
                                         <tr>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-64">{{ 'ADMIN.SETTINGS.COL_FIELD' | translate }}</th>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.SETTINGS.COL_CURRENT' | translate }}</th>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-80">{{ 'ADMIN.SETTINGS.COL_NEW' | translate }}</th>
-                                            <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-40">{{ 'ADMIN.SETTINGS.COL_UTILITY' | translate }}</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[22%]">{{ 'ADMIN.SETTINGS.COL_FIELD' | translate }}</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[28%]">{{ 'ADMIN.SETTINGS.COL_CURRENT' | translate }}</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[28%]">{{ 'ADMIN.SETTINGS.COL_NEW' | translate }}</th>
+                                            <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-[22%]">{{ 'ADMIN.SETTINGS.COL_UTILITY' | translate }}</th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-100">
                                         @for (field of section.fields; track field.key) {
                                             <tr [class.bg-amber-50]="isChanged(field.key)">
-                                                <td class="px-4 py-3 align-top">
+                                                <td class="px-4 py-3 align-top break-words">
                                                     <div class="font-medium text-gray-800">{{ field.label | translate }}</div>
                                                     @if (field.hint) {
                                                         <div class="text-xs text-gray-500 mt-0.5">{{ field.hint | translate }}</div>
@@ -98,7 +103,7 @@ interface SettingSection {
                                                     }
                                                 </td>
 
-                                                <td class="px-4 py-3 align-top text-gray-700">
+                                                <td class="px-4 py-3 align-top text-gray-700 break-words whitespace-normal">
                                                     @if (displayCurrent(field) === '') {
                                                         <span class="text-gray-400">{{ 'ADMIN.SETTINGS.CURRENT_EMPTY' | translate }}</span>
                                                     } @else if (field.type === 'url') {
@@ -111,7 +116,7 @@ interface SettingSection {
                                                         <a [href]="'tel:' + displayCurrent(field)"
                                                             class="text-teal-700 hover:underline">{{ displayCurrent(field) }}</a>
                                                     } @else {
-                                                        <span class="break-words">{{ displayCurrent(field) }}</span>
+                                                        <span class="break-words whitespace-normal">{{ displayCurrent(field) }}</span>
                                                     }
                                                 </td>
 
@@ -138,6 +143,16 @@ interface SettingSection {
                                                                 </label>
                                                             </div>
                                                         }
+                                                        @case ('select') {
+                                                            <app-ng-select-wrapper [formControlName]="field.key"
+                                                                [items]="optionsOf(field)"
+                                                                [id]="'setting_' + field.key"
+                                                                [searchable]="true" [clearable]="true"
+                                                                [placeholder]="field.placeholder ? (field.placeholder | translate) : ''"
+                                                                [isInvalid]="isInvalid(field.key)"
+                                                                [errorMessage]="errorOf(field.key)">
+                                                            </app-ng-select-wrapper>
+                                                        }
                                                         @default {
                                                             <app-input [formControlName]="field.key"
                                                                 [type]="field.type === 'number' ? 'number' : 'text'"
@@ -151,30 +166,37 @@ interface SettingSection {
                                                 </td>
 
                                                 <td class="px-4 py-3 align-top">
-                                                    <div class="flex flex-wrap items-center justify-end gap-2">
+                                                    <div class="flex flex-wrap items-center justify-end gap-1">
                                                         <app-button size="sm" variant="outline" [disabled]="!displayCurrent(field)"
-                                                            (click)="copyValue(field)">
-                                                            <i class="fa-regular fa-copy mr-1"></i>{{ 'ADMIN.SETTINGS.UTILITY_COPY' | translate }}
+                                                            [title]="'ADMIN.SETTINGS.UTILITY_COPY' | translate" (click)="copyValue(field)">
+                                                            <i class="fa-regular fa-copy"></i>
                                                         </app-button>
 
                                                         @if (field.type === 'url' && displayCurrent(field)) {
-                                                            <app-button size="sm" variant="outline" (click)="openLink(displayCurrent(field))">
-                                                                <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>{{ 'ADMIN.SETTINGS.UTILITY_OPEN' | translate }}
+                                                            <app-button size="sm" variant="outline"
+                                                                [title]="'ADMIN.SETTINGS.UTILITY_OPEN' | translate"
+                                                                (click)="openLink(displayCurrent(field))">
+                                                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                                             </app-button>
                                                         }
                                                         @if (field.type === 'phone' && displayCurrent(field)) {
-                                                            <app-button size="sm" variant="outline" (click)="openLink('tel:' + displayCurrent(field))">
-                                                                <i class="fa-solid fa-phone mr-1"></i>{{ 'ADMIN.SETTINGS.UTILITY_CALL' | translate }}
+                                                            <app-button size="sm" variant="outline"
+                                                                [title]="'ADMIN.SETTINGS.UTILITY_CALL' | translate"
+                                                                (click)="openLink('tel:' + displayCurrent(field))">
+                                                                <i class="fa-solid fa-phone"></i>
                                                             </app-button>
                                                         }
                                                         @if (field.type === 'email' && displayCurrent(field)) {
-                                                            <app-button size="sm" variant="outline" (click)="openLink('mailto:' + displayCurrent(field))">
-                                                                <i class="fa-regular fa-envelope mr-1"></i>{{ 'ADMIN.SETTINGS.UTILITY_EMAIL' | translate }}
+                                                            <app-button size="sm" variant="outline"
+                                                                [title]="'ADMIN.SETTINGS.UTILITY_EMAIL' | translate"
+                                                                (click)="openLink('mailto:' + displayCurrent(field))">
+                                                                <i class="fa-regular fa-envelope"></i>
                                                             </app-button>
                                                         }
 
-                                                        <app-button size="sm" variant="outline" (click)="useDefault(field)">
-                                                            <i class="fa-solid fa-rotate-left mr-1"></i>{{ 'ADMIN.SETTINGS.UTILITY_DEFAULT' | translate }}
+                                                        <app-button size="sm" variant="outline"
+                                                            [title]="'ADMIN.SETTINGS.UTILITY_DEFAULT' | translate" (click)="useDefault(field)">
+                                                            <i class="fa-solid fa-rotate-left"></i>
                                                         </app-button>
                                                     </div>
                                                 </td>
@@ -254,8 +276,8 @@ export class AdminGeneralSettingsComponent implements OnInit {
             description: 'ADMIN.SETTINGS.SECTION_FORMAT_DESC',
             fields: [
                 { key: 'defaultLanguage', label: 'ADMIN.SETTINGS.FIELD_DEFAULT_LANGUAGE', type: 'language' },
-                { key: 'timeZone', label: 'ADMIN.SETTINGS.FIELD_TIME_ZONE', type: 'text' },
-                { key: 'currencySymbol', label: 'ADMIN.SETTINGS.FIELD_CURRENCY_SYMBOL', type: 'text' },
+                { key: 'timeZone', label: 'ADMIN.SETTINGS.FIELD_TIME_ZONE', type: 'select' },
+                { key: 'currencySymbol', label: 'ADMIN.SETTINGS.FIELD_CURRENCY_SYMBOL', type: 'select' },
                 { key: 'dateFormat', label: 'ADMIN.SETTINGS.FIELD_DATE_FORMAT', type: 'text',
                   hint: 'ADMIN.SETTINGS.FIELD_DATE_FORMAT_HINT' }
             ]
@@ -305,12 +327,23 @@ export class AdminGeneralSettingsComponent implements OnInit {
         }
     ];
 
+    /** Múi giờ lấy từ trình duyệt (kèm chênh lệch UTC), tính một lần cho cả màn hình. */
+    private readonly _timeZones: SelectOption[] = timeZoneOptions();
+
     readonly form: FormGroup;
 
     /** Giá trị đang lưu trên hệ thống (cột "Giá trị hiện tại"). */
     current: SystemSetting | null = null;
     /** Giá trị mặc định (nút khôi phục mặc định của từng trường). */
     defaults: SystemSetting | null = null;
+
+    /** Tuỳ chọn của ô chọn; giá trị đang lưu luôn được thêm vào để ô chọn không hiện trống. */
+    optionsOf(field: SettingField): SelectOption[] {
+        if (field.key === 'timeZone') return withCurrentOption(this._timeZones, this.current?.timeZone);
+        if (field.key === 'currencySymbol') return withCurrentOption(CURRENCY_OPTIONS, this.current?.currencySymbol);
+
+        return field.options ?? [];
+    }
 
     isLoading = false;
     isSaving = false;

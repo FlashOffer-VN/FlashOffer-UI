@@ -881,7 +881,10 @@
         "BANK_CODE_CREATE": "Create verification code",
         "BANK_CODE_CREATE_HINT": "Create a code to transfer and verify your payout account.",
         "BANK_CODE_ISSUED": "Transfer verification code created.",
-        "BANK_CODE_COPIED": "Transfer content copied."
+        "BANK_CODE_COPIED": "Transfer content copied.",
+        "BANK_QR_TITLE": "Verification transfer QR",
+        "BANK_QR_HINT": "Scan with your banking app to fill in the account, amount and content.",
+        "BANK_QR_BANK": "Bank"
     },
         "WELCOME_TITLE": "Welcome back!",
         "WELCOME_DESCRIPTION": "Your account is ready. More member features will be available soon.",
@@ -1391,7 +1394,8 @@
             "ERROR_FORM_INVALID": "Some fields are invalid, please review before saving.",
             "FIELD_REFERRAL_CODE_PREFIX_HINT": "Referral code prefix, e.g. CTV."
         },
-        "BANK_ACCOUNTS": {
+        "BANK_ACCOUNTS":
+        {
             "TITLE": "Bank account verification",
             "SUBTITLE": "Check the bank details members submitted before paying out commission.",
             "TAB_ALL": "All",
@@ -1425,39 +1429,10 @@
             "COL_TRANSFER_CODE": "Transfer reference",
             "NO_TRANSFER_CODE": "No code",
             "CODE_COPY": "Copy code",
-            "CODE_COPIED": "Reference code copied."
-        },
-        "BANK_ACCOUNTS": {
-            "TITLE": "Bank account verification",
-            "SUBTITLE": "Check the bank details members submitted before paying out commission.",
-            "TAB_ALL": "All",
-            "TAB_PENDING": "Pending",
-            "TAB_VERIFIED": "Verified",
-            "SEARCH_PLACEHOLDER": "Search by name, username or account number",
-            "SEARCH": "Search",
-            "RESET": "Reset",
-            "TOTAL": "Total",
-            "EMPTY": "No bank account information yet.",
-            "COL_MEMBER": "Member",
-            "COL_BANK": "Bank",
-            "COL_ACCOUNT": "Account number",
-            "COL_HOLDER": "Account holder",
-            "COL_STATUS": "Status",
-            "COL_NOTE": "Note",
-            "COL_UPDATED": "Updated",
-            "COL_ACTIONS": "Actions",
-            "NO_BRANCH": "No branch",
-            "STATUS_VERIFIED": "Verified",
-            "STATUS_PENDING": "Pending",
-            "VERIFIED_AT": "Verified at",
-            "ACTION_VERIFY": "Verify",
-            "ACTION_UNVERIFY": "Unverify",
-            "CONFIRM_VERIFY_TITLE": "Verify bank account",
-            "CONFIRM_VERIFY_MESSAGE": "Mark these bank details as verified for this member?",
-            "CONFIRM_UNVERIFY_TITLE": "Unverify bank account",
-            "CONFIRM_UNVERIFY_MESSAGE": "This will return to pending; do not pay out until it is verified again.",
-            "SUCCESS_VERIFY": "Bank account verified.",
-            "SUCCESS_UNVERIFY": "Bank account verification removed."
+            "CODE_COPIED": "Reference code copied.",
+            "ACTION_QR": "View transfer QR",
+            "QR_TITLE": "Member transfer QR",
+            "QR_HINT": "Open a banking app and scan the code to confirm the payout account exists, then record the verification."
         },
         "PAYOUTS": {
             "TITLE": "Commission payouts",
@@ -2280,5 +2255,12 @@
             "VIEW": "Screen",
             "ACTION": "Action"
         }
+    },
+    "CONTACT_FLOATING": {
+        "CALL": "Call us",
+        "ZALO": "Chat on Zalo",
+        "EMAIL": "Send email",
+        "FACEBOOK": "Facebook",
+        "TOP": "Back to top"
     }
 }

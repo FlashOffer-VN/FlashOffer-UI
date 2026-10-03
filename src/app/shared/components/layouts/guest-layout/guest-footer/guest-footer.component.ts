@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, afterNextRender } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -21,16 +21,20 @@ interface FooterSocial {
     styleUrls: ['./guest-footer.component.css']
 })
 /** Footer trang người dùng: thông tin liên hệ và liên kết mạng xã hội lấy từ cài đặt chung. */
-export class GuestFooterComponent implements OnInit {
+export class GuestFooterComponent {
     /** Cấu hình công khai; chưa cấu hình hoặc API lỗi thì footer giữ nguyên như trước. */
     setting: PublicSystemSetting | null = null;
 
     /** Chỉ những nền tảng đã nhập liên kết mới hiển thị. */
     socials: FooterSocial[] = [];
 
-    constructor(private readonly _settingService: SystemSettingService) { }
+    constructor(private readonly _settingService: SystemSettingService) {
+        // Trang được prerender nên chỉ tải ở trình duyệt: tải lúc build sẽ "đóng băng" thông tin theo bản build.
+        afterNextRender(() => this.loadSetting());
+    }
 
-    ngOnInit(): void {
+    /** Nạp thông tin liên hệ và liên kết mạng xã hội từ cài đặt chung. */
+    private loadSetting(): void {
         this._settingService.getPublic().subscribe({
             next: response => {
                 this.setting = response.data ?? null;
