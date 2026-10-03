@@ -59,4 +59,20 @@ export class ReferralService {
             query
         );
     }
+
+    /**
+     * Thống kê giới thiệu của chính tài khoản đang đăng nhập (khu vực thành viên).
+     * GET /api/v1/Referrals/me/stats
+     */
+    getMyStats(query: ReferralStatsQuery): Observable<ApiResponse<ReferralStatsOverview>> {
+        return this._apiService.get<ApiResponse<ReferralStatsOverview>>(`${this._baseUrl}/me/stats`, query);
+    }
+
+    /**
+     * Phát sinh giới thiệu của chính tài khoản đang đăng nhập (khu vực thành viên).
+     * GET /api/v1/Referrals/me/events
+     */
+    getMyEvents(query: ReferralEventQuery): Observable<PagedResponse<ReferralEventItem>> {
+        return this._apiService.get<PagedResponse<ReferralEventItem>>(`${this._baseUrl}/me/events`, query);
+    }
 }

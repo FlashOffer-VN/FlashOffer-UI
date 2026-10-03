@@ -1,19 +1,53 @@
 // src/app/pages/user/my-referral/my-referral.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+import { finalize } from 'rxjs/operators';
+import type { ApexOptions } from 'apexcharts';
+import { ChartComponent } from 'ng-apexcharts';
 
 import { AppService } from '@core/services/app.service';
 import { buildReferralShareUrl, copyToClipboard } from '@core/utils/share-link';
+import { isBrowser } from '@core/utils/platform';
+import { PagedResponse } from '@core/models/paged-response.model';
+import {
+    ReferralEventItem,
+    ReferralEventStatus,
+    ReferralEventType,
+    ReferralStatsOverview
+} from '@core/models/referral-stats.model';
 
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
+import { PaginationComponent } from '@shared/components/pagination/pagination.component';
+import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.component';
+import { AppDatePipe } from '@shared/pipes/app-date.pipe';
+
+const CHART_PALETTE = ['#007f94', '#7c3aed', '#ea580c', '#16a34a', '#db2777', '#2563eb'];
+
+interface MyReferralCard {
+    key: string;
+    label: string;
+    icon: string;
+    total: number;
+    note: string | null;
+}
 
 /** Mã chia sẻ của tài khoản đang đăng nhập (khu vực thành viên) */
 @Component({
     selector: 'app-my-referral',
     standalone: true,
-    imports: [CommonModule, TranslateModule, ButtonComponent, LoadingComponent],
+    imports: [
+        CommonModule,
+        TranslateModule,
+        ChartComponent,
+        ButtonComponent,
+        LoadingComponent,
+        PaginationComponent,
+        BadgeComponent,
+        AppDatePipe
+    ],
     template: `
         <div class="space-y-6">
             <section class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100">
@@ -61,6 +95,111 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
             </section>
 
             <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
+                <h2 class="text-lg font-semibold text-slate-800">{{ 'USER.MY_REFERRAL.STATS_TITLE' | translate }}</h2>
+                <p class="mt-1 text-sm text-slate-500">{{ 'USER.MY_REFERRAL.STATS_DESCRIPTION' | translate }}</p>
+
+                <div *ngIf="statsLoading" class="flex justify-center py-10">
+                    <app-loading></app-loading>
+                </div>
+
+                <ng-container *ngIf="!statsLoading">
+                    <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        <div *ngFor="let card of statCards" class="rounded-xl bg-slate-50 p-4">
+                            <div class="flex items-center gap-3">
+                                <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white text-primary">
+                                    <i [class]="card.icon"></i>
+                                </span>
+                                <div class="min-w-0">
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                        {{ card.label | translate }}
+                                    </p>
+                                    <p class="text-xl font-bold text-slate-800">{{ card.total }}</p>
+                                </div>
+                            </div>
+                            <p class="mt-2 text-xs text-slate-500" *ngIf="card.note">{{ card.note }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6" *ngIf="isBrowser() && chartOptions">
+                        <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                            {{ 'USER.MY_REFERRAL.STATS_CHART_TITLE' | translate }}
+                        </p>
+                        <apx-chart
+                            [chart]="chartOptions.chart"
+                            [series]="chartOptions.series"
+                            [colors]="chartOptions.colors"
+                            [plotOptions]="chartOptions.plotOptions"
+                            [dataLabels]="chartOptions.dataLabels"
+                            [grid]="chartOptions.grid"
+                            [xaxis]="chartOptions.xaxis"
+                            [yaxis]="chartOptions.yaxis"
+                            [legend]="chartOptions.legend"
+                            [tooltip]="chartOptions.tooltip"
+                            [noData]="chartOptions.noData"
+                        ></apx-chart>
+                    </div>
+
+                    <div class="mt-6">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                            {{ 'USER.MY_REFERRAL.STATS_EVENTS_TITLE' | translate }}
+                        </p>
+
+                        <div class="mt-3 overflow-x-auto rounded-xl ring-1 ring-slate-100">
+                            <table class="w-full text-sm">
+                                <thead class="bg-slate-50">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
+                                            {{ 'USER.MY_REFERRAL.STATS_COL_TIME' | translate }}
+                                        </th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
+                                            {{ 'USER.MY_REFERRAL.STATS_COL_TYPE' | translate }}
+                                        </th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
+                                            {{ 'USER.MY_REFERRAL.STATS_COL_TARGET' | translate }}
+                                        </th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
+                                            {{ 'USER.MY_REFERRAL.STATS_COL_STATUS' | translate }}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    <tr *ngIf="eventsLoading">
+                                        <td colspan="4" class="px-4 py-6 text-center"><app-loading></app-loading></td>
+                                    </tr>
+                                    <tr *ngIf="!eventsLoading && events.length === 0">
+                                        <td colspan="4" class="px-4 py-6 text-center text-slate-500">
+                                            {{ 'USER.MY_REFERRAL.STATS_EVENTS_EMPTY' | translate }}
+                                        </td>
+                                    </tr>
+                                    <tr *ngFor="let event of events">
+                                        <td class="px-4 py-3 text-slate-500">{{ event.createdAt | appDate }}</td>
+                                        <td class="px-4 py-3 text-slate-700">{{ eventTypeKey(event.eventType) | translate }}</td>
+                                        <td class="px-4 py-3 font-mono text-slate-600">{{ event.refEntityCode || '--' }}</td>
+                                        <td class="px-4 py-3">
+                                            <app-badge [label]="eventStatusKey(event.status)"
+                                                [variant]="eventStatusVariant(event.status)" [size]="'sm'">
+                                            </app-badge>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <app-pagination
+                            [pageNumber]="eventsPage"
+                            [pageSize]="eventsPageSize"
+                            [totalCount]="eventsTotalCount"
+                            [totalPages]="eventsTotalPages"
+                            [hasPreviousPage]="eventsHasPreviousPage"
+                            [hasNextPage]="eventsHasNextPage"
+                            (pageChange)="onEventsPageChange($event)"
+                            (pageSizeChange)="onEventsPageSizeChange($event)">
+                        </app-pagination>
+                    </div>
+                </ng-container>
+            </section>
+
+            <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
                 <h2 class="text-lg font-semibold text-slate-800">{{ 'USER.MY_REFERRAL.USED_TITLE' | translate }}</h2>
                 <p class="mt-1 text-sm text-slate-500">{{ 'USER.MY_REFERRAL.USED_DESCRIPTION' | translate }}</p>
 
@@ -74,10 +213,29 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
         </div>
     `,
 })
-export class MyReferralPageComponent implements OnInit {
+export class MyReferralPageComponent implements OnInit, OnDestroy {
     referralCode: string | null = null;
     shareLink = '';
     isLoading = true;
+
+    readonly isBrowser = isBrowser;
+
+    // Thống kê giới thiệu của chính tài khoản này
+    statsLoading = true;
+    overview: ReferralStatsOverview | null = null;
+    statCards: MyReferralCard[] = [];
+    chartOptions: ApexOptions | null = null;
+
+    events: ReferralEventItem[] = [];
+    eventsLoading = false;
+    eventsPage = 1;
+    eventsPageSize = 10;
+    eventsTotalCount = 0;
+    eventsTotalPages = 0;
+    eventsHasPreviousPage = false;
+    eventsHasNextPage = false;
+
+    private langSub: Subscription | null = null;
 
     /** Các luồng ghi nhận mã chia sẻ (cột ReferralCode ở các bảng nghiệp vụ) */
     readonly usedFlows: string[] = [
@@ -101,6 +259,181 @@ export class MyReferralPageComponent implements OnInit {
                 this.isLoading = false;
             }
         });
+
+        this.loadStats();
+        this.loadEvents();
+
+        // Tên series của chart được gắn lúc dựng -> dựng lại khi đổi ngôn ngữ
+        this.langSub = this._appService.onLanguageChange().subscribe(() => this.buildChart());
+    }
+
+    ngOnDestroy(): void {
+        this.langSub?.unsubscribe();
+    }
+
+    // ===== Thống kê của tôi =====
+
+    private loadStats(): void {
+        this.statsLoading = true;
+        this._appService.referralService.getMyStats({})
+            .pipe(finalize(() => { this.statsLoading = false; }))
+            .subscribe({
+                next: (response) => {
+                    this.buildCards(response.data);
+                    this.overview = response.data;
+                    this.buildChart();
+                },
+                error: () => { this.statCards = []; }
+            });
+    }
+
+    private buildCards(overview: ReferralStatsOverview | null): void {
+        const s = overview?.summary;
+        if (!s) {
+            this.statCards = [];
+            return;
+        }
+
+        this.statCards = [
+            {
+                key: 'REFERRED_USERS',
+                label: 'ADMIN.REFERRAL_STATS.CARD_REFERRED_USERS',
+                icon: 'fa-solid fa-user-plus',
+                total: s.totalReferredUsers,
+                note: s.totalReferredGuestUsers > 0
+                    ? this._appService.trans('ADMIN.REFERRAL_STATS.GUEST_NOTE', { count: s.totalReferredGuestUsers })
+                    : null
+            },
+            {
+                key: 'GROUP_BUYING',
+                label: 'ADMIN.REFERRAL_STATS.CARD_GROUP_BUYING',
+                icon: 'fa-solid fa-people-group',
+                total: s.totalGroupBuyingRequests,
+                note: null
+            },
+            {
+                key: 'PURCHASE_REQUESTS',
+                label: 'ADMIN.REFERRAL_STATS.CARD_PURCHASE_REQUESTS',
+                icon: 'fa-solid fa-cart-shopping',
+                total: s.totalPurchaseRequests,
+                note: null
+            },
+            {
+                key: 'OFFER_REQUESTS',
+                label: 'ADMIN.REFERRAL_STATS.CARD_OFFER_REQUESTS',
+                icon: 'fa-solid fa-tags',
+                total: s.totalOfferRequests,
+                note: null
+            },
+            {
+                key: 'GROUP_MEMBERS',
+                label: 'ADMIN.REFERRAL_STATS.COL_GROUP_MEMBERS',
+                icon: 'fa-solid fa-people-roof',
+                total: s.totalGroupMemberJoins,
+                note: null
+            },
+            {
+                key: 'CANCELLED',
+                label: 'ADMIN.REFERRAL_STATS.CARD_CANCELLED',
+                icon: 'fa-solid fa-ban',
+                total: s.totalCancelledEvents,
+                note: s.totalCancelledEvents > 0 ? this._appService.trans('ADMIN.REFERRAL_STATS.CANCELLED_NOTE') : null
+            }
+        ];
+    }
+
+    private buildChart(): void {
+        const timeline = this.overview?.timeline ?? [];
+        if (timeline.length === 0) {
+            this.chartOptions = null;
+            return;
+        }
+
+        this.chartOptions = {
+            chart: { type: 'bar', height: 260, toolbar: { show: false }, fontFamily: 'inherit' },
+            series: [{
+                name: this._appService.trans('USER.MY_REFERRAL.STATS_CHART_TITLE'),
+                data: timeline.map(x => x.count)
+            }],
+            colors: [CHART_PALETTE[0]],
+            plotOptions: { bar: { borderRadius: 4, columnWidth: '45%' } },
+            dataLabels: { enabled: false },
+            grid: { borderColor: '#e2e8f0', strokeDashArray: 4 },
+            xaxis: {
+                categories: timeline.map(x => new Date(x.date).toLocaleDateString()),
+                labels: { style: { colors: '#94a3b8', fontSize: '12px' } }
+            },
+            yaxis: { labels: { style: { colors: '#94a3b8', fontSize: '12px' } }, forceNiceScale: true },
+            legend: { show: false },
+            tooltip: { theme: 'light' },
+            noData: { text: this._appService.trans('PAGINATION.NO_ITEMS') }
+        };
+    }
+
+    // ===== Phát sinh của tôi =====
+
+    private loadEvents(): void {
+        this.eventsLoading = true;
+        this._appService.referralService.getMyEvents({ page: this.eventsPage, pageSize: this.eventsPageSize })
+            .pipe(finalize(() => { this.eventsLoading = false; }))
+            .subscribe({
+                next: (response: PagedResponse<ReferralEventItem>) => {
+                    this.events = response.data;
+                    this.eventsPage = response.pageNumber;
+                    this.eventsPageSize = response.pageSize;
+                    this.eventsTotalCount = response.totalCount;
+                    this.eventsTotalPages = response.totalPages;
+                    this.eventsHasPreviousPage = response.hasPreviousPage;
+                    this.eventsHasNextPage = response.hasNextPage;
+                },
+                error: () => { this.events = []; }
+            });
+    }
+
+    onEventsPageChange(page: number): void {
+        this.eventsPage = page;
+        this.loadEvents();
+    }
+
+    onEventsPageSizeChange(size: number): void {
+        this.eventsPageSize = size;
+        this.eventsPage = 1;
+        this.loadEvents();
+    }
+
+    eventTypeKey(type: ReferralEventType): string {
+        const keys: Record<number, string> = {
+            [ReferralEventType.UserReferred]: 'USER_REFERRED',
+            [ReferralEventType.GroupBuyingRequest]: 'GROUP_BUYING_REQUEST',
+            [ReferralEventType.GroupBuyingJoin]: 'GROUP_BUYING_JOIN',
+            [ReferralEventType.PurchaseRequest]: 'PURCHASE_REQUEST',
+            [ReferralEventType.OfferRequest]: 'OFFER_REQUEST',
+            [ReferralEventType.GroupMemberJoin]: 'GROUP_MEMBER_JOIN',
+            [ReferralEventType.PartnerRegister]: 'PARTNER_REGISTER'
+        };
+        return `ADMIN.REFERRAL_STATS.EVENT_TYPE.${keys[type] ?? 'USER_REFERRED'}`;
+    }
+
+    eventStatusKey(status: ReferralEventStatus): string {
+        const keys: Record<number, string> = {
+            [ReferralEventStatus.Pending]: 'PENDING',
+            [ReferralEventStatus.Approved]: 'APPROVED',
+            [ReferralEventStatus.Rejected]: 'REJECTED',
+            [ReferralEventStatus.Cancelled]: 'CANCELLED',
+            [ReferralEventStatus.Paid]: 'PAID'
+        };
+        return `ADMIN.REFERRAL_STATS.EVENT_STATUS.${keys[status] ?? 'PENDING'}`;
+    }
+
+    eventStatusVariant(status: ReferralEventStatus): BadgeVariant {
+        const variants: Record<number, BadgeVariant> = {
+            [ReferralEventStatus.Pending]: 'warning',
+            [ReferralEventStatus.Approved]: 'success',
+            [ReferralEventStatus.Rejected]: 'danger',
+            [ReferralEventStatus.Cancelled]: 'secondary',
+            [ReferralEventStatus.Paid]: 'success'
+        };
+        return variants[status] ?? 'secondary';
     }
 
     onCopyCode(): void {
