@@ -275,7 +275,7 @@ export class AdminUserPermissionComponent implements OnInit {
     private groupOrder(key: string): number {
         const order = this._groupOrders.get(key.toUpperCase());
         if (order !== undefined) return order;
-        const fallback = ['SYSTEM', 'USER', 'MEMBER', 'PARTNER', 'PURCHASE', 'GROUP', 'COMMUNITY', 'REFERRAL', 'COMMISSION', 'SUPERADMIN'];
+        const fallback = ['ADMIN', 'MEMBER', 'SHARED', 'SYSTEM', 'USER', 'PARTNER', 'PURCHASE', 'GROUP', 'COMMUNITY', 'REFERRAL', 'COMMISSION', 'SUPERADMIN'];
         const index = fallback.indexOf(key.toUpperCase());
         return index < 0 ? 1000 : (index + 1) * 10;
     }
