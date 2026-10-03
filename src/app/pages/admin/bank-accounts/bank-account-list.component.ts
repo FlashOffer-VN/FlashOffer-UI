@@ -74,6 +74,7 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.BANK_ACCOUNTS.COL_ACCOUNT' | translate }}</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.BANK_ACCOUNTS.COL_HOLDER' | translate }}</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.BANK_ACCOUNTS.COL_STATUS' | translate }}</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.BANK_ACCOUNTS.COL_TRANSFER_CODE' | translate }}</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.BANK_ACCOUNTS.COL_NOTE' | translate }}</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.BANK_ACCOUNTS.COL_UPDATED' | translate }}</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.BANK_ACCOUNTS.COL_ACTIONS' | translate }}</th>
@@ -81,9 +82,9 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             @if (isLoading) {
-                                <tr><td colspan="8" class="px-4 py-10"><app-loading></app-loading></td></tr>
+                                <tr><td colspan="9" class="px-4 py-10"><app-loading></app-loading></td></tr>
                             } @else if (items.length === 0) {
-                                <tr><td colspan="8" class="px-4 py-10 text-center text-sm text-gray-500">{{ 'ADMIN.BANK_ACCOUNTS.EMPTY' | translate }}</td></tr>
+                                <tr><td colspan="9" class="px-4 py-10 text-center text-sm text-gray-500">{{ 'ADMIN.BANK_ACCOUNTS.EMPTY' | translate }}</td></tr>
                             } @else {
                                 @for (item of items; track item.id) {
                                     <tr class="hover:bg-gray-50 align-top">
@@ -116,6 +117,21 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
                                                 <span class="px-2 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700">
                                                     <i class="fa-solid fa-clock mr-1"></i>{{ 'ADMIN.BANK_ACCOUNTS.STATUS_PENDING' | translate }}
                                                 </span>
+                                            }
+                                        </td>
+                                        <td class="px-4 py-3 text-sm whitespace-nowrap">
+                                            @if (item.verificationCode) {
+                                                <div class="flex items-center gap-2">
+                                                    <code class="px-2 py-1 rounded bg-gray-50 border border-gray-200 font-mono text-xs text-gray-800">{{ item.verificationCode }}</code>
+                                                    <app-button size="sm" variant="outline" [title]="'ADMIN.BANK_ACCOUNTS.CODE_COPY' | translate" (click)="copyCode(item.verificationCode)">
+                                                        <i class="fa-regular fa-copy"></i>{{ 'ADMIN.BANK_ACCOUNTS.CODE_COPY' | translate }}
+                                                    </app-button>
+                                                </div>
+                                                @if (item.verificationCodeIssuedAt) {
+                                                    <div class="text-xs text-gray-500 mt-1">{{ item.verificationCodeIssuedAt | appDate }}</div>
+                                                }
+                                            } @else {
+                                                <span class="text-gray-400">{{ 'ADMIN.BANK_ACCOUNTS.NO_TRANSFER_CODE' | translate }}</span>
                                             }
                                         </td>
                                         <td class="px-4 py-3 text-sm text-gray-600 max-w-xs">{{ item.note || '—' }}</td>
@@ -245,6 +261,15 @@ export class BankAccountListComponent implements OnInit {
 
             this.saveVerification(item, false, 'ADMIN.BANK_ACCOUNTS.SUCCESS_UNVERIFY');
         });
+    }
+
+    /** Chép mã đối chiếu để đối chiếu với sao kê ngân hàng. */
+    copyCode(code: string | null | undefined): void {
+        if (!code) return;
+
+        navigator.clipboard?.writeText(code)
+            .then(() => this._appService.showSuccess(this._appService.trans('ADMIN.BANK_ACCOUNTS.CODE_COPIED')))
+            .catch(() => this._appService.showError(this._appService.trans('COMMON.ERROR.UNKNOWN')));
     }
 
     loadData(): void {

@@ -126,7 +126,21 @@ export interface BankAccount {
     verifiedAt?: string | null;
     verifiedBy?: string | null;
     note?: string | null;
+    /** Mã đối chiếu chuyển khoản để xác thực tài khoản. */
+    verificationCode?: string | null;
+    verificationCodeIssuedAt?: string | null;
     updatedAt: string;
+}
+
+/** Mã đối chiếu chuyển khoản để xác thực tài khoản ngân hàng. */
+export interface BankAccountVerificationCode {
+    verificationCode: string;
+    /** Nội dung ghi khi chuyển khoản (chính là mã đối chiếu). */
+    transferContent: string;
+    /** Số tiền gợi ý chuyển khoản để xác thực. */
+    amount: number;
+    issuedAt?: string | null;
+    expiresAt?: string | null;
 }
 
 /** Điều kiện lọc danh sách tài khoản ngân hàng chờ xác thực. */

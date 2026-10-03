@@ -7,6 +7,7 @@ import { PagedResponse } from '../models/paged-response.model';
 import {
     BankAccount,
     BankAccountQuery,
+    BankAccountVerificationCode,
     MyWallet,
     PayoutQuery,
     PayoutStatement,
@@ -40,6 +41,11 @@ export class PayoutService {
     /** Danh sách tài khoản ngân hàng chờ xác thực. GET /api/v1/BankAccounts */
     getBankAccounts(query: BankAccountQuery): Observable<PagedResponse<BankAccount>> {
         return this._apiService.get<PagedResponse<BankAccount>>(this._bankAccountUrl, { ...query });
+    }
+
+    /** Tạo (hoặc lấy lại) mã đối chiếu chuyển khoản của chính người gọi. POST /api/v1/BankAccounts/me/verification-code */
+    issueMyBankAccountVerificationCode(): Observable<ApiResponse<BankAccountVerificationCode>> {
+        return this._apiService.post<ApiResponse<BankAccountVerificationCode>>(`${this._bankAccountUrl}/me/verification-code`, {});
     }
 
     /** Ghi nhận xác thực thông tin ngân hàng của một tài khoản. PUT /api/v1/BankAccounts/{userId}/verification */

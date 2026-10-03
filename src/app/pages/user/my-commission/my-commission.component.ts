@@ -12,6 +12,7 @@ import { PayoutService } from '@core/services/payout.service';
 import { CommissionConfig } from '@core/models/commission.model';
 import {
     BankAccount,
+    BankAccountVerificationCode,
     MyWallet,
     PayoutPeriodStatus,
     PayoutStatus,
@@ -400,6 +401,38 @@ import { ButtonComponent } from '@shared/components/button/button.component';
                         </dl>
                         @if (!bankAccount.isVerified) {
                             <p class="bg-amber-50 rounded-lg px-3 py-2 text-xs text-amber-800 mt-3">{{ 'USER.COMMISSION.BANK_UNVERIFIED_HINT' | translate }}</p>
+
+                            <!-- Chuyển khoản kèm đúng nội dung này để thông tin ngân hàng được đối chiếu và xác thực -->
+                            @if (verificationCode) {
+                                <div class="mt-3 rounded-lg border border-teal-200 bg-teal-50 p-3">
+                                    <div class="flex flex-wrap items-center justify-between gap-2">
+                                        <span class="text-xs font-medium text-teal-800">{{ 'USER.COMMISSION.BANK_CODE_TITLE' | translate }}</span>
+                                        <span class="text-xs text-teal-700">{{ 'USER.COMMISSION.BANK_CODE_AMOUNT' | translate }}: {{ verificationCode.amount | appPrice }}</span>
+                                    </div>
+
+                                    <div class="mt-2 flex flex-wrap items-center gap-2">
+                                        <code class="px-2 py-1 rounded bg-white border border-teal-200 font-mono text-sm text-teal-900">{{ verificationCode.transferContent }}</code>
+                                        <app-button size="sm" variant="outline" (click)="copyTransferContent()">
+                                            <i class="fa-regular fa-copy mr-1"></i>{{ 'USER.COMMISSION.BANK_CODE_COPY' | translate }}
+                                        </app-button>
+                                        <app-button size="sm" variant="outline" [loading]="isIssuingCode" (click)="issueVerificationCode()">
+                                            <i class="fa-solid fa-rotate-left mr-1"></i>{{ 'USER.COMMISSION.BANK_CODE_RENEW' | translate }}
+                                        </app-button>
+                                    </div>
+
+                                    <p class="text-xs text-teal-800 mt-2">{{ 'USER.COMMISSION.BANK_CODE_HINT' | translate }}</p>
+                                    @if (verificationCode.expiresAt) {
+                                        <p class="text-xs text-teal-700 mt-1">{{ 'USER.COMMISSION.BANK_CODE_EXPIRES' | translate }}: {{ verificationCode.expiresAt | appDate }}</p>
+                                    }
+                                </div>
+                            } @else {
+                                <div class="mt-3 flex flex-wrap items-center gap-2">
+                                    <app-button size="sm" variant="primary" [loading]="isIssuingCode" (click)="issueVerificationCode()">
+                                        <i class="fa-solid fa-key mr-1"></i>{{ 'USER.COMMISSION.BANK_CODE_CREATE' | translate }}
+                                    </app-button>
+                                    <span class="text-xs text-gray-500">{{ 'USER.COMMISSION.BANK_CODE_CREATE_HINT' | translate }}</span>
+                                </div>
+                            }
                         }
                         <div class="flex justify-end mt-4">
                             <app-button type="button" variant="outline" (click)="startBankEdit()">
@@ -433,6 +466,10 @@ export class MyCommissionPageComponent implements OnInit {
     readonly bankForm: FormGroup;
     isEditingBank = false;
     isSavingBank = false;
+
+    /** Mã đối chiếu chuyển khoản để xác thực thông tin ngân hàng. */
+    verificationCode: BankAccountVerificationCode | null = null;
+    isIssuingCode = false;
 
     readonly tiered = CommissionType.Tiered;
     readonly fixed = CommissionType.Fixed;
@@ -475,6 +512,10 @@ export class MyCommissionPageComponent implements OnInit {
                 this.config = (isPartner ? mine?.partner : mine?.referrer) ?? null;
                 this.wallet = result.wallet?.data ?? null;
                 this.bankAccount = result.bank?.data ?? null;
+                // Còn mã đối chiếu nhưng chưa xác minh: nạp lại mã để hiện số tiền và hạn dùng.
+                if (this.bankAccount && !this.bankAccount.isVerified && this.bankAccount.verificationCode) {
+                    this.issueVerificationCode(false);
+                }
                 this.isLoading = false;
             },
             error: () => {
@@ -581,6 +622,35 @@ export class MyCommissionPageComponent implements OnInit {
                 this._appService.showError(this._appService.extractErrorMessage(error));
             }
         });
+    }
+
+    /** Tạo mã đối chiếu chuyển khoản để xác thực thông tin ngân hàng. */
+    issueVerificationCode(notify = true): void {
+        this.isIssuingCode = true;
+
+        this._payoutService.issueMyBankAccountVerificationCode().subscribe({
+            next: response => {
+                this.isIssuingCode = false;
+                this.verificationCode = response.data ?? null;
+                if (notify) {
+                    this._appService.showSuccess(this._appService.trans('USER.COMMISSION.BANK_CODE_ISSUED'));
+                }
+            },
+            error: error => {
+                this.isIssuingCode = false;
+                this._appService.showError(this._appService.extractErrorMessage(error));
+            }
+        });
+    }
+
+    /** Chép nội dung chuyển khoản để dán vào ứng dụng ngân hàng. */
+    copyTransferContent(): void {
+        const content = this.verificationCode?.transferContent;
+        if (!content) return;
+
+        navigator.clipboard?.writeText(content)
+            .then(() => this._appService.showSuccess(this._appService.trans('USER.COMMISSION.BANK_CODE_COPIED')))
+            .catch(() => this._appService.showError(this._appService.trans('COMMON.ERROR.UNKNOWN')));
     }
 
     /** Ô nhập ngân hàng đang lỗi và người dùng đã chạm vào. */
