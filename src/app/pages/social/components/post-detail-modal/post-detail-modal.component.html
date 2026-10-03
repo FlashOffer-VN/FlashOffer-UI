@@ -1,29 +1,35 @@
 <div class="post-detail-modal">
     <div *ngIf="!post" class="empty-state">
-        <i class="fas fa-file-alt text-4xl text-gray-300 mb-3"></i>
-        <p class="text-gray-500">{{ 'SOCIAL.POST_NOT_FOUND' | translate }}</p>
+        <div class="empty-icon"><i class="fas fa-file-alt"></i></div>
+        <p>{{ 'SOCIAL.POST_NOT_FOUND' | translate }}</p>
     </div>
 
     <ng-container *ngIf="post">
+        <!-- Tác giả + nút đóng -->
         <div class="modal-header">
             <div class="author-info">
-                <img [src]="post.author.avatar | avatar" class="avatar">
-                <div>
-                    <div class="author-name">{{ post.author.fullName || '' }}</div>
+                <img [src]="post.author.avatar | avatar" class="avatar" [alt]="post.author.fullName || post.author.username">
+                <div class="author-text">
+                    <div class="author-line">
+                        <span class="author-name">{{ post.author.fullName || post.author.username }}</span>
+                        <app-badge *ngIf="post.author.role" [label]="post.author.role | userRoleLabel" variant="primary"
+                            size="sm" [showDot]="false"></app-badge>
+                    </div>
                     <div class="author-code">{{ getAuthorCode(post.author) }}</div>
-                    <div class="author-role">{{ post.author.role | userRoleLabel }}</div>
                 </div>
             </div>
-            <!-- <button class="close-btn" (click)="onClose()">
+            <button type="button" class="close-btn" (click)="onClose()"
+                [attr.aria-label]="'COMMON.BUTTON.CLOSE' | translate">
                 <i class="fas fa-times"></i>
-            </button> -->
+            </button>
         </div>
 
+        <!-- Nội dung bài viết -->
         <div class="modal-body">
             <div class="post-meta">
-                <span class="post-type">{{ getTypeLabel(post.type) | translate }}</span>
-                <span class="post-privacy">{{ getPrivacyLabel(post.privacy) | translate }}</span>
-                <span class="post-time">{{ post.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+                <span class="meta-pill"><i class="fas fa-tag"></i> {{ getTypeLabel(post.type) | translate }}</span>
+                <span class="meta-pill"><i class="fas fa-lock"></i> {{ getPrivacyLabel(post.privacy) | translate }}</span>
+                <span class="meta-pill"><i class="far fa-clock"></i> {{ post.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
             </div>
 
             <h3 *ngIf="post.title" class="post-title">{{ post.title }}</h3>
@@ -34,18 +40,27 @@
             </div>
         </div>
 
+        <!-- Số liệu + hành động -->
         <div class="modal-footer">
-            <button class="action-btn" (click)="onLike()">
-                <i class="fas fa-heart" [class.liked]="post.isLiked"></i>
-                <span>{{ post.likesCount || 0 }}</span>
-            </button>
-            <button class="action-btn" (click)="onShare()">
-                <i class="fas fa-share"></i>
-                <span>{{ post.sharesCount || 0 }}</span>
-            </button>
-            <button class="action-btn" (click)="onSave()">
-                <i class="fas fa-bookmark" [class.saved]="post.isSaved"></i>
-            </button>
+            <div class="post-stats">
+                <span><i class="fas fa-heart"></i> {{ post.likesCount || 0 }}</span>
+                <span><i class="fas fa-comment"></i> {{ post.commentsCount || 0 }}</span>
+                <span><i class="fas fa-share"></i> {{ post.sharesCount || 0 }}</span>
+            </div>
+            <div class="post-actions">
+                <button type="button" class="action-btn" [class.liked]="post.isLiked" (click)="onLike()">
+                    <i class="fas fa-heart"></i>
+                    <span>{{ 'SOCIAL.LIKE' | translate }}</span>
+                </button>
+                <button type="button" class="action-btn" (click)="onShare()">
+                    <i class="fas fa-share"></i>
+                    <span>{{ 'SOCIAL.SHARE' | translate }}</span>
+                </button>
+                <button type="button" class="action-btn" [class.saved]="post.isSaved" (click)="onSave()">
+                    <i class="fas fa-bookmark"></i>
+                    <span>{{ 'COMMON.BUTTON.SAVE' | translate }}</span>
+                </button>
+            </div>
         </div>
     </ng-container>
 </div>

@@ -924,6 +924,7 @@
         "TRENDING": "Thịnh hành",
         "UPCOMING_EVENTS": "Sự kiện sắp tới",
         "POPULAR_GROUPS": "Nhóm phổ biến",
+        "POST_NOT_FOUND": "Không tìm thấy bài viết",
         "LIKE": "Thích",
         "COMMENT": "Bình luận",
         "SHARE": "Chia sẻ",
@@ -1012,6 +1013,9 @@
         }
     },
     "COMMON": {
+        "BUTTON": {
+            "CLOSE": "Đóng"
+        },
         "CHART_TYPE": {
             "BAR": "Cột",
             "LINE": "Đường"
@@ -1292,6 +1296,8 @@
             "CREATED_AT": "Ngày tạo",
             "DETAIL_TITLE": "Chi tiết bài viết",
             "UNTITLED": "Bài viết không có tiêu đề",
+            "STATUS_APPROVED": "Đã duyệt",
+            "STATUS_PENDING": "Chờ duyệt",
             "VIEW_DETAIL": "Xem chi tiết",
             "APPROVE": "Duyệt",
             "REJECT": "Từ chối",

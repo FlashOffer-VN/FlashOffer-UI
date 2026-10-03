@@ -5,195 +5,213 @@
 }
 
 .post-detail-modal {
-    padding: 24px;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
-    overflow: hidden;
 }
 
+/* ===== Rỗng ===== */
 .empty-state {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 60px 20px;
+    gap: 12px;
+    padding: 48px 20px;
+    color: var(--text-muted);
 }
 
+.empty-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: var(--text-subtle);
+}
+
+/* ===== Header: tác giả ===== */
 .modal-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #F1F5F9;
 }
 
 .author-info {
     display: flex;
     align-items: center;
     gap: 12px;
+    min-width: 0;
 }
 
 .avatar {
-    width: 48px;
-    height: 48px;
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
     object-fit: cover;
-    flex-shrink: 0;
+    box-shadow: 0 0 0 3px #F1F5F9;
+}
+
+.author-text {
+    min-width: 0;
+}
+
+.author-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .author-name {
+    font-size: 15px;
     font-weight: 600;
-    font-size: 16px;
+    color: var(--text-heading);
 }
 
-.author-role {
-    font-size: 13px;
-    color: var(--text-muted);
+.author-code {
+    font-size: 12.5px;
+    color: var(--text-subtle);
 }
 
 .close-btn {
-    background: none;
+    flex: none;
+    width: 36px;
+    height: 36px;
     border: none;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 4px 8px;
+    border-radius: 50%;
+    background: var(--surface);
     color: var(--text-muted);
-    flex-shrink: 0;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease;
 }
 
 .close-btn:hover {
-    color: var(--text);
+    background: #F1F5F9;
+    color: var(--text-secondary);
+}
+
+/* ===== Thân bài ===== */
+.modal-body {
+    padding: 16px 0 0;
 }
 
 .post-meta {
     display: flex;
-    gap: 12px;
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-bottom: 16px;
     flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.meta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: #F1F5F9;
+    color: var(--text-slate);
+    font-size: 12px;
+    font-weight: 500;
 }
 
 .post-title {
+    margin: 0 0 10px;
     font-size: 20px;
     font-weight: 700;
-    margin: 12px 0;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    word-break: break-word;
-}
-
-.post-content {
-    line-height: 1.8;
-    color: var(--text);
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    word-break: break-word;
-    width: 100%;
-    max-width: 100%;
-}
-
-.post-content * {
-    max-width: 100%;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    word-break: break-word;
-}
-
-.post-content p {
-    margin: 0 0 16px 0;
-}
-
-.post-content ul,
-.post-content ol {
-    padding-left: 24px;
-    margin: 8px 0 16px 0;
-}
-
-.post-content li {
-    margin-bottom: 6px;
-}
-
-.post-content blockquote {
-    border-left: 4px solid var(--border);
-    padding-left: 16px;
-    margin: 8px 0 16px 0;
-    color: var(--text-muted);
-}
-
-.post-content img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    display: block;
-}
-
-.post-content a {
-    color: var(--primary, var(--primary));
-    text-decoration: underline;
-}
-
-.post-content pre,
-.post-content code {
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    max-width: 100%;
+    line-height: 1.35;
+    color: var(--text-heading);
 }
 
 .post-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-top: 20px;
+    margin-top: 14px;
 }
 
 .tag {
-    background: var(--surface-muted);
-    padding: 4px 12px;
-    border-radius: 16px;
-    font-size: 13px;
-    color: var(--text-slate);
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(0, 127, 148, 0.08);
+    color: var(--primary);
+    font-size: 12.5px;
+    font-weight: 600;
 }
 
+/* ===== Footer: số liệu + hành động ===== */
 .modal-footer {
     display: flex;
-    gap: 24px;
-    padding-top: 16px;
-    border-top: 1px solid var(--border);
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
     margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px solid #F1F5F9;
+}
+
+.post-stats {
+    display: flex;
+    gap: 14px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.post-stats i {
+    margin-right: 4px;
+    color: var(--text-subtle);
+}
+
+.post-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
 .action-btn {
-    background: none;
-    border: none;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
+    padding: 8px 14px;
+    border: 1px solid #E2E8F0;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--text-slate);
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 16px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    color: var(--text-muted);
-    transition: all 0.2s;
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
 }
 
 .action-btn:hover {
-    background: var(--surface-muted);
-    color: var(--text);
+    background: var(--surface-soft);
+    border-color: #CBD5E1;
 }
 
-.liked {
-    color: var(--danger) !important;
+.action-btn.liked {
+    color: #E11D48;
+    border-color: #FECDD3;
+    background: #FFF1F2;
 }
 
-.saved {
-    color: var(--warning) !important;
+.action-btn.saved {
+    color: var(--primary);
+    border-color: rgba(0, 127, 148, 0.35);
+    background: rgba(0, 127, 148, 0.06);
 }
 
+/* ===== Nội dung rich-text (giữ nguyên định dạng hiển thị) ===== */
 .post-content {
     line-height: 1.8;
-    color: var(--text);
+    font-size: 15px;
+    color: var(--text-slate);
     word-wrap: break-word;
     overflow-wrap: break-word;
     word-break: break-word;
@@ -210,6 +228,10 @@
 
 .post-content p {
     margin: 0 0 16px 0;
+}
+
+.post-content p:last-child {
+    margin-bottom: 0;
 }
 
 .post-content ul {
@@ -234,8 +256,8 @@
 }
 
 .post-content blockquote {
-    border-left: 4px solid var(--border);
-    padding-left: 16px;
+    border-left: 4px solid var(--accent-light);
+    padding: 4px 0 4px 16px;
     margin: 8px 0 16px 0;
     color: var(--text-muted);
 }
@@ -243,17 +265,18 @@
 .post-content img {
     max-width: 100%;
     height: auto;
-    border-radius: 8px;
+    border-radius: 12px;
     display: block;
+    margin: 8px 0;
 }
 
 .post-content a {
-    color: var(--primary, var(--primary));
+    color: var(--primary);
     text-decoration: underline;
 }
 
 .post-content pre {
-    background: var(--surface-muted);
+    background: var(--surface);
     padding: 12px;
     border-radius: 8px;
     overflow-x: auto;
@@ -270,6 +293,7 @@
 .post-content strong,
 .post-content b {
     font-weight: 700;
+    color: var(--text-heading);
 }
 
 .post-content em,
@@ -285,16 +309,37 @@
 .post-content h6 {
     margin: 16px 0 8px 0;
     font-weight: 600;
+    color: var(--text-heading);
 }
 
 .post-content h1 {
-    font-size: 1.8em;
+    font-size: 1.6em;
 }
 
 .post-content h2 {
-    font-size: 1.5em;
+    font-size: 1.4em;
 }
 
 .post-content h3 {
     font-size: 1.2em;
+}
+
+@media (max-width: 640px) {
+    .avatar {
+        width: 42px;
+        height: 42px;
+    }
+
+    .post-title {
+        font-size: 18px;
+    }
+
+    .post-actions {
+        width: 100%;
+    }
+
+    .action-btn {
+        flex: 1 1 auto;
+        justify-content: center;
+    }
 }

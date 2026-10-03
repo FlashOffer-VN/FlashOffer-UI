@@ -13,6 +13,8 @@ import { PaginationComponent } from '@shared/components/pagination/pagination.co
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
+import { ModalComponent } from '@shared/components/modal/modal.component';
+import { BadgeComponent } from '@shared/components/badge/badge.component';
 
 @Component({
     selector: 'app-admin-social-post-list',
@@ -28,6 +30,8 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
         PaginationComponent,
         StatusTabsComponent,
         NgxFilterDaterangeComponent,
+        ModalComponent,
+        BadgeComponent,
         AppDatePipe
     ],
     templateUrl: './social-post-list.component.html',

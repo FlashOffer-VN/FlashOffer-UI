@@ -968,6 +968,7 @@
         "TRENDING": "Trending",
         "UPCOMING_EVENTS": "Upcoming Events",
         "POPULAR_GROUPS": "Popular Groups",
+        "POST_NOT_FOUND": "Post not found",
         "LIKE": "Like",
         "COMMENT": "Comment",
         "SHARE": "Share",
@@ -1056,6 +1057,9 @@
         }
     },
     "COMMON": {
+        "BUTTON": {
+            "CLOSE": "Close"
+        },
         "CHART_TYPE": {
             "BAR": "Column",
             "LINE": "Line"
@@ -1334,6 +1338,8 @@
             "CREATED_AT": "Created at",
             "DETAIL_TITLE": "Post details",
             "UNTITLED": "Untitled post",
+            "STATUS_APPROVED": "Approved",
+            "STATUS_PENDING": "Pending",
             "VIEW_DETAIL": "View details",
             "APPROVE": "Approve",
             "REJECT": "Reject",

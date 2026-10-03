@@ -36,91 +36,48 @@ table td:nth-child(3) {
     color: var(--accent);
 }
 
-.post-modal-backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 50;
+.post-detail-meta {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    background: rgb(0 0 0 / 50%);
-}
-
-.post-modal {
-    width: min(100%, 48rem);
-    max-width: 48rem;
-    max-height: 90vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    border-radius: 0.75rem;
-    background: var(--white);
-    box-shadow: 0 20px 40px rgb(0 0 0 / 20%);
-}
-
-.post-modal-header,
-.post-modal-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1rem 1.25rem;
-}
-
-.post-modal-header {
-    border-bottom: 1px solid var(--border);
-}
-
-.post-modal-header h2 {
-    margin: 0;
-    color: var(--text-heading);
-    font-size: 1.125rem;
-    font-weight: 700;
-}
-
-.post-modal-header p {
-    margin: 0.25rem 0 0;
-    color: var(--text-muted);
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 14px;
     font-size: 0.8rem;
+    color: var(--text-muted);
 }
 
-.close-button {
-    border: 0;
-    background: transparent;
+.post-detail-meta i {
+    margin-right: 4px;
     color: var(--text-subtle);
-    cursor: pointer;
-    font-size: 1.25rem;
 }
 
-.close-button:hover {
+.post-detail-content {
+    line-height: 1.7;
     color: var(--text-secondary);
-}
-
-.post-modal-content {
-    min-height: 8rem;
-    padding: 1.25rem;
-    color: var(--text-secondary);
-    line-height: 1.65;
     overflow-wrap: break-word;
     word-break: break-word;
 }
 
-.post-modal-content :deep(img),
-.post-modal-content :deep(video),
-.post-modal-content :deep(iframe),
-.post-modal-content :deep(table),
-.post-modal-content :deep(pre),
-.post-modal-content :deep(code) {
+.post-detail-content :deep(img),
+.post-detail-content :deep(video),
+.post-detail-content :deep(iframe),
+.post-detail-content :deep(table),
+.post-detail-content :deep(pre),
+.post-detail-content :deep(code) {
     max-width: 100%;
 }
 
-.post-modal-content :deep(pre),
-.post-modal-content :deep(code) {
+.post-detail-content :deep(pre),
+.post-detail-content :deep(code) {
     white-space: pre-wrap;
     overflow-x: auto;
 }
 
-.post-modal-footer {
+.post-detail-actions {
+    display: flex;
     justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
     border-top: 1px solid var(--border);
 }

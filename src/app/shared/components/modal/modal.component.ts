@@ -1,55 +1,55 @@
 ﻿// shared/components/modal/modal.component.ts
 import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { ButtonComponent } from '@shared/components/button/button.component';
 
 @Component({
   selector: 'app-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule, ButtonComponent],
   template: `
     <div
       *ngIf="visible"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn"
+      class="fixed inset-0 z-50 flex items-end justify-center p-0 sm:p-4 sm:items-center bg-black/50 backdrop-blur-sm animate-fadeIn"
       (click)="onBackdropClick($event)">
       <div
-        class="bg-white rounded-xl shadow-xl w-full max-h-[90vh] overflow-y-auto animate-slideUp"
+        class="bg-white w-full flex flex-col max-h-[92vh] sm:max-h-[85vh] overflow-hidden rounded-t-2xl sm:rounded-2xl shadow-2xl ring-1 ring-black/5 animate-slideUp"
         [class]="getSizeClass()"
         [style.max-width]="customWidth || 'auto'"
         (click)="$event.stopPropagation()">
         
         <!-- Header -->
-        <div *ngIf="showHeader" class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h3 class="text-lg font-semibold text-secondary">{{ title }}</h3>
+        <div *ngIf="showHeader" class="flex items-center justify-between gap-3 px-5 py-4 border-b border-gray-100 shrink-0">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <ng-content select="[modalIcon]"></ng-content>
+            <h3 class="text-base sm:text-lg font-semibold text-secondary truncate">{{ title }}</h3>
+          </div>
           <button
             *ngIf="showCloseButton"
+            type="button"
             (click)="close()"
-            class="text-gray-400 hover:text-secondary transition">
-            <i class="fa-solid fa-xmark text-2xl"></i>
+            [attr.aria-label]="'COMMON.BUTTON.CLOSE' | translate"
+            class="shrink-0 -mr-2 w-9 h-9 flex items-center justify-center rounded-full text-gray-400 hover:text-secondary hover:bg-gray-100 transition">
+            <i class="fa-solid fa-xmark text-xl"></i>
           </button>
         </div>
 
         <!-- Content -->
-        <div class="px-6 py-4">
+        <div data-modal-body class="flex-1 overflow-y-auto px-5 py-5 sm:px-6 modal-scroll">
           <p *ngIf="message" class="text-gray-700 text-base">{{ message }}</p>
           <ng-content></ng-content>
         </div>
 
         <!-- Footer -->
-        <div *ngIf="showFooter" class="flex justify-end gap-3 px-6 py-4 border-t border-gray-100">
-          <button
-            *ngIf="showCancel"
-            class="px-4 py-2 rounded-lg text-sm font-medium text-secondary bg-gray-100 hover:bg-gray-200 transition"
-            (click)="onCancel()">
+        <div *ngIf="showFooter"
+          class="shrink-0 flex flex-wrap justify-end gap-3 px-5 py-4 sm:px-6 border-t border-gray-100 bg-gray-50/70">
+          <app-button *ngIf="showCancel" variant="secondary" [disabled]="loading" (onClick)="onCancel()">
             {{ cancelText }}
-          </button>
-          <button
-            class="px-4 py-2 rounded-lg text-sm font-medium text-white transition"
-            [class]="getConfirmClass()"
-            [disabled]="loading"
-            (click)="onConfirm()">
-            <span *ngIf="loading" class="inline-block animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></span>
+          </app-button>
+          <app-button [variant]="confirmVariant" [loading]="loading" [disabled]="loading" (onClick)="onConfirm()">
             {{ confirmText }}
-          </button>
+          </app-button>
         </div>
       </div>
     </div>
@@ -71,6 +71,19 @@ import { CommonModule } from '@angular/common';
     }
     .animate-slideUp {
       animation: slideUp 0.25s ease-out;
+    }
+    .modal-scroll {
+      overscroll-behavior: contain;
+    }
+    .modal-scroll::-webkit-scrollbar {
+      width: 8px;
+    }
+    .modal-scroll::-webkit-scrollbar-thumb {
+      background: #E5E7EB;
+      border-radius: 999px;
+    }
+    .modal-scroll::-webkit-scrollbar-thumb:hover {
+      background: #D1D5DB;
     }
   `]
 })
@@ -99,19 +112,8 @@ export class ModalComponent {
     lg: 'max-w-lg'
   };
 
-  private confirmClasses = {
-    primary: 'bg-primary hover:bg-primary-dark',
-    danger: 'bg-danger hover:bg-danger-dark',
-    success: 'bg-success hover:bg-success-dark',
-    warning: 'bg-warning hover:bg-warning-dark'
-  };
-
   getSizeClass(): string {
     return this.sizeClasses[this.size];
-  }
-
-  getConfirmClass(): string {
-    return this.confirmClasses[this.confirmVariant];
   }
 
   close() {
