@@ -1,0 +1,4 @@
+/* Bảng người dùng: cột vai trò/trạng thái giữ nguyên độ rộng để không nhảy khi phân trang */
+.status-column {
+    white-space: nowrap;
+}

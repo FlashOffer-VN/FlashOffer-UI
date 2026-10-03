@@ -15,6 +15,7 @@ import { ChangeCredentialsRequest, UserRole } from '@core/models/auth.model';
 import { storageSet } from '../utils/storage';
 import { ModalService } from './modal.service';
 import { CollaboratorService } from './collaborator.service';
+import { UserService } from './user.service';
 import { DashboardService } from './dashboard.service';
 import { CrmService } from './crm.service';
 import { BusinessGroupService } from './business-group.service';
@@ -37,6 +38,7 @@ export class AppService {
         public partnerService: PartnerService,
         public socialService: SocialService,
         public collaboratorService: CollaboratorService,
+        public userService: UserService,
         public dashboardService: DashboardService,
         public crmService: CrmService,
         public businessGroupService: BusinessGroupService,

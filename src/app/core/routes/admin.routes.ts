@@ -28,6 +28,8 @@ export const adminRoutes: Routes = [
             { path: 'settings', loadComponent: () => import('@pages/admin/settings/admin-settings.component').then(m => m.AdminSettingsComponent) },
             { path: 'demo', loadComponent: () => import('@pages/demo/demo.component').then(m => m.DemoComponent) },
             { path: 'social-posts', loadComponent: () => import('@pages/admin/social/social-post-list.component').then(m => m.AdminSocialPostListComponent) },
+            // User Management
+            { path: 'users', loadComponent: () => import('@pages/admin/users/user-list.component').then(m => m.AdminUserListComponent) },
             // Collaborator Management
             { path: 'collaborator', loadComponent: () => import('@pages/admin/collaborator/collaborator-list.component').then(m => m.AdminCollaboratorListComponent) },
             { path: 'collaborator/:id', loadComponent: () => import('@pages/admin/collaborator/detail/collaborator-detail.component').then(m => m.AdminCollaboratorDetailComponent) },
