@@ -106,20 +106,10 @@ export class ModalService {
 
                 this._appRef.attachView(contentRef.hostView);
 
+                // Chèn vào mốc [data-modal-body] của app-modal (không phụ thuộc tên class trang trí)
                 const nativeEl = modalRef.componentRef.location.nativeElement;
-                const bodyEl = nativeEl.querySelector('.modal-body');
-                const contentEl = nativeEl.querySelector('.px-6.py-4');
-
-                if (bodyEl) {
-                    bodyEl.appendChild(contentRef.location.nativeElement);
-                } else if (contentEl) {
-                    contentEl.appendChild(contentRef.location.nativeElement);
-                } else {
-                    const container = nativeEl.querySelector('.bg-white.rounded-xl > div');
-                    if (container) {
-                        container.appendChild(contentRef.location.nativeElement);
-                    }
-                }
+                const hostEl = nativeEl.querySelector('[data-modal-body]') || nativeEl;
+                hostEl.appendChild(contentRef.location.nativeElement);
 
                 // Lưu trữ contentComponentRef để có thể truy cập từ bên ngoài
                 modalRef.contentComponentRef = contentRef;

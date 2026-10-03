@@ -106,35 +106,25 @@
     </div>
 </div>
 
-<div *ngIf="selectedPost" class="post-modal-backdrop" (click)="closePostDetail()">
-    <section class="post-modal" role="dialog" aria-modal="true"
-        [attr.aria-label]="'ADMIN.SOCIAL.DETAIL_TITLE' | translate" (click)="$event.stopPropagation()">
-        <header class="post-modal-header">
-            <div>
-                <h2>{{ selectedPost.title || ('ADMIN.SOCIAL.UNTITLED' | translate) }}</h2>
-                <p>{{ selectedPost.author.fullName }} ({{ getAuthorCode(selectedPost.author) }}) · {{ selectedPost.createdAt | appDate }}</p>
-            </div>
-            <button type="button" class="close-button" (click)="closePostDetail()" aria-label="Close">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </header>
+<app-modal *ngIf="selectedPost" [visible]="true" [customWidth]="'44rem'" [showFooter]="false"
+    [title]="selectedPost.title || ('ADMIN.SOCIAL.UNTITLED' | translate)" (closed)="closePostDetail()">
+    <div class="post-detail-meta">
+        <span><i class="fas fa-user"></i> {{ selectedPost.author.fullName }}</span>
+        <span><i class="fas fa-id-badge"></i> {{ getAuthorCode(selectedPost.author) }}</span>
+        <span><i class="far fa-clock"></i> {{ selectedPost.createdAt | appDate }}</span>
+        <app-badge [label]="selectedPost.isApproved ? 'ADMIN.SOCIAL.STATUS_APPROVED' : 'ADMIN.SOCIAL.STATUS_PENDING'"
+            [variant]="selectedPost.isApproved ? 'success' : 'warning'" size="sm" [showDot]="false"></app-badge>
+    </div>
 
-        <div class="post-modal-content" [innerHTML]="selectedPost.content"></div>
+    <div class="post-detail-content" [innerHTML]="selectedPost.content"></div>
 
-        <footer class="post-modal-footer">
-            <!-- Chỉ hiện Duyệt/Từ chối khi bài chưa được duyệt -->
-            <app-button *ngIf="!selectedPost.isApproved" variant="danger" [disabled]="isActionLoading"
-                (click)="reject(selectedPost); closePostDetail()"
-                [title]="'ADMIN.SOCIAL.REJECT' | translate"
-                [attr.aria-label]="'ADMIN.SOCIAL.REJECT' | translate">
-                <i class="fa-solid fa-xmark"></i>
-            </app-button>
-            <app-button *ngIf="!selectedPost.isApproved" variant="success" [disabled]="isActionLoading"
-                (click)="approve(selectedPost); closePostDetail()"
-                [title]="'ADMIN.SOCIAL.APPROVE' | translate"
-                [attr.aria-label]="'ADMIN.SOCIAL.APPROVE' | translate">
-                <i class="fa-solid fa-check"></i>
-            </app-button>
-        </footer>
-    </section>
-</div>
+    <!-- Chỉ hiện Duyệt/Từ chối khi bài chưa được duyệt -->
+    <div class="post-detail-actions" *ngIf="!selectedPost.isApproved">
+        <app-button variant="danger" [disabled]="isActionLoading" (click)="reject(selectedPost); closePostDetail()">
+            <i class="fa-solid fa-xmark"></i> {{ 'ADMIN.SOCIAL.REJECT' | translate }}
+        </app-button>
+        <app-button variant="success" [disabled]="isActionLoading" (click)="approve(selectedPost); closePostDetail()">
+            <i class="fa-solid fa-check"></i> {{ 'ADMIN.SOCIAL.APPROVE' | translate }}
+        </app-button>
+    </div>
+</app-modal>

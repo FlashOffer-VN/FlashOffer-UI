@@ -6,12 +6,13 @@ import { SocialPost, PostType, PrivacyType } from '@core/models/social.model';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AvatarPipe } from '@shared/pipes/avatar.pipe';
 import { UserRoleLabelPipe } from '@shared/pipes/user-role-label.pipe';
+import { BadgeComponent } from '@shared/components/badge/badge.component';
 import { AppService } from '@core/services/app.service';
 
 @Component({
   selector: 'app-post-detail-modal',
   standalone: true,
-  imports: [CommonModule, TranslateModule, AvatarPipe, UserRoleLabelPipe],
+  imports: [CommonModule, TranslateModule, AvatarPipe, UserRoleLabelPipe, BadgeComponent],
   templateUrl: './post-detail-modal.component.html',
   styleUrls: ['./post-detail-modal.component.css']
 })

@@ -19,6 +19,22 @@ export class ReferralService {
     constructor(private _apiService: ApiService) { }
 
     /**
+     * Bỏ tham số rỗng trước khi gửi: HttpParams biến null/undefined thành chuỗi "null"/"undefined"
+     * nên API bind DateTime? sẽ báo validation_error (lỗi màn thống kê giới thiệu khi chưa chọn ngày).
+     */
+    private cleanQuery(query: object): Record<string, any> {
+        const params: Record<string, any> = {};
+
+        Object.entries(query).forEach(([key, value]) => {
+            if (value !== null && value !== undefined && value !== '') {
+                params[key] = value;
+            }
+        });
+
+        return params;
+    }
+
+    /**
      * Ghi nhận mã chia sẻ (?ref=) trên link vào tài khoản đang đăng nhập — lần đầu mới ghi,
      * mở link của CTV khác sau đó không ghi đè.
      * POST /api/v1/Referrals/me
@@ -38,7 +54,7 @@ export class ReferralService {
      * GET /api/v1/Referrals/stats
      */
     getStats(query: ReferralStatsQuery): Observable<PagedResponse<ReferralStatsItem>> {
-        return this._apiService.get<PagedResponse<ReferralStatsItem>>(`${this._baseUrl}/stats`, query);
+        return this._apiService.get<PagedResponse<ReferralStatsItem>>(`${this._baseUrl}/stats`, this.cleanQuery(query));
     }
 
     /**
@@ -46,7 +62,7 @@ export class ReferralService {
      * GET /api/v1/Referrals/stats/overview
      */
     getOverview(query: ReferralStatsQuery): Observable<ApiResponse<ReferralStatsOverview>> {
-        return this._apiService.get<ApiResponse<ReferralStatsOverview>>(`${this._baseUrl}/stats/overview`, query);
+        return this._apiService.get<ApiResponse<ReferralStatsOverview>>(`${this._baseUrl}/stats/overview`, this.cleanQuery(query));
     }
 
     /**
@@ -56,7 +72,7 @@ export class ReferralService {
     getEvents(referralCode: string, query: ReferralEventQuery): Observable<PagedResponse<ReferralEventItem>> {
         return this._apiService.get<PagedResponse<ReferralEventItem>>(
             `${this._baseUrl}/stats/${encodeURIComponent(referralCode)}/events`,
-            query
+            this.cleanQuery(query)
         );
     }
 
@@ -65,7 +81,7 @@ export class ReferralService {
      * GET /api/v1/Referrals/me/stats
      */
     getMyStats(query: ReferralStatsQuery): Observable<ApiResponse<ReferralStatsOverview>> {
-        return this._apiService.get<ApiResponse<ReferralStatsOverview>>(`${this._baseUrl}/me/stats`, query);
+        return this._apiService.get<ApiResponse<ReferralStatsOverview>>(`${this._baseUrl}/me/stats`, this.cleanQuery(query));
     }
 
     /**
@@ -73,6 +89,6 @@ export class ReferralService {
      * GET /api/v1/Referrals/me/events
      */
     getMyEvents(query: ReferralEventQuery): Observable<PagedResponse<ReferralEventItem>> {
-        return this._apiService.get<PagedResponse<ReferralEventItem>>(`${this._baseUrl}/me/events`, query);
+        return this._apiService.get<PagedResponse<ReferralEventItem>>(`${this._baseUrl}/me/events`, this.cleanQuery(query));
     }
 }

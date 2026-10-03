@@ -103,8 +103,19 @@
 
 @media (max-width: 992px) {
     .social-grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
+        /* minmax(0, 1fr): track khong bi noi dung day rong -> le trai/phai cua card deu 20px */
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+
+    /* Cot phai nam cuoi trang tren mobile -> dua len truoc feed de khong phai keo xuong cuoi */
+    .social-grid>app-social-sidebar {
+        order: -1;
+    }
+
+    .social-grid>.social-feed {
+        min-width: 0;
+        padding-right: 0;
     }
 }
 

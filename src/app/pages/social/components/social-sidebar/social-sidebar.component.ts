@@ -13,7 +13,7 @@ import { BusinessGroup } from '@core/models/business-group.model';
     imports: [CommonModule, RouterLink, TranslateModule],
     template: `
         <!-- Nhóm ngành của bạn (dữ liệu thật từ API nhóm) -->
-        <div class="sidebar-card mb-2">
+        <div class="sidebar-card">
             <h3><i class="fas fa-people-roof"></i> {{ 'SOCIAL.MY_GROUPS' | translate }}</h3>
 
             <div *ngIf="!myGroups.length" class="groups-empty">
@@ -38,7 +38,7 @@ import { BusinessGroup } from '@core/models/business-group.model';
         </div>
 
         <!-- Mua chung đang mở -->
-        <div class="sidebar-card mb-2">
+        <div class="sidebar-card">
             <h3><i class="fas fa-people-group"></i> {{ 'SOCIAL.GROUP_BUYING_OPEN' | translate }}</h3>
             <div *ngIf="!groupBuying.length" class="gb-empty">{{ 'SOCIAL.GROUP_BUYING_EMPTY' | translate }}</div>
             <div *ngFor="let item of groupBuying | slice:0:3" class="gb-item" (click)="openGroupBuying.emit(item)">
@@ -61,7 +61,7 @@ import { BusinessGroup } from '@core/models/business-group.model';
         </div>
 
         <!-- Nhóm ngành nổi bật (dữ liệu thật) -->
-        <div class="sidebar-card mb-2">
+        <div class="sidebar-card">
             <h3><i class="fas fa-layer-group"></i> {{ 'SOCIAL.POPULAR_GROUPS' | translate }}</h3>
 
             <div *ngIf="!featuredGroups.length" class="groups-empty">
@@ -83,8 +83,8 @@ import { BusinessGroup } from '@core/models/business-group.model';
         </div>
     `,
     styles: [`
-        /* Container - có khoảng cách giữa các card */
-        .social-sidebar {
+        /* Container - khoảng cách giữa các card bằng gap của feed (20px) */
+        :host {
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -203,26 +203,30 @@ import { BusinessGroup } from '@core/models/business-group.model';
 
 
         @media (max-width: 992px) {
-            .social-sidebar {
-                display: grid;
-                grid-template-columns: 1fr 1fr 1fr;
-                gap: 16px;
+            /* Mobile: dai cuon ngang, card dau can le 20px voi card ben tren */
+            :host {
+                flex-direction: row;
+                gap: 12px;
+                margin: 0 -20px;
+                padding: 0 20px 4px;
+                overflow-x: auto;
+                scrollbar-width: none;
             }
 
+            :host::-webkit-scrollbar {
+                display: none;
+            }
+
+            /* Bề rộng card theo bề rộng màn hình cho thoáng, min-width:0 để nội dung không ép card rộng ra */
             .sidebar-card {
+                flex: 0 0 min(80vw, 280px);
+                min-width: 0;
+                margin-bottom: 0;
                 padding: 16px;
             }
         }
 
         @media (max-width: 768px) {
-            .social-sidebar {
-                grid-template-columns: 1fr 1fr;
-                gap: 14px;
-            }
-
-            .sidebar-card {
-                padding: 14px 16px;
-            }
 
 
             .event-info .title {
@@ -233,13 +237,9 @@ import { BusinessGroup } from '@core/models/business-group.model';
         }
 
         @media (max-width: 480px) {
-            .social-sidebar {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
             .sidebar-card {
-                padding: 12px 14px;
+                flex: 0 0 min(80vw, 260px);
+                padding: 14px;
             }
 
 
