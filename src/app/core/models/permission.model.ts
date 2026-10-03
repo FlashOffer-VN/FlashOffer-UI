@@ -27,6 +27,8 @@ export enum Permission {
     ViewSystemSettings = 'P010',
     /** P011 */
     ViewReferralStats = 'P011',
+    /** P012 */
+    ViewMyReferralStats = 'P012',
     /** P020 */
     ViewUsers = 'P020',
     /** P021 */
@@ -43,6 +45,14 @@ export enum Permission {
     DeleteCollaborator = 'P026',
     /** P027 */
     RestoreCollaborator = 'P027',
+    /** P028 */
+    ViewMyGroupBuying = 'P028',
+    /** P029 */
+    ViewMyRequests = 'P029',
+    /** P030 */
+    ViewMyPosts = 'P030',
+    /** P031 */
+    ViewMyGroups = 'P031',
     /** P040 */
     ViewPartners = 'P040',
     /** P041 */

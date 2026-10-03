@@ -29,7 +29,8 @@ export class PermissionGuard implements CanActivate {
             return true;
         }
 
-        this._router.navigate(['/admin/dashboard']);
+        // Khu vực thành viên bị chặn thì về trang cá nhân, không đẩy sang khu vực quản trị.
+        this._router.navigate([this._router.url.startsWith('/user') ? '/user/profile' : '/admin/dashboard']);
         return false;
     }
 }

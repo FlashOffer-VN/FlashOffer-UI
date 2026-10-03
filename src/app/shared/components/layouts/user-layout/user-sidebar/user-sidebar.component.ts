@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '../../../../../core/services/app.service';
+import { Permission } from '../../../../../core/models/permission.model';
 
 @Component({
     selector: 'app-user-sidebar',
@@ -18,16 +19,21 @@ export class UserSidebarComponent {
 
     menuItems: MenuItem[] = [
         { path: '/user/profile', icon: 'fa-solid fa-id-card', label: 'USER.SIDEBAR.PROFILE' },
-        { path: '/user/my-group-buying', icon: 'fa-solid fa-people-group', label: 'USER.SIDEBAR.MY_GROUP_BUYING' },
-        { path: '/user/my-referral', icon: 'fa-solid fa-share-nodes', label: 'USER.SIDEBAR.MY_REFERRAL' },
-        { path: '/user/my-requests', icon: 'fa-solid fa-file-lines', label: 'USER.SIDEBAR.MY_REQUESTS' },
-        { path: '/user/my-posts', icon: 'fa-solid fa-newspaper', label: 'USER.SIDEBAR.MY_POSTS' },
-        { path: '/user/my-groups', icon: 'fa-solid fa-people-roof', label: 'USER.SIDEBAR.MY_GROUPS' },
+        { path: '/user/my-group-buying', icon: 'fa-solid fa-people-group', label: 'USER.SIDEBAR.MY_GROUP_BUYING', permission: Permission.ViewMyGroupBuying },
+        { path: '/user/my-referral', icon: 'fa-solid fa-share-nodes', label: 'USER.SIDEBAR.MY_REFERRAL', permission: Permission.ViewMyReferralStats },
+        { path: '/user/my-requests', icon: 'fa-solid fa-file-lines', label: 'USER.SIDEBAR.MY_REQUESTS', permission: Permission.ViewMyRequests },
+        { path: '/user/my-posts', icon: 'fa-solid fa-newspaper', label: 'USER.SIDEBAR.MY_POSTS', permission: Permission.ViewMyPosts },
+        { path: '/user/my-groups', icon: 'fa-solid fa-people-roof', label: 'USER.SIDEBAR.MY_GROUPS', permission: Permission.ViewMyGroups },
         { path: '/user/change-credentials', icon: 'fa-solid fa-key', label: 'USER.SIDEBAR.ACCOUNT' },
         { path: '/', icon: 'fa-solid fa-house', label: 'USER.SIDEBAR.BACK_TO_SITE' },
     ];
 
     constructor(private _appService: AppService) { }
+
+    /** Menu hiển thị theo quyền của tài khoản đang đăng nhập. */
+    get visibleMenuItems(): MenuItem[] {
+        return this.menuItems.filter(item => !item.permission || this._appService.permissionService.has(item.permission));
+    }
 
     toggleSidebar(): void {
         this.toggle.emit();
@@ -53,4 +59,6 @@ interface MenuItem {
     path: string;
     icon: string;
     label: string;
+    /** Mã quyền cần có để thấy mục này; bỏ trống = luôn hiển thị. */
+    permission?: Permission | null;
 }
