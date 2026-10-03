@@ -6,7 +6,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { CreateCollaboratorRequest, SalesChannelOption } from '@core/models/collaborator.model';
+import { resolveReferralCode } from '@core/utils/share-link';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { InputComponent } from '@shared/components/input/input.component';
 import { AccountCreatedNoticeComponent } from '@shared/components/account-created-notice/account-created-notice.component';
 import { AccountCredentials } from '@core/models/account.model';
 
@@ -14,7 +16,8 @@ import { AccountCredentials } from '@core/models/account.model';
     selector: 'app-register-ctv',
     standalone: true,
     imports: [
-        CommonModule, ReactiveFormsModule, TranslateModule, NgSelectWrapperComponent, RouterLink,
+        CommonModule, ReactiveFormsModule, TranslateModule, NgSelectWrapperComponent, InputComponent,
+        RouterLink,
         AccountCreatedNoticeComponent
     ],
     templateUrl: './register-ctv.component.html',
@@ -48,6 +51,8 @@ export class RegisterCtvComponent implements OnInit {
             email: ['', [Validators.required, Validators.email]],
             salesChannel: [null, Validators.required],
             experience: [''],
+            //  Mã chia sẻ trên link (?ref=) — lấy sẵn khi khách mở link của CTV, gửi kèm khi đăng ký.
+            referredByCode: [resolveReferralCode() ?? ''],
             agreeTerms: [false, [Validators.requiredTrue]]
         });
     }
@@ -143,7 +148,8 @@ export class RegisterCtvComponent implements OnInit {
             email: value.email || undefined,
             salesChannel: value.salesChannel ?? undefined,
             experience: value.experience || undefined,
-            agreeTerms: value.agreeTerms === true
+            agreeTerms: value.agreeTerms === true,
+            referredByCode: value.referredByCode?.trim() || undefined
         };
 
 

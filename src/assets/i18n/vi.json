@@ -389,6 +389,8 @@
         }
     },
     "CTV_FORM": {
+        "REFERRAL_CODE": "Mã giới thiệu",
+        "REFERRAL_CODE_PLACEHOLDER": "Mã CTV trong link chia sẻ (nếu có)",
         "TITLE": "Đăng ký Cộng tác viên",
         "DESCRIPTION": "Trở thành cộng tác viên của Kindi để nhận hoa hồng và ưu đãi",
         "FULL_NAME": "Họ và tên",
@@ -856,6 +858,8 @@
         }
     },
     "REGISTER": {
+        "REFERRAL_CODE": "Mã giới thiệu",
+        "REFERRAL_CODE_PLACEHOLDER": "Mã CTV trong link chia sẻ (nếu có)",
         "TITLE": "TRỞ THÀNH ĐỐI TÁC KINDI",
         "SUBTITLE": "Kết nối cơ hội – Mở rộng thu nhập",
         "DESCRIPTION": "Kindi kết nối bạn với các cơ hội kinh doanh, khách hàng và đối tác phù hợp.",
