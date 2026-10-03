@@ -13,7 +13,8 @@
         <!-- Form -->
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="admin-login-form">
             <!-- Username -->
-            <app-input formControlName="username" [label]="'ADMIN_LOGIN.USERNAME' | translate"
+            <app-input formControlName="username" [id]="'admin_login_username'" [autocomplete]="'username'"
+                [label]="'ADMIN_LOGIN.USERNAME' | translate"
                 [placeholder]="'ADMIN_LOGIN.USERNAME_PLACEHOLDER' | translate" [required]="true"
                 [isInvalid]="isFieldInvalid('username')" [errorMessage]="getErrorMessage('username')"
                 icon="fas fa-user">
@@ -21,6 +22,7 @@
 
             <!-- Password -->
             <app-input formControlName="password" [type]="showPassword ? 'text' : 'password'"
+                [id]="'admin_login_password'" [autocomplete]="showPassword ? 'off' : 'current-password'"
                 [label]="'ADMIN_LOGIN.PASSWORD' | translate"
                 [placeholder]="'ADMIN_LOGIN.PASSWORD_PLACEHOLDER' | translate" [required]="true"
                 [isInvalid]="isFieldInvalid('password')" [errorMessage]="getErrorMessage('password')"

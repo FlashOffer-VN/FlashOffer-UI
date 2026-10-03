@@ -715,7 +715,7 @@
         "USERNAME": "Tên đăng nhập",
         "USERNAME_PLACEHOLDER": "Nhập email hoặc số điện thoại",
         "PASSWORD": "Mật khẩu",
-        "PASSWORD_PLACEHOLDER": "Nhập số điện thoại",
+        "PASSWORD_PLACEHOLDER": "Nhập mật khẩu",
         "REMEMBER_ME": "Ghi nhớ đăng nhập",
         "FORGOT_PASSWORD": "Quên mật khẩu?",
         "BUTTON": "Đăng nhập",

@@ -17,7 +17,8 @@
         <!-- Form -->
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
             <!-- Username -->
-            <app-input formControlName="username" [label]="'LOGIN.USERNAME' | translate"
+            <app-input formControlName="username" [id]="'login_username'" [autocomplete]="'username'"
+                [label]="'LOGIN.USERNAME' | translate"
                 [placeholder]="'LOGIN.USERNAME_PLACEHOLDER' | translate" [required]="true"
                 [isInvalid]="isFieldInvalid('username')" [errorMessage]="getErrorMessage('username')"
                 icon="fas fa-user">
@@ -25,6 +26,7 @@
 
             <!-- Password -->
             <app-input formControlName="password" [type]="showPassword ? 'text' : 'password'"
+                [id]="'login_password'" [autocomplete]="showPassword ? 'off' : 'current-password'"
                 [label]="'LOGIN.PASSWORD' | translate" [placeholder]="'LOGIN.PASSWORD_PLACEHOLDER' | translate"
                 [required]="true" [isInvalid]="isFieldInvalid('password')" [errorMessage]="getErrorMessage('password')"
                 icon="fas fa-lock">
