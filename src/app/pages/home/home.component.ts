@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '../../core/services/app.service';
+import { scrollToSection } from '../../core/utils/scroll';
 
 @Component({
     selector: 'app-home',
@@ -16,5 +17,11 @@ export class HomeComponent implements OnInit {
     constructor(private _appService: AppService) { }
 
     ngOnInit(): void {
+    }
+
+    /** Nút "Xem Câu Chuyện" đưa người xem xuống khối câu chuyện khách hàng. */
+    showStories(event: Event): void {
+        event.preventDefault();
+        scrollToSection('stories');
     }
 }

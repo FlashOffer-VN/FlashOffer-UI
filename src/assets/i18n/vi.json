@@ -1147,7 +1147,7 @@
         "UPDATE_POST_ERROR": "Không thể cập nhật bài viết",
         "CONFIRM_DELETE_MESSAGE": "Bạn có chắc chắn muốn xóa bài viết \"{{title}}\"?",
         "PIN": "Ghim",
-        "UNPIN": "Hủ ghim",
+        "UNPIN": "Hủy ghim",
         "PINNED": "Đã ghim",
         "PIN_SUCCESS": "Đã ghim bài viết lên đầu trang!",
         "UNPIN_SUCCESS": "Đã hủy ghim bài viết!",
