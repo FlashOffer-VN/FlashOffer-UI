@@ -32,6 +32,10 @@ export class PermissionService {
         if (!user) return false;
         if (user.role === UserRole.SuperAdmin) return true;
 
+        // Hồ sơ lưu từ trước khi có tính năng phân quyền chưa kèm danh sách quyền: chưa xác định được
+        // nên không ẩn/chặn (tránh khoá oan menu của phiên đang đăng nhập); API vẫn là nơi chặn thật.
+        if (!Array.isArray(user.permissions)) return true;
+
         const wanted = (Array.isArray(permission) ? permission : [permission])
             .map(code => toPermissionCode(code))
             .filter((code): code is string => !!code);
