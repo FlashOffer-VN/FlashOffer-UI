@@ -1,4 +1,4 @@
-﻿import { ServerRoute, RenderMode } from '@angular/ssr';
+import { ServerRoute, RenderMode } from '@angular/ssr';
 
 /**
  * Server routes for SSR / build-time prerendering (SSG).
@@ -24,6 +24,7 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'partner-register', renderMode: RenderMode.Prerender },
   { path: 'privacy', renderMode: RenderMode.Prerender },
   { path: 'terms', renderMode: RenderMode.Prerender },
+  { path: 'support', renderMode: RenderMode.Prerender },
   { path: 'connect-sme', renderMode: RenderMode.Prerender },
   { path: 'find-supplier', renderMode: RenderMode.Prerender },
   { path: 'group-buying', renderMode: RenderMode.Prerender },

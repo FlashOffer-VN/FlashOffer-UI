@@ -432,8 +432,8 @@
     transition: max-height 0.3s ease;
 }
 
-/* 👈 Gradient fade ở cuối khi chưa expand */
-.post-text:not(.expanded)::after {
+/* 👈 Vệt mờ ở dòng cuối chỉ khi nội dung thật sự bị cắt */
+.post-text.has-overflow:not(.expanded)::after {
     content: '';
     position: absolute;
     bottom: 0;

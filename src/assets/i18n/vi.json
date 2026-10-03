@@ -1358,7 +1358,18 @@
             "NO_PERMISSION": "Tài khoản của bạn không có quyền xem cấu hình chung.",
             "ERROR_FORM_INVALID": "Có trường chưa hợp lệ, kiểm tra lại trước khi lưu.",
             "FIELD_REFERRAL_CODE_PREFIX_HINT": "Tiền tố mã giới thiệu, ví dụ CTV.",
-          "SECTION_SELECT": "Nhóm cài đặt"
+          "SECTION_SELECT": "Nhóm cài đặt",
+          "SECTION_LEGAL": "Nội dung pháp lý",
+          "SECTION_LEGAL_DESC": "Chính sách bảo mật và Điều khoản dịch vụ hiển thị ở chân trang.",
+          "FIELD_PRIVACY_POLICY": "Chính sách bảo mật",
+          "FIELD_TERMS_OF_SERVICE": "Điều khoản dịch vụ",
+          "FIELD_LEGAL_HINT": "Soạn như bài viết: tiêu đề mục, danh sách, in đậm, chèn liên kết. Bỏ trống thì trang dùng nội dung mặc định.",
+          "CURRENT_HTML": "Đã soạn nội dung",
+          "CURRENT_HTML_CHARS": "ký tự",
+          "FIELD_LEGAL_EDITOR_HINT": "Nội dung soạn ở khung bên dưới (tiêu đề mục, danh sách, liên kết…).",
+          "FIELD_LEGAL_PLACEHOLDER": "Soạn nội dung trang…"
+        
+        
         
         },
         "BANK_ACCOUNTS":
@@ -2239,5 +2250,19 @@
         "EMAIL": "Gửi email",
         "FACEBOOK": "Facebook",
         "TOP": "Lên đầu trang"
-    }
+    },
+  "SUPPORT_TITLE": "Trung tâm hỗ trợ",
+  "SUPPORT_INTRO": "Tổng hợp cách liên hệ với Kindi: gọi điện, gửi email hoặc để lại yêu cầu, chúng tôi phản hồi trong giờ làm việc.",
+  "SUPPORT_CONTACT_TITLE": "Liên hệ trực tiếp",
+  "SUPPORT_HOTLINE": "Hotline",
+  "SUPPORT_EMAIL": "Email hỗ trợ",
+  "SUPPORT_ADDRESS": "Địa chỉ",
+  "SUPPORT_HOURS": "Giờ làm việc",
+  "SUPPORT_SOCIAL_TITLE": "Kênh khác",
+  "SUPPORT_CTA_TITLE": "Chưa tìm được câu trả lời?",
+  "SUPPORT_CTA_TEXT": "Gửi yêu cầu cho chúng tôi, đội ngũ Kindi sẽ liên hệ lại.",
+  "SUPPORT_CTA_BUTTON": "Gửi yêu cầu"
+
+
+
 }

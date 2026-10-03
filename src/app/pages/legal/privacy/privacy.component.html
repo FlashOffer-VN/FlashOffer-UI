@@ -7,6 +7,9 @@
         </header>
 
         <article class="legal-page__content">
+            @if (content) {
+                <div class="legal-rich" [innerHTML]="content"></div>
+            } @else {
             <p>
                 Chính sách Bảo mật này (“Chính sách Bảo mật”) mô tả cách thức KINDI (gọi chung là “KINDI”, “chúng tôi” hoặc “của chúng tôi”) thu thập, sử dụng và chia sẻ thông tin cá nhân liên quan đến trang web của chúng tôi tại <a href="https://www.kindi.vn" target="_blank" rel="noopener">www.kindi.vn</a> (gọi chung là “Trang web”) và các sản phẩm và dịch vụ khác của chúng tôi (gọi chung là “Dịch vụ”).
             </p>
@@ -177,6 +180,7 @@
             <p>
                 Nếu bạn có thắc mắc hoặc lo ngại về Chính sách Bảo mật của chúng tôi hoặc bất kỳ vấn đề bảo mật nào khác, hoặc muốn yêu cầu thực hiện một trong các quyền được mô tả trong Chính sách Bảo mật này, vui lòng liên hệ với chúng tôi qua email tại <a href="mailto:info@kindi.vn">info@kindi.vn</a>.
             </p>
+            }
         </article>
     </div>
 </div>
