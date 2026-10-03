@@ -31,7 +31,6 @@ export class AdminSidebarComponent {
         { path: '/admin/social-posts', icon: 'fa-solid fa-clipboard-check', label: 'ADMIN.SIDEBAR.SOCIAL_POSTS', permission: Permission.ViewSocialPosts },
         { path: '/admin/partner', icon: 'fa-solid fa-building', label: 'ADMIN.SIDEBAR.PARTNER', permission: Permission.ViewPartners },
         { path: '/admin/settings', icon: 'fa-solid fa-cog', label: 'ADMIN.SIDEBAR.SETTINGS', permission: Permission.ViewSystemSettings },
-        { path: '/admin/permissions', icon: 'fa-solid fa-shield-halved', label: 'ADMIN.SIDEBAR.PERMISSIONS', permission: Permission.ViewPermissions },
         { path: '/', icon: 'fa-solid fa-arrow-right-from-bracket', label: 'ADMIN.SIDEBAR.BACK_TO_SITE', permission: null },
     ];
 
