@@ -28,6 +28,16 @@ export class PayoutService {
         return this._apiService.get<ApiResponse<MyWallet>>(`${this._baseUrl}/me`);
     }
 
+    /** Gửi yêu cầu rút hoa hồng sớm của chính người gọi. POST /api/v1/Payouts/withdrawals */
+    createWithdrawal(amount: number): Observable<ApiResponse<PayoutStatement>> {
+        return this._apiService.post<ApiResponse<PayoutStatement>>(`${this._baseUrl}/withdrawals`, { amount });
+    }
+
+    /** Huỷ một yêu cầu rút còn chờ duyệt. POST /api/v1/Payouts/{id}/cancel */
+    cancelPayout(id: string): Observable<ApiResponse<PayoutStatement>> {
+        return this._apiService.post<ApiResponse<PayoutStatement>>(`${this._baseUrl}/${id}/cancel`, {});
+    }
+
     /** Thông tin ngân hàng nhận tiền của tôi; trả về rỗng khi chưa khai. GET /api/v1/BankAccounts/me */
     getMyBankAccount(): Observable<ApiResponse<BankAccount | null>> {
         return this._apiService.get<ApiResponse<BankAccount | null>>(`${this._bankAccountUrl}/me`);
