@@ -36,24 +36,24 @@ import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange
             </app-status-tabs>
 
             <!-- Bộ lọc -->
-            <div class="flex flex-wrap items-center gap-3 bg-white p-3 rounded-lg border border-gray-200">
+            <div class="flex flex-wrap items-end gap-3 bg-white p-3 rounded-lg border border-gray-200">
                 <ngx-filter-daterange [from]="fromDate" [to]="toDate" (rangeChange)="onRangeChange($event)">
                 </ngx-filter-daterange>
 
                 <input type="text" [(ngModel)]="keyword" (keyup.enter)="loadData()"
                     [placeholder]="(activeTab === 'auth' ? 'ADMIN.AUDIT_LOG.SEARCH_USERNAME' : 'ADMIN.AUDIT_LOG.SEARCH_ENTITY') | translate"
-                    class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-64" />
+                    class="h-10 px-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-64" />
 
                 <button type="button" (click)="onSearch()"
-                    class="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700">
+                    class="h-10 px-4 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700">
                     <i class="fa-solid fa-magnifying-glass mr-1"></i>{{ 'ADMIN.AUDIT_LOG.SEARCH' | translate }}
                 </button>
                 <button type="button" (click)="onReset()"
-                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50">
+                    class="h-10 px-4 rounded-lg border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50">
                     <i class="fa-solid fa-rotate-left mr-1"></i>{{ 'ADMIN.AUDIT_LOG.RESET' | translate }}
                 </button>
 
-                <span class="ml-auto text-sm text-gray-500">
+                <span class="ml-auto h-10 flex items-center text-sm text-gray-500">
                     {{ 'ADMIN.AUDIT_LOG.TOTAL' | translate }}: <strong>{{ totalCount }}</strong>
                 </span>
             </div>

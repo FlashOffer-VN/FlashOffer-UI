@@ -1,4 +1,45 @@
 {
+    "COMMISSION": {
+    "BENEFICIARY_REFERRER": "Người giới thiệu",
+    "BENEFICIARY_PARTNER": "Đối tác",
+    "SCOPE_TITLE": "Phạm vi áp dụng",
+    "SCOPE_GLOBAL": "Áp chung cho mọi tài khoản",
+    "SCOPE_USERS": "Áp riêng cho tài khoản được chọn",
+    "SELECTED": "Đang chọn",
+    "FORM_TITLE": "Mức hoa hồng",
+    "TYPE": "Cách tính",
+    "RATE": "Mức hoa hồng",
+    "RATE_PERCENT": "% giá trị",
+    "RATE_FIXED": "số tiền",
+    "MIN_ORDER": "Đơn tối thiểu",
+    "MAX_COMMISSION": "Trần hoa hồng",
+    "TIERS": "Bậc thang",
+    "TIER_ADD": "Thêm bậc",
+    "TIER_FROM": "Từ",
+    "TIER_TO": "Đến",
+    "TIER_RATE": "Mức",
+    "TIER_COUNT": "bậc",
+    "TIER_NO_LIMIT": "Không giới hạn",
+    "NOTE": "Ghi chú nội bộ",
+    "ACTIVE": "Đang áp dụng",
+    "PAUSED": "Đang tạm dừng",
+    "SAVE": "Lưu cấu hình",
+    "SAVE_SUCCESS": "Đã lưu cấu hình hoa hồng",
+    "SAVE_FAILED": "Lưu cấu hình hoa hồng thất bại",
+    "LOAD_FAILED": "Không tải được cấu hình hoa hồng",
+    "CANCEL_EDIT": "Bỏ chỉnh sửa",
+    "EXISTING": "Cấu hình đang áp dụng",
+    "EMPTY": "Chưa có cấu hình nào",
+    "BADGE_GLOBAL": "Chung",
+    "BADGE_PERSONAL": "Riêng",
+    "ALL_USERS": "Mọi tài khoản",
+    "NO_TARGET": "Chọn ít nhất một tài khoản hoặc áp chung cho mọi tài khoản",
+    "DELETE": "Xoá",
+    "DELETE_CONFIRM": "Bạn có chắc muốn xoá cấu hình hoa hồng này?",
+    "DELETE_SUCCESS": "Đã xoá cấu hình hoa hồng",
+    "DELETE_FAILED": "Xoá cấu hình hoa hồng thất bại",
+    "UPDATED_AT": "Cập nhật"
+    },
     "APP_TITLE": "Kindi",
     "APP_NAME": "Kindi - Nền tảng kết nối SME",
     "NAV_SOLUTIONS": "Giải Pháp",
@@ -687,11 +728,23 @@
         }
     },
     "USER": {
+        "COMMISSION": {
+        "TITLE": "Hoa hồng giới thiệu của tôi",
+        "SUBTITLE": "Mức hoa hồng đang áp cho tài khoản của bạn khi bạn giới thiệu hoặc là đối tác.",
+        "REFERRER_TITLE": "Khi bạn giới thiệu",
+        "PARTNER_TITLE": "Khi bạn là đối tác",
+        "BADGE_PERSONAL": "Mức riêng của bạn",
+        "BADGE_GLOBAL": "Mức chung",
+        "EMPTY": "Chưa có mức hoa hồng cho phần này.",
+        "PAUSED": "Mức này đang tạm dừng.",
+        "HINT": "Mức riêng của tài khoản luôn được áp trước mức chung. Liên hệ quản trị viên nếu cần điều chỉnh."
+        },
         "WELCOME_TITLE": "Chào mừng bạn trở lại!",
         "WELCOME_DESCRIPTION": "Tài khoản của bạn đã sẵn sàng. Các tính năng dành cho thành viên sẽ được cập nhật sớm.",
         "USERNAME": "Tên đăng nhập",
         "EMAIL": "Email",
         "SIDEBAR": {
+            "MY_COMMISSION": "Hoa hồng của tôi",
             "PANEL": "Khu vực thành viên",
             "PROFILE": "Hồ sơ của tôi",
             "MY_GROUP_BUYING": "Đơn mua chung của tôi",
@@ -1011,6 +1064,10 @@
         }
     },
     "COMMON": {
+        "USER_PICKER": {
+        "SEARCH_PLACEHOLDER": "Tìm theo tên đăng nhập hoặc họ tên...",
+        "EMPTY": "Không tìm thấy tài khoản nào"
+        },
         "BUTTON": {
             "SEARCH": "Tìm kiếm",
             "ACTION": "Thao tác",
@@ -1274,6 +1331,7 @@
             "REFERRED_BY": "Được giới thiệu bởi"
         },
         "SETTINGS_PAGE": {
+            "TAB_COMMISSION": "Hoa hồng",
             "TITLE": "Cài đặt hệ thống",
             "SUBTITLE": "Quản lý cấu hình và tùy chọn quản trị",
             "CARD_TITLE": "Khu vực cài đặt đang được xây dựng",

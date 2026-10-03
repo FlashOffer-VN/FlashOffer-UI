@@ -52,6 +52,12 @@ export const userRoutes: Routes = [
                 data: { permission: Permission.ViewMyGroups },
                 loadComponent: () => import('@pages/user/my-groups/my-groups.component').then(m => m.MyGroupsPageComponent)
             },
+            {
+                path: 'my-commission',
+                canActivate: [CredentialsGuard, PermissionGuard],
+                data: { permission: Permission.ViewMyCommission },
+                loadComponent: () => import('@pages/user/my-commission/my-commission.component').then(m => m.MyCommissionPageComponent)
+            },
         
         ]
     }

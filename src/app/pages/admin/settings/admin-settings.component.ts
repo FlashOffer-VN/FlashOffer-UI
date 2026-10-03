@@ -8,18 +8,20 @@ import { Permission } from '@core/models/permission.model';
 import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-tabs/status-tabs.component';
 import { AdminPermissionSettingsComponent } from '@pages/admin/permissions/permission-settings.component';
 import { AdminAuditLogListComponent } from '@pages/admin/settings/audit-log/audit-log-list.component';
+import { AdminCommissionConfigComponent } from '@pages/admin/settings/commission/commission-config.component';
 
 /**
  * Mục Cài đặt hệ thống gồm các tab cấu hình dùng chung:
  * - Cấu hình chung: các tùy chọn hệ thống (bổ sung dần).
  * - Phân quyền: ma trận quyền theo vai trò.
+ * - Hoa hồng: mức hoa hồng chung hoặc riêng cho một/nhiều tài khoản.
  * - Nhật ký hoạt động: nhật ký thao tác dữ liệu và nhật ký đăng nhập.
  * Tab chỉ hiện khi tài khoản có quyền tương ứng; SuperAdmin luôn thấy đủ tab.
  */
 @Component({
     selector: 'app-admin-settings',
     standalone: true,
-    imports: [CommonModule, TranslateModule, StatusTabsComponent, AdminPermissionSettingsComponent, AdminAuditLogListComponent],
+    imports: [CommonModule, TranslateModule, StatusTabsComponent, AdminPermissionSettingsComponent, AdminAuditLogListComponent, AdminCommissionConfigComponent],
     template: `
         <div class="page">
             <header>
@@ -35,6 +37,8 @@ import { AdminAuditLogListComponent } from '@pages/admin/settings/audit-log/audi
             <div class="tab-content">
                 @if (activeTab === 'permissions') {
                     <app-admin-permission-settings></app-admin-permission-settings>
+                } @else if (activeTab === 'commission') {
+                    <app-admin-commission-config></app-admin-commission-config>
                 } @else if (activeTab === 'audit') {
                     <app-admin-audit-log-list></app-admin-audit-log-list>
                 } @else {
@@ -82,6 +86,7 @@ export class AdminSettingsComponent implements OnInit {
         this.tabs = [
             { key: 'general', label: this._appService.trans('ADMIN.SETTINGS_PAGE.TAB_GENERAL'), icon: 'fa-solid fa-gear', permission: null },
             { key: 'permissions', label: this._appService.trans('ADMIN.SETTINGS_PAGE.TAB_PERMISSIONS'), icon: 'fa-solid fa-shield-halved', permission: Permission.ViewPermissions },
+            { key: 'commission', label: this._appService.trans('ADMIN.SETTINGS_PAGE.TAB_COMMISSION'), icon: 'fa-solid fa-percent', permission: Permission.ViewCommissionConfigs },
             { key: 'audit', label: this._appService.trans('ADMIN.SETTINGS_PAGE.TAB_AUDIT_LOG'), icon: 'fa-solid fa-clipboard-list', permission: Permission.ViewFullAuditLogs }
         ].filter(tab => !tab.permission || this._appService.permissionService.has(tab.permission));
     }
