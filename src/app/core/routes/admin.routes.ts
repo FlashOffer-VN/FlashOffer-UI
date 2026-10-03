@@ -26,7 +26,10 @@ export const adminRoutes: Routes = [
             { path: 'groups', loadComponent: () => import('@pages/admin/groups/group-list.component').then(m => m.AdminGroupListComponent) },
             { path: 'groups/:id', loadComponent: () => import('@pages/admin/groups/detail/group-detail.component').then(m => m.AdminGroupDetailComponent) },
             { path: 'group-buying/:id', loadComponent: () => import('@pages/admin/group-buying/detail/group-buying-detail.component').then(m => m.AdminGroupBuyingDetailComponent) },
-            { path: 'settings', loadComponent: () => import('@pages/admin/settings/admin-settings.component').then(m => m.AdminSettingsComponent) },
+            { path: 'settings', canActivate: [PermissionGuard], data: { permission: Permission.ViewSystemSettings },
+              loadComponent: () => import('@pages/admin/settings/admin-settings.component').then(m => m.AdminSettingsComponent) },
+            // Đường dẫn cũ của màn hình phân quyền, nay nằm trong tab của mục Cài đặt
+            { path: 'permissions', redirectTo: 'settings' },
             { path: 'demo', loadComponent: () => import('@pages/demo/demo.component').then(m => m.DemoComponent) },
             { path: 'social-posts', loadComponent: () => import('@pages/admin/social/social-post-list.component').then(m => m.AdminSocialPostListComponent) },
             // User Management
@@ -36,8 +39,6 @@ export const adminRoutes: Routes = [
             { path: 'collaborator/:id', loadComponent: () => import('@pages/admin/collaborator/detail/collaborator-detail.component').then(m => m.AdminCollaboratorDetailComponent) },
             // Partner Management
             // Phân quyền: chỉ tài khoản có quyền xem ma trận quyền (P100) mới vào được
-            { path: 'permissions', canActivate: [PermissionGuard], data: { permission: Permission.ViewPermissions },
-              loadComponent: () => import('@pages/admin/permissions/permission-matrix.component').then(m => m.AdminPermissionMatrixComponent) },
             { path: 'partner', loadComponent: () => import('@pages/admin/partner/partner-list.component').then(m => m.AdminPartnerListComponent) },
             { path: 'partner/:id', loadComponent: () => import('@pages/admin/partner/detail/partner-detail.component').then(m => m.AdminPartnerDetailComponent) },
         

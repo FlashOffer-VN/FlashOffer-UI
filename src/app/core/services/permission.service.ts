@@ -3,7 +3,14 @@ import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { AuthService } from './auth.service';
 import { ApiResponse, UserRole } from '../models/auth.model';
-import { Permission, PermissionMatrix, toPermissionCode } from '../models/permission.model';
+import {
+    Permission,
+    PermissionMatrix,
+    UserPermissionCandidate,
+    UserPermissionDetail,
+    UpdateUsersPermissionsResult,
+    toPermissionCode
+} from '../models/permission.model';
 
 /**
  * Quyền của tài khoản đang đăng nhập (đọc từ hồ sơ đã lưu sau khi đăng nhập) và API quản lý quyền.
@@ -58,5 +65,32 @@ export class PermissionService {
     /** Cập nhật quyền cho một vai trò. PUT /api/v1/permissions/roles/{role} */
     updateRolePermissions(role: UserRole, permissionCodes: string[]): Observable<ApiResponse<PermissionMatrix>> {
         return this._apiService.put<ApiResponse<PermissionMatrix>>(`${this._baseUrl}/roles/${role}`, { permissionCodes });
+    }
+
+    /** Tìm tài khoản để cấu hình quyền riêng. GET /api/v1/permissions/users */
+    searchUsers(search: string): Observable<ApiResponse<UserPermissionCandidate[]>> {
+        return this._apiService.get<ApiResponse<UserPermissionCandidate[]>>(`${this._baseUrl}/users`, {
+            search: search || undefined,
+            pageNumber: 1,
+            pageSize: 50
+        });
+    }
+
+    /** Quyền hiệu lực của một tài khoản. GET /api/v1/permissions/users/{userId} */
+    getUserPermissions(userId: string): Observable<ApiResponse<UserPermissionDetail>> {
+        return this._apiService.get<ApiResponse<UserPermissionDetail>>(`${this._baseUrl}/users/${userId}`);
+    }
+
+    /** Đặt quyền hiệu lực cho một tài khoản. PUT /api/v1/permissions/users/{userId} */
+    updateUserPermissions(userId: string, permissionCodes: string[]): Observable<ApiResponse<UserPermissionDetail>> {
+        return this._apiService.put<ApiResponse<UserPermissionDetail>>(`${this._baseUrl}/users/${userId}`, { permissionCodes });
+    }
+
+    /** Áp cùng một bộ quyền cho nhiều tài khoản. PUT /api/v1/permissions/users */
+    updateUsersPermissions(userIds: string[], permissionCodes: string[]): Observable<ApiResponse<UpdateUsersPermissionsResult>> {
+        return this._apiService.put<ApiResponse<UpdateUsersPermissionsResult>>(`${this._baseUrl}/users`, {
+            userIds,
+            permissionCodes
+        });
     }
 }
