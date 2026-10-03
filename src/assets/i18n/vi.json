@@ -69,7 +69,7 @@
     "FOOTER_PRIVACY": "Chính sách bảo mật",
     "FOOTER_TERMS": "Điều khoản dịch vụ",
     "FOOTER_CONTACT": "Liên hệ",
-    "FOOTER_COPYRIGHT": "© 2024 Kindi. All rights reserved.",
+    "FOOTER_COPYRIGHT": "© {{year}} Kindi. All rights reserved.",
     "LEGAL_BADGE": "Pháp lý",
     "LEGAL_PRIVACY_TITLE": "Chính sách bảo mật",
     "LEGAL_PRIVACY_INTRO": "Cách chúng tôi thu thập, sử dụng và bảo vệ thông tin cá nhân của bạn.",

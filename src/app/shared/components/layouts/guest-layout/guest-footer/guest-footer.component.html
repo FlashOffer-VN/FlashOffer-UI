@@ -5,15 +5,15 @@
     </div>
     <div>
         <h3>{{ 'FOOTER_SOLUTIONS' | translate }}</h3>
-        <a href="#solutions">{{ 'FOOTER_BUY_GROUP' | translate }}</a>
-        <a href="#talent">{{ 'FOOTER_OPTIMIZE' | translate }}</a>
-        <a href="#suppliers">{{ 'FOOTER_SUPPLY_NETWORK' | translate }}</a>
+        <a routerLink="/group-buying">{{ 'FOOTER_BUY_GROUP' | translate }}</a>
+        <a routerLink="/get-offer">{{ 'FOOTER_OPTIMIZE' | translate }}</a>
+        <a routerLink="/suppliers">{{ 'FOOTER_SUPPLY_NETWORK' | translate }}</a>
     </div>
     <div>
         <h3>{{ 'FOOTER_COMMUNITY' | translate }}</h3>
-        <a href="#community">{{ 'FOOTER_FORUM' | translate }}</a>
-        <a href="#talent">{{ 'FOOTER_SUPPORT' | translate }}</a>
-        <a href="#stories">{{ 'FOOTER_RESOURCES' | translate }}</a>
+        <a routerLink="/social">{{ 'FOOTER_FORUM' | translate }}</a>
+        <a routerLink="/connect-sme">{{ 'FOOTER_SUPPORT' | translate }}</a>
+        <a routerLink="/partner">{{ 'FOOTER_RESOURCES' | translate }}</a>
     </div>
     <div>
         <h3>{{ 'FOOTER_LEGAL' | translate }}</h3>
@@ -51,5 +51,5 @@
             }
         </div>
     }
-    <p class="sme-footer__copy text-center">{{ setting?.copyrightText || ('FOOTER_COPYRIGHT' | translate) }}</p>
+    <p class="sme-footer__copy text-center">{{ setting?.copyrightText || ('FOOTER_COPYRIGHT' | translate: { year: currentYear }) }}</p>
 </footer>

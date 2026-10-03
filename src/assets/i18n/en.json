@@ -68,7 +68,7 @@
     "FOOTER_PRIVACY": "Privacy policy",
     "FOOTER_TERMS": "Terms of service",
     "FOOTER_CONTACT": "Contact",
-    "FOOTER_COPYRIGHT": "© 2024 Kindi. All rights reserved.",
+    "FOOTER_COPYRIGHT": "© {{year}} Kindi. All rights reserved.",
     "LEGAL_BADGE": "Legal",
     "LEGAL_PRIVACY_TITLE": "Privacy Policy",
     "LEGAL_PRIVACY_INTRO": "How we collect, use and protect your personal information.",
