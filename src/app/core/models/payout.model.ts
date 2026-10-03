@@ -114,6 +114,10 @@ export interface PayoutQuery {
 
 export interface BankAccount {
     id: string;
+    /** Tài khoản sở hữu (màn xác thực cần để đối chiếu và gọi API). */
+    userId?: string;
+    username?: string | null;
+    fullName?: string | null;
     bankName: string;
     branch?: string | null;
     accountNumber: string;
@@ -123,6 +127,20 @@ export interface BankAccount {
     verifiedBy?: string | null;
     note?: string | null;
     updatedAt: string;
+}
+
+/** Điều kiện lọc danh sách tài khoản ngân hàng chờ xác thực. */
+export interface BankAccountQuery {
+    pageNumber?: number;
+    pageSize?: number;
+    search?: string | null;
+    isVerified?: boolean | null;
+}
+
+/** Ghi nhận xác thực thông tin ngân hàng của một tài khoản. */
+export interface VerifyBankAccountRequest {
+    isVerified: boolean;
+    note?: string | null;
 }
 
 /** Nhãn trạng thái chi trả (khoá i18n). */

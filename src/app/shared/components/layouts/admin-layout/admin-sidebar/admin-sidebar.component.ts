@@ -31,6 +31,7 @@ export class AdminSidebarComponent {
         { path: '/admin/social-posts', icon: 'fa-solid fa-clipboard-check', label: 'ADMIN.SIDEBAR.SOCIAL_POSTS', permission: Permission.ViewSocialPosts },
         { path: '/admin/partner', icon: 'fa-solid fa-building', label: 'ADMIN.SIDEBAR.PARTNER', permission: Permission.ViewPartners },
         { path: '/admin/payouts', icon: 'fa-solid fa-money-bill-transfer', label: 'ADMIN.SIDEBAR.PAYOUTS', permission: Permission.ViewPayouts },
+        { path: '/admin/bank-accounts', icon: 'fa-solid fa-building-columns', label: 'ADMIN.SIDEBAR.BANK_ACCOUNTS', permission: Permission.VerifyBankAccounts },
         { path: '/admin/settings', icon: 'fa-solid fa-cog', label: 'ADMIN.SIDEBAR.SETTINGS', permission: Permission.ViewSystemSettings },
         { path: '/', icon: 'fa-solid fa-arrow-right-from-bracket', label: 'ADMIN.SIDEBAR.BACK_TO_SITE', permission: null },
     ];
