@@ -125,14 +125,38 @@ export enum Permission {
     UpdateCommissionConfigs = 'P106',
     /** P013 */
     ViewMyCommission = 'P013',
+    /** P014 */
+    UpdateMyBankAccount = 'P014',
+    /** P015 */
+    RequestCommissionWithdrawal = 'P015',
+    /** P107 */
+    ViewPayouts = 'P107',
+    /** P108 */
+    ProcessPayouts = 'P108',
+    /** P109 */
+    ManageMembershipTiers = 'P109',
+    /** P110 */
+    VerifyBankAccounts = 'P110',
+}
+
+/** Nhóm quyền (bảng PermissionGroups): mã, tên hiển thị và thứ tự. */
+export interface PermissionGroupItem {
+    code: string;
+    /** Tên nhóm tiếng Việt. */
+    name: string;
+    /** Tên nhóm tiếng Anh. */
+    nameEn: string;
+    sortOrder: number;
 }
 
 /** Một quyền trong danh mục API trả về. */
 export interface PermissionItem {
     code: string;
     name: string;
-    /** Nhóm chức năng: System | User | Partner | Purchase | Group | Community | SuperAdmin */
+    /** Nhóm chức năng theo enum: System | User | Partner | Purchase | Group | Community | Referral | SuperAdmin */
     module: string;
+    /** Mã nhóm quyền dùng để gom nhóm trên màn phân quyền (SYSTEM, USER, MEMBER…). */
+    parentCode?: string | null;
     /** View (màn hình) hoặc Action (thao tác) */
     kind: string;
     route?: string | null;
@@ -149,6 +173,8 @@ export interface RolePermission {
 /** Ma trận phân quyền: danh mục quyền + quyền của từng vai trò. */
 export interface PermissionMatrix {
     permissions: PermissionItem[];
+    /** Danh sách nhóm quyền kèm tên và thứ tự (đọc từ DB). */
+    groups?: PermissionGroupItem[];
     roles: RolePermission[];
 }
 

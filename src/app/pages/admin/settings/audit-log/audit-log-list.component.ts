@@ -6,7 +6,8 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
 import { AuditLogService } from '@core/services/audit-log.service';
-import { AuditLogEntry, AuthAuditLogEntry } from '@core/models/audit-log.model';
+import { AuditLogEntry, AuditLogQuery, AuthAuditLogEntry, AuthAuditLogQuery } from '@core/models/audit-log.model';
+import { Permission } from '@core/models/permission.model';
 import { PagedResponse } from '@core/models/paged-response.model';
 
 import { LoadingComponent } from '@shared/components/loading/loading.component';
@@ -255,6 +256,14 @@ export class AdminAuditLogListComponent implements OnInit {
         this.expandedId = this.expandedId === id ? null : id;
     }
 
+    /**
+     * Có được xem toàn bộ nhật ký (kể cả hành động của tài khoản quản trị tối cao) hay không.
+     * Không có quyền này thì màn chỉ đọc nhật ký thường — API tự ẩn hành động của quản trị tối cao.
+     */
+    private _canViewFullLogs(): boolean {
+        return this._appService.permissionService.has(Permission.ViewFullAuditLogs);
+    }
+
     /** Ghép thông tin thiết bị để hiển thị gọn trong một cột. */
     deviceText(deviceType?: string, operatingSystem?: string, browserName?: string): string {
         const parts = [deviceType, operatingSystem, browserName].filter(part => !!part);
@@ -265,18 +274,31 @@ export class AdminAuditLogListComponent implements OnInit {
         this.isLoading = true;
 
         const keyword = this.keyword.trim();
-        const common = {
+        // Chỉ gắn tham số khi thực sự có giá trị: HttpParams biến undefined/null thành chuỗi
+        // "undefined"/"null" nên API báo lỗi dữ liệu không hợp lệ và danh sách luôn rỗng.
+        const common: AuditLogQuery = {
             pageNumber: this.pageNumber,
             pageSize: this.pageSize,
             sortBy: 'timestamp',
-            sortOrder: 'desc',
-            fromDate: this.fromDate ?? undefined,
-            toDate: this.toDate ?? undefined
+            sortOrder: 'desc'
         };
+        if (this.fromDate) common.fromDate = this.fromDate;
+        if (this.toDate) common.toDate = this.toDate;
 
-        const request: Observable<PagedResponse<AuditLogEntry | AuthAuditLogEntry>> = this.activeTab === 'auth'
-            ? this._auditLogService.getFullAuthLogs({ ...common, username: keyword || undefined })
-            : this._auditLogService.getFullEntityLogs({ ...common, entityName: keyword || undefined });
+        let request: Observable<PagedResponse<AuditLogEntry | AuthAuditLogEntry>>;
+        if (this.activeTab === 'auth') {
+            const query: AuthAuditLogQuery = { ...common };
+            if (keyword) query.username = keyword;
+            request = this._canViewFullLogs()
+                ? this._auditLogService.getFullAuthLogs(query)
+                : this._auditLogService.getAuthLogs(query);
+        } else {
+            const query: AuditLogQuery = { ...common };
+            if (keyword) query.entityName = keyword;
+            request = this._canViewFullLogs()
+                ? this._auditLogService.getFullEntityLogs(query)
+                : this._auditLogService.getEntityLogs(query);
+        }
 
         request.subscribe({
             next: (response: PagedResponse<AuditLogEntry | AuthAuditLogEntry>) => {

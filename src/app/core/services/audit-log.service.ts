@@ -16,11 +16,21 @@ export class AuditLogService {
     constructor(private readonly _api: ApiService) { }
 
     /** Nhật ký thao tác dữ liệu (thêm/sửa/xoá trên các bảng nghiệp vụ). */
+    getEntityLogs(query: AuditLogQuery): Observable<PagedResponse<AuditLogEntry>> {
+        return this._api.get<PagedResponse<AuditLogEntry>>(`${this._baseUrl}/entity`, { ...query });
+    }
+
+    /** Nhật ký đăng nhập, đổi mật khẩu, làm mới token. */
+    getAuthLogs(query: AuthAuditLogQuery): Observable<PagedResponse<AuthAuditLogEntry>> {
+        return this._api.get<PagedResponse<AuthAuditLogEntry>>(`${this._baseUrl}/auth`, { ...query });
+    }
+
+    /** Như hai hàm trên nhưng lấy cả hành động của tài khoản quản trị tối cao (quyền xem toàn bộ nhật ký). */
     getFullEntityLogs(query: AuditLogQuery): Observable<PagedResponse<AuditLogEntry>> {
         return this._api.get<PagedResponse<AuditLogEntry>>(`${this._baseUrl}/full/entity`, { ...query });
     }
 
-    /** Nhật ký đăng nhập, đổi mật khẩu, làm mới token. */
+    /** Như trên, dành cho nhật ký đăng nhập. */
     getFullAuthLogs(query: AuthAuditLogQuery): Observable<PagedResponse<AuthAuditLogEntry>> {
         return this._api.get<PagedResponse<AuthAuditLogEntry>>(`${this._baseUrl}/full/auth`, { ...query });
     }
