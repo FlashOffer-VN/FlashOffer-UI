@@ -256,7 +256,7 @@ export class AdminCommissionConfigComponent implements OnInit {
         this.loadConfigs();
     }
 
-    /** Cách tính đang là bậc thang. */
+    /** Cách tính đang là theo hạn mức. */
     get isTiered(): boolean {
         return this.type === CommissionType.Tiered;
     }

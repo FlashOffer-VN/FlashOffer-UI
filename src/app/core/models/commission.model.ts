@@ -17,7 +17,7 @@ export function getCommissionBeneficiaryLabel(beneficiary: CommissionBeneficiary
     return labels[beneficiary];
 }
 
-/** Một bậc của cấu hình hoa hồng theo bậc thang. */
+/** Một hạn mức của cấu hình hoa hồng. */
 export interface CommissionTier {
     id?: string;
     fromValue: number;
