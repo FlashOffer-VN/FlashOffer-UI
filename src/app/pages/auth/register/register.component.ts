@@ -11,6 +11,7 @@ import { ProvinceSelectComponent } from '@shared/components/province-select/prov
 import { AppService } from '@core/services/app.service';
 import { BusinessFieldOption, BusinessFieldService } from '@core/services/business-field.service';
 import { isBrowser } from '@core/utils/platform';
+import { resolveReferralCode } from '@core/utils/share-link';
 
 @Component({
     selector: 'app-register',
@@ -60,6 +61,8 @@ export class RegisterComponent implements OnInit {
             businessFieldId: [null, [Validators.required]],
             businessSize: [null, [Validators.required]],
             address: [null, [Validators.required]],
+            //  Mã chia sẻ trên link (?ref=) — lấy sẵn khi khách mở link của CTV, gửi kèm khi đăng ký.
+            referredByCode: [resolveReferralCode() ?? ''],
             agreeTerms: [false, [Validators.requiredTrue]]
         });
     }

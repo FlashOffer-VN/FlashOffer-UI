@@ -94,6 +94,8 @@ export interface CreateCollaboratorRequest {
     address?: string;
     website?: string;
     parentCollaboratorId?: string;
+    /** Mã chia sẻ trên link (?ref=) — mã của người giới thiệu tài khoản đăng ký. */
+    referredByCode?: string;
 }
 
 export interface UpdateCollaboratorRequest {

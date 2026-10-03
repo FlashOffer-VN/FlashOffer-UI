@@ -433,6 +433,8 @@
         }
     },
     "CTV_FORM": {
+        "REFERRAL_CODE": "Referral code",
+        "REFERRAL_CODE_PLACEHOLDER": "Collaborator code in the share link (optional)",
         "TITLE": "Register as Collaborator",
         "DESCRIPTION": "Become a Kindi collaborator to earn commissions and benefits",
         "FULL_NAME": "Full name",
@@ -900,6 +902,8 @@
         }
     },
     "REGISTER": {
+        "REFERRAL_CODE": "Referral code",
+        "REFERRAL_CODE_PLACEHOLDER": "Collaborator code in the share link (optional)",
         "TITLE": "BECOME A KINDI PARTNER",
         "SUBTITLE": "Connect Opportunities – Expand Income",
         "DESCRIPTION": "Kindi connects you with suitable business opportunities, customers and partners.",
