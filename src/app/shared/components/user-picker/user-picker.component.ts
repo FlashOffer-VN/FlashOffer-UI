@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { LoadingComponent } from '@shared/components/loading/loading.component';
+import { ButtonComponent } from '@shared/components/button/button.component';
+import { InputComponent } from '@shared/components/input/input.component';
 
 /** Một tài khoản hiển thị trong danh sách chọn. */
 export interface UserPickerItem {
@@ -20,16 +22,15 @@ export interface UserPickerItem {
 @Component({
     selector: 'app-user-picker',
     standalone: true,
-    imports: [CommonModule, FormsModule, TranslateModule, LoadingComponent],
+    imports: [CommonModule, FormsModule, TranslateModule, LoadingComponent, ButtonComponent, InputComponent],
     template: `
         <div class="flex gap-2">
-            <input type="text" [(ngModel)]="search" (keyup.enter)="emitSearch()"
-                [placeholder]="'COMMON.USER_PICKER.SEARCH_PLACEHOLDER' | translate"
-                class="h-10 w-full px-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            <button type="button" (click)="emitSearch()" [title]="'COMMON.BUTTON.SEARCH' | translate"
-                class="h-10 w-10 shrink-0 grid place-items-center rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50">
+            <app-input [(ngModel)]="search" (keyup.enter)="emitSearch()" [id]="'user_picker_search'"
+                [placeholder]="'COMMON.USER_PICKER.SEARCH_PLACEHOLDER' | translate">
+            </app-input>
+            <app-button variant="outline" [title]="'COMMON.BUTTON.SEARCH' | translate" (click)="emitSearch()">
                 <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
+            </app-button>
         </div>
 
         <div class="mt-3 max-h-80 overflow-y-auto">

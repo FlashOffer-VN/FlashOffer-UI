@@ -15,6 +15,8 @@ import {
 } from '@core/models/permission.model';
 
 import { LoadingComponent } from '@shared/components/loading/loading.component';
+import { ButtonComponent } from '@shared/components/button/button.component';
+import { InputComponent } from '@shared/components/input/input.component';
 
 /** Nhóm quyền theo module để hiển thị thành từng khối. */
 interface PermissionGroup {
@@ -29,14 +31,14 @@ interface PermissionGroup {
 @Component({
     selector: 'app-admin-user-permission',
     standalone: true,
-    imports: [CommonModule, FormsModule, TranslateModule, LoadingComponent],
+    imports: [CommonModule, FormsModule, TranslateModule, LoadingComponent, ButtonComponent, InputComponent],
     template: `
         <div class="grid gap-4 lg:grid-cols-[340px_1fr]">
             <!-- Danh sách tài khoản -->
             <aside class="bg-white rounded-lg border border-gray-200 p-3">
-                <input type="text" [(ngModel)]="search" (keyup.enter)="loadCandidates()"
-                    [placeholder]="'PERMISSION.USER.SEARCH_PLACEHOLDER' | translate"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <app-input [(ngModel)]="search" (keyup.enter)="loadCandidates()" [id]="'user_permission_search'"
+                    [placeholder]="'PERMISSION.USER.SEARCH_PLACEHOLDER' | translate">
+                </app-input>
 
                 <div class="mt-3 max-h-[28rem] overflow-y-auto">
                     @if (isLoadingCandidates) {
@@ -70,10 +72,9 @@ interface PermissionGroup {
                         <span class="text-xs text-gray-500">
                             {{ selectedNames() }}
                         </span>
-                        <button type="button" (click)="save()" [disabled]="isSaving"
-                            class="ml-auto px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-60">
+                        <app-button variant="primary" [loading]="isSaving" class="ml-auto" (click)="save()">
                             <i class="fa-solid fa-floppy-disk mr-1"></i>{{ 'PERMISSION.SAVE' | translate }}
-                        </button>
+                        </app-button>
                     </div>
 
                     <div class="grid gap-4 md:grid-cols-2">
