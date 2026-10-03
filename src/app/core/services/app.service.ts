@@ -11,7 +11,7 @@ import { GroupBuyingRequestService } from './group-buying-request.service';
 import { OfferRequestService } from './offer-request.service';
 import { PartnerService } from './partner.service';
 import { SocialService } from './social.service';
-import { ChangeCredentialsRequest, UserRole } from '@core/models/auth.model';
+import { ChangeCredentialsRequest, isAdminRole } from '@core/models/auth.model';
 import { storageSet } from '../utils/storage';
 import { ModalService } from './modal.service';
 import { CollaboratorService } from './collaborator.service';
@@ -20,6 +20,7 @@ import { DashboardService } from './dashboard.service';
 import { CrmService } from './crm.service';
 import { BusinessGroupService } from './business-group.service';
 import { ReferralService } from './referral.service';
+import { PermissionService } from './permission.service';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 
 @Injectable({
@@ -42,7 +43,8 @@ export class AppService {
         public dashboardService: DashboardService,
         public crmService: CrmService,
         public businessGroupService: BusinessGroupService,
-        public referralService: ReferralService
+        public referralService: ReferralService,
+        public permissionService: PermissionService
     ) { }
 
     // ========== Auth ==========
@@ -80,13 +82,13 @@ export class AppService {
     isAdmin(): boolean {
         const user = this.getCurrentUser();
         if (!user) return false;
-        return user.role === UserRole.Admin;
+        return isAdminRole(user.role);
     }
 
     isUser(): boolean {
         const user = this.getCurrentUser();
         if (!user) return false;
-        return user.role === UserRole.Customer;
+        return !isAdminRole(user.role);
     }
 
     // ========== Toast ==========

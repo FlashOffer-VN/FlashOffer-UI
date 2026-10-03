@@ -901,9 +901,10 @@
         }
     },
     "USER_ROLE": {
-        "CUSTOMER": "Thành viên",
-        "CTV": "Cộng tác viên",
-        "ADMIN": "Quản trị viên"
+        "USER": "Người dùng",
+        "PARTNER": "Đối tác chiến lược",
+        "ADMIN": "Quản trị viên",
+        "SUPER_ADMIN": "Quản trị tối cao"
     },
     "SOCIAL": {
         "TITLE": "Nền tảng kết nối cơ hội",
@@ -1011,7 +1012,22 @@
     },
     "COMMON": {
         "BUTTON": {
-            "CLOSE": "Đóng"
+            "SEARCH": "Tìm kiếm",
+            "ACTION": "Thao tác",
+            "VIEW_DETAIL": "Xem chi tiết",
+            "BACK": "Quay lại",
+            "SUBMIT": "Gửi",
+            "CANCEL": "Hủy",
+            "EDIT": "Sửa",
+            "DELETE": "Xóa",
+            "SAVE": "Lưu",
+            "CREATE": "Tạo mới",
+            "UPDATE": "Cập nhật",
+            "CONFIRM": "Xác nhận",
+            "APPLY": "Áp dụng",
+            "OK": "OK",
+            "RESTORE": "Khôi phục",
+            "SEE_MORE": "Xem thêm"
         },
         "CHART_TYPE": {
             "BAR": "Cột",
@@ -1041,24 +1057,6 @@
             "EXPIRED": "Hết hạn",
             "CONTACTED": "Đã liên hệ",
             "DELETED": "Đã xóa"
-        },
-        "BUTTON": {
-            "SEARCH": "Tìm kiếm",
-            "ACTION": "Thao tác",
-            "VIEW_DETAIL": "Xem chi tiết",
-            "BACK": "Quay lại",
-            "SUBMIT": "Gửi",
-            "CANCEL": "Hủy",
-            "EDIT": "Sửa",
-            "DELETE": "Xóa",
-            "SAVE": "Lưu",
-            "CREATE": "Tạo mới",
-            "UPDATE": "Cập nhật",
-            "CONFIRM": "Xác nhận",
-            "APPLY": "Áp dụng",
-            "OK": "OK",
-            "RESTORE": "Khôi phục",
-            "SEE_MORE": "Xem thêm"
         },
         "ERROR": {
             "LOAD_FAILED": "Đã có lỗi xảy ra khi tải dữ liệu!",
@@ -1156,7 +1154,8 @@
             "REFERRAL_STATS": "Thống kê giới thiệu",
             "LOGOUT": "Đăng xuất",
             "GROUP_BUYING": "Yêu cầu mua chung",
-            "GROUPS": "Nhóm ngành"
+            "GROUPS": "Nhóm ngành",
+            "PERMISSIONS": "Phân quyền"
         },
         "DASHBOARD": {
             "TITLE": "Tổng quan quản trị",
@@ -1741,5 +1740,32 @@
         "SHARE_LINK_LABEL": "Link chia sẻ gửi cho khách",
         "COPY_SHARE_LINK": "Sao chép link",
         "COPY_LINK_SUCCESS": "Đã sao chép link chia sẻ!"
+    },
+    "PERMISSION": {
+        "TITLE": "Phân quyền",
+        "DESCRIPTION": "Quyền theo mã P### cho từng vai trò. Chỉ tài khoản quản trị tối cao được sửa.",
+        "SAVE": "Lưu thay đổi",
+        "SAVE_SUCCESS": "Đã lưu quyền cho vai trò",
+        "SAVE_FAILED": "Lưu quyền thất bại",
+        "LOAD_FAILED": "Không tải được danh mục quyền",
+        "READ_ONLY": "Bạn chỉ có quyền xem ma trận phân quyền.",
+        "SEARCH_PLACEHOLDER": "Tìm theo mã, tên, nhóm hoặc API",
+        "SUPER_ADMIN_ALL": "Toàn quyền",
+        "COL": {
+            "PERMISSION": "Quyền"
+        },
+        "MODULE": {
+            "SYSTEM": "Hệ thống",
+            "USER": "Người dùng",
+            "PARTNER": "Đối tác",
+            "PURCHASE": "Mua hàng",
+            "GROUP": "Nhóm",
+            "COMMUNITY": "Cộng đồng",
+            "SUPERADMIN": "Quản trị tối cao"
+        },
+        "KIND": {
+            "VIEW": "Màn hình",
+            "ACTION": "Thao tác"
+        }
     }
 }

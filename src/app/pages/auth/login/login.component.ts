@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
-import { UserRole } from '@core/models/auth.model';
+import { isAdminRole } from '@core/models/auth.model';
 import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 
@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
         // ✅ Nếu đã login thì redirect về home
         if (this._appService.isAuthenticated()) {
             const user = this._appService.getCurrentUser();
-            if (user?.role === UserRole.Admin) {
+            if (isAdminRole(user?.role)) {
                 this.router.navigate(['/admin/dashboard']);
             } else {
                 this.router.navigate(['/social']);
