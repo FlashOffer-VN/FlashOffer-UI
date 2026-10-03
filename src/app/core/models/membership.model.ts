@@ -32,3 +32,27 @@ export interface MyMembership {
     /** Toàn bộ hạng đang áp dụng, xếp từ thấp tới cao. */
     tiers: MembershipTier[];
 }
+
+/** Thứ tự hạng thành viên khi xét theo doanh số tích luỹ (số lớn là hạng cao hơn). */
+export const MEMBERSHIP_LEVELS = [
+    { value: 1, label: 'ADMIN.MEMBERSHIP.LEVEL_1' },
+    { value: 2, label: 'ADMIN.MEMBERSHIP.LEVEL_2' },
+    { value: 3, label: 'ADMIN.MEMBERSHIP.LEVEL_3' },
+    { value: 4, label: 'ADMIN.MEMBERSHIP.LEVEL_4' },
+    { value: 5, label: 'ADMIN.MEMBERSHIP.LEVEL_5' }
+] as const;
+
+/** Thông tin quản trị viên gửi lên khi thêm mới hoặc cập nhật một hạng thành viên. */
+export interface SaveMembershipTierRequest {
+    level: number;
+    name: string;
+    /** Doanh số/hoa hồng tích luỹ tối thiểu để đạt hạng. */
+    minAccumulatedValue: number;
+    /** Phí rút sớm riêng của hạng (%); trống là dùng mức chung. */
+    earlyWithdrawalFeeRate?: number | null;
+    /** Hạn mức rút sớm trong một tháng; trống là không giới hạn riêng. */
+    monthlyWithdrawalLimit?: number | null;
+    approvalPriority: number;
+    isActive: boolean;
+    description?: string | null;
+}

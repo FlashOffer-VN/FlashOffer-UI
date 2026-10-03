@@ -32,7 +32,20 @@ export class AdminSidebarComponent {
         { path: '/admin/partner', icon: 'fa-solid fa-building', label: 'ADMIN.SIDEBAR.PARTNER', permission: Permission.ViewPartners },
         { path: '/admin/payouts', icon: 'fa-solid fa-money-bill-transfer', label: 'ADMIN.SIDEBAR.PAYOUTS', permission: Permission.ViewPayouts },
         { path: '/admin/bank-accounts', icon: 'fa-solid fa-building-columns', label: 'ADMIN.SIDEBAR.BANK_ACCOUNTS', permission: Permission.VerifyBankAccounts },
-        { path: '/admin/settings', icon: 'fa-solid fa-cog', label: 'ADMIN.SIDEBAR.SETTINGS', permission: Permission.ViewSystemSettings },
+        // Mục Cài đặt hiện khi tài khoản mở được ít nhất một mục bên trong; không có mục nào thì ẩn luôn.
+        {
+            path: '/admin/settings', icon: 'fa-solid fa-cog', label: 'ADMIN.SIDEBAR.SETTINGS',
+            permission: [
+                Permission.ViewSystemSettings,
+                Permission.ViewPermissions,
+                Permission.ViewCommissionConfigs,
+                Permission.ManageMembershipTiers,
+                Permission.ViewPayouts,
+                Permission.ViewFullAuditLogs,
+                Permission.ViewEntityAuditLogs,
+                Permission.ViewAuthAuditLogs
+            ]
+        },
         { path: '/', icon: 'fa-solid fa-arrow-right-from-bracket', label: 'ADMIN.SIDEBAR.BACK_TO_SITE', permission: null },
     ];
 
@@ -67,6 +80,6 @@ interface MenuItem {
     path: string;
     icon: string;
     label: string;
-    /** Mã quyền cần có để thấy mục này; null = luôn hiển thị. */
-    permission: Permission | null;
+    /** Mã quyền cần có để thấy mục này; mảng là "một trong các quyền"; null = luôn hiển thị. */
+    permission: Permission | Permission[] | null;
 }

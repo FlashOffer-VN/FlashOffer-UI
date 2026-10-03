@@ -8,7 +8,8 @@ import { Permission } from '@core/models/permission.model';
 import { AdminPermissionSettingsComponent } from '@pages/admin/permissions/permission-settings.component';
 import { AdminAuditLogListComponent } from '@pages/admin/settings/audit-log/audit-log-list.component';
 import { AdminCommissionConfigComponent } from '@pages/admin/settings/commission/commission-config.component';
-import { AdminGeneralSettingsComponent } from '@pages/admin/settings/general/general-settings.component';
+import { AdminGeneralSettingsComponent } from '@pages/admin/settings/general/general-settings-table.component';
+import { AdminMembershipTiersComponent } from '@pages/admin/settings/membership/membership-tiers.component';
 
 /** Một mục trong danh sách cài đặt (cột dọc bên trái). */
 interface SettingsTab {
@@ -28,7 +29,9 @@ interface SettingsTab {
 @Component({
     selector: 'app-admin-settings',
     standalone: true,
-    imports: [CommonModule, TranslateModule, AdminPermissionSettingsComponent, AdminAuditLogListComponent, AdminCommissionConfigComponent, AdminGeneralSettingsComponent],
+    imports: [CommonModule, TranslateModule, AdminPermissionSettingsComponent, AdminAuditLogListComponent, AdminCommissionConfigComponent, AdminGeneralSettingsComponent,
+        AdminMembershipTiersComponent
+    ],
     template: `
         <div class="settings">
             <header class="settings-head">
@@ -61,7 +64,9 @@ interface SettingsTab {
                         <app-admin-permission-settings></app-admin-permission-settings>
                     } @else if (activeTab === 'commission') {
                         <app-admin-commission-config></app-admin-commission-config>
-                    } @else if (activeTab === 'audit') {
+                    } @else if (activeTab === 'membership') {
+                    <app-admin-membership-tiers></app-admin-membership-tiers>
+                } @else if (activeTab === 'audit') {
                         <app-admin-audit-log-list></app-admin-audit-log-list>
                     } @else {
                         <app-admin-general-settings></app-admin-general-settings>
@@ -164,8 +169,9 @@ export class AdminSettingsComponent implements OnInit {
                 key: 'general',
                 label: this._appService.trans('ADMIN.SETTINGS_PAGE.TAB_GENERAL'),
                 description: this._appService.trans('ADMIN.SETTINGS_PAGE.TAB_GENERAL_DESC'),
-                icon: 'fa-solid fa-gear',
-                permission: null
+                icon: 'fa-solid fa-sliders',
+                // Cấu hình chung có quyền riêng: chỉ hiện khi tài khoản được xem cấu hình chung.
+                permission: Permission.ViewSystemSettings
             },
             {
                 key: 'permissions',
@@ -180,6 +186,13 @@ export class AdminSettingsComponent implements OnInit {
                 description: this._appService.trans('ADMIN.SETTINGS_PAGE.TAB_COMMISSION_DESC'),
                 icon: 'fa-solid fa-percent',
                 permission: Permission.ViewCommissionConfigs
+            },
+            {
+                key: 'membership',
+                label: this._appService.trans('ADMIN.SETTINGS_PAGE.TAB_MEMBERSHIP'),
+                description: this._appService.trans('ADMIN.SETTINGS_PAGE.TAB_MEMBERSHIP_DESC'),
+                icon: 'fa-solid fa-ranking-star',
+                permission: [Permission.ManageMembershipTiers, Permission.ViewPayouts]
             },
             {
                 key: 'audit',

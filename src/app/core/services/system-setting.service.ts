@@ -26,4 +26,14 @@ export class SystemSettingService {
     save(request: SaveSystemSettingRequest): Observable<ApiResponse<SystemSetting>> {
         return this._apiService.put<ApiResponse<SystemSetting>>(this._baseUrl, request);
     }
+
+    /** Giá trị mặc định của cài đặt chung (nút khôi phục từng trường). GET /api/v1/settings/defaults */
+    getDefaults(): Observable<ApiResponse<SystemSetting>> {
+        return this._apiService.get<ApiResponse<SystemSetting>>(`${this._baseUrl}/defaults`);
+    }
+
+    /** Khôi phục toàn bộ cài đặt chung về mặc định. POST /api/v1/settings/reset */
+    reset(): Observable<ApiResponse<SystemSetting>> {
+        return this._apiService.post<ApiResponse<SystemSetting>>(`${this._baseUrl}/reset`, {});
+    }
 }

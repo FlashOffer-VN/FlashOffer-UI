@@ -26,7 +26,16 @@ export const adminRoutes: Routes = [
             { path: 'groups', loadComponent: () => import('@pages/admin/groups/group-list.component').then(m => m.AdminGroupListComponent) },
             { path: 'groups/:id', loadComponent: () => import('@pages/admin/groups/detail/group-detail.component').then(m => m.AdminGroupDetailComponent) },
             { path: 'group-buying/:id', loadComponent: () => import('@pages/admin/group-buying/detail/group-buying-detail.component').then(m => m.AdminGroupBuyingDetailComponent) },
-            { path: 'settings', canActivate: [PermissionGuard], data: { permission: Permission.ViewSystemSettings },
+            { path: 'settings', canActivate: [PermissionGuard], data: { permission: [
+                Permission.ViewSystemSettings,
+                Permission.ViewPermissions,
+                Permission.ViewCommissionConfigs,
+                Permission.ManageMembershipTiers,
+                Permission.ViewPayouts,
+                Permission.ViewFullAuditLogs,
+                Permission.ViewEntityAuditLogs,
+                Permission.ViewAuthAuditLogs
+            ] },
               loadComponent: () => import('@pages/admin/settings/admin-settings.component').then(m => m.AdminSettingsComponent) },
             // Duyệt yêu cầu rút hoa hồng sớm và các lần chi trả theo kỳ
             { path: 'payouts', canActivate: [PermissionGuard], data: { permission: Permission.ViewPayouts },
