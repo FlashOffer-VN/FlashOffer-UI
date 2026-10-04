@@ -9,17 +9,15 @@
 
         <!-- Bộ lọc -->
         <div class="mb-6 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-100">
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-                <div class="flex-1">
+            <div class="flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
+                <div class="w-full sm:flex-1 sm:min-w-0">
                     <app-input [(ngModel)]="searchText" name="searchText" icon="fas fa-search"
                         [placeholder]="'GROUPS.SEARCH_PLACEHOLDER' | translate"
                         (keyup.enter)="onSearch()"></app-input>
                 </div>
-                <div class="flex gap-2">
-                    <app-button variant="primary" (onClick)="onSearch()">
-                        <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
-                    </app-button>
-                </div>
+                <app-button variant="primary" (onClick)="onSearch()">
+                    <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
+                </app-button>
             </div>
 
             <div class="mt-4 flex flex-wrap gap-2">

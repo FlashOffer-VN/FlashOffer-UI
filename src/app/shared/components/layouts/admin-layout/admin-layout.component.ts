@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { AdminSidebarComponent } from './admin-sidebar/admin-sidebar.component';
 import { AdminFooterComponent } from './admin-footer/admin-footer.component';
 import { AppService } from '../../../../core/services/app.service';
+import { isBrowser } from '../../../../core/utils/platform';
 import { AdminHeaderComponent } from './admin-header/admin-header.component';
 
 @Component({
@@ -30,6 +31,11 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
     constructor(private _appService: AppService) { }
 
     ngOnInit(): void {
+        // Màn hình nhỏ: mặc định thu gọn sidebar để nội dung không bị chèn ép.
+        if (isBrowser() && window.matchMedia('(max-width: 1023px)').matches) {
+            this.isSidebarOpen = false;
+        }
+
         this.updateLogo();
 
         this.langSubscription = this._appService.onLanguageChange().subscribe(() => {

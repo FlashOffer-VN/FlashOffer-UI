@@ -15,12 +15,12 @@
             <p>{{ 'SUPPLIERS_LIST_DESC' | translate }}</p>
         </div>
 
-        <div class="suppliers-filters">
-            <label class="supplier-search">
-                <i class="fas fa-search"></i>
-                <input type="search" [(ngModel)]="searchTerm" (ngModelChange)="onSearchInput()"
-                    [placeholder]="'SUPPLIERS_SEARCH_PLACEHOLDER' | translate">
-            </label>
+        <div class="suppliers-filters" style="--control-h: 2.5rem">
+            <div class="supplier-search">
+                <app-input [(ngModel)]="searchTerm" icon="fas fa-search"
+                    [placeholder]="'SUPPLIERS_SEARCH_PLACEHOLDER' | translate"
+                    (ngModelChange)="onSearchInput()"></app-input>
+            </div>
 
             <app-ng-select-wrapper class="supplier-category-select" [items]="businessFieldOptions"
                 [(ngModel)]="selectedBusinessFieldId" [placeholder]="'SUPPLIERS_CATEGORY_PLACEHOLDER' | translate"

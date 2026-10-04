@@ -207,7 +207,7 @@
 
 .suppliers-filters {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     gap: 12px;
     margin: 0 auto 24px;
     padding: 14px;
@@ -218,30 +218,9 @@
 
 .supplier-search {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     flex: 1 1 auto;
     min-width: 0;
-    gap: 8px;
-    color: #8a98a8;
-}
-
-.supplier-search input,
-.suppliers-filters select {
-    width: 100%;
-    border: 1px solid #d9e1e8;
-    border-radius: 8px;
-    background: var(--white);
-    color: #263746;
-    padding: 10px 12px;
-    font: inherit;
-}
-
-.supplier-search input {
-    min-width: 0;
-    flex: 1 1 auto;
-    border: 0;
-    outline: 0;
-    padding: 10px 12px;
 }
 
 .suppliers-filters app-ng-select-wrapper {
@@ -262,6 +241,9 @@
 
 .supplier-result-count {
     flex: 0 0 auto;
+    height: var(--control-h, 2.5rem);
+    display: flex;
+    align-items: center;
     color: var(--text-slate-muted);
     font-size: 13px;
     white-space: nowrap;

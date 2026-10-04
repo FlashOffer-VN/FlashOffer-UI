@@ -21,3 +21,14 @@
 ::-webkit-scrollbar-thumb:hover {
     background: var(--accent-dark);
 }
+/* Màn hình nhỏ: sidebar tách khỏi luồng (ngăn kéo trượt), nội dung chiếm trọn chiều rộng.
+   Trước đây sidebar 256px luôn hiện nên vùng nội dung ở 390px chỉ còn ~134px -> vỡ layout. */
+@media (max-width: 1023px) {
+    app-admin-sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 40;
+    }
+}
