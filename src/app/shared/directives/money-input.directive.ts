@@ -27,7 +27,15 @@ export class MoneyInputDirective implements AfterViewInit {
     constructor(
         private _el: ElementRef<HTMLInputElement>,
         @Optional() @Self() private _ngControl?: NgControl
-    ) { }
+    ) {
+        // Ô type="number" không chứa được dấu phân cách: gặp dấu là trình duyệt xoá trắng giá trị,
+        // nên chuyển sang text và mượn inputmode để điện thoại vẫn hiện bàn phím số.
+        const input = this._el.nativeElement;
+        if (input.type === 'number') {
+            input.type = 'text';
+        }
+        input.setAttribute('inputmode', 'numeric');
+    }
 
     ngAfterViewInit(): void {
         // Ô nhập đang hiện số trần, chỉ cần định dạng lại phần hiển thị.
