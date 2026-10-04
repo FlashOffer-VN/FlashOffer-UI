@@ -297,7 +297,7 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
                             </div>
                         } @else {
                             <form [formGroup]="withdrawForm" (ngSubmit)="submitWithdrawal()" class="mt-3 space-y-3">
-                                <app-input formControlName="amount" type="number" icon="fas fa-money-bill-wave"
+                                <app-input formControlName="amount" [money]="true" icon="fas fa-money-bill-wave"
                                     [label]="'USER.COMMISSION.WITHDRAW_AMOUNT' | translate"
                                     [placeholder]="'USER.COMMISSION.WITHDRAW_AMOUNT_PLACEHOLDER' | translate"
                                     [required]="true"

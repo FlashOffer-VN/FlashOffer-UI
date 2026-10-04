@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
+import { MoneyInputDirective } from '@shared/directives/money-input.directive';
 import { resolveReferralCode } from '@core/utils/share-link';
 import { CreateGroupBuyingRequest } from '@core/models/group-buying-request.model';
 import { finalize } from 'rxjs/operators';
@@ -12,7 +13,7 @@ import { finalize } from 'rxjs/operators';
 @Component({
     selector: 'app-group-buying',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, TranslateModule, RouterLink],
+    imports: [CommonModule, ReactiveFormsModule, TranslateModule, RouterLink, MoneyInputDirective],
     templateUrl: './group-buying.component.html',
     styleUrls: ['./group-buying.component.css']
 })

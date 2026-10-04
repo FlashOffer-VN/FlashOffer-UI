@@ -30,14 +30,14 @@
         </div>
 
         <div class="form-group">
-            <app-input formControlName="retailPrice" type="number" [label]="'ADMIN.PARTNER.RETAIL_PRICE' | translate"
+            <app-input formControlName="retailPrice" [money]="true" [label]="'ADMIN.PARTNER.RETAIL_PRICE' | translate"
                 [placeholder]="'PARTNER.RETAIL_PRICE_PLACEHOLDER' | translate" [id]="'product_retailPrice'"
                 [isInvalid]="isFieldInvalid('retailPrice')" [errorMessage]="getErrorMessage('retailPrice')">
             </app-input>
         </div>
 
         <div class="form-group">
-            <app-input formControlName="wholesalePrice" type="number"
+            <app-input formControlName="wholesalePrice" [money]="true"
                 [label]="'ADMIN.PARTNER.WHOLESALE_PRICE' | translate"
                 [placeholder]="'PARTNER.WHOLESALE_PRICE_PLACEHOLDER' | translate" [id]="'product_wholesalePrice'"
                 [isInvalid]="isFieldInvalid('wholesalePrice')" [errorMessage]="getErrorMessage('wholesalePrice')">

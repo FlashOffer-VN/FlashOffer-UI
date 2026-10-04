@@ -14,6 +14,7 @@ import {
     NG_VALUE_ACCESSOR,
     NgControl
 } from '@angular/forms';
+import { MoneyHelper } from '@core/utils/money';
 
 @Component({
     selector: 'app-input',
@@ -39,6 +40,11 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     @Input() autocomplete = '';
     @Input() readonly = false;
     @Input() isDisabled = false;
+    /**
+     * Ô nhập tiền: chỉ nhận chữ số và tự chèn dấu chấm phân cách hàng nghìn khi gõ.
+     * Giá trị trả cho form là chuỗi chữ số trần (1234567) để nơi tính toán không phải bỏ dấu.
+     */
+    @Input() money = false;
     @Input() errorMessage = '';  // ✅ Thêm input này
 
     @Input() isInvalid = false;  // ✅ Thêm input này để component cha có thể truyền trạng thái lỗi
@@ -56,6 +62,8 @@ export class InputComponent implements ControlValueAccessor, OnInit {
         = 'text';
 
     value = '';
+
+    private focused = false;
 
     @Optional()
     @Self()
@@ -108,16 +116,52 @@ export class InputComponent implements ControlValueAccessor, OnInit {
         );
     }
 
+    /** Ô tiền dùng thẻ text để hiện được dấu phân cách; bàn phím số trên điện thoại nhờ inputmode. */
+    get inputType(): string {
+        return this.money ? 'text' : this.type;
+    }
+
     onInput(event: Event): void {
         const input = event.target as HTMLInputElement;
-        this.value = input.value;
-        this.onChange(this.value);
+
+        if (this.money) {
+            const caretAt = input.selectionStart ?? input.value.length;
+            const digitsBeforeCaret = MoneyHelper.toDigits(input.value.slice(0, caretAt)).length;
+            // Bỏ số 0 vô nghĩa ở đầu, trừ khi người dùng chỉ gõ mỗi số 0.
+            const digits = MoneyHelper.toDigits(input.value).replace(/^0+(?=\d)/, '');
+
+            this.value = MoneyHelper.format(digits);
+            input.value = this.value;
+            this.keepCaret(input, digitsBeforeCaret);
+            this.onChange(digits);
+        } else {
+            this.value = input.value;
+            this.onChange(this.value);
+        }
+
         if (this.ngControl?.control) {
             this.ngControl.control.markAsDirty();
         }
     }
 
+    onFocus(): void {
+        this.focused = true;
+    }
+
+    /**
+     * Giữ nguyên vị trí nháy sau khi chèn dấu phân cách. Angular ghi lại giá trị đã bind ở cuối
+     * vòng xử lý sự kiện nên phải đợi hết vòng đó mới đặt lại được.
+     */
+    private keepCaret(input: HTMLInputElement, digitsBeforeCaret: number): void {
+        setTimeout(() => {
+            if (!this.focused) return;
+            const position = MoneyHelper.caretPosition(this.value, digitsBeforeCaret);
+            input.setSelectionRange(position, position);
+        }, 0);
+    }
+
     onBlur(): void {
+        this.focused = false;
         this.onTouched();
         if (this.ngControl?.control) {
             this.ngControl.control.markAsTouched();
@@ -125,7 +169,7 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     }
 
     writeValue(value: string): void {
-        this.value = value ?? '';
+        this.value = this.money ? MoneyHelper.format(value) : (value ?? '');
     }
 
     registerOnChange(fn: any): void {
