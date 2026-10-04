@@ -33,12 +33,12 @@ export class RevenueService {
 
     /** Danh sách bản khai, lọc theo mã giao dịch, loại và trạng thái. GET /api/v1/Revenues */
     getPaged(query: RevenueQuery): Observable<PagedResponse<TransactionRevenue>> {
-        return this._apiService.get<PagedResponse<TransactionRevenue>>(this._baseUrl, query as Record<string, any>);
+        return this._apiService.get<PagedResponse<TransactionRevenue>>(this._baseUrl, WithoutEmpty(query));
     }
 
     /** Thống kê theo khoảng thời gian, gộp theo ngày/tuần/tháng/năm; chỉ tính bản đã chốt. GET /api/v1/Revenues/stats */
     getStats(query: RevenueStatsQuery): Observable<ApiResponse<RevenueStats>> {
-        return this._apiService.get<ApiResponse<RevenueStats>>(`${this._baseUrl}/stats`, query as Record<string, any>);
+        return this._apiService.get<ApiResponse<RevenueStats>>(`${this._baseUrl}/stats`, WithoutEmpty(query));
     }
 
     /** Lưu bản khai (máy chủ tính lại toàn bộ số liệu). POST /api/v1/Revenues */
@@ -50,4 +50,18 @@ export class RevenueService {
     confirm(id: string): Observable<ApiResponse<TransactionRevenue>> {
         return this._apiService.post<ApiResponse<TransactionRevenue>>(`${this._baseUrl}/${id}/confirm`, {});
     }
+}
+
+/**
+ * Bỏ tham số rỗng trước khi gửi: bộ tham số của Angular biến `null`/`undefined` thành chuỗi
+ * "null"/"undefined", máy chủ hiểu thành giá trị lọc thật nên từ chối cả yêu cầu.
+ */
+function WithoutEmpty(params: Record<string, any>): Record<string, any> {
+    return Object.keys(params).reduce((kept, key) => {
+        const value = params[key];
+        if (value !== null && value !== undefined && value !== '') {
+            kept[key] = value;
+        }
+        return kept;
+    }, {} as Record<string, any>);
 }
