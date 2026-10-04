@@ -23,7 +23,6 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
     selector: 'app-admin-offers',
     standalone: true,
     imports: [
-        CodeNamePipe,
         CommonModule,
         RouterModule,
         FormsModule,
@@ -36,7 +35,8 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
         StatusTabsComponent,
         NgxFilterDaterangeComponent,
         AppDatePipe,
-        ShortIdPipe
+        ShortIdPipe,
+        CodeNamePipe
     ],
     templateUrl: './admin-offers.component.html',
     styleUrls: ['./admin-offers.component.css']

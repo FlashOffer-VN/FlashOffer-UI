@@ -22,7 +22,6 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
     selector: 'app-admin-collaborator-detail',
     standalone: true,
     imports: [
-        CodeNamePipe,
         CommonModule,
         RouterModule,
         TranslateModule,
@@ -32,7 +31,8 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
         ModalComponent,
         BusinessInfoComponent,
         CollaboratorEditFormComponent,
-        AppDatePipe
+        AppDatePipe,
+        CodeNamePipe
     ],
     templateUrl: './collaborator-detail.component.html',
     styleUrls: ['./collaborator-detail.component.css']

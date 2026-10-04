@@ -23,7 +23,6 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
     selector: 'app-admin-offer-detail',
     standalone: true,
     imports: [
-        CodeNamePipe,
         CommonModule,
         RouterModule,
         TranslateModule,
@@ -34,7 +33,8 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
         ShareToGroupComponent,
         AppDatePipe,
         AppPricePipe,
-        ShortIdPipe
+        ShortIdPipe,
+        CodeNamePipe
     ],
     templateUrl: './offer-detail.component.html',
     styleUrls: ['./offer-detail.component.css']

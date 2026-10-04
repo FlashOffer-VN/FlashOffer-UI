@@ -145,6 +145,10 @@
     </ng-container>
 </div>
 
+<!-- Khối khai doanh thu của giao dịch; chỉ hiện với tài khoản có quyền khai. -->
+<app-revenue-entry *ngIf="canManageRevenue && request" [type]="revenueType"
+    [referenceId]="request.id" [referenceCode]="request.purchaseRequestCode || (request.id | shortId)"></app-revenue-entry>
+
 <!-- ====== MODALS ====== -->
 <app-modal [(visible)]="showContactedModal" [title]="'ADMIN.PURCHASE_REQUESTS.CONTACT' | translate"
     [confirmText]="'COMMON.BUTTON.CONFIRM' | translate" [cancelText]="'COMMON.BUTTON.CANCEL' | translate"

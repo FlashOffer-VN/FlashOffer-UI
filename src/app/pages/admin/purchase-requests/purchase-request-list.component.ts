@@ -26,7 +26,6 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
     selector: 'app-admin-purchase-request-list',
     standalone: true,
     imports: [
-        CodeNamePipe,
         CommonModule,
         RouterModule,
         FormsModule,
@@ -40,7 +39,8 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
         NgxFilterDaterangeComponent,
         ShareToGroupComponent,
         AppDatePipe,
-        ShortIdPipe
+        ShortIdPipe,
+        CodeNamePipe
     ],
     templateUrl: './purchase-request-list.component.html',
     styleUrls: ['./purchase-request-list.component.css']

@@ -229,6 +229,10 @@
     </ng-container>
 </div>
 
+<!-- Khối khai doanh thu của giao dịch; chỉ hiện với tài khoản có quyền khai. -->
+<app-revenue-entry *ngIf="canManageRevenue && detail" [type]="revenueType"
+    [referenceId]="detail.id" [referenceCode]="detail.groupBuyingRequestCode || '--'"></app-revenue-entry>
+
 <!-- Duyệt -->
 <app-modal [(visible)]="showApproveModal" [title]="'ADMIN.GROUP_BUYING.APPROVE' | translate"
     [confirmText]="'COMMON.BUTTON.CONFIRM' | translate" [cancelText]="'COMMON.BUTTON.CANCEL' | translate"

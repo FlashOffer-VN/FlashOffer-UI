@@ -23,7 +23,6 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
     selector: 'app-admin-collaborator-list',
     standalone: true,
     imports: [
-        CodeNamePipe,
         CommonModule,
         RouterModule,
         FormsModule,
@@ -36,7 +35,8 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
         StatusTabsComponent,
         NgxFilterDaterangeComponent,
         AppDatePipe,
-        ShortIdPipe
+        ShortIdPipe,
+        CodeNamePipe
     ],
     templateUrl: './collaborator-list.component.html',
     styleUrls: ['./collaborator-list.component.css']
