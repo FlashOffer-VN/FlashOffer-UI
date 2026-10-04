@@ -126,16 +126,22 @@
                                         [title]="'COMMON.BUTTON.VIEW_DETAIL' | translate">
                                         <i class="fa-solid fa-eye"></i>
                                     </app-button>
-                                    <app-button *ngIf="activeTab === 'deleted'" variant="primary" size="sm" [loading]="isRestoring"
-                                        (click)="$event.stopPropagation(); onRestore(offer)"
-                                        [title]="'COMMON.BUTTON.RESTORE' | translate" [attr.aria-label]="'COMMON.BUTTON.RESTORE' | translate">
-                                        <i class="fa-solid fa-rotate-left"></i>
-                                    </app-button>
-                                    <app-button *ngIf="activeTab !== 'deleted'" variant="danger" size="sm" [loading]="isDeleting"
-                                        (click)="$event.stopPropagation(); onDelete(offer)"
-                                        [title]="'COMMON.BUTTON.DELETE' | translate">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </app-button>
+                                    <ng-container *ngIf="activeTab === 'deleted'">
+                                        <app-button variant="primary" size="sm" [loading]="isRestoring"
+                                            *appHasPermission="[Permission.RestoreOfferRequest, Permission.DeleteOfferRequest]"
+                                            (click)="$event.stopPropagation(); onRestore(offer)"
+                                            [title]="'COMMON.BUTTON.RESTORE' | translate" [attr.aria-label]="'COMMON.BUTTON.RESTORE' | translate">
+                                            <i class="fa-solid fa-rotate-left"></i>
+                                        </app-button>
+                                    </ng-container>
+                                    <ng-container *ngIf="activeTab !== 'deleted'">
+                                        <app-button variant="danger" size="sm" [loading]="isDeleting"
+                                            *appHasPermission="Permission.DeleteOfferRequest"
+                                            (click)="$event.stopPropagation(); onDelete(offer)"
+                                            [title]="'COMMON.BUTTON.DELETE' | translate">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </app-button>
+                                    </ng-container>
                                 </div>
                             </td>
                         </tr>

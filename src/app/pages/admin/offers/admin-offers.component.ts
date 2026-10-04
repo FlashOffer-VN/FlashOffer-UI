@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
 import { OfferRequest, OfferStatus } from '@core/models/offer-request.model';
+import { Permission } from '@core/models/permission.model';
 import { PagedResponse } from '@core/models/paged-response.model';
 
 import { ButtonComponent } from '@shared/components/button/button.component';
@@ -19,6 +20,7 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 
 @Component({
     selector: 'app-admin-offers',
@@ -38,12 +40,16 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
         AppDatePipe,
         ShortIdPipe,
         CodeNamePipe,
-        NgSelectWrapperComponent
+        NgSelectWrapperComponent,
+        HasPermissionDirective
     ],
     templateUrl: './admin-offers.component.html',
     styleUrls: ['./admin-offers.component.css']
 })
 export class AdminOffersComponent implements OnInit {
+    /** Mã quyền dùng trong template (`*appHasPermission`). */
+    readonly Permission = Permission;
+
     offers: OfferRequest[] = [];
     isLoading = true;
     isDeleting = false;
@@ -81,9 +87,13 @@ export class AdminOffersComponent implements OnInit {
             { key: 'pending', label: this._appService.trans('COMMON.STATUS.PENDING') },
             { key: 'approved', label: this._appService.trans('COMMON.STATUS.APPROVED') },
             { key: 'rejected', label: this._appService.trans('COMMON.STATUS.REJECTED') },
-            { key: 'expired', label: this._appService.trans('COMMON.STATUS.EXPIRED') },
-            { key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') }
+            { key: 'expired', label: this._appService.trans('COMMON.STATUS.EXPIRED') }
         ];
+
+        // Tab "Đã xóa" chỉ hiện khi có quyền khôi phục/xóa offer (mã mới P119 + mã cũ P065 trong nhịp chuyển tiếp).
+        if (this._appService.permissionService.has([Permission.RestoreOfferRequest, Permission.DeleteOfferRequest])) {
+            this.tabs.push({ key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') });
+        }
     }
 
     /** Các cột tìm kiếm khớp tham số searchField của API; giá trị '' = tất cả */

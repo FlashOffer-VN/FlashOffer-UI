@@ -145,6 +145,44 @@ export enum Permission {
     ViewTransactionRevenue = 'P113',
     /** P114 */
     ManageRevenueConfig = 'P114',
+
+    // ===== Quyền tách Xem / Sửa / Xoá (cấp từ P115 trở đi, khớp enum PermissionCode của API) =====
+    /** P115 */
+    ViewRestoreCollaborator = 'P115',
+    /** P116 */
+    RestorePartner = 'P116',
+    /** P118 */
+    DeletePartnerProduct = 'P118',
+    /** P119 */
+    RestoreOfferRequest = 'P119',
+    /** P120 */
+    DeleteGroupBuyingRequest = 'P120',
+    /** P121 */
+    DeleteGroup = 'P121',
+    /** P124 */
+    DeleteCommissionConfig = 'P124',
+    /** P125 */
+    ViewMembershipTiers = 'P125',
+    /** P126 */
+    UpdateMembershipTiers = 'P126',
+    /** P127 */
+    DeleteMembershipTiers = 'P127',
+    /** P128 */
+    ViewBankAccounts = 'P128',
+    /** P129 */
+    ViewRevenueConfig = 'P129',
+    /** P130 */
+    UpdateRevenueConfig = 'P130',
+    /** P131 */
+    DeleteRevenueConfig = 'P131',
+
+    // ===== Yêu cầu tìm nhà cung cấp (mua hàng): cặp quyền xoá mềm / khôi phục trong nhịp chuyển tiếp =====
+    /** P133 — xem & khôi phục yêu cầu tìm nhà cung cấp đã xoá */
+    ViewRestorePurchaseRequest = 'P133',
+    /** P134 — xoá mềm yêu cầu tìm nhà cung cấp */
+    DeletePurchaseRequest = 'P134',
+    /** P135 — khôi phục yêu cầu tìm nhà cung cấp */
+    RestorePurchaseRequest = 'P135',
 }
 
 /** Nhóm quyền (bảng PermissionGroups): mã, tên hiển thị và thứ tự. */
@@ -169,6 +207,10 @@ export interface PermissionItem {
     kind: string;
     route?: string | null;
     endpoints?: string | null;
+    /** Mã màn hình — gom các hành động của cùng một màn hình (API tách quyền trả về). */
+    screen?: string | null;
+    /** Tên hiển thị của màn hình. */
+    screenName?: string | null;
 }
 
 /** Quyền đang bật của một vai trò. */
@@ -185,6 +227,33 @@ export interface PermissionMatrix {
     groups?: PermissionGroupItem[];
     roles: RolePermission[];
 }
+
+/**
+ * Một nút trong cây phân quyền Nhóm → Màn hình → hành động.
+ * Cây đệ quy theo `children` nên thêm tầng sâu hơn không phải sửa lại giao diện.
+ * `GET /api/v1/Permissions/tree` trả về đúng cấu trúc này.
+ */
+export interface PermissionTreeNode {
+    /** Mã nút: mã nhóm, mã màn hình hoặc mã quyền P### (nút hành động). */
+    code: string;
+    /** Khoá dịch tên nút do API trả về (nhóm/màn hình/hành động). */
+    nameKey?: string | null;
+    /** Tên hiển thị dự phòng khi chưa có bản dịch. */
+    name?: string | null;
+    /** group | screen | view | create | update | delete | restore | action — loại nút. */
+    kind: string;
+    /** Mã nút cha (màn hình cha của hành động, nhóm cha của màn hình). */
+    parentCode?: string | null;
+    /** Quyền đã cấp cho đối tượng đang xét (API trả về) — chỉ dùng để tham chiếu ban đầu. */
+    isGranted?: boolean;
+    /** Nút con (đệ quy). */
+    children: PermissionTreeNode[];
+    /** Nút cha, gắn khi dựng cây ở client để suy trạng thái tắt-lan. */
+    parent?: PermissionTreeNode | null;
+}
+
+/** Cây phân quyền trả về từ API (mảng nút gốc). */
+export type PermissionTree = PermissionTreeNode[];
 
 /** Tài khoản chọn được ở màn cấu hình quyền riêng. */
 export interface UserPermissionCandidate {

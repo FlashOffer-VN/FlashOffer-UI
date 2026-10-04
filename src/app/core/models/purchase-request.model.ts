@@ -29,6 +29,10 @@ export interface PurchaseRequest {
     accountReferrerCode?: string | null;
     /** Tên chủ mã giới thiệu tài khoản */
     accountReferrerName?: string | null;
+    /** Bản ghi đã xoá mềm (có khi lọc danh sách "Đã xóa"). */
+    isDeleted?: boolean;
+    /** Thời điểm xoá mềm. */
+    deletedAt?: string | null;
 }
 
 export interface CreatePurchaseRequestDto {

@@ -63,7 +63,8 @@ export class PurchaseRequestService {
         fromDate?: string,
         toDate?: string,
         mineOnly?: boolean,
-        searchField?: string
+        searchField?: string,
+        includeDeleted?: boolean
     ): Observable<PagedResponse<PurchaseRequest>> {
         // Backend yêu cầu pageSize trong [1, 100]
         pageSize = this.clampPageSize(pageSize);
@@ -83,6 +84,8 @@ export class PurchaseRequestService {
         if (mineOnly) params.mineOnly = true;
         // Cột tìm kiếm do người dùng chọn; bỏ trống = tìm mọi trường (hành vi cũ)
         if (searchField) params.searchField = searchField;
+        // Tab "Đã xóa": chỉ lấy bản ghi đã xoá mềm
+        if (includeDeleted !== undefined && includeDeleted !== null) params.includeDeleted = includeDeleted;
         return this.apiService.get<PagedResponse<PurchaseRequest>>(this.endpoint, params);
     }
 
@@ -110,5 +113,21 @@ export class PurchaseRequestService {
     updateStatus(id: string, status: PurchaseRequestStatus): Observable<PurchaseRequestResponse> {
         const payload: UpdatePurchaseRequestStatusDto = { status };
         return this.apiService.patch<PurchaseRequestResponse>(`${this.endpoint}/${id}/status`, payload);
+    }
+
+    /**
+     * Xóa mềm yêu cầu tìm nhà cung cấp (Admin)
+     * DELETE /api/v1/PurchaseRequests/{id}
+     */
+    delete(id: string): Observable<PurchaseRequestResponse> {
+        return this.apiService.delete<PurchaseRequestResponse>(`${this.endpoint}/${id}`);
+    }
+
+    /**
+     * Khôi phục yêu cầu tìm nhà cung cấp đã xóa (Admin)
+     * POST /api/v1/PurchaseRequests/{id}/restore
+     */
+    restore(id: string): Observable<PurchaseRequestResponse> {
+        return this.apiService.post<PurchaseRequestResponse>(`${this.endpoint}/${id}/restore`, {});
     }
 }

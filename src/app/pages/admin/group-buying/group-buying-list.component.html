@@ -107,6 +107,23 @@
                                         [title]="'COMMON.BUTTON.VIEW_DETAIL' | translate">
                                         <i class="fas fa-eye"></i>
                                     </app-button>
+
+                                    <ng-container *ngIf="activeTab === 'deleted'">
+                                        <app-button variant="primary" size="sm" [loading]="isRestoring"
+                                            *appHasPermission="[Permission.UpdateGroupBuyingRequest, Permission.DeleteGroupBuyingRequest]"
+                                            (onClick)="$event.stopPropagation(); onRestore(request)"
+                                            [title]="'COMMON.BUTTON.RESTORE' | translate">
+                                            <i class="fa-solid fa-rotate-left"></i>
+                                        </app-button>
+                                    </ng-container>
+                                    <ng-container *ngIf="activeTab !== 'deleted'">
+                                        <app-button variant="danger" size="sm" [loading]="isDeleting"
+                                            *appHasPermission="[Permission.DeleteGroupBuyingRequest, Permission.UpdateGroupBuyingRequest]"
+                                            (onClick)="$event.stopPropagation(); onDelete(request)"
+                                            [title]="'COMMON.BUTTON.DELETE' | translate">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </app-button>
+                                    </ng-container>
                                 </div>
                             </td>
                         </tr>

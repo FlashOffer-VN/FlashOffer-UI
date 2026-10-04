@@ -105,6 +105,8 @@ export class GroupBuyingRequestService {
         if (query.status) params['status'] = query.status;
         // Cột tìm kiếm do người dùng chọn; bỏ trống = tìm mọi trường (hành vi cũ)
         if (query.searchField) params['searchField'] = query.searchField;
+        // Tab "Đã xóa": chỉ lấy bản ghi đã xoá mềm
+        if (query.includeDeleted !== undefined && query.includeDeleted !== null) params['includeDeleted'] = query.includeDeleted;
 
         return this.apiService.get<AdminGroupBuyingListResponse>(this.endpoint, params);
     }
@@ -147,5 +149,21 @@ export class GroupBuyingRequestService {
      */
     cancel(id: string): Observable<GroupBuyingResponse> {
         return this.apiService.delete<GroupBuyingResponse>(`${this.endpoint}/${id}`);
+    }
+
+    /**
+     * Xóa mềm yêu cầu mua chung (Admin) — cùng endpoint với hủy nhưng tách tên rõ nghĩa.
+     * DELETE /api/v1/GroupBuyingRequests/{id}
+     */
+    delete(id: string): Observable<GroupBuyingResponse> {
+        return this.cancel(id);
+    }
+
+    /**
+     * Khôi phục yêu cầu mua chung đã xoá mềm (Admin)
+     * POST /api/v1/GroupBuyingRequests/{id}/restore
+     */
+    restore(id: string): Observable<GroupBuyingResponse> {
+        return this.apiService.post<GroupBuyingResponse>(`${this.endpoint}/${id}/restore`, {});
     }
 }

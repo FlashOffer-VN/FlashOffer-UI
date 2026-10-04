@@ -1739,6 +1739,9 @@
             "COMPLETE": "Complete",
             "COMPLETE_CONFIRM": "Are you sure you want to mark this request as completed?",
             "COMPLETED_SUCCESS": "Request marked as completed successfully",
+            "DELETE_CONFIRM": "Are you sure you want to delete \"{{name}}\"?",
+            "DELETED_SUCCESS": "Supplier request deleted successfully",
+            "RESTORED_SUCCESS": "Supplier request restored successfully",
             "REFERRED_BY": "Account referrer"
         },
         "SETTINGS_PAGE": {
@@ -1980,6 +1983,9 @@
             "REMOVE_SUCCESS": "Participant removed",
             "EDIT_TITLE": "Edit group buying request",
             "UPDATE_SUCCESS": "Group buying request updated",
+            "DELETE_CONFIRM": "Are you sure you want to delete the group buying request \"{{name}}\"?",
+            "DELETED_SUCCESS": "Group buying request deleted successfully",
+            "RESTORED_SUCCESS": "Group buying request restored successfully",
             "REFERRED_BY": "Account referrer"
         },
         "REVENUE": {
@@ -2406,8 +2412,45 @@
             "COMMISSION": "Commission & payout"
         },
         "KIND": {
-            "VIEW": "Screen",
+            "GROUP": "Group",
+            "SCREEN": "Screen",
+            "VIEW": "View",
+            "CREATE": "Create",
+            "UPDATE": "Update",
+            "DELETE": "Delete",
+            "RESTORE": "Restore",
             "ACTION": "Action"
+        },
+        "SCREEN": {
+            "DASHBOARD": "Dashboard",
+            "CRM_DASHBOARD": "CRM dashboard",
+            "REPORTS": "Reports",
+            "AUDIT_LOGS": "Audit logs",
+            "SYSTEM_SETTINGS": "System settings",
+            "REFERRAL_STATS": "Referral statistics",
+            "USERS": "Users",
+            "COLLABORATORS": "Collaborators",
+            "PARTNERS": "Partners",
+            "PARTNER_PRODUCTS": "Partner products",
+            "COMPANIES": "Companies",
+            "PURCHASE_REQUESTS": "Supplier requests",
+            "OFFERS": "Offers",
+            "GROUP_BUYING": "Group buying requests",
+            "GROUPS": "Groups",
+            "SOCIAL_POSTS": "Social posts",
+            "PERMISSION_MATRIX": "Permission matrix",
+            "COMMISSION_CONFIG": "Commission config",
+            "PAYOUTS": "Payouts",
+            "MEMBERSHIP_TIERS": "Membership tiers",
+            "BANK_ACCOUNTS": "Bank accounts",
+            "REVENUES": "Transaction revenue",
+            "REVENUE_CONFIG": "Revenue config",
+            "MY_REFERRAL": "My referral",
+            "MY_COMMISSION": "My commission",
+            "MY_GROUP_BUYING": "My group buying",
+            "MY_REQUESTS": "My requests",
+            "MY_POSTS": "My posts",
+            "MY_GROUPS": "My groups"
         }
     },
     "CONTACT_FLOATING": {

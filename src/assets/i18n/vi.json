@@ -1697,6 +1697,9 @@
             "COMPLETE": "Hoàn thành",
             "COMPLETE_CONFIRM": "Bạn có chắc chắn đánh dấu yêu cầu này hoàn thành không?",
             "COMPLETED_SUCCESS": "Đã đánh dấu hoàn thành thành công",
+            "DELETE_CONFIRM": "Bạn có chắc chắn muốn xóa yêu cầu \"{{name}}\"?",
+            "DELETED_SUCCESS": "Đã xóa yêu cầu tìm nhà cung cấp thành công",
+            "RESTORED_SUCCESS": "Khôi phục yêu cầu tìm nhà cung cấp thành công",
             "REFERRED_BY": "Người giới thiệu tài khoản"
         },
         "SETTINGS_PAGE": {
@@ -1943,6 +1946,9 @@
             "REMOVE_SUCCESS": "Đã xóa người tham gia khỏi nhóm",
             "EDIT_TITLE": "Sửa yêu cầu mua chung",
             "UPDATE_SUCCESS": "Cập nhật yêu cầu mua chung thành công",
+            "DELETE_CONFIRM": "Bạn có chắc chắn muốn xóa yêu cầu mua chung \"{{name}}\"?",
+            "DELETED_SUCCESS": "Đã xóa yêu cầu mua chung thành công",
+            "RESTORED_SUCCESS": "Khôi phục yêu cầu mua chung thành công",
             "REFERRED_BY": "Người giới thiệu tài khoản"
         },
         "REVENUE": {
@@ -2369,8 +2375,45 @@
             "COMMISSION": "Hoa hồng & giải ngân"
         },
         "KIND": {
-            "VIEW": "Màn hình",
+            "GROUP": "Nhóm",
+            "SCREEN": "Màn hình",
+            "VIEW": "Xem",
+            "CREATE": "Thêm",
+            "UPDATE": "Sửa",
+            "DELETE": "Xóa",
+            "RESTORE": "Khôi phục",
             "ACTION": "Thao tác"
+        },
+        "SCREEN": {
+            "DASHBOARD": "Bảng điều khiển",
+            "CRM_DASHBOARD": "Dashboard CRM",
+            "REPORTS": "Báo cáo",
+            "AUDIT_LOGS": "Nhật ký hệ thống",
+            "SYSTEM_SETTINGS": "Cấu hình hệ thống",
+            "REFERRAL_STATS": "Thống kê giới thiệu",
+            "USERS": "Người dùng",
+            "COLLABORATORS": "Hồ sơ cộng tác viên",
+            "PARTNERS": "Đối tác",
+            "PARTNER_PRODUCTS": "Sản phẩm đối tác",
+            "COMPANIES": "Công ty",
+            "PURCHASE_REQUESTS": "Yêu cầu tìm nhà cung cấp",
+            "OFFERS": "Offer",
+            "GROUP_BUYING": "Yêu cầu mua chung",
+            "GROUPS": "Nhóm",
+            "SOCIAL_POSTS": "Bài đăng",
+            "PERMISSION_MATRIX": "Phân quyền",
+            "COMMISSION_CONFIG": "Cấu hình hoa hồng",
+            "PAYOUTS": "Chi trả & giải ngân",
+            "MEMBERSHIP_TIERS": "Hạng thành viên",
+            "BANK_ACCOUNTS": "Tài khoản ngân hàng",
+            "REVENUES": "Doanh thu giao dịch",
+            "REVENUE_CONFIG": "Cấu hình doanh thu",
+            "MY_REFERRAL": "Giới thiệu của tôi",
+            "MY_COMMISSION": "Hoa hồng của tôi",
+            "MY_GROUP_BUYING": "Mua chung của tôi",
+            "MY_REQUESTS": "Yêu cầu của tôi",
+            "MY_POSTS": "Bài viết của tôi",
+            "MY_GROUPS": "Nhóm của tôi"
         }
     },
     "CONTACT_FLOATING": {

@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
 import { GroupBuyingRequest, GroupBuyingStatus } from '@core/models/group-buying-request.model';
+import { Permission } from '@core/models/permission.model';
 import { PagedResponse } from '@core/models/paged-response.model';
 
 import { ButtonComponent } from '@shared/components/button/button.component';
@@ -23,6 +24,7 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 
 @Component({
     selector: 'app-admin-group-buying-list',
@@ -43,7 +45,8 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
         AppPricePipe,
         ShortIdPipe,
         CodeNamePipe,
-        NgSelectWrapperComponent
+        NgSelectWrapperComponent,
+        HasPermissionDirective
     ],
     templateUrl: './group-buying-list.component.html',
     styleUrls: ['./group-buying-list.component.css']
@@ -52,8 +55,13 @@ export class AdminGroupBuyingListComponent implements OnInit {
     /** Loại bài khi chuyển tiếp vào nhóm ngành */
     readonly groupPostType = GroupPostType;
 
+    /** Mã quyền dùng trong template (`*appHasPermission`). */
+    readonly Permission = Permission;
+
     requests: GroupBuyingRequest[] = [];
     isLoading = true;
+    isDeleting = false;
+    isRestoring = false;
 
     searchText = '';
 
@@ -87,6 +95,11 @@ export class AdminGroupBuyingListComponent implements OnInit {
             { key: 'completed', label: this._appService.trans('GROUP_BUYING.STATUS.COMPLETED') },
             { key: 'cancelled', label: this._appService.trans('GROUP_BUYING.STATUS.CANCELLED') }
         ];
+
+        // Tab "Đã xóa" chỉ hiện khi có quyền xoá/khôi phục mua chung (mã mới P120 + mã cũ P067 chuyển tiếp).
+        if (this._appService.permissionService.has([Permission.DeleteGroupBuyingRequest, Permission.UpdateGroupBuyingRequest])) {
+            this.tabs.push({ key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') });
+        }
     }
 
     /**
@@ -119,12 +132,14 @@ export class AdminGroupBuyingListComponent implements OnInit {
 
     loadData(): void {
         this.isLoading = true;
+        const isDeleted = this.activeTab === 'deleted';
         this._appService.groupBuyingRequest.getData({
             page: this.pageNumber,
             pageSize: this.pageSize,
             search: this.searchText,
-            status: this.activeTab === 'all' ? undefined : this.activeTab,
-            searchField: this.searchField ?? undefined
+            status: (this.activeTab === 'all' || isDeleted) ? undefined : this.activeTab,
+            searchField: this.searchField ?? undefined,
+            includeDeleted: isDeleted ? true : undefined
         }).subscribe({
             next: (response: PagedResponse<GroupBuyingRequest>) => {
                 this.requests = response?.data ?? [];
@@ -157,6 +172,44 @@ export class AdminGroupBuyingListComponent implements OnInit {
         this.pageSize = size;
         this.pageNumber = 1;
         this.loadData();
+    }
+
+    /** Xóa mềm một yêu cầu mua chung sau khi xác nhận. */
+    onDelete(request: GroupBuyingRequest): void {
+        this._appService.confirmDelete(
+            this._appService.trans('ADMIN.GROUP_BUYING.DELETE_CONFIRM', { name: request.productName })
+        ).then(confirmed => {
+            if (!confirmed) return;
+
+            this.isDeleting = true;
+            this._appService.groupBuyingRequest.delete(request.id).subscribe({
+                next: () => {
+                    this.isDeleting = false;
+                    this._appService.showSuccess(this._appService.trans('ADMIN.GROUP_BUYING.DELETED_SUCCESS'));
+                    this.loadData();
+                },
+                error: () => {
+                    this.isDeleting = false;
+                    this._appService.showError(this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+                }
+            });
+        });
+    }
+
+    /** Khôi phục một yêu cầu mua chung đã xóa mềm. */
+    onRestore(request: GroupBuyingRequest): void {
+        this.isRestoring = true;
+        this._appService.groupBuyingRequest.restore(request.id).subscribe({
+            next: () => {
+                this.isRestoring = false;
+                this._appService.showSuccess(this._appService.trans('ADMIN.GROUP_BUYING.RESTORED_SUCCESS'));
+                this.loadData();
+            },
+            error: () => {
+                this.isRestoring = false;
+                this._appService.showError(this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+            }
+        });
     }
 
     getStatusVariant(status: GroupBuyingStatus): BadgeVariant {

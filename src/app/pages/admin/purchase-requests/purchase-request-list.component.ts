@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
 import { PurchaseRequest, PurchaseRequestStatus } from '@core/models/purchase-request.model';
+import { Permission } from '@core/models/permission.model';
 import { PagedResponse } from '@core/models/paged-response.model';
 
 import { ButtonComponent } from '@shared/components/button/button.component';
@@ -22,6 +23,7 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 
 @Component({
     selector: 'app-admin-purchase-request-list',
@@ -42,7 +44,8 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
         AppDatePipe,
         ShortIdPipe,
         CodeNamePipe,
-        NgSelectWrapperComponent
+        NgSelectWrapperComponent,
+        HasPermissionDirective
     ],
     templateUrl: './purchase-request-list.component.html',
     styleUrls: ['./purchase-request-list.component.css']
@@ -51,9 +54,14 @@ export class AdminPurchaseRequestListComponent implements OnInit {
     /** Loại bài khi chuyển tiếp vào nhóm ngành */
     readonly groupPostType = GroupPostType;
 
+    /** Mã quyền dùng trong template (`*appHasPermission`). */
+    readonly Permission = Permission;
+
     // Data
     requests: PurchaseRequest[] = [];
     isLoading = true;
+    isDeleting = false;
+    isRestoring = false;
 
     // Search
     searchText = '';
@@ -91,6 +99,17 @@ export class AdminPurchaseRequestListComponent implements OnInit {
             { key: 'contacted', label: this._appService.trans('COMMON.STATUS.CONTACTED') },
             { key: 'completed', label: this._appService.trans('COMMON.STATUS.COMPLETED') }
         ];
+
+        // Tab "Đã xóa" chỉ hiện khi có quyền xem & khôi phục yêu cầu đã xoá (P133) hoặc quyền xoá (P134),
+        // kèm mã xem cũ trong nhịp chuyển tiếp.
+        if (this._appService.permissionService.has([
+            Permission.ViewRestorePurchaseRequest,
+            Permission.RestorePurchaseRequest,
+            Permission.DeletePurchaseRequest,
+            Permission.ViewPurchaseRequests
+        ])) {
+            this.tabs.push({ key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') });
+        }
     }
 
     /** Các cột tìm kiếm khớp tham số searchField của API; giá trị '' = tất cả */
@@ -121,8 +140,10 @@ export class AdminPurchaseRequestListComponent implements OnInit {
     loadData(): void {
         this.isLoading = true;
 
+        const isDeleted = this.activeTab === 'deleted';
+
         let status: PurchaseRequestStatus | undefined;
-        if (this.activeTab !== 'all') {
+        if (!isDeleted && this.activeTab !== 'all') {
             switch (this.activeTab) {
                 case 'pending': status = PurchaseRequestStatus.PENDING; break;
                 case 'contacted': status = PurchaseRequestStatus.CONTACTED; break;
@@ -139,7 +160,8 @@ export class AdminPurchaseRequestListComponent implements OnInit {
                 this.fromDate ?? undefined,
                 this.toDate ?? undefined,
                 undefined,
-                this.searchField ?? undefined
+                this.searchField ?? undefined,
+                isDeleted ? true : undefined
             )
             .subscribe({
                 next: (response: PagedResponse<PurchaseRequest>) => {
@@ -180,6 +202,44 @@ export class AdminPurchaseRequestListComponent implements OnInit {
         this.pageSize = size;
         this.pageNumber = 1;
         this.loadData();
+    }
+
+    /** Xóa mềm một yêu cầu sau khi xác nhận. */
+    onDelete(request: PurchaseRequest): void {
+        this._appService.confirmDelete(
+            this._appService.trans('ADMIN.PURCHASE_REQUESTS.DELETE_CONFIRM', { name: request.productName })
+        ).then(confirmed => {
+            if (!confirmed) return;
+
+            this.isDeleting = true;
+            this._appService.purchaseRequest.delete(request.id).subscribe({
+                next: () => {
+                    this.isDeleting = false;
+                    this._appService.showSuccess(this._appService.trans('ADMIN.PURCHASE_REQUESTS.DELETED_SUCCESS'));
+                    this.loadData();
+                },
+                error: () => {
+                    this.isDeleting = false;
+                    this._appService.showError(this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+                }
+            });
+        });
+    }
+
+    /** Khôi phục một yêu cầu đã xóa mềm. */
+    onRestore(request: PurchaseRequest): void {
+        this.isRestoring = true;
+        this._appService.purchaseRequest.restore(request.id).subscribe({
+            next: () => {
+                this.isRestoring = false;
+                this._appService.showSuccess(this._appService.trans('ADMIN.PURCHASE_REQUESTS.RESTORED_SUCCESS'));
+                this.loadData();
+            },
+            error: () => {
+                this.isRestoring = false;
+                this._appService.showError(this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+            }
+        });
     }
 
     getStatusVariant(status: PurchaseRequestStatus): BadgeVariant {
