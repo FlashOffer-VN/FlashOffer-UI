@@ -178,6 +178,7 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
                                     }
                                 </div>
                                 <div class="flex gap-1">
+                                    @if (!isDeletedView) {
                                     <app-button variant="ghost" size="sm" [title]="'COMMON.BUTTON.EDIT' | translate"
                                         *appHasPermission="Permission.UpdateCommissionConfigs"
                                         (click)="edit(config)">
@@ -188,6 +189,13 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
                                         (click)="remove(config)">
                                         <i class="fa-solid fa-trash"></i>
                                     </app-button>
+                                    } @else {
+                                    <app-button variant="ghost" size="sm" [title]="'COMMON.BUTTON.RESTORE' | translate"
+                                        *appHasPermission="[Permission.ViewRestoreCommissionConfig, Permission.RestoreCommissionConfig, Permission.UpdateCommissionConfigs]"
+                                        [disabled]="isRestoring" (click)="restore(config)">
+                                        <i class="fa-solid fa-rotate-left"></i>
+                                    </app-button>
+                                    }
                                 </div>
                             </div>
 
@@ -247,6 +255,7 @@ export class AdminCommissionConfigComponent implements OnInit {
     isLoading = false;
     isLoadingCandidates = false;
     isSaving = false;
+    isRestoring = false;
 
     beneficiaryKey = 'referrer';
     beneficiaryTabs: StatusTabItem[] = [];
@@ -266,6 +275,12 @@ export class AdminCommissionConfigComponent implements OnInit {
             { key: 'referrer', label: this._appService.trans('COMMISSION.BENEFICIARY_REFERRER'), icon: 'fa-solid fa-user-group' },
             { key: 'partner', label: this._appService.trans('COMMISSION.BENEFICIARY_PARTNER'), icon: 'fa-solid fa-handshake' }
         ];
+
+        // Tab "Đã xóa" hiện khi có quyền xem cấu hình đã xoá (P139), khôi phục (P140) hoặc xem danh sách (P105)
+        // — đúng cặp mã [HasPermission(ViewRestoreCommissionConfig, RestoreCommissionConfig, ViewCommissionConfigs)] của API.
+        if (this._appService.permissionService.has([Permission.ViewRestoreCommissionConfig, Permission.RestoreCommissionConfig, Permission.ViewCommissionConfigs])) {
+            this.beneficiaryTabs.push({ key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED'), icon: 'fa-solid fa-trash-can' });
+        }
         this.typeOptions = [CommissionType.Percentage, CommissionType.Fixed, CommissionType.Tiered]
             .map(value => ({ value, label: this._appService.trans(getCommissionTypeLabel(value)) }));
         this.loadConfigs();
@@ -274,6 +289,11 @@ export class AdminCommissionConfigComponent implements OnInit {
     /** Cách tính đang là theo hạn mức. */
     get isTiered(): boolean {
         return this.type === CommissionType.Tiered;
+    }
+
+    /** Đang xem danh sách cấu hình đã xoá mềm (tab "Đã xóa"). */
+    get isDeletedView(): boolean {
+        return this.beneficiaryKey === 'deleted';
     }
 
     /** Đơn vị của mức hoa hồng theo cách tính đang chọn. */
@@ -291,13 +311,16 @@ export class AdminCommissionConfigComponent implements OnInit {
         if (key === this.beneficiaryKey) return;
         this.beneficiaryKey = key;
         this.beneficiary = key === 'partner' ? CommissionBeneficiary.Partner : CommissionBeneficiary.Referrer;
-        this.resetForm();
+        if (key !== 'deleted') this.resetForm();
         this.loadConfigs();
     }
 
     loadConfigs(): void {
         this.isLoading = true;
-        this._commissionService.getConfigs(this.beneficiary).subscribe({
+        const request = this.isDeletedView
+            ? this._commissionService.getDeletedConfigs()
+            : this._commissionService.getConfigs(this.beneficiary);
+        request.subscribe({
             next: response => {
                 this.configs = response.data ?? [];
                 this.isLoading = false;
@@ -439,6 +462,22 @@ export class AdminCommissionConfigComponent implements OnInit {
                 this.loadConfigs();
             },
             error: () => this._appService.showError(this._appService.trans('COMMISSION.DELETE_FAILED'))
+        });
+    }
+
+    /** Khôi phục một cấu hình hoa hồng đã xoá mềm (tab "Đã xóa"). */
+    restore(config: CommissionConfig): void {
+        this.isRestoring = true;
+        this._commissionService.restore(config.id).subscribe({
+            next: () => {
+                this.isRestoring = false;
+                this._appService.showSuccess(this._appService.trans('COMMISSION.RESTORE_SUCCESS'));
+                this.loadConfigs();
+            },
+            error: () => {
+                this.isRestoring = false;
+                this._appService.showError(this._appService.trans('COMMISSION.RESTORE_FAILED'));
+            }
         });
     }
 }

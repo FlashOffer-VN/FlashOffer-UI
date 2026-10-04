@@ -73,6 +73,10 @@ export interface BusinessGroup {
     isMember: boolean;
     pendingMembersCount: number;
     privateRequestsCount: number;
+    /** Bản ghi đã xoá mềm (có khi xem danh sách "Đã xóa"). */
+    isDeleted?: boolean;
+    /** Thời điểm xoá mềm. */
+    deletedAt?: string | null;
 }
 
 export interface BusinessGroupMember {

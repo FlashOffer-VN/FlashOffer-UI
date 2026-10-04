@@ -30,6 +30,8 @@ export class AdminGroupListComponent implements OnInit {
 
     groups: BusinessGroup[] = [];
     isLoading = false;
+    isDeleting = false;
+    isRestoring = false;
 
     searchText = '';
 
@@ -83,6 +85,12 @@ export class AdminGroupListComponent implements OnInit {
             { key: 'active', label: this._appService.trans('ADMIN.GROUPS.TAB_ACTIVE') },
             { key: 'inactive', label: this._appService.trans('ADMIN.GROUPS.TAB_INACTIVE') }
         ];
+
+        // Tab "Đã xóa" hiện khi có quyền xem nhóm đã xoá (P137), khôi phục (P138) hoặc xem danh sách (P070)
+        // — đúng cặp mã [HasPermission(ViewRestoreGroup, RestoreGroup, ViewGroups)] của API.
+        if (this._appService.permissionService.has([Permission.ViewRestoreGroup, Permission.RestoreGroup, Permission.ViewGroups])) {
+            this.statusTabs.push({ key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') });
+        }
         this.buildSearchFieldOptions();
         this.load();
     }
@@ -109,7 +117,8 @@ export class AdminGroupListComponent implements OnInit {
         this.page = page;
         this.isLoading = true;
 
-        this._appService.businessGroupService.getAdminList({
+        const isDeleted = this.activeTab === 'deleted';
+        const query = {
             page: this.page,
             pageSize: this.pageSize,
             search: this.searchText,
@@ -117,11 +126,17 @@ export class AdminGroupListComponent implements OnInit {
                 : this.typeFilter === 'community' || this.typeFilter === 'clubPending' ? BusinessGroupType.Community
                 : null,
             approvalStatus: this.typeFilter === 'clubPending' ? GroupApprovalStatus.Pending : null,
-            isActive: this.activeTab === 'all' ? null : this.activeTab === 'active',
+            isActive: isDeleted || this.activeTab === 'all' ? null : this.activeTab === 'active',
             hasPendingMembers: this.onlyPending,
             hasPrivateRequests: this.onlyPrivate,
             searchField: this.searchField ?? undefined
-        }).subscribe({
+        };
+
+        const request = isDeleted
+            ? this._appService.businessGroupService.getDeletedList(query)
+            : this._appService.businessGroupService.getAdminList(query);
+
+        request.subscribe({
             next: (response) => {
                 this.isLoading = false;
                 this.groups = response?.data ?? [];
@@ -235,13 +250,34 @@ export class AdminGroupListComponent implements OnInit {
         this._appService.confirmDelete(this._appService.trans('ADMIN.GROUPS.CONFIRM_DELETE_MESSAGE')).then((confirmed) => {
             if (!confirmed) return;
 
+            this.isDeleting = true;
             this._appService.businessGroupService.remove(group.id).subscribe({
                 next: () => {
+                    this.isDeleting = false;
                     this._appService.showSuccess(this._appService.trans('ADMIN.GROUPS.DELETE_SUCCESS'));
                     this.load();
                 },
-                error: (error: unknown) => this._appService.showError(this._appService.extractErrorMessage(error))
+                error: (error: unknown) => {
+                    this.isDeleting = false;
+                    this._appService.showError(this._appService.extractErrorMessage(error));
+                }
             });
+        });
+    }
+
+    /** Khôi phục nhóm đã xoá mềm (tab "Đã xóa"). */
+    restore(group: BusinessGroup): void {
+        this.isRestoring = true;
+        this._appService.businessGroupService.restore(group.id).subscribe({
+            next: () => {
+                this.isRestoring = false;
+                this._appService.showSuccess(this._appService.trans('ADMIN.GROUPS.RESTORE_SUCCESS'));
+                this.load();
+            },
+            error: (error: unknown) => {
+                this.isRestoring = false;
+                this._appService.showError(this._appService.extractErrorMessage(error));
+            }
         });
     }
 

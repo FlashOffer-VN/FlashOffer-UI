@@ -101,15 +101,27 @@
                                 [title]="'COMMON.BUTTON.VIEW_DETAIL' | translate">
                                 <i class="fas fa-eye"></i>
                             </app-button>
-                            <app-button variant="primary" size="sm" (onClick)="openEdit(group)"
-                                [title]="'COMMON.BUTTON.EDIT' | translate">
-                                <i class="fas fa-pen"></i>
-                            </app-button>
-                            <app-button variant="danger" size="sm" (onClick)="remove(group)"
-                                *appHasPermission="[Permission.DeleteGroup, Permission.ManageGroups]"
-                                [title]="'COMMON.BUTTON.DELETE' | translate">
-                                <i class="fas fa-trash"></i>
-                            </app-button>
+                            <ng-container *ngIf="activeTab !== 'deleted'">
+                                <app-button variant="primary" size="sm" (onClick)="openEdit(group)"
+                                    [title]="'COMMON.BUTTON.EDIT' | translate">
+                                    <i class="fas fa-pen"></i>
+                                </app-button>
+                                <app-button variant="danger" size="sm" (onClick)="remove(group)"
+                                    [disabled]="isDeleting"
+                                    *appHasPermission="[Permission.DeleteGroup, Permission.ManageGroups]"
+                                    [title]="'COMMON.BUTTON.DELETE' | translate">
+                                    <i class="fas fa-trash"></i>
+                                </app-button>
+                            </ng-container>
+                            <ng-container *ngIf="activeTab === 'deleted'">
+                                <app-button variant="primary" size="sm" (onClick)="restore(group)"
+                                    [disabled]="isRestoring"
+                                    *appHasPermission="[Permission.ViewRestoreGroup, Permission.RestoreGroup, Permission.ManageGroups]"
+                                    [title]="'COMMON.BUTTON.RESTORE' | translate"
+                                    [attr.aria-label]="'COMMON.BUTTON.RESTORE' | translate">
+                                    <i class="fas fa-rotate-left"></i>
+                                </app-button>
+                            </ng-container>
                         </div>
                     </td>
                 </tr>

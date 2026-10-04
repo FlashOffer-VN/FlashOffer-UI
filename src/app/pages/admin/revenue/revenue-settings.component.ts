@@ -12,6 +12,7 @@ import { Permission } from '@core/models/permission.model';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
+import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-tabs/status-tabs.component';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 
 /**
@@ -22,7 +23,7 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
 @Component({
     selector: 'app-admin-revenue-settings',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, TranslateModule, ButtonComponent, InputComponent, LoadingComponent, HasPermissionDirective],
+    imports: [CommonModule, ReactiveFormsModule, TranslateModule, ButtonComponent, InputComponent, LoadingComponent, StatusTabsComponent, HasPermissionDirective],
     template: `
         <div class="space-y-4">
             <div>
@@ -65,6 +66,9 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
 
                 <app-loading *ngIf="isLoadingExpenses"></app-loading>
 
+                <!-- Tab danh mục: đang dùng / đã xoá mềm (tab "Đã xóa") -->
+                <app-status-tabs [items]="expenseTabs" [active]="expenseTab" (change)="onExpenseTabChange($event)"></app-status-tabs>
+
                 <div *ngIf="!isLoadingExpenses" class="overflow-x-auto">
                     <table class="min-w-full text-sm">
                         <thead>
@@ -78,13 +82,14 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
                         <tbody>
                             <tr *ngFor="let item of expenseTypes" class="border-b border-gray-50">
                                 <td class="px-3 py-2">
-                                    <input type="checkbox" class="h-4 w-4 rounded border-gray-300"
+                                    <input *ngIf="expenseTab !== 'deleted'" type="checkbox" class="h-4 w-4 rounded border-gray-300"
                                         [checked]="isExpenseSelected(item.id)" (change)="toggleExpenseSelection(item.id)">
                                 </td>
                                 <td class="px-3 py-2 text-gray-800">{{ item.name }}</td>
                                 <td class="px-3 py-2 text-gray-500">{{ transactionTypesText(item.transactionTypes) }}</td>
                                 <td class="px-3 py-2">
                                     <div class="flex items-center justify-end gap-2">
+                                        <ng-container *ngIf="expenseTab !== 'deleted'">
                                         <app-button variant="secondary" size="sm"
                                             *appHasPermission="[Permission.UpdateRevenueConfig, Permission.ManageRevenueConfig]"
                                             [title]="'COMMON.BUTTON.EDIT' | translate" (onClick)="startEditExpense(item)">
@@ -95,6 +100,15 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
                                             [title]="'COMMON.BUTTON.DELETE' | translate" (onClick)="deleteExpense(item)">
                                             <i class="fa-solid fa-trash"></i>
                                         </app-button>
+                                        </ng-container>
+                                        <ng-container *ngIf="expenseTab === 'deleted'">
+                                            <app-button variant="primary" size="sm"
+                                                *appHasPermission="[Permission.ViewRestoreRevenueConfig, Permission.RestoreRevenueConfig, Permission.ManageRevenueConfig]"
+                                                [disabled]="isRestoringExpense"
+                                                [title]="'COMMON.BUTTON.RESTORE' | translate" (onClick)="restoreExpense(item)">
+                                                <i class="fa-solid fa-rotate-left"></i>
+                                            </app-button>
+                                        </ng-container>
                                     </div>
                                 </td>
                             </tr>
@@ -108,7 +122,7 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
                 </div>
 
                 <!-- Gán hàng loạt: tích các loại ở bảng rồi chọn loại giao dịch và bấm Áp dụng -->
-                <div class="rounded-lg bg-gray-50 p-3 space-y-2">
+                <div *ngIf="expenseTab !== 'deleted'" class="rounded-lg bg-gray-50 p-3 space-y-2">
                     <div class="text-sm font-medium text-gray-700">{{ 'ADMIN.REVENUE.EXPENSE_ASSIGN_TITLE' | translate }}</div>
                     <p class="text-xs text-gray-500">{{ 'ADMIN.REVENUE.EXPENSE_ASSIGN_HINT' | translate }}</p>
                     <div class="flex flex-wrap items-center gap-4">
@@ -127,7 +141,7 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
                 </div>
 
                 <!-- Thêm hoặc sửa một loại chi phí -->
-                <form [formGroup]="expenseForm" (ngSubmit)="saveExpense()" class="rounded-lg border border-gray-100 p-3 space-y-3">
+                <form *ngIf="expenseTab !== 'deleted'" [formGroup]="expenseForm" (ngSubmit)="saveExpense()" class="rounded-lg border border-gray-100 p-3 space-y-3">
                     <div class="text-sm font-medium text-gray-700">
                         {{ (editingExpenseId ? 'ADMIN.REVENUE.EXPENSE_EDIT_TITLE' : 'ADMIN.REVENUE.EXPENSE_ADD_TITLE') | translate }}
                     </div>
@@ -174,6 +188,11 @@ export class AdminRevenueSettingsComponent implements OnInit {
     isLoadingExpenses = false;
     isSavingExpense = false;
     isAssigning = false;
+    isRestoringExpense = false;
+
+    /** Tab danh mục loại chi phí: 'all' (đang dùng) hoặc 'deleted' (đã xoá mềm). */
+    expenseTab = 'all';
+    expenseTabs: StatusTabItem[] = [];
 
     /** Id loại chi phí đang sửa; null là đang thêm mới. */
     editingExpenseId: string | null = null;
@@ -209,7 +228,26 @@ export class AdminRevenueSettingsComponent implements OnInit {
             name: ['', [Validators.required]]
         });
 
+        this.buildExpenseTabs();
         this.load();
+        this.loadExpenseTypes();
+    }
+
+    private buildExpenseTabs(): void {
+        this.expenseTabs = [{ key: 'all', label: this._appService.trans('COMMON.ALL') }];
+
+        // Tab "Đã xóa" hiện khi có quyền xem loại chi phí đã xoá (P143), khôi phục (P144) hoặc quản lý (P114)
+        // — đúng cặp mã [HasPermission(ViewRestoreRevenueConfig, RestoreRevenueConfig, ManageRevenueConfig)] của API.
+        if (this._appService.permissionService.has([Permission.ViewRestoreRevenueConfig, Permission.RestoreRevenueConfig, Permission.ManageRevenueConfig])) {
+            this.expenseTabs.push({ key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') });
+        }
+    }
+
+    onExpenseTabChange(tab: string): void {
+        if (tab === this.expenseTab) return;
+        this.expenseTab = tab;
+        this.selectedExpenseIds = [];
+        this.cancelEditExpense();
         this.loadExpenseTypes();
     }
 
@@ -278,7 +316,10 @@ export class AdminRevenueSettingsComponent implements OnInit {
     /** Tải toàn bộ loại chi phí đã cấu hình. */
     loadExpenseTypes(): void {
         this.isLoadingExpenses = true;
-        this._expenseTypeService.getAll().subscribe({
+        const request = this.expenseTab === 'deleted'
+            ? this._expenseTypeService.getDeleted()
+            : this._expenseTypeService.getAll();
+        request.subscribe({
             next: response => {
                 this.expenseTypes = response.data ?? [];
                 this.isLoadingExpenses = false;
@@ -419,6 +460,22 @@ export class AdminRevenueSettingsComponent implements OnInit {
                 },
                 error: error => this._appService.showError(this._appService.extractErrorMessage(error))
             });
+        });
+    }
+
+    /** Khôi phục một loại chi phí đã xoá mềm (tab "Đã xóa"). */
+    restoreExpense(item: RevenueExpenseType): void {
+        this.isRestoringExpense = true;
+        this._expenseTypeService.restore(item.id).subscribe({
+            next: () => {
+                this.isRestoringExpense = false;
+                this._appService.showSuccess(this._appService.trans('ADMIN.REVENUE.EXPENSE_RESTORED'));
+                this.loadExpenseTypes();
+            },
+            error: error => {
+                this.isRestoringExpense = false;
+                this._appService.showError(this._appService.extractErrorMessage(error));
+            }
         });
     }
 }

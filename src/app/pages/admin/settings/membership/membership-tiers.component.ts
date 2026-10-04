@@ -11,6 +11,7 @@ import { Permission } from '@core/models/permission.model';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
+import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-tabs/status-tabs.component';
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 
 /**
@@ -27,6 +28,7 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
         ButtonComponent,
         InputComponent,
         LoadingComponent,
+        StatusTabsComponent,
         AppPricePipe
     ],
     template: `
@@ -39,13 +41,16 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 
                 <div class="ml-auto flex items-center gap-3">
                     <span class="text-sm text-gray-500">{{ 'ADMIN.MEMBERSHIP.TOTAL' | translate }}: <strong>{{ tiers.length }}</strong></span>
-                    @if (canManage) {
+                    @if (canManage && activeTab !== 'deleted') {
                         <app-button variant="primary" (click)="startCreate()">
                             <i class="fa-solid fa-plus mr-1"></i>{{ 'ADMIN.MEMBERSHIP.ADD' | translate }}
                         </app-button>
                     }
                 </div>
             </div>
+
+            <!-- Tab danh sách: đang áp dụng / đã xoá mềm (tab "Đã xóa") -->
+            <app-status-tabs [items]="tabs" [active]="activeTab" (change)="onTabChange($event)"></app-status-tabs>
 
             <!-- Biểu mẫu thêm / sửa hạng -->
             @if (isEditing) {
@@ -190,7 +195,15 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
                                         </td>
                                         <td class="px-4 py-3 text-gray-600 max-w-xs">{{ tier.description || '—' }}</td>
                                         <td class="px-4 py-3">
-                                            @if (canManage || canDelete) {
+                                            @if (activeTab === 'deleted') {
+                                                <div class="flex flex-wrap items-center justify-end gap-2">
+                                                    @if (canRestore) {
+                                                    <app-button size="sm" variant="primary" [disabled]="isRestoring" (click)="restore(tier)">
+                                                        <i class="fa-solid fa-rotate-left mr-1"></i>{{ 'COMMON.BUTTON.RESTORE' | translate }}
+                                                    </app-button>
+                                                    }
+                                                </div>
+                                            } @else if (canManage || canDelete) {
                                                 <div class="flex flex-wrap items-center justify-end gap-2">
                                                     @if (canManage) {
                                                     <app-button size="sm" variant="outline" (click)="startEdit(tier)">
@@ -227,6 +240,11 @@ export class AdminMembershipTiersComponent implements OnInit {
     isEditing = false;
     isLoading = false;
     isSaving = false;
+    isRestoring = false;
+
+    /** Tab danh sách: 'all' (đang áp dụng) hoặc 'deleted' (đã xoá mềm). */
+    activeTab = 'all';
+    tabs: StatusTabItem[] = [];
 
     constructor(
         private readonly _appService: AppService,
@@ -246,6 +264,26 @@ export class AdminMembershipTiersComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.tabs = [{ key: 'all', label: this._appService.trans('COMMON.ALL') }];
+
+        // Tab "Đã xóa" hiện khi có quyền xem hạng đã xoá (P141), khôi phục (P142) hoặc quản lý (P109)
+        // — đúng cặp mã [HasPermission(ViewRestoreMembershipTier, RestoreMembershipTier, ManageMembershipTiers)] của API.
+        if (this.canRestore) {
+            this.tabs.push({ key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') });
+        }
+        this.load();
+    }
+
+    /** Quyền xem hạng đã xoá + khôi phục — [HasPermission(ViewRestoreMembershipTier, RestoreMembershipTier, ManageMembershipTiers)] (P141/P142/P109). */
+    get canRestore(): boolean {
+        return this._appService.permissionService.has([Permission.ViewRestoreMembershipTier, Permission.RestoreMembershipTier, Permission.ManageMembershipTiers]);
+    }
+
+    onTabChange(tab: string): void {
+        if (tab === this.activeTab) return;
+        this.activeTab = tab;
+        this.isEditing = false;
+        this.editingId = null;
         this.load();
     }
 
@@ -262,7 +300,11 @@ export class AdminMembershipTiersComponent implements OnInit {
     load(): void {
         this.isLoading = true;
 
-        this._membershipService.getTiers().subscribe({
+        const request = this.activeTab === 'deleted'
+            ? this._membershipService.getDeletedTiers()
+            : this._membershipService.getTiers();
+
+        request.subscribe({
             next: response => {
                 this.tiers = response.data ?? [];
                 this.isLoading = false;
@@ -365,6 +407,22 @@ export class AdminMembershipTiersComponent implements OnInit {
                 },
                 error: error => this._appService.showError(this._appService.extractErrorMessage(error))
             });
+        });
+    }
+
+    /** Khôi phục một hạng thành viên đã xoá mềm (tab "Đã xóa"). */
+    restore(tier: MembershipTier): void {
+        this.isRestoring = true;
+        this._membershipService.restoreTier(tier.id).subscribe({
+            next: () => {
+                this.isRestoring = false;
+                this._appService.showSuccess(this._appService.trans('ADMIN.MEMBERSHIP.SUCCESS_RESTORE'));
+                this.load();
+            },
+            error: error => {
+                this.isRestoring = false;
+                this._appService.showError(this._appService.extractErrorMessage(error));
+            }
         });
     }
 

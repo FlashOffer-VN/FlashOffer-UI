@@ -16,6 +16,10 @@ export interface MembershipTier {
     approvalPriority: number;
     isActive: boolean;
     description?: string | null;
+    /** Bản ghi đã xoá mềm (có khi xem danh sách "Đã xóa"). */
+    isDeleted?: boolean;
+    /** Thời điểm xoá mềm. */
+    deletedAt?: string | null;
 }
 
 /** Hạng hiện tại của tài khoản kèm tiến độ tới hạng kế tiếp. */

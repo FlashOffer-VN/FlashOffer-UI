@@ -38,6 +38,8 @@
     "DELETE_CONFIRM": "Delete this commission configuration?",
     "DELETE_SUCCESS": "Commission configuration deleted",
     "DELETE_FAILED": "Failed to delete commission configuration",
+    "RESTORE_SUCCESS": "Commission configuration restored",
+    "RESTORE_FAILED": "Failed to restore commission configuration",
     "UPDATED_AT": "Updated",
           "NOTE_PLACEHOLDER": "Internal note for administrators"
         
@@ -2061,6 +2063,7 @@
             "EXPENSE_FIELD_TYPES_HINT": "Leave empty to apply by default to every transaction type.",
             "EXPENSE_SAVED": "Expense type saved.",
             "EXPENSE_DELETED": "Expense type deleted.",
+            "EXPENSE_RESTORED": "Expense type restored.",
             "EXPENSE_DELETE_CONFIRM": "Delete this expense type?"
         },
         "GROUPS": {
@@ -2085,6 +2088,7 @@
             "EMPTY": "No groups yet",
             "SAVE_SUCCESS": "Group saved",
             "DELETE_SUCCESS": "Group deleted",
+            "RESTORE_SUCCESS": "Group restored",
             "CONFIRM_DELETE_MESSAGE": "Delete this group? Members and posts will no longer be accessible.",
             "TAB_ALL": "All",
             "TAB_ACTIVE": "Active",
@@ -2194,6 +2198,7 @@
             "FIELD_ACTIVE": "Active for members",
             "SUCCESS_SAVE": "Membership tier saved.",
             "SUCCESS_DELETE": "Membership tier deleted.",
+            "SUCCESS_RESTORE": "Membership tier restored.",
             "CONFIRM_DELETE_TITLE": "Delete membership tier",
             "CONFIRM_DELETE_MESSAGE": "This tier will be removed from the configuration. Continue?",
             "ERROR_FORM_INVALID": "Please review the invalid fields.",

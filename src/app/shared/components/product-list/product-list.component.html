@@ -67,6 +67,7 @@
                             <i class="fa-solid fa-pen"></i>
                         </app-button>
                         <app-button variant="danger" size="sm" [disabled]="isActionLoading"
+                            *appHasPermission="[Permission.DeletePartnerProduct, Permission.ManagePartnerProducts]"
                             [title]="'COMMON.BUTTON.DELETE' | translate"
                             [attr.aria-label]="'COMMON.BUTTON.DELETE' | translate" (click)="delete.emit(product)">
                             <i class="fa-solid fa-trash"></i>

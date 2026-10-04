@@ -38,6 +38,8 @@
     "DELETE_CONFIRM": "Bạn có chắc muốn xoá cấu hình hoa hồng này?",
     "DELETE_SUCCESS": "Đã xoá cấu hình hoa hồng",
     "DELETE_FAILED": "Xoá cấu hình hoa hồng thất bại",
+    "RESTORE_SUCCESS": "Khôi phục cấu hình hoa hồng thành công",
+    "RESTORE_FAILED": "Khôi phục cấu hình hoa hồng thất bại",
     "UPDATED_AT": "Cập nhật",
           "NOTE_PLACEHOLDER": "Ghi chú nội bộ cho quản trị viên"
         
@@ -2024,6 +2026,7 @@
             "EXPENSE_FIELD_TYPES_HINT": "Để trống để áp dụng mặc định cho mọi loại giao dịch.",
             "EXPENSE_SAVED": "Đã lưu loại chi phí.",
             "EXPENSE_DELETED": "Đã xóa loại chi phí.",
+            "EXPENSE_RESTORED": "Đã khôi phục loại chi phí.",
             "EXPENSE_DELETE_CONFIRM": "Xóa loại chi phí này?"
         },
         "GROUPS": {
@@ -2048,6 +2051,7 @@
             "EMPTY": "Chưa có nhóm nào",
             "SAVE_SUCCESS": "Đã lưu nhóm",
             "DELETE_SUCCESS": "Đã xoá nhóm",
+            "RESTORE_SUCCESS": "Khôi phục nhóm thành công",
             "CONFIRM_DELETE_MESSAGE": "Xoá nhóm này? Thành viên và bài trong nhóm sẽ không truy cập được.",
             "TAB_ALL": "Tất cả",
             "TAB_ACTIVE": "Đang hoạt động",
@@ -2157,6 +2161,7 @@
             "FIELD_ACTIVE": "Đang áp dụng cho thành viên",
             "SUCCESS_SAVE": "Đã lưu hạng thành viên.",
             "SUCCESS_DELETE": "Đã xoá hạng thành viên.",
+            "SUCCESS_RESTORE": "Khôi phục hạng thành viên thành công.",
             "CONFIRM_DELETE_TITLE": "Xoá hạng thành viên",
             "CONFIRM_DELETE_MESSAGE": "Hạng này sẽ bị xoá khỏi cấu hình. Tiếp tục?",
             "ERROR_FORM_INVALID": "Kiểm tra lại các trường chưa hợp lệ.",
