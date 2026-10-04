@@ -95,7 +95,7 @@
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ offer.fullName }}
                                 <div class="text-xs text-gray-400">{{ 'ADMIN.OFFERS.REFERRED_BY' | translate }}:
-                                    {{ offer.referredByName || offer.referredByCode || '--' }}</div>
+                                    {{ offer.referredByCode | appCodeName: offer.referredByName }}</div>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ offer.phone }}

@@ -16,11 +16,13 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
 import { BusinessInfoComponent } from '@shared/components/business-info/business-info.component';
 import { CollaboratorEditFormComponent } from '../edit/collaborator-edit-form.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
+import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 
 @Component({
     selector: 'app-admin-collaborator-detail',
     standalone: true,
     imports: [
+        CodeNamePipe,
         CommonModule,
         RouterModule,
         TranslateModule,

@@ -31,11 +31,13 @@ import { ProductListComponent } from '@shared/components/product-list/product-li
 import { PartnerEditFormComponent } from '../edit/partner-edit-form.component';
 import { PartnerProductFormComponent } from '../edit/partner-product-form.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
+import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 
 @Component({
     selector: 'app-admin-partner-detail',
     standalone: true,
     imports: [
+        CodeNamePipe,
         CommonModule,
         RouterModule,
         TranslateModule,

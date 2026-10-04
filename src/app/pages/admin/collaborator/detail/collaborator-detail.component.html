@@ -37,7 +37,7 @@
                         <span>
                             <i class="fa-solid fa-user-plus w-4"></i>
                             {{ 'ADMIN.CTV.REFERRED_BY' | translate }}:
-                            {{ collaborator.referredByName || collaborator.referredByCode || '--' }}
+                            {{ collaborator.referredByCode | appCodeName: collaborator.referredByName }}
                         </span>
                     </div>
                 </div>

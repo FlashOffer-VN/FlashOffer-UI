@@ -14,11 +14,13 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
+import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 
 @Component({
     selector: 'app-admin-purchase-request-detail',
     standalone: true,
     imports: [
+        CodeNamePipe,
         CommonModule,
         RouterModule,
         TranslateModule,

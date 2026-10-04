@@ -24,11 +24,13 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 import { MoneyInputDirective } from '@shared/directives/money-input.directive';
+import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 
 @Component({
     selector: 'app-admin-group-buying-detail',
     standalone: true,
     imports: [
+        CodeNamePipe,
         CommonModule, FormsModule, RouterModule, TranslateModule,
         ButtonComponent, LoadingComponent, BadgeComponent, ModalComponent,
         ShareToGroupComponent,
@@ -246,10 +248,6 @@ export class AdminGroupBuyingDetailComponent implements OnInit {
     }
 
     /** Mã chia sẻ riêng + tên CTV giới thiệu (mã ghi nhận từ link chia sẻ) */
-    referralText(name?: string | null, code?: string | null): string {
-        const parts = [code, name].filter(value => !!value);
-        return parts.length > 0 ? parts.join(' · ') : '--';
-    }
 
     goBack(): void {
         this._router.navigate(['/admin/group-buying']);

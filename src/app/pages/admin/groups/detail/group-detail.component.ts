@@ -21,12 +21,14 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { StatusTabItem, StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
+import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 
 /** Chi tiết nhóm (admin): thành viên, bài trong nhóm, yêu cầu kín */
 @Component({
     selector: 'app-admin-group-detail',
     standalone: true,
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink, TranslateModule, ButtonComponent,
+    imports: [
+        CodeNamePipe,CommonModule, FormsModule, ReactiveFormsModule, RouterLink, TranslateModule, ButtonComponent,
         InputComponent, LoadingComponent, ModalComponent, StatusTabsComponent,
         QuillModule,
         SanitizeHtmlPipe,],
@@ -392,8 +394,4 @@ export class AdminGroupDetailComponent implements OnInit {
     }
 
     /** Mã chia sẻ riêng + tên CTV giới thiệu (mã ghi nhận từ link chia sẻ) */
-    referralText(name?: string | null, code?: string | null): string {
-        const parts = [code, name].filter(value => !!value);
-        return parts.length > 0 ? parts.join(' · ') : '--';
-    }
 }
