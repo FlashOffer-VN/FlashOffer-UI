@@ -78,7 +78,7 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
                             [isInvalid]="isInvalid('name')" [errorMessage]="errorOf('name')">
                         </app-input>
 
-                        <app-input formControlName="minAccumulatedValue" type="number" [id]="'tier_min'"
+                        <app-input formControlName="minAccumulatedValue" [money]="true" [id]="'tier_min'"
                             [label]="'ADMIN.MEMBERSHIP.FIELD_MIN_VALUE' | translate"
                             [placeholder]="'1000000'" [required]="true"
                             [isInvalid]="isInvalid('minAccumulatedValue')" [errorMessage]="errorOf('minAccumulatedValue')">
@@ -91,7 +91,7 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
                             [isInvalid]="isInvalid('earlyWithdrawalFeeRate')" [errorMessage]="errorOf('earlyWithdrawalFeeRate')">
                         </app-input>
 
-                        <app-input formControlName="monthlyWithdrawalLimit" type="number" [id]="'tier_limit'"
+                        <app-input formControlName="monthlyWithdrawalLimit" [money]="true" [id]="'tier_limit'"
                             [label]="'ADMIN.MEMBERSHIP.FIELD_LIMIT' | translate"
                             [placeholder]="'20000000'"
 

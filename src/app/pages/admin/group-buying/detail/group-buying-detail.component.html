@@ -282,7 +282,7 @@
         <div class="grid grid-cols-2 gap-3">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'ADMIN.GROUP_BUYING.TARGET_PRICE' | translate }}</label>
-                <input type="number" [(ngModel)]="editData.targetPrice" class="w-full border border-gray-300 rounded-lg p-2 text-sm">
+                <input type="number" appMoneyInput [(ngModel)]="editData.targetPrice" class="w-full border border-gray-300 rounded-lg p-2 text-sm">
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'ADMIN.GROUP_BUYING.TARGET_PEOPLE' | translate }}</label>

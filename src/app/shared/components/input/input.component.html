@@ -15,9 +15,9 @@
         @if (icon) {
         <i [class]="icon" class="app-input__icon"></i>
         }
-        <input [id]="id" [type]="type" [placeholder]="placeholder" [attr.autocomplete]="autocomplete || null"
+        <input [id]="id" [type]="inputType" [attr.inputmode]="money ? 'numeric' : null" [placeholder]="placeholder" [attr.autocomplete]="autocomplete || null"
             [readonly]="readonly"
-            [disabled]="disabled || isDisabled" [value]="value" (input)="onInput($event)" (blur)="onBlur()"
+            [disabled]="disabled || isDisabled" [value]="value" (input)="onInput($event)" (focus)="onFocus()" (blur)="onBlur()"
             class="app-input__control" [class.has-icon]="icon" [class.is-invalid]="invalid"
             [class.is-disabled]="disabled || isDisabled" [class.is-readonly]="readonly" />
     </div>

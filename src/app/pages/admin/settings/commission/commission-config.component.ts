@@ -86,12 +86,12 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
                             [label]="('COMMISSION.RATE' | translate) + ' (' + (rateUnitKey | translate) + ')'">
                         </app-input>
 
-                        <app-input [(ngModel)]="minOrderValue" [type]="'number'" [id]="'commission_min_order'"
+                        <app-input [(ngModel)]="minOrderValue" [money]="true" [id]="'commission_min_order'"
                             [placeholder]="'500000'"
                             [label]="'COMMISSION.MIN_ORDER' | translate">
                         </app-input>
 
-                        <app-input [(ngModel)]="maxCommission" [type]="'number'" [id]="'commission_max'"
+                        <app-input [(ngModel)]="maxCommission" [money]="true" [id]="'commission_max'"
                             [placeholder]="'500000'"
                             [label]="'COMMISSION.MAX_COMMISSION' | translate">
                         </app-input>
@@ -107,10 +107,10 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
                             </div>
                             @for (tier of tiers; track $index) {
                                 <div class="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-end mt-2">
-                                    <app-input [(ngModel)]="tier.fromValue" [type]="'number'"
+                                    <app-input [(ngModel)]="tier.fromValue" [money]="true"
                                         [placeholder]="'COMMISSION.TIER_FROM' | translate">
                                     </app-input>
-                                    <app-input [(ngModel)]="tier.toValue" [type]="'number'"
+                                    <app-input [(ngModel)]="tier.toValue" [money]="true"
                                         [placeholder]="'COMMISSION.TIER_TO' | translate">
                                     </app-input>
                                     <app-input [(ngModel)]="tier.rate" [type]="'number'"

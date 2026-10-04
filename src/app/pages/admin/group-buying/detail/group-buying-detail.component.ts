@@ -23,6 +23,7 @@ import { GroupPostType } from '@core/models/business-group.model';
 import { ShareToGroupComponent } from '@shared/components/share-to-group/share-to-group.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
+import { MoneyInputDirective } from '@shared/directives/money-input.directive';
 
 @Component({
     selector: 'app-admin-group-buying-detail',
@@ -32,7 +33,8 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
         ButtonComponent, LoadingComponent, BadgeComponent, ModalComponent,
         ShareToGroupComponent,
         AppDatePipe,
-        AppPricePipe
+        AppPricePipe,
+        MoneyInputDirective
     ],
     templateUrl: './group-buying-detail.component.html',
     styleUrls: ['./group-buying-detail.component.css']

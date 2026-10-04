@@ -59,7 +59,7 @@
                     <label>{{ 'GROUP_BUYING.TARGET_PRICE' | translate }} <span class="required">*</span></label>
                     <div class="input-wrapper">
                         <i class="fas fa-tag input-icon"></i>
-                        <input type="number" formControlName="targetPrice"
+                        <input type="number" appMoneyInput formControlName="targetPrice"
                             placeholder="{{ 'GROUP_BUYING.TARGET_PRICE_PLACEHOLDER' | translate }}" />
                     </div>
                     <div class="error-message" *ngIf="isFieldInvalid('targetPrice')">
