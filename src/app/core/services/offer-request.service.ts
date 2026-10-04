@@ -49,7 +49,8 @@ export class OfferRequestService {
         includeDeleted?: boolean,
         fromDate?: string,
         toDate?: string,
-        mineOnly?: boolean
+        mineOnly?: boolean,
+        searchField?: string
     ): Observable<OfferRequestPagedResponse> {
         // Backend yêu cầu pageSize trong [1, 100] — không cho gửi 0/âm
         pageSize = this.clampPageSize(pageSize);
@@ -73,6 +74,8 @@ export class OfferRequestService {
         if (fromDate) params.fromDate = fromDate;
         if (toDate) params.toDate = toDate;
         if (mineOnly) params.mineOnly = true;
+        // Cột tìm kiếm do người dùng chọn; bỏ trống = tìm mọi trường (hành vi cũ)
+        if (searchField) params.searchField = searchField;
         return this.apiService.get<OfferRequestPagedResponse>(this.endpoint, params);
     }
 

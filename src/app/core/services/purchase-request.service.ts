@@ -62,7 +62,8 @@ export class PurchaseRequestService {
         status?: PurchaseRequestStatus,
         fromDate?: string,
         toDate?: string,
-        mineOnly?: boolean
+        mineOnly?: boolean,
+        searchField?: string
     ): Observable<PagedResponse<PurchaseRequest>> {
         // Backend yêu cầu pageSize trong [1, 100]
         pageSize = this.clampPageSize(pageSize);
@@ -80,6 +81,8 @@ export class PurchaseRequestService {
         if (fromDate) params.fromDate = fromDate;
         if (toDate) params.toDate = toDate;
         if (mineOnly) params.mineOnly = true;
+        // Cột tìm kiếm do người dùng chọn; bỏ trống = tìm mọi trường (hành vi cũ)
+        if (searchField) params.searchField = searchField;
         return this.apiService.get<PagedResponse<PurchaseRequest>>(this.endpoint, params);
     }
 

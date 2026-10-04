@@ -87,18 +87,18 @@ export interface BusinessGroupMember {
     role: GroupMemberRole;
     status: GroupMemberStatus;
     isGuestAccount: boolean;
-    /** Mã chia sẻ riêng của người đã mời thành viên này vào nhóm */
-    referralCode?: string | null;
-    /** Tên chủ mã chia sẻ (CTV giới thiệu) */
-    referralName?: string | null;
+    /** Ai mang BẢN GHI (thành viên) này tới — chụp lúc tạo (khớp API recordReferrerCode) */
+    recordReferrerCode?: string | null;
+    /** Tên chủ mã giới thiệu bản ghi */
+    recordReferrerName?: string | null;
     joinedAt?: string | null;
     approvedAt?: string | null;
     rejectionReason?: string | null;
     createdAt: string;
-    /** Mã chia sẻ của người đã giới thiệu người tạo bản ghi — ghi nhận trên tài khoản (màn quản trị) */
-    referredByCode?: string | null;
-    /** Tên chủ mã chia sẻ của người tạo bản ghi */
-    referredByName?: string | null;
+    /** Ai mang TÀI KHOẢN vào app — ghi lần đầu, không ghi đè (khớp API accountReferrerCode) */
+    accountReferrerCode?: string | null;
+    /** Tên chủ mã giới thiệu tài khoản */
+    accountReferrerName?: string | null;
 }
 
 export interface BusinessGroupDetail extends BusinessGroup {

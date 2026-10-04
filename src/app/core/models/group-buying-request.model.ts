@@ -19,15 +19,17 @@ export interface GroupBuyingRequest {
     status: GroupBuyingStatus;
     businessFieldId?: string | null;
     businessFieldName?: string | null;
-    /** Mã chia sẻ riêng (refcode) ghi nhận cho người đã chia sẻ bản ghi này */
-    referralCode?: string | null;
+    /** Ai mang BẢN GHI này tới — chụp lúc tạo (khớp API recordReferrerCode) */
+    recordReferrerCode?: string | null;
+    /** Tên chủ mã giới thiệu bản ghi (khớp API recordReferrerName) */
+    recordReferrerName?: string | null;
     createdAt: string;
     approvedAt?: string | null;
     closedReason?: string | null;
-    /** Mã chia sẻ của người đã giới thiệu người tạo bản ghi — ghi nhận trên tài khoản (màn quản trị) */
-    referredByCode?: string | null;
-    /** Tên chủ mã chia sẻ của người tạo bản ghi */
-    referredByName?: string | null;
+    /** Ai mang TÀI KHOẢN vào app — ghi lần đầu, không ghi đè (khớp API accountReferrerCode) */
+    accountReferrerCode?: string | null;
+    /** Tên chủ mã giới thiệu tài khoản */
+    accountReferrerName?: string | null;
 }
 
 export enum GroupBuyingStatus {
@@ -101,19 +103,19 @@ export interface GroupBuyingParticipant {
     zalo: string | null;
     email: string | null;
     note: string | null;
-    /** Mã chia sẻ riêng ghi nhận cho người đã chia sẻ link mà thành viên này tham gia */
-    referralCode?: string | null;
-    /** Tên chủ mã chia sẻ (CTV giới thiệu) */
-    referralName?: string | null;
+    /** Ai mang BẢN GHI (người tham gia) này tới — chụp lúc tạo (khớp API recordReferrerCode) */
+    recordReferrerCode?: string | null;
+    /** Tên chủ mã giới thiệu bản ghi */
+    recordReferrerName?: string | null;
     isCreator: boolean;
     isGuestAccount: boolean;
     status: number;
     isMe: boolean;
     createdAt: string;
-    /** Mã chia sẻ của người đã giới thiệu người tạo bản ghi — ghi nhận trên tài khoản (màn quản trị) */
-    referredByCode?: string | null;
-    /** Tên chủ mã chia sẻ của người tạo bản ghi */
-    referredByName?: string | null;
+    /** Ai mang TÀI KHOẢN vào app — ghi lần đầu, không ghi đè (khớp API accountReferrerCode) */
+    accountReferrerCode?: string | null;
+    /** Tên chủ mã giới thiệu tài khoản */
+    accountReferrerName?: string | null;
 }
 
 /** Chi tiết một yêu cầu mua chung (bấm vào item trên tab Mua chung). */
@@ -137,19 +139,19 @@ export interface GroupBuyingDetail {
     creatorPhone: string;
     creatorZalo: string | null;
     creatorEmail: string | null;
-    /** Mã chia sẻ riêng của người đã chia sẻ link tạo ra đơn này */
-    referralCode?: string | null;
-    /** Tên chủ mã chia sẻ (CTV giới thiệu) */
-    referralName?: string | null;
+    /** Ai mang BẢN GHI (đơn mua chung) này tới — chụp lúc tạo (khớp API recordReferrerCode) */
+    recordReferrerCode?: string | null;
+    /** Tên chủ mã giới thiệu bản ghi */
+    recordReferrerName?: string | null;
     isMine: boolean;
     isJoinedByMe: boolean;
     canJoin: boolean;
     joinBlockedReason: string | null;
     participants: GroupBuyingParticipant[];
-    /** Mã chia sẻ của người đã giới thiệu người tạo bản ghi — ghi nhận trên tài khoản (màn quản trị) */
-    referredByCode?: string | null;
-    /** Tên chủ mã chia sẻ của người tạo bản ghi */
-    referredByName?: string | null;
+    /** Ai mang TÀI KHOẢN vào app — ghi lần đầu, không ghi đè (khớp API accountReferrerCode) */
+    accountReferrerCode?: string | null;
+    /** Tên chủ mã giới thiệu tài khoản */
+    accountReferrerName?: string | null;
 }
 
 /** Khách chưa đăng nhập phải gửi họ tên + SĐT; người đã đăng nhập chỉ cần ghi chú. */

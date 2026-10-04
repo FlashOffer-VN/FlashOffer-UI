@@ -17,6 +17,15 @@
                 </app-input>
             </div>
 
+            <!-- Search field selector: chọn cột tìm kiếm (bỏ trống = tất cả) -->
+            <div class="flex-shrink-0 w-full sm:w-56">
+                <app-ng-select-wrapper [items]="searchFieldOptions" [(ngModel)]="searchField"
+                    [label]="'COMMON.SEARCH_FIELD.LABEL' | translate"
+                    [placeholder]="'COMMON.SEARCH_FIELD.ALL' | translate" [clearable]="true" appendTo="body"
+                    (valueChange)="onSearchFieldChange()">
+                </app-ng-select-wrapper>
+            </div>
+
             <!-- Date range -->
             <ngx-filter-daterange [from]="fromDate" [to]="toDate" (rangeChange)="onRangeChange($event)">
             </ngx-filter-daterange>
@@ -94,8 +103,10 @@
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ offer.fullName }}
+                                <div class="text-xs text-gray-400">{{ 'ADMIN.OFFERS.REFERRAL' | translate }}:
+                                    {{ offer.recordReferrerCode | appCodeName: offer.recordReferrerName }}</div>
                                 <div class="text-xs text-gray-400">{{ 'ADMIN.OFFERS.REFERRED_BY' | translate }}:
-                                    {{ offer.referredByCode | appCodeName: offer.referredByName }}</div>
+                                    {{ offer.accountReferrerCode | appCodeName: offer.accountReferrerName }}</div>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ offer.phone }}

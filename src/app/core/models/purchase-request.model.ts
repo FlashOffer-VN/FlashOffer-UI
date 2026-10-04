@@ -20,13 +20,15 @@ export interface PurchaseRequest {
     email: string;
     note: string | null;
     status: PurchaseRequestStatus;
-    /** Mã chia sẻ riêng ghi nhận cho người đã chia sẻ link tạo ra yêu cầu này */
-    referralCode?: string | null;
+    /** Ai mang BẢN GHI này tới — chụp lúc tạo (khớp API recordReferrerCode) */
+    recordReferrerCode?: string | null;
+    /** Tên chủ mã giới thiệu bản ghi (khớp API recordReferrerName) */
+    recordReferrerName?: string | null;
     createdAt: string;
-    /** Mã chia sẻ của người đã giới thiệu người tạo bản ghi — ghi nhận trên tài khoản (màn quản trị) */
-    referredByCode?: string | null;
-    /** Tên chủ mã chia sẻ của người tạo bản ghi */
-    referredByName?: string | null;
+    /** Ai mang TÀI KHOẢN vào app — ghi lần đầu, không ghi đè (khớp API accountReferrerCode) */
+    accountReferrerCode?: string | null;
+    /** Tên chủ mã giới thiệu tài khoản */
+    accountReferrerName?: string | null;
 }
 
 export interface CreatePurchaseRequestDto {

@@ -21,6 +21,7 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 
 @Component({
     selector: 'app-admin-purchase-request-list',
@@ -40,7 +41,8 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
         ShareToGroupComponent,
         AppDatePipe,
         ShortIdPipe,
-        CodeNamePipe
+        CodeNamePipe,
+        NgSelectWrapperComponent
     ],
     templateUrl: './purchase-request-list.component.html',
     styleUrls: ['./purchase-request-list.component.css']
@@ -58,6 +60,10 @@ export class AdminPurchaseRequestListComponent implements OnInit {
     fromDate: string | null = null;
     toDate: string | null = null;
 
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField: string | null = null;
+    searchFieldOptions: { value: string; label: string }[] = [];
+
     // Tab lọc status
     activeTab = 'all';
     tabs: { key: string; label: string }[] = [];
@@ -74,6 +80,7 @@ export class AdminPurchaseRequestListComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildTabs();
+        this.buildSearchFieldOptions();
         this.loadData();
     }
 
@@ -84,6 +91,25 @@ export class AdminPurchaseRequestListComponent implements OnInit {
             { key: 'contacted', label: this._appService.trans('COMMON.STATUS.CONTACTED') },
             { key: 'completed', label: this._appService.trans('COMMON.STATUS.COMPLETED') }
         ];
+    }
+
+    /** Các cột tìm kiếm khớp tham số searchField của API; giá trị '' = tất cả */
+    private buildSearchFieldOptions(): void {
+        const t = (key: string) => this._appService.trans(key);
+        this.searchFieldOptions = [
+            { value: '', label: t('COMMON.SEARCH_FIELD.ALL') },
+            { value: 'productName', label: t('COMMON.SEARCH_FIELD.PRODUCT_NAME') },
+            { value: 'code', label: t('COMMON.SEARCH_FIELD.CODE') },
+            { value: 'recordReferrerCode', label: t('COMMON.SEARCH_FIELD.RECORD_REFERRER') },
+            { value: 'customerName', label: t('COMMON.SEARCH_FIELD.CUSTOMER_NAME') },
+            { value: 'customerPhone', label: t('COMMON.SEARCH_FIELD.CUSTOMER_PHONE') },
+            { value: 'customerEmail', label: t('COMMON.SEARCH_FIELD.CUSTOMER_EMAIL') }
+        ];
+    }
+
+    onSearchFieldChange(): void {
+        this.pageNumber = 1;
+        this.loadData();
     }
 
     onTabChange(tab: string): void {
@@ -111,7 +137,9 @@ export class AdminPurchaseRequestListComponent implements OnInit {
                 this.searchText,
                 status,
                 this.fromDate ?? undefined,
-                this.toDate ?? undefined
+                this.toDate ?? undefined,
+                undefined,
+                this.searchField ?? undefined
             )
             .subscribe({
                 next: (response: PagedResponse<PurchaseRequest>) => {
