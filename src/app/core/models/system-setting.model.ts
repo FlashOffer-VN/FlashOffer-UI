@@ -32,6 +32,10 @@ export interface SystemSetting {
     referralCodePrefix: string;
     referralCodeLength: number;
     commissionAttributionDays: number;
+    /** Tỷ lệ thuế doanh thu (%) áp cho mọi bản khai. */
+    revenueTaxPercent: number;
+    /** Số doanh thu nhập vào đã gồm thuế hay chưa. */
+    revenueTaxIncluded: boolean;
 
     maxUploadSizeMb: number;
     allowedImageExtensions?: string | null;

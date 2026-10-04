@@ -1,5 +1,5 @@
 // src/app/pages/admin/referral-stats/referral-stats.component.ts
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -85,6 +85,9 @@ export class AdminReferralStatsComponent implements OnInit, OnDestroy {
 
     // Phát sinh của mã đang chọn
     selectedCode: string | null = null;
+    /** Bảng phát sinh, dùng để cuộn tới sau khi bấm xem. */
+    @ViewChild('eventsPanel') eventsPanel?: ElementRef<HTMLElement>;
+
     events: ReferralEventItem[] = [];
     eventsLoading = false;
     eventsPage = 1;
@@ -323,6 +326,9 @@ export class AdminReferralStatsComponent implements OnInit, OnDestroy {
                     this.eventsTotalPages = response.totalPages;
                     this.eventsHasPreviousPage = response.hasPreviousPage;
                     this.eventsHasNextPage = response.hasNextPage;
+
+                    // Cuộn xuống bảng phát sinh để thấy ngay kết quả sau khi bấm.
+                    setTimeout(() => this.eventsPanel?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' }), 0);
                 },
                 error: () => { this.events = []; }
             });
