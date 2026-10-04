@@ -1242,6 +1242,7 @@
         },
         "BUTTON": {
             "SEARCH": "Search",
+"RETRY": "Retry",
             "ACTION": "Action",
             "VIEW_DETAIL": "View Detail",
             "EDIT": "Edit",
@@ -1985,6 +1986,8 @@
             "STATUS": "Status",
             "CREATED_AT": "Created at",
             "EMPTY": "No declaration yet",
+            "LOAD_FAILED": "Could not load the figures, please retry.",
+            "RECORD_COUNT": "declarations",
             "CONFIRMED_COUNT": "Confirmed",
             "DRAFT_COUNT_HINT": "still draft"
         },

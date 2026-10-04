@@ -51,6 +51,7 @@ export class AdminRevenueListComponent implements OnInit {
     period = 'month';
     stats: RevenueStats | null = null;
     isLoadingStats = true;
+    statsFailed = false;
 
     /** Lọc danh sách bản khai. */
     statusTabs: StatusTabItem[] = [];
@@ -59,6 +60,7 @@ export class AdminRevenueListComponent implements OnInit {
 
     records: TransactionRevenue[] = [];
     isLoadingList = true;
+    recordsFailed = false;
     page = 1;
     pageSize = 10;
     totalCount = 0;
@@ -145,8 +147,10 @@ export class AdminRevenueListComponent implements OnInit {
             : this._appService.trans('ADMIN.REVENUE.TYPE_GROUP_BUYING');
     }
 
-    private loadStats(): void {
+    /** Tải lại số tổng của kỳ đang chọn. */
+    loadStats(): void {
         this.isLoadingStats = true;
+        this.statsFailed = false;
         const range = this.currentRange();
 
         this._revenueService.getStats({ from: range.from, to: range.to, groupBy: this.period as 'week' | 'month' | 'year' }).subscribe({
@@ -156,12 +160,15 @@ export class AdminRevenueListComponent implements OnInit {
             },
             error: () => {
                 this.isLoadingStats = false;
+                this.statsFailed = true;
             }
         });
     }
 
-    private loadRecords(page = this.page): void {
+    /** Tải lại danh sách bản khai. */
+    loadRecords(page = this.page): void {
         this.isLoadingList = true;
+        this.recordsFailed = false;
         this.page = page;
 
         this._revenueService.getPaged({
@@ -180,6 +187,7 @@ export class AdminRevenueListComponent implements OnInit {
             },
             error: () => {
                 this.isLoadingList = false;
+                this.recordsFailed = true;
             }
         });
     }
