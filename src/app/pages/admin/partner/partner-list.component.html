@@ -131,9 +131,11 @@
                             </td>
                             <td class="action-column px-3 py-3">
                                 <div class="flex items-center gap-2">
+                                    <!-- Nút xem chi tiết chỉ hiển thị icon, tooltip lấy từ i18n -->
                                     <app-button variant="primary" size="sm"
-                                        (click)="$event.stopPropagation(); navigateToDetail(partner.id)">
-                                        {{ 'COMMON.BUTTON.VIEW_DETAIL' | translate }}
+                                        (click)="$event.stopPropagation(); navigateToDetail(partner.id)"
+                                        [title]="'COMMON.BUTTON.VIEW_DETAIL' | translate">
+                                        <i class="fa-solid fa-eye"></i>
                                     </app-button>
                                     <app-button *ngIf="activeTab === 'deleted'" variant="primary" size="sm"
                                         [loading]="isRestoring" (click)="$event.stopPropagation(); onRestore(partner)"

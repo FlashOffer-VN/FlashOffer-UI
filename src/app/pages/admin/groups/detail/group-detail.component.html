@@ -49,12 +49,14 @@
                 <p class="mt-1 font-semibold text-slate-800">{{ group.topic || '--' }}</p>
 
                 <div class="mt-4 flex flex-wrap items-center gap-3">
+                    <!-- Nhóm nút thao tác chỉ hiển thị icon, tooltip lấy từ i18n -->
                     <app-button variant="success" [loading]="clubApproving" [disabled]="clubApproving"
-                        (onClick)="approveClub()">
-                        <i class="fas fa-check mr-2"></i>{{ 'ADMIN.CLUBS.APPROVE_CLUB' | translate }}
+                        (onClick)="approveClub()" [title]="'COMMON.BUTTON.APPROVE' | translate">
+                        <i class="fas fa-check"></i>
                     </app-button>
-                    <app-button variant="danger" [disabled]="clubApproving" (onClick)="clubRejectVisible = true">
-                        <i class="fas fa-xmark mr-2"></i>{{ 'ADMIN.CLUBS.REJECT_CLUB' | translate }}
+                    <app-button variant="danger" [disabled]="clubApproving" (onClick)="clubRejectVisible = true"
+                        [title]="'COMMON.BUTTON.REJECT' | translate">
+                        <i class="fas fa-xmark"></i>
                     </app-button>
 
                     <span *ngIf="group.rejectedReason" class="text-xs font-semibold text-rose-600">
@@ -137,13 +139,16 @@
                             <td class="px-4 py-3 text-slate-500">{{ member.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
                             <td class="px-4 py-3">
                                 <div class="flex justify-end gap-2">
-                                    <app-button *ngIf="member.status !== 2" variant="success" size="sm" (onClick)="approve(member)">
+                                    <app-button *ngIf="member.status !== 2" variant="success" size="sm" (onClick)="approve(member)"
+                                        [title]="'COMMON.BUTTON.APPROVE' | translate">
                                         <i class="fas fa-check"></i>
                                     </app-button>
-                                    <app-button *ngIf="member.status !== 3" variant="secondary" size="sm" (onClick)="openReject(member)">
+                                    <app-button *ngIf="member.status !== 3" variant="secondary" size="sm" (onClick)="openReject(member)"
+                                        [title]="'COMMON.BUTTON.REJECT' | translate">
                                         <i class="fas fa-xmark"></i>
                                     </app-button>
-                                    <app-button variant="danger" size="sm" (onClick)="removeMember(member)">
+                                    <app-button variant="danger" size="sm" (onClick)="removeMember(member)"
+                                        [title]="'COMMON.BUTTON.DELETE' | translate">
                                         <i class="fas fa-trash"></i>
                                     </app-button>
                                 </div>

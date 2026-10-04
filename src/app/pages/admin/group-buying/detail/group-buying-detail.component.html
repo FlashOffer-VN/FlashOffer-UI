@@ -28,21 +28,22 @@
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2">
+                    <!-- Nhóm nút thao tác chỉ hiển thị icon, tooltip lấy từ i18n -->
                     <app-button *ngIf="canApprove()" variant="success" [loading]="isActionLoading"
-                        (onClick)="showApproveModal = true">
-                        <i class="fas fa-check mr-2"></i>{{ 'ADMIN.GROUP_BUYING.APPROVE' | translate }}
+                        (onClick)="showApproveModal = true" [title]="'COMMON.BUTTON.APPROVE' | translate">
+                        <i class="fas fa-check"></i>
                     </app-button>
                     <app-button *ngIf="canComplete()" variant="primary" [loading]="isActionLoading"
-                        (onClick)="showCompleteModal = true">
-                        <i class="fas fa-flag-checkered mr-2"></i>{{ 'ADMIN.GROUP_BUYING.COMPLETE' | translate }}
+                        (onClick)="showCompleteModal = true" [title]="'COMMON.BUTTON.COMPLETE' | translate">
+                        <i class="fas fa-flag-checkered"></i>
                     </app-button>
                     <app-button *ngIf="canReopen()" variant="warning" [loading]="isActionLoading"
-                        (onClick)="confirmReopen()">
-                        <i class="fas fa-rotate-right mr-2"></i>{{ 'ADMIN.GROUP_BUYING.REOPEN' | translate }}
+                        (onClick)="confirmReopen()" [title]="'COMMON.BUTTON.REOPEN' | translate">
+                        <i class="fas fa-rotate-right"></i>
                     </app-button>
                     <app-button *ngIf="canCancel()" variant="danger" [loading]="isActionLoading"
-                        (onClick)="showCancelModal = true">
-                        <i class="fas fa-ban mr-2"></i>{{ 'ADMIN.GROUP_BUYING.CANCEL_REQUEST' | translate }}
+                        (onClick)="showCancelModal = true" [title]="'COMMON.BUTTON.CANCEL' | translate">
+                        <i class="fas fa-ban"></i>
                     </app-button>
                     <app-share-to-group [size]="'md'" [labelKey]="'SHARE_TO_GROUP.BUTTON_SHORT'" [multi]="true"
                         [allGroups]="true" [refId]="detail.id"
@@ -50,11 +51,11 @@
                         [targetTitle]="detail.productName"
                         [refLabelKey]="'SHARE_TO_GROUP.FROM_GROUP_BUYING'"></app-share-to-group>
 
-                    <app-button variant="secondary" (onClick)="openEdit()">
-                        <i class="fas fa-pen mr-2"></i>{{ 'COMMON.BUTTON.EDIT' | translate }}
+                    <app-button variant="secondary" (onClick)="openEdit()" [title]="'COMMON.BUTTON.EDIT' | translate">
+                        <i class="fas fa-pen"></i>
                     </app-button>
-                    <app-button variant="secondary" (onClick)="goBack()">
-                        <i class="fas fa-arrow-left mr-2"></i>{{ 'COMMON.BUTTON.BACK' | translate }}
+                    <app-button variant="secondary" (onClick)="goBack()" [title]="'COMMON.BUTTON.BACK' | translate">
+                        <i class="fas fa-arrow-left"></i>
                     </app-button>
                 </div>
             </div>
@@ -217,7 +218,7 @@
                             <td class="px-4 py-3 text-sm text-gray-500">{{ p.createdAt | appDate }}</td>
                             <td class="px-4 py-3 text-right">
                                 <app-button *ngIf="!p.isCreator" variant="danger" size="sm"
-                                    (onClick)="openRemoveParticipant(p)">
+                                    (onClick)="openRemoveParticipant(p)" [title]="'COMMON.BUTTON.DELETE' | translate">
                                     <i class="fas fa-user-minus"></i>
                                 </app-button>
                             </td>
