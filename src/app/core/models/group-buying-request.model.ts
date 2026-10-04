@@ -21,8 +21,6 @@ export interface GroupBuyingRequest {
     businessFieldName?: string | null;
     /** Mã chia sẻ riêng (refcode) ghi nhận cho người đã chia sẻ bản ghi này */
     referralCode?: string | null;
-    /** Tên chủ mã chia sẻ của người đã giới thiệu bản ghi này (CTV hoặc tài khoản) */
-    referralName?: string | null;
     createdAt: string;
     approvedAt?: string | null;
     closedReason?: string | null;
