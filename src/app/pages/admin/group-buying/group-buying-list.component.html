@@ -7,9 +7,9 @@
 
     <!-- Filters -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
-        <div class="flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
+        <div class="flex flex-col sm:flex-row gap-3 items-end" style="--control-h: 2.5rem">
             <!-- Search field selector: chọn cột tìm kiếm (bỏ trống = tất cả). Đổi lựa chọn KHÔNG tự tải lại — chỉ tìm khi bấm Enter hoặc nút Tìm. -->
-            <div class="w-full sm:w-56 sm:flex-shrink-0">
+            <div class="flex-shrink-0 w-full sm:w-56">
                 <app-ng-select-wrapper [items]="searchFieldOptions" [(ngModel)]="searchField"
                     [label]="'COMMON.SEARCH_FIELD.LABEL' | translate"
                     [placeholder]="'COMMON.SEARCH_FIELD.ALL' | translate" [clearable]="true" appendTo="body">
