@@ -366,16 +366,6 @@ export class AdminGeneralSettingsComponent implements OnInit {
             ]
         },
         {
-            title: 'ADMIN.SETTINGS.SECTION_REVENUE',
-            description: 'ADMIN.SETTINGS.SECTION_REVENUE_DESC',
-            fields: [
-                { key: 'revenueTaxPercent', label: 'ADMIN.SETTINGS.FIELD_REVENUE_TAX_PERCENT', type: 'number',
-                  placeholder: '0', hint: 'ADMIN.SETTINGS.FIELD_REVENUE_TAX_PERCENT_HINT' },
-                { key: 'revenueTaxIncluded', label: 'ADMIN.SETTINGS.FIELD_REVENUE_TAX_INCLUDED', type: 'bool',
-                  hint: 'ADMIN.SETTINGS.FIELD_REVENUE_TAX_INCLUDED_HINT' }
-            ]
-        },
-        {
             title: 'ADMIN.SETTINGS.SECTION_CONTENT',
             description: 'ADMIN.SETTINGS.SECTION_CONTENT_DESC',
             fields: [
@@ -529,8 +519,6 @@ export class AdminGeneralSettingsComponent implements OnInit {
             referralCodePrefix: ['', [Validators.required, Validators.maxLength(20)]],
             referralCodeLength: [6, AdminGeneralSettingsComponent._range(4, 12)],
             commissionAttributionDays: [30, AdminGeneralSettingsComponent._range(0, 365)],
-            revenueTaxPercent: [0, AdminGeneralSettingsComponent._range(0, 100)],
-            revenueTaxIncluded: [false],
             maxUploadSizeMb: [10, AdminGeneralSettingsComponent._range(1, 200)],
             allowedImageExtensions: ['', [Validators.maxLength(300)]],
             allowedDocumentExtensions: ['', [Validators.maxLength(300)]],
@@ -597,7 +585,12 @@ export class AdminGeneralSettingsComponent implements OnInit {
             return;
         }
 
-        const request = this._normalize(this.form.getRawValue());
+        // Giữ nguyên những trường cài đặt không có trên màn này (cấu hình thuế doanh thu nằm ở trang riêng).
+        const rest = { ...(this.current ?? {}) } as Partial<SystemSetting>;
+        delete rest.updatedAt;
+        delete rest.updatedBy;
+
+        const request = { ...rest, ...this._normalize(this.form.getRawValue()) };
         this.isSaving = true;
 
         this._settingService.save(request).subscribe({
