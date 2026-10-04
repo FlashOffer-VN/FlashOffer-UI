@@ -3,6 +3,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 import { AppService } from '../../../../../core/services/app.service';
 import { Permission } from '../../../../../core/models/permission.model';
 
@@ -50,7 +51,53 @@ export class AdminSidebarComponent {
         { path: '/', icon: 'fa-solid fa-arrow-right-from-bracket', label: 'ADMIN.SIDEBAR.BACK_TO_SITE', permission: null },
     ];
 
-    constructor(private _appService: AppService) { }
+    /**
+     * Nhóm menu cho gọn sidebar; mục nào không thuộc nhóm nào sẽ hiện riêng ở cuối.
+     * Nhóm rỗng (tài khoản không có quyền nào bên trong) tự ẩn.
+     */
+    menuGroups: { key: string; paths: string[] }[] = [
+        { key: 'ADMIN.SIDEBAR.GROUP_OVERVIEW', paths: ['/admin/dashboard', '/admin/admin-crm', '/admin/referral-stats'] },
+        { key: 'ADMIN.SIDEBAR.GROUP_SALES', paths: ['/admin/offers', '/admin/purchase-requests', '/admin/group-buying', '/admin/groups'] },
+        { key: 'ADMIN.SIDEBAR.GROUP_USERS', paths: ['/admin/users', '/admin/collaborator', '/admin/social-posts', '/admin/partner'] },
+        { key: 'ADMIN.SIDEBAR.GROUP_FINANCE', paths: ['/admin/revenue', '/admin/payouts', '/admin/bank-accounts'] },
+        { key: 'ADMIN.SIDEBAR.GROUP_SYSTEM', paths: ['/admin/settings'] }
+    ];
+
+    /** Nhóm người dùng bấm mở; nhóm đang chứa trang hiện tại luôn mở. */
+    expandedGroup = '';
+
+    constructor(
+        private _appService: AppService,
+        private _router: Router
+    ) { }
+
+    /** Menu sau khi lọc quyền, chia theo nhóm; mục lẻ gom vào một nhóm không có tiêu đề. */
+    get visibleMenuGroups(): { key: string; items: MenuItem[] }[] {
+        const visible = this.visibleMenuItems;
+        const groups = this.menuGroups
+            .map(group => ({ key: group.key, items: visible.filter(item => group.paths.includes(item.path)) }))
+            .filter(group => group.items.length > 0);
+
+        const groupedPaths = this.menuGroups.flatMap(group => group.paths);
+        const loose = visible.filter(item => !groupedPaths.includes(item.path));
+        if (loose.length > 0) groups.push({ key: '', items: loose });
+
+        return groups;
+    }
+
+    /** Nhóm đang chứa trang hiện tại. */
+    get activeGroupKey(): string {
+        const url = this._router.url;
+        return this.menuGroups.find(group => group.paths.some(path => url.startsWith(path)))?.key ?? '';
+    }
+
+    isGroupExpanded(key: string): boolean {
+        return this.expandedGroup === key || this.activeGroupKey === key;
+    }
+
+    toggleGroup(key: string): void {
+        this.expandedGroup = this.expandedGroup === key ? '' : key;
+    }
 
     /** Menu theo quyền của tài khoản đang đăng nhập. */
     get visibleMenuItems(): MenuItem[] {
