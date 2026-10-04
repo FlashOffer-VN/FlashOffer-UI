@@ -164,7 +164,7 @@
 
         <!-- Phát sinh của mã đang chọn -->
         <ng-container *ngIf="selectedCode">
-            <h2 class="section-title mt-6">
+            <h2 #eventsPanel class="section-title mt-6">
                 {{ 'ADMIN.REFERRAL_STATS.EVENTS_TITLE' | translate: { code: selectedCode } }}
             </h2>
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
