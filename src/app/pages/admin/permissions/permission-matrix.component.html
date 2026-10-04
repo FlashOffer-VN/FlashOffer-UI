@@ -44,7 +44,7 @@
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            {{ 'PERMISSION.COL.PERMISSION' | translate }}
+                            {{ 'PERMISSION.COL.FUNCTION' | translate }}
                         </th>
                         @for (column of roleColumns; track column.role) {
                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -98,15 +98,8 @@
                     {{ nodeLabel(node) }}
                 </span>
 
-                @if (isContainer(node)) {
-                <app-badge size="sm" [showDot]="false" variant="secondary" [label]="leafCount(node) + ''"></app-badge>
-                } @else {
-                <app-badge [label]="node.code" [showDot]="false" size="sm" variant="secondary"></app-badge>
+                @if (node.kind === 'group' || node.kind === 'screen') {
                 <span class="text-xs text-gray-400">{{ kindKey(node) | translate }}</span>
-                }
-
-                @if (node.kind === 'screen' && node.name) {
-                <span class="text-xs text-gray-400">{{ node.code }}</span>
                 }
             </div>
         </td>

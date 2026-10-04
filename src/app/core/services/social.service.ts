@@ -29,7 +29,9 @@ export class SocialService {
     getPosts(query: GetPostsQuery = {}): Observable<PagedResponse<SocialPost>> {
         const params: any = {
             pageNumber: query.pageNumber || 1,
-            pageSize: query.pageSize || 10
+            pageSize: query.pageSize || 10,
+            sortBy: 'CreatedAt',
+            sortOrder: 'desc'
         };
         if (query.type) params.type = query.type;
         if (query.privacy) params.privacy = query.privacy;
@@ -46,7 +48,7 @@ export class SocialService {
     getPendingPosts(pageNumber = 1, pageSize = 10): Observable<PagedResponse<SocialPost>> {
         return this._apiService.get<PagedResponse<SocialPost>>(
             `${this._baseSocialUrl}/posts/pending`,
-            { pageNumber, pageSize }
+            { pageNumber, pageSize, sortBy: 'CreatedAt', sortOrder: 'desc' }
         );
     }
 
@@ -63,7 +65,7 @@ export class SocialService {
     ): Observable<PagedResponse<SocialPost>> {
         // Backend yêu cầu pageSize trong [1, 100]
         pageSize = this.clampPageSize(pageSize);
-        const params: any = { pageNumber, pageSize };
+        const params: any = { pageNumber, pageSize, sortBy: 'CreatedAt', sortOrder: 'desc' };
         if (status) params.status = status;
         if (search) params.search = search;
         if (fromDate) params.fromDate = fromDate;

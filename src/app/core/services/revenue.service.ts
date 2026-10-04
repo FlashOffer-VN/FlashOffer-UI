@@ -33,7 +33,7 @@ export class RevenueService {
 
     /** Danh sách bản khai, lọc theo mã giao dịch, loại và trạng thái. GET /api/v1/Revenues */
     getPaged(query: RevenueQuery): Observable<PagedResponse<TransactionRevenue>> {
-        return this._apiService.get<PagedResponse<TransactionRevenue>>(this._baseUrl, WithoutEmpty(query));
+        return this._apiService.get<PagedResponse<TransactionRevenue>>(this._baseUrl, WithoutEmpty({ sortBy: 'CreatedAt', sortOrder: 'desc', ...query }));
     }
 
     /** Thống kê theo khoảng thời gian, gộp theo ngày/tuần/tháng/năm; chỉ tính bản đã chốt. GET /api/v1/Revenues/stats */

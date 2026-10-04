@@ -191,3 +191,24 @@ export function collectActionCodes(node: PermissionTreeNode): string[] {
 export function isContainerNode(node: PermissionTreeNode): boolean {
     return !!node.children && node.children.length > 0;
 }
+
+/**
+ * Khoá dịch của một nút cây quyền, suy từ `nameKey` API trả về.
+ * API trả `Permission_<P###>` (hành động), `PermissionScreen_<MÃ>` (màn hình),
+ * `PermissionGroup_<MÃ>` (nhóm) — các khoá này được quy về khoá i18n của UI
+ * (`PERMISSION.ACTION.<P###>`, `PERMISSION.SCREEN.<MÃ>`, `PERMISSION.GROUP.<MÃ>`).
+ * Khi API chưa trả `nameKey` thì suy theo mã nút. Trả null nếu không nhận dạng được.
+ */
+export function permissionLabelKey(node: PermissionTreeNode): string | null {
+    const rawKey = (node.nameKey ?? '').trim();
+    if (rawKey.startsWith('PermissionGroup_')) return `PERMISSION.GROUP.${rawKey.slice('PermissionGroup_'.length).toUpperCase()}`;
+    if (rawKey.startsWith('PermissionScreen_')) return `PERMISSION.SCREEN.${rawKey.slice('PermissionScreen_'.length).toUpperCase()}`;
+    if (rawKey.startsWith('Permission_')) return `PERMISSION.ACTION.${rawKey.slice('Permission_'.length).toUpperCase()}`;
+    if (rawKey) return rawKey;
+
+    const code = (node.code ?? '').trim().toUpperCase();
+    if (node.kind === 'group') return `PERMISSION.GROUP.${code}`;
+    if (node.kind === 'screen') return `PERMISSION.SCREEN.${code}`;
+    if (/^P\d+$/.test(code)) return `PERMISSION.ACTION.${code}`;
+    return null;
+}

@@ -54,7 +54,7 @@ export class ReferralService {
      * GET /api/v1/Referrals/stats
      */
     getStats(query: ReferralStatsQuery): Observable<PagedResponse<ReferralStatsItem>> {
-        return this._apiService.get<PagedResponse<ReferralStatsItem>>(`${this._baseUrl}/stats`, this.cleanQuery(query));
+        return this._apiService.get<PagedResponse<ReferralStatsItem>>(`${this._baseUrl}/stats`, this.cleanQuery({ sortBy: 'CreatedAt', sortOrder: 'desc', ...query }));
     }
 
     /**
@@ -72,7 +72,7 @@ export class ReferralService {
     getEvents(referralCode: string, query: ReferralEventQuery): Observable<PagedResponse<ReferralEventItem>> {
         return this._apiService.get<PagedResponse<ReferralEventItem>>(
             `${this._baseUrl}/stats/${encodeURIComponent(referralCode)}/events`,
-            this.cleanQuery(query)
+            this.cleanQuery({ sortBy: 'CreatedAt', sortOrder: 'desc', ...query })
         );
     }
 
@@ -89,6 +89,6 @@ export class ReferralService {
      * GET /api/v1/Referrals/me/events
      */
     getMyEvents(query: ReferralEventQuery): Observable<PagedResponse<ReferralEventItem>> {
-        return this._apiService.get<PagedResponse<ReferralEventItem>>(`${this._baseUrl}/me/events`, this.cleanQuery(query));
+        return this._apiService.get<PagedResponse<ReferralEventItem>>(`${this._baseUrl}/me/events`, this.cleanQuery({ sortBy: 'CreatedAt', sortOrder: 'desc', ...query }));
     }
 }

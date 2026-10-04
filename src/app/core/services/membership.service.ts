@@ -19,7 +19,7 @@ export class MembershipService {
 
     /** Danh sách hạng thành viên cho màn quản trị. GET /api/v1/MembershipTiers?activeOnly= */
     getTiers(activeOnly = false): Observable<ApiResponse<MembershipTier[]>> {
-        return this._apiService.get<ApiResponse<MembershipTier[]>>(this._baseUrl, { activeOnly });
+        return this._apiService.get<ApiResponse<MembershipTier[]>>(this._baseUrl, { activeOnly, sortBy: 'CreatedAt', sortOrder: 'desc' });
     }
 
     /** Thêm mới (không truyền id) hoặc cập nhật một hạng. POST /api/v1/MembershipTiers?id= */
@@ -35,7 +35,7 @@ export class MembershipService {
 
     /** Danh sách hạng thành viên đã xoá mềm. GET /api/v1/MembershipTiers/deleted */
     getDeletedTiers(): Observable<ApiResponse<MembershipTier[]>> {
-        return this._apiService.get<ApiResponse<MembershipTier[]>>(`${this._baseUrl}/deleted`);
+        return this._apiService.get<ApiResponse<MembershipTier[]>>(`${this._baseUrl}/deleted`, { sortBy: 'CreatedAt', sortOrder: 'desc' });
     }
 
     /** Khôi phục một hạng thành viên đã xoá mềm. POST /api/v1/MembershipTiers/{id}/restore */

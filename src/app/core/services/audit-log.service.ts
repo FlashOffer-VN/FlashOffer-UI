@@ -17,21 +17,21 @@ export class AuditLogService {
 
     /** Nhật ký thao tác dữ liệu (thêm/sửa/xoá trên các bảng nghiệp vụ). */
     getEntityLogs(query: AuditLogQuery): Observable<PagedResponse<AuditLogEntry>> {
-        return this._api.get<PagedResponse<AuditLogEntry>>(`${this._baseUrl}/entity`, { ...query });
+        return this._api.get<PagedResponse<AuditLogEntry>>(`${this._baseUrl}/entity`, { sortBy: 'CreatedAt', sortOrder: 'desc', ...query });
     }
 
     /** Nhật ký đăng nhập, đổi mật khẩu, làm mới token. */
     getAuthLogs(query: AuthAuditLogQuery): Observable<PagedResponse<AuthAuditLogEntry>> {
-        return this._api.get<PagedResponse<AuthAuditLogEntry>>(`${this._baseUrl}/auth`, { ...query });
+        return this._api.get<PagedResponse<AuthAuditLogEntry>>(`${this._baseUrl}/auth`, { sortBy: 'CreatedAt', sortOrder: 'desc', ...query });
     }
 
     /** Như hai hàm trên nhưng lấy cả hành động của tài khoản quản trị tối cao (quyền xem toàn bộ nhật ký). */
     getFullEntityLogs(query: AuditLogQuery): Observable<PagedResponse<AuditLogEntry>> {
-        return this._api.get<PagedResponse<AuditLogEntry>>(`${this._baseUrl}/full/entity`, { ...query });
+        return this._api.get<PagedResponse<AuditLogEntry>>(`${this._baseUrl}/full/entity`, { sortBy: 'CreatedAt', sortOrder: 'desc', ...query });
     }
 
     /** Như trên, dành cho nhật ký đăng nhập. */
     getFullAuthLogs(query: AuthAuditLogQuery): Observable<PagedResponse<AuthAuditLogEntry>> {
-        return this._api.get<PagedResponse<AuthAuditLogEntry>>(`${this._baseUrl}/full/auth`, { ...query });
+        return this._api.get<PagedResponse<AuthAuditLogEntry>>(`${this._baseUrl}/full/auth`, { sortBy: 'CreatedAt', sortOrder: 'desc', ...query });
     }
 }

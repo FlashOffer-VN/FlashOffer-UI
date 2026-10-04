@@ -5,7 +5,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Observable, forkJoin, of } from 'rxjs';
 
 import { AppService } from '@core/services/app.service';
-import { PermissionService, buildPermissionTree, collectActionCodes, isContainerNode } from '@core/services/permission.service';
+import { PermissionService, buildPermissionTree, collectActionCodes, isContainerNode, permissionLabelKey } from '@core/services/permission.service';
 import { ApiResponse, UserRole, toUserRole } from '@core/models/auth.model';
 import {
     PermissionGroupItem,
@@ -113,19 +113,20 @@ type NodeState = 'all' | 'some' | 'none';
                         <input type="checkbox" class="mt-1" [checked]="isChecked(node.code) && !isNodeDisabled(node)"
                             [disabled]="isNodeDisabled(node)" (change)="toggleCode(node.code)" />
                         <span class="text-sm">
-                            <span class="block text-gray-800">{{ node.name || node.code }}</span>
+                            <span class="block text-gray-800">{{ nodeLabel(node) }}</span>
+                            @if (isMixed(node.code) || isGrantedExtra(node.code) || isDeniedOverride(node.code)) {
                             <span class="block text-xs text-gray-500">
-                                {{ node.code }} · {{ kindKey(node) | translate }}
                                 @if (isMixed(node.code)) {
-                                    · <em>{{ 'PERMISSION.USER.MIXED' | translate }}</em>
+                                    <em>{{ 'PERMISSION.USER.MIXED' | translate }}</em>
                                 }
                                 @if (isGrantedExtra(node.code)) {
-                                    · <span class="text-green-600">{{ 'PERMISSION.USER.GRANTED_EXTRA' | translate }}</span>
+                                    <span class="text-green-600">{{ 'PERMISSION.USER.GRANTED_EXTRA' | translate }}</span>
                                 }
                                 @if (isDeniedOverride(node.code)) {
-                                    · <span class="text-red-600">{{ 'PERMISSION.USER.DENIED_OVERRIDE' | translate }}</span>
+                                    <span class="text-red-600">{{ 'PERMISSION.USER.DENIED_OVERRIDE' | translate }}</span>
                                 }
                             </span>
+                            }
                         </span>
                     }
                 </div>
@@ -265,15 +266,16 @@ export class AdminUserPermissionComponent implements OnInit {
         this.expanded[node.code] = !this.isExpanded(node);
     }
 
-    /** Tên hiển thị: tên nhóm đọc từ DB, rồi khoá dịch, rồi tên/mã. */
+    /** Nhãn hiển thị: nhóm lấy tên từ DB, còn lại dịch theo `nameKey` API trả về; chưa có thì dịch theo mã. */
     nodeLabel(node: PermissionTreeNode): string {
         if (node.kind === 'group') {
             const fromDb = this._groupNames.get(node.code.toUpperCase());
             if (fromDb) return fromDb;
         }
-        if (node.nameKey) {
-            const translated = this._appService.trans(node.nameKey);
-            if (translated && translated !== node.nameKey) return translated;
+        const key = permissionLabelKey(node);
+        if (key) {
+            const translated = this._appService.trans(key);
+            if (translated && translated !== key) return translated;
         }
         return node.name || node.code;
     }

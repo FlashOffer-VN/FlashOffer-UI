@@ -104,13 +104,12 @@ export class AdminGroupListComponent implements OnInit {
         this.searchFieldOptions = [
             { value: '', label: t('COMMON.SEARCH_FIELD.ALL') },
             { value: 'name', label: t('COMMON.SEARCH_FIELD.GROUP_NAME') },
+            { value: 'description', label: t('COMMON.SEARCH_FIELD.GROUP_DESCRIPTION') },
+            { value: 'topic', label: t('COMMON.SEARCH_FIELD.GROUP_TOPIC') },
             { value: 'businessFieldName', label: t('COMMON.SEARCH_FIELD.GROUP_BUSINESS_FIELD') },
-            { value: 'description', label: t('COMMON.SEARCH_FIELD.GROUP_DESCRIPTION') }
+            { value: 'code', label: t('COMMON.SEARCH_FIELD.GROUP_CODE') },
+            { value: 'recordReferrerName', label: t('COMMON.SEARCH_FIELD.RECORD_REFERRER_NAME') }
         ];
-    }
-
-    onSearchFieldChange(): void {
-        this.load(1);
     }
 
     load(page = this.page): void {

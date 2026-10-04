@@ -32,6 +32,9 @@ export class CommissionService {
     getConfigs(beneficiary?: CommissionBeneficiary | null): Observable<PagedResponse<CommissionConfig>> {
         const params: Record<string, unknown> = { pageNumber: 1, pageSize: 50 };
         if (beneficiary) params['beneficiary'] = beneficiary;
+        params['sortBy'] = 'CreatedAt';
+        params['sortOrder'] = 'desc';
+
         return this._apiService.get<PagedResponse<CommissionConfig>>(this._baseUrl, params);
     }
 
@@ -56,6 +59,9 @@ export class CommissionService {
     getDeletedConfigs(beneficiary?: CommissionBeneficiary | null): Observable<PagedResponse<CommissionConfig>> {
         const params: Record<string, unknown> = { pageNumber: 1, pageSize: 50 };
         if (beneficiary) params['beneficiary'] = beneficiary;
+        params['sortBy'] = 'CreatedAt';
+        params['sortOrder'] = 'desc';
+
         return this._apiService.get<PagedResponse<CommissionConfig>>(`${this._baseUrl}/deleted`, params);
     }
 

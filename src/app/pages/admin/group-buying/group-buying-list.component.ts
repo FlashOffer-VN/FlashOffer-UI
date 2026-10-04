@@ -116,14 +116,11 @@ export class AdminGroupBuyingListComponent implements OnInit {
             { value: 'productName', label: t('COMMON.SEARCH_FIELD.PRODUCT_NAME') },
             { value: 'code', label: t('COMMON.SEARCH_FIELD.CODE') },
             { value: 'recordReferrerCode', label: t('COMMON.SEARCH_FIELD.RECORD_REFERRER') },
+            { value: 'recordReferrerName', label: t('COMMON.SEARCH_FIELD.RECORD_REFERRER_NAME') },
             { value: 'customerName', label: t('COMMON.SEARCH_FIELD.CREATOR_NAME') },
-            { value: 'customerPhone', label: t('COMMON.SEARCH_FIELD.CREATOR_PHONE') }
+            { value: 'customerPhone', label: t('COMMON.SEARCH_FIELD.CREATOR_PHONE') },
+            { value: 'customerEmail', label: t('COMMON.SEARCH_FIELD.CUSTOMER_EMAIL') }
         ];
-    }
-
-    onSearchFieldChange(): void {
-        this.pageNumber = 1;
-        this.loadData();
     }
 
     onTabChange(tab: string): void {
