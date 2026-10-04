@@ -24,6 +24,14 @@ export enum RevenueRecordStatus {
     Confirmed = 2
 }
 
+/** Một dòng chi phí phát sinh của bản khai doanh thu. */
+export interface TransactionRevenueExpense {
+    /** Tên loại chi phí. */
+    name: string;
+    /** Số tiền chi phí của dòng. */
+    amount: number;
+}
+
 /** Một bên nhận hoa hồng kèm số tiền đã chia. */
 export interface TransactionCommission {
     beneficiary: CommissionBeneficiary;
@@ -47,6 +55,8 @@ export interface TransactionRevenue {
     totalCommission: number;
     extraCost: number;
     extraCostNote?: string | null;
+    /** Các dòng chi phí của bản khai; máy chủ tự cộng thành extraCost. */
+    expenses?: TransactionRevenueExpense[];
     actualRevenue: number;
     status: RevenueRecordStatus;
     confirmedBy?: string | null;
@@ -72,6 +82,8 @@ export interface SaveTransactionRevenueRequest {
     taxPercent?: number;
     extraCost: number;
     extraCostNote?: string | null;
+    /** Danh sách dòng chi phí; máy chủ tự cộng và ghi đè extraCost. */
+    expenses?: TransactionRevenueExpense[];
     commissions: TransactionCommissionRequest[];
 }
 
@@ -114,4 +126,39 @@ export interface RevenueStats {
     extraCost: number;
     actualRevenue: number;
     points: RevenueStatsPoint[];
+}
+
+/** Loại chi phí dùng chung khi khai doanh thu, có thể gắn riêng cho từng loại giao dịch. */
+export interface RevenueExpenseType {
+    id: string;
+    name: string;
+    sortOrder: number;
+    /** Các loại giao dịch áp dụng riêng; rỗng nghĩa là áp dụng mặc định. */
+    transactionTypes: number[];
+}
+
+/** Loại chi phí gọn để hiển thị khi chọn nhanh lúc khai doanh thu. */
+export interface RevenueExpenseTypeOption {
+    id: string;
+    name: string;
+}
+
+/** Dữ liệu gửi lên khi thêm hoặc sửa một loại chi phí. */
+export interface SaveRevenueExpenseTypeRequest {
+    name: string;
+    sortOrder?: number;
+    /** Rỗng nghĩa là áp dụng mặc định cho mọi loại giao dịch. */
+    transactionTypes: number[];
+}
+
+/** Gán hàng loạt danh sách loại chi phí cho một số loại giao dịch. */
+export interface AssignRevenueExpenseTypesRequest {
+    expenseTypeIds: string[];
+    transactionTypes: number[];
+}
+
+/** Cấu hình doanh thu mặc định (thuế) — đọc/sửa chung nhóm quyền với cấu hình loại chi phí. */
+export interface RevenueConfig {
+    revenueTaxPercent: number;
+    revenueTaxIncluded: boolean;
 }

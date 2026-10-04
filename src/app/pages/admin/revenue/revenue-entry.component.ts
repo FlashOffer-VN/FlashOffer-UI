@@ -1,11 +1,12 @@
 // pages/admin/revenue/revenue-entry.component.ts
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
 import { RevenueService } from '@core/services/revenue.service';
+import { RevenueExpenseTypeService } from '@core/services/revenue-expense-type.service';
 import {
     CommissionBeneficiary,
     RevenueRecordStatus,
@@ -17,6 +18,7 @@ import {
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-tabs/status-tabs.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
@@ -25,8 +27,9 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
  * Khối khai doanh thu nhúng trong màn chi tiết giao dịch (yêu cầu mua hàng, yêu cầu mua chung).
  *
  * Quản trị viên nhập doanh thu gộp, tỷ lệ thuế (mặc định lấy theo Cài đặt chung, ghi đè được cho từng
- * giao dịch) và tỷ lệ hoa hồng từng bên; số tách ra bên dưới là bản xem trước tính giống hệt phép tính
- * ở máy chủ, còn số chính thức luôn do máy chủ tính lại khi lưu. Chốt xong thì khoá, không nhập được nữa.
+ * giao dịch) và tỷ lệ hoa hồng từng bên; chi phí phát sinh khai theo từng dòng — chọn từ danh mục loại
+ * chi phí của loại giao dịch hoặc tự nhập tên khác. Số tách ra bên dưới là bản xem trước tính giống hệt
+ * phép tính ở máy chủ, còn số chính thức luôn do máy chủ tính lại khi lưu. Chốt xong thì khoá, không nhập được nữa.
  */
 @Component({
     selector: 'app-revenue-entry',
@@ -38,6 +41,7 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
         ButtonComponent,
         InputComponent,
         LoadingComponent,
+        NgSelectWrapperComponent,
         StatusTabsComponent,
         AppDatePipe,
         AppPricePipe
@@ -60,9 +64,17 @@ export class RevenueEntryComponent implements OnInit {
     /** Hai lựa chọn cho biết số doanh thu nhập vào đã gồm thuế hay chưa. */
     taxIncludedTabs: StatusTabItem[] = [];
 
+    /** Loại chi phí máy chủ trả về cho loại giao dịch đang khai, dùng khi thêm dòng chi phí. */
+    expenseTypeOptions: { label: string; value: string }[] = [];
+    /** Ô chọn loại chi phí trước khi thêm vào danh sách dòng. */
+    expenseForm!: FormGroup;
+    /** Bật thì hiện khu vực chọn loại chi phí để thêm dòng. */
+    isAddingExpense = false;
+
     constructor(
         private _formBuilder: FormBuilder,
         private _revenueService: RevenueService,
+        private _expenseTypeService: RevenueExpenseTypeService,
         private _appService: AppService
     ) { }
 
@@ -78,11 +90,26 @@ export class RevenueEntryComponent implements OnInit {
             taxPercent: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
             referrerRatePercent: ['', [Validators.min(0), Validators.max(100)]],
             partnerRatePercent: ['', [Validators.min(0), Validators.max(100)]],
-            extraCost: [''],
-            extraCostNote: ['']
+            expenses: this._formBuilder.array([])
         });
 
+        this.expenseForm = this._formBuilder.group({
+            expenseTypeId: [null],
+            customName: ['']
+        });
+
+        this.loadExpenseTypes();
         this.load();
+    }
+
+    /** Danh sách dòng chi phí của bản khai. */
+    get expenses(): FormArray {
+        return this.form.get('expenses') as FormArray;
+    }
+
+    /** Tổng các dòng chi phí, dùng cho bản xem trước và gửi kèm khi lưu. */
+    get totalExpense(): number {
+        return this.expenses.controls.reduce((sum, control) => sum + ReadNumber(control.value.amount), 0);
     }
 
     /** Ô nhập đã chạm vào và đang sai, dùng để tô đỏ. */
@@ -105,7 +132,7 @@ export class RevenueEntryComponent implements OnInit {
      * Số tách ra để xem trước, tính đúng như máy chủ: gộp → thuế → sau thuế → hoa hồng trên phần sau
      * thuế → chi phí → thực nhận, mỗi bước làm tròn tới đồng.
      */
-    get preview(): { taxAmount: number; netRevenue: number; commissions: TransactionCommissionLine[]; totalCommission: number; actualRevenue: number } {
+    get preview(): { taxAmount: number; netRevenue: number; commissions: TransactionCommissionLine[]; totalCommission: number; totalExpense: number; actualRevenue: number } {
         const gross = ReadNumber(this.form?.value.grossRevenue);
         const taxPercent = Clamp(ReadNumber(this.form?.value.taxPercent), 0, 100);
         const included = !!this.form?.value.taxIncluded;
@@ -119,9 +146,9 @@ export class RevenueEntryComponent implements OnInit {
         ];
 
         const totalCommission = commissions.reduce((sum, item) => sum + item.amount, 0);
-        const extraCost = Math.round(ReadNumber(this.form?.value.extraCost));
+        const totalExpense = this.totalExpense;
 
-        return { taxAmount, netRevenue, commissions, totalCommission, actualRevenue: netRevenue - totalCommission - extraCost };
+        return { taxAmount, netRevenue, commissions, totalCommission, totalExpense, actualRevenue: netRevenue - totalCommission - totalExpense };
     }
 
     /** Bản khai hiện có của giao dịch; chưa khai thì màn hình mở form trắng. */
@@ -139,9 +166,51 @@ export class RevenueEntryComponent implements OnInit {
         });
     }
 
+    /** Tải danh mục loại chi phí đang áp dụng cho loại giao dịch đang khai. */
+    loadExpenseTypes(): void {
+        this._expenseTypeService.resolve(this.type).subscribe({
+            next: response => {
+                this.expenseTypeOptions = (response.data ?? []).map(item => ({ label: item.name, value: item.id }));
+            },
+            error: () => {
+                this.expenseTypeOptions = [];
+            }
+        });
+    }
+
     /** Đổi cờ "số nhập đã gồm thuế". */
     onTaxIncludedChange(key: string): void {
         this.form.patchValue({ taxIncluded: key === 'included' });
+    }
+
+    /** Bật khu vực chọn loại chi phí để thêm dòng. */
+    openAddExpense(): void {
+        if (this.isLocked) return;
+        this.expenseForm.reset({ expenseTypeId: null, customName: '' });
+        this.isAddingExpense = true;
+    }
+
+    /** Thêm một dòng chi phí: ưu tiên tên tự nhập, không có thì lấy loại chi phí đã chọn. */
+    addExpenseLine(): void {
+        const customName = String(this.expenseForm.value.customName ?? '').trim();
+        const typeId = this.expenseForm.value.expenseTypeId;
+        const picked = this.expenseTypeOptions.find(option => option.value === typeId);
+        const name = customName || picked?.label || '';
+
+        if (!name) {
+            this._appService.showError(this._appService.trans('ADMIN.REVENUE.EXPENSE_REQUIRED_NAME'));
+            return;
+        }
+
+        this.expenses.push(this._formBuilder.group({ name: [name], amount: [''] }));
+        this.expenseForm.reset({ expenseTypeId: null, customName: '' });
+        this.isAddingExpense = false;
+    }
+
+    /** Bỏ một dòng chi phí. */
+    removeExpenseLine(index: number): void {
+        if (this.isLocked) return;
+        this.expenses.removeAt(index);
     }
 
     /** Lưu bản khai với số liệu đang nhập. */
@@ -161,8 +230,12 @@ export class RevenueEntryComponent implements OnInit {
             grossRevenue: ReadNumber(value.grossRevenue),
             taxIncluded: !!value.taxIncluded,
             taxPercent: ReadNumber(value.taxPercent),
-            extraCost: ReadNumber(value.extraCost),
-            extraCostNote: value.extraCostNote || null,
+            // Gửi kèm tổng chi phí để tương thích; máy chủ tự tính lại từ danh sách expenses.
+            extraCost: this.totalExpense,
+            extraCostNote: null,
+            expenses: this.expenses.controls
+                .map(control => ({ name: String(control.value.name ?? '').trim(), amount: ReadNumber(control.value.amount) }))
+                .filter(line => !!line.name),
             commissions: [
                 { beneficiary: CommissionBeneficiary.Referrer, ratePercent: ReadNumber(value.referrerRatePercent) },
                 { beneficiary: CommissionBeneficiary.Partner, ratePercent: ReadNumber(value.partnerRatePercent) }
@@ -214,10 +287,14 @@ export class RevenueEntryComponent implements OnInit {
             taxIncluded: revenue?.taxIncluded ?? false,
             taxPercent: revenue ? String(revenue.taxPercent) : '',
             referrerRatePercent: String(revenue?.commissions.find(item => item.beneficiary === CommissionBeneficiary.Referrer)?.ratePercent ?? ''),
-            partnerRatePercent: String(revenue?.commissions.find(item => item.beneficiary === CommissionBeneficiary.Partner)?.ratePercent ?? ''),
-            extraCost: revenue ? String(revenue.extraCost) : '',
-            extraCostNote: revenue?.extraCostNote ?? ''
+            partnerRatePercent: String(revenue?.commissions.find(item => item.beneficiary === CommissionBeneficiary.Partner)?.ratePercent ?? '')
         });
+
+        this.expenses.clear();
+        (revenue?.expenses ?? []).forEach(line => {
+            this.expenses.push(this._formBuilder.group({ name: [line.name], amount: [String(line.amount)] }));
+        });
+        this.isAddingExpense = false;
     }
 }
 

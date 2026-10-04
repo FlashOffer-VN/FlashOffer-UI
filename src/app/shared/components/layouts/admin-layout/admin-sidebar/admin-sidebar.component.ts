@@ -32,7 +32,7 @@ export class AdminSidebarComponent {
         { path: '/admin/social-posts', icon: 'fa-solid fa-clipboard-check', label: 'ADMIN.SIDEBAR.SOCIAL_POSTS', permission: Permission.ViewSocialPosts },
         { path: '/admin/partner', icon: 'fa-solid fa-building', label: 'ADMIN.SIDEBAR.PARTNER', permission: Permission.ViewPartners },
         { path: '/admin/revenue', icon: 'fa-solid fa-chart-line', label: 'ADMIN.SIDEBAR.REVENUE', permission: Permission.ViewTransactionRevenue },
-        { path: '/admin/revenue/settings', icon: 'fa-solid fa-percent', label: 'ADMIN.SIDEBAR.REVENUE_SETTINGS', permission: Permission.UpdateSystemSettings },
+        { path: '/admin/revenue/settings', icon: 'fa-solid fa-percent', label: 'ADMIN.SIDEBAR.REVENUE_SETTINGS', permission: Permission.ManageRevenueConfig },
         { path: '/admin/payouts', icon: 'fa-solid fa-money-bill-transfer', label: 'ADMIN.SIDEBAR.PAYOUTS', permission: Permission.ViewPayouts },
         { path: '/admin/bank-accounts', icon: 'fa-solid fa-building-columns', label: 'ADMIN.SIDEBAR.BANK_ACCOUNTS', permission: Permission.VerifyBankAccounts },
         // Mục Cài đặt hiện khi tài khoản mở được ít nhất một mục bên trong; không có mục nào thì ẩn luôn.
