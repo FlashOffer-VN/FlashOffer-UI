@@ -73,6 +73,9 @@ export class CollaboratorService {
         if (fromDate) params.fromDate = fromDate;
         if (toDate) params.toDate = toDate;
 
+        params['sortBy'] = 'CreatedAt';
+        params['sortOrder'] = 'desc';
+
         return this._apiService.get<PagedResponse<Collaborator>>(this._baseUrl, params);
     }
 
@@ -91,6 +94,9 @@ export class CollaboratorService {
         const params: any = { page: pageNumber, size: pageSize, search };
         if (fromDate) params.fromDate = fromDate;
         if (toDate) params.toDate = toDate;
+
+        params['sortBy'] = 'CreatedAt';
+        params['sortOrder'] = 'desc';
 
         return this._apiService.get<PagedResponse<Collaborator>>(`${this._baseUrl}/deleted`, params);
     }

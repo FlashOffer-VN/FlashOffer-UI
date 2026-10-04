@@ -42,6 +42,9 @@ export class PartnerService {
         if (query.search?.trim()) params['search'] = query.search.trim();
         if (query.businessFieldId) params['businessFieldId'] = query.businessFieldId;
 
+        params['sortBy'] = 'CreatedAt';
+        params['sortOrder'] = 'desc';
+
         return this._apiService.get<PagedResponse<PublicPartner>>(`${this._baseUrl}/public`, params);
     }
 
@@ -73,6 +76,9 @@ export class PartnerService {
         }
         if (fromDate) params.fromDate = fromDate;
         if (toDate) params.toDate = toDate;
+        params['sortBy'] = 'CreatedAt';
+        params['sortOrder'] = 'desc';
+
         return this._apiService.get<PagedResponse<Partner>>(this._baseUrl, params);
     }
 
@@ -172,6 +178,9 @@ export class PartnerService {
     getDeletedData(pageNumber = 1, pageSize = 10, search = ''): Observable<PagedResponse<Partner>> {
         pageSize = this.clampPageSize(pageSize);
         const params: any = { pageNumber, pageSize, search: search || '' };
+        params['sortBy'] = 'CreatedAt';
+        params['sortOrder'] = 'desc';
+
         return this._apiService.get<PagedResponse<Partner>>(`${this._baseUrl}/deleted`, params);
     }
 

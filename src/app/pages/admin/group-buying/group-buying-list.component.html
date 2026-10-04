@@ -8,19 +8,18 @@
     <!-- Filters -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
         <div class="flex flex-col sm:flex-row gap-3 items-end">
+            <!-- Search field selector: chọn cột tìm kiếm (bỏ trống = tất cả). Đổi lựa chọn KHÔNG tự tải lại — chỉ tìm khi bấm Enter hoặc nút Tìm. -->
+            <div class="flex-shrink-0 w-full sm:w-56">
+                <app-ng-select-wrapper [items]="searchFieldOptions" [(ngModel)]="searchField"
+                    [label]="'COMMON.SEARCH_FIELD.LABEL' | translate"
+                    [placeholder]="'COMMON.SEARCH_FIELD.ALL' | translate" [clearable]="true" appendTo="body">
+                </app-ng-select-wrapper>
+            </div>
+
             <div class="flex-1 w-full">
                 <app-input [(ngModel)]="searchText" [label]="'ADMIN.GROUP_BUYING.SEARCH_LABEL' | translate"
                     [placeholder]="'ADMIN.GROUP_BUYING.SEARCH_PLACEHOLDER' | translate" (keyup.enter)="onSearch()">
                 </app-input>
-            </div>
-
-            <!-- Search field selector: chọn cột tìm kiếm (bỏ trống = tất cả) -->
-            <div class="flex-shrink-0 w-full sm:w-56">
-                <app-ng-select-wrapper [items]="searchFieldOptions" [(ngModel)]="searchField"
-                    [label]="'COMMON.SEARCH_FIELD.LABEL' | translate"
-                    [placeholder]="'COMMON.SEARCH_FIELD.ALL' | translate" [clearable]="true" appendTo="body"
-                    (valueChange)="onSearchFieldChange()">
-                </app-ng-select-wrapper>
             </div>
 
             <app-button variant="primary" (onClick)="onSearch()">

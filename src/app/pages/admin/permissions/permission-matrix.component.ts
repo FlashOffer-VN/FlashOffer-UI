@@ -4,14 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
-import { buildPermissionTree, collectActionCodes, isContainerNode } from '@core/services/permission.service';
+import { buildPermissionTree, collectActionCodes, isContainerNode, permissionLabelKey } from '@core/services/permission.service';
 import { UserRole } from '@core/models/auth.model';
 import { Permission, PermissionGroupItem, PermissionMatrix, PermissionTreeNode, RolePermission } from '@core/models/permission.model';
 
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
-import { BadgeComponent } from '@shared/components/badge/badge.component';
 
 /** Cột vai trò được cấu hình quyền trên màn hình. */
 interface RoleColumn {
@@ -37,8 +36,7 @@ type NodeState = 'all' | 'some' | 'none';
         TranslateModule,
         ButtonComponent,
         InputComponent,
-        LoadingComponent,
-        BadgeComponent
+        LoadingComponent
     ],
     templateUrl: './permission-matrix.component.html',
     styleUrls: ['./permission-matrix.component.css']
@@ -185,12 +183,11 @@ export class AdminPermissionMatrixComponent implements OnInit {
         this.expanded[node.code] = !this.isExpanded(node);
     }
 
-    /** Số quyền hành động trong một nhánh. */
-    leafCount(node: PermissionTreeNode): number {
-        return collectActionCodes(node).length;
-    }
-
-    /** Tên hiển thị của nút: tên nhóm đọc từ DB, rồi tới khoá dịch, rồi tới tên/mã. */
+    /**
+     * Nhãn hiển thị của nút: nhóm lấy tên từ DB, màn hình và hành động dịch theo `nameKey` API trả về
+     * (`PermissionScreen_*` / `Permission_P###`); API chưa trả `nameKey` thì dịch theo mã nút.
+     * Không in mã thô khi đã có nhãn dịch.
+     */
     nodeLabel(node: PermissionTreeNode): string {
         if (node.kind === 'group') {
             const group = this.apiGroups.find(item => item.code.toUpperCase() === node.code.toUpperCase());
@@ -200,9 +197,10 @@ export class AdminPermissionMatrixComponent implements OnInit {
             }
         }
 
-        if (node.nameKey) {
-            const translated = this._appService.trans(node.nameKey);
-            if (translated && translated !== node.nameKey) return translated;
+        const key = permissionLabelKey(node);
+        if (key) {
+            const translated = this._appService.trans(key);
+            if (translated && translated !== key) return translated;
         }
 
         return node.name || node.code;

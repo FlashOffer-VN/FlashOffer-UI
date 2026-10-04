@@ -48,12 +48,15 @@ export class BusinessGroupService {
         if (query.search?.trim()) params['search'] = query.search.trim();
         if (query.businessFieldId) params['businessFieldId'] = query.businessFieldId;
 
+        params['sortBy'] = 'CreatedAt';
+        params['sortOrder'] = 'desc';
+
         return this.api.get<BusinessGroupListResponse>(`${this.endpoint}/public`, params);
     }
 
     /** Nhóm ngành đã có bài chuyển tiếp cho bản ghi này (admin) — cảnh báo trước khi gửi */
     getForwardedGroups(refId: string): Observable<ForwardedGroupListResponse> {
-        return this.api.get<ForwardedGroupListResponse>(`${this.endpoint}/forwarded-groups`, { refId });
+        return this.api.get<ForwardedGroupListResponse>(`${this.endpoint}/forwarded-groups`, { refId, sortBy: 'CreatedAt', sortOrder: 'desc' });
     }
 
     getPublicDetail(id: string): Observable<BusinessGroupDetailResponse> {
@@ -70,6 +73,9 @@ export class BusinessGroupService {
         };
         if (query.search?.trim()) params['search'] = query.search.trim();
 
+        params['sortBy'] = 'CreatedAt';
+        params['sortOrder'] = 'desc';
+
         return this.api.get<BusinessGroupListResponse>(`${this.endpoint}/community`, params);
     }
 
@@ -81,6 +87,9 @@ export class BusinessGroupService {
         };
         if (query.search?.trim()) params['search'] = query.search.trim();
         if (query.mineRole) params['mineRole'] = query.mineRole;
+
+        params['sortBy'] = 'CreatedAt';
+        params['sortOrder'] = 'desc';
 
         return this.api.get<BusinessGroupListResponse>(`${this.endpoint}/mine`, params);
     }
@@ -113,6 +122,9 @@ export class BusinessGroupService {
         if (query.type) params['type'] = query.type;
         if (query.privateOnly) params['privateOnly'] = true;
 
+        params['sortBy'] = 'CreatedAt';
+        params['sortOrder'] = 'desc';
+
         return this.api.get<BusinessGroupPostListResponse>(`${this.endpoint}/${groupId}/posts`, params);
     }
 
@@ -130,7 +142,7 @@ export class BusinessGroupService {
 
     // ===== Bình luận =====
     getComments(postId: string, page = 1, pageSize = 20): Observable<BusinessGroupCommentListResponse> {
-        return this.api.get<BusinessGroupCommentListResponse>(`${this.endpoint}/posts/${postId}/comments`, { page, pageSize });
+        return this.api.get<BusinessGroupCommentListResponse>(`${this.endpoint}/posts/${postId}/comments`, { page, pageSize, sortBy: 'CreatedAt', sortOrder: 'desc' });
     }
 
     createComment(postId: string, content: string, parentCommentId?: string): Observable<BusinessGroupCommentResponse> {
@@ -156,6 +168,9 @@ export class BusinessGroupService {
         if (query.hasPrivateRequests) params['hasPrivateRequests'] = true;
         // Cột tìm kiếm do người dùng chọn; bỏ trống = tìm mọi trường (hành vi cũ)
         if (query.searchField) params['searchField'] = query.searchField;
+
+        params['sortBy'] = 'CreatedAt';
+        params['sortOrder'] = 'desc';
 
         return this.api.get<BusinessGroupListResponse>(this.endpoint, params);
     }
@@ -186,6 +201,9 @@ export class BusinessGroupService {
         // Cột tìm kiếm do người dùng chọn; bỏ trống = tìm mọi trường
         if (query.searchField) params['searchField'] = query.searchField;
 
+        params['sortBy'] = 'CreatedAt';
+        params['sortOrder'] = 'desc';
+
         return this.api.get<BusinessGroupListResponse>(`${this.endpoint}/deleted`, params);
     }
 
@@ -202,6 +220,9 @@ export class BusinessGroupService {
         if (query.search?.trim()) params['search'] = query.search.trim();
         if (query.status) params['status'] = query.status;
 
+        params['sortBy'] = 'CreatedAt';
+        params['sortOrder'] = 'desc';
+
         return this.api.get<BusinessGroupMemberListResponse>(`${this.endpoint}/${id}/members`, params);
     }
 
@@ -216,6 +237,9 @@ export class BusinessGroupService {
 
     getPrivateRequests(id: string, query: GroupPostQuery = {}): Observable<BusinessGroupPostListResponse> {
         const params: Record<string, unknown> = { page: query.page ?? 1, pageSize: query.pageSize ?? 20, privateOnly: true };
+        params['sortBy'] = 'CreatedAt';
+        params['sortOrder'] = 'desc';
+
         return this.api.get<BusinessGroupPostListResponse>(`${this.endpoint}/${id}/private-requests`, params);
     }
 }

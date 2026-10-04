@@ -97,20 +97,19 @@ export class AdminGroupListComponent implements OnInit {
 
     /**
      * Các cột tìm kiếm khớp tham số searchField của API; giá trị '' = tất cả.
-     * Các cột đúng bằng trường màn danh sách nhóm đang tìm (tên, lĩnh vực, mô tả).
+     * Chỉ dùng các trường có thật trên nhóm (name, description, topic, businessFieldName, code) —
+     * bảng nhóm không có người giới thiệu bản ghi nên KHÔNG có lựa chọn đó (khác các màn yêu cầu).
      */
     private buildSearchFieldOptions(): void {
         const t = (key: string) => this._appService.trans(key);
         this.searchFieldOptions = [
             { value: '', label: t('COMMON.SEARCH_FIELD.ALL') },
             { value: 'name', label: t('COMMON.SEARCH_FIELD.GROUP_NAME') },
+            { value: 'description', label: t('COMMON.SEARCH_FIELD.GROUP_DESCRIPTION') },
+            { value: 'topic', label: t('COMMON.SEARCH_FIELD.GROUP_TOPIC') },
             { value: 'businessFieldName', label: t('COMMON.SEARCH_FIELD.GROUP_BUSINESS_FIELD') },
-            { value: 'description', label: t('COMMON.SEARCH_FIELD.GROUP_DESCRIPTION') }
+            { value: 'code', label: t('COMMON.SEARCH_FIELD.GROUP_CODE') }
         ];
-    }
-
-    onSearchFieldChange(): void {
-        this.load(1);
     }
 
     load(page = this.page): void {

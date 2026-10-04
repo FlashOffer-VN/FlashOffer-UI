@@ -16,7 +16,7 @@ export class UserService {
      */
     getData(pageNumber = 1, pageSize = 10, search = ''): Observable<PagedResponse<AdminUser>> {
         // Backend yêu cầu pageSize trong [1, 100]
-        const params: any = { pageNumber, pageSize: this.clampPageSize(pageSize), search };
+        const params: any = { pageNumber, pageSize: this.clampPageSize(pageSize), search, sortBy: 'CreatedAt', sortOrder: 'desc' };
 
         return this._apiService.get<PagedResponse<AdminUser>>(this._baseUrl, params);
     }
