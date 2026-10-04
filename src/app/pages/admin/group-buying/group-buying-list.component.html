@@ -73,6 +73,8 @@
                             <td class="px-4 py-3">
                                 <div class="text-sm text-gray-900">{{ request.fullName }}</div>
                                 <div class="text-xs text-gray-500">{{ request.phone }}</div>
+                                <div class="text-xs text-gray-400">{{ 'ADMIN.GROUP_BUYING.REFERRAL' | translate }}:
+                                    {{ request.referralCode | appCodeName: request.referralName }}</div>
                                 <div class="text-xs text-gray-400">{{ 'ADMIN.GROUP_BUYING.REFERRED_BY' | translate }}:
                                     {{ request.referredByCode | appCodeName: request.referredByName }}</div>
                             </td>

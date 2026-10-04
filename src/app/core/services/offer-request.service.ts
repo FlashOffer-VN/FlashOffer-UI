@@ -56,7 +56,10 @@ export class OfferRequestService {
         const params: any = {
             page: pageNumber, // API DTO dùng property "Page" (không phải "pageNumber")
             pageSize,
-            search: search || ''
+            search: search || '',
+            // Mặc định danh sách mới nhất trước
+            sortBy: 'CreatedAt',
+            sortOrder: 'desc'
         };
         if (status !== undefined && status !== null) {
             params.status = status;
