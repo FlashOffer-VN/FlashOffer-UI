@@ -17,7 +17,7 @@ export class BadgeComponent implements OnInit {
     @Input() status = '';
     @Input() variant: BadgeVariant = 'secondary';
     @Input() label = '';
-    @Input() size: BadgeSize = 'md';
+    @Input() size: BadgeSize = 'sm';
     @Input() rounded: BadgeRounded = 'full';
     @Input() showDot = true;
 

@@ -86,7 +86,7 @@
                     <ng-container *ngIf="!isLoading">
     <tr *ngFor="let collaborator of collaborators; let i = index"
                             class="hover:bg-gray-50 transition-colors cursor-pointer"
-                            (click)="navigateToDetail(collaborator.id)">
+>
                             <td class="px-4 py-3 text-sm text-gray-500">
                                 {{ (pageNumber - 1) * pageSize + i + 1 }}
                             </td>

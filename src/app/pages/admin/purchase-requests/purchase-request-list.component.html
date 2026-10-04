@@ -79,7 +79,7 @@
                     <!-- Data rows -->
                     <ng-container *ngIf="!isLoading">
     <tr *ngFor="let request of requests; let i = index"
-                            class="hover:bg-gray-50 transition-colors cursor-pointer" (click)="navigateToDetail(request.id)">
+                            class="hover:bg-gray-50 transition-colors">
                             <td class="px-4 py-3 text-sm text-gray-500">
                                 {{ (pageNumber - 1) * pageSize + i + 1 }}
                             </td>

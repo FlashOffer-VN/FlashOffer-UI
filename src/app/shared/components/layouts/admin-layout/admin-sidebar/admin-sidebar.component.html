@@ -13,17 +13,24 @@
 
     <!-- Menu - flex-1 để đẩy logout xuống dưới -->
     <nav class="p-4 space-y-1 flex-1 overflow-y-auto">
-        @for (item of visibleMenuItems; track item.path) {
+        @for (group of visibleMenuGroups; track group.key) {
+        @if (group.key) {
+        <button type="button" (click)="toggleGroup(group.key)"
+            class="flex w-full items-center justify-between gap-2 rounded-lg px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-400 hover:text-gray-100 transition">
+            <span>{{ group.key | translate }}</span>
+            <i class="fa-solid text-[10px]" [ngClass]="isGroupExpanded(group.key) ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+        </button>
+        }
+        @if (!group.key || isGroupExpanded(group.key)) {
+        @for (item of group.items; track item.path) {
         <a [routerLink]="item.path" routerLinkActive="bg-primary"
             [routerLinkActiveOptions]="{ exact: item.path === '/' }"
             class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-secondary-light transition">
             <i [class]="item.icon" class="w-5"></i>
-            @if (item.path === '/admin/dashboard') {
-            {{ item.label }}
-            } @else {
             {{ item.label | translate }}
-            }
         </a>
+        }
+        }
         }
     </nav>
 
