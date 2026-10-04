@@ -69,7 +69,10 @@ export class PurchaseRequestService {
         const params: any = {
             page: pageNumber, // API DTO dùng "Page"
             pageSize,
-            search: search || ''
+            search: search || '',
+            // Mặc định danh sách mới nhất trước
+            sortBy: 'CreatedAt',
+            sortOrder: 'desc'
         };
         if (status !== undefined && status !== null) {
             params.status = status;

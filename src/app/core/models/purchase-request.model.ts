@@ -22,6 +22,8 @@ export interface PurchaseRequest {
     status: PurchaseRequestStatus;
     /** Mã chia sẻ riêng ghi nhận cho người đã chia sẻ link tạo ra yêu cầu này */
     referralCode?: string | null;
+    /** Tên chủ mã chia sẻ của người đã giới thiệu yêu cầu này (CTV hoặc tài khoản) */
+    referralName?: string | null;
     createdAt: string;
     /** Mã chia sẻ của người đã giới thiệu người tạo bản ghi — ghi nhận trên tài khoản (màn quản trị) */
     referredByCode?: string | null;
