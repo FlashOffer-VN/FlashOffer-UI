@@ -11,13 +11,15 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { StatusTabItem, StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 
 /** Quản lý nhóm theo lĩnh vực kinh doanh (admin) */
 @Component({
     selector: 'app-admin-group-list',
     standalone: true,
     imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule, ButtonComponent,
-        InputComponent, LoadingComponent, ModalComponent, PaginationComponent, StatusTabsComponent],
+        InputComponent, LoadingComponent, ModalComponent, PaginationComponent, StatusTabsComponent,
+        NgSelectWrapperComponent],
     templateUrl: './group-list.component.html',
 })
 export class AdminGroupListComponent implements OnInit {
@@ -25,6 +27,11 @@ export class AdminGroupListComponent implements OnInit {
     isLoading = false;
 
     searchText = '';
+
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField: string | null = null;
+    searchFieldOptions: { value: string; label: string }[] = [];
+
     activeTab = 'all';
     onlyPending = false;
     onlyPrivate = false;
@@ -71,7 +78,26 @@ export class AdminGroupListComponent implements OnInit {
             { key: 'active', label: this._appService.trans('ADMIN.GROUPS.TAB_ACTIVE') },
             { key: 'inactive', label: this._appService.trans('ADMIN.GROUPS.TAB_INACTIVE') }
         ];
+        this.buildSearchFieldOptions();
         this.load();
+    }
+
+    /**
+     * Các cột tìm kiếm khớp tham số searchField của API; giá trị '' = tất cả.
+     * Các cột đúng bằng trường màn danh sách nhóm đang tìm (tên, lĩnh vực, mô tả).
+     */
+    private buildSearchFieldOptions(): void {
+        const t = (key: string) => this._appService.trans(key);
+        this.searchFieldOptions = [
+            { value: '', label: t('COMMON.SEARCH_FIELD.ALL') },
+            { value: 'name', label: t('COMMON.SEARCH_FIELD.GROUP_NAME') },
+            { value: 'businessFieldName', label: t('COMMON.SEARCH_FIELD.GROUP_BUSINESS_FIELD') },
+            { value: 'description', label: t('COMMON.SEARCH_FIELD.GROUP_DESCRIPTION') }
+        ];
+    }
+
+    onSearchFieldChange(): void {
+        this.load(1);
     }
 
     load(page = this.page): void {
@@ -88,7 +114,8 @@ export class AdminGroupListComponent implements OnInit {
             approvalStatus: this.typeFilter === 'clubPending' ? GroupApprovalStatus.Pending : null,
             isActive: this.activeTab === 'all' ? null : this.activeTab === 'active',
             hasPendingMembers: this.onlyPending,
-            hasPrivateRequests: this.onlyPrivate
+            hasPrivateRequests: this.onlyPrivate,
+            searchField: this.searchField ?? undefined
         }).subscribe({
             next: (response) => {
                 this.isLoading = false;

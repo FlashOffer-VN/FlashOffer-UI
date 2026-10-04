@@ -1278,7 +1278,12 @@
             "RECORD_REFERRER": "Record referrer",
             "CUSTOMER_NAME": "Customer name",
             "CUSTOMER_PHONE": "Phone",
-            "CUSTOMER_EMAIL": "Email"
+            "CUSTOMER_EMAIL": "Email",
+            "CREATOR_NAME": "Group owner",
+            "CREATOR_PHONE": "Group owner phone",
+            "GROUP_NAME": "Group name",
+            "GROUP_BUSINESS_FIELD": "Business field",
+            "GROUP_DESCRIPTION": "Description"
         },
         "ALL": "All",
         "PROVINCE": "Province/City",

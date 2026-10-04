@@ -22,6 +22,7 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 
 @Component({
     selector: 'app-admin-group-buying-list',
@@ -41,7 +42,8 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
         AppDatePipe,
         AppPricePipe,
         ShortIdPipe,
-        CodeNamePipe
+        CodeNamePipe,
+        NgSelectWrapperComponent
     ],
     templateUrl: './group-buying-list.component.html',
     styleUrls: ['./group-buying-list.component.css']
@@ -54,6 +56,10 @@ export class AdminGroupBuyingListComponent implements OnInit {
     isLoading = true;
 
     searchText = '';
+
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField: string | null = null;
+    searchFieldOptions: { value: string; label: string }[] = [];
 
     activeTab = 'all';
     tabs: { key: string; label: string }[] = [];
@@ -69,6 +75,7 @@ export class AdminGroupBuyingListComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildTabs();
+        this.buildSearchFieldOptions();
         this.loadData();
     }
 
@@ -80,6 +87,28 @@ export class AdminGroupBuyingListComponent implements OnInit {
             { key: 'completed', label: this._appService.trans('GROUP_BUYING.STATUS.COMPLETED') },
             { key: 'cancelled', label: this._appService.trans('GROUP_BUYING.STATUS.CANCELLED') }
         ];
+    }
+
+    /**
+     * Các cột tìm kiếm khớp tham số searchField của API; giá trị '' = tất cả.
+     * Các cột đúng bằng trường màn mua chung đang tìm (mã yêu cầu, tên sản phẩm,
+     * người mở nhóm, mã người giới thiệu bản ghi).
+     */
+    private buildSearchFieldOptions(): void {
+        const t = (key: string) => this._appService.trans(key);
+        this.searchFieldOptions = [
+            { value: '', label: t('COMMON.SEARCH_FIELD.ALL') },
+            { value: 'productName', label: t('COMMON.SEARCH_FIELD.PRODUCT_NAME') },
+            { value: 'code', label: t('COMMON.SEARCH_FIELD.CODE') },
+            { value: 'recordReferrerCode', label: t('COMMON.SEARCH_FIELD.RECORD_REFERRER') },
+            { value: 'customerName', label: t('COMMON.SEARCH_FIELD.CREATOR_NAME') },
+            { value: 'customerPhone', label: t('COMMON.SEARCH_FIELD.CREATOR_PHONE') }
+        ];
+    }
+
+    onSearchFieldChange(): void {
+        this.pageNumber = 1;
+        this.loadData();
     }
 
     onTabChange(tab: string): void {
@@ -94,7 +123,8 @@ export class AdminGroupBuyingListComponent implements OnInit {
             page: this.pageNumber,
             pageSize: this.pageSize,
             search: this.searchText,
-            status: this.activeTab === 'all' ? undefined : this.activeTab
+            status: this.activeTab === 'all' ? undefined : this.activeTab,
+            searchField: this.searchField ?? undefined
         }).subscribe({
             next: (response: PagedResponse<GroupBuyingRequest>) => {
                 this.requests = response?.data ?? [];

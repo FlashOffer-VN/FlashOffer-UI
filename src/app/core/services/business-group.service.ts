@@ -154,6 +154,8 @@ export class BusinessGroupService {
         if (query.approvalStatus) params['approvalStatus'] = query.approvalStatus;
         if (query.hasPendingMembers) params['hasPendingMembers'] = true;
         if (query.hasPrivateRequests) params['hasPrivateRequests'] = true;
+        // Cột tìm kiếm do người dùng chọn; bỏ trống = tìm mọi trường (hành vi cũ)
+        if (query.searchField) params['searchField'] = query.searchField;
 
         return this.api.get<BusinessGroupListResponse>(this.endpoint, params);
     }

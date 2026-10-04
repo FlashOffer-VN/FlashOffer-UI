@@ -169,6 +169,8 @@ export interface AdminBusinessGroupQuery extends BusinessGroupQuery {
     approvalStatus?: GroupApprovalStatus | null;
     hasPendingMembers?: boolean;
     hasPrivateRequests?: boolean;
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField?: string;
 }
 
 export interface BusinessGroupMemberQuery {

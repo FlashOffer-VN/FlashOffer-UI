@@ -197,6 +197,8 @@ export interface GetAdminGroupBuyingQuery {
     status?: string;
     sortBy?: string;
     sortOrder?: string;
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField?: string;
 }
 
 export interface UpdateGroupBuyingStatusPayload {

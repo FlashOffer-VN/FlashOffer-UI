@@ -1234,7 +1234,12 @@
             "RECORD_REFERRER": "Người giới thiệu bản ghi",
             "CUSTOMER_NAME": "Tên khách hàng",
             "CUSTOMER_PHONE": "SĐT",
-            "CUSTOMER_EMAIL": "Email"
+            "CUSTOMER_EMAIL": "Email",
+            "CREATOR_NAME": "Người mở nhóm",
+            "CREATOR_PHONE": "SĐT người mở nhóm",
+            "GROUP_NAME": "Tên nhóm",
+            "GROUP_BUSINESS_FIELD": "Lĩnh vực kinh doanh",
+            "GROUP_DESCRIPTION": "Mô tả"
         },
         "ALL": "Tất cả",
         "PROVINCE": "Tỉnh/Thành phố",
