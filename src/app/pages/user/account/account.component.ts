@@ -53,7 +53,7 @@ import { ChangeCredentialsFormComponent } from '@shared/components/change-creden
                     @if (isLoading) {
                         <app-loading></app-loading>
                     } @else {
-                        <form [formGroup]="profileForm" class="grid gap-4 sm:grid-cols-2">
+                        <form [formGroup]="profileForm" (ngSubmit)="save()" class="grid gap-4 sm:grid-cols-2">
                             <app-input formControlName="fullName" [id]="'account_full_name'"
                                 [label]="'USER.ACCOUNT.FULL_NAME' | translate"
                                 [placeholder]="'USER.ACCOUNT.FULL_NAME_PLACEHOLDER' | translate"></app-input>
