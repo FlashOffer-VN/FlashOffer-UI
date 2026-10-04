@@ -43,6 +43,39 @@
             </div>
         </div>
 
+        <!-- Biểu đồ doanh thu theo kỳ: mỗi chỉ số một series, bấm chú giải để ẩn/hiện -->
+        <div class="mt-6 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 px-5 py-4">
+                <h3 class="text-sm font-semibold text-gray-800">{{ 'ADMIN.REVENUE.CHART_TITLE' | translate }}</h3>
+                <div class="flex items-center gap-2">
+                    <app-button [variant]="chartType === 'bar' ? 'primary' : 'secondary'" size="sm"
+                        (onClick)="setChartType('bar')">{{ 'COMMON.CHART_TYPE.BAR' | translate }}</app-button>
+                    <app-button [variant]="chartType === 'line' ? 'primary' : 'secondary'" size="sm"
+                        (onClick)="setChartType('line')">{{ 'COMMON.CHART_TYPE.LINE' | translate }}</app-button>
+                </div>
+            </div>
+            <div class="px-3 py-4">
+                <apx-chart *ngIf="isBrowser() && chartOptions"
+                    [chart]="chartOptions.chart"
+                    [series]="chartOptions.series"
+                    [colors]="chartOptions.colors"
+                    [plotOptions]="chartOptions.plotOptions"
+                    [stroke]="chartOptions.stroke"
+                    [markers]="chartOptions.markers"
+                    [dataLabels]="chartOptions.dataLabels"
+                    [grid]="chartOptions.grid"
+                    [xaxis]="chartOptions.xaxis"
+                    [yaxis]="chartOptions.yaxis"
+                    [legend]="chartOptions.legend"
+                    [tooltip]="chartOptions.tooltip"
+                    [noData]="chartOptions.noData"
+                ></apx-chart>
+                <div *ngIf="!chartOptions" class="py-10 text-center text-sm text-gray-500">
+                    {{ 'ADMIN.REVENUE.EMPTY' | translate }}
+                </div>
+            </div>
+        </div>
+
         <!-- Chi tiết theo từng kỳ -->
         <div class="mt-6 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
             <div class="border-b border-gray-100 px-5 py-4">

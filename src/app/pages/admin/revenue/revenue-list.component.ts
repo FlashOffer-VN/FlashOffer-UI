@@ -1,12 +1,16 @@
 // pages/admin/revenue/revenue-list.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+import type { ApexOptions } from 'apexcharts';
+import { ChartComponent } from 'ng-apexcharts';
 
 import { AppService } from '@core/services/app.service';
 import { RevenueService } from '@core/services/revenue.service';
+import { isBrowser } from '@core/utils/platform';
 import {
     RevenueRecordStatus,
     RevenueStats,
@@ -22,6 +26,15 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 
+/** Bảng màu cho biểu đồ: màu đầu là màu thương hiệu, các màu sau để phân biệt chỉ số. */
+const CHART_PALETTE = ['#007f94', '#7c3aed', '#ea580c', '#16a34a', '#db2777'];
+
+/** Định dạng số gọn cho nhãn trục tung (VD: 1.234.567 -> 1,2 Tr). */
+const AXIS_NUMBER_FORMATTER = new Intl.NumberFormat('vi-VN', { notation: 'compact', maximumFractionDigits: 1 });
+
+/** Định dạng số đầy đủ cho chú thích khi rê chuột. */
+const FULL_NUMBER_FORMATTER = new Intl.NumberFormat('vi-VN', { maximumFractionDigits: 0 });
+
 /**
  * Thống kê doanh thu theo tuần/tháng/năm và danh sách bản khai doanh thu của từng giao dịch.
  *
@@ -35,6 +48,7 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
         RouterModule,
         FormsModule,
         TranslateModule,
+        ChartComponent,
         ButtonComponent,
         InputComponent,
         LoadingComponent,
@@ -45,13 +59,21 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
     ],
     templateUrl: './revenue-list.component.html'
 })
-export class AdminRevenueListComponent implements OnInit {
+export class AdminRevenueListComponent implements OnInit, OnDestroy {
     /** Cách gộp nhóm của thống kê: tuần, tháng hay năm. */
     periodTabs: StatusTabItem[] = [];
     period = 'month';
     stats: RevenueStats | null = null;
     isLoadingStats = true;
     statsFailed = false;
+
+    /** Biểu đồ doanh thu theo kỳ; chỉ dựng khi kỳ có số liệu. */
+    chartOptions: ApexOptions | null = null;
+    /** Kiểu biểu đồ đang chọn: cột hoặc đường. */
+    chartType: 'bar' | 'line' = 'line';
+
+    /** Cho phép template chỉ vẽ biểu đồ ở trình duyệt (an toàn khi dựng sẵn). */
+    readonly isBrowser = isBrowser;
 
     /** Lọc danh sách bản khai. */
     statusTabs: StatusTabItem[] = [];
@@ -67,6 +89,9 @@ export class AdminRevenueListComponent implements OnInit {
     totalPages = 1;
     hasPreviousPage = false;
     hasNextPage = false;
+
+    /** Theo dõi đổi ngôn ngữ để dựng lại nhãn biểu đồ. */
+    private langSub: Subscription | null = null;
 
     constructor(
         private _revenueService: RevenueService,
@@ -87,8 +112,15 @@ export class AdminRevenueListComponent implements OnInit {
             { key: 'confirmed', label: this._appService.trans('ADMIN.REVENUE.STATUS_CONFIRMED') }
         ];
 
+        // Tên series và nhãn kỳ lấy từ bản dịch nên dựng lại biểu đồ khi đổi ngôn ngữ.
+        this.langSub = this._appService.onLanguageChange().subscribe(() => this.buildChart());
+
         this.loadStats();
         this.loadRecords();
+    }
+
+    ngOnDestroy(): void {
+        this.langSub?.unsubscribe();
     }
 
     /** Đổi kỳ thống kê. */
@@ -157,12 +189,69 @@ export class AdminRevenueListComponent implements OnInit {
             next: response => {
                 this.stats = response.data;
                 this.isLoadingStats = false;
+                this.buildChart();
             },
             error: () => {
                 this.isLoadingStats = false;
                 this.statsFailed = true;
             }
         });
+    }
+
+    /** Đổi kiểu biểu đồ giữa cột và đường rồi dựng lại. */
+    setChartType(chartType: 'bar' | 'line'): void {
+        if (this.chartType === chartType) {
+            return;
+        }
+
+        this.chartType = chartType;
+        this.buildChart();
+    }
+
+    /**
+     * Dựng biểu đồ doanh thu theo kỳ từ `stats.points`; mỗi chỉ số là một series
+     * (doanh thu gộp, thuế, hoa hồng, chi phí, thực nhận) nên bấm vào chú giải
+     * để ẩn/hiện riêng từng đường.
+     */
+    private buildChart(): void {
+        const points = this.stats?.points ?? [];
+        if (points.length === 0) {
+            this.chartOptions = null;
+            return;
+        }
+
+        const isLine = this.chartType === 'line';
+
+        this.chartOptions = {
+            chart: { type: this.chartType, height: 340, toolbar: { show: false }, fontFamily: 'inherit' },
+            series: [
+                { name: this._appService.trans('ADMIN.REVENUE.GROSS_REVENUE'), data: points.map(p => p.grossRevenue) },
+                { name: this._appService.trans('ADMIN.REVENUE.TAX_AMOUNT'), data: points.map(p => p.taxAmount) },
+                { name: this._appService.trans('ADMIN.REVENUE.TOTAL_COMMISSION'), data: points.map(p => p.totalCommission) },
+                { name: this._appService.trans('ADMIN.REVENUE.EXTRA_COST'), data: points.map(p => p.extraCost) },
+                { name: this._appService.trans('ADMIN.REVENUE.ACTUAL_REVENUE'), data: points.map(p => p.actualRevenue) }
+            ],
+            colors: CHART_PALETTE,
+            plotOptions: isLine ? {} : { bar: { borderRadius: 4, columnWidth: '60%' } },
+            stroke: isLine ? { curve: 'smooth', width: 3 } : { width: 0 },
+            markers: isLine ? { size: 4, strokeWidth: 2, hover: { size: 6 } } : { size: 0 },
+            dataLabels: { enabled: false },
+            grid: { borderColor: '#e5e7eb', strokeDashArray: 4 },
+            xaxis: {
+                categories: points.map(p => this.periodLabel(p.period)),
+                labels: { style: { colors: '#6b7280', fontSize: '12px' }, rotate: -45, rotateAlways: points.length > 12 }
+            },
+            yaxis: {
+                labels: {
+                    style: { colors: '#6b7280', fontSize: '12px' },
+                    formatter: value => AXIS_NUMBER_FORMATTER.format(value)
+                },
+                forceNiceScale: true
+            },
+            legend: { show: true, position: 'bottom' },
+            tooltip: { theme: 'light', y: { formatter: value => FULL_NUMBER_FORMATTER.format(value ?? 0) } },
+            noData: { text: this._appService.trans('ADMIN.REVENUE.EMPTY') }
+        };
     }
 
     /** Tải lại danh sách bản khai. */

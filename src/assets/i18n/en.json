@@ -1996,6 +1996,7 @@
             "PERIOD_YEAR": "Year",
             "WEEK_PREFIX": "Week",
             "POINTS_TITLE": "Revenue by period",
+            "CHART_TITLE": "Revenue chart by period",
             "PERIOD": "Period",
             "RECORDS_TITLE": "Revenue declarations",
             "SEARCH_PLACEHOLDER": "Search by transaction code",
