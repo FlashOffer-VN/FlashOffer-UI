@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
 import { PurchaseRequest, PurchaseRequestStatus } from '@core/models/purchase-request.model';
+import { Permission } from '@core/models/permission.model';
 import { PagedResponse } from '@core/models/paged-response.model';
 
 import { ButtonComponent } from '@shared/components/button/button.component';
@@ -21,6 +22,8 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 
 @Component({
     selector: 'app-admin-purchase-request-list',
@@ -40,7 +43,9 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
         ShareToGroupComponent,
         AppDatePipe,
         ShortIdPipe,
-        CodeNamePipe
+        CodeNamePipe,
+        NgSelectWrapperComponent,
+        HasPermissionDirective
     ],
     templateUrl: './purchase-request-list.component.html',
     styleUrls: ['./purchase-request-list.component.css']
@@ -49,14 +54,23 @@ export class AdminPurchaseRequestListComponent implements OnInit {
     /** Loại bài khi chuyển tiếp vào nhóm ngành */
     readonly groupPostType = GroupPostType;
 
+    /** Mã quyền dùng trong template (`*appHasPermission`). */
+    readonly Permission = Permission;
+
     // Data
     requests: PurchaseRequest[] = [];
     isLoading = true;
+    isDeleting = false;
+    isRestoring = false;
 
     // Search
     searchText = '';
     fromDate: string | null = null;
     toDate: string | null = null;
+
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField: string | null = null;
+    searchFieldOptions: { value: string; label: string }[] = [];
 
     // Tab lọc status
     activeTab = 'all';
@@ -74,6 +88,7 @@ export class AdminPurchaseRequestListComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildTabs();
+        this.buildSearchFieldOptions();
         this.loadData();
     }
 
@@ -84,6 +99,34 @@ export class AdminPurchaseRequestListComponent implements OnInit {
             { key: 'contacted', label: this._appService.trans('COMMON.STATUS.CONTACTED') },
             { key: 'completed', label: this._appService.trans('COMMON.STATUS.COMPLETED') }
         ];
+
+        // Tab "Đã xóa" chỉ hiện khi có quyền xem yêu cầu mua hàng đã xoá (P146) hoặc khôi phục (P147)
+        // — đúng cặp mã [HasPermission(ViewRestorePurchaseRequest, RestorePurchaseRequest)] của API.
+        if (this._appService.permissionService.has([
+            Permission.ViewRestorePurchaseRequest,
+            Permission.RestorePurchaseRequest
+        ])) {
+            this.tabs.push({ key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') });
+        }
+    }
+
+    /** Các cột tìm kiếm khớp tham số searchField của API; giá trị '' = tất cả */
+    private buildSearchFieldOptions(): void {
+        const t = (key: string) => this._appService.trans(key);
+        this.searchFieldOptions = [
+            { value: '', label: t('COMMON.SEARCH_FIELD.ALL') },
+            { value: 'productName', label: t('COMMON.SEARCH_FIELD.PRODUCT_NAME') },
+            { value: 'code', label: t('COMMON.SEARCH_FIELD.CODE') },
+            { value: 'recordReferrerCode', label: t('COMMON.SEARCH_FIELD.RECORD_REFERRER') },
+            { value: 'customerName', label: t('COMMON.SEARCH_FIELD.CUSTOMER_NAME') },
+            { value: 'customerPhone', label: t('COMMON.SEARCH_FIELD.CUSTOMER_PHONE') },
+            { value: 'customerEmail', label: t('COMMON.SEARCH_FIELD.CUSTOMER_EMAIL') }
+        ];
+    }
+
+    onSearchFieldChange(): void {
+        this.pageNumber = 1;
+        this.loadData();
     }
 
     onTabChange(tab: string): void {
@@ -95,8 +138,10 @@ export class AdminPurchaseRequestListComponent implements OnInit {
     loadData(): void {
         this.isLoading = true;
 
+        const isDeleted = this.activeTab === 'deleted';
+
         let status: PurchaseRequestStatus | undefined;
-        if (this.activeTab !== 'all') {
+        if (!isDeleted && this.activeTab !== 'all') {
             switch (this.activeTab) {
                 case 'pending': status = PurchaseRequestStatus.PENDING; break;
                 case 'contacted': status = PurchaseRequestStatus.CONTACTED; break;
@@ -111,7 +156,10 @@ export class AdminPurchaseRequestListComponent implements OnInit {
                 this.searchText,
                 status,
                 this.fromDate ?? undefined,
-                this.toDate ?? undefined
+                this.toDate ?? undefined,
+                undefined,
+                this.searchField ?? undefined,
+                isDeleted ? true : undefined
             )
             .subscribe({
                 next: (response: PagedResponse<PurchaseRequest>) => {
@@ -152,6 +200,44 @@ export class AdminPurchaseRequestListComponent implements OnInit {
         this.pageSize = size;
         this.pageNumber = 1;
         this.loadData();
+    }
+
+    /** Xóa mềm một yêu cầu sau khi xác nhận. */
+    onDelete(request: PurchaseRequest): void {
+        this._appService.confirmDelete(
+            this._appService.trans('ADMIN.PURCHASE_REQUESTS.DELETE_CONFIRM', { name: request.productName })
+        ).then(confirmed => {
+            if (!confirmed) return;
+
+            this.isDeleting = true;
+            this._appService.purchaseRequest.delete(request.id).subscribe({
+                next: () => {
+                    this.isDeleting = false;
+                    this._appService.showSuccess(this._appService.trans('ADMIN.PURCHASE_REQUESTS.DELETED_SUCCESS'));
+                    this.loadData();
+                },
+                error: () => {
+                    this.isDeleting = false;
+                    this._appService.showError(this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+                }
+            });
+        });
+    }
+
+    /** Khôi phục một yêu cầu đã xóa mềm. */
+    onRestore(request: PurchaseRequest): void {
+        this.isRestoring = true;
+        this._appService.purchaseRequest.restore(request.id).subscribe({
+            next: () => {
+                this.isRestoring = false;
+                this._appService.showSuccess(this._appService.trans('ADMIN.PURCHASE_REQUESTS.RESTORED_SUCCESS'));
+                this.loadData();
+            },
+            error: () => {
+                this.isRestoring = false;
+                this._appService.showError(this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
+            }
+        });
     }
 
     getStatusVariant(status: PurchaseRequestStatus): BadgeVariant {

@@ -154,6 +154,8 @@ export class BusinessGroupService {
         if (query.approvalStatus) params['approvalStatus'] = query.approvalStatus;
         if (query.hasPendingMembers) params['hasPendingMembers'] = true;
         if (query.hasPrivateRequests) params['hasPrivateRequests'] = true;
+        // Cột tìm kiếm do người dùng chọn; bỏ trống = tìm mọi trường (hành vi cũ)
+        if (query.searchField) params['searchField'] = query.searchField;
 
         return this.api.get<BusinessGroupListResponse>(this.endpoint, params);
     }
@@ -172,6 +174,24 @@ export class BusinessGroupService {
 
     remove(id: string): Observable<{ message: string }> {
         return this.api.delete<{ message: string }>(`${this.endpoint}/${id}`);
+    }
+
+    /** Danh sách nhóm đã xoá mềm (admin). GET /api/v1/businessgroups/deleted */
+    getDeletedList(query: AdminBusinessGroupQuery = {}): Observable<BusinessGroupListResponse> {
+        const params: Record<string, unknown> = {
+            page: query.page ?? 1,
+            pageSize: query.pageSize ?? 10
+        };
+        if (query.search?.trim()) params['search'] = query.search.trim();
+        // Cột tìm kiếm do người dùng chọn; bỏ trống = tìm mọi trường
+        if (query.searchField) params['searchField'] = query.searchField;
+
+        return this.api.get<BusinessGroupListResponse>(`${this.endpoint}/deleted`, params);
+    }
+
+    /** Khôi phục một nhóm đã xoá mềm. POST /api/v1/businessgroups/{id}/restore */
+    restore(id: string): Observable<BusinessGroupResponse> {
+        return this.api.post<BusinessGroupResponse>(`${this.endpoint}/${id}/restore`, {});
     }
 
     getMembers(id: string, query: BusinessGroupMemberQuery = {}): Observable<BusinessGroupMemberListResponse> {

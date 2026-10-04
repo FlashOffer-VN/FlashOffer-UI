@@ -125,13 +125,13 @@
                         <span class="text-sm text-gray-500">{{ 'ADMIN.PURCHASE_REQUESTS.EMAIL' | translate }}</span>
                         <span class="text-sm font-medium text-gray-900">{{ request.email || '--' }}</span>
                     </div>
-                    <div class="flex justify-between py-2 border-b border-gray-50" *ngIf="request.referralCode">
+                    <div class="flex justify-between py-2 border-b border-gray-50">
                         <span class="text-sm text-gray-500">{{ 'ADMIN.PURCHASE_REQUESTS.REFERRAL' | translate }}</span>
-                        <span class="text-sm font-medium text-gray-900">{{ request.referralCode }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ request.recordReferrerCode | appCodeName: request.recordReferrerName }}</span>
                     </div>
                     <div class="flex justify-between py-2 border-b border-gray-50">
                         <span class="text-sm text-gray-500">{{ 'ADMIN.PURCHASE_REQUESTS.REFERRED_BY' | translate }}</span>
-                        <span class="text-sm font-medium text-gray-900">{{ request.referredByCode | appCodeName: request.referredByName }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ request.accountReferrerCode | appCodeName: request.accountReferrerName }}</span>
                     </div>
                     <div class="flex justify-between py-2 border-b border-gray-50">
                         <span class="text-sm text-gray-500">{{ 'ADMIN.PURCHASE_REQUESTS.CREATED_AT' | translate }}</span>

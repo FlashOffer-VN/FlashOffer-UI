@@ -38,6 +38,8 @@
     "DELETE_CONFIRM": "Delete this commission configuration?",
     "DELETE_SUCCESS": "Commission configuration deleted",
     "DELETE_FAILED": "Failed to delete commission configuration",
+    "RESTORE_SUCCESS": "Commission configuration restored",
+    "RESTORE_FAILED": "Failed to restore commission configuration",
     "UPDATED_AT": "Updated",
           "NOTE_PLACEHOLDER": "Internal note for administrators"
         
@@ -1270,6 +1272,21 @@
             "BAR": "Column",
             "LINE": "Line"
         },
+        "SEARCH_FIELD": {
+            "LABEL": "Search by",
+            "ALL": "All",
+            "PRODUCT_NAME": "Product name",
+            "CODE": "Request code",
+            "RECORD_REFERRER": "Record referrer",
+            "CUSTOMER_NAME": "Customer name",
+            "CUSTOMER_PHONE": "Phone",
+            "CUSTOMER_EMAIL": "Email",
+            "CREATOR_NAME": "Group owner",
+            "CREATOR_PHONE": "Group owner phone",
+            "GROUP_NAME": "Group name",
+            "GROUP_BUSINESS_FIELD": "Business field",
+            "GROUP_DESCRIPTION": "Description"
+        },
         "ALL": "All",
         "PROVINCE": "Province/City",
         "PROVINCE_PLACEHOLDER": "Select province/city",
@@ -1682,7 +1699,7 @@
             "NOTE": "Note",
             "ZALO": "Zalo",
             "EMAIL": "Email",
-            "REFERRAL": "Referrer",
+            "REFERRAL": "Record referrer",
             "APPROVE": "Approve",
             "REJECT": "Reject",
             "EXPIRE": "Mark as expired",
@@ -1695,7 +1712,7 @@
             "DELETE_CONFIRM": "Are you sure you want to delete \"{{name}}\"?",
             "DELETED_SUCCESS": "Offer request deleted successfully",
             "RESTORED_SUCCESS": "Offer request restored successfully",
-            "REFERRED_BY": "Referred by"
+            "REFERRED_BY": "Account referrer"
         },
         "PURCHASE_REQUESTS": {
             "TITLE": "Purchase Request Management",
@@ -1717,14 +1734,17 @@
             "NOTE": "Note",
             "ZALO": "Zalo",
             "EMAIL": "Email",
-            "REFERRAL": "Referrer",
+            "REFERRAL": "Record referrer",
             "CONTACT": "Contacted",
             "CONTACT_CONFIRM": "Are you sure you want to mark this request as contacted?",
             "CONTACTED_SUCCESS": "Request marked as contacted successfully",
             "COMPLETE": "Complete",
             "COMPLETE_CONFIRM": "Are you sure you want to mark this request as completed?",
             "COMPLETED_SUCCESS": "Request marked as completed successfully",
-            "REFERRED_BY": "Referred by"
+            "DELETE_CONFIRM": "Are you sure you want to delete \"{{name}}\"?",
+            "DELETED_SUCCESS": "Supplier request deleted successfully",
+            "RESTORED_SUCCESS": "Supplier request restored successfully",
+            "REFERRED_BY": "Account referrer"
         },
         "SETTINGS_PAGE": {
             "TAB_COMMISSION": "Commission",
@@ -1840,7 +1860,7 @@
             "DELETED_SUCCESS": "Collaborator deleted successfully",
             "EDIT_TITLE": "Edit collaborator",
             "UPDATED_SUCCESS": "Collaborator updated successfully",
-            "REFERRED_BY": "Referred by"
+            "REFERRED_BY": "Account referrer"
         },
         "BUSINESS_INFO": {
             "TITLE": "Business Information",
@@ -1917,7 +1937,7 @@
             "NO_FILTER_RESULT": "No products match the filter",
             "NO_PRODUCTS": "No products yet",
             "SPECIAL_CONDITIONS": "Special conditions",
-            "REFERRED_BY": "Referred by"
+            "REFERRED_BY": "Account referrer"
         },
         "GROUP_BUYING": {
             "TITLE": "Group buying management",
@@ -1947,7 +1967,7 @@
             "JOINED_AT": "Joined at",
             "OWNER": "Owner",
             "GUEST_ACCOUNT": "Auto-created account",
-            "REFERRAL": "Referrer",
+            "REFERRAL": "Record referrer",
             "APPROVE": "Approve",
             "APPROVE_CONFIRM": "Approve this request so it shows publicly in the Group buying tab?",
             "APPROVE_SUCCESS": "Group buying request approved",
@@ -1965,7 +1985,10 @@
             "REMOVE_SUCCESS": "Participant removed",
             "EDIT_TITLE": "Edit group buying request",
             "UPDATE_SUCCESS": "Group buying request updated",
-            "REFERRED_BY": "Referred by"
+            "DELETE_CONFIRM": "Are you sure you want to delete the group buying request \"{{name}}\"?",
+            "DELETED_SUCCESS": "Group buying request deleted successfully",
+            "RESTORED_SUCCESS": "Group buying request restored successfully",
+            "REFERRED_BY": "Account referrer"
         },
         "REVENUE": {
             "TITLE": "Revenue",
@@ -2040,6 +2063,7 @@
             "EXPENSE_FIELD_TYPES_HINT": "Leave empty to apply by default to every transaction type.",
             "EXPENSE_SAVED": "Expense type saved.",
             "EXPENSE_DELETED": "Expense type deleted.",
+            "EXPENSE_RESTORED": "Expense type restored.",
             "EXPENSE_DELETE_CONFIRM": "Delete this expense type?"
         },
         "GROUPS": {
@@ -2064,6 +2088,7 @@
             "EMPTY": "No groups yet",
             "SAVE_SUCCESS": "Group saved",
             "DELETE_SUCCESS": "Group deleted",
+            "RESTORE_SUCCESS": "Group restored",
             "CONFIRM_DELETE_MESSAGE": "Delete this group? Members and posts will no longer be accessible.",
             "TAB_ALL": "All",
             "TAB_ACTIVE": "Active",
@@ -2081,7 +2106,7 @@
             "MEMBER_NAME": "Member",
             "MEMBER_CONTACT": "Contact",
             "MEMBER_JOINED": "Joined at",
-            "REFERRAL": "Referrer",
+            "REFERRAL": "Record referrer",
             "MEMBER_STATUS_SUCCESS": "Member status updated",
             "MEMBER_REMOVED": "Member removed from the group",
             "NO_MEMBERS": "No members yet",
@@ -2093,6 +2118,7 @@
             "POST_TYPE": "Post type",
             "REF_CODE": "Reference code",
             "REF_CODE_PLACEHOLDER": "e.g. GBR-XXXXXX, OFR-XXXXXX",
+            "POST_SHARE_CODE": "Share code",
             "WITH_SHARE_LINK": "With share link",
             "POST_CONTENT_PLACEHOLDER": "Content sent to group members...",
             "PUBLISH": "Post to group",
@@ -2106,7 +2132,7 @@
             "PRIVATE_HINT": "Private requests are sent by members to admins only.",
             "NO_PRIVATE": "No private requests",
             "NO_POSTS": "No posts yet",
-            "REFERRED_BY": "Referred by"
+            "REFERRED_BY": "Account referrer"
         },
         "LOGOUT_TITLE": "Sign out of the admin area?",
         "LOGOUT_MESSAGE": "You will need to sign in again to continue managing.",
@@ -2172,6 +2198,7 @@
             "FIELD_ACTIVE": "Active for members",
             "SUCCESS_SAVE": "Membership tier saved.",
             "SUCCESS_DELETE": "Membership tier deleted.",
+            "SUCCESS_RESTORE": "Membership tier restored.",
             "CONFIRM_DELETE_TITLE": "Delete membership tier",
             "CONFIRM_DELETE_MESSAGE": "This tier will be removed from the configuration. Continue?",
             "ERROR_FORM_INVALID": "Please review the invalid fields.",
@@ -2357,6 +2384,7 @@
     },
     "PERMISSION": {
         "TAB_ROLE": "By role",
+        "VIEW_ROLE": "View by role",
         "GROUP": {
             "ADMIN": "Management system",
             "MEMBER": "Member area",
@@ -2390,8 +2418,45 @@
             "COMMISSION": "Commission & payout"
         },
         "KIND": {
-            "VIEW": "Screen",
+            "GROUP": "Group",
+            "SCREEN": "Screen",
+            "VIEW": "View",
+            "CREATE": "Create",
+            "UPDATE": "Update",
+            "DELETE": "Delete",
+            "RESTORE": "Restore",
             "ACTION": "Action"
+        },
+        "SCREEN": {
+            "DASHBOARD": "Dashboard",
+            "CRM_DASHBOARD": "CRM dashboard",
+            "REPORTS": "Reports",
+            "AUDIT_LOGS": "Audit logs",
+            "SYSTEM_SETTINGS": "System settings",
+            "REFERRAL_STATS": "Referral statistics",
+            "USERS": "Users",
+            "COLLABORATORS": "Collaborators",
+            "PARTNERS": "Partners",
+            "PARTNER_PRODUCTS": "Partner products",
+            "COMPANIES": "Companies",
+            "PURCHASE_REQUESTS": "Supplier requests",
+            "OFFERS": "Offers",
+            "GROUP_BUYING": "Group buying requests",
+            "GROUPS": "Groups",
+            "SOCIAL_POSTS": "Social posts",
+            "PERMISSION_MATRIX": "Permission matrix",
+            "COMMISSION_CONFIG": "Commission config",
+            "PAYOUTS": "Payouts",
+            "MEMBERSHIP_TIERS": "Membership tiers",
+            "BANK_ACCOUNTS": "Bank accounts",
+            "REVENUES": "Transaction revenue",
+            "REVENUE_CONFIG": "Revenue config",
+            "MY_REFERRAL": "My referral",
+            "MY_COMMISSION": "My commission",
+            "MY_GROUP_BUYING": "My group buying",
+            "MY_REQUESTS": "My requests",
+            "MY_POSTS": "My posts",
+            "MY_GROUPS": "My groups"
         }
     },
     "CONTACT_FLOATING": {

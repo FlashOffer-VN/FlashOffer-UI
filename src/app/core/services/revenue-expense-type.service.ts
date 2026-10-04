@@ -55,6 +55,16 @@ export class RevenueExpenseTypeService {
         return this._apiService.delete<ApiResponse<boolean>>(`${this._baseUrl}/${id}`);
     }
 
+    /** Danh sách loại chi phí đã xoá mềm. GET /api/v1/RevenueExpenseTypes/deleted */
+    getDeleted(): Observable<ApiResponse<RevenueExpenseType[]>> {
+        return this._apiService.get<ApiResponse<RevenueExpenseType[]>>(`${this._baseUrl}/deleted`);
+    }
+
+    /** Khôi phục một loại chi phí đã xoá mềm. POST /api/v1/RevenueExpenseTypes/{id}/restore */
+    restore(id: string): Observable<ApiResponse<RevenueExpenseType>> {
+        return this._apiService.post<ApiResponse<RevenueExpenseType>>(`${this._baseUrl}/${id}/restore`, {});
+    }
+
     /** Gán hàng loạt loại chi phí cho các loại giao dịch; mảng rỗng nghĩa là về mặc định. PUT /api/v1/RevenueExpenseTypes/assign */
     assign(request: AssignRevenueExpenseTypesRequest): Observable<ApiResponse<boolean>> {
         return this._apiService.put<ApiResponse<boolean>>(`${this._baseUrl}/assign`, request);

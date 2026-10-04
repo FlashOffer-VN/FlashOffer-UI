@@ -38,6 +38,8 @@
     "DELETE_CONFIRM": "Bạn có chắc muốn xoá cấu hình hoa hồng này?",
     "DELETE_SUCCESS": "Đã xoá cấu hình hoa hồng",
     "DELETE_FAILED": "Xoá cấu hình hoa hồng thất bại",
+    "RESTORE_SUCCESS": "Khôi phục cấu hình hoa hồng thành công",
+    "RESTORE_FAILED": "Khôi phục cấu hình hoa hồng thất bại",
     "UPDATED_AT": "Cập nhật",
           "NOTE_PLACEHOLDER": "Ghi chú nội bộ cho quản trị viên"
         
@@ -1226,6 +1228,21 @@
             "BAR": "Cột",
             "LINE": "Đường"
         },
+        "SEARCH_FIELD": {
+            "LABEL": "Tìm theo",
+            "ALL": "Tất cả",
+            "PRODUCT_NAME": "Tên sản phẩm",
+            "CODE": "Mã yêu cầu",
+            "RECORD_REFERRER": "Người giới thiệu bản ghi",
+            "CUSTOMER_NAME": "Tên khách hàng",
+            "CUSTOMER_PHONE": "SĐT",
+            "CUSTOMER_EMAIL": "Email",
+            "CREATOR_NAME": "Người mở nhóm",
+            "CREATOR_PHONE": "SĐT người mở nhóm",
+            "GROUP_NAME": "Tên nhóm",
+            "GROUP_BUSINESS_FIELD": "Lĩnh vực kinh doanh",
+            "GROUP_DESCRIPTION": "Mô tả"
+        },
         "ALL": "Tất cả",
         "PROVINCE": "Tỉnh/Thành phố",
         "PROVINCE_PLACEHOLDER": "Chọn tỉnh/thành phố",
@@ -1640,7 +1657,7 @@
             "NOTE": "Ghi chú",
             "ZALO": "Zalo",
             "EMAIL": "Email",
-            "REFERRAL": "CTV giới thiệu",
+            "REFERRAL": "Người giới thiệu bản ghi",
             "APPROVE": "Duyệt",
             "REJECT": "Từ chối",
             "EXPIRE": "Đánh dấu hết hạn",
@@ -1653,7 +1670,7 @@
             "DELETE_CONFIRM": "Bạn có chắc chắn muốn xóa yêu cầu \"{{name}}\"?",
             "DELETED_SUCCESS": "Đã xóa yêu cầu offer thành công",
             "RESTORED_SUCCESS": "Khôi phục yêu cầu offer thành công",
-            "REFERRED_BY": "Được giới thiệu bởi"
+            "REFERRED_BY": "Người giới thiệu tài khoản"
         },
         "PURCHASE_REQUESTS": {
             "TITLE": "Quản lý yêu cầu tìm nhà cung cấp",
@@ -1675,14 +1692,17 @@
             "NOTE": "Ghi chú",
             "ZALO": "Zalo",
             "EMAIL": "Email",
-            "REFERRAL": "CTV giới thiệu",
+            "REFERRAL": "Người giới thiệu bản ghi",
             "CONTACT": "Đã liên hệ",
             "CONTACT_CONFIRM": "Bạn có chắc chắn đánh dấu đã liên hệ với yêu cầu này không?",
             "CONTACTED_SUCCESS": "Đã đánh dấu đã liên hệ thành công",
             "COMPLETE": "Hoàn thành",
             "COMPLETE_CONFIRM": "Bạn có chắc chắn đánh dấu yêu cầu này hoàn thành không?",
             "COMPLETED_SUCCESS": "Đã đánh dấu hoàn thành thành công",
-            "REFERRED_BY": "Được giới thiệu bởi"
+            "DELETE_CONFIRM": "Bạn có chắc chắn muốn xóa yêu cầu \"{{name}}\"?",
+            "DELETED_SUCCESS": "Đã xóa yêu cầu tìm nhà cung cấp thành công",
+            "RESTORED_SUCCESS": "Khôi phục yêu cầu tìm nhà cung cấp thành công",
+            "REFERRED_BY": "Người giới thiệu tài khoản"
         },
         "SETTINGS_PAGE": {
             "TAB_COMMISSION": "Hoa hồng",
@@ -1803,7 +1823,7 @@
             "DELETED_SUCCESS": "Xóa cộng tác viên thành công",
             "EDIT_TITLE": "Sửa cộng tác viên",
             "UPDATED_SUCCESS": "Cập nhật cộng tác viên thành công",
-            "REFERRED_BY": "Được giới thiệu bởi"
+            "REFERRED_BY": "Người giới thiệu tài khoản"
         },
         "BUSINESS_INFO": {
             "TITLE": "Thông tin doanh nghiệp",
@@ -1880,7 +1900,7 @@
             "NO_FILTER_RESULT": "Không có sản phẩm nào khớp bộ lọc",
             "NO_PRODUCTS": "Chưa có sản phẩm",
             "SPECIAL_CONDITIONS": "Điều kiện đặc biệt",
-            "REFERRED_BY": "Được giới thiệu bởi"
+            "REFERRED_BY": "Người giới thiệu tài khoản"
         },
         "GROUP_BUYING": {
             "TITLE": "Quản lý yêu cầu mua chung",
@@ -1910,7 +1930,7 @@
             "JOINED_AT": "Tham gia lúc",
             "OWNER": "Người mở",
             "GUEST_ACCOUNT": "Tài khoản tự tạo",
-            "REFERRAL": "CTV giới thiệu",
+            "REFERRAL": "Người giới thiệu bản ghi",
             "APPROVE": "Duyệt yêu cầu",
             "APPROVE_CONFIRM": "Duyệt yêu cầu này để hiển thị công khai trên tab Mua chung?",
             "APPROVE_SUCCESS": "Duyệt yêu cầu mua chung thành công",
@@ -1928,7 +1948,10 @@
             "REMOVE_SUCCESS": "Đã xóa người tham gia khỏi nhóm",
             "EDIT_TITLE": "Sửa yêu cầu mua chung",
             "UPDATE_SUCCESS": "Cập nhật yêu cầu mua chung thành công",
-            "REFERRED_BY": "Được giới thiệu bởi"
+            "DELETE_CONFIRM": "Bạn có chắc chắn muốn xóa yêu cầu mua chung \"{{name}}\"?",
+            "DELETED_SUCCESS": "Đã xóa yêu cầu mua chung thành công",
+            "RESTORED_SUCCESS": "Khôi phục yêu cầu mua chung thành công",
+            "REFERRED_BY": "Người giới thiệu tài khoản"
         },
         "REVENUE": {
             "TITLE": "Doanh thu",
@@ -2003,6 +2026,7 @@
             "EXPENSE_FIELD_TYPES_HINT": "Để trống để áp dụng mặc định cho mọi loại giao dịch.",
             "EXPENSE_SAVED": "Đã lưu loại chi phí.",
             "EXPENSE_DELETED": "Đã xóa loại chi phí.",
+            "EXPENSE_RESTORED": "Đã khôi phục loại chi phí.",
             "EXPENSE_DELETE_CONFIRM": "Xóa loại chi phí này?"
         },
         "GROUPS": {
@@ -2027,6 +2051,7 @@
             "EMPTY": "Chưa có nhóm nào",
             "SAVE_SUCCESS": "Đã lưu nhóm",
             "DELETE_SUCCESS": "Đã xoá nhóm",
+            "RESTORE_SUCCESS": "Khôi phục nhóm thành công",
             "CONFIRM_DELETE_MESSAGE": "Xoá nhóm này? Thành viên và bài trong nhóm sẽ không truy cập được.",
             "TAB_ALL": "Tất cả",
             "TAB_ACTIVE": "Đang hoạt động",
@@ -2044,7 +2069,7 @@
             "MEMBER_NAME": "Thành viên",
             "MEMBER_CONTACT": "Liên hệ",
             "MEMBER_JOINED": "Ngày tham gia",
-            "REFERRAL": "CTV giới thiệu",
+            "REFERRAL": "Người giới thiệu bản ghi",
             "MEMBER_STATUS_SUCCESS": "Cập nhật trạng thái thành viên thành công",
             "MEMBER_REMOVED": "Đã xoá thành viên khỏi nhóm",
             "NO_MEMBERS": "Chưa có thành viên",
@@ -2056,6 +2081,7 @@
             "POST_TYPE": "Loại bài",
             "REF_CODE": "Mã tham chiếu",
             "REF_CODE_PLACEHOLDER": "Ví dụ: GBR-XXXXXX, OFR-XXXXXX",
+            "POST_SHARE_CODE": "Mã chia sẻ",
             "WITH_SHARE_LINK": "Kèm link chia sẻ",
             "POST_CONTENT_PLACEHOLDER": "Nội dung gửi tới thành viên nhóm...",
             "PUBLISH": "Đăng vào nhóm",
@@ -2069,7 +2095,7 @@
             "PRIVATE_HINT": "Yêu cầu kín do thành viên gửi riêng cho admin, các thành viên khác không đọc được.",
             "NO_PRIVATE": "Chưa có yêu cầu kín",
             "NO_POSTS": "Chưa có bài nào",
-            "REFERRED_BY": "Được giới thiệu bởi"
+            "REFERRED_BY": "Người giới thiệu tài khoản"
         },
         "LOGOUT_TITLE": "Đăng xuất khỏi trang quản trị?",
         "LOGOUT_MESSAGE": "Bạn sẽ cần đăng nhập lại để tiếp tục quản trị.",
@@ -2135,6 +2161,7 @@
             "FIELD_ACTIVE": "Đang áp dụng cho thành viên",
             "SUCCESS_SAVE": "Đã lưu hạng thành viên.",
             "SUCCESS_DELETE": "Đã xoá hạng thành viên.",
+            "SUCCESS_RESTORE": "Khôi phục hạng thành viên thành công.",
             "CONFIRM_DELETE_TITLE": "Xoá hạng thành viên",
             "CONFIRM_DELETE_MESSAGE": "Hạng này sẽ bị xoá khỏi cấu hình. Tiếp tục?",
             "ERROR_FORM_INVALID": "Kiểm tra lại các trường chưa hợp lệ.",
@@ -2320,6 +2347,7 @@
     },
     "PERMISSION": {
         "TAB_ROLE": "Theo vai trò",
+        "VIEW_ROLE": "Xem theo vai trò",
         "GROUP": {
             "ADMIN": "Hệ thống quản trị",
             "MEMBER": "Khu vực thành viên",
@@ -2353,8 +2381,45 @@
             "COMMISSION": "Hoa hồng & giải ngân"
         },
         "KIND": {
-            "VIEW": "Màn hình",
+            "GROUP": "Nhóm",
+            "SCREEN": "Màn hình",
+            "VIEW": "Xem",
+            "CREATE": "Thêm",
+            "UPDATE": "Sửa",
+            "DELETE": "Xóa",
+            "RESTORE": "Khôi phục",
             "ACTION": "Thao tác"
+        },
+        "SCREEN": {
+            "DASHBOARD": "Bảng điều khiển",
+            "CRM_DASHBOARD": "Dashboard CRM",
+            "REPORTS": "Báo cáo",
+            "AUDIT_LOGS": "Nhật ký hệ thống",
+            "SYSTEM_SETTINGS": "Cấu hình hệ thống",
+            "REFERRAL_STATS": "Thống kê giới thiệu",
+            "USERS": "Người dùng",
+            "COLLABORATORS": "Hồ sơ cộng tác viên",
+            "PARTNERS": "Đối tác",
+            "PARTNER_PRODUCTS": "Sản phẩm đối tác",
+            "COMPANIES": "Công ty",
+            "PURCHASE_REQUESTS": "Yêu cầu tìm nhà cung cấp",
+            "OFFERS": "Offer",
+            "GROUP_BUYING": "Yêu cầu mua chung",
+            "GROUPS": "Nhóm",
+            "SOCIAL_POSTS": "Bài đăng",
+            "PERMISSION_MATRIX": "Phân quyền",
+            "COMMISSION_CONFIG": "Cấu hình hoa hồng",
+            "PAYOUTS": "Chi trả & giải ngân",
+            "MEMBERSHIP_TIERS": "Hạng thành viên",
+            "BANK_ACCOUNTS": "Tài khoản ngân hàng",
+            "REVENUES": "Doanh thu giao dịch",
+            "REVENUE_CONFIG": "Cấu hình doanh thu",
+            "MY_REFERRAL": "Giới thiệu của tôi",
+            "MY_COMMISSION": "Hoa hồng của tôi",
+            "MY_GROUP_BUYING": "Mua chung của tôi",
+            "MY_REQUESTS": "Yêu cầu của tôi",
+            "MY_POSTS": "Bài viết của tôi",
+            "MY_GROUPS": "Nhóm của tôi"
         }
     },
     "CONTACT_FLOATING": {

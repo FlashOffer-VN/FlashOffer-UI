@@ -135,6 +135,10 @@ export interface RevenueExpenseType {
     sortOrder: number;
     /** Các loại giao dịch áp dụng riêng; rỗng nghĩa là áp dụng mặc định. */
     transactionTypes: number[];
+    /** Bản ghi đã xoá mềm (có khi xem danh sách "Đã xóa"). */
+    isDeleted?: boolean;
+    /** Thời điểm xoá mềm. */
+    deletedAt?: string | null;
 }
 
 /** Loại chi phí gọn để hiển thị khi chọn nhanh lúc khai doanh thu. */

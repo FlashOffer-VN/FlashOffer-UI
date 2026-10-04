@@ -6,6 +6,8 @@ import { ApiResponse, UserRole } from '../models/auth.model';
 import {
     Permission,
     PermissionMatrix,
+    PermissionTree,
+    PermissionTreeNode,
     UserPermissionCandidate,
     UserPermissionDetail,
     UpdateUsersPermissionsResult,
@@ -62,6 +64,15 @@ export class PermissionService {
         return this._apiService.get<ApiResponse<PermissionMatrix>>(this._baseUrl);
     }
 
+    /**
+     * Cây phân quyền Nhóm → Màn hình → hành động. GET /api/v1/permissions/tree
+     * Truyền role để máy chủ gắn sẵn `isGranted` cho từng nút của vai trò đó.
+     */
+    getTree(role?: UserRole): Observable<ApiResponse<PermissionTree>> {
+        const params = role !== undefined && role !== null ? { role } : undefined;
+        return this._apiService.get<ApiResponse<PermissionTree>>(`${this._baseUrl}/tree`, params);
+    }
+
     /** Cập nhật quyền cho một vai trò. PUT /api/v1/permissions/roles/{role} */
     updateRolePermissions(role: UserRole, permissionCodes: string[]): Observable<ApiResponse<PermissionMatrix>> {
         return this._apiService.put<ApiResponse<PermissionMatrix>>(`${this._baseUrl}/roles/${role}`, { permissionCodes });
@@ -99,4 +110,84 @@ export class PermissionService {
             permissionCodes
         });
     }
+}
+
+/** Thứ tự nhóm mặc định khi máy chủ chưa trả bảng PermissionGroups. */
+const GROUP_FALLBACK_ORDER = ['ADMIN', 'MEMBER', 'SHARED', 'SYSTEM', 'USER', 'PARTNER', 'PURCHASE', 'GROUP', 'COMMUNITY', 'REFERRAL', 'COMMISSION', 'SUPERADMIN'];
+
+/**
+ * Dựng cây Nhóm → Màn hình → hành động từ ma trận quyền.
+ * Dùng khi máy chủ chưa có `GET /permissions/tree`: mỗi quyền được gom theo `parentCode` (nhóm),
+ * rồi theo `screen` (màn hình), rồi để nguyên là hành động. Cấu trúc trả về khớp hợp đồng cây của API.
+ */
+export function buildPermissionTree(matrix: PermissionMatrix | null | undefined): PermissionTreeNode[] {
+    const permissions = matrix?.permissions ?? [];
+    const groupOrder = new Map<string, number>();
+    (matrix?.groups ?? []).forEach(group => groupOrder.set(group.code.toUpperCase(), group.sortOrder));
+
+    const groups = new Map<string, PermissionTreeNode>();
+    for (const item of permissions) {
+        const groupCode = (item.parentCode ?? '').trim() || item.module.toUpperCase();
+        const screenCode = (item.screen ?? '').trim() || item.module.toUpperCase();
+
+        let group = groups.get(groupCode.toUpperCase());
+        if (!group) {
+            group = {
+                code: groupCode,
+                nameKey: `PERMISSION.GROUP.${groupCode.toUpperCase()}`,
+                name: '',
+                kind: 'group',
+                parentCode: null,
+                children: [],
+                parent: null
+            };
+            groups.set(groupCode.toUpperCase(), group);
+        }
+
+        let screen = group.children.find(child => child.code.toUpperCase() === screenCode.toUpperCase());
+        if (!screen) {
+            screen = {
+                code: screenCode,
+                nameKey: `PERMISSION.SCREEN.${screenCode.toUpperCase()}`,
+                name: item.screenName ?? '',
+                kind: 'screen',
+                parentCode: group.code,
+                children: [],
+                parent: group
+            };
+            group.children.push(screen);
+        }
+
+        const action: PermissionTreeNode = {
+            code: item.code,
+            nameKey: null,
+            name: item.name,
+            kind: item.kind || 'action',
+            parentCode: screen.code,
+            children: [],
+            parent: screen
+        };
+        screen.children.push(action);
+    }
+
+    return [...groups.values()].sort((left, right) => groupSort(left.code, groupOrder) - groupSort(right.code, groupOrder));
+}
+
+function groupSort(code: string, orders: Map<string, number>): number {
+    const upper = code.toUpperCase();
+    const fromApi = orders.get(upper);
+    if (fromApi !== undefined) return fromApi;
+    const index = GROUP_FALLBACK_ORDER.indexOf(upper);
+    return index < 0 ? 1000 : (index + 1) * 10;
+}
+
+/** Mọi mã quyền của các nút hành động (nút lá) trong một nhánh cây — dùng cho tắt-lan theo cha. */
+export function collectActionCodes(node: PermissionTreeNode): string[] {
+    if (!node.children || node.children.length === 0) return [node.code];
+    return node.children.flatMap(child => collectActionCodes(child));
+}
+
+/** Nút có phải nhóm/màn hình (có con) hay không. */
+export function isContainerNode(node: PermissionTreeNode): boolean {
+    return !!node.children && node.children.length > 0;
 }

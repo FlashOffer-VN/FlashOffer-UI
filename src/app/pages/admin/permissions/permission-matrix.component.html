@@ -20,92 +20,120 @@
     }
 
     <div class="bg-white rounded-xl shadow-sm border border-gray-100">
-        <div class="p-4 border-b border-gray-100 max-w-md">
-            <app-input [(ngModel)]="searchText" icon="fa-solid fa-magnifying-glass"
-                [placeholder]="'PERMISSION.SEARCH_PLACEHOLDER' | translate"></app-input>
+        <div class="p-4 border-b border-gray-100 flex flex-wrap items-center gap-3">
+            <div class="max-w-md flex-1 min-w-[16rem]">
+                <app-input [(ngModel)]="searchText" icon="fa-solid fa-magnifying-glass"
+                    [placeholder]="'PERMISSION.SEARCH_PLACEHOLDER' | translate"></app-input>
+            </div>
+            <label class="flex items-center gap-2 text-sm text-gray-600">
+                <span>{{ 'PERMISSION.VIEW_ROLE' | translate }}</span>
+                <select class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700"
+                    [ngModel]="viewRole" (ngModelChange)="onViewRoleChange($event)">
+                    @for (column of roleColumns; track column.role) {
+                    <option [ngValue]="column.role">{{ roleKey(column.role) | translate }}</option>
+                    }
+                </select>
+            </label>
         </div>
 
         @if (isLoading) {
         <app-loading></app-loading>
         } @else {
-        @for (group of groups; track group.key) {
-        <div class="border-t border-gray-100">
-            <button type="button" (click)="toggleGroup(group.key)"
-                class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50">
-                <i class="fa-solid text-gray-400" [class.fa-chevron-down]="isExpanded(group.key)"
-                    [class.fa-chevron-right]="!isExpanded(group.key)"></i>
-                <span class="text-sm font-semibold text-gray-800">{{ groupName(group) }}</span>
-                <app-badge size="sm" [showDot]="false" variant="secondary"
-                    [label]="group.permissions.length + ''"></app-badge>
-                @if (group.isMemberArea) {
-                <span class="text-xs text-gray-500">{{ 'PERMISSION.MEMBER_AREA_HINT' | translate }}</span>
-                }
-            </button>
-
-            @if (isExpanded(group.key)) {
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-100">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                {{ 'PERMISSION.COL.PERMISSION' | translate }}
-                            </th>
-                            @for (column of roleColumns; track column.role) {
-                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                {{ roleKey(column.role) | translate }}
-                                @if (isDirty(column.role)) {
-                                <span class="text-primary">•</span>
-                                }
-                            </th>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-100">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ 'PERMISSION.COL.PERMISSION' | translate }}
+                        </th>
+                        @for (column of roleColumns; track column.role) {
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ roleKey(column.role) | translate }}
+                            @if (isDirty(column.role)) {
+                            <span class="text-primary">•</span>
                             }
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-100">
-                        @for (item of group.permissions; track item.code) {
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-3">
-                                <div class="flex items-start gap-3">
-                                    <app-badge [label]="item.code" [showDot]="false" size="sm"
-                                        variant="secondary"></app-badge>
-                                    <div>
-                                        <div class="text-sm font-medium text-gray-800">{{ item.name }}</div>
-                                        <div class="text-xs text-gray-500 mt-0.5">
-                                            {{ moduleKey(item.module) | translate }} · {{ kindKey(item.kind) |
-                                            translate }}
-                                        </div>
-                                        @if (item.route) {
-                                        <div class="text-xs text-gray-400 mt-0.5">{{ item.route }}</div>
-                                        }
-                                        @if (item.endpoints) {
-                                        <div class="text-xs text-gray-400 mt-0.5">{{ item.endpoints }}</div>
-                                        }
-                                    </div>
-                                </div>
-                            </td>
-                            @for (column of roleColumns; track column.role) {
-                            <td class="px-4 py-3 text-center">
-                                @if (column.isSuperAdmin) {
-                                <i class="fa-solid fa-infinity text-primary"
-                                    [title]="'PERMISSION.SUPER_ADMIN_ALL' | translate"></i>
-                                } @else {
-                                <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer"
-                                    [checked]="isChecked(column.role, item.code)" [disabled]="!canEdit"
-                                    (change)="onToggle(column.role, item.code, $any($event.target).checked)" />
-                                }
-                            </td>
-                            }
-                        </tr>
+                        </th>
                         }
-                    </tbody>
-                </table>
-            </div>
-            }
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-100">
+                    @for (node of visibleTree; track node.code) {
+                    <ng-container *ngTemplateOutlet="nodeRow; context: { $implicit: node, depth: 0 }"></ng-container>
+                    } @empty {
+                    <tr>
+                        <td [attr.colspan]="roleColumns.length + 1" class="px-4 py-6 text-center text-gray-500">
+                            {{ 'PAGINATION.NO_ITEMS' | translate }}
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
         </div>
-        } @empty {
-        <div class="px-4 py-6 text-center text-gray-500">
-            {{ 'PAGINATION.NO_ITEMS' | translate }}
-        </div>
-        }
         }
     </div>
 </div>
+
+<!-- Một dòng cho mỗi nút trong cây; tự gọi lại chính nó cho các nút con (đệ quy). -->
+<ng-template #nodeRow let-node let-depth="depth">
+    <tr [class.bg-gray-50]="node.kind === 'group'" class="hover:bg-gray-50">
+        <td class="px-4 py-2.5">
+            <div class="flex items-center gap-2" [style.padding-left.px]="depth * 20">
+                @if (isContainer(node)) {
+                <button type="button" class="text-gray-400 hover:text-gray-600 w-4"
+                    (click)="toggleExpand(node)" [attr.aria-expanded]="isExpanded(node)">
+                    <i class="fa-solid" [class.fa-chevron-down]="isExpanded(node)"
+                        [class.fa-chevron-right]="isCollapsed(node)"></i>
+                </button>
+                } @else {
+                <span class="w-4"></span>
+                }
+
+                <span
+                    [class.text-sm]="true"
+                    [class.font-semibold]="node.kind === 'group'"
+                    [class.text-gray-800]="node.kind === 'group'"
+                    [class.font-medium]="node.kind === 'screen'"
+                    [class.text-gray-700]="node.kind === 'screen'"
+                    [class.text-gray-600]="node.kind !== 'group' && node.kind !== 'screen'">
+                    {{ nodeLabel(node) }}
+                </span>
+
+                @if (isContainer(node)) {
+                <app-badge size="sm" [showDot]="false" variant="secondary" [label]="leafCount(node) + ''"></app-badge>
+                } @else {
+                <app-badge [label]="node.code" [showDot]="false" size="sm" variant="secondary"></app-badge>
+                <span class="text-xs text-gray-400">{{ kindKey(node) | translate }}</span>
+                }
+
+                @if (node.kind === 'screen' && node.name) {
+                <span class="text-xs text-gray-400">{{ node.code }}</span>
+                }
+            </div>
+        </td>
+
+        @for (column of roleColumns; track column.role) {
+        <td class="px-4 py-2.5 text-center">
+            @if (column.isSuperAdmin) {
+            <i class="fa-solid fa-infinity text-primary" [title]="'PERMISSION.SUPER_ADMIN_ALL' | translate"></i>
+            } @else if (isContainer(node)) {
+            <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer"
+                [checked]="nodeState(column.role, node) === 'all'"
+                [indeterminate]="nodeState(column.role, node) === 'some'"
+                [disabled]="isNodeDisabled(column.role, node) || !canEdit"
+                (change)="toggleNode(column.role, node, $any($event.target).checked)" />
+            } @else {
+            <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer"
+                [checked]="isChecked(column.role, node.code) && !isNodeDisabled(column.role, node)"
+                [disabled]="isNodeDisabled(column.role, node) || !canEdit"
+                (change)="onToggle(column.role, node.code, $any($event.target).checked)" />
+            }
+        </td>
+        }
+    </tr>
+
+    @if (isContainer(node) && isExpanded(node)) {
+    @for (child of node.children; track child.code) {
+    <ng-container *ngTemplateOutlet="nodeRow; context: { $implicit: child, depth: depth + 1 }"></ng-container>
+    }
+    }
+</ng-template>

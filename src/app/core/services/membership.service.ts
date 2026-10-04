@@ -32,4 +32,14 @@ export class MembershipService {
     deleteTier(id: string): Observable<ApiResponse<unknown>> {
         return this._apiService.delete<ApiResponse<unknown>>(`${this._baseUrl}/${id}`);
     }
+
+    /** Danh sách hạng thành viên đã xoá mềm. GET /api/v1/MembershipTiers/deleted */
+    getDeletedTiers(): Observable<ApiResponse<MembershipTier[]>> {
+        return this._apiService.get<ApiResponse<MembershipTier[]>>(`${this._baseUrl}/deleted`);
+    }
+
+    /** Khôi phục một hạng thành viên đã xoá mềm. POST /api/v1/MembershipTiers/{id}/restore */
+    restoreTier(id: string): Observable<ApiResponse<MembershipTier>> {
+        return this._apiService.post<ApiResponse<MembershipTier>>(`${this._baseUrl}/${id}/restore`, {});
+    }
 }

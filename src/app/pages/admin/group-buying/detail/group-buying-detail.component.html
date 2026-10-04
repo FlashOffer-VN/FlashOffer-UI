@@ -140,11 +140,11 @@
                 </div>
                 <div class="flex justify-between py-2 border-b border-gray-50">
                     <span class="text-sm text-gray-500">{{ 'ADMIN.GROUP_BUYING.REFERRAL' | translate }}</span>
-                    <span class="text-sm font-medium text-gray-800 text-right">{{ detail.referralCode | appCodeName: detail.referralName }}</span>
+                    <span class="text-sm font-medium text-gray-800 text-right">{{ detail.recordReferrerCode | appCodeName: detail.recordReferrerName }}</span>
                 </div>
                 <div class="flex justify-between py-2 border-b border-gray-50">
                     <span class="text-sm text-gray-500">{{ 'ADMIN.GROUP_BUYING.REFERRED_BY' | translate }}</span>
-                    <span class="text-sm font-medium text-gray-800 text-right">{{ detail.referredByCode | appCodeName: detail.referredByName }}</span>
+                    <span class="text-sm font-medium text-gray-800 text-right">{{ detail.accountReferrerCode | appCodeName: detail.accountReferrerName }}</span>
                 </div>
                 <div class="flex justify-between py-2">
                     <span class="text-sm text-gray-500">{{ 'ADMIN.GROUP_BUYING.APPROVED_AT' | translate }}</span>
@@ -180,6 +180,8 @@
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 {{ 'ADMIN.GROUP_BUYING.REFERRAL' | translate }}</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                {{ 'ADMIN.GROUP_BUYING.REFERRED_BY' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 {{ 'ADMIN.GROUP_BUYING.JOINED_AT' | translate }}</th>
                             <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 {{ 'COMMON.BUTTON.ACTION' | translate }}</th>
@@ -187,7 +189,7 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         <tr *ngIf="detail.participants.length === 0">
-                            <td colspan="8" class="px-4 py-8 text-center text-gray-500">
+                            <td colspan="9" class="px-4 py-8 text-center text-gray-500">
                                 {{ 'PAGINATION.NO_ITEMS' | translate }}
                             </td>
                         </tr>
@@ -211,9 +213,10 @@
                                 <div *ngIf="p.userCode">{{ p.userCode }}</div>
                             </td>
                             <td class="px-4 py-3 text-xs text-gray-600">
-                                <p>{{ p.referralCode | appCodeName: p.referralName }}</p>
-                                <p class="text-gray-400">{{ 'ADMIN.GROUP_BUYING.REFERRED_BY' | translate }}:
-                                    {{ p.referredByCode | appCodeName: p.referredByName }}</p>
+                                {{ p.recordReferrerCode | appCodeName: p.recordReferrerName }}
+                            </td>
+                            <td class="px-4 py-3 text-xs text-gray-600">
+                                {{ p.accountReferrerCode | appCodeName: p.accountReferrerName }}
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-500">{{ p.createdAt | appDate }}</td>
                             <td class="px-4 py-3 text-right">

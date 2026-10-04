@@ -61,6 +61,7 @@
                                 <div class="action-buttons">
                                     <ng-container *ngIf="activeStatus === 'deleted'">
                                         <app-button variant="primary" size="sm" [disabled]="isActionLoading"
+                                            *appHasPermission="[Permission.ViewRestoreSocialPost, Permission.RestoreSocialPost]"
                                             (click)="restore(post)" [title]="'COMMON.BUTTON.RESTORE' | translate"
                                             [attr.aria-label]="'COMMON.BUTTON.RESTORE' | translate">
                                             <i class="fa-solid fa-rotate-left"></i>

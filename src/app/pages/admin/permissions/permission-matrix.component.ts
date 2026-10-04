@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
+import { buildPermissionTree, collectActionCodes, isContainerNode } from '@core/services/permission.service';
 import { UserRole } from '@core/models/auth.model';
-import { Permission, PermissionGroupItem, PermissionItem, RolePermission } from '@core/models/permission.model';
+import { Permission, PermissionGroupItem, PermissionMatrix, PermissionTreeNode, RolePermission } from '@core/models/permission.model';
 
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
@@ -18,23 +19,13 @@ interface RoleColumn {
     isSuperAdmin: boolean;
 }
 
-/** Một nhóm quyền trong cây phân quyền. */
-interface PermissionGroup {
-    /** Mã nhóm quyền (quyền trỏ tới nhóm qua ParentCode). */
-    key: string;
-    /** Tên nhóm đọc từ DB của máy chủ; máy chủ cũ không trả về thì để rỗng. */
-    name: string;
-    /** Tên nhóm tiếng Anh đọc từ DB. */
-    nameEn: string;
-    /** Khoá i18n tên nhóm — dùng khi máy chủ chưa trả về tên nhóm. */
-    labelKey: string;
-    /** Nhóm quyền gắn với trang của thành viên (quản trị viên không có trang đó). */
-    isMemberArea: boolean;
-    permissions: PermissionItem[];
-}
+/** Trạng thái tick của một nút với một vai trò: đủ / một phần / chưa tick. */
+type NodeState = 'all' | 'some' | 'none';
 
 /**
- * Ma trận phân quyền: danh mục quyền theo mã P### (API đọc từ enum) và quyền bật cho từng vai trò.
+ * Ma trận phân quyền hiển thị theo cây Nhóm → Màn hình → hành động (Thêm/Sửa/Xóa/Khôi phục/…).
+ * Cây dựng từ `GET /api/v1/permissions/tree`, máy chủ chưa có thì suy từ ma trận quyền.
+ * Tắt-lan theo cha: tắt màn hình thì mọi hành động con coi như tắt, tắt nhóm thì cả cụm màn hình tắt theo.
  * Chỉ tài khoản có quyền P101 mới sửa được; SuperAdmin luôn toàn quyền nên không cấu hình.
  */
 @Component({
@@ -57,16 +48,24 @@ export class AdminPermissionMatrixComponent implements OnInit {
     isSaving = false;
     searchText = '';
 
-    /** Nhóm dành riêng cho quyền gắn với trang của thành viên. */
-    private readonly memberGroupKey = 'MEMBER';
+    /** Cây phân quyền Nhóm → Màn hình → hành động. */
+    tree: PermissionTreeNode[] = [];
 
-    /** Nhóm quyền do máy chủ trả về (tên và thứ tự đọc từ bảng PermissionGroups). */
+    /** Nhóm quyền đọc từ máy chủ (tên + thứ tự) để hiển thị tên nhóm. */
     private apiGroups: PermissionGroupItem[] = [];
 
-    /** Nhóm đang mở; mặc định thu gọn để cây phân quyền gọn hơn. */
-    expandedGroups: Record<string, boolean> = {};
+    /** Ma trận gần nhất — dùng làm fallback khi dựng cây và khi đổi vai trò đang xem. */
+    private _matrix?: PermissionMatrix;
 
-    permissions: PermissionItem[] = [];
+    /** Vai trò đang xem — cây quyền được tải theo vai trò này (GET /permissions/tree?role=...). */
+    viewRole: UserRole = UserRole.User;
+
+    /** Nút đang mở/đóng; mặc định mở nhóm, đóng màn hình (droplist). */
+    private expanded: Record<string, boolean> = {};
+
+    /** Ảnh chụp các mã đang tick khi tắt một nhánh, để bật lại cha thì con về trạng thái cũ. */
+    private snapshots: Record<string, string[]> = {};
+
     roleColumns: RoleColumn[] = [
         { role: UserRole.User, isSuperAdmin: false },
         { role: UserRole.Partner, isSuperAdmin: false },
@@ -95,10 +94,10 @@ export class AdminPermissionMatrixComponent implements OnInit {
         this._appService.permissionService.getMatrix().subscribe({
             next: (response) => {
                 const matrix = response.data;
-                this.permissions = matrix?.permissions ?? [];
+                this._matrix = matrix;
                 this.apiGroups = matrix?.groups ?? [];
                 this.applyRoles(matrix?.roles ?? []);
-                this.isLoading = false;
+                this.loadTree(matrix);
             },
             error: (error) => {
                 this.isLoading = false;
@@ -107,83 +106,166 @@ export class AdminPermissionMatrixComponent implements OnInit {
         });
     }
 
-    /** Danh mục quyền lọc theo ô tìm kiếm (mã, tên, nhóm, trang hoặc API). */
-    get filteredPermissions(): PermissionItem[] {
-        const keyword = this.searchText.trim().toLowerCase();
-        if (!keyword) return this.permissions;
-
-        return this.permissions.filter(item =>
-            item.code.toLowerCase().includes(keyword)
-            || item.name.toLowerCase().includes(keyword)
-            || item.module.toLowerCase().includes(keyword)
-            || (item.parentCode ?? '').toLowerCase().includes(keyword)
-            || (item.route ?? '').toLowerCase().includes(keyword)
-            || (item.endpoints ?? '').toLowerCase().includes(keyword));
+    /**
+     * Ưu tiên cây phân quyền mới của máy chủ (`GET /permissions/tree`);
+     * máy chủ chưa trả cây thì dựng cây từ ma trận quyền để giao diện vẫn chạy.
+     */
+    private loadTree(matrix: PermissionMatrix | undefined): void {
+        this._appService.permissionService.getTree(this.viewRole).subscribe({
+            next: (response) => {
+                const apiTree = response.data;
+                this.tree = apiTree && apiTree.length ? this.normalizeTree(apiTree) : buildPermissionTree(matrix);
+                this.isLoading = false;
+            },
+            error: () => {
+                this.tree = buildPermissionTree(matrix);
+                this.isLoading = false;
+            }
+        });
     }
 
-    /** Các nhóm quyền sau khi lọc, xếp theo thứ tự nhóm chức năng. */
-    get groups(): PermissionGroup[] {
-        const buckets = new Map<string, PermissionItem[]>();
-
-        for (const item of this.filteredPermissions) {
-            const key = this.groupKey(item);
-            const bucket = buckets.get(key);
-            if (bucket) bucket.push(item);
-            else buckets.set(key, [item]);
-        }
-
-        return [...buckets.entries()]
-            .map(([key, permissions]) => {
-                const group = this.apiGroups.find(item => item.code.toUpperCase() === key.toUpperCase());
-                return {
-                    key,
-                    name: group?.name ?? '',
-                    nameEn: group?.nameEn ?? '',
-                    labelKey: this.groupLabelKey(key),
-                    isMemberArea: key.toUpperCase() === this.memberGroupKey,
-                    permissions
-                };
-            })
-            .sort((left, right) => this.groupOrder(left.key) - this.groupOrder(right.key));
+    /**
+     * Người dùng chọn vai trò đang xem ở ô chọn phía trên lưới → tải lại cây theo vai trò đó
+     * để `isGranted`/`isEffective` của các nút phản ánh đúng vai trò đang xem.
+     */
+    onViewRoleChange(role: UserRole): void {
+        this.viewRole = role;
+        this.loadTree(this._matrix);
     }
 
-    /** Đang tìm kiếm thì mở hết nhóm để thấy ngay kết quả. */
+    /** Gắn nút cha cho từng nút để suy trạng thái tắt-lan, và đảm bảo mọi nút đều có mảng children. */
+    private normalizeTree(nodes: PermissionTreeNode[], parent: PermissionTreeNode | null = null): PermissionTreeNode[] {
+        return nodes.map(node => {
+            const normalized: PermissionTreeNode = { ...node, children: node.children ?? [], parent };
+            normalized.children = this.normalizeTree(normalized.children, normalized);
+            return normalized;
+        });
+    }
+
+    /** Đang tìm kiếm thì mở hết để thấy ngay kết quả và chỉ hiện nhánh có kết quả. */
     get isSearching(): boolean {
         return this.searchText.trim().length > 0;
     }
 
-    isExpanded(key: string): boolean {
-        return this.isSearching || (this.expandedGroups[key] ?? false);
+    get visibleTree(): PermissionTreeNode[] {
+        const keyword = this.searchText.trim().toLowerCase();
+        if (!keyword) return this.tree;
+
+        return this.tree
+            .map(node => this.filterNode(node, keyword))
+            .filter((node): node is PermissionTreeNode => !!node);
     }
 
-    toggleGroup(key: string): void {
-        this.expandedGroups[key] = !this.isExpanded(key);
+    /** Giữ nhánh có nút hành động khớp từ khoá (mã hoặc tên). */
+    private filterNode(node: PermissionTreeNode, keyword: string): PermissionTreeNode | null {
+        if (isContainerNode(node)) {
+            const children = node.children
+                .map(child => this.filterNode(child, keyword))
+                .filter((child): child is PermissionTreeNode => !!child);
+            return children.length ? { ...node, children } : null;
+        }
+
+        const haystack = `${node.code} ${node.name ?? ''}`.toLowerCase();
+        return haystack.includes(keyword) ? node : null;
+    }
+
+    isContainer(node: PermissionTreeNode): boolean {
+        return isContainerNode(node);
+    }
+
+    isExpanded(node: PermissionTreeNode): boolean {
+        if (this.isSearching) return true;
+        const stored = this.expanded[node.code];
+        if (stored !== undefined) return stored;
+        // Mặc định mở nhóm để thấy danh sách màn hình, đóng màn hình (droplist) để gọn.
+        return node.kind === 'group';
+    }
+
+    toggleExpand(node: PermissionTreeNode): void {
+        this.expanded[node.code] = !this.isExpanded(node);
+    }
+
+    /** Số quyền hành động trong một nhánh. */
+    leafCount(node: PermissionTreeNode): number {
+        return collectActionCodes(node).length;
+    }
+
+    /** Tên hiển thị của nút: tên nhóm đọc từ DB, rồi tới khoá dịch, rồi tới tên/mã. */
+    nodeLabel(node: PermissionTreeNode): string {
+        if (node.kind === 'group') {
+            const group = this.apiGroups.find(item => item.code.toUpperCase() === node.code.toUpperCase());
+            if (group) {
+                const name = this._translate.currentLang === 'en' ? (group.nameEn || group.name) : (group.name || group.nameEn);
+                if (name) return name;
+            }
+        }
+
+        if (node.nameKey) {
+            const translated = this._appService.trans(node.nameKey);
+            if (translated && translated !== node.nameKey) return translated;
+        }
+
+        return node.name || node.code;
+    }
+
+    /** Nhãn loại nút (nhóm / màn hình / xem / thêm / sửa / xóa / khôi phục / thao tác). */
+    kindKey(node: PermissionTreeNode): string {
+        return `PERMISSION.KIND.${(node.kind || 'action').toUpperCase()}`;
+    }
+
+    /** Có đang đóng nhánh hay không (không tính trạng thái mở rộng khi tìm kiếm). */
+    isCollapsed(node: PermissionTreeNode): boolean {
+        return !this.isExpanded(node);
+    }
+
+    /** Trạng thái tick của một nút với một vai trò, gộp mọi hành động con. */
+    nodeState(role: UserRole, node: PermissionTreeNode): NodeState {
+        const codes = collectActionCodes(node);
+        const set = this.selected[role];
+        if (!set || codes.length === 0) return 'none';
+
+        let granted = 0;
+        for (const code of codes) {
+            if (set.has(code)) granted += 1;
+        }
+
+        if (granted === 0) return 'none';
+        return granted === codes.length ? 'all' : 'some';
     }
 
     /**
-     * Nhóm của một quyền: lấy mã nhóm (ParentCode) do máy chủ trả về — nhóm đọc từ bảng PermissionGroups.
-     * Máy chủ cũ không trả về ParentCode thì suy nhóm từ module và gom riêng quyền của trang thành viên.
+     * Cha đang tắt thì con khoá lại: bất kỳ tổ tiên nào chưa tick quyền nào (trạng thái none)
+     * cũng làm cho nút này không tick được — chỉ hiện trạng thái tắt.
      */
-    private groupKey(item: PermissionItem): string {
-        const parentCode = (item.parentCode ?? '').trim();
-        if (parentCode) return parentCode;
-        return (item.route ?? '').startsWith('/user') ? this.memberGroupKey : item.module.toUpperCase();
+    isNodeDisabled(role: UserRole, node: PermissionTreeNode): boolean {
+        let parent = node.parent ?? null;
+        while (parent) {
+            if (this.nodeState(role, parent) === 'none') return true;
+            parent = parent.parent ?? null;
+        }
+        return false;
     }
 
-    /** Thứ tự nhóm: theo SortOrder của bảng PermissionGroups, máy chủ cũ thì theo thứ tự nhóm chức năng. */
-    private groupOrder(key: string): number {
-        const group = this.apiGroups.find(item => item.code.toUpperCase() === key.toUpperCase());
-        if (group) return group.sortOrder;
+    /** Tick / bỏ tick một nhánh cho vai trò: áp cho toàn bộ hành động con (đệ quy theo cây). */
+    toggleNode(role: UserRole, node: PermissionTreeNode, checked: boolean): void {
+        const set = this.selected[role];
+        if (!set) return;
 
-        const fallback = ['ADMIN', this.memberGroupKey, 'SHARED', 'SYSTEM', 'USER', 'PARTNER', 'PURCHASE', 'GROUP', 'COMMUNITY', 'REFERRAL', 'COMMISSION', 'SUPERADMIN'];
-        const index = fallback.indexOf(key.toUpperCase());
-        return index < 0 ? 1000 : (index + 1) * 10;
-    }
+        const codes = collectActionCodes(node);
+        const key = `${role}:${node.code}`;
 
-    /** Tên nhóm hiển thị: ưu tiên tên đọc từ DB theo ngôn ngữ đang dùng, chưa có thì lấy khoá i18n. */
-    groupName(group: PermissionGroup): string {
-        const name = this._translate.currentLang === 'en' ? group.nameEn : group.name;
-        return name || this._appService.trans(group.labelKey);
+        if (checked) {
+            // Bật lại cha thì con trở về đúng tập đã tick trước đó; chưa có ảnh chụp thì bật hết.
+            const restore = this.snapshots[key];
+            const toAdd = restore && restore.length ? restore : codes;
+            for (const code of toAdd) set.add(code);
+            delete this.snapshots[key];
+            return;
+        }
+
+        // Tắt: nhớ lại tập con đang tick rồi bỏ hết khỏi lựa chọn.
+        this.snapshots[key] = codes.filter(code => set.has(code));
+        for (const code of codes) set.delete(code);
     }
 
     /** Tài khoản hiện tại có được sửa quyền (chỉ SuperAdmin có quyền P101). */
@@ -241,7 +323,7 @@ export class AdminPermissionMatrixComponent implements OnInit {
 
                 this.isSaving = false;
                 if (matrix) {
-                    this.permissions = matrix.permissions ?? this.permissions;
+                    this.apiGroups = matrix.groups ?? this.apiGroups;
                     this.applyRoles(matrix.roles ?? []);
                 }
                 this._appService.showSuccess(this._appService.trans('PERMISSION.SAVE_SUCCESS'));
@@ -252,26 +334,6 @@ export class AdminPermissionMatrixComponent implements OnInit {
                 this.loadMatrix();
             }
         });
-    }
-
-    /** Nhãn nhóm chức năng. */
-    /**
-     * Khoá i18n cho nhãn nhóm: ba nhóm theo khu vực dùng khoá PERMISSION.GROUP, máy chủ cũ trả mã module thì dùng PERMISSION.MODULE.
-     */
-    groupLabelKey(key: string): string {
-        const upper = key.toUpperCase();
-        return ['ADMIN', this.memberGroupKey, 'SHARED'].includes(upper)
-            ? `PERMISSION.GROUP.${upper}`
-            : this.moduleKey(upper);
-    }
-
-    moduleKey(module: string): string {
-        return `PERMISSION.MODULE.${module.toUpperCase()}`;
-    }
-
-    /** Nhãn loại quyền (view/action). */
-    kindKey(kind: string): string {
-        return `PERMISSION.KIND.${kind.toUpperCase()}`;
     }
 
     /** Nhãn vai trò. */

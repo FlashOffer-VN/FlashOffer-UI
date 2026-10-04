@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { Collaborator, CollaboratorStatus } from '@core/models/collaborator.model';
 import { PagedResponse } from '@core/models/paged-response.model';
+import { Permission } from '@core/models/permission.model';
 
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
@@ -18,6 +19,7 @@ import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
+import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 
 @Component({
     selector: 'app-admin-collaborator-list',
@@ -36,12 +38,16 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
         NgxFilterDaterangeComponent,
         AppDatePipe,
         ShortIdPipe,
-        CodeNamePipe
+        CodeNamePipe,
+        HasPermissionDirective
     ],
     templateUrl: './collaborator-list.component.html',
     styleUrls: ['./collaborator-list.component.css']
 })
 export class AdminCollaboratorListComponent implements OnInit {
+    /** Mã quyền dùng trong template (`*appHasPermission`). */
+    readonly Permission = Permission;
+
     // Data
     collaborators: Collaborator[] = [];
     isLoading = true;
@@ -76,9 +82,14 @@ export class AdminCollaboratorListComponent implements OnInit {
             { key: 'all', label: this._appService.trans('COMMON.ALL') },
             { key: 'pending', label: this._appService.trans('COMMON.STATUS.PENDING') },
             { key: 'approved', label: this._appService.trans('COMMON.STATUS.APPROVED') },
-            { key: 'rejected', label: this._appService.trans('COMMON.STATUS.REJECTED') },
-            { key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') }
+            { key: 'rejected', label: this._appService.trans('COMMON.STATUS.REJECTED') }
         ];
+
+        // Tab "Đã xóa" hiện khi có quyền xem hồ sơ CTV đã xoá (P115) hoặc khôi phục (P027)
+        // — đúng cặp mã [HasPermission(ViewRestoreCollaborator, RestoreCollaborator)] của API.
+        if (this._appService.permissionService.has([Permission.ViewRestoreCollaborator, Permission.RestoreCollaborator])) {
+            this.tabs.push({ key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') });
+        }
     }
 
     onTabChange(tab: string): void {

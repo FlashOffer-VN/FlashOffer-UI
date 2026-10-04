@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
 import { OfferRequest, OfferStatus } from '@core/models/offer-request.model';
+import { Permission } from '@core/models/permission.model';
 import { PagedResponse } from '@core/models/paged-response.model';
 
 import { ButtonComponent } from '@shared/components/button/button.component';
@@ -18,6 +19,8 @@ import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 
 @Component({
     selector: 'app-admin-offers',
@@ -36,12 +39,17 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
         NgxFilterDaterangeComponent,
         AppDatePipe,
         ShortIdPipe,
-        CodeNamePipe
+        CodeNamePipe,
+        NgSelectWrapperComponent,
+        HasPermissionDirective
     ],
     templateUrl: './admin-offers.component.html',
     styleUrls: ['./admin-offers.component.css']
 })
 export class AdminOffersComponent implements OnInit {
+    /** Mã quyền dùng trong template (`*appHasPermission`). */
+    readonly Permission = Permission;
+
     offers: OfferRequest[] = [];
     isLoading = true;
     isDeleting = false;
@@ -50,6 +58,10 @@ export class AdminOffersComponent implements OnInit {
     searchText = '';
     fromDate: string | null = null;
     toDate: string | null = null;
+
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField: string | null = null;
+    searchFieldOptions: { value: string; label: string }[] = [];
 
     activeTab = 'all';
     tabs: { key: string; label: string }[] = [];
@@ -65,6 +77,7 @@ export class AdminOffersComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildTabs();
+        this.buildSearchFieldOptions();
         this.loadData();
     }
 
@@ -74,9 +87,33 @@ export class AdminOffersComponent implements OnInit {
             { key: 'pending', label: this._appService.trans('COMMON.STATUS.PENDING') },
             { key: 'approved', label: this._appService.trans('COMMON.STATUS.APPROVED') },
             { key: 'rejected', label: this._appService.trans('COMMON.STATUS.REJECTED') },
-            { key: 'expired', label: this._appService.trans('COMMON.STATUS.EXPIRED') },
-            { key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') }
+            { key: 'expired', label: this._appService.trans('COMMON.STATUS.EXPIRED') }
         ];
+
+        // Tab "Đã xóa" hiện khi có quyền xem offer đã xoá (P133), khôi phục (P119) hoặc xoá (P065)
+        // — đúng cặp mã [HasPermission(ViewRestoreOfferRequest, RestoreOfferRequest, DeleteOfferRequest)] của API.
+        if (this._appService.permissionService.has([Permission.ViewRestoreOfferRequest, Permission.RestoreOfferRequest, Permission.DeleteOfferRequest])) {
+            this.tabs.push({ key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') });
+        }
+    }
+
+    /** Các cột tìm kiếm khớp tham số searchField của API; giá trị '' = tất cả */
+    private buildSearchFieldOptions(): void {
+        const t = (key: string) => this._appService.trans(key);
+        this.searchFieldOptions = [
+            { value: '', label: t('COMMON.SEARCH_FIELD.ALL') },
+            { value: 'productName', label: t('COMMON.SEARCH_FIELD.PRODUCT_NAME') },
+            { value: 'code', label: t('COMMON.SEARCH_FIELD.CODE') },
+            { value: 'recordReferrerCode', label: t('COMMON.SEARCH_FIELD.RECORD_REFERRER') },
+            { value: 'customerName', label: t('COMMON.SEARCH_FIELD.CUSTOMER_NAME') },
+            { value: 'customerPhone', label: t('COMMON.SEARCH_FIELD.CUSTOMER_PHONE') },
+            { value: 'customerEmail', label: t('COMMON.SEARCH_FIELD.CUSTOMER_EMAIL') }
+        ];
+    }
+
+    onSearchFieldChange(): void {
+        this.pageNumber = 1;
+        this.loadData();
     }
 
     onTabChange(tab: string): void {
@@ -109,7 +146,9 @@ export class AdminOffersComponent implements OnInit {
                 undefined,
                 isDeleted ? true : undefined,
                 this.fromDate ?? undefined,
-                this.toDate ?? undefined
+                this.toDate ?? undefined,
+                undefined,
+                this.searchField ?? undefined
             )
             .subscribe({
                 next: (response: PagedResponse<OfferRequest>) => {

@@ -10,6 +10,8 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { PartnerProduct, PRODUCT_CATEGORIES, ProductCategory } from '@core/models/partner.model';
+import { Permission } from '@core/models/permission.model';
+import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 
 /**
  * Bảng danh sách sản phẩm của đối tác — dùng chung, kèm filter.
@@ -42,12 +44,16 @@ import { PartnerProduct, PRODUCT_CATEGORIES, ProductCategory } from '@core/model
         TranslateModule,
         InputComponent,
         NgSelectWrapperComponent,
-        ButtonComponent
+        ButtonComponent,
+        HasPermissionDirective
     ],
     templateUrl: './product-list.component.html',
     styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
+
+    /** Mã quyền dùng trong template (`*appHasPermission`) — gác nút xoá sản phẩm của đối tác. */
+    readonly Permission = Permission;
 
     private readonly _appService = inject(AppService);
     private readonly _destroyRef = inject(DestroyRef);

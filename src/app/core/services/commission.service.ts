@@ -52,6 +52,18 @@ export class CommissionService {
         return this._apiService.delete<ApiResponse<{ id: string }>>(`${this._baseUrl}/${id}`);
     }
 
+    /** Danh sách cấu hình hoa hồng đã xoá mềm. GET /api/v1/commissions/deleted */
+    getDeletedConfigs(beneficiary?: CommissionBeneficiary | null): Observable<PagedResponse<CommissionConfig>> {
+        const params: Record<string, unknown> = { pageNumber: 1, pageSize: 50 };
+        if (beneficiary) params['beneficiary'] = beneficiary;
+        return this._apiService.get<PagedResponse<CommissionConfig>>(`${this._baseUrl}/deleted`, params);
+    }
+
+    /** Khôi phục một cấu hình hoa hồng đã xoá mềm. POST /api/v1/commissions/{id}/restore */
+    restore(id: string): Observable<ApiResponse<CommissionConfig>> {
+        return this._apiService.post<ApiResponse<CommissionConfig>>(`${this._baseUrl}/${id}/restore`, {});
+    }
+
     /** Mức hoa hồng đang áp cho chính tôi. GET /api/v1/commissions/me */
     getMine(): Observable<ApiResponse<MyCommission>> {
         return this._apiService.get<ApiResponse<MyCommission>>(`${this._baseUrl}/me`);

@@ -237,7 +237,7 @@ export class GroupBuyingDetailModalComponent implements OnInit, OnChanges {
 
     /** Mã chia sẻ đang gắn với đơn: mã trên URL, hoặc mã đã ghi nhận sẵn trên đơn */
     get attributionReferralCode(): string | null {
-        return this.incomingReferralCode ?? this.detail?.referralCode ?? null;
+        return this.incomingReferralCode ?? this.detail?.recordReferrerCode ?? null;
     }
 
     copyShareLink(): void {

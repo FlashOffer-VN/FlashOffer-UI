@@ -5,11 +5,12 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Observable, forkJoin, of } from 'rxjs';
 
 import { AppService } from '@core/services/app.service';
-import { PermissionService } from '@core/services/permission.service';
-import { ApiResponse } from '@core/models/auth.model';
+import { PermissionService, buildPermissionTree, collectActionCodes, isContainerNode } from '@core/services/permission.service';
+import { ApiResponse, UserRole, toUserRole } from '@core/models/auth.model';
 import {
     PermissionGroupItem,
-    PermissionItem,
+    PermissionMatrix,
+    PermissionTreeNode,
     UpdateUsersPermissionsResult,
     UserPermissionCandidate,
     UserPermissionDetail
@@ -19,15 +20,11 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 
-/** Nhóm quyền để hiển thị thành từng khối: khoá nhóm và tên đã hiển thị được. */
-interface PermissionGroup {
-    key: string;
-    label: string;
-    items: PermissionItem[];
-}
+type NodeState = 'all' | 'some' | 'none';
 
 /**
  * Cấu hình quyền riêng cho tài khoản: chọn một hoặc nhiều tài khoản rồi tích quyền hiệu lực.
+ * Cây quyền hiển thị theo Nhóm → Màn hình → hành động; tắt màn hình thì mọi hành động con coi như tắt.
  * Phần khác biệt so với quyền của vai trò được API lưu lại, nên khi quyền vai trò đổi thì tài khoản vẫn theo vai trò.
  */
 @Component({
@@ -62,7 +59,7 @@ interface PermissionGroup {
                 </div>
             </aside>
 
-            <!-- Bảng quyền của các tài khoản đang chọn -->
+            <!-- Cây quyền của các tài khoản đang chọn -->
             <section class="bg-white rounded-lg border border-gray-200 p-4">
                 @if (selected.length === 0) {
                     <p class="text-sm text-gray-500 py-10 text-center">{{ 'PERMISSION.USER.NO_USER_SELECTED' | translate }}</p>
@@ -74,46 +71,72 @@ interface PermissionGroup {
                         <span class="text-xs text-gray-500">
                             {{ selectedNames() }}
                         </span>
-                        <app-button variant="primary" [loading]="isSaving" class="ml-auto" (click)="save()">
+                        <app-button variant="primary" [loading]="isSaving" class="ml-auto" (onClick)="save()">
                             <i class="fa-solid fa-floppy-disk mr-1"></i>{{ 'PERMISSION.SAVE' | translate }}
                         </app-button>
                     </div>
 
-                    <div class="grid gap-4 md:grid-cols-2">
-                        @for (group of groups; track group.key) {
-                            <div class="border border-gray-200 rounded-lg">
-                                <p class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50 border-b border-gray-200">
-                                    {{ group.label }}
-                                </p>
-                                <div class="p-2 max-h-72 overflow-y-auto">
-                                    @for (item of group.items; track item.code) {
-                                        <label class="flex items-start gap-2 px-1 py-1.5 rounded hover:bg-gray-50 cursor-pointer">
-                                            <input type="checkbox" class="mt-1" [checked]="isChecked(item.code)"
-                                                (change)="toggleCode(item.code)" />
-                                            <span class="text-sm">
-                                                <span class="block text-gray-800">{{ item.name }}</span>
-                                                <span class="block text-xs text-gray-500">
-                                                    {{ item.code }}
-                                                    @if (isMixed(item.code)) {
-                                                        · <em>{{ 'PERMISSION.USER.MIXED' | translate }}</em>
-                                                    }
-                                                    @if (isGrantedExtra(item.code)) {
-                                                        · <span class="text-green-600">{{ 'PERMISSION.USER.GRANTED_EXTRA' | translate }}</span>
-                                                    }
-                                                    @if (isDeniedOverride(item.code)) {
-                                                        · <span class="text-red-600">{{ 'PERMISSION.USER.DENIED_OVERRIDE' | translate }}</span>
-                                                    }
-                                                </span>
-                                            </span>
-                                        </label>
-                                    }
-                                </div>
-                            </div>
+                    <div class="rounded-lg border border-gray-200">
+                        @for (node of visibleTree; track node.code) {
+                            <ng-container *ngTemplateOutlet="permNode; context: { $implicit: node, depth: 0 }"></ng-container>
+                        } @empty {
+                            <p class="text-sm text-gray-500 py-6 text-center">{{ 'PAGINATION.NO_ITEMS' | translate }}</p>
                         }
                     </div>
                 }
             </section>
         </div>
+
+        <!-- Một dòng cho mỗi nút; tự gọi lại cho nút con (đệ quy theo children). -->
+        <ng-template #permNode let-node let-depth="depth">
+            <div class="border-b border-gray-100 last:border-b-0">
+                <div class="flex items-start gap-2 px-3 py-2"
+                    [class.bg-gray-50]="node.kind === 'group'"
+                    [style.padding-left.px]="12 + depth * 18">
+                    @if (isContainer(node)) {
+                        <button type="button" class="mt-0.5 text-gray-400 hover:text-gray-600 w-4"
+                            (click)="toggleExpand(node)" [attr.aria-expanded]="isExpanded(node)">
+                            <i class="fa-solid" [class.fa-chevron-down]="isExpanded(node)"
+                                [class.fa-chevron-right]="!isExpanded(node)"></i>
+                        </button>
+                        <input type="checkbox" class="mt-1" [checked]="nodeState(node) === 'all'"
+                            [indeterminate]="nodeState(node) === 'some'"
+                            [disabled]="isNodeDisabled(node)" (change)="toggleNode(node, $any($event.target).checked)" />
+                        <span class="text-sm"
+                            [class.font-semibold]="node.kind === 'group'"
+                            [class.font-medium]="node.kind === 'screen'">
+                            {{ nodeLabel(node) }}
+                        </span>
+                        <span class="text-xs text-gray-400 mt-0.5">· {{ kindKey(node) | translate }}</span>
+                    } @else {
+                        <span class="w-4"></span>
+                        <input type="checkbox" class="mt-1" [checked]="isChecked(node.code) && !isNodeDisabled(node)"
+                            [disabled]="isNodeDisabled(node)" (change)="toggleCode(node.code)" />
+                        <span class="text-sm">
+                            <span class="block text-gray-800">{{ node.name || node.code }}</span>
+                            <span class="block text-xs text-gray-500">
+                                {{ node.code }} · {{ kindKey(node) | translate }}
+                                @if (isMixed(node.code)) {
+                                    · <em>{{ 'PERMISSION.USER.MIXED' | translate }}</em>
+                                }
+                                @if (isGrantedExtra(node.code)) {
+                                    · <span class="text-green-600">{{ 'PERMISSION.USER.GRANTED_EXTRA' | translate }}</span>
+                                }
+                                @if (isDeniedOverride(node.code)) {
+                                    · <span class="text-red-600">{{ 'PERMISSION.USER.DENIED_OVERRIDE' | translate }}</span>
+                                }
+                            </span>
+                        </span>
+                    }
+                </div>
+
+                @if (isContainer(node) && isExpanded(node)) {
+                    @for (child of node.children; track child.code) {
+                        <ng-container *ngTemplateOutlet="permNode; context: { $implicit: child, depth: depth + 1 }"></ng-container>
+                    }
+                }
+            </div>
+        </ng-template>
     `
 })
 export class AdminUserPermissionComponent implements OnInit {
@@ -124,16 +147,22 @@ export class AdminUserPermissionComponent implements OnInit {
 
     candidates: UserPermissionCandidate[] = [];
     selected: UserPermissionCandidate[] = [];
-    groups: PermissionGroup[] = [];
+    tree: PermissionTreeNode[] = [];
     search = '';
     isLoadingCandidates = false;
     isLoadingDetail = false;
     isSaving = false;
 
+    /** Nhánh đang mở/đóng; mặc định mở nhóm, đóng màn hình (droplist). */
+    private expanded: Record<string, boolean> = {};
+    /** Ảnh chụp mã đang tick khi tắt nhánh, để bật lại cha thì con về trạng thái cũ. */
+    private snapshots: Record<string, string[]> = {};
+
     private _details = new Map<string, UserPermissionDetail>();
     /** Tên nhóm quyền theo mã nhóm, đọc từ bảng PermissionGroups. */
     private _groupNames = new Map<string, string>();
-    private _groupOrders = new Map<string, number>();
+    /** Ma trận quyền gần nhất — dùng làm fallback khi dựng cây. */
+    private _matrix?: PermissionMatrix;
 
     constructor(
         private readonly _appService: AppService,
@@ -196,9 +225,108 @@ export class AdminUserPermissionComponent implements OnInit {
             this.selected = [...this.selected, user];
         }
         this.loadDetails();
+        // Cây quyền tải theo vai trò đang xem — vai trò của tài khoản đang chọn.
+        this.loadTree();
     }
 
-    /** Tích / bỏ tích một quyền cho toàn bộ tài khoản đang chọn. */
+    //#region Cây quyền (Nhóm → Màn hình → hành động)
+
+    get visibleTree(): PermissionTreeNode[] {
+        const keyword = this.search.trim().toLowerCase();
+        if (!keyword) return this.tree;
+
+        return this.tree
+            .map(node => this.filterNode(node, keyword))
+            .filter((node): node is PermissionTreeNode => !!node);
+    }
+
+    private filterNode(node: PermissionTreeNode, keyword: string): PermissionTreeNode | null {
+        if (isContainerNode(node)) {
+            const children = node.children
+                .map(child => this.filterNode(child, keyword))
+                .filter((child): child is PermissionTreeNode => !!child);
+            return children.length ? { ...node, children } : null;
+        }
+        const haystack = `${node.code} ${node.name ?? ''}`.toLowerCase();
+        return haystack.includes(keyword) ? node : null;
+    }
+
+    isContainer(node: PermissionTreeNode): boolean {
+        return isContainerNode(node);
+    }
+
+    isExpanded(node: PermissionTreeNode): boolean {
+        const stored = this.expanded[node.code];
+        if (stored !== undefined) return stored;
+        return node.kind === 'group';
+    }
+
+    toggleExpand(node: PermissionTreeNode): void {
+        this.expanded[node.code] = !this.isExpanded(node);
+    }
+
+    /** Tên hiển thị: tên nhóm đọc từ DB, rồi khoá dịch, rồi tên/mã. */
+    nodeLabel(node: PermissionTreeNode): string {
+        if (node.kind === 'group') {
+            const fromDb = this._groupNames.get(node.code.toUpperCase());
+            if (fromDb) return fromDb;
+        }
+        if (node.nameKey) {
+            const translated = this._appService.trans(node.nameKey);
+            if (translated && translated !== node.nameKey) return translated;
+        }
+        return node.name || node.code;
+    }
+
+    kindKey(node: PermissionTreeNode): string {
+        return `PERMISSION.KIND.${(node.kind || 'action').toUpperCase()}`;
+    }
+
+    nodeState(node: PermissionTreeNode): NodeState {
+        const codes = collectActionCodes(node);
+        if (codes.length === 0) return 'none';
+
+        let granted = 0;
+        for (const code of codes) {
+            if (this.checked.has(code)) granted += 1;
+        }
+        if (granted === 0) return 'none';
+        return granted === codes.length ? 'all' : 'some';
+    }
+
+    /** Cha đang tắt (chưa tick quyền nào) thì con khoá lại, chỉ hiện trạng thái tắt. */
+    isNodeDisabled(node: PermissionTreeNode): boolean {
+        let parent = node.parent ?? null;
+        while (parent) {
+            if (this.nodeState(parent) === 'none') return true;
+            parent = parent.parent ?? null;
+        }
+        return false;
+    }
+
+    /** Tick / bỏ tick một nhánh: áp cho toàn bộ hành động con (đệ quy theo cây). */
+    toggleNode(node: PermissionTreeNode, checked: boolean): void {
+        const codes = collectActionCodes(node);
+        const key = node.code;
+
+        if (checked) {
+            const restore = this.snapshots[key];
+            const toAdd = restore && restore.length ? restore : codes;
+            for (const code of toAdd) {
+                this.checked.add(code);
+                this.mixed.delete(code);
+            }
+            delete this.snapshots[key];
+            return;
+        }
+
+        this.snapshots[key] = codes.filter(code => this.checked.has(code));
+        for (const code of codes) {
+            this.checked.delete(code);
+        }
+    }
+
+    /** Tích / bỏ tích một quyền hành động cho toàn bộ tài khoản đang chọn. */
     toggleCode(code: string): void {
         if (this.checked.has(code) && !this.mixed.has(code)) {
             this.checked.delete(code);
@@ -207,6 +335,8 @@ export class AdminUserPermissionComponent implements OnInit {
         }
         this.mixed.delete(code);
     }
+
+    //#endregion
 
     save(): void {
         if (this.selected.length === 0 || this.isSaving) return;
@@ -233,58 +363,51 @@ export class AdminUserPermissionComponent implements OnInit {
         });
     }
 
-    /** Danh mục quyền dùng chung với ma trận quyền: gom theo nhóm (parentCode) do API trả về. */
+    /** Danh mục quyền dùng chung với ma trận quyền, dựng thành cây Nhóm → Màn hình → hành động. */
     private loadCatalog(): void {
         this._permissionService.getMatrix().subscribe({
             next: response => {
-                const permissions = response.data?.permissions ?? [];
-                const apiGroups: PermissionGroupItem[] = response.data?.groups ?? [];
-                this._groupNames = new Map(apiGroups.map(group => [group.code.toUpperCase(), this.groupName(group)]));
-                this._groupOrders = new Map(apiGroups.map(group => [group.code.toUpperCase(), group.sortOrder]));
-
-                const byGroup = new Map<string, PermissionItem[]>();
-                for (const item of permissions) {
-                    const key = this.groupKey(item);
-                    const bucket = byGroup.get(key) ?? [];
-                    bucket.push(item);
-                    byGroup.set(key, bucket);
-                }
-
-                this.groups = Array.from(byGroup, ([key, items]) => ({ key, label: this.groupLabel(key), items }))
-                    .sort((left, right) => this.groupOrder(left.key) - this.groupOrder(right.key));
+                const matrix: PermissionMatrix | undefined = response.data;
+                this._matrix = matrix;
+                this.applyGroupNames(matrix?.groups ?? []);
+                this.loadTree();
             },
             error: () => this._appService.showError(this._appService.trans('PERMISSION.LOAD_FAILED'))
         });
     }
 
-    /** Tên nhóm theo ngôn ngữ đang dùng; máy chủ cũ chưa trả nhóm thì lùi về khoá i18n rồi tới mã nhóm. */
-    private groupName(group: PermissionGroupItem): string {
-        return this._translate.currentLang === 'en'
-            ? (group.nameEn || group.name)
-            : (group.name || group.nameEn);
+    /** Vai trò đang xem: vai trò của tài khoản đang chọn (đầu tiên) — truyền vào GET /permissions/tree. */
+    private viewRole(): UserRole | undefined {
+        if (this.selected.length === 0) return undefined;
+        return toUserRole(this.selected[0].role);
     }
 
-    private groupLabel(key: string): string {
-        const fromDb = this._groupNames.get(key.toUpperCase());
-        if (fromDb) return fromDb;
-        const i18nKey = `PERMISSION.GROUP.${key.toUpperCase()}`;
-        const translated = this._appService.trans(i18nKey);
-        return translated && translated !== i18nKey ? translated : key;
+    /** Tải cây quyền theo vai trò đang xem; máy chủ chưa trả cây thì dựng từ ma trận quyền. */
+    private loadTree(): void {
+        this._permissionService.getTree(this.viewRole()).subscribe({
+            next: treeResponse => {
+                const apiTree = treeResponse.data;
+                this.tree = apiTree && apiTree.length ? this.normalizeTree(apiTree) : buildPermissionTree(this._matrix);
+            },
+            error: () => {
+                this.tree = buildPermissionTree(this._matrix);
+            }
+        });
     }
 
-    private groupOrder(key: string): number {
-        const order = this._groupOrders.get(key.toUpperCase());
-        if (order !== undefined) return order;
-        const fallback = ['ADMIN', 'MEMBER', 'SHARED', 'SYSTEM', 'USER', 'PARTNER', 'PURCHASE', 'GROUP', 'COMMUNITY', 'REFERRAL', 'COMMISSION', 'SUPERADMIN'];
-        const index = fallback.indexOf(key.toUpperCase());
-        return index < 0 ? 1000 : (index + 1) * 10;
+    private applyGroupNames(groups: PermissionGroupItem[]): void {
+        this._groupNames = new Map(groups.map(group => [
+            group.code.toUpperCase(),
+            this._translate.currentLang === 'en' ? (group.nameEn || group.name) : (group.name || group.nameEn)
+        ]));
     }
 
-    /** Nhóm của một quyền: ưu tiên parentCode, máy chủ cũ thì suy từ module/đường dẫn. */
-    private groupKey(item: PermissionItem): string {
-        const parent = (item.parentCode ?? '').trim();
-        if (parent) return parent;
-        return (item.route ?? '').startsWith('/user') ? 'MEMBER' : item.module.toUpperCase();
+    private normalizeTree(nodes: PermissionTreeNode[], parent: PermissionTreeNode | null = null): PermissionTreeNode[] {
+        return nodes.map(node => {
+            const normalized: PermissionTreeNode = { ...node, children: node.children ?? [], parent };
+            normalized.children = this.normalizeTree(normalized.children, normalized);
+            return normalized;
+        });
     }
 
     /** Nạp quyền hiệu lực của các tài khoản đang chọn rồi gộp thành trạng thái tích chung. */

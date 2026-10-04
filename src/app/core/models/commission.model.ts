@@ -42,6 +42,10 @@ export interface CommissionConfig {
     note?: string | null;
     tiers: CommissionTier[];
     updatedAt: string;
+    /** Bản ghi đã xoá mềm (có khi xem danh sách "Đã xóa"). */
+    isDeleted?: boolean;
+    /** Thời điểm xoá mềm. */
+    deletedAt?: string | null;
 }
 
 /** Yêu cầu lưu cấu hình hoa hồng cho bản chung hoặc cho một/nhiều tài khoản được chọn. */

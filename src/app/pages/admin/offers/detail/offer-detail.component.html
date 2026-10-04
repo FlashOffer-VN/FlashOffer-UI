@@ -145,13 +145,13 @@
                         <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.EMAIL' | translate }}</span>
                         <span class="text-sm font-medium text-gray-900">{{ offer.email || '--' }}</span>
                     </div>
-                    <div class="flex justify-between py-2 border-b border-gray-50" *ngIf="offer.referralCode">
+                    <div class="flex justify-between py-2 border-b border-gray-50">
                         <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.REFERRAL' | translate }}</span>
-                        <span class="text-sm font-medium text-gray-900">{{ offer.referralCode }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ offer.recordReferrerCode | appCodeName: offer.recordReferrerName }}</span>
                     </div>
                     <div class="flex justify-between py-2 border-b border-gray-50">
                         <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.REFERRED_BY' | translate }}</span>
-                        <span class="text-sm font-medium text-gray-900">{{ offer.referredByCode | appCodeName: offer.referredByName }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ offer.accountReferrerCode | appCodeName: offer.accountReferrerName }}</span>
                     </div>
                     <div class="flex justify-between py-2 border-b border-gray-50">
                         <span class="text-sm text-gray-500">{{ 'ADMIN.OFFERS.CREATED_AT' | translate }}</span>

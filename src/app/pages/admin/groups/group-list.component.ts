@@ -5,26 +5,40 @@ import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { BusinessGroup, BusinessGroupType, CreateBusinessGroupRequest, GroupApprovalStatus } from '@core/models/business-group.model';
+import { Permission } from '@core/models/permission.model';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { StatusTabItem, StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 
 /** Quản lý nhóm theo lĩnh vực kinh doanh (admin) */
 @Component({
     selector: 'app-admin-group-list',
     standalone: true,
     imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule, ButtonComponent,
-        InputComponent, LoadingComponent, ModalComponent, PaginationComponent, StatusTabsComponent],
+        InputComponent, LoadingComponent, ModalComponent, PaginationComponent, StatusTabsComponent,
+        NgSelectWrapperComponent, HasPermissionDirective],
     templateUrl: './group-list.component.html',
 })
 export class AdminGroupListComponent implements OnInit {
+    /** Mã quyền dùng trong template (`*appHasPermission`). */
+    readonly Permission = Permission;
+
     groups: BusinessGroup[] = [];
     isLoading = false;
+    isDeleting = false;
+    isRestoring = false;
 
     searchText = '';
+
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField: string | null = null;
+    searchFieldOptions: { value: string; label: string }[] = [];
+
     activeTab = 'all';
     onlyPending = false;
     onlyPrivate = false;
@@ -71,14 +85,40 @@ export class AdminGroupListComponent implements OnInit {
             { key: 'active', label: this._appService.trans('ADMIN.GROUPS.TAB_ACTIVE') },
             { key: 'inactive', label: this._appService.trans('ADMIN.GROUPS.TAB_INACTIVE') }
         ];
+
+        // Tab "Đã xóa" hiện khi có quyền xem nhóm đã xoá (P137), khôi phục (P138) hoặc xem danh sách (P070)
+        // — đúng cặp mã [HasPermission(ViewRestoreGroup, RestoreGroup, ViewGroups)] của API.
+        if (this._appService.permissionService.has([Permission.ViewRestoreGroup, Permission.RestoreGroup, Permission.ViewGroups])) {
+            this.statusTabs.push({ key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') });
+        }
+        this.buildSearchFieldOptions();
         this.load();
+    }
+
+    /**
+     * Các cột tìm kiếm khớp tham số searchField của API; giá trị '' = tất cả.
+     * Các cột đúng bằng trường màn danh sách nhóm đang tìm (tên, lĩnh vực, mô tả).
+     */
+    private buildSearchFieldOptions(): void {
+        const t = (key: string) => this._appService.trans(key);
+        this.searchFieldOptions = [
+            { value: '', label: t('COMMON.SEARCH_FIELD.ALL') },
+            { value: 'name', label: t('COMMON.SEARCH_FIELD.GROUP_NAME') },
+            { value: 'businessFieldName', label: t('COMMON.SEARCH_FIELD.GROUP_BUSINESS_FIELD') },
+            { value: 'description', label: t('COMMON.SEARCH_FIELD.GROUP_DESCRIPTION') }
+        ];
+    }
+
+    onSearchFieldChange(): void {
+        this.load(1);
     }
 
     load(page = this.page): void {
         this.page = page;
         this.isLoading = true;
 
-        this._appService.businessGroupService.getAdminList({
+        const isDeleted = this.activeTab === 'deleted';
+        const query = {
             page: this.page,
             pageSize: this.pageSize,
             search: this.searchText,
@@ -86,10 +126,17 @@ export class AdminGroupListComponent implements OnInit {
                 : this.typeFilter === 'community' || this.typeFilter === 'clubPending' ? BusinessGroupType.Community
                 : null,
             approvalStatus: this.typeFilter === 'clubPending' ? GroupApprovalStatus.Pending : null,
-            isActive: this.activeTab === 'all' ? null : this.activeTab === 'active',
+            isActive: isDeleted || this.activeTab === 'all' ? null : this.activeTab === 'active',
             hasPendingMembers: this.onlyPending,
-            hasPrivateRequests: this.onlyPrivate
-        }).subscribe({
+            hasPrivateRequests: this.onlyPrivate,
+            searchField: this.searchField ?? undefined
+        };
+
+        const request = isDeleted
+            ? this._appService.businessGroupService.getDeletedList(query)
+            : this._appService.businessGroupService.getAdminList(query);
+
+        request.subscribe({
             next: (response) => {
                 this.isLoading = false;
                 this.groups = response?.data ?? [];
@@ -203,13 +250,34 @@ export class AdminGroupListComponent implements OnInit {
         this._appService.confirmDelete(this._appService.trans('ADMIN.GROUPS.CONFIRM_DELETE_MESSAGE')).then((confirmed) => {
             if (!confirmed) return;
 
+            this.isDeleting = true;
             this._appService.businessGroupService.remove(group.id).subscribe({
                 next: () => {
+                    this.isDeleting = false;
                     this._appService.showSuccess(this._appService.trans('ADMIN.GROUPS.DELETE_SUCCESS'));
                     this.load();
                 },
-                error: (error: unknown) => this._appService.showError(this._appService.extractErrorMessage(error))
+                error: (error: unknown) => {
+                    this.isDeleting = false;
+                    this._appService.showError(this._appService.extractErrorMessage(error));
+                }
             });
+        });
+    }
+
+    /** Khôi phục nhóm đã xoá mềm (tab "Đã xóa"). */
+    restore(group: BusinessGroup): void {
+        this.isRestoring = true;
+        this._appService.businessGroupService.restore(group.id).subscribe({
+            next: () => {
+                this.isRestoring = false;
+                this._appService.showSuccess(this._appService.trans('ADMIN.GROUPS.RESTORE_SUCCESS'));
+                this.load();
+            },
+            error: (error: unknown) => {
+                this.isRestoring = false;
+                this._appService.showError(this._appService.extractErrorMessage(error));
+            }
         });
     }
 
