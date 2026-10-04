@@ -38,6 +38,8 @@ export const adminRoutes: Routes = [
             ] },
               loadComponent: () => import('@pages/admin/settings/admin-settings.component').then(m => m.AdminSettingsComponent) },
             // Duyệt yêu cầu rút hoa hồng sớm và các lần chi trả theo kỳ
+            { path: 'revenue', canActivate: [PermissionGuard], data: { permission: Permission.ViewTransactionRevenue },
+                loadComponent: () => import('@pages/admin/revenue/revenue-list.component').then(m => m.AdminRevenueListComponent) },
             { path: 'payouts', canActivate: [PermissionGuard], data: { permission: Permission.ViewPayouts },
               loadComponent: () => import('@pages/admin/payouts/payout-list.component').then(m => m.AdminPayoutListComponent) },
             // Xác thực tài khoản ngân hàng nhận giải ngân của thành viên

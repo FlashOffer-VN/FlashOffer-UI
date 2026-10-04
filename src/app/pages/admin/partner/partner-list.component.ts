@@ -22,7 +22,6 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
     selector: 'app-admin-partner-list',
     standalone: true,
     imports: [
-        CodeNamePipe,
         CommonModule,
         RouterModule,
         FormsModule,
@@ -34,7 +33,8 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
         BadgeComponent,
         StatusTabsComponent,
         NgxFilterDaterangeComponent,
-        AppDatePipe
+        AppDatePipe,
+        CodeNamePipe
     ],
     templateUrl: './partner-list.component.html',
     styleUrls: ['./partner-list.component.css']

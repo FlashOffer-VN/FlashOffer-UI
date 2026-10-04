@@ -5,6 +5,9 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
 import { PurchaseRequest, PurchaseRequestStatus } from '@core/models/purchase-request.model';
+import { Permission } from '@core/models/permission.model';
+import { RevenueTransactionType } from '@core/models/revenue.model';
+import { RevenueEntryComponent } from '@pages/admin/revenue/revenue-entry.component';
 
 // Shared Components
 import { ButtonComponent } from '@shared/components/button/button.component';
@@ -20,7 +23,6 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
     selector: 'app-admin-purchase-request-detail',
     standalone: true,
     imports: [
-        CodeNamePipe,
         CommonModule,
         RouterModule,
         TranslateModule,
@@ -30,7 +32,9 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
         ModalComponent,
         AppDatePipe,
         AppPricePipe,
-        ShortIdPipe
+        ShortIdPipe,
+        RevenueEntryComponent,
+        CodeNamePipe
     ],
     templateUrl: './purchase-request-detail.component.html',
     styleUrls: ['./purchase-request-detail.component.css']
@@ -38,6 +42,10 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 export class AdminPurchaseRequestDetailComponent implements OnInit {
     request: PurchaseRequest | null = null;
     isLoading = true;
+
+    /** Chỉ tài khoản có quyền khai doanh thu mới thấy khối khai. */
+    canManageRevenue = false;
+    revenueType = RevenueTransactionType.PurchaseRequest;
     isActionLoading = false;
 
     // Modal
@@ -51,6 +59,9 @@ export class AdminPurchaseRequestDetailComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+
+        this.canManageRevenue = this._appService.permissionService.has(Permission.ManageTransactionRevenue);
+
         this.loadData();
     }
 

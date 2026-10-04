@@ -27,14 +27,21 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
     selector: 'app-admin-group-buying-list',
     standalone: true,
     imports: [
-        CodeNamePipe,
-        CommonModule, RouterModule, FormsModule, TranslateModule,
-        ButtonComponent, InputComponent, LoadingComponent, PaginationComponent,
-        BadgeComponent, StatusTabsComponent,
+        CommonModule,
+        RouterModule,
+        FormsModule,
+        TranslateModule,
+        ButtonComponent,
+        InputComponent,
+        LoadingComponent,
+        PaginationComponent,
+        BadgeComponent,
+        StatusTabsComponent,
         ShareToGroupComponent,
         AppDatePipe,
         AppPricePipe,
-        ShortIdPipe
+        ShortIdPipe,
+        CodeNamePipe
     ],
     templateUrl: './group-buying-list.component.html',
     styleUrls: ['./group-buying-list.component.css']

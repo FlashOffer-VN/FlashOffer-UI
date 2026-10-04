@@ -139,6 +139,10 @@ export enum Permission {
     VerifyBankAccounts = 'P110',
     /** P111 */
     UpdateSystemSettings = 'P111',
+    /** P112 */
+    ManageTransactionRevenue = 'P112',
+    /** P113 */
+    ViewTransactionRevenue = 'P113',
 }
 
 /** Nhóm quyền (bảng PermissionGroups): mã, tên hiển thị và thứ tự. */

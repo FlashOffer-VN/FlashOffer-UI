@@ -1,0 +1,85 @@
+<!-- Khối khai doanh thu của một giao dịch -->
+<div class="mt-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+    <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+        <h3 class="text-base font-semibold text-gray-800">{{ 'ADMIN.REVENUE.ENTRY_TITLE' | translate }}</h3>
+
+        <div class="flex flex-wrap items-center gap-3">
+            <span class="rounded-full px-3 py-1 text-xs font-semibold"
+                [ngClass]="isLocked ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'">
+                {{ (isLocked ? 'ADMIN.REVENUE.STATUS_CONFIRMED' : 'ADMIN.REVENUE.STATUS_DRAFT') | translate }}
+            </span>
+            <span *ngIf="isLocked && revenue?.confirmedBy" class="text-xs text-gray-500">
+                {{ 'ADMIN.REVENUE.CONFIRMED_BY' | translate }}: {{ revenue?.confirmedBy }}
+                <span *ngIf="revenue?.confirmedAt">· {{ revenue?.confirmedAt | appDate }}</span>
+            </span>
+        </div>
+    </div>
+
+    <app-loading *ngIf="isLoading"></app-loading>
+
+    <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="save(false)" class="space-y-5">
+        <div class="grid gap-4 sm:grid-cols-2">
+            <app-input formControlName="grossRevenue" [money]="true"
+                [label]="'ADMIN.REVENUE.GROSS_REVENUE' | translate"
+                [placeholder]="'ADMIN.REVENUE.GROSS_REVENUE_PLACEHOLDER' | translate"
+                [isDisabled]="isLocked" [isInvalid]="isInvalid('grossRevenue')"></app-input>
+
+            <app-input formControlName="taxPercent" type="number"
+                [label]="'ADMIN.REVENUE.TAX_PERCENT' | translate"
+                [isDisabled]="isLocked" [isInvalid]="isInvalid('taxPercent')"></app-input>
+
+            <app-input formControlName="referrerRatePercent" type="number"
+                [label]="'ADMIN.REVENUE.COMMISSION_REFERRER' | translate"
+                [isDisabled]="isLocked" [isInvalid]="isInvalid('referrerRatePercent')"></app-input>
+
+            <app-input formControlName="partnerRatePercent" type="number"
+                [label]="'ADMIN.REVENUE.COMMISSION_PARTNER' | translate"
+                [isDisabled]="isLocked" [isInvalid]="isInvalid('partnerRatePercent')"></app-input>
+
+            <app-input formControlName="extraCost" [money]="true"
+                [label]="'ADMIN.REVENUE.EXTRA_COST' | translate" [isDisabled]="isLocked"></app-input>
+
+            <app-input formControlName="extraCostNote"
+                [label]="'ADMIN.REVENUE.EXTRA_COST_NOTE' | translate" [isDisabled]="isLocked"></app-input>
+        </div>
+
+        <!-- Số doanh thu nhập vào đã gồm thuế hay chưa; chọn xong số bên dưới tách lại ngay. -->
+        <div>
+            <span class="mb-2 block text-sm font-medium text-gray-700">{{ 'ADMIN.REVENUE.TAX_INCLUDED_QUESTION' | translate }}</span>
+            <app-status-tabs [items]="taxIncludedTabs" [active]="taxIncludedKey"
+                (change)="onTaxIncludedChange($event)"></app-status-tabs>
+        </div>
+
+        <!-- Bản xem trước: máy chủ tính lại đúng công thức này khi lưu. -->
+        <div class="grid gap-3 rounded-xl bg-gray-50 p-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div>
+                <div class="text-xs text-gray-500">{{ 'ADMIN.REVENUE.TAX_AMOUNT' | translate }}</div>
+                <div class="text-sm font-semibold text-gray-800">{{ preview.taxAmount | appPrice }}</div>
+            </div>
+            <div>
+                <div class="text-xs text-gray-500">{{ 'ADMIN.REVENUE.NET_REVENUE' | translate }}</div>
+                <div class="text-sm font-semibold text-gray-800">{{ preview.netRevenue | appPrice }}</div>
+            </div>
+            <div>
+                <div class="text-xs text-gray-500">{{ 'ADMIN.REVENUE.TOTAL_COMMISSION' | translate }}</div>
+                <div class="text-sm font-semibold text-gray-800">{{ preview.totalCommission | appPrice }}</div>
+            </div>
+            <div>
+                <div class="text-xs text-gray-500">{{ 'ADMIN.REVENUE.ACTUAL_REVENUE' | translate }}</div>
+                <div class="text-sm font-semibold text-indigo-700">{{ preview.actualRevenue | appPrice }}</div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-end gap-3">
+            <span *ngIf="isLocked" class="mr-auto text-xs text-gray-500">{{ 'ADMIN.REVENUE.LOCKED_HINT' | translate }}</span>
+
+            <app-button *ngIf="!isLocked" variant="secondary" type="submit" [loading]="isSaving">
+                {{ 'ADMIN.REVENUE.SAVE_DRAFT' | translate }}
+            </app-button>
+            <app-button *ngIf="!isLocked" variant="primary" type="button" [loading]="isSaving"
+                (onClick)="save(true)">
+                {{ 'ADMIN.REVENUE.CONFIRM' | translate }}
+            </app-button>
+        </div>
+    </form>
+</div>

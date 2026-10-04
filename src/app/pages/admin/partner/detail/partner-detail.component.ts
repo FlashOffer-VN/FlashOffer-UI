@@ -37,7 +37,6 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
     selector: 'app-admin-partner-detail',
     standalone: true,
     imports: [
-        CodeNamePipe,
         CommonModule,
         RouterModule,
         TranslateModule,
@@ -49,7 +48,8 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
         ProductListComponent,
         PartnerEditFormComponent,
         PartnerProductFormComponent,
-        AppDatePipe
+        AppDatePipe,
+        CodeNamePipe
     ],
     templateUrl: './partner-detail.component.html',
     styleUrls: ['./partner-detail.component.css']

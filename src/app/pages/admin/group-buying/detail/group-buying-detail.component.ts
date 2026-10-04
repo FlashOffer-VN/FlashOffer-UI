@@ -23,6 +23,9 @@ import { GroupPostType } from '@core/models/business-group.model';
 import { ShareToGroupComponent } from '@shared/components/share-to-group/share-to-group.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
+import { Permission } from '@core/models/permission.model';
+import { RevenueTransactionType } from '@core/models/revenue.model';
+import { RevenueEntryComponent } from '@pages/admin/revenue/revenue-entry.component';
 import { MoneyInputDirective } from '@shared/directives/money-input.directive';
 import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 
@@ -30,18 +33,28 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
     selector: 'app-admin-group-buying-detail',
     standalone: true,
     imports: [
-        CodeNamePipe,
-        CommonModule, FormsModule, RouterModule, TranslateModule,
-        ButtonComponent, LoadingComponent, BadgeComponent, ModalComponent,
+        CommonModule,
+        FormsModule,
+        RouterModule,
+        TranslateModule,
+        ButtonComponent,
+        LoadingComponent,
+        BadgeComponent,
+        ModalComponent,
         ShareToGroupComponent,
         AppDatePipe,
         AppPricePipe,
-        MoneyInputDirective
+        MoneyInputDirective,
+        RevenueEntryComponent,
+        CodeNamePipe
     ],
     templateUrl: './group-buying-detail.component.html',
     styleUrls: ['./group-buying-detail.component.css']
 })
 export class AdminGroupBuyingDetailComponent implements OnInit {
+    /** Chỉ tài khoản có quyền khai doanh thu mới thấy khối khai. */
+    canManageRevenue = false;
+    revenueType = RevenueTransactionType.GroupBuyingRequest;
     /** Loại bài khi gửi thông tin vào nhóm ngành */
     readonly groupPostType = GroupPostType;
 
@@ -70,6 +83,9 @@ export class AdminGroupBuyingDetailComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+
+        this.canManageRevenue = this._appService.permissionService.has(Permission.ManageTransactionRevenue);
+
         this.loadData();
     }
 

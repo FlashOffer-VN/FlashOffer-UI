@@ -28,10 +28,20 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
     selector: 'app-admin-group-detail',
     standalone: true,
     imports: [
-        CodeNamePipe,CommonModule, FormsModule, ReactiveFormsModule, RouterLink, TranslateModule, ButtonComponent,
-        InputComponent, LoadingComponent, ModalComponent, StatusTabsComponent,
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterLink,
+        TranslateModule,
+        ButtonComponent,
+        InputComponent,
+        LoadingComponent,
+        ModalComponent,
+        StatusTabsComponent,
         QuillModule,
-        SanitizeHtmlPipe,],
+        SanitizeHtmlPipe,
+        CodeNamePipe
+    ],
     templateUrl: './group-detail.component.html',
 })
 export class AdminGroupDetailComponent implements OnInit {
