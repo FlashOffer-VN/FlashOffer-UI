@@ -12,6 +12,7 @@ import {
 } from '@core/models/partner.model';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
+import { InputComponent } from '@shared/components/input/input.component';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 
 /**
@@ -22,7 +23,7 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
     selector: 'app-suppliers',
     standalone: true,
     imports: [CommonModule, FormsModule, RouterLink, TranslateModule, LoadingComponent, PaginationComponent,
-        NgSelectWrapperComponent],
+        InputComponent, NgSelectWrapperComponent],
     templateUrl: './suppliers.component.html',
     styleUrls: ['./suppliers.component.css']
 })

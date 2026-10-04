@@ -20,20 +20,17 @@
     }
 
     <div class="bg-white rounded-xl shadow-sm border border-gray-100">
-        <div class="p-4 border-b border-gray-100 flex flex-wrap items-center gap-3">
-            <div class="max-w-md flex-1 min-w-[16rem]">
+        <div class="p-4 border-b border-gray-100 flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
+            <div class="w-full sm:max-w-md sm:flex-1 sm:min-w-[16rem]">
                 <app-input [(ngModel)]="searchText" icon="fa-solid fa-magnifying-glass"
                     [placeholder]="'PERMISSION.SEARCH_PLACEHOLDER' | translate"></app-input>
             </div>
-            <label class="flex items-center gap-2 text-sm text-gray-600">
-                <span>{{ 'PERMISSION.VIEW_ROLE' | translate }}</span>
-                <select class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700"
-                    [ngModel]="viewRole" (ngModelChange)="onViewRoleChange($event)">
-                    @for (column of roleColumns; track column.role) {
-                    <option [ngValue]="column.role">{{ roleKey(column.role) | translate }}</option>
-                    }
-                </select>
-            </label>
+            <div class="w-full sm:w-56">
+                <app-ng-select-wrapper [items]="roleOptions" [(ngModel)]="viewRole"
+                    [label]="'PERMISSION.VIEW_ROLE' | translate"
+                    (valueChange)="onViewRoleChange($event)" appendTo="body">
+                </app-ng-select-wrapper>
+            </div>
         </div>
 
         @if (isLoading) {

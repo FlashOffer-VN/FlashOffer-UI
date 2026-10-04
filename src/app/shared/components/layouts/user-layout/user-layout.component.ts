@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { UserSidebarComponent } from './user-sidebar/user-sidebar.component';
 import { UserHeaderComponent } from './user-header/user-header.component';
 import { AppService } from '../../../../core/services/app.service';
+import { isBrowser } from '../../../../core/utils/platform';
 
 @Component({
     selector: 'app-user-layout',
@@ -28,6 +29,11 @@ export class UserLayoutComponent implements OnInit, OnDestroy {
     constructor(private _appService: AppService) { }
 
     ngOnInit(): void {
+        // Màn hình nhỏ: mặc định thu gọn sidebar để nội dung không bị chèn ép.
+        if (isBrowser() && window.matchMedia('(max-width: 1023px)').matches) {
+            this.isSidebarOpen = false;
+        }
+
         this.updateLogo();
 
         this.langSubscription = this._appService.onLanguageChange().subscribe(() => {

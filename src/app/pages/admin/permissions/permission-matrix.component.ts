@@ -10,6 +10,7 @@ import { Permission, PermissionGroupItem, PermissionMatrix, PermissionTreeNode, 
 
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 
 /** Cột vai trò được cấu hình quyền trên màn hình. */
@@ -36,6 +37,7 @@ type NodeState = 'all' | 'some' | 'none';
         TranslateModule,
         ButtonComponent,
         InputComponent,
+        NgSelectWrapperComponent,
         LoadingComponent
     ],
     templateUrl: './permission-matrix.component.html',
@@ -83,6 +85,10 @@ export class AdminPermissionMatrixComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.roleOptions = this.roleColumns.map(column => ({
+            value: column.role,
+            label: this._appService.trans(this.roleKey(column.role))
+        }));
         this.loadMatrix();
     }
 
@@ -333,6 +339,13 @@ export class AdminPermissionMatrixComponent implements OnInit {
             }
         });
     }
+
+    /**
+     * Lựa chọn vai trò cho ô chọn "xem theo vai trò" — nhãn dịch sẵn vì ng-select không tự dịch khoá i18n.
+     * Dựng MỘT LẦN (không dùng getter): ng-select coi mảng mới là dữ liệu đổi nên dựng lại panel mỗi lượt
+     * kiểm tra thay đổi → bấm vào lựa chọn không ăn.
+     */
+    roleOptions: { value: UserRole; label: string }[] = [];
 
     /** Nhãn vai trò. */
     roleKey(role: UserRole): string {

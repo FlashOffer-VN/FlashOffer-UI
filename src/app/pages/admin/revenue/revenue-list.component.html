@@ -122,9 +122,11 @@
         <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 px-5 py-4">
             <h3 class="text-sm font-semibold text-gray-800">{{ 'ADMIN.REVENUE.RECORDS_TITLE' | translate }}</h3>
 
-            <div class="flex flex-wrap items-end gap-3">
-                <app-input [(ngModel)]="keyword" [placeholder]="'ADMIN.REVENUE.SEARCH_PLACEHOLDER' | translate"
-                    (keyup.enter)="onSearch()"></app-input>
+            <div class="flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
+                <div class="w-full sm:w-64">
+                    <app-input [(ngModel)]="keyword" [placeholder]="'ADMIN.REVENUE.SEARCH_PLACEHOLDER' | translate"
+                        (keyup.enter)="onSearch()"></app-input>
+                </div>
                 <app-button variant="secondary" (onClick)="onSearch()">{{ 'COMMON.BUTTON.SEARCH' | translate }}</app-button>
             </div>
         </div>

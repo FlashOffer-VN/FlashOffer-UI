@@ -100,7 +100,8 @@
                     {{ 'ADMIN.GROUPS.NO_MEMBERS' | translate }}
                 </div>
 
-                <table *ngIf="!membersLoading && members.length > 0" class="mt-4 min-w-full divide-y divide-slate-100 text-sm">
+                <div *ngIf="!membersLoading && members.length > 0" class="mt-4 overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-100 text-sm">
                     <thead class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
                         <tr>
                             <th class="px-4 py-3">{{ 'ADMIN.GROUPS.MEMBER_NAME' | translate }}</th>
@@ -158,6 +159,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
             </div>
 
             <!-- Bài trong nhóm -->

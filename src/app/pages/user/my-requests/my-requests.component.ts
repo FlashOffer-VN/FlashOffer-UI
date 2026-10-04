@@ -62,8 +62,8 @@ interface MyRequestStatusView {
                     </button>
                 </div>
 
-                <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
-                    <div class="flex-1">
+                <div class="flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
+                    <div class="w-full sm:flex-1 sm:min-w-0">
                         <app-input [(ngModel)]="searchText" [label]="'USER.MY_REQUESTS.SEARCH_LABEL' | translate"
                             [placeholder]="'USER.MY_REQUESTS.SEARCH_PLACEHOLDER' | translate"
                             (keyup.enter)="onSearch()"></app-input>

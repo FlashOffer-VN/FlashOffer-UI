@@ -1,7 +1,7 @@
 <div class="space-y-6">
     <!-- Bộ lọc -->
     <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
-        <div class="flex flex-col gap-3 lg:flex-row lg:items-center">
+        <div class="flex flex-col gap-3 lg:flex-row lg:items-center" style="--control-h: 2.5rem">
             <!-- Search field selector: chọn cột tìm kiếm (bỏ trống = tất cả). Đổi lựa chọn KHÔNG tự tải lại — chỉ tìm khi bấm Enter hoặc nút Tìm. -->
             <div class="flex-shrink-0 w-full lg:w-56">
                 <app-ng-select-wrapper [items]="searchFieldOptions" [(ngModel)]="searchField"
@@ -10,7 +10,7 @@
                 </app-ng-select-wrapper>
             </div>
 
-            <div class="flex-1">
+            <div class="w-full lg:flex-1 lg:min-w-0">
                 <app-input [(ngModel)]="searchText" name="searchText" icon="fas fa-search"
                     [placeholder]="'ADMIN.GROUPS.SEARCH_PLACEHOLDER' | translate" (keyup.enter)="onSearch()">
                 </app-input>
@@ -51,7 +51,8 @@
             <p class="font-medium">{{ 'ADMIN.GROUPS.EMPTY' | translate }}</p>
         </div>
 
-        <table *ngIf="!isLoading && groups.length > 0" class="min-w-full divide-y divide-slate-100 text-sm">
+        <div *ngIf="!isLoading && groups.length > 0" class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-slate-100 text-sm">
             <thead class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
                 <tr>
                     <th class="px-4 py-3">{{ 'ADMIN.GROUPS.NAME' | translate }}</th>
@@ -125,7 +126,8 @@
                     </td>
                 </tr>
             </tbody>
-        </table>
+            </table>
+        </div>
 
         <div *ngIf="!isLoading && totalCount > 0" class="border-t border-slate-100 px-4 py-3">
             <app-pagination [pageNumber]="page" [pageSize]="pageSize" [totalCount]="totalCount"
