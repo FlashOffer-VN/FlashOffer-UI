@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { BusinessGroup, BusinessGroupType, CreateBusinessGroupRequest, GroupApprovalStatus } from '@core/models/business-group.model';
+import { Permission } from '@core/models/permission.model';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
@@ -12,6 +13,7 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { StatusTabItem, StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 
 /** Quản lý nhóm theo lĩnh vực kinh doanh (admin) */
 @Component({
@@ -19,10 +21,13 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
     standalone: true,
     imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule, ButtonComponent,
         InputComponent, LoadingComponent, ModalComponent, PaginationComponent, StatusTabsComponent,
-        NgSelectWrapperComponent],
+        NgSelectWrapperComponent, HasPermissionDirective],
     templateUrl: './group-list.component.html',
 })
 export class AdminGroupListComponent implements OnInit {
+    /** Mã quyền dùng trong template (`*appHasPermission`). */
+    readonly Permission = Permission;
+
     groups: BusinessGroup[] = [];
     isLoading = false;
 

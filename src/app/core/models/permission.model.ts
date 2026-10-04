@@ -176,13 +176,41 @@ export enum Permission {
     /** P131 */
     DeleteRevenueConfig = 'P131',
 
-    // ===== Yêu cầu tìm nhà cung cấp (mua hàng): cặp quyền xoá mềm / khôi phục trong nhịp chuyển tiếp =====
-    /** P133 — xem & khôi phục yêu cầu tìm nhà cung cấp đã xoá */
-    ViewRestorePurchaseRequest = 'P133',
-    /** P134 — xoá mềm yêu cầu tìm nhà cung cấp */
-    DeletePurchaseRequest = 'P134',
-    /** P135 — khôi phục yêu cầu tìm nhà cung cấp */
-    RestorePurchaseRequest = 'P135',
+    // ===== Cặp quyền xem danh sách đã xoá / khôi phục (P132–P144) — khớp enum PermissionCode của API =====
+    /** P132 — xem đối tác đã xoá */
+    ViewRestorePartner = 'P132',
+    /** P133 — xem offer đã xoá */
+    ViewRestoreOfferRequest = 'P133',
+    /** P134 — xem bài đăng đã xoá */
+    ViewRestoreSocialPost = 'P134',
+    /** P135 — xem yêu cầu mua chung đã xoá */
+    ViewRestoreGroupBuyingRequest = 'P135',
+    /** P136 — khôi phục yêu cầu mua chung */
+    RestoreGroupBuyingRequest = 'P136',
+    /** P137 — xem nhóm đã xoá */
+    ViewRestoreGroup = 'P137',
+    /** P138 — khôi phục nhóm */
+    RestoreGroup = 'P138',
+    /** P139 — xem cấu hình hoa hồng đã xoá */
+    ViewRestoreCommissionConfig = 'P139',
+    /** P140 — khôi phục cấu hình hoa hồng */
+    RestoreCommissionConfig = 'P140',
+    /** P141 — xem hạng thành viên đã xoá */
+    ViewRestoreMembershipTier = 'P141',
+    /** P142 — khôi phục hạng thành viên */
+    RestoreMembershipTier = 'P142',
+    /** P143 — xem cấu hình loại thu/chi đã xoá */
+    ViewRestoreRevenueConfig = 'P143',
+    /** P144 — khôi phục cấu hình loại thu/chi */
+    RestoreRevenueConfig = 'P144',
+
+    // ===== Yêu cầu mua hàng (yêu cầu tìm nhà cung cấp): đủ bộ xoá mềm / xem đã xoá / khôi phục =====
+    /** P145 — xoá mềm yêu cầu mua hàng */
+    DeletePurchaseRequest = 'P145',
+    /** P146 — xem yêu cầu mua hàng đã xoá */
+    ViewRestorePurchaseRequest = 'P146',
+    /** P147 — khôi phục yêu cầu mua hàng */
+    RestorePurchaseRequest = 'P147',
 }
 
 /** Nhóm quyền (bảng PermissionGroups): mã, tên hiển thị và thứ tự. */

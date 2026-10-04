@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { Partner, PartnerStatus, getPartnerStatusLabel, getBusinessTypeLabel, getCompanySizeLabel } from '@core/models/partner.model';
 import { PagedResponse } from '@core/models/paged-response.model';
+import { Permission } from '@core/models/permission.model';
 
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
@@ -17,6 +18,7 @@ import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.
 import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
+import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 
 @Component({
     selector: 'app-admin-partner-list',
@@ -34,12 +36,16 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
         StatusTabsComponent,
         NgxFilterDaterangeComponent,
         AppDatePipe,
-        CodeNamePipe
+        CodeNamePipe,
+        HasPermissionDirective
     ],
     templateUrl: './partner-list.component.html',
     styleUrls: ['./partner-list.component.css']
 })
 export class AdminPartnerListComponent implements OnInit {
+    /** Mã quyền dùng trong template (`*appHasPermission`). */
+    readonly Permission = Permission;
+
     // Data
     partners: Partner[] = [];
     isLoading = true;
@@ -86,9 +92,14 @@ export class AdminPartnerListComponent implements OnInit {
             { key: 'pending', label: this._appService.trans('COMMON.STATUS.PENDING') },
             { key: 'approved', label: this._appService.trans('COMMON.STATUS.APPROVED') },
             { key: 'rejected', label: this._appService.trans('COMMON.STATUS.REJECTED') },
-            { key: 'active', label: this._appService.trans('COMMON.STATUS.ACTIVE') },
-            { key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') }
+            { key: 'active', label: this._appService.trans('COMMON.STATUS.ACTIVE') }
         ];
+
+        // Tab "Đã xóa" hiện khi có quyền xem đối tác đã xoá (P132) hoặc khôi phục (P116) hoặc xoá (P045)
+        // — đúng cặp mã [HasPermission(ViewRestorePartner, RestorePartner, DeletePartner, ViewPartners)] của API.
+        if (this._appService.permissionService.has([Permission.ViewRestorePartner, Permission.RestorePartner, Permission.DeletePartner, Permission.ViewPartners])) {
+            this.tabs.push({ key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') });
+        }
     }
 
     onTabChange(tab: string): void {

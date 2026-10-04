@@ -96,8 +96,10 @@ export class AdminGroupBuyingListComponent implements OnInit {
             { key: 'cancelled', label: this._appService.trans('GROUP_BUYING.STATUS.CANCELLED') }
         ];
 
-        // Tab "Đã xóa" chỉ hiện khi có quyền xoá/khôi phục mua chung (mã mới P120 + mã cũ P067 chuyển tiếp).
-        if (this._appService.permissionService.has([Permission.DeleteGroupBuyingRequest, Permission.UpdateGroupBuyingRequest])) {
+        // Tab "Đã xóa" hiện khi có quyền xem yêu cầu mua chung đã xoá (P135), khôi phục (P136)
+        // hoặc xem danh sách (P066) — đúng cặp mã [HasPermission(ViewRestoreGroupBuyingRequest,
+        // RestoreGroupBuyingRequest, ViewGroupBuyingRequests)] của API cho endpoint danh sách đã xoá.
+        if (this._appService.permissionService.has([Permission.ViewRestoreGroupBuyingRequest, Permission.RestoreGroupBuyingRequest, Permission.ViewGroupBuyingRequests])) {
             this.tabs.push({ key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') });
         }
     }

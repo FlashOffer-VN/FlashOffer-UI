@@ -2342,6 +2342,7 @@
     },
     "PERMISSION": {
         "TAB_ROLE": "Theo vai trò",
+        "VIEW_ROLE": "Xem theo vai trò",
         "GROUP": {
             "ADMIN": "Hệ thống quản trị",
             "MEMBER": "Khu vực thành viên",

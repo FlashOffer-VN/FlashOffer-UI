@@ -7,6 +7,7 @@ import { AppService } from '@core/services/app.service';
 import { CommissionService } from '@core/services/commission.service';
 import { CommissionBeneficiary, CommissionConfig, CommissionTier } from '@core/models/commission.model';
 import { CommissionType, getCommissionTypeLabel } from '@core/models/partner.model';
+import { Permission } from '@core/models/permission.model';
 
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
@@ -17,6 +18,7 @@ import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { BadgeComponent } from '@shared/components/badge/badge.component';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 
 /**
  * Cấu hình mức hoa hồng cho người giới thiệu và đối tác: một bản dùng chung cho mọi tài khoản
@@ -37,7 +39,8 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
         ButtonComponent,
         InputComponent,
         BadgeComponent,
-        NgSelectWrapperComponent
+        NgSelectWrapperComponent,
+        HasPermissionDirective
     ],
     template: `
         <div class="grid gap-4 lg:grid-cols-[1fr_380px]">
@@ -176,10 +179,12 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
                                 </div>
                                 <div class="flex gap-1">
                                     <app-button variant="ghost" size="sm" [title]="'COMMON.BUTTON.EDIT' | translate"
+                                        *appHasPermission="Permission.UpdateCommissionConfigs"
                                         (click)="edit(config)">
                                         <i class="fa-solid fa-pen"></i>
                                     </app-button>
                                     <app-button variant="ghost" size="sm" [title]="'COMMON.BUTTON.DELETE' | translate"
+                                        *appHasPermission="[Permission.DeleteCommissionConfig, Permission.UpdateCommissionConfigs]"
                                         (click)="remove(config)">
                                         <i class="fa-solid fa-trash"></i>
                                     </app-button>
@@ -210,6 +215,9 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
     `
 })
 export class AdminCommissionConfigComponent implements OnInit {
+    /** Mã quyền dùng trong template (`*appHasPermission`). */
+    readonly Permission = Permission;
+
     /** Phạm vi đang cấu hình: chung cho mọi tài khoản hay riêng cho tài khoản được chọn. */
     scope: 'global' | 'users' = 'global';
 

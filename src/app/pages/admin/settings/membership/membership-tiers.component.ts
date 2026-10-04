@@ -190,14 +190,18 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
                                         </td>
                                         <td class="px-4 py-3 text-gray-600 max-w-xs">{{ tier.description || '—' }}</td>
                                         <td class="px-4 py-3">
-                                            @if (canManage) {
+                                            @if (canManage || canDelete) {
                                                 <div class="flex flex-wrap items-center justify-end gap-2">
+                                                    @if (canManage) {
                                                     <app-button size="sm" variant="outline" (click)="startEdit(tier)">
                                                         <i class="fa-solid fa-pen mr-1"></i>{{ 'ADMIN.MEMBERSHIP.ACTION_EDIT' | translate }}
                                                     </app-button>
+                                                    }
+                                                    @if (canDelete) {
                                                     <app-button size="sm" variant="danger" (click)="remove(tier)">
                                                         <i class="fa-solid fa-trash mr-1"></i>{{ 'ADMIN.MEMBERSHIP.ACTION_DELETE' | translate }}
                                                     </app-button>
+                                                    }
                                                 </div>
                                             } @else {
                                                 <span class="text-gray-400">—</span>
@@ -245,9 +249,14 @@ export class AdminMembershipTiersComponent implements OnInit {
         this.load();
     }
 
-    /** Quyền quản lý hạng thành viên (thêm, sửa, xoá). */
+    /** Quyền thêm / sửa hạng thành viên — [HasPermission(UpdateMembershipTiers, ManageMembershipTiers)] (P126 | P109). */
     get canManage(): boolean {
-        return this._appService.permissionService.has(Permission.ManageMembershipTiers);
+        return this._appService.permissionService.has([Permission.UpdateMembershipTiers, Permission.ManageMembershipTiers]);
+    }
+
+    /** Quyền xoá hạng thành viên — [HasPermission(DeleteMembershipTiers, ManageMembershipTiers)] (P127 | P109). */
+    get canDelete(): boolean {
+        return this._appService.permissionService.has([Permission.DeleteMembershipTiers, Permission.ManageMembershipTiers]);
     }
 
     load(): void {

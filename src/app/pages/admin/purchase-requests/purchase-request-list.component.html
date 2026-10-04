@@ -129,7 +129,7 @@
 
                                     <ng-container *ngIf="activeTab === 'deleted'">
                                         <app-button variant="primary" size="sm" [loading]="isRestoring"
-                                            *appHasPermission="[Permission.ViewRestorePurchaseRequest, Permission.RestorePurchaseRequest, Permission.ViewPurchaseRequests]"
+                                            *appHasPermission="[Permission.ViewRestorePurchaseRequest, Permission.RestorePurchaseRequest]"
                                             (click)="$event.stopPropagation(); onRestore(request)"
                                             [title]="'COMMON.BUTTON.RESTORE' | translate">
                                             <i class="fa-solid fa-rotate-left"></i>
@@ -137,7 +137,7 @@
                                     </ng-container>
                                     <ng-container *ngIf="activeTab !== 'deleted'">
                                         <app-button variant="danger" size="sm" [loading]="isDeleting"
-                                            *appHasPermission="[Permission.DeletePurchaseRequest, Permission.ViewPurchaseRequests]"
+                                            *appHasPermission="Permission.DeletePurchaseRequest"
                                             (click)="$event.stopPropagation(); onDelete(request)"
                                             [title]="'COMMON.BUTTON.DELETE' | translate">
                                             <i class="fa-solid fa-trash"></i>

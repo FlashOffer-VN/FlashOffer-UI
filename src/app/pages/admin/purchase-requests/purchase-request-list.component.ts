@@ -100,13 +100,11 @@ export class AdminPurchaseRequestListComponent implements OnInit {
             { key: 'completed', label: this._appService.trans('COMMON.STATUS.COMPLETED') }
         ];
 
-        // Tab "Đã xóa" chỉ hiện khi có quyền xem & khôi phục yêu cầu đã xoá (P133) hoặc quyền xoá (P134),
-        // kèm mã xem cũ trong nhịp chuyển tiếp.
+        // Tab "Đã xóa" chỉ hiện khi có quyền xem yêu cầu mua hàng đã xoá (P146) hoặc khôi phục (P147)
+        // — đúng cặp mã [HasPermission(ViewRestorePurchaseRequest, RestorePurchaseRequest)] của API.
         if (this._appService.permissionService.has([
             Permission.ViewRestorePurchaseRequest,
-            Permission.RestorePurchaseRequest,
-            Permission.DeletePurchaseRequest,
-            Permission.ViewPurchaseRequests
+            Permission.RestorePurchaseRequest
         ])) {
             this.tabs.push({ key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') });
         }

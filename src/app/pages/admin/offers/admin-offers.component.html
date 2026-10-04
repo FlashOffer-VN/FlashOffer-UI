@@ -128,7 +128,7 @@
                                     </app-button>
                                     <ng-container *ngIf="activeTab === 'deleted'">
                                         <app-button variant="primary" size="sm" [loading]="isRestoring"
-                                            *appHasPermission="[Permission.RestoreOfferRequest, Permission.DeleteOfferRequest]"
+                                            *appHasPermission="[Permission.ViewRestoreOfferRequest, Permission.RestoreOfferRequest, Permission.DeleteOfferRequest]"
                                             (click)="$event.stopPropagation(); onRestore(offer)"
                                             [title]="'COMMON.BUTTON.RESTORE' | translate" [attr.aria-label]="'COMMON.BUTTON.RESTORE' | translate">
                                             <i class="fa-solid fa-rotate-left"></i>

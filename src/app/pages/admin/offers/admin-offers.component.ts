@@ -90,8 +90,9 @@ export class AdminOffersComponent implements OnInit {
             { key: 'expired', label: this._appService.trans('COMMON.STATUS.EXPIRED') }
         ];
 
-        // Tab "Đã xóa" chỉ hiện khi có quyền khôi phục/xóa offer (mã mới P119 + mã cũ P065 trong nhịp chuyển tiếp).
-        if (this._appService.permissionService.has([Permission.RestoreOfferRequest, Permission.DeleteOfferRequest])) {
+        // Tab "Đã xóa" hiện khi có quyền xem offer đã xoá (P133), khôi phục (P119) hoặc xoá (P065)
+        // — đúng cặp mã [HasPermission(ViewRestoreOfferRequest, RestoreOfferRequest, DeleteOfferRequest)] của API.
+        if (this._appService.permissionService.has([Permission.ViewRestoreOfferRequest, Permission.RestoreOfferRequest, Permission.DeleteOfferRequest])) {
             this.tabs.push({ key: 'deleted', label: this._appService.trans('COMMON.STATUS.DELETED') });
         }
     }

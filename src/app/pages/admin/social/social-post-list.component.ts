@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { SocialPost } from '@core/models/social.model';
 import { PagedResponse } from '@core/models/paged-response.model';
+import { Permission } from '@core/models/permission.model';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
@@ -15,6 +16,7 @@ import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { BadgeComponent } from '@shared/components/badge/badge.component';
+import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 
 @Component({
     selector: 'app-admin-social-post-list',
@@ -32,12 +34,16 @@ import { BadgeComponent } from '@shared/components/badge/badge.component';
         NgxFilterDaterangeComponent,
         ModalComponent,
         BadgeComponent,
-        AppDatePipe
+        AppDatePipe,
+        HasPermissionDirective
     ],
     templateUrl: './social-post-list.component.html',
     styleUrls: ['./social-post-list.component.css']
 })
 export class AdminSocialPostListComponent implements OnInit {
+    /** Mã quyền dùng trong template (`*appHasPermission`). */
+    readonly Permission = Permission;
+
     posts: SocialPost[] = [];
     isLoading = true;
     isActionLoading = false;
@@ -69,9 +75,14 @@ export class AdminSocialPostListComponent implements OnInit {
         this.tabs = [
             { key: 'all', label: this.appService.trans('COMMON.ALL') },
             { key: 'pending', label: this.appService.trans('COMMON.STATUS.PENDING') },
-            { key: 'approved', label: this.appService.trans('COMMON.STATUS.APPROVED') },
-            { key: 'deleted', label: this.appService.trans('COMMON.STATUS.DELETED') }
+            { key: 'approved', label: this.appService.trans('COMMON.STATUS.APPROVED') }
         ];
+
+        // Tab "Đã xóa" hiện khi có quyền xem bài đăng đã xoá (P134), khôi phục (P084) hoặc xem danh sách (P080)
+        // — đúng cặp mã [HasPermission(ViewRestoreSocialPost, RestoreSocialPost, ViewSocialPosts)] của API.
+        if (this.appService.permissionService.has([Permission.ViewRestoreSocialPost, Permission.RestoreSocialPost, Permission.ViewSocialPosts])) {
+            this.tabs.push({ key: 'deleted', label: this.appService.trans('COMMON.STATUS.DELETED') });
+        }
     }
 
     onTabChange(tab: string): void {

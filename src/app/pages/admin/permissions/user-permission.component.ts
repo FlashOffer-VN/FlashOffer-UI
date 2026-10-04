@@ -6,7 +6,7 @@ import { Observable, forkJoin, of } from 'rxjs';
 
 import { AppService } from '@core/services/app.service';
 import { PermissionService, buildPermissionTree, collectActionCodes, isContainerNode } from '@core/services/permission.service';
-import { ApiResponse } from '@core/models/auth.model';
+import { ApiResponse, UserRole, toUserRole } from '@core/models/auth.model';
 import {
     PermissionGroupItem,
     PermissionMatrix,
@@ -161,6 +161,8 @@ export class AdminUserPermissionComponent implements OnInit {
     private _details = new Map<string, UserPermissionDetail>();
     /** Tên nhóm quyền theo mã nhóm, đọc từ bảng PermissionGroups. */
     private _groupNames = new Map<string, string>();
+    /** Ma trận quyền gần nhất — dùng làm fallback khi dựng cây. */
+    private _matrix?: PermissionMatrix;
 
     constructor(
         private readonly _appService: AppService,
@@ -223,6 +225,8 @@ export class AdminUserPermissionComponent implements OnInit {
             this.selected = [...this.selected, user];
         }
         this.loadDetails();
+        // Cây quyền tải theo vai trò đang xem — vai trò của tài khoản đang chọn.
+        this.loadTree();
     }
 
     //#region Cây quyền (Nhóm → Màn hình → hành động)
@@ -364,18 +368,30 @@ export class AdminUserPermissionComponent implements OnInit {
         this._permissionService.getMatrix().subscribe({
             next: response => {
                 const matrix: PermissionMatrix | undefined = response.data;
+                this._matrix = matrix;
                 this.applyGroupNames(matrix?.groups ?? []);
-                this._permissionService.getTree().subscribe({
-                    next: treeResponse => {
-                        const apiTree = treeResponse.data;
-                        this.tree = apiTree && apiTree.length ? this.normalizeTree(apiTree) : buildPermissionTree(matrix);
-                    },
-                    error: () => {
-                        this.tree = buildPermissionTree(matrix);
-                    }
-                });
+                this.loadTree();
             },
             error: () => this._appService.showError(this._appService.trans('PERMISSION.LOAD_FAILED'))
+        });
+    }
+
+    /** Vai trò đang xem: vai trò của tài khoản đang chọn (đầu tiên) — truyền vào GET /permissions/tree. */
+    private viewRole(): UserRole | undefined {
+        if (this.selected.length === 0) return undefined;
+        return toUserRole(this.selected[0].role);
+    }
+
+    /** Tải cây quyền theo vai trò đang xem; máy chủ chưa trả cây thì dựng từ ma trận quyền. */
+    private loadTree(): void {
+        this._permissionService.getTree(this.viewRole()).subscribe({
+            next: treeResponse => {
+                const apiTree = treeResponse.data;
+                this.tree = apiTree && apiTree.length ? this.normalizeTree(apiTree) : buildPermissionTree(this._matrix);
+            },
+            error: () => {
+                this.tree = buildPermissionTree(this._matrix);
+            }
         });
     }
 

@@ -106,6 +106,7 @@
                                 <i class="fas fa-pen"></i>
                             </app-button>
                             <app-button variant="danger" size="sm" (onClick)="remove(group)"
+                                *appHasPermission="[Permission.DeleteGroup, Permission.ManageGroups]"
                                 [title]="'COMMON.BUTTON.DELETE' | translate">
                                 <i class="fas fa-trash"></i>
                             </app-button>

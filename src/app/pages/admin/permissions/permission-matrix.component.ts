@@ -54,6 +54,12 @@ export class AdminPermissionMatrixComponent implements OnInit {
     /** Nhóm quyền đọc từ máy chủ (tên + thứ tự) để hiển thị tên nhóm. */
     private apiGroups: PermissionGroupItem[] = [];
 
+    /** Ma trận gần nhất — dùng làm fallback khi dựng cây và khi đổi vai trò đang xem. */
+    private _matrix?: PermissionMatrix;
+
+    /** Vai trò đang xem — cây quyền được tải theo vai trò này (GET /permissions/tree?role=...). */
+    viewRole: UserRole = UserRole.User;
+
     /** Nút đang mở/đóng; mặc định mở nhóm, đóng màn hình (droplist). */
     private expanded: Record<string, boolean> = {};
 
@@ -88,6 +94,7 @@ export class AdminPermissionMatrixComponent implements OnInit {
         this._appService.permissionService.getMatrix().subscribe({
             next: (response) => {
                 const matrix = response.data;
+                this._matrix = matrix;
                 this.apiGroups = matrix?.groups ?? [];
                 this.applyRoles(matrix?.roles ?? []);
                 this.loadTree(matrix);
@@ -104,7 +111,7 @@ export class AdminPermissionMatrixComponent implements OnInit {
      * máy chủ chưa trả cây thì dựng cây từ ma trận quyền để giao diện vẫn chạy.
      */
     private loadTree(matrix: PermissionMatrix | undefined): void {
-        this._appService.permissionService.getTree().subscribe({
+        this._appService.permissionService.getTree(this.viewRole).subscribe({
             next: (response) => {
                 const apiTree = response.data;
                 this.tree = apiTree && apiTree.length ? this.normalizeTree(apiTree) : buildPermissionTree(matrix);
@@ -115,6 +122,15 @@ export class AdminPermissionMatrixComponent implements OnInit {
                 this.isLoading = false;
             }
         });
+    }
+
+    /**
+     * Người dùng chọn vai trò đang xem ở ô chọn phía trên lưới → tải lại cây theo vai trò đó
+     * để `isGranted`/`isEffective` của các nút phản ánh đúng vai trò đang xem.
+     */
+    onViewRoleChange(role: UserRole): void {
+        this.viewRole = role;
+        this.loadTree(this._matrix);
     }
 
     /** Gắn nút cha cho từng nút để suy trạng thái tắt-lan, và đảm bảo mọi nút đều có mảng children. */

@@ -7,10 +7,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { RevenueExpenseTypeService } from '@core/services/revenue-expense-type.service';
 import { RevenueConfig, RevenueExpenseType, RevenueTransactionType } from '@core/models/revenue.model';
+import { Permission } from '@core/models/permission.model';
 
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
+import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 
 /**
  * Cấu hình doanh thu dùng chung cho mọi giao dịch: tỷ lệ thuế và cách hiểu số doanh thu nhập vào,
@@ -20,7 +22,7 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 @Component({
     selector: 'app-admin-revenue-settings',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, TranslateModule, ButtonComponent, InputComponent, LoadingComponent],
+    imports: [CommonModule, ReactiveFormsModule, TranslateModule, ButtonComponent, InputComponent, LoadingComponent, HasPermissionDirective],
     template: `
         <div class="space-y-4">
             <div>
@@ -84,10 +86,12 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
                                 <td class="px-3 py-2">
                                     <div class="flex items-center justify-end gap-2">
                                         <app-button variant="secondary" size="sm"
+                                            *appHasPermission="[Permission.UpdateRevenueConfig, Permission.ManageRevenueConfig]"
                                             [title]="'COMMON.BUTTON.EDIT' | translate" (onClick)="startEditExpense(item)">
                                             <i class="fa-solid fa-pen"></i>
                                         </app-button>
                                         <app-button variant="danger" size="sm"
+                                            *appHasPermission="[Permission.DeleteRevenueConfig, Permission.ManageRevenueConfig]"
                                             [title]="'COMMON.BUTTON.DELETE' | translate" (onClick)="deleteExpense(item)">
                                             <i class="fa-solid fa-trash"></i>
                                         </app-button>
@@ -158,6 +162,9 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
     `
 })
 export class AdminRevenueSettingsComponent implements OnInit {
+    /** Mã quyền dùng trong template (`*appHasPermission`). */
+    readonly Permission = Permission;
+
     form!: FormGroup;
     isLoading = false;
     isSaving = false;
