@@ -1198,6 +1198,7 @@
         },
         "BUTTON": {
             "SEARCH": "Tìm kiếm",
+"RETRY": "Thử lại",
             "ACTION": "Thao tác",
             "VIEW_DETAIL": "Xem chi tiết",
             "BACK": "Quay lại",
@@ -1948,6 +1949,8 @@
             "STATUS": "Trạng thái",
             "CREATED_AT": "Ngày tạo",
             "EMPTY": "Chưa có bản khai nào",
+            "LOAD_FAILED": "Không tải được số liệu, thử lại sau.",
+            "RECORD_COUNT": "bản khai",
             "CONFIRMED_COUNT": "Bản đã chốt",
             "DRAFT_COUNT_HINT": "bản còn nháp"
         },
