@@ -109,6 +109,9 @@ export class AdminGroupListComponent implements OnInit {
 
     onTabChange(tab: string): void {
         this.activeTab = tab;
+        // Cả hàng lọc chỉ giữ một lựa chọn: chọn tab trạng thái thì bỏ hai nút lọc cờ.
+        this.onlyPending = false;
+        this.onlyPrivate = false;
         this.load(1);
     }
 
@@ -117,13 +120,25 @@ export class AdminGroupListComponent implements OnInit {
         this.load(1);
     }
 
+    /** Bật "có yêu cầu chờ duyệt": tắt nút lọc còn lại và đưa trạng thái về Tất cả. */
     togglePending(): void {
-        this.onlyPending = !this.onlyPending;
+        const next = !this.onlyPending;
+        this.onlyPending = next;
+        this.onlyPrivate = false;
+        if (next) {
+            this.activeTab = 'all';
+        }
         this.load(1);
     }
 
+    /** Bật "có yêu cầu kín": tắt nút lọc còn lại và đưa trạng thái về Tất cả. */
     togglePrivate(): void {
-        this.onlyPrivate = !this.onlyPrivate;
+        const next = !this.onlyPrivate;
+        this.onlyPrivate = next;
+        this.onlyPending = false;
+        if (next) {
+            this.activeTab = 'all';
+        }
         this.load(1);
     }
 

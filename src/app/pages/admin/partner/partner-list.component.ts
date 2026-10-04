@@ -16,11 +16,13 @@ import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.com
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
+import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 
 @Component({
     selector: 'app-admin-partner-list',
     standalone: true,
     imports: [
+        CodeNamePipe,
         CommonModule,
         RouterModule,
         FormsModule,

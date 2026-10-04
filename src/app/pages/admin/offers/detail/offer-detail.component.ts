@@ -17,11 +17,13 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
+import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 
 @Component({
     selector: 'app-admin-offer-detail',
     standalone: true,
     imports: [
+        CodeNamePipe,
         CommonModule,
         RouterModule,
         TranslateModule,

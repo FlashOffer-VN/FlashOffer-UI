@@ -62,9 +62,8 @@
     <tr *ngFor="let request of requests; let i = index"
                             class="hover:bg-gray-50 transition-colors cursor-pointer" (click)="navigateToDetail(request.id)">
                             <td class="px-4 py-3 text-sm text-gray-500">{{ (pageNumber - 1) * pageSize + i + 1 }}</td>
-                            <td class="px-4 py-3">
-                                <div class="text-sm font-medium text-gray-900">{{ request.productName }}</div>
-                                <div class="text-xs text-gray-400">#{{ request.groupBuyingRequestCode || (request.id | shortId) }}</div>
+                            <td class="px-4 py-3 text-sm font-medium text-gray-900">
+                                {{ (request.groupBuyingRequestCode || (request.id | shortId)) | appCodeName: request.productName }}
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-700">{{ request.targetPrice | appPrice }}</td>
                             <td class="px-4 py-3 text-sm text-gray-700">
@@ -75,7 +74,7 @@
                                 <div class="text-sm text-gray-900">{{ request.fullName }}</div>
                                 <div class="text-xs text-gray-500">{{ request.phone }}</div>
                                 <div class="text-xs text-gray-400">{{ 'ADMIN.GROUP_BUYING.REFERRED_BY' | translate }}:
-                                    {{ request.referredByName || request.referredByCode || '--' }}</div>
+                                    {{ request.referredByCode | appCodeName: request.referredByName }}</div>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-500">{{ request.createdAt | appDate }}</td>
                             <td class="px-4 py-3">

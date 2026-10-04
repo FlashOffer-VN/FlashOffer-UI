@@ -17,11 +17,13 @@ import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.
 import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
+import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 
 @Component({
     selector: 'app-admin-collaborator-list',
     standalone: true,
     imports: [
+        CodeNamePipe,
         CommonModule,
         RouterModule,
         FormsModule,

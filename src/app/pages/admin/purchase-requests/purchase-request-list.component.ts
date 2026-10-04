@@ -20,11 +20,13 @@ import { GroupPostType } from '@core/models/business-group.model';
 import { ShareToGroupComponent } from '@shared/components/share-to-group/share-to-group.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
+import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 
 @Component({
     selector: 'app-admin-purchase-request-list',
     standalone: true,
     imports: [
+        CodeNamePipe,
         CommonModule,
         RouterModule,
         FormsModule,

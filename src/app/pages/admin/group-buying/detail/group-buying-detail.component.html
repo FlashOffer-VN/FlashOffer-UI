@@ -139,11 +139,11 @@
                 </div>
                 <div class="flex justify-between py-2 border-b border-gray-50">
                     <span class="text-sm text-gray-500">{{ 'ADMIN.GROUP_BUYING.REFERRAL' | translate }}</span>
-                    <span class="text-sm font-medium text-gray-800 text-right">{{ referralText(detail.referralName, detail.referralCode) }}</span>
+                    <span class="text-sm font-medium text-gray-800 text-right">{{ detail.referralCode | appCodeName: detail.referralName }}</span>
                 </div>
                 <div class="flex justify-between py-2 border-b border-gray-50">
                     <span class="text-sm text-gray-500">{{ 'ADMIN.GROUP_BUYING.REFERRED_BY' | translate }}</span>
-                    <span class="text-sm font-medium text-gray-800 text-right">{{ referralText(detail.referredByName, detail.referredByCode) }}</span>
+                    <span class="text-sm font-medium text-gray-800 text-right">{{ detail.referredByCode | appCodeName: detail.referredByName }}</span>
                 </div>
                 <div class="flex justify-between py-2">
                     <span class="text-sm text-gray-500">{{ 'ADMIN.GROUP_BUYING.APPROVED_AT' | translate }}</span>
@@ -210,9 +210,9 @@
                                 <div *ngIf="p.userCode">{{ p.userCode }}</div>
                             </td>
                             <td class="px-4 py-3 text-xs text-gray-600">
-                                <p>{{ referralText(p.referralName, p.referralCode) }}</p>
+                                <p>{{ p.referralCode | appCodeName: p.referralName }}</p>
                                 <p class="text-gray-400">{{ 'ADMIN.GROUP_BUYING.REFERRED_BY' | translate }}:
-                                    {{ referralText(p.referredByName, p.referredByCode) }}</p>
+                                    {{ p.referredByCode | appCodeName: p.referredByName }}</p>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-500">{{ p.createdAt | appDate }}</td>
                             <td class="px-4 py-3 text-right">
