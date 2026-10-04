@@ -109,9 +109,11 @@
                                         [targetTitle]="request.productName"
                                         [refLabelKey]="'SHARE_TO_GROUP.FROM_SUPPLIER'"></app-share-to-group>
     
+                                    <!-- Nút xem chi tiết chỉ hiển thị icon, tooltip lấy từ i18n -->
                                     <app-button variant="primary" size="sm"
-                                        (click)="$event.stopPropagation(); navigateToDetail(request.id)">
-                                        {{ 'COMMON.BUTTON.VIEW_DETAIL' | translate }}
+                                        (click)="$event.stopPropagation(); navigateToDetail(request.id)"
+                                        [title]="'COMMON.BUTTON.VIEW_DETAIL' | translate">
+                                        <i class="fa-solid fa-eye"></i>
                                     </app-button>
                                 </div>
                             </td>

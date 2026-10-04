@@ -1257,7 +1257,14 @@
             "APPLY": "Apply",
             "OK": "OK",
             "RESTORE": "Restore",
-            "SEE_MORE": "See more"
+            "SEE_MORE": "See more",
+            "APPROVE": "Approve",
+            "REJECT": "Reject",
+            "COMPLETE": "Complete",
+            "EXPIRE": "Expire",
+            "ACTIVATE": "Activate",
+            "REOPEN": "Reopen",
+            "CONTACT": "Contact"
         },
         "CHART_TYPE": {
             "BAR": "Column",

@@ -1213,7 +1213,14 @@
             "APPLY": "Áp dụng",
             "OK": "OK",
             "RESTORE": "Khôi phục",
-            "SEE_MORE": "Xem thêm"
+            "SEE_MORE": "Xem thêm",
+            "APPROVE": "Duyệt",
+            "REJECT": "Từ chối",
+            "COMPLETE": "Hoàn tất",
+            "EXPIRE": "Hết hạn",
+            "ACTIVATE": "Kích hoạt",
+            "REOPEN": "Mở lại",
+            "CONTACT": "Liên hệ"
         },
         "CHART_TYPE": {
             "BAR": "Cột",

@@ -33,23 +33,26 @@
                 </div>
                 <!-- Actions -->
                 <div class="flex flex-wrap gap-2 flex-shrink-0">
+                    <!-- Nhóm nút thao tác chỉ hiển thị icon, tooltip lấy từ i18n -->
                     <app-button *ngIf="canApprove()" variant="success" size="sm" (click)="onApprove()"
-                        [loading]="isActionLoading">
-                        <i class="fa-solid fa-check mr-1"></i> {{ 'ADMIN.PARTNER.APPROVE' | translate }}
+                        [loading]="isActionLoading" [title]="'COMMON.BUTTON.APPROVE' | translate">
+                        <i class="fa-solid fa-check"></i>
                     </app-button>
                     <app-button *ngIf="canReject()" variant="danger" size="sm" (click)="onReject()"
-                        [loading]="isActionLoading">
-                        <i class="fa-solid fa-xmark mr-1"></i> {{ 'ADMIN.PARTNER.REJECT' | translate }}
+                        [loading]="isActionLoading" [title]="'COMMON.BUTTON.REJECT' | translate">
+                        <i class="fa-solid fa-xmark"></i>
                     </app-button>
                     <app-button *ngIf="canActivate()" variant="primary" size="sm" (click)="onActivate()"
-                        [loading]="isActionLoading">
-                        <i class="fa-solid fa-play mr-1"></i> {{ 'ADMIN.PARTNER.ACTIVATE' | translate }}
+                        [loading]="isActionLoading" [title]="'COMMON.BUTTON.ACTIVATE' | translate">
+                        <i class="fa-solid fa-play"></i>
                     </app-button>
-                    <app-button variant="primary" size="sm" (click)="openEdit()" [loading]="isActionLoading">
-                        <i class="fa-solid fa-pen mr-1"></i> {{ 'COMMON.BUTTON.EDIT' | translate }}
+                    <app-button variant="primary" size="sm" (click)="openEdit()" [loading]="isActionLoading"
+                        [title]="'COMMON.BUTTON.EDIT' | translate">
+                        <i class="fa-solid fa-pen"></i>
                     </app-button>
-                    <app-button variant="secondary" size="sm" (click)="goBack()">
-                        <i class="fa-solid fa-arrow-left mr-1"></i> {{ 'COMMON.BUTTON.BACK' | translate }}
+                    <app-button variant="secondary" size="sm" (click)="goBack()"
+                        [title]="'COMMON.BUTTON.BACK' | translate">
+                        <i class="fa-solid fa-arrow-left"></i>
                     </app-button>
                 </div>
             </div>

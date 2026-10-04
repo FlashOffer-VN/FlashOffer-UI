@@ -31,16 +31,18 @@
                 </div>
                 <!-- Actions -->
                 <div class="flex flex-wrap gap-2 flex-shrink-0">
+                    <!-- Nhóm nút thao tác chỉ hiển thị icon, tooltip lấy từ i18n -->
                     <app-button *ngIf="canMarkContacted()" variant="primary" size="sm" (click)="onMarkContacted()"
-                        [loading]="isActionLoading">
-                        <i class="fa-solid fa-phone mr-1"></i> {{ 'ADMIN.PURCHASE_REQUESTS.CONTACT' | translate }}
+                        [loading]="isActionLoading" [title]="'COMMON.BUTTON.CONTACT' | translate">
+                        <i class="fa-solid fa-phone"></i>
                     </app-button>
                     <app-button *ngIf="canComplete()" variant="success" size="sm" (click)="onComplete()"
-                        [loading]="isActionLoading">
-                        <i class="fa-solid fa-check mr-1"></i> {{ 'ADMIN.PURCHASE_REQUESTS.COMPLETE' | translate }}
+                        [loading]="isActionLoading" [title]="'COMMON.BUTTON.COMPLETE' | translate">
+                        <i class="fa-solid fa-check"></i>
                     </app-button>
-                    <app-button variant="secondary" size="sm" (click)="goBack()">
-                        <i class="fa-solid fa-arrow-left mr-1"></i> {{ 'COMMON.BUTTON.BACK' | translate }}
+                    <app-button variant="secondary" size="sm" (click)="goBack()"
+                        [title]="'COMMON.BUTTON.BACK' | translate">
+                        <i class="fa-solid fa-arrow-left"></i>
                     </app-button>
                 </div>
             </div>

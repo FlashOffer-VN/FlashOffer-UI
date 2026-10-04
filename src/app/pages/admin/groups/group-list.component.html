@@ -87,13 +87,17 @@
                     </td>
                     <td class="px-4 py-3">
                         <div class="flex justify-end gap-2">
-                            <app-button variant="secondary" size="sm" (onClick)="viewDetail(group)">
-                                {{ 'COMMON.BUTTON.VIEW_DETAIL' | translate }}
+                            <!-- Nhóm nút thao tác chỉ hiển thị icon, tooltip lấy từ i18n -->
+                            <app-button variant="secondary" size="sm" (onClick)="viewDetail(group)"
+                                [title]="'COMMON.BUTTON.VIEW_DETAIL' | translate">
+                                <i class="fas fa-eye"></i>
                             </app-button>
-                            <app-button variant="primary" size="sm" (onClick)="openEdit(group)">
+                            <app-button variant="primary" size="sm" (onClick)="openEdit(group)"
+                                [title]="'COMMON.BUTTON.EDIT' | translate">
                                 <i class="fas fa-pen"></i>
                             </app-button>
-                            <app-button variant="danger" size="sm" (onClick)="remove(group)">
+                            <app-button variant="danger" size="sm" (onClick)="remove(group)"
+                                [title]="'COMMON.BUTTON.DELETE' | translate">
                                 <i class="fas fa-trash"></i>
                             </app-button>
                         </div>
