@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
+import { socialPostSearchFields } from '@core/constants/search-fields';
 import { SocialPost, SocialMember, SocialGroup } from '@core/models/social.model';
 import { BusinessGroup, BusinessGroupType, GroupApprovalStatus } from '@core/models/business-group.model';
 import { GroupBuyingFeedItem } from '@core/models/group-buying-request.model';
@@ -25,6 +26,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PostDetailModalComponent } from './components/post-detail-modal/post-detail-modal.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { InputComponent } from '@shared/components/input/input.component';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -41,6 +43,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
         LoadingComponent,
         RouterLink,
         ModalComponent,
+        SearchByComponent,
     ],
     templateUrl: './social.component.html',
     styleUrls: ['./social.component.css']
@@ -57,6 +60,11 @@ export class SocialComponent implements OnInit, AfterViewInit {
 
     posts: SocialPost[] = [];
     members: SocialMember[] = [];
+
+    /** Từ khoá + cột tìm kiếm cho bảng tin (bỏ trống = mọi trường) */
+    searchText = '';
+    searchField: string | null = null;
+    searchFieldOptions: { value: string; label: string }[] = [];
 
     /** Sidebar: nhóm theo lĩnh vực người dùng đã tham gia + nhóm nổi bật (dữ liệu thật) */
     myGroups: BusinessGroup[] = [];
@@ -127,6 +135,7 @@ export class SocialComponent implements OnInit, AfterViewInit {
         this.getCurrentUser();
         this.updateAuthState();
         this.loadMyReferralCode();
+        this.searchFieldOptions = socialPostSearchFields((key: string) => this._appService.trans(key));
         this.loadPosts();
         this.loadMembers();
         this.loadClubs();
@@ -134,6 +143,11 @@ export class SocialComponent implements OnInit, AfterViewInit {
         this.loadGroups();
         this.loadSidebarGroups();
         this.loadTrendingTopics();
+    }
+
+    /** Enter/nút Tìm mới gọi lại API (đổi cột không tự tải) */
+    onSearch(): void {
+        this.loadPosts();
     }
 
     getCurrentUser(): void {
@@ -174,7 +188,10 @@ export class SocialComponent implements OnInit, AfterViewInit {
 
     loadPosts(): void {
         this.isLoadingPosts = true;
-        this._appService.socialService.getPosts().subscribe({
+        this._appService.socialService.getPosts({
+            search: this.searchText,
+            searchField: this.searchField ?? undefined
+        }).subscribe({
             next: (response) => {
                 this.posts = response.data;
                 this.isLoadingPosts = false;

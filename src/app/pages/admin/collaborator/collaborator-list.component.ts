@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
+import { collaboratorSearchFields } from '@core/constants/search-fields';
 import { Collaborator, CollaboratorStatus } from '@core/models/collaborator.model';
 import { PagedResponse } from '@core/models/paged-response.model';
 import { Permission } from '@core/models/permission.model';
@@ -20,6 +21,7 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 
 @Component({
     selector: 'app-admin-collaborator-list',
@@ -39,7 +41,8 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
         AppDatePipe,
         ShortIdPipe,
         CodeNamePipe,
-        HasPermissionDirective
+        HasPermissionDirective,
+        SearchByComponent
     ],
     templateUrl: './collaborator-list.component.html',
     styleUrls: ['./collaborator-list.component.css']
@@ -59,6 +62,10 @@ export class AdminCollaboratorListComponent implements OnInit {
     fromDate: string | null = null;
     toDate: string | null = null;
 
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField: string | null = null;
+    searchFieldOptions: { value: string; label: string }[] = [];
+
     // Tab lọc status
     activeTab = 'all';
     tabs: { key: string; label: string }[] = [];
@@ -74,7 +81,14 @@ export class AdminCollaboratorListComponent implements OnInit {
     constructor(private _appService: AppService, private _router: Router) { }
 
     ngOnInit(): void {
-        this.buildTabs();        this.loadData();
+        this.buildTabs();
+        this.buildSearchFieldOptions();
+        this.loadData();
+    }
+
+    /** Các cột tìm kiếm dùng chung (CollaboratorSearchField) khớp tham số searchField của API. */
+    private buildSearchFieldOptions(): void {
+        this.searchFieldOptions = collaboratorSearchFields((key: string) => this._appService.trans(key));
     }
 
     private buildTabs(): void {
@@ -108,7 +122,8 @@ export class AdminCollaboratorListComponent implements OnInit {
                 this.pageSize,
                 this.searchText,
                 this.fromDate ?? undefined,
-                this.toDate ?? undefined
+                this.toDate ?? undefined,
+                this.searchField ?? undefined
             )
                 .subscribe({
                     next: (response: PagedResponse<Collaborator>) => {
@@ -138,7 +153,8 @@ export class AdminCollaboratorListComponent implements OnInit {
                 this.searchText,
                 status,
                 this.fromDate ?? undefined,
-                this.toDate ?? undefined
+                this.toDate ?? undefined,
+                this.searchField ?? undefined
             )
             .subscribe({
                 next: (response: PagedResponse<Collaborator>) => {

@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
+import { requestSearchFields } from '@core/constants/search-fields';
 import {
     GetPublicGroupBuyingQuery,
     GroupBuyingFeedItem,
@@ -24,6 +25,7 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { GroupBuyingDetailModalComponent } from '@pages/social/components/group-buying-detail-modal/group-buying-detail-modal.component';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 
 @Component({
     selector: 'app-my-group-buying',
@@ -33,6 +35,7 @@ import { GroupBuyingDetailModalComponent } from '@pages/social/components/group-
         AppDatePipe, AppPricePipe,
         BadgeComponent, ButtonComponent, InputComponent, LoadingComponent,
         PaginationComponent, StatusTabsComponent,
+        SearchByComponent,
         GroupBuyingDetailModalComponent
     ],
     template: `
@@ -50,6 +53,9 @@ import { GroupBuyingDetailModalComponent } from '@pages/social/components/group-
                 </div>
 
                 <div class="flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
+                    <!-- Chọn cột tìm kiếm (bỏ trống = tất cả) — component dùng chung <app-search-by> -->
+                    <app-search-by [options]="searchFieldOptions" [(value)]="searchField"></app-search-by>
+
                     <div class="w-full sm:flex-1 sm:min-w-0">
                         <app-input [(ngModel)]="searchText" [label]="'USER.MY_GROUP_BUYING.SEARCH_LABEL' | translate"
                             [placeholder]="'USER.MY_GROUP_BUYING.SEARCH_PLACEHOLDER' | translate"
@@ -152,6 +158,10 @@ export class MyGroupBuyingPageComponent implements OnInit {
 
     searchText = '';
 
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField: string | null = null;
+    searchFieldOptions: { value: string; label: string }[] = [];
+
     activeTab = 'all';
     tabs: { key: string; label: string }[] = [];
 
@@ -172,7 +182,13 @@ export class MyGroupBuyingPageComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildTabs();
+        this.buildSearchFieldOptions();
         this.loadData();
+    }
+
+    /** Các cột tìm kiếm dùng chung (RequestSearchField) khớp tham số searchField của API. */
+    private buildSearchFieldOptions(): void {
+        this.searchFieldOptions = requestSearchFields((key: string) => this._appService.trans(key));
     }
 
     private buildTabs(): void {
@@ -200,7 +216,8 @@ export class MyGroupBuyingPageComponent implements OnInit {
             search: this.searchText,
             // Chỉ lấy đơn do chính mình mở, mọi trạng thái (kể cả đã hoàn thành / đã hủy)
             mineOnly: true,
-            status: this.activeTab === 'all' ? undefined : Number(this.activeTab) as GroupBuyingStatus
+            status: this.activeTab === 'all' ? undefined : Number(this.activeTab) as GroupBuyingStatus,
+            searchField: this.searchField ?? undefined
         };
 
         this._appService.groupBuyingRequest.getPublic(query).subscribe({

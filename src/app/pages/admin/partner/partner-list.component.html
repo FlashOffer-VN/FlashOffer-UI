@@ -10,6 +10,9 @@
     <!-- Filters -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
         <div class="flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
+            <!-- Chọn cột tìm kiếm (bỏ trống = tất cả) — component dùng chung <app-search-by> -->
+            <app-search-by [options]="searchFieldOptions" [(value)]="searchField"></app-search-by>
+
             <!-- Search -->
             <div class="w-full sm:flex-1 sm:min-w-0">
                 <app-input [(ngModel)]="searchText" [placeholder]="'ADMIN.PARTNER.SEARCH_PLACEHOLDER' | translate"

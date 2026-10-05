@@ -958,7 +958,8 @@
             "APPROVED": "Đã duyệt",
             "PENDING": "Chờ duyệt",
             "EMPTY": "Bạn chưa có bài viết nào.",
-            "EMPTY_HINT": "Bài viết bạn đăng trên bảng tin sẽ được quản lý tại đây."
+            "EMPTY_HINT": "Bài viết bạn đăng trên bảng tin sẽ được quản lý tại đây.",
+            "SEARCH_PLACEHOLDER": "Tìm kiếm bài viết của tôi..."
         },
         "MY_GROUPS": {
             "TITLE": "Nhóm của tôi",
@@ -1099,6 +1100,7 @@
         "STATS_POSTS": "Bài viết",
         "STATS_EVENTS": "Sự kiện",
         "FEED": "Bảng tin",
+        "SEARCH_PLACEHOLDER": "Tìm kiếm bài viết...",
         "MEMBERS": "Thành viên",
         "EVENTS": "Sự kiện",
         "GROUPS": "Nhóm",
@@ -1252,7 +1254,19 @@
             "GROUP_BUSINESS_FIELD": "Lĩnh vực kinh doanh",
             "GROUP_DESCRIPTION": "Mô tả",
             "GROUP_TOPIC": "Chủ đề",
-            "GROUP_CODE": "Mã nhóm"
+            "GROUP_CODE": "Mã nhóm",
+            "USERNAME": "Tên đăng nhập",
+            "FULL_NAME": "Họ tên",
+            "USER_CODE": "Mã tài khoản",
+            "REFERRAL_CODE": "Mã giới thiệu",
+            "ACCOUNT_REFERRER_CODE": "Người giới thiệu",
+            "COLLABORATOR_CODE": "Mã cộng tác viên",
+            "PARTNER_CODE": "Mã đối tác",
+            "COMPANY_NAME": "Tên công ty",
+            "COMPANY_TAX_CODE": "Mã số thuế",
+            "CONTENT": "Nội dung",
+            "AUTHOR_FULL_NAME": "Tên tác giả",
+            "AUTHOR_USER_CODE": "Mã tài khoản tác giả"
         },
         "ALL": "Tất cả",
         "PROVINCE": "Tỉnh/Thành phố",

@@ -50,6 +50,8 @@ export class GroupBuyingRequestService {
         };
         if (query.search?.trim()) params['search'] = query.search.trim();
         if (query.status) params['status'] = query.status;
+        // Cột tìm kiếm do người dùng chọn; bỏ trống = tìm mọi trường (hành vi cũ)
+        if (query.searchField) params['searchField'] = query.searchField;
 
         return this.apiService.get<GroupBuyingFeedResponse>(`${this.endpoint}/public`, params);
     }

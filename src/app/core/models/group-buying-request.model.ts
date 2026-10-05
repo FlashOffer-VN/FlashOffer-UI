@@ -194,6 +194,8 @@ export interface GetPublicGroupBuyingQuery {
     mineOnly?: boolean;
     /** Lọc theo trạng thái (tab trong khu vực thành viên); bỏ trống = tất cả. */
     status?: GroupBuyingStatus;
+    /** Cột tìm kiếm (khớp RequestSearchField của API); bỏ trống = tìm mọi trường. */
+    searchField?: string;
 }
 
 export interface GetAdminGroupBuyingQuery {

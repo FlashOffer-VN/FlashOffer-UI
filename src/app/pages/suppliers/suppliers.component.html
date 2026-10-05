@@ -16,6 +16,10 @@
         </div>
 
         <div class="suppliers-filters" style="--control-h: 2.5rem">
+            <!-- Chọn cột tìm kiếm (bỏ trống = tất cả) — component dùng chung <app-search-by> -->
+            <app-search-by [options]="searchFieldOptions" [value]="searchField"
+                (valueChange)="onSearchFieldChange($event)"></app-search-by>
+
             <div class="supplier-search">
                 <app-input [(ngModel)]="searchTerm" icon="fas fa-search"
                     [placeholder]="'SUPPLIERS_SEARCH_PLACEHOLDER' | translate"

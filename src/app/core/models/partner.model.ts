@@ -377,5 +377,7 @@ export interface PublicPartnerQuery {
     page?: number;
     pageSize?: number;
     search?: string;
+    /** Cột tìm kiếm (khớp PartnerSearchField của API); bỏ trống = tìm mọi trường */
+    searchField?: string;
     businessFieldId?: string | null;
 }

@@ -153,4 +153,8 @@ export interface GetPostsQuery {
     mineOnly?: boolean;
     /** Lọc theo trạng thái duyệt: true = đã duyệt, false = chờ duyệt */
     isApproved?: boolean;
+    /** Từ khoá tìm kiếm */
+    search?: string;
+    /** Cột tìm kiếm (khớp SocialPostSearchField của API); bỏ trống = tìm mọi trường */
+    searchField?: string;
 }

@@ -1002,7 +1002,8 @@
             "APPROVED": "Approved",
             "PENDING": "Pending approval",
             "EMPTY": "You have no posts yet.",
-            "EMPTY_HINT": "Posts you publish on the feed are managed here."
+            "EMPTY_HINT": "Posts you publish on the feed are managed here.",
+            "SEARCH_PLACEHOLDER": "Search my posts..."
         },
         "MY_GROUPS": {
             "TITLE": "My groups",
@@ -1143,6 +1144,7 @@
         "STATS_POSTS": "Posts",
         "STATS_EVENTS": "Events",
         "FEED": "Feed",
+        "SEARCH_PLACEHOLDER": "Search posts...",
         "MEMBERS": "Members",
         "EVENTS": "Events",
         "GROUPS": "Groups",
@@ -1296,7 +1298,19 @@
             "GROUP_BUSINESS_FIELD": "Business field",
             "GROUP_DESCRIPTION": "Description",
             "GROUP_TOPIC": "Topic",
-            "GROUP_CODE": "Group code"
+            "GROUP_CODE": "Group code",
+            "USERNAME": "Username",
+            "FULL_NAME": "Full name",
+            "USER_CODE": "User code",
+            "REFERRAL_CODE": "Referral code",
+            "ACCOUNT_REFERRER_CODE": "Referred by",
+            "COLLABORATOR_CODE": "Collaborator code",
+            "PARTNER_CODE": "Partner code",
+            "COMPANY_NAME": "Company name",
+            "COMPANY_TAX_CODE": "Tax code",
+            "CONTENT": "Content",
+            "AUTHOR_FULL_NAME": "Author name",
+            "AUTHOR_USER_CODE": "Author user code"
         },
         "ALL": "All",
         "PROVINCE": "Province/City",

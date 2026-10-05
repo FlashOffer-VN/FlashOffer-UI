@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
+import { userSearchFields } from '@core/constants/search-fields';
 import { AdminUser } from '@core/models/user.model';
 import { PagedResponse } from '@core/models/paged-response.model';
 import { isAdminRole, userRoleLabelKey } from '@core/models/auth.model';
@@ -14,6 +15,7 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { BadgeComponent } from '@shared/components/badge/badge.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 
 @Component({
     selector: 'app-admin-user-list',
@@ -27,7 +29,8 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
         LoadingComponent,
         PaginationComponent,
         BadgeComponent,
-        AppDatePipe
+        AppDatePipe,
+        SearchByComponent
     ],
     templateUrl: './user-list.component.html',
     styleUrls: ['./user-list.component.css']
@@ -40,6 +43,10 @@ export class AdminUserListComponent implements OnInit {
     // Search
     searchText = '';
 
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField: string | null = null;
+    searchFieldOptions: { value: string; label: string }[] = [];
+
     // Pagination
     pageNumber = 1;
     pageSize = 10;
@@ -51,13 +58,19 @@ export class AdminUserListComponent implements OnInit {
     constructor(private _appService: AppService) { }
 
     ngOnInit(): void {
+        this.buildSearchFieldOptions();
         this.loadData();
+    }
+
+    /** Các cột tìm kiếm dùng chung (UserSearchField) khớp tham số searchField của API. */
+    private buildSearchFieldOptions(): void {
+        this.searchFieldOptions = userSearchFields((key: string) => this._appService.trans(key));
     }
 
     loadData(): void {
         this.isLoading = true;
 
-        this._appService.userService.getData(this.pageNumber, this.pageSize, this.searchText)
+        this._appService.userService.getData(this.pageNumber, this.pageSize, this.searchText, this.searchField ?? undefined)
             .subscribe({
                 next: (response: PagedResponse<AdminUser>) => {
                     this.applyPagedResponse(response);
