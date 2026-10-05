@@ -274,6 +274,12 @@ export interface PermissionTreeNode {
     parentCode?: string | null;
     /** Quyền đã cấp cho đối tượng đang xét (API trả về) — chỉ dùng để tham chiếu ban đầu. */
     isGranted?: boolean;
+    /**
+     * Quyền có hiệu lực sau kế thừa (bản thân VÀ mọi tổ tiên đều được cấp) — API trả về theo vai trò
+     * đang xem. `isGranted = true` nhưng `isEffective = false` nghĩa là node đã được tick nhưng bị
+     * tổ tiên (màn hình/nhóm) chưa cấp chặn lại, nên UI phải hiện rõ "chưa hiệu lực".
+     */
+    isEffective?: boolean;
     /** Nút con (đệ quy). */
     children: PermissionTreeNode[];
     /** Nút cha, gắn khi dựng cây ở client để suy trạng thái tắt-lan. */
