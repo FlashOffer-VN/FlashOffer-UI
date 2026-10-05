@@ -1,11 +1,12 @@
 // pages/social/components/post-edit-modal/post-edit-modal.component.ts
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { QuillModule } from 'ngx-quill';
 
 import { AppService } from '@core/services/app.service';
+import { acquireModalLevel, releaseModalLevel } from '@core/utils/z-index';
 import { PostType, PrivacyType, SocialPost, UpdatePostRequest } from '@core/models/social.model';
 import { QUILL_MODULES, quillPlainText } from '@core/configs/quill.config';
 import { isBrowser } from '@core/utils/platform';
@@ -19,11 +20,15 @@ import { apiOrigin } from '@shared/pipes/media-url.pipe';
     templateUrl: './post-edit-modal.component.html',
     styleUrls: ['./post-edit-modal.component.css']
 })
-export class PostEditModalComponent implements OnChanges {
+export class PostEditModalComponent implements OnChanges, OnDestroy {
     /** Bài cần sửa; truyền null để đóng modal */
     @Input() post: SocialPost | null = null;
     @Output() saved = new EventEmitter<SocialPost>();
     @Output() closed = new EventEmitter<void>();
+
+    /** Tầng xếp lớp: modal mở sau luôn nằm trên modal mở trước (xem core/utils/z-index.ts) */
+    modalLevel = 0;
+    private _level: number | null = null;
 
     isSaving = false;
     showQuillEditor = true;
@@ -57,9 +62,12 @@ export class PostEditModalComponent implements OnChanges {
         if (!changes['post']) return;
 
         if (!this.post) {
+            this._releaseLevel();
             this.showQuillEditor = true;
             return;
         }
+
+        this._acquireLevel();
 
         this.formData = {
             title: this.post.title || '',
@@ -75,6 +83,25 @@ export class PostEditModalComponent implements OnChanges {
         setTimeout(() => {
             this.showQuillEditor = true;
         }, 0);
+    }
+
+    ngOnDestroy(): void {
+        this._releaseLevel();
+    }
+
+    /** Cấp/trả tầng xếp lớp để modal mở sau luôn nằm trên modal mở trước */
+    private _acquireLevel(): void {
+        if (this._level === null) {
+            this._level = acquireModalLevel();
+            this.modalLevel = this._level;
+        }
+    }
+
+    private _releaseLevel(): void {
+        if (this._level !== null) {
+            releaseModalLevel(this._level);
+            this._level = null;
+        }
     }
 
     close(): void {

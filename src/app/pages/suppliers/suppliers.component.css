@@ -235,8 +235,9 @@
     z-index: 2;
 }
 
+/* Panel của ng-select được append ra <body> — xếp cùng tầng dropdown của toàn app */
 ::ng-deep .supplier-category-select .ng-dropdown-panel {
-    z-index: 1000 !important;
+    z-index: var(--z-dropdown) !important;
 }
 
 .supplier-result-count {

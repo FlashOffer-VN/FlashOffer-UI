@@ -1,6 +1,6 @@
 ﻿<!-- Modal sửa bài viết — dùng chung cho bảng tin và trang Bài viết của tôi -->
 @if (post) {
-<div class="modal-overlay" (click)="close()">
+<div class="modal-overlay" [style.--modal-level]="modalLevel" (click)="close()">
     <div class="modal-content" (click)="$event.stopPropagation()">
         <div class="modal-header">
             <h3>{{ 'SOCIAL.EDIT_POST' | translate }}</h3>

@@ -52,7 +52,7 @@ export type ToastType = 'success' | 'error' | 'warning' | 'info';
       position: fixed;
       top: 24px;
       right: 24px;
-      z-index: 9999;
+      z-index: var(--z-toast);
       max-width: 420px;
       width: 100%;
       pointer-events: none;

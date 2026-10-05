@@ -257,7 +257,7 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     min-width: 200px;
     padding: 6px;
-    z-index: 100;
+    z-index: var(--z-dropdown);
     animation: dropdownSlide 0.2s ease;
 }
 

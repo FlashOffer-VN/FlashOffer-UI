@@ -12,14 +12,14 @@
     gap: 16px;
     position: sticky;
     top: 0;
-    z-index: 50;
+    z-index: var(--z-header);
     backdrop-filter: blur(8px);
     transition: all 0.3s ease;
 }
 
 /* ✅ KHI MENU MỞ - HEADER BỊ CHE */
 .sme-header.menu-open {
-    z-index: 48;
+    z-index: var(--z-header-muted);
     /* ✅ Thấp hơn overlay (z-index: 49) */
 }
 
@@ -32,7 +32,7 @@
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 49;
+    z-index: var(--z-drawer-backdrop);
     /* ✅ Cao hơn header (50) khi header bình thường */
     opacity: 0;
     transition: opacity 0.4s ease;
@@ -53,7 +53,7 @@
     width: 300px;
     height: 100vh;
     background: white;
-    z-index: 51;
+    z-index: var(--z-drawer);
     /* ✅ Cao nhất */
     padding: 24px 20px;
     box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
@@ -364,7 +364,7 @@
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.4);
-    z-index: 49;
+    z-index: var(--z-drawer-backdrop);
     /* ✅ Giảm từ 990 xuống 49 */
     opacity: 0;
     transition: opacity 0.4s ease;
@@ -387,7 +387,7 @@
     width: 300px;
     height: 100vh;
     background: white;
-    z-index: 51;
+    z-index: var(--z-drawer);
     /* ✅ Giảm từ 1001 xuống 51 */
     padding: 24px 20px;
     box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
