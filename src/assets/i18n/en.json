@@ -2498,6 +2498,8 @@
         "SAVE_FAILED": "Saving permissions failed",
         "LOAD_FAILED": "Could not load the permission catalogue",
         "READ_ONLY": "You have view-only access to the permission matrix.",
+        "NOT_EFFECTIVE": "not effective",
+        "NOT_EFFECTIVE_HINT": "The action is ticked but its parent screen/group is not granted, so it has no effect yet.",
         "SEARCH_PLACEHOLDER": "Search by code, name, module or API",
         "SUPER_ADMIN_ALL": "All permissions",
         "COL": {

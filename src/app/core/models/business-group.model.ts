@@ -120,10 +120,10 @@ export interface BusinessGroupPost {
     type: GroupPostType;
     refId?: string | null;
     refCode?: string | null;
-    /** Mã chia sẻ riêng của người chuyển tiếp — dùng để gắn vào link chia sẻ trong bài */
-    referralCode?: string | null;
-    /** Tên chủ mã chia sẻ (CTV giới thiệu) */
-    referralName?: string | null;
+    /** Mã người giới thiệu (chụp lúc tạo bài) — khớp API recordReferrerCode */
+    recordReferrerCode?: string | null;
+    /** Tên chủ mã người giới thiệu — khớp API recordReferrerName */
+    recordReferrerName?: string | null;
     /** Bài chuyển tiếp có kèm link chia sẻ mời tham gia */
     withShareLink: boolean;
     isPrivateToAdmin: boolean;
@@ -204,8 +204,8 @@ export interface JoinBusinessGroupRequest {
     zalo?: string;
     email?: string;
     note?: string;
-    /** Mã chia sẻ riêng trên link người dùng mở (?ref=) — ghi nhận cho người đã chia sẻ */
-    referralCode?: string;
+    /** Mã người giới thiệu gửi kèm khi tham gia nhóm, lấy từ link chia sẻ (?ref=) — khớp API recordReferrerCode */
+    recordReferrerCode?: string;
 }
 
 export interface CreateCommunityGroupRequest {

@@ -146,6 +146,13 @@
     --z-loading: 180;
     /* lớp chờ toàn màn hình (trên hộp thoại, dưới thông báo) */
     --z-toast: 200;
+    /* Tương thích thang z-index dùng chung (dialog lồng nhau, sidebar ngăn kéo, header bị che)
+       — các token này do utils/z-index.ts và layout/admin-layout dùng, phải giữ đủ. */
+    --z-app: 0;
+    --z-modal-step: 10;          /* mỗi tầng dialog lồng nhau cộng thêm */
+    --z-sidebar-backdrop: 30;    /* lớp mờ khi mở sidebar/ngăn kéo */
+    --z-sidebar: 40;             /* sidebar / ngăn kéo dọc */
+    --z-header-muted: 48;        /* header khi bị ngăn kéo che */
     /* thông báo nổi */
 
     /* Kiểu chữ dùng chung */

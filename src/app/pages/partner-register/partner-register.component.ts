@@ -106,7 +106,7 @@ export class PartnerRegisterComponent {
       companyAddress: formData.companyAddress,
       businessFieldId: formData.businessFieldId,
       companySize: Number(formData.companySize),
-      referralCode: formData.referralCode || '',
+      recordReferrerCode: formData.recordReferrerCode || '',
       products: formData.products.map((p: any) => ({
         name: p.name,
         description: p.description || ''

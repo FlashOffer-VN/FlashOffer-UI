@@ -2461,6 +2461,8 @@
         "SAVE_FAILED": "Lưu quyền thất bại",
         "LOAD_FAILED": "Không tải được danh mục quyền",
         "READ_ONLY": "Bạn chỉ có quyền xem ma trận phân quyền.",
+        "NOT_EFFECTIVE": "chưa hiệu lực",
+        "NOT_EFFECTIVE_HINT": "Quyền đã được tick nhưng màn hình/nhóm cha chưa được cấp nên chưa có hiệu lực.",
         "SEARCH_PLACEHOLDER": "Tìm theo mã, tên, nhóm hoặc API",
         "SUPER_ADMIN_ALL": "Toàn quyền",
         "COL": {

@@ -5,7 +5,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Observable, forkJoin, of } from 'rxjs';
 
 import { AppService } from '@core/services/app.service';
-import { PermissionService, buildPermissionTree, collectActionCodes, isContainerNode, permissionLabelKey } from '@core/services/permission.service';
+import { PermissionService, ancestorCodes, buildPermissionTree, collectActionCodes, grantChainCodes, isContainerNode, permissionLabelKey } from '@core/services/permission.service';
 import { ApiResponse, UserRole, toUserRole } from '@core/models/auth.model';
 import {
     PermissionGroupItem,
@@ -71,6 +71,12 @@ type NodeState = 'all' | 'some' | 'none';
                         <span class="text-xs text-gray-500">
                             {{ selectedNames() }}
                         </span>
+                        <!-- Ô lọc cây quyền dùng state riêng (treeSearch); ô tìm tài khoản ở cột trái chỉ query tài khoản. -->
+                        <div class="w-full sm:w-64">
+                            <app-input [(ngModel)]="treeSearch" icon="fa-solid fa-magnifying-glass"
+                                [placeholder]="'PERMISSION.SEARCH_PLACEHOLDER' | translate">
+                            </app-input>
+                        </div>
                         <app-button variant="primary" [loading]="isSaving" class="ml-auto" (onClick)="save()">
                             <i class="fa-solid fa-floppy-disk mr-1"></i>{{ 'PERMISSION.SAVE' | translate }}
                         </app-button>
@@ -110,11 +116,11 @@ type NodeState = 'all' | 'some' | 'none';
                         <span class="text-xs text-gray-400 mt-0.5">· {{ kindKey(node) | translate }}</span>
                     } @else {
                         <span class="w-4"></span>
-                        <input type="checkbox" class="mt-1" [checked]="isChecked(node.code) && !isNodeDisabled(node)"
-                            [disabled]="isNodeDisabled(node)" (change)="toggleCode(node.code)" />
+                        <input type="checkbox" class="mt-1" [checked]="isChecked(node.code)"
+                            [disabled]="isNodeDisabled(node)" (change)="toggleCode(node)" />
                         <span class="text-sm">
                             <span class="block text-gray-800">{{ nodeLabel(node) }}</span>
-                            @if (isMixed(node.code) || isGrantedExtra(node.code) || isDeniedOverride(node.code)) {
+                            @if (isMixed(node.code) || isGrantedExtra(node.code) || isDeniedOverride(node.code) || isTickedButBlocked(node) || isGrantedNotEffective(node.code)) {
                             <span class="block text-xs text-gray-500">
                                 @if (isMixed(node.code)) {
                                     <em>{{ 'PERMISSION.USER.MIXED' | translate }}</em>
@@ -124,6 +130,9 @@ type NodeState = 'all' | 'some' | 'none';
                                 }
                                 @if (isDeniedOverride(node.code)) {
                                     <span class="text-red-600">{{ 'PERMISSION.USER.DENIED_OVERRIDE' | translate }}</span>
+                                }
+                                @if (isTickedButBlocked(node) || isGrantedNotEffective(node.code)) {
+                                    <span class="text-amber-600">{{ 'PERMISSION.NOT_EFFECTIVE' | translate }}</span>
                                 }
                             </span>
                             }
@@ -149,7 +158,14 @@ export class AdminUserPermissionComponent implements OnInit {
     candidates: UserPermissionCandidate[] = [];
     selected: UserPermissionCandidate[] = [];
     tree: PermissionTreeNode[] = [];
+    /** Từ khoá tìm tài khoản (ô bên trái) — CHỈ dùng để query danh sách tài khoản. */
     search = '';
+    /**
+     * Từ khoá lọc CÂY QUYỀN — state RIÊNG, không dùng chung với ô tìm tài khoản.
+     * Trước đây cây quyền lọc theo chính `search` nên gõ tên tài khoản là cây trống,
+     * còn gõ mã quyền để lọc cây lại thành từ khoá tìm tài khoản (không ra tài khoản nào).
+     */
+    treeSearch = '';
     isLoadingCandidates = false;
     isLoadingDetail = false;
     isSaving = false;
@@ -233,7 +249,7 @@ export class AdminUserPermissionComponent implements OnInit {
     //#region Cây quyền (Nhóm → Màn hình → hành động)
 
     get visibleTree(): PermissionTreeNode[] {
-        const keyword = this.search.trim().toLowerCase();
+        const keyword = this.treeSearch.trim().toLowerCase();
         if (!keyword) return this.tree;
 
         return this.tree
@@ -306,7 +322,11 @@ export class AdminUserPermissionComponent implements OnInit {
         return false;
     }
 
-    /** Tick / bỏ tick một nhánh: áp cho toàn bộ hành động con (đệ quy theo cây). */
+    /**
+     * Tick / bỏ tick một nhánh: áp cho toàn bộ hành động con (đệ quy theo cây).
+     * Khi BẬT phải cấp kèm toàn bộ chuỗi tổ tiên (màn hình + nhóm của nó) để quyền có hiệu lực — gửi thiếu
+     * là hành động vừa bật bị kế thừa vô hiệu ngay (đã gặp với màn hoa hồng).
+     */
     toggleNode(node: PermissionTreeNode, checked: boolean): void {
         const codes = collectActionCodes(node);
         const key = node.code;
@@ -315,6 +335,10 @@ export class AdminUserPermissionComponent implements OnInit {
             const restore = this.snapshots[key];
             const toAdd = restore && restore.length ? restore : codes;
             for (const code of toAdd) {
+                this.checked.add(code);
+                this.mixed.delete(code);
+            }
+            for (const code of grantChainCodes(node)) {
                 this.checked.add(code);
                 this.mixed.delete(code);
             }
@@ -328,14 +352,31 @@ export class AdminUserPermissionComponent implements OnInit {
         }
     }
 
-    /** Tích / bỏ tích một quyền hành động cho toàn bộ tài khoản đang chọn. */
-    toggleCode(code: string): void {
-        if (this.checked.has(code) && !this.mixed.has(code)) {
-            this.checked.delete(code);
+    /**
+     * Tích / bỏ tích một quyền hành động cho toàn bộ tài khoản đang chọn.
+     * Khi BẬT phải cấp kèm toàn bộ chuỗi tổ tiên (màn hình + nhóm) — API tính hiệu lực = bản thân VÀ mọi
+     * tổ tiên đều được cấp nên thiếu tổ tiên là quyền bị vô hiệu sau khi lưu.
+     */
+    toggleCode(node: PermissionTreeNode): void {
+        if (this.checked.has(node.code) && !this.mixed.has(node.code)) {
+            this.checked.delete(node.code);
         } else {
-            this.checked.add(code);
+            this.checked.add(node.code);
+            for (const code of ancestorCodes(node)) this.checked.add(code);
         }
-        this.mixed.delete(code);
+        this.mixed.delete(node.code);
+    }
+
+    /** Hành động đang tick nhưng một tổ tiên trong chuỗi đang tắt ⇒ chưa hiệu lực. */
+    isTickedButBlocked(node: PermissionTreeNode): boolean {
+        return !this.isContainer(node) && this.checked.has(node.code) && this.isNodeDisabled(node);
+    }
+
+    /** Quyền được cấp riêng cho tài khoản nhưng KHÔNG hiệu lực vì thiếu mã tổ tiên (màn hình/nhóm). */
+    isGrantedNotEffective(code: string): boolean {
+        if (this.selected.length !== 1) return false;
+        const detail = this._details.get(this.selected[0].id);
+        return !!detail && !!detail.grantedCodes?.includes(code) && !detail.effectiveCodes?.includes(code);
     }
 
     //#endregion

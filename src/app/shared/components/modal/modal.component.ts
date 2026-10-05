@@ -1,5 +1,6 @@
 ﻿// shared/components/modal/modal.component.ts
-import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostListener, OnDestroy } from '@angular/core';
+import { acquireModalLevel, releaseModalLevel } from '@core/utils/z-index';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ButtonComponent } from '@shared/components/button/button.component';
@@ -11,7 +12,8 @@ import { ButtonComponent } from '@shared/components/button/button.component';
   template: `
     <div
       *ngIf="visible"
-      class="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center p-3 sm:p-4 bg-black/50 backdrop-blur-sm animate-fadeIn"
+      class="modal-layer fixed inset-0 flex items-center justify-center p-3 sm:p-4 bg-black/50 backdrop-blur-sm animate-fadeIn"
+      [style.--modal-level]="modalLevel"
       (click)="onBackdropClick($event)">
       <div
         class="bg-white w-full flex flex-col max-h-[90vh] sm:max-h-[85vh] overflow-hidden rounded-2xl shadow-2xl ring-1 ring-black/5 animate-slideUp"
@@ -55,6 +57,10 @@ import { ButtonComponent } from '@shared/components/button/button.component';
     </div>
   `,
   styles: [`
+    /* Xếp lớp dialog: dialog mở sau (tầng cao hơn) luôn nằm trên dialog mở trước */
+    .modal-layer {
+      z-index: calc(var(--z-modal) + var(--modal-level, 0) * var(--z-modal-step));
+    }
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -87,8 +93,34 @@ import { ButtonComponent } from '@shared/components/button/button.component';
     }
   `]
 })
-export class ModalComponent {
-  @Input() visible = false;
+export class ModalComponent implements OnDestroy {
+  /**
+   * Hiện/ẩn dialog. Dùng getter/setter (không phải field thuần) vì ModalService gán
+   * `instance.visible = true` trực tiếp — phải bắt mọi lần đổi trạng thái để cấp/trả "tầng"
+   * xếp lớp (xem core/utils/z-index.ts), giữ quy tắc dialog mở sau luôn nằm trên dialog mở trước.
+   */
+  @Input()
+  get visible(): boolean {
+    return this._visible;
+  }
+  set visible(value: boolean) {
+    const next = value === true;
+    if (next === this._visible) {
+      return;
+    }
+    this._visible = next;
+    if (next) {
+      this._acquireLevel();
+    } else {
+      this._releaseLevel();
+    }
+  }
+
+  /** Tầng z-index của dialog — truyền cho overlay qua biến CSS --modal-level */
+  modalLevel = 0;
+
+  private _visible = false;
+  private _level: number | null = null;
   @Input() title = '';
   @Input() message = '';
   @Input() confirmText = 'Xác nhận';
@@ -143,4 +175,24 @@ export class ModalComponent {
       this.close();
     }
   }
+  ngOnDestroy() {
+    this._releaseLevel();
+  }
+
+  /** Cấp "tầng" cho dialog đang mở — dialog mở sau nhận tầng cao hơn */
+  private _acquireLevel() {
+    if (this._level === null) {
+      this._level = acquireModalLevel();
+      this.modalLevel = this._level;
+    }
+  }
+
+  /** Trả "tầng" khi dialog đóng để dialog sau tái dùng tầng thấp nhất trống */
+  private _releaseLevel() {
+    if (this._level !== null) {
+      releaseModalLevel(this._level);
+      this._level = null;
+    }
+  }
+
 }

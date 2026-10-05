@@ -79,7 +79,7 @@ export interface PartnerRegisterRequest {
     email: string;
     phone: string;
     position: string;
-    referralCode?: string;
+    recordReferrerCode?: string;
 
     // Step 2: Business Info (lĩnh vực hoạt động quản lý tập trung qua BusinessField)
     companyName: string;
@@ -180,9 +180,7 @@ export interface PartnerRegisterResponse {
 
 export interface Partner {
     /** Mã chia sẻ của tài khoản đã mang hồ sơ này vào hệ thống (API: AccountReferrerCode). */
-    accountReferrerCode?: string | null;
     /** Tên người giới thiệu của tài khoản (API: AccountReferrerName). */
-    accountReferrerName?: string | null;
     id: string;
     userId: string;
     partnerCode: string;
@@ -222,10 +220,10 @@ export interface Partner {
      */
     businessInfo?: BusinessInfo;
     companyInfo?: BusinessInfo;
-    /** Mã chia sẻ của người đã giới thiệu người tạo bản ghi — ghi nhận trên tài khoản (màn quản trị) */
-    referredByCode?: string | null;
-    /** Tên chủ mã chia sẻ của người tạo bản ghi */
-    referredByName?: string | null;
+    /** Mã người giới thiệu tài khoản — khớp API accountReferrerCode (màn quản trị) */
+    accountReferrerCode?: string | null;
+    /** Tên chủ mã người giới thiệu tài khoản — khớp API accountReferrerName */
+    accountReferrerName?: string | null;
 }
 
 export interface PartnerCommission {

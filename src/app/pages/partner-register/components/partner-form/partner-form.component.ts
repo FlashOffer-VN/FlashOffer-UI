@@ -62,7 +62,7 @@ export class PartnerFormComponent implements OnInit {
             phone: ['', [Validators.required, Validators.pattern(/^(0|\+84)[0-9]{9,10}$/)]],
             position: ['', [Validators.required, Validators.minLength(2)]],
             // Mã chia sẻ của CTV lấy từ link (?ref=) — không nhập tay ở form, gửi lên API cùng hồ sơ
-            referralCode: [resolveReferralCode() ?? ''],
+            recordReferrerCode: [resolveReferralCode() ?? ''],
 
             // Step 2: Business Info
             companyName: ['', [Validators.required, Validators.minLength(2)]],
