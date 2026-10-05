@@ -1288,6 +1288,7 @@
         "SEARCH_FIELD": {
             "LABEL": "Search by",
             "ALL": "All",
+"KEYWORD": "Keyword",
             "PRODUCT_NAME": "Product name",
             "CODE": "Request code",
             "RECORD_REFERRER": "Record referrer",

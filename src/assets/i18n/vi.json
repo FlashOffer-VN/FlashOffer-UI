@@ -1244,10 +1244,11 @@
         "SEARCH_FIELD": {
             "LABEL": "Tìm theo",
             "ALL": "Tất cả",
+"KEYWORD": "Từ khoá",
             "PRODUCT_NAME": "Tên sản phẩm",
             "CODE": "Mã yêu cầu",
-            "RECORD_REFERRER": "Người giới thiệu bản ghi",
-            "RECORD_REFERRER_NAME": "Người giới thiệu bản ghi (tên)",
+            "RECORD_REFERRER": "NGT bản ghi",
+            "RECORD_REFERRER_NAME": "NGT bản ghi (tên)",
             "CUSTOMER_NAME": "Tên khách hàng",
             "CUSTOMER_PHONE": "SĐT",
             "CUSTOMER_EMAIL": "Email",
@@ -1262,7 +1263,7 @@
             "FULL_NAME": "Họ tên",
             "USER_CODE": "Mã tài khoản",
             "REFERRAL_CODE": "Mã giới thiệu",
-            "ACCOUNT_REFERRER_CODE": "Người giới thiệu",
+            "ACCOUNT_REFERRER_CODE": "NGT tài khoản",
             "COLLABORATOR_CODE": "Mã cộng tác viên",
             "PARTNER_CODE": "Mã đối tác",
             "COMPANY_NAME": "Tên công ty",
@@ -1750,7 +1751,7 @@
             "NOTE": "Ghi chú",
             "ZALO": "Zalo",
             "EMAIL": "Email",
-            "REFERRAL": "Người giới thiệu bản ghi",
+            "REFERRAL": "NGT bản ghi",
             "APPROVE": "Duyệt",
             "REJECT": "Từ chối",
             "EXPIRE": "Đánh dấu hết hạn",
@@ -1763,7 +1764,7 @@
             "DELETE_CONFIRM": "Bạn có chắc chắn muốn xóa yêu cầu \"{{name}}\"?",
             "DELETED_SUCCESS": "Đã xóa yêu cầu offer thành công",
             "RESTORED_SUCCESS": "Khôi phục yêu cầu offer thành công",
-            "REFERRED_BY": "Người giới thiệu tài khoản"
+            "REFERRED_BY": "NGT tài khoản"
         },
         "PURCHASE_REQUESTS": {
             "TITLE": "Quản lý yêu cầu tìm nhà cung cấp",
@@ -1785,7 +1786,7 @@
             "NOTE": "Ghi chú",
             "ZALO": "Zalo",
             "EMAIL": "Email",
-            "REFERRAL": "Người giới thiệu bản ghi",
+            "REFERRAL": "NGT bản ghi",
             "CONTACT": "Đã liên hệ",
             "CONTACT_CONFIRM": "Bạn có chắc chắn đánh dấu đã liên hệ với yêu cầu này không?",
             "CONTACTED_SUCCESS": "Đã đánh dấu đã liên hệ thành công",
@@ -1795,7 +1796,7 @@
             "DELETE_CONFIRM": "Bạn có chắc chắn muốn xóa yêu cầu \"{{name}}\"?",
             "DELETED_SUCCESS": "Đã xóa yêu cầu tìm nhà cung cấp thành công",
             "RESTORED_SUCCESS": "Khôi phục yêu cầu tìm nhà cung cấp thành công",
-            "REFERRED_BY": "Người giới thiệu tài khoản"
+            "REFERRED_BY": "NGT tài khoản"
         },
         "SETTINGS_PAGE": {
             "TAB_COMMISSION": "Hoa hồng",
@@ -1916,7 +1917,7 @@
             "DELETED_SUCCESS": "Xóa cộng tác viên thành công",
             "EDIT_TITLE": "Sửa cộng tác viên",
             "UPDATED_SUCCESS": "Cập nhật cộng tác viên thành công",
-            "REFERRED_BY": "Người giới thiệu tài khoản"
+            "REFERRED_BY": "NGT tài khoản"
         },
         "BUSINESS_INFO": {
             "TITLE": "Thông tin doanh nghiệp",
@@ -1993,7 +1994,7 @@
             "NO_FILTER_RESULT": "Không có sản phẩm nào khớp bộ lọc",
             "NO_PRODUCTS": "Chưa có sản phẩm",
             "SPECIAL_CONDITIONS": "Điều kiện đặc biệt",
-            "REFERRED_BY": "Người giới thiệu tài khoản"
+            "REFERRED_BY": "NGT tài khoản"
         },
         "GROUP_BUYING": {
             "TITLE": "Quản lý yêu cầu mua chung",
@@ -2023,7 +2024,7 @@
             "JOINED_AT": "Tham gia lúc",
             "OWNER": "Người mở",
             "GUEST_ACCOUNT": "Tài khoản tự tạo",
-            "REFERRAL": "Người giới thiệu bản ghi",
+            "REFERRAL": "NGT bản ghi",
             "APPROVE": "Duyệt yêu cầu",
             "APPROVE_CONFIRM": "Duyệt yêu cầu này để hiển thị công khai trên tab Mua chung?",
             "APPROVE_SUCCESS": "Duyệt yêu cầu mua chung thành công",
@@ -2044,7 +2045,7 @@
             "DELETE_CONFIRM": "Bạn có chắc chắn muốn xóa yêu cầu mua chung \"{{name}}\"?",
             "DELETED_SUCCESS": "Đã xóa yêu cầu mua chung thành công",
             "RESTORED_SUCCESS": "Khôi phục yêu cầu mua chung thành công",
-            "REFERRED_BY": "Người giới thiệu tài khoản"
+            "REFERRED_BY": "NGT tài khoản"
         },
         "REVENUE": {
             "TITLE": "Doanh thu",
@@ -2163,7 +2164,7 @@
             "MEMBER_NAME": "Thành viên",
             "MEMBER_CONTACT": "Liên hệ",
             "MEMBER_JOINED": "Ngày tham gia",
-            "REFERRAL": "Người giới thiệu bản ghi",
+            "REFERRAL": "NGT bản ghi",
             "MEMBER_STATUS_SUCCESS": "Cập nhật trạng thái thành viên thành công",
             "MEMBER_REMOVED": "Đã xoá thành viên khỏi nhóm",
             "NO_MEMBERS": "Chưa có thành viên",
@@ -2189,7 +2190,7 @@
             "PRIVATE_HINT": "Yêu cầu kín do thành viên gửi riêng cho admin, các thành viên khác không đọc được.",
             "NO_PRIVATE": "Chưa có yêu cầu kín",
             "NO_POSTS": "Chưa có bài nào",
-            "REFERRED_BY": "Người giới thiệu tài khoản"
+            "REFERRED_BY": "NGT tài khoản"
         },
         "LOGOUT_TITLE": "Đăng xuất khỏi trang quản trị?",
         "LOGOUT_MESSAGE": "Bạn sẽ cần đăng nhập lại để tiếp tục quản trị.",
