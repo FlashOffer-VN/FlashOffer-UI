@@ -84,8 +84,8 @@
                                 <div class="text-sm text-gray-900">{{ request.fullName }}</div>
                                 <div class="text-xs text-gray-500">{{ request.phone }}</div>
                                 <app-code-list [items]="[
-                                    { label: ('ADMIN.GROUP_BUYING.REFERRAL' | translate), value: request.recordReferrerCode },
-                                    { label: ('ADMIN.GROUP_BUYING.REFERRED_BY' | translate), value: request.accountReferrerCode },
+                                    { label: ('ADMIN.GROUP_BUYING.REFERRAL' | translate), value: request.recordReferrerCode, hint: request.recordReferrerName },
+                                    { label: ('ADMIN.GROUP_BUYING.REFERRED_BY' | translate), value: request.accountReferrerCode, hint: request.accountReferrerName },
                                     { label: ('COMMON.CODE.ACCOUNT' | translate), value: request.userCode }
                                 ]"></app-code-list>
                             </td>

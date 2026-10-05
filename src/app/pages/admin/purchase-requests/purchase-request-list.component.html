@@ -101,8 +101,8 @@
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 <div>{{ request.fullName }}</div>
                                 <app-code-list [items]="[
-                                    { label: ('ADMIN.PURCHASE_REQUESTS.REFERRAL' | translate), value: request.recordReferrerCode },
-                                    { label: ('ADMIN.PURCHASE_REQUESTS.REFERRED_BY' | translate), value: request.accountReferrerCode },
+                                    { label: ('ADMIN.PURCHASE_REQUESTS.REFERRAL' | translate), value: request.recordReferrerCode, hint: request.recordReferrerName },
+                                    { label: ('ADMIN.PURCHASE_REQUESTS.REFERRED_BY' | translate), value: request.accountReferrerCode, hint: request.accountReferrerName },
                                     { label: ('COMMON.CODE.ACCOUNT' | translate), value: request.userCode }
                                 ]"></app-code-list>
                             </td>

@@ -107,7 +107,7 @@
                             <td class="px-4 py-3 text-sm font-medium text-gray-900">
                                 <div>{{ collaborator.fullName }}</div>
                                 <app-code-list [items]="[
-                                    { label: ('ADMIN.CTV.REFERRED_BY' | translate), value: collaborator.accountReferrerCode },
+                                    { label: ('ADMIN.CTV.REFERRED_BY' | translate), value: collaborator.accountReferrerCode, hint: collaborator.accountReferrerName },
                                     { label: ('COMMON.CODE.ACCOUNT' | translate), value: collaborator.userCode }
                                 ]"></app-code-list>
                             </td>

@@ -115,7 +115,7 @@
                             <td class="px-4 py-3 text-sm font-medium text-gray-900">
                                 <div>{{ partner.fullName }}</div>
                                 <app-code-list [items]="[
-                                    { label: ('ADMIN.PARTNER.REFERRED_BY' | translate), value: partner.accountReferrerCode },
+                                    { label: ('ADMIN.PARTNER.REFERRED_BY' | translate), value: partner.accountReferrerCode, hint: partner.accountReferrerName },
                                     { label: ('COMMON.CODE.ACCOUNT' | translate), value: partner.userCode }
                                 ]"></app-code-list>
                             </td>

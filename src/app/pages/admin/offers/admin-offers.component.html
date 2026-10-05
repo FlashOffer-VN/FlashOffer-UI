@@ -106,8 +106,8 @@
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 <div>{{ offer.fullName }}</div>
                                 <app-code-list [items]="[
-                                    { label: ('ADMIN.OFFERS.REFERRAL' | translate), value: offer.recordReferrerCode },
-                                    { label: ('ADMIN.OFFERS.REFERRED_BY' | translate), value: offer.accountReferrerCode },
+                                    { label: ('ADMIN.OFFERS.REFERRAL' | translate), value: offer.recordReferrerCode, hint: offer.recordReferrerName },
+                                    { label: ('ADMIN.OFFERS.REFERRED_BY' | translate), value: offer.accountReferrerCode, hint: offer.accountReferrerName },
                                     { label: ('COMMON.CODE.ACCOUNT' | translate), value: offer.userCode }
                                 ]"></app-code-list>
                             </td>
