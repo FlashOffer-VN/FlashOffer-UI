@@ -153,10 +153,7 @@ export class AdminRevenueListComponent implements OnInit, OnDestroy {
 
     /** Mở màn chi tiết của giao dịch đã khai. */
     openRecord(record: TransactionRevenue): void {
-        const path = record.type === RevenueTransactionType.PurchaseRequest
-            ? '/admin/purchase-requests'
-            : '/admin/group-buying';
-        this._router.navigate([path, record.referenceId]);
+        this._router.navigate([this.recordPath(record.type), record.referenceId]);
     }
 
     /** Nhãn dễ đọc cho khoá kỳ do máy chủ trả về (2026-10-04, 2026-W41, 2026-10 hay 2026). */
@@ -174,9 +171,28 @@ export class AdminRevenueListComponent implements OnInit, OnDestroy {
 
     /** Tên loại giao dịch. */
     typeLabel(type: RevenueTransactionType): string {
-        return type === RevenueTransactionType.PurchaseRequest
-            ? this._appService.trans('ADMIN.REVENUE.TYPE_PURCHASE_REQUEST')
-            : this._appService.trans('ADMIN.REVENUE.TYPE_GROUP_BUYING');
+        switch (type) {
+            case RevenueTransactionType.PurchaseRequest:
+                return this._appService.trans('ADMIN.REVENUE.TYPE_PURCHASE_REQUEST');
+            case RevenueTransactionType.GroupBuyingRequest:
+                return this._appService.trans('ADMIN.REVENUE.TYPE_GROUP_BUYING');
+            case RevenueTransactionType.OfferRequest:
+                return this._appService.trans('ADMIN.REVENUE.TYPE_OFFER_REQUEST');
+            default:
+                return '--';
+        }
+    }
+
+    /** Đường dẫn màn chi tiết của loại giao dịch. */
+    private recordPath(type: RevenueTransactionType): string {
+        switch (type) {
+            case RevenueTransactionType.GroupBuyingRequest:
+                return '/admin/group-buying';
+            case RevenueTransactionType.OfferRequest:
+                return '/admin/offers';
+            default:
+                return '/admin/purchase-requests';
+        }
     }
 
     /** Tải lại số tổng của kỳ đang chọn. */

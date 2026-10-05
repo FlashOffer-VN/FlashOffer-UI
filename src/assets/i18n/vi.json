@@ -2053,6 +2053,7 @@
             "TYPE": "Loại giao dịch",
             "TYPE_PURCHASE_REQUEST": "Yêu cầu tìm nhà cung cấp",
             "TYPE_GROUP_BUYING": "Yêu cầu mua chung",
+"TYPE_OFFER_REQUEST": "Offer",
             "STATUS": "Trạng thái",
             "CREATED_AT": "Ngày tạo",
             "EMPTY": "Chưa có bản khai nào",

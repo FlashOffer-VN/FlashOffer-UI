@@ -2090,6 +2090,7 @@
             "TYPE": "Transaction type",
             "TYPE_PURCHASE_REQUEST": "Supplier request",
             "TYPE_GROUP_BUYING": "Group buying request",
+"TYPE_OFFER_REQUEST": "Offer",
             "STATUS": "Status",
             "CREATED_AT": "Created at",
             "EMPTY": "No declaration yet",
