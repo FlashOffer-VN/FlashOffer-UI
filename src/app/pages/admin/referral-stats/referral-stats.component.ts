@@ -287,12 +287,12 @@ export class AdminReferralStatsComponent implements OnInit, OnDestroy {
     // ===== Phát sinh của một mã =====
 
     toggleEvents(item: ReferralStatsItem): void {
-        if (this.selectedCode === item.referralCode) {
+        if (this.selectedCode === item.recordReferrerCode) {
             this.closeEvents();
             return;
         }
 
-        this.selectedCode = item.referralCode;
+        this.selectedCode = item.recordReferrerCode;
         this.eventsPage = 1;
         this.loadEvents();
     }

@@ -53,7 +53,8 @@ export interface ReferralStatsSummary {
 }
 
 export interface ReferralStatsItem {
-    referralCode: string;
+    /** Mã chia sẻ ghi nhận của phát sinh — khớp tên trường API `recordReferrerCode`. */
+    recordReferrerCode: string;
     referrerName: string | null;
     referredUsers: number;
     referredGuestUsers: number;
@@ -85,7 +86,8 @@ export interface ReferralStatsOverview {
 export interface ReferralEventItem {
     id: string;
     referralEventCode: string | null;
-    referralCode: string;
+    /** Mã chia sẻ ghi nhận của phát sinh — khớp tên trường API `recordReferrerCode`. */
+    recordReferrerCode: string;
     referrerName: string | null;
     referredUserId: string;
     referredUserName: string | null;
