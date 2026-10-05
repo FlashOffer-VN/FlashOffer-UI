@@ -25,6 +25,7 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { PaymentQrComponent } from '@shared/components/payment-qr/payment-qr.component';
 import { buildAccountQr } from '@core/constants/bank-catalog';
+import { CodeListComponent } from '@shared/components/code-list/code-list.component';
 
 /**
  * Duyệt chi trả hoa hồng: yêu cầu rút sớm của thành viên và các kỳ chi trả theo tháng.
@@ -37,6 +38,7 @@ import { buildAccountQr } from '@core/constants/bank-catalog';
         CommonModule,
         FormsModule,
         TranslateModule,
+        CodeListComponent,
         LoadingComponent,
         PaginationComponent,
         StatusTabsComponent,
@@ -110,9 +112,9 @@ import { buildAccountQr } from '@core/constants/bank-catalog';
                                             @if (item.username) {
                                                 <div class="text-xs text-gray-500">{{ item.username }}</div>
                                             }
-                                            @if (item.userCode) {
-                                                <div class="text-xs text-gray-400">{{ 'COMMON.CODE.ACCOUNT' | translate }}: {{ item.userCode }}</div>
-                                            }
+                                            <app-code-list [items]="[
+                                                { label: ('COMMON.CODE.ACCOUNT' | translate), value: item.userCode }
+                                            ]"></app-code-list>
                                         </td>
                                         <td class="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">
                                             {{ getPayoutTypeLabel(item.type) | translate }}

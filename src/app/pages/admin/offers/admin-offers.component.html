@@ -95,19 +95,21 @@
                             <td class="px-4 py-3 text-sm text-gray-500">
                                 {{ (pageNumber - 1) * pageSize + i + 1 }}
                             </td>
-                            <td class="px-4 py-3 text-sm font-mono text-gray-600">
-                                {{ offer.offerRequestCode || (offer.id | shortId) }}
+                            <td class="px-4 py-3 text-sm">
+                                <app-code-list [items]="[
+                                    { label: '', value: (offer.offerRequestCode || (offer.id | shortId)) }
+                                ]"></app-code-list>
                             </td>
                             <td class="px-4 py-3 text-sm font-medium text-gray-900">
                                 {{ offer.productName }}
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">
-                                {{ offer.fullName }}
-                                <div class="text-xs text-gray-400">{{ 'ADMIN.OFFERS.REFERRAL' | translate }}:
-                                    {{ offer.recordReferrerCode | appCodeName: offer.recordReferrerName }}</div>
-                                <div class="text-xs text-gray-400">{{ 'ADMIN.OFFERS.REFERRED_BY' | translate }}:
-                                    {{ offer.accountReferrerCode | appCodeName: offer.accountReferrerName }}</div>
-                                <div class="text-xs text-gray-400">{{'COMMON.CODE.ACCOUNT' | translate }}: {{ offer.userCode || '--' }}</div>
+                                <div>{{ offer.fullName }}</div>
+                                <app-code-list [items]="[
+                                    { label: ('ADMIN.OFFERS.REFERRAL' | translate), value: offer.recordReferrerCode },
+                                    { label: ('ADMIN.OFFERS.REFERRED_BY' | translate), value: offer.accountReferrerCode },
+                                    { label: ('COMMON.CODE.ACCOUNT' | translate), value: offer.userCode }
+                                ]"></app-code-list>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ offer.phone }}

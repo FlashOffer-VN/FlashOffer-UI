@@ -1202,7 +1202,9 @@
     "COMMON": {
         "CODE": {
             "ACCOUNT": "Mã tài khoản",
-            "COMPANY": "Mã công ty"
+            "COMPANY": "Mã công ty",
+            "COPY": "Sao chép",
+            "COPIED": "Đã sao chép"
         },
         "USER_PICKER": {
         "SEARCH_PLACEHOLDER": "Tìm theo tên đăng nhập hoặc họ tên...",

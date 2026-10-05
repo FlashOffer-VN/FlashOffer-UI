@@ -27,12 +27,14 @@ import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.
 import { GroupBuyingDetailModalComponent } from '@pages/social/components/group-buying-detail-modal/group-buying-detail-modal.component';
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
+import { CodeListComponent } from '@shared/components/code-list/code-list.component';
 
 @Component({
     selector: 'app-my-group-buying',
     standalone: true,
     imports: [
         CommonModule, FormsModule, TranslateModule,
+        CodeListComponent,
         AppDatePipe, AppPricePipe,
         BadgeComponent, ButtonComponent, InputComponent, LoadingComponent,
         PaginationComponent, StatusTabsComponent,
@@ -123,12 +125,12 @@ import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange
                             <tr class="cursor-pointer transition-colors hover:bg-slate-50" (click)="openDetail(item)">
                                 <td class="px-4 py-3">
                                     <div class="text-sm font-medium text-slate-800">{{ item.productName }}</div>
-                                    <div class="text-xs text-slate-400">
-                                        {{ item.groupBuyingRequestCode || '--' }}
-                                        @if (item.businessFieldName) {
-                                        <span> · {{ item.businessFieldName }}</span>
-                                        }
-                                    </div>
+                                    @if (item.businessFieldName) {
+                                    <div class="text-xs text-slate-400">{{ item.businessFieldName }}</div>
+                                    }
+                                    <app-code-list [items]="[
+                                        { label: '', value: item.groupBuyingRequestCode }
+                                    ]"></app-code-list>
                                 </td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ item.targetPrice | appPrice }}</td>
                                 <td class="px-4 py-3 text-sm text-slate-700">

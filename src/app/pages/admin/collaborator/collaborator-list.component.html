@@ -99,15 +99,17 @@
                             <td class="px-4 py-3 text-sm text-gray-500">
                                 {{ (pageNumber - 1) * pageSize + i + 1 }}
                             </td>
-                            <td class="px-4 py-3 text-sm font-mono text-gray-600 whitespace-nowrap">
-                                {{ collaborator.collaboratorCode || '--' }}
+                            <td class="px-4 py-3 text-sm">
+                                <app-code-list [items]="[
+                                    { label: '', value: collaborator.collaboratorCode }
+                                ]"></app-code-list>
                             </td>
-                            <td class="px-4 py-3 text-sm font-medium text-gray-900 w-40">
-                                {{ collaborator.fullName }}
-                                <div class="text-xs font-normal text-gray-400">{{ 'ADMIN.CTV.REFERRED_BY' | translate }}:
-                                    {{ collaborator.accountReferrerCode | appCodeName: collaborator.accountReferrerName }}</div>
-                                <div class="text-xs font-normal text-gray-400">{{ 'COMMON.CODE.ACCOUNT' | translate }}:
-                                    {{ collaborator.userCode || '--' }}</div>
+                            <td class="px-4 py-3 text-sm font-medium text-gray-900">
+                                <div>{{ collaborator.fullName }}</div>
+                                <app-code-list [items]="[
+                                    { label: ('ADMIN.CTV.REFERRED_BY' | translate), value: collaborator.accountReferrerCode },
+                                    { label: ('COMMON.CODE.ACCOUNT' | translate), value: collaborator.userCode }
+                                ]"></app-code-list>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ collaborator.email || '--' }}

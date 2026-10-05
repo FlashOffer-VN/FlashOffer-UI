@@ -22,6 +22,7 @@ import { PaginationComponent } from '@shared/components/pagination/pagination.co
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
+import { CodeListComponent } from '@shared/components/code-list/code-list.component';
 
 /** Loại yêu cầu xem trong khu vực thành viên */
 type MyRequestType = 'purchase' | 'offer';
@@ -39,6 +40,7 @@ interface MyRequestStatusView {
     standalone: true,
     imports: [
         CommonModule, FormsModule, TranslateModule,
+        CodeListComponent,
         AppDatePipe, AppPricePipe, ShortIdPipe,
         BadgeComponent, ButtonComponent, InputComponent, LoadingComponent,
         ModalComponent, PaginationComponent, StatusTabsComponent, SearchByComponent, NgxFilterDaterangeComponent
@@ -153,12 +155,12 @@ interface MyRequestStatusView {
                             <tr class="cursor-pointer transition-colors hover:bg-slate-50" (click)="openPurchase(item)">
                                 <td class="px-4 py-3">
                                     <div class="text-sm font-medium text-slate-800">{{ item.productName }}</div>
-                                    <div class="text-xs text-slate-400">
-                                        {{ item.purchaseRequestCode || (item.id | shortId) }}
-                                        @if (item.productCategory) {
-                                        <span> · {{ item.productCategory }}</span>
-                                        }
-                                    </div>
+                                    @if (item.productCategory) {
+                                    <div class="text-xs text-slate-400">{{ item.productCategory }}</div>
+                                    }
+                                    <app-code-list [items]="[
+                                        { label: ('USER.MY_REQUESTS.CODE' | translate), value: (item.purchaseRequestCode || (item.id | shortId)) }
+                                    ]"></app-code-list>
                                 </td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ item.quantity }} {{ item.unit }}</td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ item.expectedPrice | appPrice }}</td>
@@ -190,7 +192,9 @@ interface MyRequestStatusView {
                             <tr class="cursor-pointer transition-colors hover:bg-slate-50" (click)="openOffer(item)">
                                 <td class="px-4 py-3">
                                     <div class="text-sm font-medium text-slate-800">{{ item.productName }}</div>
-                                    <div class="text-xs text-slate-400">{{ item.offerRequestCode || (item.id | shortId) }}</div>
+                                    <app-code-list [items]="[
+                                        { label: ('USER.MY_REQUESTS.CODE' | translate), value: (item.offerRequestCode || (item.id | shortId)) }
+                                    ]"></app-code-list>
                                 </td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ item.quantity }} {{ item.unit }}</td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ item.currentPrice | appPrice }}</td>

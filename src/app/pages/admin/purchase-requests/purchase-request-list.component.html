@@ -93,15 +93,18 @@
                                 {{ (pageNumber - 1) * pageSize + i + 1 }}
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-800">
-                                {{ (request.purchaseRequestCode || (request.id | shortId)) | appCodeName: request.productName }}
+                                <div class="font-medium text-gray-900">{{ request.productName }}</div>
+                                <app-code-list [items]="[
+                                    { label: '', value: (request.purchaseRequestCode || (request.id | shortId)) }
+                                ]"></app-code-list>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">
-                                {{ request.fullName }}
-                                <div class="text-xs text-gray-400">{{ 'ADMIN.PURCHASE_REQUESTS.REFERRAL' | translate }}:
-                                    {{ request.recordReferrerCode | appCodeName: request.recordReferrerName }}</div>
-                                <div class="text-xs text-gray-400">{{ 'ADMIN.PURCHASE_REQUESTS.REFERRED_BY' | translate }}:
-                                    {{ request.accountReferrerCode | appCodeName: request.accountReferrerName }}</div>
-                                <div class="text-xs text-gray-400">{{'COMMON.CODE.ACCOUNT' | translate }}: {{ request.userCode || '--' }}</div>
+                                <div>{{ request.fullName }}</div>
+                                <app-code-list [items]="[
+                                    { label: ('ADMIN.PURCHASE_REQUESTS.REFERRAL' | translate), value: request.recordReferrerCode },
+                                    { label: ('ADMIN.PURCHASE_REQUESTS.REFERRED_BY' | translate), value: request.accountReferrerCode },
+                                    { label: ('COMMON.CODE.ACCOUNT' | translate), value: request.userCode }
+                                ]"></app-code-list>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ request.phone }}

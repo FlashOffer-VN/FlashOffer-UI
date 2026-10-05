@@ -16,6 +16,7 @@ import { PaginationComponent } from '@shared/components/pagination/pagination.co
 import { BadgeComponent } from '@shared/components/badge/badge.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
+import { CodeListComponent } from '@shared/components/code-list/code-list.component';
 
 @Component({
     selector: 'app-admin-user-list',
@@ -24,6 +25,7 @@ import { SearchByComponent } from '@shared/components/search-by/search-by.compon
         CommonModule,
         FormsModule,
         TranslateModule,
+        CodeListComponent,
         ButtonComponent,
         InputComponent,
         LoadingComponent,

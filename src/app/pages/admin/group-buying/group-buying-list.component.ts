@@ -23,9 +23,9 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
-import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
+import { CodeListComponent } from '@shared/components/code-list/code-list.component';
 
 @Component({
     selector: 'app-admin-group-buying-list',
@@ -35,6 +35,7 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
         RouterModule,
         FormsModule,
         TranslateModule,
+        CodeListComponent,
         ButtonComponent,
         InputComponent,
         LoadingComponent,
@@ -45,7 +46,6 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
         AppDatePipe,
         AppPricePipe,
         ShortIdPipe,
-        CodeNamePipe,
         SearchByComponent,
         HasPermissionDirective
     ],

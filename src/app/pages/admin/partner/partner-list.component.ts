@@ -18,9 +18,9 @@ import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.com
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
-import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
+import { CodeListComponent } from '@shared/components/code-list/code-list.component';
 
 @Component({
     selector: 'app-admin-partner-list',
@@ -30,6 +30,7 @@ import { SearchByComponent } from '@shared/components/search-by/search-by.compon
         RouterModule,
         FormsModule,
         TranslateModule,
+        CodeListComponent,
         ButtonComponent,
         InputComponent,
         LoadingComponent,
@@ -38,7 +39,6 @@ import { SearchByComponent } from '@shared/components/search-by/search-by.compon
         StatusTabsComponent,
         NgxFilterDaterangeComponent,
         AppDatePipe,
-        CodeNamePipe,
         HasPermissionDirective,
         SearchByComponent
     ],
