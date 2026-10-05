@@ -51,12 +51,14 @@
 
                 <div class="supplier-card__body">
                     <h3>{{ supplier.companyName }}</h3>
-                    <span class="supplier-card__category" *ngIf="supplier.companyAddress">
-                        <i class="fas fa-location-dot"></i> {{ supplier.companyAddress }}
-                    </span>
-                    <span class="supplier-card__category">
-                        <i class="fas fa-users"></i> {{ companySizeText(supplier) | translate }}
-                    </span>
+                    <div class="supplier-card__tags">
+                        <span class="supplier-card__category" *ngIf="supplier.companyAddress">
+                            <i class="fas fa-location-dot"></i> {{ supplier.companyAddress }}
+                        </span>
+                        <span class="supplier-card__category">
+                            <i class="fas fa-users"></i> {{ companySizeText(supplier) | translate }}
+                        </span>
+                    </div>
 
                     <div class="supplier-card__products" *ngIf="supplier.products.length">
                         <span class="product-tag" *ngFor="let product of supplier.products | slice:0:4">
@@ -67,7 +69,7 @@
 
                 <div class="supplier-card__footer">
                     <span class="supplier-card__verified">
-                        ✅ {{ 'SUPPLIERS_VERIFIED' | translate }}
+                        <i class="fas fa-circle-check"></i> {{ 'SUPPLIERS_VERIFIED' | translate }}
                     </span>
                     <a class="supplier-card__cta" routerLink="/find-supplier">
                         {{ 'SUPPLIERS_CONTACT' | translate }}

@@ -87,7 +87,7 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
 
         .gb-card {
             background: white;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--border);
             border-radius: 16px;
             padding: 16px;
             display: flex;
@@ -102,7 +102,7 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
            tạo containing block mới -> rời chuột là overlay nhảy theo, gây nhấp nháy modal liên tục */
         .gb-card:hover {
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-            border-color: #d1d5db;
+            border-color: var(--border-strong);
         }
 
         .gb-head {
@@ -120,20 +120,20 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
             text-transform: uppercase;
         }
 
-        .gb-badge.active { background: #dbeafe; color: #1d4ed8; }
-        .gb-badge.pending { background: #fef3c7; color: #b45309; }
-        .gb-badge.completed { background: #d1fae5; color: #047857; }
-        .gb-badge.cancelled { background: #fee2e2; color: #b91c1c; }
+        .gb-badge.active { background: var(--blue-soft); color: #1d4ed8; }
+        .gb-badge.pending { background: var(--warning-soft); color: var(--warning-dark); }
+        .gb-badge.completed { background: var(--success-soft); color: var(--success-strong); }
+        .gb-badge.cancelled { background: var(--danger-bg); color: var(--danger-deep); }
 
         .gb-field {
             font-size: 12px;
-            color: #6b7280;
+            color: var(--text-muted);
         }
 
         .gb-title {
             font-size: 16px;
             font-weight: 700;
-            color: #111827;
+            color: var(--text-heading);
             margin: 0;
             line-height: 1.35;
         }
@@ -143,7 +143,7 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
             align-items: baseline;
             gap: 6px;
             font-size: 13px;
-            color: #6b7280;
+            color: var(--text-muted);
         }
 
         .gb-price .value {
@@ -154,7 +154,7 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
 
         .bar {
             height: 8px;
-            background: #f3f4f6;
+            background: var(--surface-muted);
             border-radius: 999px;
             overflow: hidden;
         }
@@ -174,9 +174,9 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
             font-size: 12px;
         }
 
-        .gb-progress .joined { color: #374151; font-weight: 600; }
-        .gb-progress .need { color: #d97706; font-weight: 600; }
-        .gb-progress .enough { color: #059669; font-weight: 600; }
+        .gb-progress .joined { color: var(--text-secondary); font-weight: 600; }
+        .gb-progress .need { color: var(--warning-strong); font-weight: 600; }
+        .gb-progress .enough { color: var(--success-dark); font-weight: 600; }
 
         .gb-people {
             display: flex;
@@ -186,8 +186,8 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
 
         .gb-people .person {
             font-size: 11px;
-            background: #f3f4f6;
-            color: #4b5563;
+            background: var(--surface-muted);
+            color: var(--text-slate);
             padding: 2px 8px;
             border-radius: 999px;
         }
@@ -199,12 +199,12 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
             gap: 8px;
             margin-top: auto;
             padding-top: 8px;
-            border-top: 1px solid #f1f5f9;
+            border-top: 1px solid var(--surface-subtle);
         }
 
         .gb-foot .creator {
             font-size: 12px;
-            color: #6b7280;
+            color: var(--text-muted);
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -214,7 +214,7 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
         .gb-foot .joined-flag {
             font-size: 12px;
             font-weight: 600;
-            color: #059669;
+            color: var(--success-dark);
             white-space: nowrap;
         }
 
@@ -232,7 +232,7 @@ import { ShareToGroupComponent } from '@shared/components/share-to-group/share-t
         }
 
         .join-btn:hover { background: var(--primary-dark); }
-        .join-btn.disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
+        .join-btn.disabled { background: var(--border); color: var(--text-subtle); cursor: not-allowed; }
 
         @media (max-width: 480px) {
             .gb-title { font-size: 15px; }

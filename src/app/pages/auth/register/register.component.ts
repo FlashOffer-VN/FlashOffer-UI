@@ -8,10 +8,13 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 import { ProvinceSelectComponent } from '@shared/components/province-select/province-select.component';
+import { AccountCreatedNoticeComponent } from '@shared/components/account-created-notice/account-created-notice.component';
 import { AppService } from '@core/services/app.service';
 import { BusinessFieldOption, BusinessFieldService } from '@core/services/business-field.service';
 import { isBrowser } from '@core/utils/platform';
+import { focusFirstInvalid } from '@core/utils/form-invalid';
 import { resolveReferralCode } from '@core/utils/share-link';
+import { COMPANY_SIZES } from '@core/models/partner.model';
 
 @Component({
     selector: 'app-register',
@@ -24,7 +27,8 @@ import { resolveReferralCode } from '@core/utils/share-link';
         InputComponent,
         ButtonComponent,
         NgSelectWrapperComponent,
-        ProvinceSelectComponent
+        ProvinceSelectComponent,
+        AccountCreatedNoticeComponent
     ],
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.css']
@@ -34,18 +38,23 @@ export class RegisterComponent implements OnInit {
     isLoading = false;
     isSubmitted = false;
     currentStep = 1;
+    /** Tài khoản trả về sau khi đăng ký thành công — hiện khối thông báo thay cho form */
+    registerResult: {
+        isNewAccount?: boolean;
+        accountAlreadyExisted?: boolean;
+        username?: string | null;
+        passwordIsPhone?: boolean;
+    } | null = null;
     totalSteps = 2;
 
     /** Danh sách lĩnh vực hoạt động lấy từ API (BusinessField — quản lý tập trung). */
     businessFields: BusinessFieldOption[] = [];
 
-    businessSizes = [
-        { value: 1, label: '1 - 10 nhân viên' },
-        { value: 2, label: '11 - 50 nhân viên' },
-        { value: 3, label: '51 - 200 nhân viên' },
-        { value: 4, label: '201 - 500 nhân viên' },
-        { value: 5, label: '500+ nhân viên' }
-    ];
+    /**
+     * Quy mô doanh nghiệp — dùng đúng 4 mức của enum CompanySize bên API.
+     * Mức thứ 5 chỉ có ở dữ liệu cũ, không hiện cho người đăng ký mới.
+     */
+    businessSizes: { value: number; label: string }[] = [];
 
     constructor(
         private fb: FormBuilder,
@@ -68,6 +77,11 @@ export class RegisterComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.businessSizes = COMPANY_SIZES.map(option => ({
+            value: option.value,
+            label: this._appService.trans(option.label)
+        }));
+
         if (this._appService.isAuthenticated()) {
             this.router.navigate(['/']);
             return;
@@ -88,11 +102,15 @@ export class RegisterComponent implements OnInit {
 
     // ===== STEP NAVIGATION =====
     nextStep(): void {
-        if (this.isStep1Valid()) {
-            this.currentStep = 2;
-            if (isBrowser()) {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
+        if (!this.isStep1Valid()) {
+            // Bấm mà form còn lỗi: đưa người dùng tới đúng ô cần sửa thay vì đứng im
+            focusFirstInvalid();
+            return;
+        }
+
+        this.currentStep = 2;
+        if (isBrowser()) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }
 
@@ -174,6 +192,11 @@ export class RegisterComponent implements OnInit {
         return fieldErrors[errorKey as keyof typeof fieldErrors] || this._appService.trans('VALIDATION.INVALID');
     }
 
+    /** Từ khối thông báo tài khoản → sang trang đăng nhập */
+    goToLogin(): void {
+        this.router.navigate(['/login']);
+    }
+
     onSubmit(): void {
         this.isSubmitted = true;
 
@@ -187,10 +210,7 @@ export class RegisterComponent implements OnInit {
             this.registerForm.markAllAsTouched();
             if (!isBrowser()) return;
 
-            const firstInvalid = document.querySelector('.is-invalid,.ng-invalid');
-            if (firstInvalid) {
-                firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
+            focusFirstInvalid();
             return;
         }
 
@@ -203,16 +223,33 @@ export class RegisterComponent implements OnInit {
         };
 
         this._appService.collaboratorService.register(formData).subscribe({
-            next: () => {
+            next: (response: any) => {
                 this.isLoading = false;
+
+                // API trả kèm thông tin tài khoản (tên đăng nhập, mật khẩu khởi tạo) — hiện khối
+                // thông báo dùng chung với luồng mua chung thay vì chuyển thẳng sang trang đăng nhập.
+                // Chỉ giữ lại khi có nội dung để hiện (tài khoản mới, hoặc tài khoản đã tồn tại).
+                const account = response?.data?.account;
+                if (account && (account.isNewAccount === true || account.accountAlreadyExisted === true)) {
+                    this.registerResult = account;
+                    return;
+                }
+
                 this._appService.showSuccess(this._appService.trans('REGISTER.SUCCESS'));
                 this.router.navigate(['/login']);
             },
             error: (error) => {
                 this.isLoading = false;
+
+                // 409: SĐT/email đã có tài khoản hoặc đã là CTV
+                if (error?.status === 409) {
+                    this._appService.showError(this._appService.trans('REGISTER.ALREADY_REGISTERED'));
+                    return;
+                }
+
                 const errorMsg = this._appService.extractErrorMessage(error);
                 if (errorMsg.includes('Email') || errorMsg.includes('Phone') || errorMsg.includes('duplicate')) {
-                    this._appService.showError('Thông tin đăng ký đã tồn tại, vui lòng kiểm tra lại');
+                    this._appService.showError(this._appService.trans('REGISTER.CONTACT_EXISTS'));
                 } else {
                     this._appService.showError(errorMsg);
                 }

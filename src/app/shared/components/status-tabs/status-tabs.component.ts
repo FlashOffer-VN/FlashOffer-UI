@@ -13,7 +13,7 @@ export interface StatusTabItem {
     standalone: true,
     imports: [CommonModule],
     templateUrl: './status-tabs.component.html',
-    styleUrls: ['./status-tabs.component.css']
+    styleUrls: ['./status-tabs.component.css', './status-tabs.component.mobile.css']
 })
 export class StatusTabsComponent {
     @Input() items: StatusTabItem[] = [];

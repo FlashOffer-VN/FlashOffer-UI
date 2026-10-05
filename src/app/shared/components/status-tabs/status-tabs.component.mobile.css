@@ -1,0 +1,17 @@
+/* status-tabs.component.mobile.css
+   Dải tab lọc trạng thái trên mobile (≤768px). Nạp sau file .css gốc trong `styleUrls`.
+   Trên điện thoại tab là điểm chạm chính nên nâng lên bằng chiều cao điều khiển của app
+   (--control-h = 2.5rem) thay vì co nhỏ lại như trước. */
+
+@media (max-width: 768px) {
+    .status-tabs {
+        gap: 6px;
+        padding: 8px;
+    }
+
+    .tab-btn {
+        min-height: 40px;
+        padding: 0 14px;
+        font-size: 13px;
+    }
+}

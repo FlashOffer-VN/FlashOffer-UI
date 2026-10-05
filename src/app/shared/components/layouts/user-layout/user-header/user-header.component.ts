@@ -1,6 +1,7 @@
 // shared/components/layouts/user-layout/user-header/user-header.component.ts
 import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { RouterLink } from '@angular/router';
 import { AppService } from '../../../../../core/services/app.service';
 import { LanguageSwitcherComponent } from '../../../language-switcher/language-switcher.component';
@@ -8,9 +9,9 @@ import { LanguageSwitcherComponent } from '../../../language-switcher/language-s
 @Component({
     selector: 'app-user-header',
     standalone: true,
-    imports: [CommonModule, RouterLink, LanguageSwitcherComponent ],
+    imports: [CommonModule, RouterLink, LanguageSwitcherComponent, TranslateModule],
     templateUrl: './user-header.component.html',
-    styleUrls: ['./user-header.component.css']
+    styleUrls: ['./user-header.component.css', './user-header.component.mobile.css']
 })
 export class UserHeaderComponent {
     @Input() logoPath = 'logo-full-vn.svg';

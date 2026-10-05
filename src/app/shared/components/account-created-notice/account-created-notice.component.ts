@@ -55,10 +55,10 @@ import { TranslateModule } from '@ngx-translate/core';
             padding: 16px;
             border: 1px solid #a7f3d0;
             border-radius: 12px;
-            background: #ecfdf5;
+            background: var(--success-bg);
         }
 
-        .account-notice h4 { margin: 0; font-size: 15px; color: #047857; }
+        .account-notice h4 { margin: 0; font-size: 15px; color: var(--success-strong); }
         .account-notice p { margin: 0; font-size: 13px; color: #065f46; }
 
         .credential {
@@ -67,13 +67,13 @@ import { TranslateModule } from '@ngx-translate/core';
             justify-content: space-between;
             gap: 10px;
             padding: 8px 12px;
-            border: 1px solid #d1fae5;
+            border: 1px solid var(--success-soft);
             border-radius: 8px;
-            background: #ffffff;
+            background: var(--white);
         }
 
-        .credential .label { font-size: 12px; color: #6b7280; }
-        .credential code { font-size: 14px; font-weight: 700; color: #111827; }
+        .credential .label { font-size: 12px; color: var(--text-muted); }
+        .credential code { font-size: 14px; font-weight: 700; color: var(--text-heading); }
 
         .account-note {
             display: flex;
@@ -81,7 +81,7 @@ import { TranslateModule } from '@ngx-translate/core';
             gap: 8px;
             font-size: 12px;
             font-weight: 600;
-            color: #b45309;
+            color: var(--warning-dark);
         }
 
         .btn-login {
@@ -92,18 +92,18 @@ import { TranslateModule } from '@ngx-translate/core';
             padding: 10px 16px;
             border: 0;
             border-radius: 10px;
-            background: #0d9488;
-            color: #ffffff;
+            background: var(--teal);
+            color: var(--white);
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s ease;
         }
 
-        .btn-login:hover { background: #0f766e; }
+        .btn-login:hover { background: var(--teal-deep); }
 
-        .account-notice.exists { background: #fffbeb; border-color: #fde68a; }
-        .account-notice.exists h4, .account-notice.exists p { color: #92400e; }
+        .account-notice.exists { background: var(--warning-bg); border-color: #fde68a; }
+        .account-notice.exists h4, .account-notice.exists p { color: var(--warning-deep); }
     `],
 })
 export class AccountCreatedNoticeComponent {

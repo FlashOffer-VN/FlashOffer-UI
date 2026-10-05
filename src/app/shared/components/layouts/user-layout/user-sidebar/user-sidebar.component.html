@@ -4,11 +4,16 @@
     [class.-ml-64]="!isOpen">
 
     <!-- Logo -->
-    <div class="p-4 border-b border-secondary-light flex-shrink-0">
+    <div class="p-4 border-b border-secondary-light flex-shrink-0 relative">
         <a routerLink="/" class="flex items-center justify-center">
             <img src="logo-white.svg" alt="Kindi" class="h-8">
         </a>
         <p class="text-gray-400 text-sm mt-1 text-center">{{ 'USER.SIDEBAR.PANEL' | translate }}</p>
+        <!-- Nút đóng cho ngăn kéo trên mobile (≥1024px sidebar luôn hiện nên ẩn nút này) -->
+        <button type="button" (click)="toggleSidebar()" [attr.aria-label]="'COMMON.BUTTON.CLOSE' | translate"
+            class="app-drawer-close absolute top-3 right-3 flex items-center justify-center rounded-full text-gray-300 hover:bg-secondary-light hover:text-white transition lg:hidden">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
     </div>
 
     <!-- Menu - flex-1 để đẩy logout xuống dưới -->

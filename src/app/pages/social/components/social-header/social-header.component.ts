@@ -32,7 +32,7 @@ import { TranslateModule } from '@ngx-translate/core';
     `,
     styles: [`
         .social-header {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            background: linear-gradient(135deg, var(--text-ink), #16213e);
             border-radius: 20px;
             padding: 40px 40px;
             margin: 20px 0 30px;

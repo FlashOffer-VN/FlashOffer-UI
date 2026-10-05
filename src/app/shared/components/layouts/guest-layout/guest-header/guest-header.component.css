@@ -8,61 +8,14 @@
     padding: 0 40px;
     min-height: 72px;
     background: rgba(255, 255, 255, 0.96);
-    border-bottom: 1px solid #d9e3eb;
+    border-bottom: 1px solid var(--border-soft);
     gap: 16px;
     position: sticky;
     top: 0;
-    z-index: 50;
+    /* Thanh đầu trang — xếp lớp theo thang --z-* ở styles.css */
+    z-index: var(--z-header);
     backdrop-filter: blur(8px);
     transition: all 0.3s ease;
-}
-
-/* ✅ KHI MENU MỞ - HEADER BỊ CHE */
-.sme-header.menu-open {
-    z-index: 48;
-    /* ✅ Thấp hơn overlay (z-index: 49) */
-}
-
-/* ===== Mobile Menu Overlay ===== */
-.sme-mobile-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 49;
-    /* ✅ Cao hơn header (50) khi header bình thường */
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-}
-
-.sme-mobile-overlay.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-/* ===== Mobile Menu ===== */
-.sme-mobile-menu {
-    display: none;
-    position: fixed;
-    top: 0;
-    right: -320px;
-    width: 300px;
-    height: 100vh;
-    background: white;
-    z-index: 51;
-    /* ✅ Cao nhất */
-    padding: 24px 20px;
-    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
-    transition: right 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    overflow-y: auto;
-}
-
-.sme-mobile-menu.active {
-    right: 0;
 }
 
 /* ===== Header Scroll Effect ===== */
@@ -133,7 +86,7 @@
 }
 
 .sme-nav a {
-    color: #4a5b6e;
+    color: var(--text-slate-deep);
     font-size: 15px;
     font-weight: 600;
     text-decoration: none;
@@ -246,8 +199,6 @@
     white-space: nowrap;
     position: relative;
     overflow: hidden;
-    z-index: 10;
-    /* ✅ Đảm bảo button có thể click */
 }
 
 .sme-button::before {
@@ -290,7 +241,7 @@
 
 .sme-button--ghost {
     background: transparent;
-    border: 1.5px solid #d9e3eb;
+    border: 1.5px solid var(--border-soft);
     color: var(--primary);
 }
 
@@ -314,8 +265,6 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    z-index: 10;
-    /* ✅ Đảm bảo button có thể click */
 }
 
 .sme-admin-btn:hover {
@@ -335,8 +284,6 @@
     padding: 4px 8px;
     border-radius: 8px;
     transition: all 0.3s ease;
-    z-index: 10;
-    /* ✅ Đảm bảo button có thể click */
 }
 
 .sme-mobile-toggle:hover {
@@ -364,31 +311,33 @@
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.4);
-    z-index: 49;
-    /* ✅ Giảm từ 990 xuống 49 */
+    /* Lớp phủ nằm trên thanh đầu trang (--z-header) và dưới ngăn kéo (--z-drawer).
+       Khi chưa mở thì pointer-events: none nên không chặn nút trên thanh đầu trang. */
+    z-index: var(--z-drawer-backdrop);
     opacity: 0;
     transition: opacity 0.4s ease;
     pointer-events: none;
-    /* ✅ Không chặn click khi chưa active */
 }
 
 .sme-mobile-overlay.active {
     opacity: 1;
     pointer-events: auto;
-    /* ✅ Chặn click khi active */
 }
 
 /* ===== Mobile Menu ===== */
 .sme-mobile-menu {
+    /* Bề rộng ngăn kéo; ≤768px thu theo tỉ lệ màn hình (guest-header.component.mobile.css) */
+    --drawer-w: 300px;
     display: none;
     position: fixed;
     top: 0;
-    right: -320px;
-    width: 300px;
+    right: calc(-1 * var(--drawer-w) - 20px);
+    width: var(--drawer-w);
     height: 100vh;
+    /* dvh: chiều cao thật của vùng nhìn thấy trên mobile (thanh địa chỉ ẩn/hiện) */
+    height: 100dvh;
     background: white;
-    z-index: 51;
-    /* ✅ Giảm từ 1001 xuống 51 */
+    z-index: var(--z-drawer);
     padding: 24px 20px;
     box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
     transition: right 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -412,7 +361,7 @@
     background: none;
     border: none;
     font-size: 24px;
-    color: #4a5b6e;
+    color: var(--text-slate-deep);
     cursor: pointer;
     padding: 4px 8px;
     border-radius: 8px;
@@ -441,9 +390,13 @@
     align-items: center;
     gap: 12px;
     position: relative;
-    transform: translateX(-10px);
-    opacity: 0;
-    animation: menuItemFade 0.4s ease forwards;
+}
+
+/* Hiệu ứng vào của từng mục: chỉ chạy khi ngăn kéo MỞ (mở lại là chạy lại), trạng thái đầu/cuối
+   nằm trong @keyframes + fill `both` — nếu animation bị tắt thì mục vẫn hiện bình thường,
+   không giữ opacity/transform của keyframe như cách khai ở rule gốc. */
+.sme-mobile-menu.active .sme-mobile-menu__nav a {
+    animation: menuItemFade 0.4s ease both;
 }
 
 .sme-mobile-menu__nav a:nth-child(1) {
@@ -522,10 +475,10 @@
 .sme-mobile-menu__actions .sme-button {
     width: 100%;
     justify-content: center;
-    opacity: 0;
-    transform: translateY(10px);
-    animation: actionFade 0.4s ease forwards;
-    z-index: 10;
+}
+
+.sme-mobile-menu.active .sme-mobile-menu__actions .sme-button {
+    animation: actionFade 0.4s ease both;
 }
 
 .sme-mobile-menu__actions .sme-button:nth-child(1) {
@@ -553,14 +506,13 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    color: #4a5b6e;
+    color: var(--text-slate-deep);
     cursor: pointer;
     padding: 6px 12px;
     border-radius: 8px;
     transition: all 0.3s ease;
     font-size: 14px;
     font-weight: 500;
-    z-index: 10;
 }
 
 .user-info:hover {
@@ -597,115 +549,4 @@
     }
 }
 
-@media (max-width: 768px) {
-    .sme-header {
-        padding: 0 16px;
-        min-height: 60px;
-    }
-
-    .sme-logo {
-        font-size: 18px;
-    }
-
-    .sme-header.scrolled {
-        min-height: 56px;
-        padding: 0 16px;
-    }
-
-    .sme-header.scrolled .sme-logo {
-        font-size: 16px;
-    }
-
-    /* Ẩn nav desktop */
-    .sme-nav {
-        display: none;
-    }
-
-    /* Ẩn các button trên desktop (trừ Language Switcher và User) */
-    .sme-header-actions .sme-button {
-        display: none;
-    }
-
-    .sme-header-actions .sme-admin-btn {
-        display: none;
-    }
-
-    /* Hiện mobile toggle */
-    .sme-mobile-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    /* Hiện mobile overlay & menu */
-    .sme-mobile-overlay {
-        display: block;
-    }
-
-    .sme-mobile-menu {
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* Chỉ giữ Language Switcher và User Info trên header */
-    .sme-header-actions {
-        gap: 8px;
-    }
-
-    .sme-header-actions .user-info {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 13px;
-        color: #4a5b6e;
-        cursor: pointer;
-    }
-
-    .sme-header-actions .user-info i {
-        font-size: 16px;
-    }
-
-    /* Logo text nhỏ hơn */
-    .sme-logo .logo-text {
-        font-size: 16px;
-    }
-}
-
-@media (max-width: 480px) {
-    .sme-header {
-        padding: 0 12px;
-        min-height: 56px;
-    }
-
-    .sme-header.scrolled {
-        min-height: 50px;
-        padding: 0 12px;
-    }
-
-    .sme-logo {
-        font-size: 16px;
-    }
-
-    .sme-logo .logo-text {
-        font-size: 14px;
-    }
-
-    .sme-mobile-menu {
-        width: 280px;
-        right: -300px;
-    }
-
-    .sme-header-actions .user-info span {
-        display: none;
-    }
-
-    .sme-header-actions .user-info {
-        font-size: 18px;
-    }
-
-    .sme-header-actions .user-info .avatar {
-        width: 28px;
-        height: 28px;
-        font-size: 12px;
-    }
-}
+/* Phần ≤768px và ≤480px nằm ở guest-header.component.mobile.css */

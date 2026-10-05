@@ -1,115 +1,11 @@
-﻿/* styles.css */
+﻿/* styles.css — chỉ còn phần áp dụng chung; biến số ở variable.css */
+@import './variable.css';
 @import '@ng-select/ng-select/themes/default.theme.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-    :root {
-        /* Thương hiệu (teal) */
-        --primary: #007f94;
-        --primary-light: #24c7d7;
-        --primary-dark: #006b80;
 
-        /* Màu nhấn */
-        --accent: #007f94;
-        --accent-light: #24c7d7;
-        --accent-dark: #006b80;
-        --accent-strong: #006b7e;
-        --accent-subtle: #2bd0de;
-        --pink: #ec4899;
-
-        /* Chữ */
-        --text-strong: #0a1a2b;
-        --text-navy: #1a2a3a;
-        --text: #1f2937;
-        --text-heading: #111827;
-        --text-secondary: #374151;
-        --text-muted: #6b7280;
-        --text-subtle: #9ca3af;
-        --text-slate: #4b5563;
-        --text-slate-soft: #5a6c7e;
-        --text-slate-muted: #6b7a8a;
-        --text-slate-faint: #8a9aa8;
-        --text-slate-line: #a0b8c8;
-
-        /* Nền */
-        --white: #ffffff;
-        --surface: #f9fafb;
-        --surface-soft: #f8fafc;
-        --surface-muted: #f3f4f6;
-        --surface-subtle: #f1f5f9;
-        --page-bg: #e8edf3;
-        --page-bg-soft: #f0f4f8;
-        --page-bg-muted: #eef2f7;
-
-        /* Viền */
-        --border: #e5e7eb;
-        --border-strong: #d1d5db;
-        --border-slate: #e2e8f0;
-
-        /* Trạng thái */
-        --danger: #ef4444;
-        --danger-dark: #dc2626;
-        --danger-soft: #fef2f2;
-        --warning: #f59e0b;
-        --warning-soft: #fef3c7;
-        --success: #10b981;
-        --orange: #f97316;
-
-        /* Trạng thái — sắc độ đậm/nhạt */
-        --danger-light: #fecaca;
-        --danger-bg: #fee2e2;
-        --danger-deep: #b91c1c;
-        --warning-light: #fbbf24;
-        --warning-strong: #d97706;
-        --warning-dark: #b45309;
-        --warning-deep: #92400e;
-        --warning-bg: #fffbeb;
-        --orange-light: #fb923c;
-        --orange-dark: #ea580c;
-        --orange-soft: #ffedd5;
-        --success-bg: #ecfdf5;
-        --success-bg-soft: #dcfce7;
-        --success-soft: #d1fae5;
-        --success-dark: #059669;
-        --success-strong: #047857;
-        --pink-dark: #db2777;
-        --pink-soft: #fce7f3;
-
-        /* Teal — sắc độ phụ */
-        --accent-bright: #2bd0de;
-        --accent-border: #bfe3ea;
-        --accent-bg: #eef7f9;
-        --accent-bg-soft: #f4fafb;
-        --accent-soft: #e0f0f4;
-
-        /* Xanh lam / teal mở rộng */
-        --indigo: #667eea;
-        --blue: #2563eb;
-        --blue-light: #3b82f6;
-        --blue-bg: #eff6ff;
-        --blue-soft: #dbeafe;
-        --teal: #0d9488;
-        --teal-dark: #0d7890;
-        --teal-deep: #0f766e;
-        --primary-bright: #2bd0de;
-        --primary-deep: #006b7e;
-
-        /* Thang xám slate */
-        --slate-900: #0f172a;
-        --slate-700: #334155;
-        --slate-600: #475569;
-        --slate-500: #64748b;
-        --slate-400: #94a3b8;
-        --slate-300: #cbd5e1;
-
-        /* Scrollbar — mảnh, trung tính, hợp cả nền sáng */
-        --scrollbar-thumb: rgba(148, 163, 184, 0.45);
-        --scrollbar-thumb-hover: rgba(100, 116, 139, 0.7);
-    }
-
-}
 
 /* ==========================================================================
    Scrollbar toàn cục — mảnh (8px), bo tròn, track trong suốt
@@ -242,12 +138,12 @@
 
 /* Font chính cho toàn bộ app */
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: var(--font-family);
 }
 
 /* Font cho bài viết */
 .post-text {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: var(--font-family);
     font-size: 15px;
     line-height: 1.7;
     color: var(--text);
@@ -255,7 +151,7 @@ body {
 
 /* Font cho tiêu đề bài viết */
 .post-title {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: var(--font-family);
     font-weight: 700;
     font-size: 18px;
     letter-spacing: -0.01em;
@@ -293,7 +189,7 @@ body {
     border-radius: 0 0 12px 12px;
     min-height: 120px;
     font-size: 14px;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: var(--font-family);
 }
 
 /* ===== Nội dung bài viết giàu định dạng (Quill) — dùng chung cho feed + bài trong nhóm/hội + modal chi tiết =====
@@ -346,6 +242,8 @@ body {
    ========================================================================== */
 
 .ng-dropdown-panel {
+    /* Panel được append ra <body> nên phải nổi trên cả hộp thoại */
+    z-index: var(--z-select) !important;
     border: 1px solid var(--border) !important;
     border-radius: 14px !important;
     box-shadow: 0 14px 34px rgba(15, 23, 42, 0.14) !important;
@@ -424,4 +322,21 @@ select:not([multiple]):focus {
 
 select:not([multiple]) option {
     padding: 8px 12px;
+}
+
+/* ==========================================================================
+   Người dùng bật "giảm chuyển động" (cài đặt hệ điều hành/trình duyệt):
+   giữ nguyên bố cục nhưng bỏ hiệu ứng. Animation vẫn còn nên trạng thái cuối
+   (fill) vẫn được áp — phần tử không bị kẹt ở trạng thái trong suốt.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
 }

@@ -16,7 +16,8 @@
     "env:prod": "NODE_ENV=production node generate-env.js",
     "check:routes": "node scripts/check-server-routes.mjs",
     "check:globals": "node scripts/check-browser-globals.mjs",
-    "check:prerender": "node scripts/smoke-prerender.mjs"
+    "check:prerender": "node scripts/smoke-prerender.mjs",
+    "check:mobile": "node scripts/check-mobile.mjs"
   },
   "prettier": {
     "printWidth": 100,

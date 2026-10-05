@@ -20,7 +20,7 @@ import { LanguageSwitcherComponent } from '../../../language-switcher/language-s
         LanguageSwitcherComponent
     ],
     templateUrl: './guest-header.component.html',
-    styleUrls: ['./guest-header.component.css']
+    styleUrls: ['./guest-header.component.css', './guest-header.component.mobile.css']
 })
 export class GuestHeaderComponent implements OnInit, OnDestroy {
     // ✅ Secret Admin Button
@@ -107,6 +107,14 @@ export class GuestHeaderComponent implements OnInit, OnDestroy {
         this.mobileMenuOpen = false;
         if (!isBrowser()) return;
         document.body.style.overflow = '';
+    }
+
+    /** Đóng ngăn kéo bằng phím Esc (bàn phím rời, hoặc trình duyệt desktop thu nhỏ). */
+    @HostListener('document:keydown.escape')
+    onEscape(): void {
+        if (this.mobileMenuOpen) {
+            this.closeMobileMenu();
+        }
     }
 
     // ✅ Go to Admin

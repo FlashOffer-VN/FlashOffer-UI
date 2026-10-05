@@ -27,7 +27,7 @@ import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange
 import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 
-const CHART_PALETTE = ['#007f94', '#7c3aed', '#ea580c', '#16a34a', '#db2777', '#2563eb'];
+const CHART_PALETTE = ['var(--primary)', 'var(--chart-violet)', 'var(--orange-dark)', 'var(--success-mid)', 'var(--pink-dark)', 'var(--blue)'];
 
 interface ReferralStatCard {
     key: string;
@@ -245,12 +245,12 @@ export class AdminReferralStatsComponent implements OnInit, OnDestroy {
             stroke: isLine ? { curve: 'smooth', width: 3 } : { width: 0 },
             markers: isLine ? { size: 4, strokeWidth: 2, hover: { size: 6 } } : { size: 0 },
             dataLabels: { enabled: false },
-            grid: { borderColor: '#e5e7eb', strokeDashArray: 4 },
+            grid: { borderColor: 'var(--border)', strokeDashArray: 4 },
             xaxis: {
                 categories: timeline.map(x => new Date(x.date).toLocaleDateString()),
-                labels: { style: { colors: '#6b7280', fontSize: '12px' } }
+                labels: { style: { colors: 'var(--text-muted)', fontSize: '12px' } }
             },
-            yaxis: { labels: { style: { colors: '#6b7280', fontSize: '12px' } }, forceNiceScale: true },
+            yaxis: { labels: { style: { colors: 'var(--text-muted)', fontSize: '12px' } }, forceNiceScale: true },
             legend: { show: false },
             tooltip: { theme: 'light' },
             noData: { text: this._appService.trans('PAGINATION.NO_ITEMS') }

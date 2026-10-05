@@ -106,7 +106,7 @@ import { BusinessGroup } from '@core/models/business-group.model';
         .sidebar-card h3 {
             font-size: 15px;
             font-weight: 700;
-            color: #1F2937;
+            color: var(--text);
             margin: 0 0 14px;
             display: flex;
             align-items: center;
@@ -125,7 +125,7 @@ import { BusinessGroup } from '@core/models/business-group.model';
             display: flex;
             gap: 12px;
             padding: 10px 0;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid var(--surface-subtle);
             cursor: pointer;
             transition: background 0.2s ease;
             border-radius: 6px;
@@ -133,7 +133,7 @@ import { BusinessGroup } from '@core/models/business-group.model';
         }
 
         .gb-item:hover {
-            background: #f8fafc;
+            background: var(--surface-soft);
         }
 
         .gb-item:last-child {
@@ -142,7 +142,7 @@ import { BusinessGroup } from '@core/models/business-group.model';
 
         .gb-empty {
             font-size: 13px;
-            color: #9CA3AF;
+            color: var(--text-subtle);
         }
 
         .gb-badge-count {
@@ -165,7 +165,7 @@ import { BusinessGroup } from '@core/models/business-group.model';
 
         .gb-badge-count .target {
             font-size: 12px;
-            color: #9CA3AF;
+            color: var(--text-subtle);
             font-weight: 600;
         }
 
@@ -177,7 +177,7 @@ import { BusinessGroup } from '@core/models/business-group.model';
         .gb-info .title {
             font-size: 14px;
             font-weight: 500;
-            color: #1F2937;
+            color: var(--text);
             display: block;
             line-height: 1.3;
             margin-bottom: 2px;
@@ -188,7 +188,7 @@ import { BusinessGroup } from '@core/models/business-group.model';
 
         .gb-info .need {
             font-size: 12px;
-            color: #D97706;
+            color: var(--warning-strong);
             display: block;
             font-weight: 600;
         }
@@ -202,7 +202,7 @@ import { BusinessGroup } from '@core/models/business-group.model';
 
 
 
-        @media (max-width: 992px) {
+        @media (max-width: 1024px) {
             /* Mobile: dai cuon ngang, card dau can le 20px voi card ben tren */
             :host {
                 flex-direction: row;
@@ -261,7 +261,7 @@ import { BusinessGroup } from '@core/models/business-group.model';
         /* Nhóm ngành (dữ liệu thật từ API nhóm) */
         .groups-empty {
             font-size: 13px;
-            color: #9CA3AF;
+            color: var(--text-subtle);
             padding: 4px 0 8px;
         }
 
@@ -276,12 +276,12 @@ import { BusinessGroup } from '@core/models/business-group.model';
         }
 
         .group-link:hover {
-            background: #F3F4F6;
+            background: var(--surface-muted);
         }
 
         .group-link > i {
             font-size: 18px;
-            color: #0d9488;
+            color: var(--teal);
         }
 
         .group-link__info {
@@ -295,7 +295,7 @@ import { BusinessGroup } from '@core/models/business-group.model';
         .group-link__info .name {
             font-size: 13px;
             font-weight: 600;
-            color: #1F2937;
+            color: var(--text);
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -303,19 +303,19 @@ import { BusinessGroup } from '@core/models/business-group.model';
 
         .group-link__info .meta {
             font-size: 11px;
-            color: #6B7280;
+            color: var(--text-muted);
         }
 
         .group-link__chevron {
             font-size: 12px;
-            color: #9CA3AF;
+            color: var(--text-subtle);
         }
 
         .group-link__badge {
             font-size: 10px;
             font-weight: 700;
-            color: #047857;
-            background: #ECFDF5;
+            color: var(--success-strong);
+            background: var(--success-bg);
             border-radius: 999px;
             padding: 3px 8px;
         }
@@ -327,7 +327,7 @@ import { BusinessGroup } from '@core/models/business-group.model';
             margin-top: 8px;
             font-size: 12px;
             font-weight: 700;
-            color: #0d9488;
+            color: var(--teal);
             text-decoration: none;
         }
 

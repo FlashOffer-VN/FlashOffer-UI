@@ -1,5 +1,5 @@
 // shared/components/layouts/admin-layout/admin-layout.component.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -21,7 +21,7 @@ import { AdminHeaderComponent } from './admin-header/admin-header.component';
         AdminFooterComponent
     ],
     templateUrl: './admin-layout.component.html',
-    styleUrls: ['./admin-layout.component.css']
+    styleUrls: ['./admin-layout.component.css', './admin-layout.component.mobile.css']
 })
 export class AdminLayoutComponent implements OnInit, OnDestroy {
     isSidebarOpen = true;
@@ -48,6 +48,14 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
         this.logoPath = lang === 'en'
             ? 'logo-full-en.svg'
             : 'logo-full-vn.svg';
+    }
+
+    /** Đóng ngăn kéo bằng phím Esc — chỉ ở chế độ ngăn kéo (≤1023px). */
+    @HostListener('document:keydown.escape')
+    onEscape(): void {
+        if (this.isSidebarOpen && isBrowser() && window.matchMedia('(max-width: 1023px)').matches) {
+            this.toggleSidebar();
+        }
     }
 
     toggleSidebar(): void {

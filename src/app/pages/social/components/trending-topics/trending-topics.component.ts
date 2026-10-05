@@ -25,7 +25,7 @@ import { TranslateModule } from '@ngx-translate/core';
         .trending-section h3 {
             font-size: 16px;
             font-weight: 700;
-            color: #1F2937;
+            color: var(--text);
             margin: 0 0 12px;
         }
         .trending-topics {
@@ -35,10 +35,10 @@ import { TranslateModule } from '@ngx-translate/core';
         }
         .trending-topic {
             padding: 6px 14px;
-            background: #f3f4f6;
+            background: var(--surface-muted);
             border-radius: 999px;
             font-size: 13px;
-            color: #1F2937;
+            color: var(--text);
             cursor: pointer;
             transition: all 0.2s ease;
         }

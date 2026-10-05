@@ -1,6 +1,6 @@
 .sme-footer {
     background: var(--white);
-    border-top: 1px solid #d9e3eb;
+    border-top: 1px solid var(--border-soft);
     display: grid;
     gap: 56px;
     grid-template-columns: 1.35fr repeat(4, 1fr);
@@ -30,7 +30,7 @@
 }
 
 .sme-footer__copy {
-    border-top: 1px solid #d9e3eb;
+    border-top: 1px solid var(--border-soft);
     grid-column: 1 / -1;
     margin: 10px -34px 0;
     padding: 20px 34px 0;
@@ -65,7 +65,7 @@
     width: 30px;
     height: 30px;
     margin: 0;
-    border: 1px solid #d9e3eb;
+    border: 1px solid var(--border-soft);
     border-radius: 999px;
     font-size: 14px;
 }
@@ -75,13 +75,13 @@
     color: #0f9d8f;
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1024px) {
     .sme-footer {
         grid-template-columns: 1fr 1fr;
     }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 640px) {
     .sme-footer {
         grid-template-columns: 1fr;
         padding-left: 20px;

@@ -1,0 +1,75 @@
+/* app.mobile.css
+   Lớp MOBILE DÙNG CHUNG cho cả app — nạp ngay sau styles.css
+   (angular.json > projects.kindi-ui.architect.build.options.styles).
+
+   Chỉ để ở đây những gì NHIỀU màn hình cùng cần. Rule chỉ thuộc một component thì nằm ở
+   <component>.component.mobile.css, nạp SAU file .css gốc trong `styleUrls`, nên khi ngang
+   độ ưu tiên thì rule mobile thắng mà không cần !important.
+
+   Breakpoint chuẩn — code mới chỉ dùng 3 mốc này:
+     480px  : điện thoại nhỏ
+     768px  : MOBILE — từ đây trở xuống là giao diện mobile
+     1023px : tablet/desktop nhỏ — sidebar admin & khu vực thành viên chuyển thành ngăn kéo
+   (1023px không nằm trong file này: nó là cấu trúc của layout, khai ở <layout>.component.css)
+
+   Biến dùng chung (màu, xếp lớp --z-*, vùng an toàn --safe-*, --font-family, --control-h)
+   khai ở src/variable.css; ở đây chỉ áp dụng.
+   ========================================================================== */
+
+@media (max-width: 768px) {
+
+    /* Thanh cuộn ẩn như app thật. Kèm hệ quả có lợi: thanh cuộn chiếm ~17px trong vùng nhìn thấy,
+       không ẩn thì mọi phần tử position: fixed bám mép phải/đáy (ngăn kéo, thông báo, nút nổi)
+       bị đẩy ra ngoài mép nhìn thấy. */
+    html {
+        scrollbar-width: none;
+    }
+
+    html::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }
+
+    /* Safari không tự phóng to chữ khi xoay máy */
+    html {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+
+    body {
+        /* Bỏ vệt xanh nháy khi chạm */
+        -webkit-tap-highlight-color: transparent;
+        /* Cuộn dọc không kéo theo cả trang — giống app */
+        overscroll-behavior-y: contain;
+    }
+
+    /* Trang trong khu vực admin/thành viên tự thêm `p-6`, mà `main` của layout đã có 16px trên
+       mobile — bỏ phần đệm của trang để nội dung rộng thêm (bảng: 308px -> 358px). */
+    app-admin-layout main > * > .p-6,
+    app-user-layout main > * > .p-6 {
+        padding: 0;
+    }
+
+    /* Nút thao tác theo dòng trong bảng (icon 24px): đủ 44px để chạm */
+    app-admin-layout main table td .btn-sm,
+    app-user-layout main table td .btn-sm {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Bảng rộng: vuốt tới mép không kéo theo cả trang */
+    app-admin-layout main .overflow-x-auto,
+    app-user-layout main .overflow-x-auto {
+        overscroll-behavior-x: contain;
+    }
+
+    /* Vùng chạm tối thiểu 44px cho nút chỉ có icon (thanh đầu trang, ngăn kéo) */
+    app-admin-header button,
+    app-user-header button,
+    .sme-mobile-toggle,
+    .sme-mobile-menu__close,
+    .app-drawer-close {
+        min-width: 44px;
+        min-height: 44px;
+    }
+}

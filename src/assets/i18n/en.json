@@ -1028,6 +1028,8 @@
         }
     },
     "REGISTER": {
+            "ALREADY_REGISTERED": "This phone number/email already has a Kindi account. Please log in or use a different one.",
+            "CONTACT_EXISTS": "These registration details already exist, please check again",
         "REFERRAL_CODE": "Referral code",
         "REFERRAL_CODE_PLACEHOLDER": "Collaborator code in the share link (optional)",
         "TITLE": "BECOME A KINDI PARTNER",
@@ -1266,7 +1268,9 @@
             "EXPIRE": "Expire",
             "ACTIVATE": "Activate",
             "REOPEN": "Reopen",
-            "CONTACT": "Contact"
+            "CONTACT": "Contact",
+            "CLOSE": "Close",
+            "OPEN_MENU": "Open menu"
         },
         "CHART_TYPE": {
             "BAR": "Column",

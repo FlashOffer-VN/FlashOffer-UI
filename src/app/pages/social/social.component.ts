@@ -10,6 +10,7 @@ import { GroupBuyingFeedItem } from '@core/models/group-buying-request.model';
 import { UserRole } from '@core/models/auth.model';
 import { User } from '@core/models/auth.model';
 import { isBrowser } from '@core/utils/platform';
+import { appendReferralCode } from '@core/utils/share-link';
 
 import { SocialHeaderComponent } from './components/social-header/social-header.component';
 import { CreatePostComponent } from './components/create-post/create-post.component';
@@ -95,6 +96,9 @@ export class SocialComponent implements OnInit, AfterViewInit {
     // Bài đang sửa trong modal sửa bài viết
     editingPost: SocialPost | null = null;
 
+    /** Mã chia sẻ riêng của người đang đăng nhập — gắn vào link bài viết khi chia sẻ */
+    myReferralCode: string | null = null;
+
     ngAfterViewInit(): void {
         this._isInitialized = true;
         if (this._pendingPostId) {
@@ -122,6 +126,7 @@ export class SocialComponent implements OnInit, AfterViewInit {
         });
         this.getCurrentUser();
         this.updateAuthState();
+        this.loadMyReferralCode();
         this.loadPosts();
         this.loadMembers();
         this.loadClubs();
@@ -137,6 +142,19 @@ export class SocialComponent implements OnInit, AfterViewInit {
 
     updateAuthState(): void {
         this.isLoggedIn = this._appService.isAuthenticated();
+    }
+
+    /** Lấy mã chia sẻ của tài khoản đang đăng nhập (khách thì không có mã) */
+    loadMyReferralCode(): void {
+        if (!this._appService.isAuthenticated()) {
+            this.myReferralCode = null;
+            return;
+        }
+
+        this._appService.collaboratorService.getMyReferralCode().subscribe({
+            next: (code) => this.myReferralCode = code ?? null,
+            error: () => this.myReferralCode = null
+        });
     }
 
     canEditPost(post: SocialPost): boolean {
@@ -385,8 +403,9 @@ export class SocialComponent implements OnInit, AfterViewInit {
     sharePost(post: SocialPost): void {
         if (!isBrowser()) return; // clipboard + DOM tạm only exist in browser
 
-        // Copy link vào clipboard
-        const shareUrl = `${window.location.origin}/social/${post.id}`;
+        // Copy link vào clipboard — kèm mã chia sẻ riêng của người đang đăng nhập
+        // để người mở link được ghi nhận đúng người chia sẻ
+        const shareUrl = appendReferralCode(`${window.location.origin}/social/${post.id}`, this.myReferralCode);
 
         navigator.clipboard.writeText(shareUrl).then(() => {
             this._appService.showSuccess('Đã sao chép link bài viết!');

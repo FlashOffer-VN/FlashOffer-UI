@@ -41,6 +41,20 @@ export function readReferralCodeFromQuery(search?: string | null): string | null
 }
 
 /** Khoá lưu mã chia sẻ đã gặp — để trong localStorage cho bền qua các phiên sử dụng */
+/**
+ * Gắn mã chia sẻ vào một đường dẫn nội bộ bất kỳ (bài viết, nhóm, …).
+ * Dùng cho link không có hàm dựng sẵn; giữ nguyên đường dẫn khi chưa có mã.
+ */
+export function appendReferralCode(url: string, referralCode?: string | null): string {
+    const ref = (referralCode ?? '').trim();
+    if (!url || !ref) return url;
+
+    return `${url}${url.includes('?') ? '&' : '?'}ref=${encodeURIComponent(ref)}`;
+}
+
+/**
+ * Khoá lưu mã chia sẻ đã gặp — để trong localStorage cho bền qua các phiên sử dụng
+ */
 const REFERRAL_STORAGE_KEY = 'kindi_referral_code';
 
 /** Khoá lưu mã đã đồng bộ lên tài khoản — tránh gọi lại API ở mỗi lần chuyển trang */

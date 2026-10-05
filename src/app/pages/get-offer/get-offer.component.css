@@ -331,7 +331,7 @@
     border-radius: 10px;
     font-size: 14px;
     transition: all 0.3s ease;
-    background: #fafbfc;
+    background: var(--surface-deep);
     font-family: inherit;
     color: var(--text-navy);
     box-sizing: border-box;
@@ -474,7 +474,7 @@
     align-items: center;
     width: 20px;
     height: 20px;
-    border: 2px solid #d0d8e0;
+    border: 2px solid var(--border-muted);
     border-radius: 6px;
     background: var(--white);
     transition: all 0.3s ease;

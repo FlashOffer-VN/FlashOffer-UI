@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { resolveReferralCode } from '@core/utils/share-link';
+import { focusFirstInvalid } from '@core/utils/form-invalid';
 import { finalize } from 'rxjs/operators';
 
 @Component({
@@ -155,6 +156,7 @@ export class GetOfferComponent {
     onSubmit(): void {
         if (this.offerForm.invalid) {
             this.offerForm.markAllAsTouched();
+            focusFirstInvalid();
             this._appService.showError(this._appService.trans('GET_OFFER.ERROR.FORM_INVALID'));
             return;
         }

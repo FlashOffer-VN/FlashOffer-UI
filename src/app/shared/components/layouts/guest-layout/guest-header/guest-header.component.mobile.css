@@ -1,0 +1,126 @@
+/* guest-header.component.mobile.css
+   Phần mobile của thanh đầu trang khách (<=768px và <=480px).
+   Nạp sau guest-header.component.css trong `styleUrls` nên thắng khi ngang độ ưu tiên.
+   Xếp lớp dùng thang --z-* (styles.css); vùng an toàn dùng --safe-* (app.mobile.css). */
+
+@media (max-width: 768px) {
+    .sme-header {
+        padding: 0 16px;
+        padding-top: var(--safe-top, 0px);
+        min-height: 60px;
+    }
+
+    .sme-logo {
+        font-size: 18px;
+    }
+
+    .sme-header.scrolled {
+        min-height: 56px;
+        padding: 0 16px;
+        padding-top: var(--safe-top, 0px);
+    }
+
+    .sme-header.scrolled .sme-logo {
+        font-size: 16px;
+    }
+
+    /* Ẩn nav desktop */
+    .sme-nav {
+        display: none;
+    }
+
+    /* Ẩn các button desktop (trừ Language Switcher và User) */
+    .sme-header-actions .sme-button {
+        display: none;
+    }
+
+    .sme-header-actions .sme-admin-btn {
+        display: none;
+    }
+
+    .sme-header-actions {
+        gap: 8px;
+    }
+
+    .sme-header-actions .user-info {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--text-slate-deep);
+        cursor: pointer;
+    }
+
+    .sme-header-actions .user-info i {
+        font-size: 16px;
+    }
+
+    /* Logo text nhỏ hơn */
+    .sme-logo .logo-text {
+        font-size: 16px;
+    }
+
+    /* Nút trong ngăn kéo: file này nạp SAU file gốc nên thắng `min-height: 34px` của khối ≤1024px */
+    .sme-mobile-menu__actions .sme-button {
+        min-height: 44px;
+    }
+
+    /* Nút mở menu (kích thước vùng chạm do app.mobile.css lo) */
+    .sme-mobile-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Ngăn kéo: bề rộng theo tỉ lệ màn hình để máy nhỏ không bị chiếm gần hết,
+       vẫn thấy lớp phủ phía sau và chạm ra ngoài được. */
+    .sme-mobile-menu {
+        --drawer-w: min(300px, 85vw);
+        display: flex;
+        flex-direction: column;
+        padding-top: calc(24px + var(--safe-top, 0px));
+        padding-bottom: calc(24px + var(--safe-bottom, 0px));
+        overscroll-behavior: contain;
+    }
+
+    .sme-mobile-overlay {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    .sme-header {
+        padding: 0 12px;
+        padding-top: var(--safe-top, 0px);
+        min-height: 56px;
+    }
+
+    .sme-header.scrolled {
+        min-height: 50px;
+        padding: 0 12px;
+        padding-top: var(--safe-top, 0px);
+    }
+
+    .sme-logo {
+        font-size: 16px;
+    }
+
+    .sme-logo .logo-text {
+        font-size: 14px;
+    }
+
+    /* Giấu tên, chỉ còn avatar cho gọn */
+    .sme-header-actions .user-info span {
+        display: none;
+    }
+
+    .sme-header-actions .user-info {
+        font-size: 18px;
+    }
+
+    .sme-header-actions .user-info .avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+}

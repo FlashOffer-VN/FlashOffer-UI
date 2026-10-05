@@ -115,7 +115,7 @@
 
 .stat-card-blue .stat-icon { background: var(--blue-soft); color: var(--blue); }
 .stat-card-teal .stat-icon { background: var(--accent-soft); color: var(--accent); }
-.stat-card-green .stat-icon { background: var(--success-bg-soft); color: #16a34a; }
+.stat-card-green .stat-icon { background: var(--success-bg-soft); color: var(--success-mid); }
 .stat-card-orange .stat-icon { background: var(--orange-soft); color: var(--orange-dark); }
 .stat-card-pink .stat-icon { background: var(--pink-soft); color: var(--pink-dark); }
 .stat-card-cyan .stat-icon { background: #cffafe; color: #0891b2; }
@@ -180,7 +180,7 @@
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
     .dashboard-page {
         padding: 1rem;
     }

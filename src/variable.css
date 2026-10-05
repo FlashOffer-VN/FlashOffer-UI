@@ -1,0 +1,179 @@
+/* variable.css — BIẾN DÙNG CHUNG của cả app (màu sắc, xếp lớp, vùng an toàn, cỡ chữ...).
+   Nạp một lần qua `@import './variable.css';` ở đầu styles.css.
+
+   Quy ước:
+   - Thành phần KHÔNG viết màu/số trực tiếp: dùng var(--ten-bien).
+   - Thêm màu mới thì thêm ở đây (kèm chú thích màu dùng làm gì), không khai trong component.
+   - Xếp lớp dùng thang --z-* bên dưới.
+   - Vùng an toàn --safe-* (tai thỏ) cần `viewport-fit=cover` ở index.html.
+
+   BREAKPOINT CHUẨN (CSS không cho dùng biến trong @media, nên đây là danh sách chốt —
+   scripts/check-mobile.mjs kiểm tra mọi @media chỉ dùng các mốc này):
+     480px  : điện thoại nhỏ
+     640px  : điện thoại lớn (khớp sm của Tailwind)
+     768px  : MOBILE — từ đây trở xuống là giao diện mobile
+     1023px : layout admin / khu vực thành viên đổi sidebar thành ngăn kéo
+     1024px : desktop (khớp lg của Tailwind)
+     1200px : ngoại lệ còn lại ở vài màn admin (chưa dọn)
+*/
+
+:root {
+    /* Thương hiệu (teal) */
+    --primary: #007f94;
+    --primary-light: #24c7d7;
+    --primary-dark: #006b80;
+
+    /* Màu nhấn */
+    --accent: #007f94;
+    --accent-light: #24c7d7;
+    --accent-dark: #006b80;
+    --accent-strong: #006b7e;
+    --accent-subtle: #2bd0de;
+    --pink: #ec4899;
+
+    /* Chữ */
+    --text-strong: #0a1a2b;
+    --text-navy: #1a2a3a;
+    --text: #1f2937;
+    --text-heading: #111827;
+    --text-secondary: #374151;
+    --text-muted: #6b7280;
+    --text-subtle: #9ca3af;
+    --text-slate: #4b5563;
+    --text-slate-soft: #5a6c7e;
+    --text-slate-muted: #6b7a8a;
+    --text-slate-faint: #8a9aa8;
+    --text-slate-line: #a0b8c8;
+
+    /* Nền */
+    --white: #ffffff;
+    --surface: #f9fafb;
+    --surface-soft: #f8fafc;
+    --surface-muted: #f3f4f6;
+    --surface-subtle: #f1f5f9;
+    --page-bg: #e8edf3;
+    --page-bg-soft: #f0f4f8;
+    --page-bg-muted: #eef2f7;
+
+    /* Viền */
+    --border: #e5e7eb;
+    --border-strong: #d1d5db;
+    --border-slate: #e2e8f0;
+
+    /* Trạng thái */
+    --danger: #ef4444;
+    --danger-dark: #dc2626;
+    --danger-soft: #fef2f2;
+    --warning: #f59e0b;
+    --warning-soft: #fef3c7;
+    --success: #10b981;
+    --orange: #f97316;
+
+    /* Trạng thái — sắc độ đậm/nhạt */
+    --danger-light: #fecaca;
+    --danger-bg: #fee2e2;
+    --danger-deep: #b91c1c;
+    --warning-light: #fbbf24;
+    --warning-strong: #d97706;
+    --warning-dark: #b45309;
+    --warning-deep: #92400e;
+    --warning-bg: #fffbeb;
+    --orange-light: #fb923c;
+    --orange-dark: #ea580c;
+    --orange-soft: #ffedd5;
+    --success-bg: #ecfdf5;
+    --success-bg-soft: #dcfce7;
+    --success-soft: #d1fae5;
+    --success-dark: #059669;
+    --success-strong: #047857;
+    --pink-dark: #db2777;
+    --pink-soft: #fce7f3;
+
+    /* Teal — sắc độ phụ */
+    --accent-bright: #2bd0de;
+    --accent-border: #bfe3ea;
+    --accent-bg: #eef7f9;
+    --accent-bg-soft: #f4fafb;
+    --accent-soft: #e0f0f4;
+
+    /* Xanh lam / teal mở rộng */
+    --indigo: #667eea;
+    --blue: #2563eb;
+    --blue-light: #3b82f6;
+    --blue-bg: #eff6ff;
+    --blue-soft: #dbeafe;
+    --teal: #0d9488;
+    --teal-dark: #0d7890;
+    --teal-deep: #0f766e;
+    --primary-bright: #2bd0de;
+    --primary-deep: #006b7e;
+
+    /* Thang xám slate */
+    --slate-900: #0f172a;
+    --slate-700: #334155;
+    --slate-600: #475569;
+    --slate-500: #64748b;
+    --slate-400: #94a3b8;
+    --slate-300: #cbd5e1;
+
+    /* Scrollbar — mảnh, trung tính, hợp cả nền sáng */
+    --scrollbar-thumb: rgba(148, 163, 184, 0.45);
+    --scrollbar-thumb-hover: rgba(100, 116, 139, 0.7);
+
+    /* Thang xếp lớp (z-index) — dùng chung cho cả app.
+       Thành phần KHÔNG khai số trực tiếp, chỉ dùng var(--z-*) theo đúng vai trò;
+       thêm lớp mới thì thêm biến ở đây, không sửa lẻ từng màn hình.
+       Thấp → cao: nội dung < thanh dính trong trang < thanh đầu trang < nút nổi
+       < lớp phủ ngăn kéo < ngăn kéo < menu/popover < hộp thoại < panel select < thông báo. */
+    --z-content: 1;
+    /* nội dung trang */
+    --z-sticky: 30;
+    /* thanh dính trong trang (thead, thanh lọc) */
+    --z-header: 40;
+    /* thanh đầu trang (khách, admin, thành viên) */
+    --z-floating: 50;
+    /* nút nổi: liên hệ, lên đầu trang */
+    --z-drawer-backdrop: 60;
+    /* lớp phủ tối của ngăn kéo */
+    --z-drawer: 70;
+    /* ngăn kéo / sidebar mobile */
+    --z-dropdown: 80;
+    /* menu, popover trong trang */
+    --z-modal: 100;
+    /* hộp thoại */
+    --z-select: 150;
+    /* panel ng-select (append ra body, có thể nằm trong hộp thoại) */
+    --z-loading: 180;
+    /* lớp chờ toàn màn hình (trên hộp thoại, dưới thông báo) */
+    --z-toast: 200;
+    /* thông báo nổi */
+
+    /* Kiểu chữ dùng chung */
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    /* Chiều cao điều khiển chuẩn (ô nhập, select, nút lọc); hàng lọc có thể ghi đè bằng
+       `style="--control-h: ..."` khi cần khác. */
+    --control-h: 2.5rem;
+
+    /* Vùng an toàn (tai thỏ / thanh gợi ý) — 0px nếu máy không có */
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+
+    /* Tông dùng lặp ở nhiều màn hình (thêm để không phải viết mã màu rải rác) */
+    --border-soft: #d9e3eb;
+    /* viền thanh đầu trang / chân trang khách */
+    --border-muted: #d0d8e0;
+    /* viền thẻ biểu mẫu */
+    --text-slate-deep: #4a5b6e;
+    /* chữ phụ trên thanh đầu trang khách, nội dung thông báo */
+    --text-ink: #1a1a2e;
+    /* tiêu đề đậm trên nền sáng */
+    --success-mid: #16a34a;
+    /* xanh lá cho biểu đồ & icon thống kê */
+    --chart-violet: #7c3aed;
+    /* tím trong bảng màu biểu đồ */
+    --surface-deep: #fafbfc;
+    /* nền rất nhạt cho khối phụ */
+}

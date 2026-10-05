@@ -11,7 +11,7 @@ import { ButtonComponent } from '@shared/components/button/button.component';
   template: `
     <div
       *ngIf="visible"
-      class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/50 backdrop-blur-sm animate-fadeIn"
+      class="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center p-3 sm:p-4 bg-black/50 backdrop-blur-sm animate-fadeIn"
       (click)="onBackdropClick($event)">
       <div
         class="bg-white w-full flex flex-col max-h-[90vh] sm:max-h-[85vh] overflow-hidden rounded-2xl shadow-2xl ring-1 ring-black/5 animate-slideUp"
@@ -79,11 +79,11 @@ import { ButtonComponent } from '@shared/components/button/button.component';
       width: 8px;
     }
     .modal-scroll::-webkit-scrollbar-thumb {
-      background: #E5E7EB;
+      background: var(--border);
       border-radius: 999px;
     }
     .modal-scroll::-webkit-scrollbar-thumb:hover {
-      background: #D1D5DB;
+      background: var(--border-strong);
     }
   `]
 })

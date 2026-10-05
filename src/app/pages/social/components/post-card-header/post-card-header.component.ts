@@ -47,7 +47,7 @@ import { UserRoleLabelPipe } from '@shared/pipes/user-role-label.pipe';
         }
         .post-author .name {
             font-weight: 600;
-            color: #1F2937;
+            color: var(--text);
             display: block;
         }
         .post-author .name .verified {
@@ -57,22 +57,22 @@ import { UserRoleLabelPipe } from '@shared/pipes/user-role-label.pipe';
         }
         .post-author .role {
             font-size: 12px;
-            color: #6B7280;
+            color: var(--text-muted);
         }
         .post-author .time {
             font-size: 12px;
-            color: #9CA3AF;
+            color: var(--text-subtle);
             margin-left: 8px;
         }
         .post-card__more {
             background: none;
             border: none;
-            color: #9CA3AF;
+            color: var(--text-subtle);
             cursor: pointer;
             padding: 4px 8px;
             border-radius: 8px;
         }
-        .post-card__more:hover { background: #f3f4f6; }
+        .post-card__more:hover { background: var(--surface-muted); }
     `]
 })
 export class PostCardHeaderComponent {

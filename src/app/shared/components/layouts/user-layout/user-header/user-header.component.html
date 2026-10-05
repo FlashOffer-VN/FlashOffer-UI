@@ -2,12 +2,13 @@
 <header class="bg-white shadow-sm px-6 py-4 flex items-center justify-between">
     <!-- Left -->
     <div class="flex items-center gap-4">
-        <button (click)="onToggleSidebar()" class="text-secondary hover:text-primary transition text-xl">
+        <button (click)="onToggleSidebar()" [attr.aria-label]="'COMMON.BUTTON.OPEN_MENU' | translate"
+            class="text-secondary hover:text-primary transition text-xl">
             <i class="fa-solid fa-bars"></i>
         </button>
 
         <a routerLink="/" class="flex items-center gap-2">
-            <img [src]="logoPath" alt="Kindi" class="h-10 w-auto">
+            <img [src]="logoPath" alt="Kindi" class="h-8 w-auto lg:h-10">
         </a>
     </div>
 

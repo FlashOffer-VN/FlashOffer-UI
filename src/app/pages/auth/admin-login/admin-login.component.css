@@ -87,7 +87,7 @@
 .admin-login-header h1 {
     font-size: 1.75rem;
     font-weight: 700;
-    color: #1a1a2e;
+    color: var(--text-ink);
     margin: 0;
     letter-spacing: -0.5px;
 }
@@ -231,7 +231,7 @@
     }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) {
     .admin-login-card {
         padding: 1.25rem 1rem 1.25rem;
     }

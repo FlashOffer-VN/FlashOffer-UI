@@ -1,0 +1,29 @@
+/* contact-floating.component.mobile.css
+   Cụm nút liên hệ + lên đầu trang trên mobile (<=640px và <=480px).
+   Nạp sau contact-floating.component.css trong `styleUrls`.
+   Lớp: --z-floating (styles.css) — thấp hơn lớp phủ/ngăn kéo, nên ngăn kéo mở là che được cụm nút. */
+
+@media (max-width: 640px) {
+    .contact-floating-wrap {
+        right: calc(1rem + var(--safe-right, 0px));
+        bottom: calc(4rem + var(--safe-bottom, 0px));
+    }
+
+    .contact-floating-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+    }
+
+    .scroll-icon {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-floating-wrap {
+        right: calc(0.75rem + var(--safe-right, 0px));
+        bottom: calc(3.5rem + var(--safe-bottom, 0px));
+    }
+}

@@ -27,7 +27,7 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 
 /** Bảng màu cho biểu đồ: màu đầu là màu thương hiệu, các màu sau để phân biệt chỉ số. */
-const CHART_PALETTE = ['#007f94', '#7c3aed', '#ea580c', '#16a34a', '#db2777'];
+const CHART_PALETTE = ['var(--primary)', 'var(--chart-violet)', 'var(--orange-dark)', 'var(--success-mid)', 'var(--pink-dark)'];
 
 /** Định dạng số gọn cho nhãn trục tung (VD: 1.234.567 -> 1,2 Tr). */
 const AXIS_NUMBER_FORMATTER = new Intl.NumberFormat('vi-VN', { notation: 'compact', maximumFractionDigits: 1 });
@@ -236,14 +236,14 @@ export class AdminRevenueListComponent implements OnInit, OnDestroy {
             stroke: isLine ? { curve: 'smooth', width: 3 } : { width: 0 },
             markers: isLine ? { size: 4, strokeWidth: 2, hover: { size: 6 } } : { size: 0 },
             dataLabels: { enabled: false },
-            grid: { borderColor: '#e5e7eb', strokeDashArray: 4 },
+            grid: { borderColor: 'var(--border)', strokeDashArray: 4 },
             xaxis: {
                 categories: points.map(p => this.periodLabel(p.period)),
-                labels: { style: { colors: '#6b7280', fontSize: '12px' }, rotate: -45, rotateAlways: points.length > 12 }
+                labels: { style: { colors: 'var(--text-muted)', fontSize: '12px' }, rotate: -45, rotateAlways: points.length > 12 }
             },
             yaxis: {
                 labels: {
-                    style: { colors: '#6b7280', fontSize: '12px' },
+                    style: { colors: 'var(--text-muted)', fontSize: '12px' },
                     formatter: value => AXIS_NUMBER_FORMATTER.format(value)
                 },
                 forceNiceScale: true

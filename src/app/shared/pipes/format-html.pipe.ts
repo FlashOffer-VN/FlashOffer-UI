@@ -24,8 +24,8 @@ export class FormatHtmlPipe implements PipeTransform {
         // 2. Cỡ chữ - mặc định 15px
         const fontSize = options?.fontSize || '15px';
 
-        // 3. Màu chữ - mặc định #1F2937
-        const color = options?.color || '#1F2937';
+        // 3. Màu chữ - mặc định var(--text)
+        const color = options?.color || 'var(--text)';
 
         // 4. Khoảng cách dòng - mặc định 1.7
         const lineHeight = options?.lineHeight || '1.7';
@@ -51,7 +51,7 @@ export class FormatHtmlPipe implements PipeTransform {
 export interface FormatOptions {
     fontFamily?: string;   // Mặc định: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'
     fontSize?: string;     // Mặc định: '15px'
-    color?: string;        // Mặc định: '#1F2937'
+    color?: string;        // Mặc định: 'var(--text)'
     lineHeight?: string;   // Mặc định: '1.7'
     textAlign?: string;    // 'left', 'center', 'right', 'justify'
 }

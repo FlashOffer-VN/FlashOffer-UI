@@ -1,15 +1,16 @@
 ﻿// shared/components/layouts/admin-layout/admin-header/admin-header.component.ts
 import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { RouterLink } from '@angular/router';
 import { AppService } from '../../../../../core/services/app.service';
 
 @Component({
     selector: 'app-admin-header',
     standalone: true,
-    imports: [CommonModule, RouterLink],
+    imports: [CommonModule, RouterLink, TranslateModule],
     templateUrl: './admin-header.component.html',
-    styleUrls: ['./admin-header.component.css']
+    styleUrls: ['./admin-header.component.css', './admin-header.component.mobile.css']
 })
 export class AdminHeaderComponent {
     @Input() logoPath = 'logo-full-vn.svg';

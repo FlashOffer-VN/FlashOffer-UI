@@ -10,7 +10,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: var(--z-modal);
     animation: fadeIn 0.2s ease;
 }
 
@@ -96,7 +96,7 @@
     border-radius: 10px;
     font-size: 14px;
     transition: all 0.2s ease;
-    background: #FAFBFC;
+    background: var(--surface-deep);
 }
 
 .form-control:hover {
@@ -196,7 +196,7 @@
     align-items: center;
     padding: 16px 24px;
     border-top: 1px solid var(--border);
-    background: #FAFBFC;
+    background: var(--surface-deep);
     border-radius: 0 0 20px 20px;
 }
 

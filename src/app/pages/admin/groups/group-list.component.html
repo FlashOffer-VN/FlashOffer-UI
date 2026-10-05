@@ -1,7 +1,7 @@
 <div class="space-y-6">
     <!-- Bộ lọc -->
     <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
-        <div class="flex flex-col gap-3 lg:flex-row lg:items-center" style="--control-h: 2.5rem">
+        <div class="flex flex-col gap-3 lg:flex-row lg:items-end" style="--control-h: 2.5rem">
             <!-- Search field selector: chọn cột tìm kiếm (bỏ trống = tất cả). Đổi lựa chọn KHÔNG tự tải lại — chỉ tìm khi bấm Enter hoặc nút Tìm. -->
             <div class="flex-shrink-0 w-full lg:w-56">
                 <app-ng-select-wrapper [items]="searchFieldOptions" [(ngModel)]="searchField"

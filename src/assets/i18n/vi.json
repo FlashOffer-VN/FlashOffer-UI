@@ -984,6 +984,8 @@
         }
     },
     "REGISTER": {
+            "ALREADY_REGISTERED": "Số điện thoại/email này đã có tài khoản Kindi. Vui lòng đăng nhập hoặc dùng số khác.",
+            "CONTACT_EXISTS": "Thông tin đăng ký đã tồn tại, vui lòng kiểm tra lại",
         "REFERRAL_CODE": "Mã giới thiệu",
         "REFERRAL_CODE_PLACEHOLDER": "Mã CTV trong link chia sẻ (nếu có)",
         "TITLE": "TRỞ THÀNH ĐỐI TÁC KINDI",
@@ -1222,7 +1224,9 @@
             "EXPIRE": "Hết hạn",
             "ACTIVATE": "Kích hoạt",
             "REOPEN": "Mở lại",
-            "CONTACT": "Liên hệ"
+            "CONTACT": "Liên hệ",
+            "CLOSE": "Đóng",
+            "OPEN_MENU": "Mở menu"
         },
         "CHART_TYPE": {
             "BAR": "Cột",

@@ -10,7 +10,7 @@ import { scrollToSection } from '../../core/utils/scroll';
     standalone: true,
     imports: [CommonModule, RouterLink, TranslateModule],
     templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css']
+    styleUrls: ['./home.component.css', './home.component.mobile.css']
 })
 export class HomeComponent implements OnInit {
 

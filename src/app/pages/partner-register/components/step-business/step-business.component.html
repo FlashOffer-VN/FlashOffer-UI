@@ -6,7 +6,7 @@
     <div class="form-grid" [formGroup]="formGroup">
         <!-- Company Name -->
         <div class="form-group">
-            <app-input formControlName="companyName" [label]="'PARTNER.COMPANY_NAME' | translate"
+            <app-input formControlName="companyName" [required]="true" [label]="'PARTNER.COMPANY_NAME' | translate"
                 [placeholder]="'PARTNER.COMPANY_NAME_PLACEHOLDER' | translate" [id]="'companyName'">
             </app-input>
             @if (isFieldInvalid('companyName')) {
@@ -58,7 +58,7 @@
 
             <div class="form-grid">
                 <div class="form-group">
-                    <app-input formControlName="name" [label]="'PARTNER.PRODUCT_NAME' | translate"
+                    <app-input formControlName="name" [required]="true" [label]="'PARTNER.PRODUCT_NAME' | translate"
                         [placeholder]="'PARTNER.PRODUCT_NAME_PLACEHOLDER' | translate"
                         [id]="'product_name_' + $index">
                     </app-input>

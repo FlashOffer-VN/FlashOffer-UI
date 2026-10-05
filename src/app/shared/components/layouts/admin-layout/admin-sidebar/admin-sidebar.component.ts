@@ -12,7 +12,7 @@ import { Permission } from '../../../../../core/models/permission.model';
     standalone: true,
     imports: [CommonModule, RouterLink, RouterLinkActive, TranslateModule],
     templateUrl: './admin-sidebar.component.html',
-    styleUrls: ['./admin-sidebar.component.css']
+    styleUrls: ['./admin-sidebar.component.css', './admin-sidebar.component.mobile.css']
 })
 export class AdminSidebarComponent {
     @Input() isOpen = true;

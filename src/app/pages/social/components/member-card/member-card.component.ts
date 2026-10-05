@@ -56,7 +56,7 @@ import { SocialMember } from '@core/models/social.model';
             right: 2px;
             width: 14px;
             height: 14px;
-            background: #10B981;
+            background: var(--success);
             border-radius: 50%;
             border: 2px solid white;
         }
@@ -73,17 +73,17 @@ import { SocialMember } from '@core/models/social.model';
         .member-card .name {
             display: block;
             font-weight: 600;
-            color: #1F2937;
+            color: var(--text);
         }
         .member-card .role {
             display: block;
             font-size: 13px;
-            color: #6B7280;
+            color: var(--text-muted);
         }
         .member-card .company {
             display: block;
             font-size: 12px;
-            color: #9CA3AF;
+            color: var(--text-subtle);
             margin-bottom: 8px;
         }
         .member-card__stats {
@@ -91,7 +91,7 @@ import { SocialMember } from '@core/models/social.model';
             justify-content: center;
             gap: 16px;
             font-size: 13px;
-            color: #6B7280;
+            color: var(--text-muted);
             margin-bottom: 12px;
         }
         .member-card__stats i { margin-right: 4px; }
@@ -111,9 +111,9 @@ import { SocialMember } from '@core/models/social.model';
             color: white;
         }
         .follow-btn.following {
-            background: #d1fae5;
-            border-color: #10B981;
-            color: #059669;
+            background: var(--success-soft);
+            border-color: var(--success);
+            color: var(--success-dark);
         }
     `]
 })

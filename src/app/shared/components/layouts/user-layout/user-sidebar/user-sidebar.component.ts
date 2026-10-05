@@ -11,7 +11,7 @@ import { Permission } from '../../../../../core/models/permission.model';
     standalone: true,
     imports: [CommonModule, RouterLink, RouterLinkActive, TranslateModule],
     templateUrl: './user-sidebar.component.html',
-    styleUrls: ['./user-sidebar.component.css']
+    styleUrls: ['./user-sidebar.component.css', './user-sidebar.component.mobile.css']
 })
 export class UserSidebarComponent {
     @Input() isOpen = true;

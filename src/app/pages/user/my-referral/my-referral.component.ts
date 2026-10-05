@@ -24,7 +24,7 @@ import { PaginationComponent } from '@shared/components/pagination/pagination.co
 import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 
-const CHART_PALETTE = ['#007f94', '#7c3aed', '#ea580c', '#16a34a', '#db2777', '#2563eb'];
+const CHART_PALETTE = ['var(--primary)', 'var(--chart-violet)', 'var(--orange-dark)', 'var(--success-mid)', 'var(--pink-dark)', 'var(--blue)'];
 
 interface MyReferralCard {
     key: string;
@@ -387,12 +387,12 @@ export class MyReferralPageComponent implements OnInit, OnDestroy {
             stroke: isLine ? { curve: 'smooth', width: 3 } : { width: 0 },
             markers: isLine ? { size: 4, strokeWidth: 2, hover: { size: 6 } } : { size: 0 },
             dataLabels: { enabled: false },
-            grid: { borderColor: '#e2e8f0', strokeDashArray: 4 },
+            grid: { borderColor: 'var(--border-slate)', strokeDashArray: 4 },
             xaxis: {
                 categories: timeline.map(x => new Date(x.date).toLocaleDateString()),
-                labels: { style: { colors: '#94a3b8', fontSize: '12px' } }
+                labels: { style: { colors: 'var(--slate-400)', fontSize: '12px' } }
             },
-            yaxis: { labels: { style: { colors: '#94a3b8', fontSize: '12px' } }, forceNiceScale: true },
+            yaxis: { labels: { style: { colors: 'var(--slate-400)', fontSize: '12px' } }, forceNiceScale: true },
             legend: { show: false },
             tooltip: { theme: 'light' },
             noData: { text: this._appService.trans('PAGINATION.NO_ITEMS') }
