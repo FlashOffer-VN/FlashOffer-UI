@@ -40,7 +40,7 @@ export interface CodeListItem {
                             <span class="font-mono text-sm text-gray-400 whitespace-nowrap">--</span>
                         }
                         @if (trimmed(item.hint)) {
-                            <span class="text-xs text-gray-500 whitespace-nowrap" [title]="trimmed(item.hint)">{{ trimmed(item.hint) }}</span>
+                            <span class="max-w-[8.5rem] truncate text-xs text-gray-500" [title]="trimmed(item.hint)">{{ trimmed(item.hint) }}</span>
                         }
                     </span>
                     @if (trimmed(item.value)) {

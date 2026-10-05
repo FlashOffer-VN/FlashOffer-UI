@@ -15,6 +15,10 @@
  * khi bảng co giãn nên cột ngắn bị bóp, cột dài bị phình.
  * `min-width` = tổng các cột => màn hình hẹp thì cuộn ngang, không bóp cột.
  *
+ * Cột 2 (mã đối tác) và cột 3 (họ tên) phải chừa chỗ cho khối mã dùng chung
+ * `app-code-list` (nhãn + mã monospace không bẻ dòng + nút copy 32px) — nếu hẹp hơn
+ * thì nội dung tràn sang cột bên cạnh vì bảng dùng `table-layout: fixed`.
+ *
  * Thứ tự cột:
  *   1 #  ·  2 Mã ĐT  ·  3 Họ tên  ·  4 Công ty  ·  5 Email  ·  6 SĐT
  *   7 Loại hình  ·  8 Lĩnh vực  ·  9 Trạng thái  ·  10 Ngày ĐK  ·  11 Thao tác
@@ -23,7 +27,7 @@
  */
 table {
     width: 100%;
-    min-width: 1460px;
+    min-width: 1654px;
     table-layout: fixed;
 }
 
@@ -41,11 +45,11 @@ table td:nth-child(1) { width: 56px; }
 
 /* 2. Mã đối tác — "PART-260712-9814", font mono nên cần rộng hơn số ký tự */
 table th:nth-child(2),
-table td:nth-child(2) { width: 150px; }
+table td:nth-child(2) { width: 232px; }
 
 /* 3. Họ tên — dài thì xuống dòng, không cần rộng tối đa */
 table th:nth-child(3),
-table td:nth-child(3) { width: 140px; }
+table td:nth-child(3) { width: 252px; }
 
 /* 4. Công ty */
 table th:nth-child(4),
