@@ -21,6 +21,8 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
+import { businessGroupSearchFields, SearchFieldOption } from '@core/constants/search-fields';
 
 /** Nhóm của tôi: nhóm mình tạo và nhóm mình đã tham gia (nhóm ngành + hội nhóm) */
 @Component({
@@ -29,7 +31,7 @@ import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.
     imports: [
         CommonModule, FormsModule, TranslateModule, AppDatePipe,
         BadgeComponent, ButtonComponent, InputComponent, LoadingComponent,
-        PaginationComponent, StatusTabsComponent
+        PaginationComponent, StatusTabsComponent, SearchByComponent
     ],
     template: `
         <div class="space-y-6">
@@ -49,6 +51,7 @@ import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.
                 </div>
 
                 <div class="flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
+                    <app-search-by [options]="searchFieldOptions" [(value)]="searchField"></app-search-by>
                     <div class="w-full sm:flex-1 sm:min-w-0">
                         <app-input [(ngModel)]="searchText" [label]="'USER.MY_GROUPS.SEARCH_LABEL' | translate"
                             [placeholder]="'USER.MY_GROUPS.SEARCH_PLACEHOLDER' | translate"
@@ -146,6 +149,10 @@ export class MyGroupsPageComponent implements OnInit {
 
     searchText = '';
 
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField: string | null = null;
+    searchFieldOptions: SearchFieldOption[] = [];
+
     pageNumber = 1;
     pageSize = 12;
     totalCount = 0;
@@ -164,7 +171,14 @@ export class MyGroupsPageComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildTabs();
+        this.buildSearchFieldOptions();
         this.loadData();
+    }
+
+    /** Các cột tìm kiếm dùng chung (BusinessGroupSearchField). */
+    private buildSearchFieldOptions(): void {
+        const t = (key: string) => this._appService.trans(key);
+        this.searchFieldOptions = businessGroupSearchFields(t);
     }
 
     onTabChange(tab: string): void {
@@ -206,6 +220,7 @@ export class MyGroupsPageComponent implements OnInit {
             page: this.pageNumber,
             pageSize: this.pageSize,
             search: this.searchText,
+            searchField: this.searchField ?? undefined,
             mineRole: this.currentRole()
         }).subscribe({
             next: (response) => {

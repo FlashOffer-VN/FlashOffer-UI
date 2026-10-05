@@ -161,6 +161,8 @@ export interface BusinessGroupQuery {
     page?: number;
     pageSize?: number;
     search?: string;
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường mặc định */
+    searchField?: string;
     businessFieldId?: string | null;
     mineOnly?: boolean;
     /** Danh sách "nhóm của tôi": nhóm mình tạo hay nhóm mình đã tham gia (bỏ trống = cả hai) */

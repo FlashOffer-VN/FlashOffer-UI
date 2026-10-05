@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
+import { requestSearchFields, SearchFieldOption } from '@core/constants/search-fields';
 import { PagedResponse } from '@core/models/paged-response.model';
 import { PurchaseRequest, PurchaseRequestStatus } from '@core/models/purchase-request.model';
 import { OfferRequest, OfferStatus } from '@core/models/offer-request.model';
@@ -19,6 +20,7 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 
 /** Loại yêu cầu xem trong khu vực thành viên */
 type MyRequestType = 'purchase' | 'offer';
@@ -38,7 +40,7 @@ interface MyRequestStatusView {
         CommonModule, FormsModule, TranslateModule,
         AppDatePipe, AppPricePipe, ShortIdPipe,
         BadgeComponent, ButtonComponent, InputComponent, LoadingComponent,
-        ModalComponent, PaginationComponent, StatusTabsComponent
+        ModalComponent, PaginationComponent, StatusTabsComponent, SearchByComponent
     ],
     template: `
         <div class="space-y-6">
@@ -63,6 +65,7 @@ interface MyRequestStatusView {
                 </div>
 
                 <div class="flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
+                    <app-search-by [options]="searchFieldOptions" [(value)]="searchField"></app-search-by>
                     <div class="w-full sm:flex-1 sm:min-w-0">
                         <app-input [(ngModel)]="searchText" [label]="'USER.MY_REQUESTS.SEARCH_LABEL' | translate"
                             [placeholder]="'USER.MY_REQUESTS.SEARCH_PLACEHOLDER' | translate"
@@ -356,6 +359,10 @@ export class MyRequestsPageComponent implements OnInit {
     isLoading = true;
     searchText = '';
 
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField: string | null = null;
+    searchFieldOptions: SearchFieldOption[] = [];
+
     activeTab = 'all';
     tabs: { key: string; label: string }[] = [];
 
@@ -374,7 +381,14 @@ export class MyRequestsPageComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildTabs();
+        this.buildSearchFieldOptions();
         this.loadData();
+    }
+
+    /** Các cột tìm kiếm dùng chung (RequestSearchField), áp cho cả yêu cầu mua hàng và offer. */
+    private buildSearchFieldOptions(): void {
+        const t = (key: string) => this._appService.trans(key);
+        this.searchFieldOptions = requestSearchFields(t);
     }
 
     setType(type: MyRequestType): void {
@@ -460,7 +474,7 @@ export class MyRequestsPageComponent implements OnInit {
     /** Chỉ lấy yêu cầu của chính mình (API cũng giới hạn như vậy với người dùng không phải admin) */
     private loadPurchaseRequests(): void {
         this._appService.purchaseRequest
-            .getData(this.pageNumber, this.pageSize, this.searchText, this.currentStatus<PurchaseRequestStatus>(), undefined, undefined, true)
+            .getData(this.pageNumber, this.pageSize, this.searchText, this.currentStatus<PurchaseRequestStatus>(), undefined, undefined, true, this.searchField ?? undefined)
             .subscribe({
                 next: (response: PagedResponse<PurchaseRequest>) => {
                     this.purchaseItems = response?.data ?? [];
@@ -476,7 +490,7 @@ export class MyRequestsPageComponent implements OnInit {
 
     private loadOfferRequests(): void {
         this._appService.offerRequest
-            .getData(this.pageNumber, this.pageSize, this.searchText, this.currentStatus<OfferStatus>(), undefined, undefined, undefined, undefined, true)
+            .getData(this.pageNumber, this.pageSize, this.searchText, this.currentStatus<OfferStatus>(), undefined, undefined, undefined, undefined, true, this.searchField ?? undefined)
             .subscribe({
                 next: (response: PagedResponse<OfferRequest>) => {
                     this.offerItems = response?.data ?? [];

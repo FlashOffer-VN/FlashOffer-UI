@@ -1,0 +1,8 @@
+<!-- shared/components/search-by/search-by.component.html -->
+<!-- Bộ chọn cột tìm kiếm dùng chung — xem SearchByComponent. Đổi lựa chọn chưa tự tải lại. -->
+<div [ngClass]="wrapperClass">
+    <app-ng-select-wrapper [items]="options" [ngModel]="value" (ngModelChange)="onValueChange($event)"
+        [label]="'COMMON.SEARCH_FIELD.LABEL' | translate"
+        [placeholder]="'COMMON.SEARCH_FIELD.ALL' | translate" [clearable]="true" appendTo="body">
+    </app-ng-select-wrapper>
+</div>
