@@ -219,9 +219,9 @@
                                 {{ post.refCode }}
                             </span>
                             <!-- Bài chuyển tiếp kèm mã chia sẻ riêng của người gửi -->
-                            <span *ngIf="post.referralCode" class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">
+                            <span *ngIf="post.recordReferrerCode" class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">
                                 <i class="fas fa-share-nodes mr-1"></i>{{ 'ADMIN.GROUPS.POST_SHARE_CODE' | translate }}:
-                                {{ post.referralCode | appCodeName: post.referralName }}
+                                {{ post.recordReferrerCode | appCodeName: post.recordReferrerName }}
                             </span>
                             <span *ngIf="post.withShareLink" class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
                                 <i class="fas fa-link mr-1"></i>{{ 'ADMIN.GROUPS.WITH_SHARE_LINK' | translate }}
@@ -264,9 +264,9 @@
                             <span class="rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700">
                                 <i class="fas fa-user-shield mr-1"></i>{{ 'GROUPS.PRIVATE_BADGE' | translate }}
                             </span>
-                            <span *ngIf="post.referralCode" class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">
+                            <span *ngIf="post.recordReferrerCode" class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">
                                 <i class="fas fa-share-nodes mr-1"></i>{{ 'ADMIN.GROUPS.POST_SHARE_CODE' | translate }}:
-                                {{ post.referralCode | appCodeName: post.referralName }}
+                                {{ post.recordReferrerCode | appCodeName: post.recordReferrerName }}
                             </span>
                             <span class="ml-auto text-xs text-slate-400">{{ post.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
                         </div>

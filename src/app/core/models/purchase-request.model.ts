@@ -46,8 +46,8 @@ export interface CreatePurchaseRequestDto {
     zalo?: string | null;
     email: string;
     note?: string | null;
-    /** Mã chia sẻ riêng trên link người dùng mở (?ref=) — ghi nhận cho người đã chia sẻ */
-    referralCode?: string | null;
+    /** Mã người giới thiệu gửi kèm khi tạo yêu cầu, lấy từ link chia sẻ (?ref=) — khớp API recordReferrerCode */
+    recordReferrerCode?: string | null;
 }
 
 export interface UpdatePurchaseRequestStatusDto {

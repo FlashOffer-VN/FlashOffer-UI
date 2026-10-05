@@ -55,10 +55,10 @@ export interface Collaborator {
     address?: string;
     website?: string;
     businessSize?: number;
-    /** Mã chia sẻ của người đã giới thiệu người tạo bản ghi — ghi nhận trên tài khoản (màn quản trị) */
-    referredByCode?: string | null;
-    /** Tên chủ mã chia sẻ của người tạo bản ghi */
-    referredByName?: string | null;
+    /** Mã người giới thiệu tài khoản — khớp API accountReferrerCode (màn quản trị) */
+    accountReferrerCode?: string | null;
+    /** Tên chủ mã người giới thiệu tài khoản — khớp API accountReferrerName */
+    accountReferrerName?: string | null;
 }
 
 export enum CollaboratorStatus {
@@ -94,8 +94,8 @@ export interface CreateCollaboratorRequest {
     address?: string;
     website?: string;
     parentCollaboratorId?: string;
-    /** Mã chia sẻ trên link (?ref=) — mã của người giới thiệu tài khoản đăng ký. */
-    referredByCode?: string;
+    /** Mã người giới thiệu gửi kèm khi đăng ký, lấy từ link chia sẻ (?ref=) — khớp API accountReferrerCode */
+    accountReferrerCode?: string;
 }
 
 export interface UpdateCollaboratorRequest {
