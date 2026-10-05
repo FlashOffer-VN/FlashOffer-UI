@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
+import { partnerSearchFields } from '@core/constants/search-fields';
 import { BusinessFieldOption, BusinessFieldService } from '@core/services/business-field.service';
 import {
     PublicPartner,
@@ -14,6 +15,7 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 
 /**
  * Trang Nguồn cung: danh sách đối tác doanh nghiệp ĐÃ ĐĂNG KÝ với Kindi và đã được duyệt
@@ -23,7 +25,7 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
     selector: 'app-suppliers',
     standalone: true,
     imports: [CommonModule, FormsModule, RouterLink, TranslateModule, LoadingComponent, PaginationComponent,
-        InputComponent, NgSelectWrapperComponent],
+        InputComponent, NgSelectWrapperComponent, SearchByComponent],
     templateUrl: './suppliers.component.html',
     styleUrls: ['./suppliers.component.css']
 })
@@ -34,6 +36,10 @@ export class SuppliersComponent implements OnInit, OnDestroy {
     searchTerm = '';
     selectedBusinessFieldId: string | null = null;
     businessFieldOptions: BusinessFieldOption[] = [];
+
+    /** Cột tìm kiếm (khớp PartnerSearchField API); bỏ trống = tìm mọi trường */
+    searchField: string | null = null;
+    searchFieldOptions: { value: string; label: string }[] = [];
 
     page = 1;
     pageSize = 12;
@@ -51,6 +57,8 @@ export class SuppliersComponent implements OnInit, OnDestroy {
             error: () => (this.businessFieldOptions = [])
         });
 
+        this.searchFieldOptions = partnerSearchFields((key: string) => this._appService.trans(key));
+
         this.load();
     }
 
@@ -66,6 +74,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
             page: this.page,
             pageSize: this.pageSize,
             search: this.searchTerm,
+            searchField: this.searchField ?? undefined,
             businessFieldId: this.selectedBusinessFieldId
         }).subscribe({
             next: (response) => {
@@ -92,12 +101,19 @@ export class SuppliersComponent implements OnInit, OnDestroy {
         this.load(1);
     }
 
+    /** Cột tìm kiếm — trang này lọc tự động (không có nút Tìm) nên đổi cột là tải lại ngay */
+    onSearchFieldChange(value: string | null): void {
+        this.searchField = value;
+        this.load(1);
+    }
+
     onPageChange(page: number): void {
         this.load(page);
     }
 
     clearFilters(): void {
         this.searchTerm = '';
+        this.searchField = null;
         this.selectedBusinessFieldId = null;
         this.load(1);
     }

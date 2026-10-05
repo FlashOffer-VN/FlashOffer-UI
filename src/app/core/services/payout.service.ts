@@ -8,6 +8,7 @@ import {
     BankAccount,
     BankAccountQuery,
     BankAccountVerificationCode,
+    MyPayoutQuery,
     MyWallet,
     PayoutQuery,
     PayoutStatement,
@@ -66,6 +67,27 @@ export class PayoutService {
     /** Danh sách chi trả hoa hồng cho quản trị viên, lọc theo loại và trạng thái. GET /api/v1/Payouts */
     getPaged(query: PayoutQuery): Observable<PagedResponse<PayoutStatement>> {
         return this._apiService.get<PagedResponse<PayoutStatement>>(this._baseUrl, { ...query });
+    }
+
+    /**
+     * Lịch sử chi trả của CHÍNH người gọi: lọc + phân trang phía máy chủ.
+     * GET /api/v1/Payouts/my — API tự ép tài khoản hiện tại nên không gửi userId.
+     */
+    getMyPayouts(query: MyPayoutQuery): Observable<PagedResponse<PayoutStatement>> {
+        // Chỉ gắn tham số khi thực sự có giá trị: HttpParams biến undefined/null thành chuỗi
+        // "undefined"/"null" nên API báo lỗi dữ liệu không hợp lệ và danh sách luôn rỗng.
+        const params: Record<string, string | number> = {
+            page: query.page ?? 1,
+            pageSize: query.pageSize ?? 10
+        };
+        if (query.search && query.search.trim()) params['search'] = query.search.trim();
+        if (query.searchField) params['searchField'] = query.searchField;
+        if (query.status != null) params['status'] = query.status;
+        if (query.type != null) params['type'] = query.type;
+        if (query.fromDate) params['fromDate'] = query.fromDate;
+        if (query.toDate) params['toDate'] = query.toDate;
+
+        return this._apiService.get<PagedResponse<PayoutStatement>>(`${this._baseUrl}/my`, params);
     }
 
     /** Duyệt một lần chi trả. POST /api/v1/Payouts/{id}/approve */

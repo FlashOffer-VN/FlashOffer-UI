@@ -18,6 +18,7 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
 import { PaymentQrComponent } from '@shared/components/payment-qr/payment-qr.component';
 import { buildAccountQr } from '@core/constants/bank-catalog';
 import { copyToClipboard } from '@core/utils/share-link';
+import { CodeListComponent } from '@shared/components/code-list/code-list.component';
 
 /**
  * Xác thực tài khoản ngân hàng nhận giải ngân của thành viên.
@@ -30,6 +31,7 @@ import { copyToClipboard } from '@core/utils/share-link';
         CommonModule,
         FormsModule,
         TranslateModule,
+        CodeListComponent,
         LoadingComponent,
         PaginationComponent,
         StatusTabsComponent,
@@ -99,6 +101,9 @@ import { copyToClipboard } from '@core/utils/share-link';
                                             @if (item.username) {
                                                 <div class="text-xs text-gray-500">{{ item.username }}</div>
                                             }
+                                            <app-code-list [items]="[
+                                                { label: ('COMMON.CODE.ACCOUNT' | translate), value: item.userCode }
+                                            ]"></app-code-list>
                                         </td>
                                         <td class="px-4 py-3 text-sm text-gray-700">
                                             <div class="font-medium text-gray-800">{{ item.bankName || '—' }}</div>

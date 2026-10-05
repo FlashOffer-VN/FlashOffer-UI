@@ -1,7 +1,8 @@
-import { Component, HostListener, Inject, OnInit, PLATFORM_ID, afterNextRender } from '@angular/core';
+import { Component, HostBinding, HostListener, Inject, OnInit, PLATFORM_ID, afterNextRender } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { Router } from '@angular/router';
 import { SystemSettingService } from '@core/services/system-setting.service';
 import { PublicSystemSetting } from '@core/models/system-setting.model';
 
@@ -18,7 +19,7 @@ const DEFAULT_EMAIL = 'info@kindi.vn';
     standalone: true,
     imports: [TranslateModule],
     templateUrl: './contact-floating.component.html',
-    styleUrls: ['./contact-floating.component.css']
+    styleUrls: ['./contact-floating.component.css', './contact-floating.component.mobile.css']
 })
 export class ContactFloatingComponent implements OnInit {
     phone = DEFAULT_PHONE;
@@ -32,9 +33,19 @@ export class ContactFloatingComponent implements OnInit {
 
     isVisible = false;
 
+    /**
+     * Cụm nút liên hệ dành cho khách và người dùng cuối. Trong khu vực quản trị thì ẩn:
+     * ở đó nó nằm đè lên cột thao tác của bảng và các thẻ nội dung (bấm vào bảng bị vướng).
+     */
+    @HostBinding('style.display')
+    get display(): string | null {
+        return this._router.url.startsWith('/admin') ? 'none' : null;
+    }
+
     constructor(
         @Inject(PLATFORM_ID) private platformId: any,
-        private readonly _settingService: SystemSettingService
+        private readonly _settingService: SystemSettingService,
+        private readonly _router: Router
     ) {
         // Sau khi trang chạy ở trình duyệt thì nạp lại, tránh giữ giá trị của bản dựng sẵn.
         afterNextRender(() => this.loadContact());

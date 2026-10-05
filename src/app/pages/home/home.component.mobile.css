@@ -1,0 +1,40 @@
+/* home.component.mobile.css
+   Phần mobile của trang chủ (≤768px và ≤480px), nạp sau home.component.css trong `styleUrls`.
+   Gồm 2 việc:
+     1. Tắt animation mở trang trên mobile — animation chỉ hiện trên desktop.
+     2. Thu gọn hero cho màn hình hẹp.
+   Lưu ý khi thêm rule vào file gốc: transform khởi tạo của animation PHẢI nằm trong @keyframes,
+   không đặt ở rule gốc, nếu không khi tắt animation (mobile) phần tử vẫn giữ translate/scale
+   -> lệch và tràn khỏi màn hình. */
+
+@media (max-width: 768px) {
+    .sme-hero__copy,
+    .sme-pill,
+    .sme-hero h1,
+    .sme-hero__text,
+    .sme-hero__actions .sme-button,
+    .sme-hero__visual {
+        animation: none;
+        opacity: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .sme-hero {
+        padding: 24px 16px 40px;
+    }
+
+    .sme-hero h1 {
+        font-size: 28px;
+    }
+
+    .sme-hero__actions,
+    .sme-cta__actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .sme-button {
+        width: 100%;
+    }
+}

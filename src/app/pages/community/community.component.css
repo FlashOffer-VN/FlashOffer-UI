@@ -88,7 +88,7 @@
     font-size: 15px;
     font-weight: 600;
     text-decoration: none;
-    border: 2px solid #dce3eb;
+    border: 2px solid var(--border-soft);
     transition: all 0.3s ease;
 }
 
@@ -308,7 +308,7 @@
 }
 
 /* ===== Responsive ===== */
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
     .benefits-grid {
         grid-template-columns: repeat(2, 1fr);
     }

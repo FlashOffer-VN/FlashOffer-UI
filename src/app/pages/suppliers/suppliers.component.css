@@ -235,10 +235,6 @@
     z-index: 2;
 }
 
-/* Panel của ng-select được append ra <body> — xếp cùng tầng dropdown của toàn app */
-::ng-deep .supplier-category-select .ng-dropdown-panel {
-    z-index: var(--z-dropdown) !important;
-}
 
 .supplier-result-count {
     flex: 0 0 auto;
@@ -370,14 +366,24 @@
     margin: 0 0 4px;
 }
 
+/* Hàng tag (địa chỉ + quy mô công ty): dùng flex + gap như .supplier-card__products.
+   Trước đây mỗi tag là inline-block không có khoảng cách ngang, mà Angular bỏ khoảng trắng
+   giữa hai thẻ nên hai tag dính liền nhau. */
+.supplier-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
 .supplier-card__category {
     font-size: 13px;
     color: var(--text-slate-soft);
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     background: var(--page-bg-soft);
     padding: 2px 12px;
     border-radius: 999px;
-    margin-bottom: 12px;
 }
 
 .supplier-card__products {
@@ -404,8 +410,12 @@
 }
 
 .supplier-card__verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     font-size: 13px;
-    color: var(--success);
+    /* Một màu thương hiệu cho cả app — không dùng xanh lá riêng cho nhãn này */
+    color: var(--primary);
 }
 
 .supplier-card__cta {
@@ -464,7 +474,7 @@
 }
 
 /* ===== Responsive ===== */
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
     .featured-grid {
         grid-template-columns: repeat(2, 1fr);
     }

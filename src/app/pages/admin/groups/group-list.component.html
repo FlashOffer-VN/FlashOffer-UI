@@ -1,17 +1,14 @@
 <div class="space-y-6">
     <!-- Bộ lọc -->
     <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
-        <div class="flex flex-col gap-3 lg:flex-row lg:items-center" style="--control-h: 2.5rem">
-            <!-- Search field selector: chọn cột tìm kiếm (bỏ trống = tất cả). Đổi lựa chọn KHÔNG tự tải lại — chỉ tìm khi bấm Enter hoặc nút Tìm. -->
-            <div class="flex-shrink-0 w-full lg:w-56">
-                <app-ng-select-wrapper [items]="searchFieldOptions" [(ngModel)]="searchField"
-                    [label]="'COMMON.SEARCH_FIELD.LABEL' | translate"
-                    [placeholder]="'COMMON.SEARCH_FIELD.ALL' | translate" [clearable]="true" appendTo="body">
-                </app-ng-select-wrapper>
-            </div>
+        <div class="flex flex-col gap-3 lg:flex-row lg:items-end" style="--control-h: 2.5rem">
+            <!-- Search field selector: chọn cột tìm kiếm (bỏ trống = tất cả). Dùng chung component <app-search-by>. -->
+            <app-search-by [options]="searchFieldOptions" [(value)]="searchField"
+                wrapperClass="flex-shrink-0 w-full lg:w-56"></app-search-by>
 
             <div class="w-full lg:flex-1 lg:min-w-0">
                 <app-input [(ngModel)]="searchText" name="searchText" icon="fas fa-search"
+                    [label]="'COMMON.SEARCH_FIELD.KEYWORD' | translate"
                     [placeholder]="'ADMIN.GROUPS.SEARCH_PLACEHOLDER' | translate" (keyup.enter)="onSearch()">
                 </app-input>
             </div>
@@ -26,7 +23,7 @@
             </div>
         </div>
 
-        <div class="mt-4 flex flex-wrap items-center gap-3">
+        <div class="mt-4 flex flex-wrap items-center gap-3 border-t border-gray-200 pt-4">
             <app-status-tabs [items]="statusTabs" [active]="activeTab" (change)="onTabChange($event)"></app-status-tabs>
 
             <button type="button" (click)="togglePending()"

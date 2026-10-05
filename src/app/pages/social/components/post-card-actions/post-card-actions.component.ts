@@ -35,11 +35,11 @@ import { SocialPost } from '@core/models/social.model';
             display: flex;
             gap: 24px;
             padding: 12px 0;
-            border-top: 1px solid #f1f5f9;
-            border-bottom: 1px solid #f1f5f9;
+            border-top: 1px solid var(--surface-subtle);
+            border-bottom: 1px solid var(--surface-subtle);
             margin: 12px 0;
             font-size: 14px;
-            color: #6B7280;
+            color: var(--text-muted);
         }
         .post-card__stats span {
             display: flex;
@@ -58,7 +58,7 @@ import { SocialPost } from '@core/models/social.model';
             border-radius: 8px;
             font-size: 14px;
             font-weight: 500;
-            color: #6B7280;
+            color: var(--text-muted);
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
@@ -66,8 +66,8 @@ import { SocialPost } from '@core/models/social.model';
             justify-content: center;
             gap: 6px;
         }
-        .action-btn:hover { background: #f3f4f6; }
-        .action-btn.liked { color: #EF4444; }
+        .action-btn:hover { background: var(--surface-muted); }
+        .action-btn.liked { color: var(--danger); }
         .action-btn.liked i { animation: heartBeat 0.3s ease; }
         .action-btn.save-btn.saved { color: var(--primary); }
         @keyframes heartBeat {

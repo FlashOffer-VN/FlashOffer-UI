@@ -1,0 +1,10 @@
+/* admin-layout.component.mobile.css
+   Khung nội dung khu vực quản trị trên mobile (≤768px). Nạp sau file .css gốc trong `styleUrls`.
+   Rule nằm ở đây (không ở app.mobile.css) vì cần thắng lớp .p-6 của Tailwind trên element `main`. */
+
+@media (max-width: 768px) {
+    /* 24px -> 16px mỗi bên: điện thoại hẹp nên nhường chỗ cho nội dung */
+    main {
+        padding: 16px;
+    }
+}

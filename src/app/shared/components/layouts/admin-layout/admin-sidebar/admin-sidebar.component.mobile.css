@@ -1,0 +1,14 @@
+/* admin-sidebar.component.mobile.css
+   Ngăn kéo menu khu vực admin trên mobile (<=768px). Nạp sau file .css gốc trong `styleUrls`.
+   Từ 1023px trở xuống host đã tách khỏi luồng (position: fixed, xem admin-layout.component.css). */
+
+@media (max-width: 768px) {
+    aside {
+        /* Ngăn kéo chạm tới sát đáy / tai thỏ của máy */
+        padding-top: var(--safe-top, 0px);
+        padding-bottom: var(--safe-bottom, 0px);
+        /* Tách ngăn kéo khỏi nội dung phía sau */
+        box-shadow: 4px 0 24px rgba(15, 23, 42, 0.28);
+        overscroll-behavior: contain;
+    }
+}

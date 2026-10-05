@@ -40,6 +40,7 @@ export class PartnerService {
             pageSize: query.pageSize ?? 12
         };
         if (query.search?.trim()) params['search'] = query.search.trim();
+        if (query.searchField) params['searchField'] = query.searchField;
         if (query.businessFieldId) params['businessFieldId'] = query.businessFieldId;
 
         params['sortBy'] = 'CreatedAt';
@@ -59,7 +60,8 @@ export class PartnerService {
         status?: PartnerStatus,
         fromDate?: string,
         toDate?: string,
-        isDeleted?: boolean
+        isDeleted?: boolean,
+        searchField?: string
     ): Observable<PagedResponse<Partner>> {
         // Backend yêu cầu pageSize trong [1, 100]
         pageSize = this.clampPageSize(pageSize);
@@ -76,6 +78,8 @@ export class PartnerService {
         }
         if (fromDate) params.fromDate = fromDate;
         if (toDate) params.toDate = toDate;
+        // Cột tìm kiếm do người dùng chọn; bỏ trống = tìm mọi trường (hành vi cũ)
+        if (searchField) params.searchField = searchField;
         params['sortBy'] = 'CreatedAt';
         params['sortOrder'] = 'desc';
 
@@ -175,9 +179,10 @@ export class PartnerService {
      * Danh sách đối tác đã xóa mềm.
      * GET /api/v1/partners/deleted?pageNumber&pageSize&search
      */
-    getDeletedData(pageNumber = 1, pageSize = 10, search = ''): Observable<PagedResponse<Partner>> {
+    getDeletedData(pageNumber = 1, pageSize = 10, search = '', searchField?: string): Observable<PagedResponse<Partner>> {
         pageSize = this.clampPageSize(pageSize);
         const params: any = { pageNumber, pageSize, search: search || '' };
+        if (searchField) params.searchField = searchField;
         params['sortBy'] = 'CreatedAt';
         params['sortOrder'] = 'desc';
 

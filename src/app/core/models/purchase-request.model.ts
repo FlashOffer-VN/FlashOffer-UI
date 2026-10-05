@@ -33,6 +33,8 @@ export interface PurchaseRequest {
     isDeleted?: boolean;
     /** Thời điểm xoá mềm. */
     deletedAt?: string | null;
+    /** Mã tài khoản người gửi */
+    userCode?: string | null;
 }
 
 export interface CreatePurchaseRequestDto {

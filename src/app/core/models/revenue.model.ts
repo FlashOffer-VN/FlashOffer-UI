@@ -13,7 +13,9 @@ export enum RevenueTransactionType {
     /** Yêu cầu mua hàng gửi cho đối tác. */
     PurchaseRequest = 1,
     /** Yêu cầu mua chung. */
-    GroupBuyingRequest = 2
+    GroupBuyingRequest = 2,
+    /** Offer đối tác gửi cho yêu cầu mua hàng. */
+    OfferRequest = 3
 }
 
 /** Trạng thái một bản khai doanh thu. */

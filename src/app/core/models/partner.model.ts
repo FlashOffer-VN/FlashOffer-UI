@@ -179,6 +179,8 @@ export interface PartnerRegisterResponse {
 // ==============================
 
 export interface Partner {
+    /** Mã chia sẻ của tài khoản đã mang hồ sơ này vào hệ thống (API: AccountReferrerCode). */
+    /** Tên người giới thiệu của tài khoản (API: AccountReferrerName). */
     id: string;
     userId: string;
     partnerCode: string;
@@ -195,6 +197,8 @@ export interface Partner {
     businessFieldId?: string | null;
     businessFieldName?: string | null;
     referralCode?: string;
+    /** Mã tài khoản (USR-…) của đối tác */
+    userCode?: string | null;
     note?: string;
     status: PartnerStatus;
     approvedAt?: string;
@@ -371,5 +375,7 @@ export interface PublicPartnerQuery {
     page?: number;
     pageSize?: number;
     search?: string;
+    /** Cột tìm kiếm (khớp PartnerSearchField của API); bỏ trống = tìm mọi trường */
+    searchField?: string;
     businessFieldId?: string | null;
 }

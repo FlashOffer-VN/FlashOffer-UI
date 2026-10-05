@@ -49,7 +49,7 @@ import { SocialGroup } from '@core/models/social.model';
             top: -4px;
             right: -12px;
             font-size: 14px;
-            color: #6B7280;
+            color: var(--text-muted);
             background: white;
             border-radius: 50%;
             padding: 2px;
@@ -57,12 +57,12 @@ import { SocialGroup } from '@core/models/social.model';
         .group-card h3 {
             font-size: 16px;
             font-weight: 600;
-            color: #1F2937;
+            color: var(--text);
             margin: 0 0 4px;
         }
         .group-card p {
             font-size: 13px;
-            color: #6B7280;
+            color: var(--text-muted);
             margin: 0 0 12px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -74,7 +74,7 @@ import { SocialGroup } from '@core/models/social.model';
             justify-content: center;
             gap: 16px;
             font-size: 13px;
-            color: #6B7280;
+            color: var(--text-muted);
             margin-bottom: 12px;
         }
         .group-card__stats i { margin-right: 4px; }
@@ -94,9 +94,9 @@ import { SocialGroup } from '@core/models/social.model';
             color: white;
         }
         .join-btn.joined {
-            background: #d1fae5;
-            border-color: #10B981;
-            color: #059669;
+            background: var(--success-soft);
+            border-color: var(--success);
+            color: var(--success-dark);
         }
     `]
 })

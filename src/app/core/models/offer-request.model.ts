@@ -30,6 +30,8 @@ export interface OfferRequest {
     accountReferrerCode?: string | null;
     /** Tên chủ mã giới thiệu tài khoản */
     accountReferrerName?: string | null;
+    /** Mã tài khoản người gửi */
+    userCode?: string | null;
 }
 
 export enum OfferStatus {

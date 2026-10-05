@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
+import { requestSearchFields } from '@core/constants/search-fields';
 import { PurchaseRequest, PurchaseRequestStatus } from '@core/models/purchase-request.model';
 import { Permission } from '@core/models/permission.model';
 import { PagedResponse } from '@core/models/paged-response.model';
@@ -21,9 +22,9 @@ import { GroupPostType } from '@core/models/business-group.model';
 import { ShareToGroupComponent } from '@shared/components/share-to-group/share-to-group.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
-import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
-import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
+import { CodeListComponent } from '@shared/components/code-list/code-list.component';
 
 @Component({
     selector: 'app-admin-purchase-request-list',
@@ -33,6 +34,7 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
         RouterModule,
         FormsModule,
         TranslateModule,
+        CodeListComponent,
         ButtonComponent,
         InputComponent,
         LoadingComponent,
@@ -43,8 +45,7 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
         ShareToGroupComponent,
         AppDatePipe,
         ShortIdPipe,
-        CodeNamePipe,
-        NgSelectWrapperComponent,
+        SearchByComponent,
         HasPermissionDirective
     ],
     templateUrl: './purchase-request-list.component.html',
@@ -110,19 +111,10 @@ export class AdminPurchaseRequestListComponent implements OnInit {
         }
     }
 
-    /** Các cột tìm kiếm khớp tham số searchField của API; giá trị '' = tất cả */
+    /** Các cột tìm kiếm dùng chung (RequestSearchField) khớp tham số searchField của API. */
     private buildSearchFieldOptions(): void {
         const t = (key: string) => this._appService.trans(key);
-        this.searchFieldOptions = [
-            { value: '', label: t('COMMON.SEARCH_FIELD.ALL') },
-            { value: 'productName', label: t('COMMON.SEARCH_FIELD.PRODUCT_NAME') },
-            { value: 'code', label: t('COMMON.SEARCH_FIELD.CODE') },
-            { value: 'recordReferrerCode', label: t('COMMON.SEARCH_FIELD.RECORD_REFERRER') },
-            { value: 'recordReferrerName', label: t('COMMON.SEARCH_FIELD.RECORD_REFERRER_NAME') },
-            { value: 'customerName', label: t('COMMON.SEARCH_FIELD.CUSTOMER_NAME') },
-            { value: 'customerPhone', label: t('COMMON.SEARCH_FIELD.CUSTOMER_PHONE') },
-            { value: 'customerEmail', label: t('COMMON.SEARCH_FIELD.CUSTOMER_EMAIL') }
-        ];
+        this.searchFieldOptions = requestSearchFields(t);
     }
 
     onTabChange(tab: string): void {

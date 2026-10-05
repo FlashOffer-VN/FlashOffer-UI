@@ -21,6 +21,9 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
+import { businessGroupSearchFields, SearchFieldOption } from '@core/constants/search-fields';
+import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 
 /** Nhóm của tôi: nhóm mình tạo và nhóm mình đã tham gia (nhóm ngành + hội nhóm) */
 @Component({
@@ -29,7 +32,7 @@ import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.
     imports: [
         CommonModule, FormsModule, TranslateModule, AppDatePipe,
         BadgeComponent, ButtonComponent, InputComponent, LoadingComponent,
-        PaginationComponent, StatusTabsComponent
+        PaginationComponent, StatusTabsComponent, SearchByComponent, NgxFilterDaterangeComponent
     ],
     template: `
         <div class="space-y-6">
@@ -44,19 +47,33 @@ import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.
                     </app-button>
                 </div>
 
-                <div class="mb-4">
-                    <app-status-tabs [items]="tabs" [active]="activeTab" (change)="onTabChange($event)"></app-status-tabs>
+                <div class="flex flex-wrap items-end gap-x-4 gap-y-4" style="--control-h: 2.5rem">
+                    <!-- Nhóm tìm kiếm: chọn cột + từ khoá + nút -->
+                    <div class="flex w-full flex-wrap items-end gap-3 lg:flex-1 lg:min-w-0">
+                        <app-search-by [options]="searchFieldOptions" [(value)]="searchField"></app-search-by>
+                        <div class="w-full lg:flex-1 lg:min-w-0">
+                            <app-input [(ngModel)]="searchText" [label]="'USER.MY_GROUPS.SEARCH_LABEL' | translate"
+                                [placeholder]="'USER.MY_GROUPS.SEARCH_PLACEHOLDER' | translate"
+                                (keyup.enter)="onSearch()"></app-input>
+                        </div>
+                        <app-button variant="primary" (onClick)="onSearch()">
+                            <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
+                        </app-button>
+                        <app-button variant="outline" (onClick)="onReset()">
+                            <i class="fas fa-rotate-left mr-2"></i>{{ 'COMMON.BUTTON.RESET' | translate }}
+                        </app-button>
+                    </div>
+
+                    <!-- Nhóm lọc: khoảng ngày -->
+                    <div
+                        class="flex w-full flex-wrap items-end gap-3 border-t border-gray-200 pt-3 lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
+                        <ngx-filter-daterange [from]="fromDate" [to]="toDate"
+                            (rangeChange)="onRangeChange($event)"></ngx-filter-daterange>
+                    </div>
                 </div>
 
-                <div class="flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
-                    <div class="w-full sm:flex-1 sm:min-w-0">
-                        <app-input [(ngModel)]="searchText" [label]="'USER.MY_GROUPS.SEARCH_LABEL' | translate"
-                            [placeholder]="'USER.MY_GROUPS.SEARCH_PLACEHOLDER' | translate"
-                            (keyup.enter)="onSearch()"></app-input>
-                    </div>
-                    <app-button variant="primary" (onClick)="onSearch()">
-                        <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
-                    </app-button>
+                <div class="mt-4 border-t border-gray-200 pt-4">
+                    <app-status-tabs [items]="tabs" [active]="activeTab" (change)="onTabChange($event)"></app-status-tabs>
                 </div>
             </section>
 
@@ -146,6 +163,14 @@ export class MyGroupsPageComponent implements OnInit {
 
     searchText = '';
 
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField: string | null = null;
+    searchFieldOptions: SearchFieldOption[] = [];
+
+    /** Khoảng ngày tạo nhóm (YYYY-MM-DD) */
+    fromDate: string | null = null;
+    toDate: string | null = null;
+
     pageNumber = 1;
     pageSize = 12;
     totalCount = 0;
@@ -164,7 +189,14 @@ export class MyGroupsPageComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildTabs();
+        this.buildSearchFieldOptions();
         this.loadData();
+    }
+
+    /** Các cột tìm kiếm dùng chung (BusinessGroupSearchField). */
+    private buildSearchFieldOptions(): void {
+        const t = (key: string) => this._appService.trans(key);
+        this.searchFieldOptions = businessGroupSearchFields(t);
     }
 
     onTabChange(tab: string): void {
@@ -174,6 +206,24 @@ export class MyGroupsPageComponent implements OnInit {
     }
 
     onSearch(): void {
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    /** Đổi khoảng ngày thì tải lại (bỏ trống = không lọc ngày). */
+    onRangeChange(range: { from: string | null; to: string | null }): void {
+        this.fromDate = range.from;
+        this.toDate = range.to;
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    /** Đặt lại toàn bộ bộ lọc: từ khoá, cột tìm kiếm và khoảng ngày. */
+    onReset(): void {
+        this.searchText = '';
+        this.searchField = null;
+        this.fromDate = null;
+        this.toDate = null;
         this.pageNumber = 1;
         this.loadData();
     }
@@ -206,7 +256,10 @@ export class MyGroupsPageComponent implements OnInit {
             page: this.pageNumber,
             pageSize: this.pageSize,
             search: this.searchText,
-            mineRole: this.currentRole()
+            searchField: this.searchField ?? undefined,
+            mineRole: this.currentRole(),
+            fromDate: this.fromDate ?? undefined,
+            toDate: this.toDate ?? undefined
         }).subscribe({
             next: (response) => {
                 this.groups = response?.data ?? [];

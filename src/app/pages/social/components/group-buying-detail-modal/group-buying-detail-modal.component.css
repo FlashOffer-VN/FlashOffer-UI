@@ -5,7 +5,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: calc(var(--z-modal) + var(--modal-level, 0) * var(--z-modal-step));
+    z-index: var(--z-modal);
     padding: 16px;
 }
 

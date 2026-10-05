@@ -4,11 +4,11 @@
     align-items: center;
     gap: 0.5rem;
     margin-top: 0.75rem;
-    border: 1px solid var(--border, #e5e7eb);
+    border: 1px solid var(--border, var(--border));
     border-radius: 0.5rem;
-    background: var(--white, #fff);
+    background: var(--white, var(--white));
     padding: 0.5rem 0.9rem;
-    color: var(--text-secondary, #374151);
+    color: var(--text-secondary, var(--text-secondary));
     font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
@@ -23,11 +23,11 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    border: 1px solid #fecaca;
+    border: 1px solid var(--danger-light);
     border-radius: 0.75rem;
-    background: #fef2f2;
+    background: var(--danger-soft);
     padding: 0.85rem 1rem;
-    color: #b91c1c;
+    color: var(--danger-deep);
     font-size: 0.9rem;
 }
 
@@ -39,9 +39,9 @@
 }
 
 .stat-card {
-    border: 1px solid var(--border, #e5e7eb);
+    border: 1px solid var(--border, var(--border));
     border-radius: 0.75rem;
-    background: var(--white, #fff);
+    background: var(--white, var(--white));
     padding: 1.25rem;
     box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
 }
@@ -63,7 +63,7 @@
 }
 
 .stat-pending-badge {
-    color: var(--text-muted, #6b7280);
+    color: var(--text-muted, var(--text-muted));
     font-size: 0.75rem;
     font-weight: 600;
     text-align: right;
@@ -71,22 +71,22 @@
 
 .stat-label {
     margin-top: 1rem;
-    color: var(--text-muted, #6b7280);
+    color: var(--text-muted, var(--text-muted));
     font-size: 0.875rem;
 }
 
 .stat-value {
     margin-top: 0.25rem;
-    color: var(--text-heading, #111827);
+    color: var(--text-heading, var(--text-heading));
     font-size: 1.875rem;
     font-weight: 700;
 }
 
 .stat-card-blue .stat-icon { background: #e0f2fe; color: #0369a1; }
-.stat-card-teal .stat-icon { background: #ccfbf1; color: #0f766e; }
-.stat-card-green .stat-icon { background: #dcfce7; color: #16a34a; }
-.stat-card-orange .stat-icon { background: #ffedd5; color: #c2410c; }
-.stat-card-pink .stat-icon { background: #fce7f3; color: #be185d; }
+.stat-card-teal .stat-icon { background: #ccfbf1; color: var(--teal-deep); }
+.stat-card-green .stat-icon { background: var(--success-bg-soft); color: var(--success-mid); }
+.stat-card-orange .stat-icon { background: var(--orange-soft); color: #c2410c; }
+.stat-card-pink .stat-icon { background: var(--pink-soft); color: #be185d; }
 .stat-card-cyan .stat-icon { background: #cffafe; color: #0891b2; }
 
 /* ===== Section + chart ===== */
@@ -96,15 +96,15 @@
 
 .section-title {
     margin: 0 0 0.85rem;
-    color: var(--text-secondary, #374151);
+    color: var(--text-secondary, var(--text-secondary));
     font-size: 1.05rem;
     font-weight: 600;
 }
 
 .chart-card {
-    border: 1px solid var(--border, #e5e7eb);
+    border: 1px solid var(--border, var(--border));
     border-radius: 0.75rem;
-    background: var(--white, #fff);
+    background: var(--white, var(--white));
     padding: 1.25rem;
     box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
 }
@@ -112,7 +112,7 @@
 .chart-empty {
     margin: 0;
     padding: 1.25rem 0;
-    color: var(--text-subtle, #9ca3af);
+    color: var(--text-subtle, var(--text-subtle));
     font-size: 0.875rem;
     text-align: center;
 }
@@ -129,9 +129,9 @@
 .guest-tag {
     margin-left: 0.4rem;
     border-radius: 9999px;
-    background: #f3f4f6;
+    background: var(--surface-muted);
     padding: 0.1rem 0.5rem;
-    color: #6b7280;
+    color: var(--text-muted);
     font-size: 0.7rem;
     font-weight: 600;
 }

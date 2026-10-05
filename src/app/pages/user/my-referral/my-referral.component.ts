@@ -1,6 +1,7 @@
 // src/app/pages/user/my-referral/my-referral.component.ts
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -11,6 +12,7 @@ import { AppService } from '@core/services/app.service';
 import { buildReferralShareUrl, copyToClipboard } from '@core/utils/share-link';
 import { isBrowser } from '@core/utils/platform';
 import { PagedResponse } from '@core/models/paged-response.model';
+import { referralEventSearchFields, SearchFieldOption } from '@core/constants/search-fields';
 import {
     ReferralEventItem,
     ReferralEventStatus,
@@ -23,8 +25,11 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
+import { InputComponent } from '@shared/components/input/input.component';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
+import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 
-const CHART_PALETTE = ['#007f94', '#7c3aed', '#ea580c', '#16a34a', '#db2777', '#2563eb'];
+const CHART_PALETTE = ['var(--primary)', 'var(--chart-violet)', 'var(--orange-dark)', 'var(--success-mid)', 'var(--pink-dark)', 'var(--blue)'];
 
 interface MyReferralCard {
     key: string;
@@ -40,13 +45,17 @@ interface MyReferralCard {
     standalone: true,
     imports: [
         CommonModule,
+        FormsModule,
         TranslateModule,
         ChartComponent,
         ButtonComponent,
         LoadingComponent,
         PaginationComponent,
         BadgeComponent,
-        AppDatePipe
+        AppDatePipe,
+        InputComponent,
+        SearchByComponent,
+        NgxFilterDaterangeComponent
     ],
     template: `
         <div class="space-y-6">
@@ -158,6 +167,32 @@ interface MyReferralCard {
                             {{ 'USER.MY_REFERRAL.STATS_EVENTS_TITLE' | translate }}
                         </p>
 
+                        <div class="mt-3 flex flex-wrap items-end gap-x-4 gap-y-4" style="--control-h: 2.5rem">
+                            <!-- Nhóm tìm kiếm: chọn cột + từ khoá + nút -->
+                            <div class="flex w-full flex-wrap items-end gap-3 lg:flex-1 lg:min-w-0">
+                                <app-search-by [options]="eventSearchFieldOptions" [(value)]="eventSearchField"></app-search-by>
+                                <div class="w-full lg:flex-1 lg:min-w-0">
+                                    <app-input [(ngModel)]="eventSearchText"
+                                        [label]="'COMMON.SEARCH_FIELD.KEYWORD' | translate"
+                                        [placeholder]="'USER.MY_REFERRAL.STATS_SEARCH_PLACEHOLDER' | translate"
+                                        (keyup.enter)="onEventsSearch()"></app-input>
+                                </div>
+                                <app-button variant="primary" (onClick)="onEventsSearch()">
+                                    <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
+                                </app-button>
+                                <app-button variant="outline" (onClick)="onEventsReset()">
+                                    <i class="fas fa-rotate-left mr-2"></i>{{ 'COMMON.BUTTON.RESET' | translate }}
+                                </app-button>
+                            </div>
+
+                            <!-- Nhóm lọc: khoảng ngày -->
+                            <div
+                                class="flex w-full flex-wrap items-end gap-3 border-t border-gray-200 pt-3 lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
+                                <ngx-filter-daterange [from]="eventFromDate" [to]="eventToDate"
+                                    (rangeChange)="onEventsRangeChange($event)"></ngx-filter-daterange>
+                            </div>
+                        </div>
+
                         <div class="mt-3 overflow-x-auto rounded-xl ring-1 ring-slate-100">
                             <table class="w-full text-sm">
                                 <thead class="bg-slate-50">
@@ -251,6 +286,13 @@ export class MyReferralPageComponent implements OnInit, OnDestroy {
     eventsHasPreviousPage = false;
     eventsHasNextPage = false;
 
+    /** Bộ lọc danh sách phát sinh giới thiệu (mã chia sẻ/mã đối tượng/trạng thái + khoảng ngày) */
+    eventSearchText = '';
+    eventSearchField: string | null = null;
+    eventSearchFieldOptions: SearchFieldOption[] = [];
+    eventFromDate: string | null = null;
+    eventToDate: string | null = null;
+
     private langSub: Subscription | null = null;
 
     /** Các luồng ghi nhận mã chia sẻ (cột ReferralCode ở các bảng nghiệp vụ) */
@@ -277,6 +319,7 @@ export class MyReferralPageComponent implements OnInit, OnDestroy {
         });
 
         this.loadStats();
+        this.eventSearchFieldOptions = referralEventSearchFields((key: string) => this._appService.trans(key));
         this.loadEvents();
 
         // Tên series của chart được gắn lúc dựng -> dựng lại khi đổi ngôn ngữ
@@ -387,12 +430,12 @@ export class MyReferralPageComponent implements OnInit, OnDestroy {
             stroke: isLine ? { curve: 'smooth', width: 3 } : { width: 0 },
             markers: isLine ? { size: 4, strokeWidth: 2, hover: { size: 6 } } : { size: 0 },
             dataLabels: { enabled: false },
-            grid: { borderColor: '#e2e8f0', strokeDashArray: 4 },
+            grid: { borderColor: 'var(--border-slate)', strokeDashArray: 4 },
             xaxis: {
                 categories: timeline.map(x => new Date(x.date).toLocaleDateString()),
-                labels: { style: { colors: '#94a3b8', fontSize: '12px' } }
+                labels: { style: { colors: 'var(--slate-400)', fontSize: '12px' } }
             },
-            yaxis: { labels: { style: { colors: '#94a3b8', fontSize: '12px' } }, forceNiceScale: true },
+            yaxis: { labels: { style: { colors: 'var(--slate-400)', fontSize: '12px' } }, forceNiceScale: true },
             legend: { show: false },
             tooltip: { theme: 'light' },
             noData: { text: this._appService.trans('PAGINATION.NO_ITEMS') }
@@ -403,7 +446,14 @@ export class MyReferralPageComponent implements OnInit, OnDestroy {
 
     private loadEvents(): void {
         this.eventsLoading = true;
-        this._appService.referralService.getMyEvents({ page: this.eventsPage, pageSize: this.eventsPageSize })
+        this._appService.referralService.getMyEvents({
+            page: this.eventsPage,
+            pageSize: this.eventsPageSize,
+            from: this.eventFromDate,
+            to: this.eventToDate,
+            search: this.eventSearchText.trim() || null,
+            searchField: this.eventSearchField
+        })
             .pipe(finalize(() => { this.eventsLoading = false; }))
             .subscribe({
                 next: (response: PagedResponse<ReferralEventItem>) => {
@@ -426,6 +476,30 @@ export class MyReferralPageComponent implements OnInit, OnDestroy {
 
     onEventsPageSizeChange(size: number): void {
         this.eventsPageSize = size;
+        this.eventsPage = 1;
+        this.loadEvents();
+    }
+
+    /** Tìm phát sinh: bấm nút/Enter đều tải lại từ trang đầu. */
+    onEventsSearch(): void {
+        this.eventsPage = 1;
+        this.loadEvents();
+    }
+
+    /** Đổi khoảng ngày phát sinh thì tải lại (bỏ trống = không lọc ngày). */
+    onEventsRangeChange(range: { from: string | null; to: string | null }): void {
+        this.eventFromDate = range.from;
+        this.eventToDate = range.to;
+        this.eventsPage = 1;
+        this.loadEvents();
+    }
+
+    /** Đặt lại bộ lọc phát sinh: từ khoá, cột tìm kiếm và khoảng ngày. */
+    onEventsReset(): void {
+        this.eventSearchText = '';
+        this.eventSearchField = null;
+        this.eventFromDate = null;
+        this.eventToDate = null;
         this.eventsPage = 1;
         this.loadEvents();
     }

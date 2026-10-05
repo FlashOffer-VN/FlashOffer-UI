@@ -28,6 +28,10 @@ export interface ReferralEventQuery {
     from?: string | null;
     to?: string | null;
     eventType?: number | null;
+    /** Từ khoá tìm kiếm phát sinh (mã chia sẻ, mã đối tượng…). */
+    search?: string | null;
+    /** Cột tìm kiếm tương ứng với `search`; bỏ trống = tìm mọi trường. */
+    searchField?: string | null;
     page?: number;
     pageSize?: number;
 }
@@ -49,7 +53,8 @@ export interface ReferralStatsSummary {
 }
 
 export interface ReferralStatsItem {
-    referralCode: string;
+    /** Mã chia sẻ ghi nhận của phát sinh — khớp tên trường API `recordReferrerCode`. */
+    recordReferrerCode: string;
     referrerName: string | null;
     referredUsers: number;
     referredGuestUsers: number;
@@ -81,7 +86,8 @@ export interface ReferralStatsOverview {
 export interface ReferralEventItem {
     id: string;
     referralEventCode: string | null;
-    referralCode: string;
+    /** Mã chia sẻ ghi nhận của phát sinh — khớp tên trường API `recordReferrerCode`. */
+    recordReferrerCode: string;
     referrerName: string | null;
     referredUserId: string;
     referredUserName: string | null;

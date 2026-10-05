@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { isBrowser } from '../../../../core/utils/platform';
+import { focusFirstInvalid } from '../../../../core/utils/form-invalid';
 import { StepPersonalComponent } from '../step-personal/step-personal.component';
 import { StepBusinessComponent } from '../step-business/step-business.component';
 import { StepConfirmationComponent } from '../step-confirmation/step-confirmation.component';
@@ -148,6 +149,9 @@ export class PartnerFormComponent implements OnInit {
                     ctrl.get(key)?.markAsTouched();
                 });
             });
+            // Ô tên sản phẩm bắt buộc nằm dưới màn hình (nhất là trên mobile) nên phải cuộn tới,
+            // nếu không người dùng chỉ thấy nút "Tiếp tục" không phản hồi mà không biết vì sao.
+            focusFirstInvalid();
         }
         return valid;
     }
@@ -167,17 +171,7 @@ export class PartnerFormComponent implements OnInit {
         });
 
         if (!isValid) {
-            const firstInvalid = controls.find(control => {
-                const ctrl = this.registerForm.get(control);
-                return ctrl?.invalid;
-            });
-            if (firstInvalid && isBrowser()) {
-                const element = document.querySelector(`[formcontrolname="${firstInvalid}"]`);
-                if (element) {
-                    (element as HTMLElement).focus();
-                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }
+            focusFirstInvalid();
         }
         return isValid;
     }

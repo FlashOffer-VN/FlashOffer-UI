@@ -9,15 +9,22 @@
 
     <!-- Filters -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
-        <div class="flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
-            <div class="w-full sm:flex-1 sm:min-w-0">
-                <app-input [(ngModel)]="searchText" [placeholder]="'ADMIN.USERS.SEARCH_PLACEHOLDER' | translate"
-                    (keyup.enter)="onSearch()" class="w-full">
-                </app-input>
+        <div class="flex flex-wrap items-end gap-x-4 gap-y-4" style="--control-h: 2.5rem">
+            <!-- Nhóm tìm kiếm: chọn cột + từ khoá + nút -->
+            <div class="flex w-full flex-wrap items-end gap-3 sm:flex-1 sm:min-w-0">
+                <!-- Chọn cột tìm kiếm (bỏ trống = tất cả) — component dùng chung <app-search-by> -->
+                <app-search-by [options]="searchFieldOptions" [(value)]="searchField"></app-search-by>
+
+                <div class="w-full sm:flex-1 sm:min-w-0">
+                    <app-input [(ngModel)]="searchText" [label]="'COMMON.SEARCH_FIELD.KEYWORD' | translate"
+                        [placeholder]="'ADMIN.USERS.SEARCH_PLACEHOLDER' | translate"
+                        (keyup.enter)="onSearch()" class="w-full">
+                    </app-input>
+                </div>
+                <app-button variant="primary" (click)="onSearch()">
+                    {{ 'COMMON.BUTTON.SEARCH' | translate }}
+                </app-button>
             </div>
-            <app-button variant="primary" (click)="onSearch()">
-                {{ 'COMMON.BUTTON.SEARCH' | translate }}
-            </app-button>
         </div>
     </div>
 
@@ -64,7 +71,12 @@
                                 {{ user.username }}
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">
-                                {{ user.fullName || '--' }}
+                                <div>{{ user.fullName || '--' }}</div>
+                                <app-code-list [items]="[
+                                    { label: ('COMMON.CODE.ACCOUNT' | translate), value: user.userCode },
+                                    { label: ('ADMIN.CTV.REFERRAL_CODE' | translate), value: user.referralCode },
+                                    { label: ('ADMIN.CTV.REFERRED_BY' | translate), value: user.accountReferrerCode }
+                                ]"></app-code-list>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ user.phone || '--' }}

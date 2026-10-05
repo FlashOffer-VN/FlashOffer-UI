@@ -15,6 +15,9 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
 import { GroupPostType } from '@core/models/business-group.model';
 import { ShareToGroupComponent } from '@shared/components/share-to-group/share-to-group.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
+import { RevenueEntryComponent } from '@pages/admin/revenue/revenue-entry.component';
+import { RevenueTransactionType } from '@core/models/revenue.model';
+import { Permission } from '@core/models/permission.model';
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
@@ -23,6 +26,7 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
     selector: 'app-admin-offer-detail',
     standalone: true,
     imports: [
+        RevenueEntryComponent,
         CommonModule,
         RouterModule,
         TranslateModule,
@@ -44,6 +48,12 @@ export class AdminOfferDetailComponent implements OnInit {
     readonly groupPostType = GroupPostType;
 
     offer: OfferRequest | null = null;
+
+    /** Có quyền khai doanh thu cho offer hay không. */
+    canManageRevenue = false;
+
+    /** Bản khai doanh thu gắn với offer này. */
+    revenueType = RevenueTransactionType.OfferRequest;
     isLoading = true;
     isActionLoading = false;
 
@@ -59,6 +69,8 @@ export class AdminOfferDetailComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.canManageRevenue = this._appService.permissionService.has(Permission.ManageTransactionRevenue);
+
         this.loadData();
     }
 

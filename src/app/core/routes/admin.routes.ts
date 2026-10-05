@@ -24,6 +24,9 @@ export const adminRoutes: Routes = [
             // Group Buying Management
             { path: 'group-buying', loadComponent: () => import('@pages/admin/group-buying/group-buying-list.component').then(m => m.AdminGroupBuyingListComponent) },
             { path: 'groups', loadComponent: () => import('@pages/admin/groups/group-list.component').then(m => m.AdminGroupListComponent) },
+            // Quản lý lĩnh vực hoạt động — danh mục dùng chung cho công ty và hồ sơ CTV/đối tác
+            { path: 'business-fields', canActivate: [PermissionGuard], data: { permission: [Permission.ViewBusinessFields] },
+              loadComponent: () => import('@pages/admin/business-fields/business-field-list.component').then(m => m.AdminBusinessFieldListComponent) },
             { path: 'groups/:id', loadComponent: () => import('@pages/admin/groups/detail/group-detail.component').then(m => m.AdminGroupDetailComponent) },
             { path: 'group-buying/:id', loadComponent: () => import('@pages/admin/group-buying/detail/group-buying-detail.component').then(m => m.AdminGroupBuyingDetailComponent) },
             { path: 'settings', canActivate: [PermissionGuard], data: { permission: [

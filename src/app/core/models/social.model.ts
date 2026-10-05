@@ -153,4 +153,12 @@ export interface GetPostsQuery {
     mineOnly?: boolean;
     /** Lọc theo trạng thái duyệt: true = đã duyệt, false = chờ duyệt */
     isApproved?: boolean;
+    /** Từ khoá tìm kiếm */
+    search?: string;
+    /** Cột tìm kiếm (khớp SocialPostSearchField của API); bỏ trống = tìm mọi trường */
+    searchField?: string;
+    /** Lọc theo ngày tạo (từ ngày) — định dạng YYYY-MM-DD. */
+    fromDate?: string;
+    /** Lọc theo ngày tạo (đến ngày) — định dạng YYYY-MM-DD. */
+    toDate?: string;
 }

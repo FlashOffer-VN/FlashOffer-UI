@@ -860,6 +860,7 @@
         "COL_ACTION": "Action",
         "HISTORY_TITLE": "Payout history",
         "HISTORY_SUBTITLE": "Recent payouts, including early withdrawal requests.",
+        "HISTORY_SEARCH_PLACEHOLDER": "Search by period, account number, note...",
         "HISTORY_EMPTY": "No payout yet. Commission appears once a payout period is approved.",
         "COL_PERIOD": "Period",
         "COL_TYPE": "Type",
@@ -961,6 +962,7 @@
             "STATS_DESCRIPTION": "Activity generated from your referral code — cancelled activity is excluded from the totals.",
             "STATS_CHART_TITLE": "Activity by day",
             "STATS_EVENTS_TITLE": "Recent activity",
+            "STATS_SEARCH_PLACEHOLDER": "Search by referral code, target code...",
             "STATS_EVENTS_EMPTY": "No activity from your code yet",
             "STATS_COL_TIME": "Time",
             "STATS_COL_TYPE": "Activity type",
@@ -1002,7 +1004,8 @@
             "APPROVED": "Approved",
             "PENDING": "Pending approval",
             "EMPTY": "You have no posts yet.",
-            "EMPTY_HINT": "Posts you publish on the feed are managed here."
+            "EMPTY_HINT": "Posts you publish on the feed are managed here.",
+            "SEARCH_PLACEHOLDER": "Search my posts..."
         },
         "MY_GROUPS": {
             "TITLE": "My groups",
@@ -1028,6 +1031,8 @@
         }
     },
     "REGISTER": {
+            "ALREADY_REGISTERED": "This phone number/email already has a Kindi account. Please log in or use a different one.",
+            "CONTACT_EXISTS": "These registration details already exist, please check again",
         "REFERRAL_CODE": "Referral code",
         "REFERRAL_CODE_PLACEHOLDER": "Collaborator code in the share link (optional)",
         "TITLE": "BECOME A KINDI PARTNER",
@@ -1141,6 +1146,7 @@
         "STATS_POSTS": "Posts",
         "STATS_EVENTS": "Events",
         "FEED": "Feed",
+        "SEARCH_PLACEHOLDER": "Search posts...",
         "MEMBERS": "Members",
         "EVENTS": "Events",
         "GROUPS": "Groups",
@@ -1238,12 +1244,19 @@
         }
     },
     "COMMON": {
+        "CODE": {
+            "ACCOUNT": "Account code",
+            "COMPANY": "Company code",
+            "COPY": "Copy",
+            "COPIED": "Copied"
+        },
         "USER_PICKER": {
         "SEARCH_PLACEHOLDER": "Search by username or full name...",
         "EMPTY": "No account found"
         },
         "BUTTON": {
             "SEARCH": "Search",
+            "RESET": "Reset",
 "RETRY": "Retry",
             "ACTION": "Action",
             "VIEW_DETAIL": "View Detail",
@@ -1266,7 +1279,9 @@
             "EXPIRE": "Expire",
             "ACTIVATE": "Activate",
             "REOPEN": "Reopen",
-            "CONTACT": "Contact"
+            "CONTACT": "Contact",
+            "CLOSE": "Close",
+            "OPEN_MENU": "Open menu"
         },
         "CHART_TYPE": {
             "BAR": "Column",
@@ -1275,6 +1290,7 @@
         "SEARCH_FIELD": {
             "LABEL": "Search by",
             "ALL": "All",
+"KEYWORD": "Keyword",
             "PRODUCT_NAME": "Product name",
             "CODE": "Request code",
             "RECORD_REFERRER": "Record referrer",
@@ -1288,7 +1304,24 @@
             "GROUP_BUSINESS_FIELD": "Business field",
             "GROUP_DESCRIPTION": "Description",
             "GROUP_TOPIC": "Topic",
-            "GROUP_CODE": "Group code"
+            "GROUP_CODE": "Group code",
+            "USERNAME": "Username",
+            "FULL_NAME": "Full name",
+            "USER_CODE": "User code",
+            "REFERRAL_CODE": "Referral code",
+            "ACCOUNT_REFERRER_CODE": "Referred by",
+            "COLLABORATOR_CODE": "Collaborator code",
+            "PARTNER_CODE": "Partner code",
+            "COMPANY_NAME": "Company name",
+            "COMPANY_TAX_CODE": "Tax code",
+            "CONTENT": "Content",
+            "AUTHOR_FULL_NAME": "Author name",
+            "AUTHOR_USER_CODE": "Author user code",
+            "REFERRAL_TARGET": "Target code",
+            "STATUS": "Status",
+            "PAYOUT_PERIOD": "Payout period",
+            "BANK_ACCOUNT": "Account number",
+            "NOTE": "Note"
         },
         "ALL": "All",
         "PROVINCE": "Province/City",
@@ -1388,7 +1421,7 @@
             "FIELD_LOCKOUT_MINUTES": "Account lockout duration (minutes)",
             "FIELD_LOCKOUT_MINUTES_HINT": "Temporary lock after too many failed logins.",
             "FIELD_REFERRAL_CODE_PREFIX": "Referral code prefix",
-            "FIELD_REFERRAL_CODE_PREFIX_PLACEHOLDER": "e.g. CTV-",
+            "FIELD_REFERRAL_CODE_PREFIX_PLACEHOLDER": "e.g. KND",
             "FIELD_REFERRAL_CODE_LENGTH": "Referral code random length",
             "FIELD_REFERRAL_CODE_LENGTH_HINT": "Between 4 and 12 characters.",
             "FIELD_ATTRIBUTION_DAYS": "Commission attribution days",
@@ -1450,7 +1483,7 @@
             "NO": "Off",
             "NO_PERMISSION": "You do not have permission to view the general configuration.",
             "ERROR_FORM_INVALID": "Some fields are invalid, please review before saving.",
-            "FIELD_REFERRAL_CODE_PREFIX_HINT": "Referral code prefix, e.g. CTV.",
+            "FIELD_REFERRAL_CODE_PREFIX_HINT": "Referral code prefix, e.g. KND. Generated codes contain letters and digits only — no separators.",
           "SECTION_SELECT": "Settings group",
           "SECTION_LEGAL": "Legal content",
           "SECTION_LEGAL_DESC": "Privacy policy and terms of service shown in the footer.",
@@ -1464,6 +1497,66 @@
         
         
         
+        },
+        "BUSINESS_FIELDS": {
+            "TITLE": "Business fields",
+            "SUBTITLE": "Shared category used by companies and collaborator/partner profiles.",
+            "SEARCH_PLACEHOLDER": "Search by name, code or aliases",
+            "SEARCH": "Search",
+            "RESET": "Reset",
+            "TOTAL": "Total",
+            "ADD": "Add field",
+            "COL_CODE": "Code",
+            "COL_NAME": "Name",
+            "COL_ALIASES": "Aliases",
+            "COL_COMPANY": "Companies",
+            "COL_USER": "Accounts",
+            "COL_STATUS": "Status",
+            "COL_ACTION": "Actions",
+            "ACTIVE": "Active",
+            "INACTIVE": "Disabled",
+            "EMPTY": "No business field yet",
+            "VIEW": "View companies and accounts in this field",
+            "EDIT": "Edit",
+            "DELETE": "Delete",
+            "FORM_CREATE_TITLE": "Add business field",
+            "FORM_EDIT_TITLE": "Edit business field",
+            "FORM_NAME": "Name",
+            "FORM_NAME_PLACEHOLDER": "E.g. Information technology",
+            "FORM_ALIASES": "Aliases",
+            "FORM_ALIASES_HINT": "Comma separated, e.g. IT, ICT",
+            "FORM_ACTIVE": "Active",
+            "SAVE": "Save",
+            "CANCEL": "Cancel",
+            "DELETE_TITLE": "Delete business field",
+            "DELETE_CONFIRM": "Delete the field {{name}}?",
+            "DETAIL_TITLE": "Companies and accounts in this field",
+            "DETAIL_COMPANIES": "Companies",
+            "DETAIL_USERS": "Accounts",
+            "NO_COMPANIES": "No company in this field yet",
+            "NO_USERS": "No account in this field yet",
+            "COMPANY_CODE": "Company code",
+            "COMPANY_NAME": "Company",
+            "COMPANY_TAX": "Tax code",
+            "USER_NAME": "Full name",
+            "USER_PHONE": "Phone",
+            "USER_ROLE": "Profile",
+            "ROLE_COLLABORATOR": "Collaborator",
+            "ROLE_PARTNER": "Partner",
+            "TAB_COMPANIES": "Companies",
+            "TAB_ACCOUNTS": "Accounts",
+            "COMPANY_SEARCH_PLACEHOLDER": "Search by company code, name or tax code",
+            "USER_SEARCH_PLACEHOLDER": "Search by account code, name, phone, company or profile",
+            "COMPANY_SEARCH_EMPTY": "No company matches the keyword",
+            "USER_SEARCH_EMPTY": "No account matches the keyword",
+            "COMPANY_COLLABORATOR_COUNT": "Collaborator profiles",
+            "COMPANY_PARTNER_COUNT": "Partner profiles",
+            "SAVED": "Business field saved",
+            "DELETED": "Business field deleted",
+            "NAME_REQUIRED": "Please enter the field name",
+            "LOAD_ERROR": "Could not load business fields",
+            "SAVE_ERROR": "Could not save business field",
+            "DELETE_ERROR": "Could not delete business field"
         },
         "BANK_ACCOUNTS":
         {
@@ -2030,6 +2123,7 @@
             "TYPE": "Transaction type",
             "TYPE_PURCHASE_REQUEST": "Supplier request",
             "TYPE_GROUP_BUYING": "Group buying request",
+"TYPE_OFFER_REQUEST": "Offer",
             "STATUS": "Status",
             "CREATED_AT": "Created at",
             "EMPTY": "No declaration yet",
@@ -2434,6 +2528,7 @@
             "ACTION": "Action"
         },
         "SCREEN": {
+            "BUSINESS_FIELDS": "Business fields",
             "DASHBOARD": "Dashboard",
             "CRM_DASHBOARD": "CRM dashboard",
             "REPORTS": "Reports",

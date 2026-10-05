@@ -36,6 +36,8 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     @Input() placeholder = '';
     @Input() hint = '';
     @Input() icon = '';
+    /** Bắt buộc — hiện dấu * cạnh nhãn. */
+    @Input() required = false;
     /** Gợi ý điền tự động của trình duyệt (username, current-password, new-password…). */
     @Input() autocomplete = '';
     @Input() readonly = false;
@@ -110,10 +112,13 @@ export class InputComponent implements ControlValueAccessor, OnInit {
         return 'Dữ liệu không hợp lệ';
     }
 
-    get required(): boolean {
-        return !!this.ngControl?.control?.hasValidator?.(
-            Validators.required
-        );
+    /**
+     * Hiện dấu * đỏ cạnh nhãn. Nhận cả hai cách:
+     * - `[required]="true"` khi component cha biết chắc ô là bắt buộc
+     * - tự nhận biết khi control có `Validators.required` (không cần khai lại ở template)
+     */
+    get isRequired(): boolean {
+        return this.required || !!this.ngControl?.control?.hasValidator?.(Validators.required);
     }
 
     /** Ô tiền dùng thẻ text để hiện được dấu phân cách; bàn phím số trên điện thoại nhờ inputmode. */

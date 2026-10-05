@@ -85,7 +85,7 @@
 .sme-button--light {
     background: var(--white);
     color: var(--text-navy);
-    border: 1px solid #dce3eb;
+    border: 1px solid var(--border-soft);
 }
 
 .sme-button--light:hover {
@@ -586,23 +586,7 @@
 }
 
 @media (max-width: 480px) {
-    .sme-hero {
-        padding: 24px 16px 40px;
-    }
-
-    .sme-hero h1 {
-        font-size: 28px;
-    }
-
-    .sme-hero__actions,
-    .sme-cta__actions {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .sme-button {
-        width: 100%;
-    }
+    /* Phần hero của ≤480px nằm ở home.component.mobile.css */
 
     .sme-stats {
         grid-template-columns: 1fr;
@@ -882,7 +866,7 @@
 }
 
 /* Responsive */
-@media (max-width: 680px) {
+@media (max-width: 640px) {
     .sme-dashboard__body {
         grid-template-columns: 1fr;
         gap: 12px;
@@ -1227,7 +1211,7 @@
 .sme-card:hover {
     transform: translateY(-6px) scale(1.01);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.10);
-    border-color: #d0d8e0;
+    border-color: var(--border-muted);
 }
 
 .sme-card--wide {
@@ -1678,7 +1662,6 @@
     margin: 0 0 20px;
     padding: 6px 16px;
     opacity: 0;
-    transform: translateY(10px) scale(0.9);
     animation: pill-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
 }
 
@@ -1703,7 +1686,6 @@
     margin: 0 0 16px;
     max-width: 600px;
     opacity: 0;
-    transform: translateY(20px);
     animation: title-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
 }
 
@@ -1727,7 +1709,6 @@
     margin: 0 0 28px;
     max-width: 520px;
     opacity: 0;
-    transform: translateY(15px);
     animation: text-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s forwards;
 }
 
@@ -1753,7 +1734,6 @@
 
 .sme-hero__actions .sme-button {
     opacity: 0;
-    transform: translateY(20px) scale(0.9);
     animation: btn-hero-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
@@ -1789,7 +1769,6 @@
     max-width: 540px;
     justify-self: end;
     opacity: 0;
-    transform: translateX(30px) scale(0.96);
     animation: hero-visual-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
 }
 
@@ -1813,21 +1792,7 @@
     }
 }
 
-@media (max-width: 680px) {
-    .sme-hero__copy {
-        animation: none;
-        opacity: 1;
-    }
-
-    .sme-pill,
-    .sme-hero h1,
-    .sme-hero__text,
-    .sme-hero__actions .sme-button,
-    .sme-hero__visual {
-        animation: none;
-        opacity: 1;
-    }
-}
+/* Khối ≤680px của hero nằm ở home.component.mobile.css */
 
 /* Stats Section */
 .sme-stats {

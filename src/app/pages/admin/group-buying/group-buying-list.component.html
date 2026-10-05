@@ -7,24 +7,22 @@
 
     <!-- Filters -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
-        <div class="flex flex-col sm:flex-row gap-3 items-end" style="--control-h: 2.5rem">
-            <!-- Search field selector: chọn cột tìm kiếm (bỏ trống = tất cả). Đổi lựa chọn KHÔNG tự tải lại — chỉ tìm khi bấm Enter hoặc nút Tìm. -->
-            <div class="flex-shrink-0 w-full sm:w-56">
-                <app-ng-select-wrapper [items]="searchFieldOptions" [(ngModel)]="searchField"
-                    [label]="'COMMON.SEARCH_FIELD.LABEL' | translate"
-                    [placeholder]="'COMMON.SEARCH_FIELD.ALL' | translate" [clearable]="true" appendTo="body">
-                </app-ng-select-wrapper>
-            </div>
+        <div class="flex flex-wrap items-end gap-x-4 gap-y-4" style="--control-h: 2.5rem">
+            <!-- Nhóm tìm kiếm: chọn cột + từ khoá + nút -->
+            <div class="flex w-full flex-wrap items-end gap-3 sm:flex-1 sm:min-w-0">
+                <!-- Search field selector: chọn cột tìm kiếm (bỏ trống = tất cả). Dùng chung component <app-search-by>. -->
+                <app-search-by [options]="searchFieldOptions" [(value)]="searchField"></app-search-by>
 
-            <div class="w-full sm:flex-1 sm:min-w-0">
-                <app-input [(ngModel)]="searchText" [label]="'ADMIN.GROUP_BUYING.SEARCH_LABEL' | translate"
-                    [placeholder]="'ADMIN.GROUP_BUYING.SEARCH_PLACEHOLDER' | translate" (keyup.enter)="onSearch()">
-                </app-input>
-            </div>
+                <div class="w-full sm:flex-1 sm:min-w-0">
+                    <app-input [(ngModel)]="searchText" [label]="'ADMIN.GROUP_BUYING.SEARCH_LABEL' | translate"
+                        [placeholder]="'ADMIN.GROUP_BUYING.SEARCH_PLACEHOLDER' | translate" (keyup.enter)="onSearch()">
+                    </app-input>
+                </div>
 
-            <app-button variant="primary" (onClick)="onSearch()">
-                <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
-            </app-button>
+                <app-button variant="primary" (onClick)="onSearch()">
+                    <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
+                </app-button>
+            </div>
         </div>
     </div>
 
@@ -72,7 +70,10 @@
                             class="hover:bg-gray-50 transition-colors">
                             <td class="px-4 py-3 text-sm text-gray-500">{{ (pageNumber - 1) * pageSize + i + 1 }}</td>
                             <td class="px-4 py-3 text-sm font-medium text-gray-900">
-                                {{ (request.groupBuyingRequestCode || (request.id | shortId)) | appCodeName: request.productName }}
+                                <div>{{ request.productName }}</div>
+                                <app-code-list [items]="[
+                                    { label: '', value: (request.groupBuyingRequestCode || (request.id | shortId)) }
+                                ]"></app-code-list>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-700">{{ request.targetPrice | appPrice }}</td>
                             <td class="px-4 py-3 text-sm text-gray-700">
@@ -82,10 +83,11 @@
                             <td class="px-4 py-3">
                                 <div class="text-sm text-gray-900">{{ request.fullName }}</div>
                                 <div class="text-xs text-gray-500">{{ request.phone }}</div>
-                                <div class="text-xs text-gray-400">{{ 'ADMIN.GROUP_BUYING.REFERRAL' | translate }}:
-                                    {{ request.recordReferrerCode | appCodeName: request.recordReferrerName }}</div>
-                                <div class="text-xs text-gray-400">{{ 'ADMIN.GROUP_BUYING.REFERRED_BY' | translate }}:
-                                    {{ request.accountReferrerCode | appCodeName: request.accountReferrerName }}</div>
+                                <app-code-list [items]="[
+                                    { label: ('ADMIN.GROUP_BUYING.REFERRAL' | translate), value: request.recordReferrerCode, hint: request.recordReferrerName },
+                                    { label: ('ADMIN.GROUP_BUYING.REFERRED_BY' | translate), value: request.accountReferrerCode, hint: request.accountReferrerName },
+                                    { label: ('COMMON.CODE.ACCOUNT' | translate), value: request.userCode }
+                                ]"></app-code-list>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-500">{{ request.createdAt | appDate }}</td>
                             <td class="px-4 py-3">

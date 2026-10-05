@@ -308,7 +308,7 @@
     align-items: center;
     width: 20px;
     height: 20px;
-    border: 2px solid #d0d8e0;
+    border: 2px solid var(--border-muted);
     border-radius: 6px;
     background: var(--white);
     transition: all 0.3s ease;

@@ -41,6 +41,8 @@ export interface BusinessInfo {
     businessType?: BusinessType;
     companySize?: CompanySize;
     businessField?: string;    // lĩnh vực kinh doanh (CTV.businessField)
+    /** Mã công ty (CMP-…) */
+    companyCode?: string | null;
 }
 
 // Nguồn dữ liệu linh hoạt (flat hoặc nested) — gộp vocabulary của Partner & CTV
@@ -62,6 +64,8 @@ export interface BusinessInfoSource {
     // Nested — backend bọc trong `businessInfo` (contract cũ) hoặc `companyInfo` (CTV)
     businessInfo?: BusinessInfoSource | null;
     companyInfo?: BusinessInfoSource | null;
+    /** Mã công ty (CMP-…) */
+    companyCode?: string | null;
 }
 
 /** Trả về giá trị đầu tiên không rỗng (`undefined` / `null` / `''` đều bị coi là thiếu). */

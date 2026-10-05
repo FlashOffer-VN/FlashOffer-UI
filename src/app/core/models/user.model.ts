@@ -11,6 +11,10 @@ export interface AdminUser {
     /** Email tạm sinh từ SĐT ({sđt}@temp.com) được API trả về rỗng */
     email?: string;
     phone?: string;
+    /** Mã chia sẻ của tài khoản */
+    referralCode?: string | null;
+    /** Mã chia sẻ của tài khoản đã mang người này vào hệ thống (API: AccountReferrerCode) */
+    accountReferrerCode?: string | null;
     /** Vai trò: API trả dạng chữ (Admin/CTV/Customer), dữ liệu cũ có thể là số */
     role: string | number;
     isActive: boolean;

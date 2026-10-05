@@ -8,6 +8,10 @@ export interface MyReferralCode {
 }
 
 export interface Collaborator {
+    /** Mã chia sẻ của tài khoản đã mang hồ sơ này vào hệ thống (API: AccountReferrerCode). */
+    accountReferrerCode?: string | null;
+    /** Tên người giới thiệu của tài khoản (API: AccountReferrerName). */
+    accountReferrerName?: string | null;
     id: string;
     userId: string;
     fullName: string;
@@ -55,10 +59,12 @@ export interface Collaborator {
     address?: string;
     website?: string;
     businessSize?: number;
-    /** Mã người giới thiệu tài khoản — khớp API accountReferrerCode (màn quản trị) */
-    accountReferrerCode?: string | null;
-    /** Tên chủ mã người giới thiệu tài khoản — khớp API accountReferrerName */
-    accountReferrerName?: string | null;
+    /** Mã chia sẻ của người đã giới thiệu người tạo bản ghi — ghi nhận trên tài khoản (màn quản trị) */
+    referredByCode?: string | null;
+    /** Tên chủ mã chia sẻ của người tạo bản ghi */
+    referredByName?: string | null;
+    /** Mã tài khoản (USR-…) của CTV */
+    userCode?: string | null;
 }
 
 export enum CollaboratorStatus {
@@ -94,8 +100,8 @@ export interface CreateCollaboratorRequest {
     address?: string;
     website?: string;
     parentCollaboratorId?: string;
-    /** Mã người giới thiệu gửi kèm khi đăng ký, lấy từ link chia sẻ (?ref=) — khớp API accountReferrerCode */
-    accountReferrerCode?: string;
+    /** Mã chia sẻ trên link (?ref=) — mã của người giới thiệu tài khoản đăng ký. */
+    referredByCode?: string;
 }
 
 export interface UpdateCollaboratorRequest {

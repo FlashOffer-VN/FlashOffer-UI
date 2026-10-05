@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
+import { socialPostSearchFields } from '@core/constants/search-fields';
 import { SocialPost } from '@core/models/social.model';
 import { PagedResponse } from '@core/models/paged-response.model';
 import { Permission } from '@core/models/permission.model';
@@ -17,6 +18,7 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { BadgeComponent } from '@shared/components/badge/badge.component';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 
 @Component({
     selector: 'app-admin-social-post-list',
@@ -35,7 +37,8 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
         ModalComponent,
         BadgeComponent,
         AppDatePipe,
-        HasPermissionDirective
+        HasPermissionDirective,
+        SearchByComponent
     ],
     templateUrl: './social-post-list.component.html',
     styleUrls: ['./social-post-list.component.css']
@@ -60,6 +63,10 @@ export class AdminSocialPostListComponent implements OnInit {
     fromDate: string | null = null;
     toDate: string | null = null;
 
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField: string | null = null;
+    searchFieldOptions: { value: string; label: string }[] = [];
+
     // Tab lọc status (All / Pending / Approved / Deleted)
     activeStatus = 'all';
     tabs: { key: string; label: string }[] = [];
@@ -68,6 +75,7 @@ export class AdminSocialPostListComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildTabs();
+        this.searchFieldOptions = socialPostSearchFields((key: string) => this.appService.trans(key));
         this.loadPosts();
     }
 
@@ -99,7 +107,8 @@ export class AdminSocialPostListComponent implements OnInit {
             this.pageSize,
             this.searchText,
             this.fromDate ?? undefined,
-            this.toDate ?? undefined
+            this.toDate ?? undefined,
+            this.searchField ?? undefined
         ).subscribe({
             next: (response: PagedResponse<SocialPost>) => {
                 this.posts = response.data;

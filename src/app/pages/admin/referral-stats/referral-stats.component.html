@@ -114,9 +114,9 @@
                         <ng-container *ngIf="!isLoading">
                             <tr *ngFor="let item of items; let i = index"
                                 class="hover:bg-gray-50 transition-colors"
-                                [class.row-selected]="selectedCode === item.referralCode">
+                                [class.row-selected]="selectedCode === item.recordReferrerCode">
                                 <td class="px-4 py-3 text-sm text-gray-500">{{ (pageNumber - 1) * pageSize + i + 1 }}</td>
-                                <td class="px-4 py-3 text-sm font-mono text-gray-700 font-medium">{{ item.referralCode }}</td>
+                                <td class="px-4 py-3 text-sm font-mono text-gray-700 font-medium">{{ item.recordReferrerCode }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900">{{ item.referrerName || '--' }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900">
                                     {{ item.referredUsers }}
@@ -137,7 +137,7 @@
                                 <td class="px-4 py-3 text-sm text-gray-500">{{ item.lastEventAt ? (item.lastEventAt | appDate) : '--' }}</td>
                                 <td class="px-4 py-3">
                                     <app-button variant="primary" size="sm" (click)="toggleEvents(item)">
-                                        {{ (selectedCode === item.referralCode
+                                        {{ (selectedCode === item.recordReferrerCode
                                             ? 'ADMIN.REFERRAL_STATS.HIDE_EVENTS'
                                             : 'ADMIN.REFERRAL_STATS.VIEW_EVENTS') | translate }}
                                     </app-button>
@@ -148,16 +148,18 @@
                 </table>
             </div>
 
-            <app-pagination
-                [pageNumber]="pageNumber"
-                [pageSize]="pageSize"
-                [totalCount]="totalCount"
-                [totalPages]="totalPages"
-                [hasPreviousPage]="hasPreviousPage"
-                [hasNextPage]="hasNextPage"
-                (pageChange)="onPageChange($event)"
-                (pageSizeChange)="onPageSizeChange($event)">
-            </app-pagination>
+            <div class="border-t border-gray-200 px-4 py-3">
+                <app-pagination
+                    [pageNumber]="pageNumber"
+                    [pageSize]="pageSize"
+                    [totalCount]="totalCount"
+                    [totalPages]="totalPages"
+                    [hasPreviousPage]="hasPreviousPage"
+                    [hasNextPage]="hasNextPage"
+                    (pageChange)="onPageChange($event)"
+                    (pageSizeChange)="onPageSizeChange($event)">
+                </app-pagination>
+            </div>
         </div>
 
         <!-- Phát sinh của mã đang chọn -->
@@ -205,16 +207,18 @@
                         </tbody>
                     </table>
                 </div>
-                <app-pagination
-                    [pageNumber]="eventsPage"
-                    [pageSize]="eventsPageSize"
-                    [totalCount]="eventsTotalCount"
-                    [totalPages]="eventsTotalPages"
-                    [hasPreviousPage]="eventsHasPreviousPage"
-                    [hasNextPage]="eventsHasNextPage"
-                    (pageChange)="onEventsPageChange($event)"
-                    (pageSizeChange)="onEventsPageSizeChange($event)">
-                </app-pagination>
+                <div class="border-t border-gray-200 px-4 py-3">
+                    <app-pagination
+                        [pageNumber]="eventsPage"
+                        [pageSize]="eventsPageSize"
+                        [totalCount]="eventsTotalCount"
+                        [totalPages]="eventsTotalPages"
+                        [hasPreviousPage]="eventsHasPreviousPage"
+                        [hasNextPage]="eventsHasNextPage"
+                        (pageChange)="onEventsPageChange($event)"
+                        (pageSizeChange)="onEventsPageSizeChange($event)">
+                    </app-pagination>
+                </div>
             </div>
         </ng-container>
     </ng-container>

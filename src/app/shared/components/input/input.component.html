@@ -4,7 +4,7 @@
     @if (label) {
     <label [for]="id" class="app-input__label">
         {{ label }}
-        @if (required) {
+        @if (isRequired) {
         <span class="app-input__required">*</span>
         }
     </label>

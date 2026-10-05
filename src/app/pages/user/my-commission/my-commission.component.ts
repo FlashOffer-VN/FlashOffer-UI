@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -13,6 +13,7 @@ import { CommissionConfig } from '@core/models/commission.model';
 import {
     BankAccount,
     BankAccountVerificationCode,
+    MyPayoutQuery,
     MyWallet,
     PayoutPeriodStatus,
     PayoutStatement,
@@ -35,6 +36,11 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
+import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
+import { PaginationComponent } from '@shared/components/pagination/pagination.component';
+import { payoutSearchFields, SearchFieldOption } from '@core/constants/search-fields';
 
 /**
  * Trang hoa hồng của tôi: mức hoa hồng đang áp dụng, ví hoa hồng (khả dụng, chờ duyệt, đã nhận),
@@ -55,7 +61,12 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
         InputComponent,
         ButtonComponent,
         NgSelectWrapperComponent,
-        PaymentQrComponent
+        PaymentQrComponent,
+        FormsModule,
+        StatusTabsComponent,
+        SearchByComponent,
+        NgxFilterDaterangeComponent,
+        PaginationComponent
     ],
     template: `
         <div class="space-y-5">
@@ -332,41 +343,77 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
                     <h2 class="text-base font-semibold text-gray-900">{{ 'USER.COMMISSION.HISTORY_TITLE' | translate }}</h2>
                     <p class="text-sm text-gray-500 mt-1">{{ 'USER.COMMISSION.HISTORY_SUBTITLE' | translate }}</p>
 
-                    @if (wallet?.recentPayouts?.length) {
+                    <!-- Bộ lọc lịch sử chi trả: máy chủ lọc + phân trang (GET /Payouts/my); đổi bộ lọc/tab/trang là tải lại -->
+                    <div class="mt-4 flex flex-wrap items-end gap-x-4 gap-y-4" style="--control-h: 2.5rem">
+                        <!-- Nhóm tìm kiếm: chọn cột + từ khoá + nút -->
+                        <div class="flex w-full flex-wrap items-end gap-3 lg:flex-1 lg:min-w-0">
+                            <app-search-by [options]="historySearchFieldOptions" [(value)]="historySearchField"></app-search-by>
+                            <div class="w-full lg:flex-1 lg:min-w-0">
+                                <app-input [(ngModel)]="historySearchText"
+                                    [label]="'COMMON.SEARCH_FIELD.KEYWORD' | translate"
+                                    [placeholder]="'USER.COMMISSION.HISTORY_SEARCH_PLACEHOLDER' | translate"
+                                    (keyup.enter)="onHistorySearch()"></app-input>
+                            </div>
+                            <app-button variant="primary" [loading]="isLoadingHistory" (onClick)="onHistorySearch()">
+                                <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
+                            </app-button>
+                            <app-button variant="outline" (onClick)="onHistoryReset()">
+                                <i class="fas fa-rotate-left mr-2"></i>{{ 'COMMON.BUTTON.RESET' | translate }}
+                            </app-button>
+                        </div>
+
+                        <!-- Nhóm lọc: khoảng ngày -->
+                        <div
+                            class="flex w-full flex-wrap items-end gap-3 border-t border-gray-200 pt-3 lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
+                            <ngx-filter-daterange [from]="historyFromDate" [to]="historyToDate"
+                                (rangeChange)="onHistoryRangeChange($event)"></ngx-filter-daterange>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 border-t border-gray-200 pt-4">
+                        <app-status-tabs [items]="statusTabs" [active]="activeStatusTab"
+                            (change)="onStatusTabChange($event)"></app-status-tabs>
+                    </div>
+
+                    @if (isLoadingHistory) {
+                        <div class="mt-3">
+                            <app-loading></app-loading>
+                        </div>
+                    } @else if (payouts.length) {
                         <div class="overflow-x-auto mt-3">
                             <table class="w-full text-sm">
                                 <thead>
                                     <tr class="text-left text-gray-500">
-                                        <th class="py-2">{{ 'USER.COMMISSION.COL_PERIOD' | translate }}</th>
-                                        <th class="py-2">{{ 'USER.COMMISSION.COL_TYPE' | translate }}</th>
-                                        <th class="py-2 text-right">{{ 'USER.COMMISSION.COL_ACCRUED' | translate }}</th>
-                                        <th class="py-2 text-right">{{ 'USER.COMMISSION.COL_FEE' | translate }}</th>
-                                        <th class="py-2 text-right">{{ 'USER.COMMISSION.COL_NET' | translate }}</th>
-                                        <th class="py-2">{{ 'USER.COMMISSION.COL_STATUS' | translate }}</th>
-                                        <th class="py-2">{{ 'USER.COMMISSION.COL_TIME' | translate }}</th>
-                                        <th class="py-2">{{ 'USER.COMMISSION.COL_ACTION' | translate }}</th>
+                                        <th class="py-2 whitespace-nowrap">{{ 'USER.COMMISSION.COL_PERIOD' | translate }}</th>
+                                        <th class="py-2 whitespace-nowrap">{{ 'USER.COMMISSION.COL_TYPE' | translate }}</th>
+                                        <th class="py-2 text-right whitespace-nowrap">{{ 'USER.COMMISSION.COL_ACCRUED' | translate }}</th>
+                                        <th class="py-2 text-right whitespace-nowrap">{{ 'USER.COMMISSION.COL_FEE' | translate }}</th>
+                                        <th class="py-2 text-right whitespace-nowrap">{{ 'USER.COMMISSION.COL_NET' | translate }}</th>
+                                        <th class="py-2 whitespace-nowrap">{{ 'USER.COMMISSION.COL_STATUS' | translate }}</th>
+                                        <th class="py-2 whitespace-nowrap">{{ 'USER.COMMISSION.COL_TIME' | translate }}</th>
+                                        <th class="py-2 whitespace-nowrap">{{ 'USER.COMMISSION.COL_ACTION' | translate }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @for (item of wallet?.recentPayouts; track item.id) {
+                                    @for (item of payouts; track item.id) {
                                         <tr class="border-t border-gray-100 text-gray-700">
-                                            <td class="py-2 font-medium">{{ item.periodLabel || '—' }}</td>
-                                            <td class="py-2">{{ getPayoutTypeLabel(item.type) | translate }}</td>
-                                            <td class="py-2 text-right">{{ item.accruedAmount | appPrice }}</td>
-                                            <td class="py-2 text-right">
+                                            <td class="py-2 font-medium whitespace-nowrap">{{ item.periodLabel || '—' }}</td>
+                                            <td class="py-2 whitespace-nowrap">{{ getPayoutTypeLabel(item.type) | translate }}</td>
+                                            <td class="py-2 text-right whitespace-nowrap">{{ item.accruedAmount | appPrice }}</td>
+                                            <td class="py-2 text-right whitespace-nowrap">
                                                 {{ item.feeAmount | appPrice }}
                                                 @if (item.feeRate) {
                                                     <span class="text-xs text-gray-500">({{ item.feeRate }}%)</span>
                                                 }
                                             </td>
-                                            <td class="py-2 text-right font-semibold">{{ item.netAmount | appPrice }}</td>
-                                            <td class="py-2">
+                                            <td class="py-2 text-right font-semibold whitespace-nowrap">{{ item.netAmount | appPrice }}</td>
+                                            <td class="py-2 whitespace-nowrap">
                                                 <span class="px-2 py-0.5 rounded text-xs" [class]="statusClass(item.status)">
                                                     {{ getPayoutStatusLabel(item.status) | translate }}
                                                 </span>
                                             </td>
-                                            <td class="py-2 text-xs text-gray-500">{{ (item.requestedAt || item.createdAt) | appDate }}</td>
-                                            <td class="py-2">
+                                            <td class="py-2 text-xs text-gray-500 whitespace-nowrap">{{ (item.requestedAt || item.createdAt) | appDate }}</td>
+                                            <td class="py-2 whitespace-nowrap">
                                                 @if (canCancel(item)) {
                                                     <app-button size="sm" variant="outline" [loading]="cancellingId === item.id"
                                                         (click)="cancelWithdrawal(item)">
@@ -378,6 +425,14 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
                                     }
                                 </tbody>
                             </table>
+                        </div>
+
+                        <div class="mt-3">
+                            <app-pagination [pageNumber]="historyPageNumber" [pageSize]="historyPageSize"
+                                [totalCount]="historyTotalCount" [totalPages]="historyTotalPages"
+                                [hasPreviousPage]="historyHasPreviousPage" [hasNextPage]="historyHasNextPage"
+                                (pageChange)="onHistoryPageChange($event)" (pageSizeChange)="onHistoryPageSizeChange($event)">
+                            </app-pagination>
                         </div>
                     } @else {
                         <p class="bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-600 mt-3">{{ 'USER.COMMISSION.HISTORY_EMPTY' | translate }}</p>
@@ -555,6 +610,33 @@ export class MyCommissionPageComponent implements OnInit {
     /** Yêu cầu rút đang huỷ, dùng để hiện trạng thái chờ trên đúng dòng. */
     cancellingId: string | null = null;
 
+    /** Bộ lọc lịch sử chi trả — máy chủ lọc + phân trang qua GET /Payouts/my. */
+    historySearchText = '';
+    historySearchField: string | null = null;
+    historySearchFieldOptions: SearchFieldOption[] = [];
+    historyFromDate: string | null = null;
+    historyToDate: string | null = null;
+
+    /** Từ khoá/cột đã áp dụng khi bấm Tìm (đổi cột/ô nhập không tự tải lại). */
+    private appliedHistorySearch = '';
+    private appliedHistoryField: string | null = null;
+
+    /** Lịch sử chi trả của trang hiện tại (máy chủ phân trang). */
+    payouts: PayoutStatement[] = [];
+    isLoadingHistory = false;
+
+    /** Phân trang lịch sử chi trả theo phản hồi máy chủ. */
+    historyPageNumber = 1;
+    historyPageSize = 10;
+    historyTotalCount = 0;
+    historyTotalPages = 0;
+    historyHasPreviousPage = false;
+    historyHasNextPage = false;
+
+    /** Tab trạng thái chi trả đang chọn ('all' hoặc giá trị PayoutStatus). */
+    activeStatusTab = 'all';
+    statusTabs: { key: string; label: string }[] = [];
+
     /** Danh mục ngân hàng cho ô chọn (kèm mã BIN để dựng QR chuyển khoản). */
     readonly bankOptions = bankSelectOptions();
 
@@ -593,6 +675,8 @@ export class MyCommissionPageComponent implements OnInit {
 
     ngOnInit(): void {
         this.isLoading = true;
+        this.buildHistoryFilter();
+        this.loadHistory();
 
         // Ba nguồn dữ liệu độc lập: mức hoa hồng, ví hoa hồng và ngân hàng nhận tiền. Tài khoản chưa
         // được cấp quyền xem ngân hàng vẫn phải xem được phần còn lại nên lỗi từng nguồn bỏ qua riêng.
@@ -873,6 +957,121 @@ export class MyCommissionPageComponent implements OnInit {
     /** Yêu cầu rút sớm còn chờ duyệt thì còn huỷ được. */
     canCancel(item: PayoutStatement): boolean {
         return item.type === PayoutType.Early && item.status === PayoutStatus.Pending;
+    }
+
+    /** Dựng tab trạng thái và cột tìm kiếm cho lịch sử chi trả. */
+    private buildHistoryFilter(): void {
+        this.statusTabs = [
+            { key: 'all', label: this._appService.trans('COMMON.ALL') },
+            { key: String(PayoutStatus.Pending), label: this._appService.trans('USER.COMMISSION.STATUS_PENDING') },
+            { key: String(PayoutStatus.Approved), label: this._appService.trans('USER.COMMISSION.STATUS_APPROVED') },
+            { key: String(PayoutStatus.Rejected), label: this._appService.trans('USER.COMMISSION.STATUS_REJECTED') },
+            { key: String(PayoutStatus.Paid), label: this._appService.trans('USER.COMMISSION.STATUS_PAID') },
+            { key: String(PayoutStatus.Cancelled), label: this._appService.trans('USER.COMMISSION.STATUS_CANCELLED') }
+        ];
+        this.historySearchFieldOptions = payoutSearchFields((key: string) => this._appService.trans(key));
+    }
+
+    /** Nạp lịch sử chi trả từ máy chủ theo bộ lọc và trang hiện tại. */
+    loadHistory(): void {
+        this.isLoadingHistory = true;
+
+        const query: MyPayoutQuery = {
+            page: this.historyPageNumber,
+            pageSize: this.historyPageSize
+        };
+        if (this.appliedHistorySearch.trim()) query.search = this.appliedHistorySearch.trim();
+        if (this.appliedHistoryField) query.searchField = this.appliedHistoryField;
+
+        const status = this.statusOfTab(this.activeStatusTab);
+        if (status !== null) query.status = status;
+
+        if (this.historyFromDate) query.fromDate = this.historyFromDate;
+        if (this.historyToDate) query.toDate = this.historyToDate;
+
+        this._payoutService.getMyPayouts(query).subscribe({
+            next: response => {
+                this.payouts = response.data ?? [];
+                this.historyPageNumber = response.pageNumber ?? this.historyPageNumber;
+                this.historyPageSize = response.pageSize ?? this.historyPageSize;
+                this.historyTotalCount = response.totalCount ?? 0;
+                this.historyTotalPages = response.totalPages ?? 0;
+                this.historyHasPreviousPage = response.hasPreviousPage ?? false;
+                this.historyHasNextPage = response.hasNextPage ?? false;
+                this.isLoadingHistory = false;
+            },
+            error: () => {
+                this.isLoadingHistory = false;
+                this.payouts = [];
+                this.historyTotalCount = 0;
+                this.historyTotalPages = 0;
+                this.historyHasPreviousPage = false;
+                this.historyHasNextPage = false;
+                this._appService.showError(this._appService.trans('COMMON.ERROR.LOAD_FAILED'));
+            }
+        });
+    }
+
+    /** Trạng thái tương ứng tab đang chọn; tab "Tất cả" thì không lọc theo trạng thái. */
+    private statusOfTab(tab: string): PayoutStatus | null {
+        switch (tab) {
+            case String(PayoutStatus.Pending): return PayoutStatus.Pending;
+            case String(PayoutStatus.Approved): return PayoutStatus.Approved;
+            case String(PayoutStatus.Rejected): return PayoutStatus.Rejected;
+            case String(PayoutStatus.Paid): return PayoutStatus.Paid;
+            case String(PayoutStatus.Cancelled): return PayoutStatus.Cancelled;
+            default: return null;
+        }
+    }
+
+    /** Bấm Tìm mới áp từ khoá/cột tìm kiếm rồi tải lại từ trang đầu. */
+    onHistorySearch(): void {
+        this.appliedHistorySearch = this.historySearchText;
+        this.appliedHistoryField = this.historySearchField;
+        this.historyPageNumber = 1;
+        this.loadHistory();
+    }
+
+    /** Đổi khoảng ngày chi trả — tải lại từ trang đầu. */
+    onHistoryRangeChange(range: { from: string | null; to: string | null }): void {
+        this.historyFromDate = range.from;
+        this.historyToDate = range.to;
+        this.historyPageNumber = 1;
+        this.loadHistory();
+    }
+
+    /** Đổi tab trạng thái chi trả — tải lại từ trang đầu. */
+    onStatusTabChange(tab: string): void {
+        this.activeStatusTab = tab;
+        this.historyPageNumber = 1;
+        this.loadHistory();
+    }
+
+    /** Chuyển trang lịch sử chi trả. */
+    onHistoryPageChange(page: number): void {
+        this.historyPageNumber = page;
+        this.loadHistory();
+    }
+
+    /** Đổi số dòng mỗi trang — quay về trang đầu. */
+    onHistoryPageSizeChange(pageSize: number): void {
+        this.historyPageSize = pageSize;
+        this.historyPageNumber = 1;
+        this.loadHistory();
+    }
+
+    /** Đặt lại toàn bộ bộ lọc lịch sử chi trả rồi tải lại từ trang đầu. */
+    onHistoryReset(): void {
+        this.historySearchText = '';
+        this.historySearchField = null;
+        this.appliedHistorySearch = '';
+        this.appliedHistoryField = null;
+        this.historyFromDate = null;
+        this.historyToDate = null;
+        this.activeStatusTab = 'all';
+        this.historyPageNumber = 1;
+        this.historyPageSize = 10;
+        this.loadHistory();
     }
 
     /** Đưa người dùng xuống khối ngân hàng nhận tiền để khai hoặc xác minh. */

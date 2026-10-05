@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
+import { requestSearchFields, SearchFieldOption } from '@core/constants/search-fields';
 import { PagedResponse } from '@core/models/paged-response.model';
 import { PurchaseRequest, PurchaseRequestStatus } from '@core/models/purchase-request.model';
 import { OfferRequest, OfferStatus } from '@core/models/offer-request.model';
@@ -19,6 +20,9 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
+import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
+import { CodeListComponent } from '@shared/components/code-list/code-list.component';
 
 /** Loại yêu cầu xem trong khu vực thành viên */
 type MyRequestType = 'purchase' | 'offer';
@@ -36,9 +40,10 @@ interface MyRequestStatusView {
     standalone: true,
     imports: [
         CommonModule, FormsModule, TranslateModule,
+        CodeListComponent,
         AppDatePipe, AppPricePipe, ShortIdPipe,
         BadgeComponent, ButtonComponent, InputComponent, LoadingComponent,
-        ModalComponent, PaginationComponent, StatusTabsComponent
+        ModalComponent, PaginationComponent, StatusTabsComponent, SearchByComponent, NgxFilterDaterangeComponent
     ],
     template: `
         <div class="space-y-6">
@@ -62,15 +67,29 @@ interface MyRequestStatusView {
                     </button>
                 </div>
 
-                <div class="flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
-                    <div class="w-full sm:flex-1 sm:min-w-0">
-                        <app-input [(ngModel)]="searchText" [label]="'USER.MY_REQUESTS.SEARCH_LABEL' | translate"
-                            [placeholder]="'USER.MY_REQUESTS.SEARCH_PLACEHOLDER' | translate"
-                            (keyup.enter)="onSearch()"></app-input>
+                <div class="flex flex-wrap items-end gap-x-4 gap-y-4" style="--control-h: 2.5rem">
+                    <!-- Nhóm tìm kiếm: chọn cột + từ khoá + nút -->
+                    <div class="flex w-full flex-wrap items-end gap-3 lg:flex-1 lg:min-w-0">
+                        <app-search-by [options]="searchFieldOptions" [(value)]="searchField"></app-search-by>
+                        <div class="w-full lg:flex-1 lg:min-w-0">
+                            <app-input [(ngModel)]="searchText" [label]="'USER.MY_REQUESTS.SEARCH_LABEL' | translate"
+                                [placeholder]="'USER.MY_REQUESTS.SEARCH_PLACEHOLDER' | translate"
+                                (keyup.enter)="onSearch()"></app-input>
+                        </div>
+                        <app-button variant="primary" (onClick)="onSearch()">
+                            <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
+                        </app-button>
+                        <app-button variant="outline" (onClick)="onReset()">
+                            <i class="fas fa-rotate-left mr-2"></i>{{ 'COMMON.BUTTON.RESET' | translate }}
+                        </app-button>
                     </div>
-                    <app-button variant="primary" (onClick)="onSearch()">
-                        <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
-                    </app-button>
+
+                    <!-- Nhóm lọc: khoảng ngày -->
+                    <div
+                        class="flex w-full flex-wrap items-end gap-3 border-t border-gray-200 pt-3 lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
+                        <ngx-filter-daterange [from]="fromDate" [to]="toDate"
+                            (rangeChange)="onRangeChange($event)"></ngx-filter-daterange>
+                    </div>
                 </div>
             </section>
 
@@ -136,12 +155,12 @@ interface MyRequestStatusView {
                             <tr class="cursor-pointer transition-colors hover:bg-slate-50" (click)="openPurchase(item)">
                                 <td class="px-4 py-3">
                                     <div class="text-sm font-medium text-slate-800">{{ item.productName }}</div>
-                                    <div class="text-xs text-slate-400">
-                                        {{ item.purchaseRequestCode || (item.id | shortId) }}
-                                        @if (item.productCategory) {
-                                        <span> · {{ item.productCategory }}</span>
-                                        }
-                                    </div>
+                                    @if (item.productCategory) {
+                                    <div class="text-xs text-slate-400">{{ item.productCategory }}</div>
+                                    }
+                                    <app-code-list [items]="[
+                                        { label: ('USER.MY_REQUESTS.CODE' | translate), value: (item.purchaseRequestCode || (item.id | shortId)) }
+                                    ]"></app-code-list>
                                 </td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ item.quantity }} {{ item.unit }}</td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ item.expectedPrice | appPrice }}</td>
@@ -173,7 +192,9 @@ interface MyRequestStatusView {
                             <tr class="cursor-pointer transition-colors hover:bg-slate-50" (click)="openOffer(item)">
                                 <td class="px-4 py-3">
                                     <div class="text-sm font-medium text-slate-800">{{ item.productName }}</div>
-                                    <div class="text-xs text-slate-400">{{ item.offerRequestCode || (item.id | shortId) }}</div>
+                                    <app-code-list [items]="[
+                                        { label: ('USER.MY_REQUESTS.CODE' | translate), value: (item.offerRequestCode || (item.id | shortId)) }
+                                    ]"></app-code-list>
                                 </td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ item.quantity }} {{ item.unit }}</td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ item.currentPrice | appPrice }}</td>
@@ -356,6 +377,14 @@ export class MyRequestsPageComponent implements OnInit {
     isLoading = true;
     searchText = '';
 
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField: string | null = null;
+    searchFieldOptions: SearchFieldOption[] = [];
+
+    /** Khoảng ngày gửi yêu cầu (YYYY-MM-DD) */
+    fromDate: string | null = null;
+    toDate: string | null = null;
+
     activeTab = 'all';
     tabs: { key: string; label: string }[] = [];
 
@@ -374,7 +403,14 @@ export class MyRequestsPageComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildTabs();
+        this.buildSearchFieldOptions();
         this.loadData();
+    }
+
+    /** Các cột tìm kiếm dùng chung (RequestSearchField), áp cho cả yêu cầu mua hàng và offer. */
+    private buildSearchFieldOptions(): void {
+        const t = (key: string) => this._appService.trans(key);
+        this.searchFieldOptions = requestSearchFields(t);
     }
 
     setType(type: MyRequestType): void {
@@ -413,6 +449,24 @@ export class MyRequestsPageComponent implements OnInit {
     }
 
     onSearch(): void {
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    /** Đổi khoảng ngày thì tải lại (bỏ trống = không lọc ngày). */
+    onRangeChange(range: { from: string | null; to: string | null }): void {
+        this.fromDate = range.from;
+        this.toDate = range.to;
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    /** Đặt lại toàn bộ bộ lọc: từ khoá, cột tìm kiếm và khoảng ngày. */
+    onReset(): void {
+        this.searchText = '';
+        this.searchField = null;
+        this.fromDate = null;
+        this.toDate = null;
         this.pageNumber = 1;
         this.loadData();
     }
@@ -460,7 +514,7 @@ export class MyRequestsPageComponent implements OnInit {
     /** Chỉ lấy yêu cầu của chính mình (API cũng giới hạn như vậy với người dùng không phải admin) */
     private loadPurchaseRequests(): void {
         this._appService.purchaseRequest
-            .getData(this.pageNumber, this.pageSize, this.searchText, this.currentStatus<PurchaseRequestStatus>(), undefined, undefined, true)
+            .getData(this.pageNumber, this.pageSize, this.searchText, this.currentStatus<PurchaseRequestStatus>(), this.fromDate ?? undefined, this.toDate ?? undefined, true, this.searchField ?? undefined)
             .subscribe({
                 next: (response: PagedResponse<PurchaseRequest>) => {
                     this.purchaseItems = response?.data ?? [];
@@ -476,7 +530,7 @@ export class MyRequestsPageComponent implements OnInit {
 
     private loadOfferRequests(): void {
         this._appService.offerRequest
-            .getData(this.pageNumber, this.pageSize, this.searchText, this.currentStatus<OfferStatus>(), undefined, undefined, undefined, undefined, true)
+            .getData(this.pageNumber, this.pageSize, this.searchText, this.currentStatus<OfferStatus>(), undefined, undefined, this.fromDate ?? undefined, this.toDate ?? undefined, true, this.searchField ?? undefined)
             .subscribe({
                 next: (response: PagedResponse<OfferRequest>) => {
                     this.offerItems = response?.data ?? [];

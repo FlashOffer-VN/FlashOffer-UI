@@ -28,6 +28,11 @@
         top: 0;
         bottom: 0;
         left: 0;
-        z-index: var(--z-sidebar);
+        z-index: var(--z-drawer);
     }
+}
+
+/* Lớp phủ tối khi ngăn kéo mở (≤1023px): trên nội dung, dưới ngăn kéo */
+.app-drawer-backdrop {
+    z-index: var(--z-drawer-backdrop);
 }

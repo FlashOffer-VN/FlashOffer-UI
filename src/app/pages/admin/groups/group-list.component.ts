@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
+import { businessGroupSearchFields } from '@core/constants/search-fields';
 import { BusinessGroup, BusinessGroupType, CreateBusinessGroupRequest, GroupApprovalStatus } from '@core/models/business-group.model';
 import { Permission } from '@core/models/permission.model';
 import { ButtonComponent } from '@shared/components/button/button.component';
@@ -12,7 +13,7 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { StatusTabItem, StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
-import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 
 /** Quản lý nhóm theo lĩnh vực kinh doanh (admin) */
@@ -21,7 +22,7 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
     standalone: true,
     imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule, ButtonComponent,
         InputComponent, LoadingComponent, ModalComponent, PaginationComponent, StatusTabsComponent,
-        NgSelectWrapperComponent, HasPermissionDirective],
+        SearchByComponent, HasPermissionDirective],
     templateUrl: './group-list.component.html',
 })
 export class AdminGroupListComponent implements OnInit {
@@ -95,21 +96,10 @@ export class AdminGroupListComponent implements OnInit {
         this.load();
     }
 
-    /**
-     * Các cột tìm kiếm khớp tham số searchField của API; giá trị '' = tất cả.
-     * Chỉ dùng các trường có thật trên nhóm (name, description, topic, businessFieldName, code) —
-     * bảng nhóm không có người giới thiệu bản ghi nên KHÔNG có lựa chọn đó (khác các màn yêu cầu).
-     */
+    /** Các cột tìm kiếm dùng chung (BusinessGroupSearchField) khớp tham số searchField của API. */
     private buildSearchFieldOptions(): void {
         const t = (key: string) => this._appService.trans(key);
-        this.searchFieldOptions = [
-            { value: '', label: t('COMMON.SEARCH_FIELD.ALL') },
-            { value: 'name', label: t('COMMON.SEARCH_FIELD.GROUP_NAME') },
-            { value: 'description', label: t('COMMON.SEARCH_FIELD.GROUP_DESCRIPTION') },
-            { value: 'topic', label: t('COMMON.SEARCH_FIELD.GROUP_TOPIC') },
-            { value: 'businessFieldName', label: t('COMMON.SEARCH_FIELD.GROUP_BUSINESS_FIELD') },
-            { value: 'code', label: t('COMMON.SEARCH_FIELD.GROUP_CODE') }
-        ];
+        this.searchFieldOptions = businessGroupSearchFields(t);
     }
 
     load(page = this.page): void {

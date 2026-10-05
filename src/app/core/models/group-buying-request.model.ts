@@ -34,6 +34,8 @@ export interface GroupBuyingRequest {
     isDeleted?: boolean;
     /** Thời điểm xoá mềm. */
     deletedAt?: string | null;
+    /** Mã tài khoản người tạo đơn */
+    userCode?: string | null;
 }
 
 export enum GroupBuyingStatus {
@@ -192,6 +194,12 @@ export interface GetPublicGroupBuyingQuery {
     mineOnly?: boolean;
     /** Lọc theo trạng thái (tab trong khu vực thành viên); bỏ trống = tất cả. */
     status?: GroupBuyingStatus;
+    /** Cột tìm kiếm (khớp RequestSearchField của API); bỏ trống = tìm mọi trường. */
+    searchField?: string;
+    /** Lọc theo ngày tạo (từ ngày) — định dạng YYYY-MM-DD. */
+    fromDate?: string;
+    /** Lọc theo ngày tạo (đến ngày) — định dạng YYYY-MM-DD. */
+    toDate?: string;
 }
 
 export interface GetAdminGroupBuyingQuery {

@@ -9,7 +9,7 @@ export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | '
   imports: [CommonModule],
   template: `
     <!-- Fullscreen với Community Icon -->
-    <div *ngIf="fullScreen" class="loading-fullscreen fixed inset-0 bg-white/70 backdrop-blur-sm flex items-center justify-center">
+    <div *ngIf="fullScreen" class="fixed inset-0 bg-white/70 backdrop-blur-sm z-[var(--z-loading)] flex items-center justify-center">
       <div class="text-center space-y-6 p-8 bg-white/90 rounded-2xl shadow-xl max-w-sm w-full mx-4">
         <!-- Community Icon -->
         <div class="community-icon inline-block">
@@ -105,11 +105,6 @@ export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | '
     </ng-container>
   `,
   styles: [`
-    /* Overlay loading toàn màn hình — trên mọi lớp nổi (xem thang --z-* ở styles.css) */
-    .loading-fullscreen {
-      z-index: var(--z-loading);
-    }
-
     /* ===== DOTS ===== */
     .dot {
       border-radius: 50%;
@@ -139,7 +134,7 @@ export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | '
     .skeleton-line {
       border-radius: 6px;
       animation: shimmer 1.5s ease-in-out infinite;
-      background: linear-gradient(90deg, #E5E7EB 25%, #F3F4F6 50%, #E5E7EB 75%);
+      background: linear-gradient(90deg, var(--border) 25%, var(--surface-muted) 50%, var(--border) 75%);
       background-size: 200% 100%;
     }
     @keyframes shimmer {

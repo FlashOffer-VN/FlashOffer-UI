@@ -2,7 +2,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 /**
- * Hiển thị mã kèm tên theo một kiểu thống nhất: "CTV-YP8Y6W - Nguyễn Văn A".
+ * Hiển thị mã kèm tên theo một kiểu thống nhất: "KND04D90586 - Nguyễn Văn A".
  *
  * Mã được viết hoa và bỏ khoảng trắng thừa (giống DisplayCodePipe) nên copy ra vẫn tra cứu được.
  * Thiếu một trong hai thì hiện cái còn lại, thiếu cả hai thì hiện '--' để mọi màn hình giống nhau.

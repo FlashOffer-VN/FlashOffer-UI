@@ -175,6 +175,10 @@ export enum Permission {
     UpdateRevenueConfig = 'P130',
     /** P131 */
     DeleteRevenueConfig = 'P131',
+    ViewBusinessFields = 'P148',
+    CreateBusinessField = 'P149',
+    UpdateBusinessField = 'P150',
+    DeleteBusinessField = 'P151',
 
     // ===== Cặp quyền xem danh sách đã xoá / khôi phục (P132–P144) — khớp enum PermissionCode của API =====
     /** P132 — xem đối tác đã xoá */

@@ -16,17 +16,30 @@
         </div>
 
         <div class="suppliers-filters" style="--control-h: 2.5rem">
-            <div class="supplier-search">
-                <app-input [(ngModel)]="searchTerm" icon="fas fa-search"
-                    [placeholder]="'SUPPLIERS_SEARCH_PLACEHOLDER' | translate"
-                    (ngModelChange)="onSearchInput()"></app-input>
+            <!-- Nhóm tìm kiếm: chọn cột + từ khoá -->
+            <div class="flex w-full flex-wrap items-end gap-3 md:flex-1 md:min-w-0">
+                <!-- Chọn cột tìm kiếm (bỏ trống = tất cả) — component dùng chung <app-search-by> -->
+                <app-search-by [options]="searchFieldOptions" [value]="searchField"
+                    (valueChange)="onSearchFieldChange($event)"></app-search-by>
+
+                <div class="supplier-search">
+                    <app-input [(ngModel)]="searchTerm" icon="fas fa-search"
+                        [label]="'COMMON.SEARCH_FIELD.KEYWORD' | translate"
+                        [placeholder]="'SUPPLIERS_SEARCH_PLACEHOLDER' | translate"
+                        (ngModelChange)="onSearchInput()"></app-input>
+                </div>
             </div>
 
-            <app-ng-select-wrapper class="supplier-category-select" [items]="businessFieldOptions"
-                [(ngModel)]="selectedBusinessFieldId" [placeholder]="'SUPPLIERS_CATEGORY_PLACEHOLDER' | translate"
-                [clearable]="true" [searchable]="true" appendTo="body"
-                (valueChange)="onFilterChange()">
-            </app-ng-select-wrapper>
+            <!-- Nhóm lọc: lĩnh vực kinh doanh — ngăn cách với nhóm tìm kiếm bằng đường kẻ mảnh -->
+            <div class="w-full border-t border-gray-200 pt-3 md:w-auto md:border-l md:border-t-0 md:pl-4 md:pt-0">
+                <app-ng-select-wrapper class="supplier-category-select" [items]="businessFieldOptions"
+                    [(ngModel)]="selectedBusinessFieldId"
+                    [label]="'COMMON.SEARCH_FIELD.GROUP_BUSINESS_FIELD' | translate"
+                    [placeholder]="'SUPPLIERS_CATEGORY_PLACEHOLDER' | translate"
+                    [clearable]="true" [searchable]="true" appendTo="body"
+                    (valueChange)="onFilterChange()">
+                </app-ng-select-wrapper>
+            </div>
 
             <span class="supplier-result-count">
                 {{ totalCount }} {{ 'SUPPLIERS_RESULTS' | translate }}
@@ -51,12 +64,14 @@
 
                 <div class="supplier-card__body">
                     <h3>{{ supplier.companyName }}</h3>
-                    <span class="supplier-card__category" *ngIf="supplier.companyAddress">
-                        <i class="fas fa-location-dot"></i> {{ supplier.companyAddress }}
-                    </span>
-                    <span class="supplier-card__category">
-                        <i class="fas fa-users"></i> {{ companySizeText(supplier) | translate }}
-                    </span>
+                    <div class="supplier-card__tags">
+                        <span class="supplier-card__category" *ngIf="supplier.companyAddress">
+                            <i class="fas fa-location-dot"></i> {{ supplier.companyAddress }}
+                        </span>
+                        <span class="supplier-card__category">
+                            <i class="fas fa-users"></i> {{ companySizeText(supplier) | translate }}
+                        </span>
+                    </div>
 
                     <div class="supplier-card__products" *ngIf="supplier.products.length">
                         <span class="product-tag" *ngFor="let product of supplier.products | slice:0:4">
@@ -67,7 +82,7 @@
 
                 <div class="supplier-card__footer">
                     <span class="supplier-card__verified">
-                        ✅ {{ 'SUPPLIERS_VERIFIED' | translate }}
+                        <i class="fas fa-circle-check"></i> {{ 'SUPPLIERS_VERIFIED' | translate }}
                     </span>
                     <a class="supplier-card__cta" routerLink="/find-supplier">
                         {{ 'SUPPLIERS_CONTACT' | translate }}

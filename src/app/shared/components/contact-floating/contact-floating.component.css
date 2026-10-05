@@ -83,40 +83,4 @@
     }
 }
 
-/* Responsive */
-@media (max-width: 640px) {
-    .contact-floating-wrap {
-        right: 1rem;
-        bottom: 4rem;
-        /* ⭐ Đồng nhất responsive */
-    }
-
-    .contact-floating-btn {
-        width: 44px;
-        height: 44px;
-        font-size: 1.1rem;
-    }
-
-    .scroll-icon {
-        width: 18px;
-        height: 18px;
-    }
-}
-
-@media (max-width: 480px) {
-    .contact-floating-wrap {
-        bottom: 3.5rem;
-        right: 0.75rem;
-    }
-
-    .contact-floating-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
-    }
-
-    .scroll-icon {
-        width: 16px;
-        height: 16px;
-    }
-}
+/* Phần ≤640px và ≤480px nằm ở contact-floating.component.mobile.css */

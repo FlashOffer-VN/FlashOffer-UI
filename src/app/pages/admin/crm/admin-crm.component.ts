@@ -9,7 +9,7 @@ import { AppService } from '@core/services/app.service';
 import { isBrowser } from '@core/utils/platform';
 import { CrmDashboardStats, CrmEntityType } from '@core/models/crm.model';
 
-const CHART_PALETTE = ['#007f94', '#7c3aed', '#ea580c', '#16a34a', '#db2777', '#2563eb'];
+const CHART_PALETTE = ['var(--primary)', 'var(--chart-violet)', 'var(--orange-dark)', 'var(--success-mid)', 'var(--pink-dark)', 'var(--blue)'];
 
 @Component({
     selector: 'app-admin-crm',
@@ -167,13 +167,13 @@ export class AdminCrmComponent implements OnInit, OnDestroy {
                 gradient: { opacityFrom: 0.25, opacityTo: 0.01 }
             },
             dataLabels: { enabled: false },
-            grid: { borderColor: '#e5e7eb' },
+            grid: { borderColor: 'var(--border)' },
             xaxis: {
                 categories: trends.map(t => t.month),
-                labels: { style: { colors: '#6b7280', fontSize: '12px' } }
+                labels: { style: { colors: 'var(--text-muted)', fontSize: '12px' } }
             },
             yaxis: {
-                labels: { style: { colors: '#6b7280', fontSize: '12px' } }
+                labels: { style: { colors: 'var(--text-muted)', fontSize: '12px' } }
             },
             legend: { position: 'bottom', fontSize: '12px' },
             tooltip: { shared: true, intersect: false },
@@ -198,10 +198,10 @@ export class AdminCrmComponent implements OnInit, OnDestroy {
                 bar: { horizontal: true, distributed: true, barHeight: '60%' }
             },
             dataLabels: { enabled: false },
-            grid: { borderColor: '#e5e7eb' },
+            grid: { borderColor: 'var(--border)' },
             xaxis: {
                 categories: cats.map(c => c.name),
-                labels: { style: { colors: '#6b7280', fontSize: '12px' } }
+                labels: { style: { colors: 'var(--text-muted)', fontSize: '12px' } }
             },
             legend: { show: false },
             noData: { text: this.t('ADMIN.CRM.CATEGORIES_EMPTY'), align: 'center', verticalAlign: 'middle' }

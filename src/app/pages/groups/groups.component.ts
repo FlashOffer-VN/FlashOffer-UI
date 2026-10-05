@@ -9,12 +9,14 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
+import { businessGroupSearchFields, SearchFieldOption } from '@core/constants/search-fields';
 
 /** Danh sách nhóm theo lĩnh vực kinh doanh (công khai) */
 @Component({
     selector: 'app-groups',
     standalone: true,
-    imports: [CommonModule, FormsModule, RouterLink, TranslateModule, InputComponent, ButtonComponent, LoadingComponent, PaginationComponent],
+    imports: [CommonModule, FormsModule, RouterLink, TranslateModule, InputComponent, ButtonComponent, LoadingComponent, PaginationComponent, SearchByComponent],
     templateUrl: './groups.component.html',
 })
 export class GroupsComponent implements OnInit {
@@ -22,6 +24,10 @@ export class GroupsComponent implements OnInit {
     isLoading = false;
     searchText = '';
     mineOnly = false;
+
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường mặc định */
+    searchField: string | null = null;
+    searchFieldOptions: SearchFieldOption[] = [];
 
     page = 1;
     pageSize = 12;
@@ -33,7 +39,14 @@ export class GroupsComponent implements OnInit {
     constructor(private readonly _appService: AppService) { }
 
     ngOnInit(): void {
+        this.buildSearchFieldOptions();
         this.load();
+    }
+
+    /** Các cột tìm kiếm dùng chung (BusinessGroupSearchField) — danh sách nhóm công khai. */
+    private buildSearchFieldOptions(): void {
+        const t = (key: string) => this._appService.trans(key);
+        this.searchFieldOptions = businessGroupSearchFields(t);
     }
 
     load(page = this.page): void {
@@ -44,6 +57,7 @@ export class GroupsComponent implements OnInit {
             page: this.page,
             pageSize: this.pageSize,
             search: this.searchText,
+            searchField: this.searchField ?? undefined,
             mineOnly: this.mineOnly
         }).subscribe({
             next: (response) => {

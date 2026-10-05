@@ -33,6 +33,7 @@
             ],
             "styles": [
               "src/styles.css",
+              "src/app.mobile.css",
               "node_modules/quill/dist/quill.snow.css"
             ]
           },
@@ -101,7 +102,8 @@
               "src/googleb37932a9c455930c.html"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/app.mobile.css"
             ]
           }
         }

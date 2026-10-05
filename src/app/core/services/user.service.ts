@@ -14,9 +14,11 @@ export class UserService {
      * Danh sách người dùng phân trang (Admin)
      * GET /api/v1/Users?pageNumber=&pageSize=&search=
      */
-    getData(pageNumber = 1, pageSize = 10, search = ''): Observable<PagedResponse<AdminUser>> {
+    getData(pageNumber = 1, pageSize = 10, search = '', searchField?: string): Observable<PagedResponse<AdminUser>> {
         // Backend yêu cầu pageSize trong [1, 100]
         const params: any = { pageNumber, pageSize: this.clampPageSize(pageSize), search, sortBy: 'CreatedAt', sortOrder: 'desc' };
+        // Cột tìm kiếm do người dùng chọn; bỏ trống = tìm mọi trường (hành vi cũ)
+        if (searchField) params.searchField = searchField;
 
         return this._apiService.get<PagedResponse<AdminUser>>(this._baseUrl, params);
     }

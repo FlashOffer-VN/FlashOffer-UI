@@ -6,7 +6,7 @@
     <div class="form-grid" [formGroup]="formGroup">
         <!-- Full Name -->
         <div class="form-group">
-            <app-input formControlName="fullName" [label]="'PARTNER.FULL_NAME' | translate"
+            <app-input formControlName="fullName" [required]="true" [label]="'PARTNER.FULL_NAME' | translate"
                 [placeholder]="'PARTNER.FULL_NAME_PLACEHOLDER' | translate" [id]="'fullName'">
             </app-input>
             @if (isFieldInvalid('fullName')) {
@@ -16,7 +16,7 @@
 
         <!-- Email -->
         <div class="form-group">
-            <app-input formControlName="email" type="email" [label]="'PARTNER.EMAIL' | translate"
+            <app-input formControlName="email" [required]="true" type="email" [label]="'PARTNER.EMAIL' | translate"
                 [placeholder]="'PARTNER.EMAIL_PLACEHOLDER' | translate" [id]="'email'">
             </app-input>
             @if (isFieldInvalid('email')) {
@@ -26,7 +26,7 @@
 
         <!-- Phone -->
         <div class="form-group">
-            <app-input formControlName="phone" type="tel" [label]="'PARTNER.PHONE' | translate"
+            <app-input formControlName="phone" [required]="true" type="tel" [label]="'PARTNER.PHONE' | translate"
                 [placeholder]="'PARTNER.PHONE_PLACEHOLDER' | translate" [id]="'phone'">
             </app-input>
             @if (isFieldInvalid('phone')) {
@@ -36,7 +36,7 @@
 
         <!-- Position -->
         <div class="form-group">
-            <app-input formControlName="position" [label]="'PARTNER.POSITION' | translate"
+            <app-input formControlName="position" [required]="true" [label]="'PARTNER.POSITION' | translate"
                 [placeholder]="'PARTNER.POSITION_PLACEHOLDER' | translate" [id]="'position'">
             </app-input>
             @if (isFieldInvalid('position')) {

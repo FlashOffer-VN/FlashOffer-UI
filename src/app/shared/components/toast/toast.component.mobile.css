@@ -1,0 +1,40 @@
+/* toast.component.mobile.css
+   Thông báo nổi trên mobile: chuyển xuống ĐÁY màn hình.
+   Nạp sau toast.component.css trong `styleUrls` (ngang độ ưu tiên thì file này thắng).
+   Lý do: ở trên, thông báo trải hết bề ngang và che thanh đầu trang — bấm nút mở menu
+   (và mọi nút trên thanh đầu trang) không ăn cho tới khi thông báo tự tắt. */
+
+@media (max-width: 768px) {
+    .toast-container {
+        top: auto;
+        bottom: calc(16px + var(--safe-bottom, 0px));
+        left: 12px;
+        right: 12px;
+        /* Bỏ width: 100% — chỉ bám hai mép để thông báo không vượt ra ngoài mép phải */
+        width: auto;
+        max-width: none;
+    }
+
+    .toast-content-wrapper {
+        padding: 14px 16px;
+        gap: 10px;
+    }
+
+    .toast-message {
+        font-size: 13px;
+    }
+
+    .toast-title {
+        font-size: 13px;
+    }
+
+    .toast-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+    }
+
+    .toast-icon i {
+        font-size: 14px;
+    }
+}

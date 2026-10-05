@@ -46,6 +46,7 @@ export class BusinessGroupService {
             mineOnly: query.mineOnly ?? false
         };
         if (query.search?.trim()) params['search'] = query.search.trim();
+        if (query.searchField) params['searchField'] = query.searchField;
         if (query.businessFieldId) params['businessFieldId'] = query.businessFieldId;
 
         params['sortBy'] = 'CreatedAt';
@@ -72,6 +73,7 @@ export class BusinessGroupService {
             mineOnly: query.mineOnly ?? false
         };
         if (query.search?.trim()) params['search'] = query.search.trim();
+        if (query.searchField) params['searchField'] = query.searchField;
 
         params['sortBy'] = 'CreatedAt';
         params['sortOrder'] = 'desc';
@@ -86,7 +88,11 @@ export class BusinessGroupService {
             pageSize: query.pageSize ?? 12
         };
         if (query.search?.trim()) params['search'] = query.search.trim();
+        if (query.searchField) params['searchField'] = query.searchField;
         if (query.mineRole) params['mineRole'] = query.mineRole;
+        // Lọc theo khoảng ngày tạo (khu vực thành viên)
+        if (query.fromDate) params['fromDate'] = query.fromDate;
+        if (query.toDate) params['toDate'] = query.toDate;
 
         params['sortBy'] = 'CreatedAt';
         params['sortOrder'] = 'desc';

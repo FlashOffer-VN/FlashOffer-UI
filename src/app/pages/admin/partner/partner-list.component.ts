@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
+import { partnerSearchFields } from '@core/constants/search-fields';
 import { Partner, PartnerStatus, getPartnerStatusLabel, getBusinessTypeLabel, getCompanySizeLabel } from '@core/models/partner.model';
 import { PagedResponse } from '@core/models/paged-response.model';
 import { Permission } from '@core/models/permission.model';
@@ -17,8 +18,9 @@ import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.com
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
-import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
+import { CodeListComponent } from '@shared/components/code-list/code-list.component';
 
 @Component({
     selector: 'app-admin-partner-list',
@@ -28,6 +30,7 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
         RouterModule,
         FormsModule,
         TranslateModule,
+        CodeListComponent,
         ButtonComponent,
         InputComponent,
         LoadingComponent,
@@ -36,8 +39,8 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
         StatusTabsComponent,
         NgxFilterDaterangeComponent,
         AppDatePipe,
-        CodeNamePipe,
-        HasPermissionDirective
+        HasPermissionDirective,
+        SearchByComponent
     ],
     templateUrl: './partner-list.component.html',
     styleUrls: ['./partner-list.component.css']
@@ -56,6 +59,10 @@ export class AdminPartnerListComponent implements OnInit {
     searchText = '';
     fromDate: string | null = null;
     toDate: string | null = null;
+
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField: string | null = null;
+    searchFieldOptions: { value: string; label: string }[] = [];
 
     // Tab lọc status
     activeTab = 'all';
@@ -83,7 +90,13 @@ export class AdminPartnerListComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildTabs();
+        this.buildSearchFieldOptions();
         this.loadData();
+    }
+
+    /** Các cột tìm kiếm dùng chung (PartnerSearchField) khớp tham số searchField của API. */
+    private buildSearchFieldOptions(): void {
+        this.searchFieldOptions = partnerSearchFields((key: string) => this._appService.trans(key));
     }
 
     private buildTabs(): void {
@@ -115,7 +128,7 @@ export class AdminPartnerListComponent implements OnInit {
 
         if (isDeleted) {
             this._appService.partnerService
-                .getDeletedData(this.pageNumber, this.pageSize, this.searchText ?? '')
+                .getDeletedData(this.pageNumber, this.pageSize, this.searchText ?? '', this.searchField ?? undefined)
                 .subscribe({
                     next: (response: PagedResponse<Partner>) => {
                         this.applyPagedResponse(response);
@@ -146,7 +159,9 @@ export class AdminPartnerListComponent implements OnInit {
                 this.searchText ?? '',
                 status,
                 this.fromDate ?? undefined,
-                this.toDate ?? undefined
+                this.toDate ?? undefined,
+                undefined, // isDeleted — màn danh sách dùng tab riêng nên để trống
+                this.searchField ?? undefined
             )
             .subscribe({
                 next: (response: PagedResponse<Partner>) => {

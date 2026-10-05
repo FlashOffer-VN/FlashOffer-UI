@@ -64,7 +64,8 @@ export class CollaboratorService {
         search = '',
         status?: CollaboratorStatus,
         fromDate?: string,
-        toDate?: string
+        toDate?: string,
+        searchField?: string
     ): Observable<PagedResponse<Collaborator>> {
         // Backend yêu cầu pageSize trong [1, 100]
         pageSize = this.clampPageSize(pageSize);
@@ -72,6 +73,8 @@ export class CollaboratorService {
         if (status !== undefined) params.status = status;
         if (fromDate) params.fromDate = fromDate;
         if (toDate) params.toDate = toDate;
+        // Cột tìm kiếm do người dùng chọn; bỏ trống = tìm mọi trường (hành vi cũ)
+        if (searchField) params.searchField = searchField;
 
         params['sortBy'] = 'CreatedAt';
         params['sortOrder'] = 'desc';
@@ -88,12 +91,15 @@ export class CollaboratorService {
         pageSize = 10,
         search = '',
         fromDate?: string,
-        toDate?: string
+        toDate?: string,
+        searchField?: string
     ): Observable<PagedResponse<Collaborator>> {
         pageSize = this.clampPageSize(pageSize);
         const params: any = { page: pageNumber, size: pageSize, search };
         if (fromDate) params.fromDate = fromDate;
         if (toDate) params.toDate = toDate;
+        // Cột tìm kiếm do người dùng chọn; bỏ trống = tìm mọi trường (hành vi cũ)
+        if (searchField) params.searchField = searchField;
 
         params['sortBy'] = 'CreatedAt';
         params['sortOrder'] = 'desc';

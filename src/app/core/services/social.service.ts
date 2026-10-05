@@ -38,6 +38,10 @@ export class SocialService {
         if (query.tag) params.tag = query.tag;
         if (query.mineOnly) params.mineOnly = true;
         if (query.isApproved !== undefined && query.isApproved !== null) params.isApproved = query.isApproved;
+        if (query.search?.trim()) params.search = query.search.trim();
+        if (query.searchField) params.searchField = query.searchField;
+        if (query.fromDate) params.fromDate = query.fromDate;
+        if (query.toDate) params.toDate = query.toDate;
 
         return this._apiService.get<PagedResponse<SocialPost>>(
             `${this._baseSocialUrl}/posts`,
@@ -61,13 +65,16 @@ export class SocialService {
         pageSize = 10,
         search = '',
         fromDate?: string,
-        toDate?: string
+        toDate?: string,
+        searchField?: string
     ): Observable<PagedResponse<SocialPost>> {
         // Backend yêu cầu pageSize trong [1, 100]
         pageSize = this.clampPageSize(pageSize);
         const params: any = { pageNumber, pageSize, sortBy: 'CreatedAt', sortOrder: 'desc' };
         if (status) params.status = status;
         if (search) params.search = search;
+        // Cột tìm kiếm do người dùng chọn; bỏ trống = tìm mọi trường (hành vi cũ)
+        if (searchField) params.searchField = searchField;
         if (fromDate) params.fromDate = fromDate;
         if (toDate) params.toDate = toDate;
         return this._apiService.get<PagedResponse<SocialPost>>(

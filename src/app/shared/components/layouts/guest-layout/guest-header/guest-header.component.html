@@ -1,5 +1,5 @@
 ﻿<!-- shared/components/layouts/guest-layout/guest-header/guest-header.component.html -->
-<header class="sme-header menu-open">
+<header class="sme-header">
     <!-- Logo -->
     <a class="sme-logo" routerLink="/home">
         <span class="logo-text">{{ 'APP_NAME' | translate }}</span>
@@ -60,7 +60,8 @@
         </a>
 
         <!-- Mobile Menu Toggle -->
-        <button class="sme-mobile-toggle" (click)="toggleMobileMenu()" aria-label="Toggle menu">
+        <button class="sme-mobile-toggle" (click)="toggleMobileMenu()"
+            [attr.aria-label]="'COMMON.BUTTON.OPEN_MENU' | translate">
             <i class="fas fa-bars"></i>
         </button>
     </div>

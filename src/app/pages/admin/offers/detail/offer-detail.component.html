@@ -168,6 +168,12 @@
 </div>
 
 <!-- ====== MODALS ====== -->
+<!-- Khai doanh thu cho offer (chỉ hiện khi có quyền) -->
+@if (canManageRevenue && offer) {
+<app-revenue-entry [type]="revenueType" [referenceId]="offer.id"
+    [referenceCode]="offer.offerRequestCode || (offer.id | shortId)"></app-revenue-entry>
+}
+
 <app-modal [(visible)]="showApproveModal" [title]="'ADMIN.OFFERS.APPROVE' | translate"
     [confirmText]="'COMMON.BUTTON.CONFIRM' | translate" [cancelText]="'COMMON.BUTTON.CANCEL' | translate"
     [confirmVariant]="'success'" [loading]="isActionLoading" (confirm)="confirmApprove()"

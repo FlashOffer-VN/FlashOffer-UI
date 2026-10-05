@@ -1,10 +1,12 @@
 ﻿// src/app/pages/user/my-posts/my-posts.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
+import { socialPostSearchFields } from '@core/constants/search-fields';
 import { PagedResponse } from '@core/models/paged-response.model';
 import { GetPostsQuery, SocialPost } from '@core/models/social.model';
 
@@ -17,6 +19,9 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
+import { InputComponent } from '@shared/components/input/input.component';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
+import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 
 import { PostCardComponent } from '@pages/social/components/post-card/post-card.component';
 import { PostDetailModalComponent } from '@pages/social/components/post-detail-modal/post-detail-modal.component';
@@ -27,9 +32,10 @@ import { PostEditModalComponent } from '@pages/social/components/post-edit-modal
     selector: 'app-my-posts',
     standalone: true,
     imports: [
-        CommonModule, TranslateModule, AppDatePipe,
+        CommonModule, FormsModule, TranslateModule, AppDatePipe,
         BadgeComponent, ButtonComponent, LoadingComponent,
-        PaginationComponent, StatusTabsComponent, PostCardComponent, PostEditModalComponent
+        PaginationComponent, StatusTabsComponent, PostCardComponent, PostEditModalComponent,
+        InputComponent, SearchByComponent, NgxFilterDaterangeComponent
     ],
     template: `
         <div class="space-y-6">
@@ -43,8 +49,40 @@ import { PostEditModalComponent } from '@pages/social/components/post-edit-modal
                         <i class="fa-solid fa-plus mr-2"></i>{{ 'USER.MY_POSTS.CREATE_NEW' | translate }}
                     </app-button>
                 </div>
+            </section>
 
-                <app-status-tabs [items]="tabs" [active]="activeTab" (change)="onTabChange($event)"></app-status-tabs>
+            <!-- Tìm kiếm + chọn cột tìm kiếm (bỏ trống = tất cả) -->
+            <section class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-100">
+                <div class="flex flex-wrap items-end gap-x-4 gap-y-4" style="--control-h: 2.5rem">
+                    <!-- Nhóm tìm kiếm: chọn cột + từ khoá + nút -->
+                    <div class="flex w-full flex-wrap items-end gap-3 lg:flex-1 lg:min-w-0">
+                        <app-search-by [options]="searchFieldOptions" [(value)]="searchField"></app-search-by>
+
+                        <div class="w-full lg:flex-1 lg:min-w-0">
+                            <app-input [(ngModel)]="searchText" [label]="'COMMON.SEARCH_FIELD.KEYWORD' | translate"
+                                [placeholder]="'USER.MY_POSTS.SEARCH_PLACEHOLDER' | translate"
+                                (keyup.enter)="onSearch()"></app-input>
+                        </div>
+
+                        <app-button variant="primary" (onClick)="onSearch()">
+                            <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
+                        </app-button>
+                        <app-button variant="outline" (onClick)="onReset()">
+                            <i class="fas fa-rotate-left mr-2"></i>{{ 'COMMON.BUTTON.RESET' | translate }}
+                        </app-button>
+                    </div>
+
+                    <!-- Nhóm lọc: khoảng ngày -->
+                    <div
+                        class="flex w-full flex-wrap items-end gap-3 border-t border-gray-200 pt-3 lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
+                        <ngx-filter-daterange [from]="fromDate" [to]="toDate"
+                            (rangeChange)="onRangeChange($event)"></ngx-filter-daterange>
+                    </div>
+                </div>
+
+                <div class="mt-4 border-t border-gray-200 pt-4">
+                    <app-status-tabs [items]="tabs" [active]="activeTab" (change)="onTabChange($event)"></app-status-tabs>
+                </div>
             </section>
 
             @if (isLoading) {
@@ -99,6 +137,15 @@ export class MyPostsPageComponent implements OnInit {
     /** Bài đang sửa trong modal sửa bài viết */
     editingPost: SocialPost | null = null;
 
+    /** Từ khoá + cột tìm kiếm (bỏ trống = mọi trường) */
+    searchText = '';
+    searchField: string | null = null;
+    searchFieldOptions: { value: string; label: string }[] = [];
+
+    /** Khoảng ngày đăng bài (YYYY-MM-DD) */
+    fromDate: string | null = null;
+    toDate: string | null = null;
+
     activeTab = 'all';
     tabs: { key: string; label: string }[] = [];
 
@@ -116,11 +163,36 @@ export class MyPostsPageComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildTabs();
+        this.searchFieldOptions = socialPostSearchFields((key: string) => this._appService.trans(key));
         this.loadData();
     }
 
     onTabChange(tab: string): void {
         this.activeTab = tab;
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    /** Enter/nút Tìm mới gọi lại API (đổi cột không tự tải) */
+    onSearch(): void {
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    /** Đổi khoảng ngày thì tải lại (bỏ trống = không lọc ngày). */
+    onRangeChange(range: { from: string | null; to: string | null }): void {
+        this.fromDate = range.from;
+        this.toDate = range.to;
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    /** Đặt lại toàn bộ bộ lọc: từ khoá, cột tìm kiếm và khoảng ngày. */
+    onReset(): void {
+        this.searchText = '';
+        this.searchField = null;
+        this.fromDate = null;
+        this.toDate = null;
         this.pageNumber = 1;
         this.loadData();
     }
@@ -239,7 +311,11 @@ export class MyPostsPageComponent implements OnInit {
         const query: GetPostsQuery = {
             pageNumber: this.pageNumber,
             pageSize: this.pageSize,
-            mineOnly: true
+            mineOnly: true,
+            search: this.searchText,
+            searchField: this.searchField ?? undefined,
+            fromDate: this.fromDate ?? undefined,
+            toDate: this.toDate ?? undefined
         };
 
         if (this.activeTab !== 'all') {

@@ -1,0 +1,15 @@
+/* admin-header.component.mobile.css
+   Thanh đầu trang khu vực quản trị trên mobile (≤768px). Nạp sau file .css gốc trong `styleUrls`.
+   Rule đặt ở đây (không đặt ở app.mobile.css) vì lớp .px-6 của Tailwind trên element `header`
+   có độ ưu tiên cao hơn selector toàn phần tử, mà file này được nạp sau nên thắng. */
+
+@media (max-width: 768px) {
+    /* Bớt lề cho rộng chỗ: ngang 16px (khớp thanh đầu trang khách), dọc 12px —
+       vùng chạm nút mở menu là 44px nên đây là phần đệm còn lại. */
+    header {
+        padding-left: 16px;
+        padding-right: 16px;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+}

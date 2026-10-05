@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
+import { requestSearchFields } from '@core/constants/search-fields';
 import {
     GetPublicGroupBuyingQuery,
     GroupBuyingFeedItem,
@@ -24,15 +25,20 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { GroupBuyingDetailModalComponent } from '@pages/social/components/group-buying-detail-modal/group-buying-detail-modal.component';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
+import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
+import { CodeListComponent } from '@shared/components/code-list/code-list.component';
 
 @Component({
     selector: 'app-my-group-buying',
     standalone: true,
     imports: [
         CommonModule, FormsModule, TranslateModule,
+        CodeListComponent,
         AppDatePipe, AppPricePipe,
         BadgeComponent, ButtonComponent, InputComponent, LoadingComponent,
         PaginationComponent, StatusTabsComponent,
+        SearchByComponent, NgxFilterDaterangeComponent,
         GroupBuyingDetailModalComponent
     ],
     template: `
@@ -49,15 +55,30 @@ import { GroupBuyingDetailModalComponent } from '@pages/social/components/group-
                     </app-button>
                 </div>
 
-                <div class="flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
-                    <div class="w-full sm:flex-1 sm:min-w-0">
-                        <app-input [(ngModel)]="searchText" [label]="'USER.MY_GROUP_BUYING.SEARCH_LABEL' | translate"
-                            [placeholder]="'USER.MY_GROUP_BUYING.SEARCH_PLACEHOLDER' | translate"
-                            (keyup.enter)="onSearch()"></app-input>
+                <div class="flex flex-wrap items-end gap-x-4 gap-y-4" style="--control-h: 2.5rem">
+                    <!-- Nhóm tìm kiếm: chọn cột + từ khoá + nút -->
+                    <div class="flex w-full flex-wrap items-end gap-3 lg:flex-1 lg:min-w-0">
+                        <!-- Chọn cột tìm kiếm (bỏ trống = tất cả) — component dùng chung <app-search-by> -->
+                        <app-search-by [options]="searchFieldOptions" [(value)]="searchField"></app-search-by>
+                        <div class="w-full lg:flex-1 lg:min-w-0">
+                            <app-input [(ngModel)]="searchText" [label]="'USER.MY_GROUP_BUYING.SEARCH_LABEL' | translate"
+                                [placeholder]="'USER.MY_GROUP_BUYING.SEARCH_PLACEHOLDER' | translate"
+                                (keyup.enter)="onSearch()"></app-input>
+                        </div>
+                        <app-button variant="primary" (onClick)="onSearch()">
+                            <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
+                        </app-button>
+                        <app-button variant="outline" (onClick)="onReset()">
+                            <i class="fas fa-rotate-left mr-2"></i>{{ 'COMMON.BUTTON.RESET' | translate }}
+                        </app-button>
                     </div>
-                    <app-button variant="primary" (onClick)="onSearch()">
-                        <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
-                    </app-button>
+
+                    <!-- Nhóm lọc: khoảng ngày -->
+                    <div
+                        class="flex w-full flex-wrap items-end gap-3 border-t border-gray-200 pt-3 lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
+                        <ngx-filter-daterange [from]="fromDate" [to]="toDate"
+                            (rangeChange)="onRangeChange($event)"></ngx-filter-daterange>
+                    </div>
                 </div>
             </section>
 
@@ -104,12 +125,12 @@ import { GroupBuyingDetailModalComponent } from '@pages/social/components/group-
                             <tr class="cursor-pointer transition-colors hover:bg-slate-50" (click)="openDetail(item)">
                                 <td class="px-4 py-3">
                                     <div class="text-sm font-medium text-slate-800">{{ item.productName }}</div>
-                                    <div class="text-xs text-slate-400">
-                                        {{ item.groupBuyingRequestCode || '--' }}
-                                        @if (item.businessFieldName) {
-                                        <span> · {{ item.businessFieldName }}</span>
-                                        }
-                                    </div>
+                                    @if (item.businessFieldName) {
+                                    <div class="text-xs text-slate-400">{{ item.businessFieldName }}</div>
+                                    }
+                                    <app-code-list [items]="[
+                                        { label: '', value: item.groupBuyingRequestCode }
+                                    ]"></app-code-list>
                                 </td>
                                 <td class="px-4 py-3 text-sm text-slate-700">{{ item.targetPrice | appPrice }}</td>
                                 <td class="px-4 py-3 text-sm text-slate-700">
@@ -152,6 +173,14 @@ export class MyGroupBuyingPageComponent implements OnInit {
 
     searchText = '';
 
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường */
+    searchField: string | null = null;
+    searchFieldOptions: { value: string; label: string }[] = [];
+
+    /** Khoảng ngày mở đơn (YYYY-MM-DD) */
+    fromDate: string | null = null;
+    toDate: string | null = null;
+
     activeTab = 'all';
     tabs: { key: string; label: string }[] = [];
 
@@ -172,7 +201,13 @@ export class MyGroupBuyingPageComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildTabs();
+        this.buildSearchFieldOptions();
         this.loadData();
+    }
+
+    /** Các cột tìm kiếm dùng chung (RequestSearchField) khớp tham số searchField của API. */
+    private buildSearchFieldOptions(): void {
+        this.searchFieldOptions = requestSearchFields((key: string) => this._appService.trans(key));
     }
 
     private buildTabs(): void {
@@ -200,7 +235,10 @@ export class MyGroupBuyingPageComponent implements OnInit {
             search: this.searchText,
             // Chỉ lấy đơn do chính mình mở, mọi trạng thái (kể cả đã hoàn thành / đã hủy)
             mineOnly: true,
-            status: this.activeTab === 'all' ? undefined : Number(this.activeTab) as GroupBuyingStatus
+            status: this.activeTab === 'all' ? undefined : Number(this.activeTab) as GroupBuyingStatus,
+            searchField: this.searchField ?? undefined,
+            fromDate: this.fromDate ?? undefined,
+            toDate: this.toDate ?? undefined
         };
 
         this._appService.groupBuyingRequest.getPublic(query).subscribe({
@@ -223,6 +261,24 @@ export class MyGroupBuyingPageComponent implements OnInit {
     }
 
     onSearch(): void {
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    /** Đổi khoảng ngày thì tải lại (bỏ trống = không lọc ngày). */
+    onRangeChange(range: { from: string | null; to: string | null }): void {
+        this.fromDate = range.from;
+        this.toDate = range.to;
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    /** Đặt lại toàn bộ bộ lọc: từ khoá, cột tìm kiếm và khoảng ngày. */
+    onReset(): void {
+        this.searchText = '';
+        this.searchField = null;
+        this.fromDate = null;
+        this.toDate = null;
         this.pageNumber = 1;
         this.loadData();
     }

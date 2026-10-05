@@ -1,9 +1,9 @@
 ﻿// shared/components/modal/modal.component.ts
 import { Component, Input, Output, EventEmitter, HostListener, OnDestroy } from '@angular/core';
+import { acquireModalLevel, releaseModalLevel } from '@core/utils/z-index';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ButtonComponent } from '@shared/components/button/button.component';
-import { acquireModalLevel, releaseModalLevel } from '@core/utils/z-index';
 
 @Component({
   selector: 'app-modal',
@@ -57,6 +57,10 @@ import { acquireModalLevel, releaseModalLevel } from '@core/utils/z-index';
     </div>
   `,
   styles: [`
+    /* Xếp lớp dialog: dialog mở sau (tầng cao hơn) luôn nằm trên dialog mở trước */
+    .modal-layer {
+      z-index: calc(var(--z-modal) + var(--modal-level, 0) * var(--z-modal-step));
+    }
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -74,10 +78,6 @@ import { acquireModalLevel, releaseModalLevel } from '@core/utils/z-index';
     .animate-slideUp {
       animation: slideUp 0.25s ease-out;
     }
-    /* Xếp lớp dialog: dialog mở sau (tầng cao hơn) luôn nằm trên dialog mở trước */
-    .modal-layer {
-      z-index: calc(var(--z-modal) + var(--modal-level, 0) * var(--z-modal-step));
-    }
     .modal-scroll {
       overscroll-behavior: contain;
     }
@@ -85,11 +85,11 @@ import { acquireModalLevel, releaseModalLevel } from '@core/utils/z-index';
       width: 8px;
     }
     .modal-scroll::-webkit-scrollbar-thumb {
-      background: #E5E7EB;
+      background: var(--border);
       border-radius: 999px;
     }
     .modal-scroll::-webkit-scrollbar-thumb:hover {
-      background: #D1D5DB;
+      background: var(--border-strong);
     }
   `]
 })
@@ -121,7 +121,6 @@ export class ModalComponent implements OnDestroy {
 
   private _visible = false;
   private _level: number | null = null;
-
   @Input() title = '';
   @Input() message = '';
   @Input() confirmText = 'Xác nhận';
@@ -176,7 +175,6 @@ export class ModalComponent implements OnDestroy {
       this.close();
     }
   }
-
   ngOnDestroy() {
     this._releaseLevel();
   }
@@ -196,4 +194,5 @@ export class ModalComponent implements OnDestroy {
       this._level = null;
     }
   }
+
 }

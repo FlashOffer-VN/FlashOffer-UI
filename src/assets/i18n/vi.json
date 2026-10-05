@@ -816,6 +816,7 @@
         "COL_ACTION": "Thao tác",
         "HISTORY_TITLE": "Lịch sử chi trả",
         "HISTORY_SUBTITLE": "Các lần chi trả gần đây, gồm cả yêu cầu rút sớm.",
+        "HISTORY_SEARCH_PLACEHOLDER": "Tìm theo kỳ, số tài khoản, ghi chú...",
         "HISTORY_EMPTY": "Chưa có lần chi trả nào. Hoa hồng sẽ xuất hiện sau khi kỳ chốt sổ được duyệt chi.",
         "COL_PERIOD": "Kỳ",
         "COL_TYPE": "Loại",
@@ -917,6 +918,7 @@
             "STATS_DESCRIPTION": "Số liệu phát sinh từ mã chia sẻ của bạn — phát sinh đã hủy được trừ ra khỏi số liệu.",
             "STATS_CHART_TITLE": "Phát sinh theo ngày",
             "STATS_EVENTS_TITLE": "Phát sinh gần đây",
+            "STATS_SEARCH_PLACEHOLDER": "Tìm theo mã chia sẻ, mã đối tượng...",
             "STATS_EVENTS_EMPTY": "Chưa có phát sinh nào từ mã của bạn",
             "STATS_COL_TIME": "Thời gian",
             "STATS_COL_TYPE": "Loại phát sinh",
@@ -958,7 +960,8 @@
             "APPROVED": "Đã duyệt",
             "PENDING": "Chờ duyệt",
             "EMPTY": "Bạn chưa có bài viết nào.",
-            "EMPTY_HINT": "Bài viết bạn đăng trên bảng tin sẽ được quản lý tại đây."
+            "EMPTY_HINT": "Bài viết bạn đăng trên bảng tin sẽ được quản lý tại đây.",
+            "SEARCH_PLACEHOLDER": "Tìm kiếm bài viết của tôi..."
         },
         "MY_GROUPS": {
             "TITLE": "Nhóm của tôi",
@@ -984,6 +987,8 @@
         }
     },
     "REGISTER": {
+            "ALREADY_REGISTERED": "Số điện thoại/email này đã có tài khoản Kindi. Vui lòng đăng nhập hoặc dùng số khác.",
+            "CONTACT_EXISTS": "Thông tin đăng ký đã tồn tại, vui lòng kiểm tra lại",
         "REFERRAL_CODE": "Mã giới thiệu",
         "REFERRAL_CODE_PLACEHOLDER": "Mã CTV trong link chia sẻ (nếu có)",
         "TITLE": "TRỞ THÀNH ĐỐI TÁC KINDI",
@@ -1097,6 +1102,7 @@
         "STATS_POSTS": "Bài viết",
         "STATS_EVENTS": "Sự kiện",
         "FEED": "Bảng tin",
+        "SEARCH_PLACEHOLDER": "Tìm kiếm bài viết...",
         "MEMBERS": "Thành viên",
         "EVENTS": "Sự kiện",
         "GROUPS": "Nhóm",
@@ -1194,12 +1200,19 @@
         }
     },
     "COMMON": {
+        "CODE": {
+            "ACCOUNT": "Mã tài khoản",
+            "COMPANY": "Mã công ty",
+            "COPY": "Sao chép",
+            "COPIED": "Đã sao chép"
+        },
         "USER_PICKER": {
         "SEARCH_PLACEHOLDER": "Tìm theo tên đăng nhập hoặc họ tên...",
         "EMPTY": "Không tìm thấy tài khoản nào"
         },
         "BUTTON": {
             "SEARCH": "Tìm kiếm",
+            "RESET": "Đặt lại",
 "RETRY": "Thử lại",
             "ACTION": "Thao tác",
             "VIEW_DETAIL": "Xem chi tiết",
@@ -1222,7 +1235,9 @@
             "EXPIRE": "Hết hạn",
             "ACTIVATE": "Kích hoạt",
             "REOPEN": "Mở lại",
-            "CONTACT": "Liên hệ"
+            "CONTACT": "Liên hệ",
+            "CLOSE": "Đóng",
+            "OPEN_MENU": "Mở menu"
         },
         "CHART_TYPE": {
             "BAR": "Cột",
@@ -1231,10 +1246,11 @@
         "SEARCH_FIELD": {
             "LABEL": "Tìm theo",
             "ALL": "Tất cả",
+"KEYWORD": "Từ khoá",
             "PRODUCT_NAME": "Tên sản phẩm",
             "CODE": "Mã yêu cầu",
-            "RECORD_REFERRER": "Người giới thiệu bản ghi",
-            "RECORD_REFERRER_NAME": "Người giới thiệu bản ghi (tên)",
+            "RECORD_REFERRER": "NGT bản ghi",
+            "RECORD_REFERRER_NAME": "NGT bản ghi (tên)",
             "CUSTOMER_NAME": "Tên khách hàng",
             "CUSTOMER_PHONE": "SĐT",
             "CUSTOMER_EMAIL": "Email",
@@ -1244,7 +1260,24 @@
             "GROUP_BUSINESS_FIELD": "Lĩnh vực kinh doanh",
             "GROUP_DESCRIPTION": "Mô tả",
             "GROUP_TOPIC": "Chủ đề",
-            "GROUP_CODE": "Mã nhóm"
+            "GROUP_CODE": "Mã nhóm",
+            "USERNAME": "Tên đăng nhập",
+            "FULL_NAME": "Họ tên",
+            "USER_CODE": "Mã tài khoản",
+            "REFERRAL_CODE": "Mã giới thiệu",
+            "ACCOUNT_REFERRER_CODE": "NGT tài khoản",
+            "COLLABORATOR_CODE": "Mã cộng tác viên",
+            "PARTNER_CODE": "Mã đối tác",
+            "COMPANY_NAME": "Tên công ty",
+            "COMPANY_TAX_CODE": "Mã số thuế",
+            "CONTENT": "Nội dung",
+            "AUTHOR_FULL_NAME": "Tên tác giả",
+            "AUTHOR_USER_CODE": "Mã tài khoản tác giả",
+            "REFERRAL_TARGET": "Mã đối tượng",
+            "STATUS": "Trạng thái",
+            "PAYOUT_PERIOD": "Kỳ chi trả",
+            "BANK_ACCOUNT": "Số tài khoản",
+            "NOTE": "Ghi chú"
         },
         "ALL": "Tất cả",
         "PROVINCE": "Tỉnh/Thành phố",
@@ -1346,7 +1379,7 @@
             "FIELD_LOCKOUT_MINUTES": "Thời gian khoá tài khoản (phút)",
             "FIELD_LOCKOUT_MINUTES_HINT": "Khoá tạm khi đăng nhập sai quá số lần cho phép.",
             "FIELD_REFERRAL_CODE_PREFIX": "Tiền tố mã giới thiệu",
-            "FIELD_REFERRAL_CODE_PREFIX_PLACEHOLDER": "Ví dụ: CTV-",
+            "FIELD_REFERRAL_CODE_PREFIX_PLACEHOLDER": "Ví dụ: KND",
             "FIELD_REFERRAL_CODE_LENGTH": "Số ký tự ngẫu nhiên của mã giới thiệu",
             "FIELD_REFERRAL_CODE_LENGTH_HINT": "Từ 4 đến 12 ký tự.",
             "FIELD_ATTRIBUTION_DAYS": "Số ngày ghi nhận hoa hồng",
@@ -1408,7 +1441,7 @@
             "NO": "Tắt",
             "NO_PERMISSION": "Tài khoản của bạn không có quyền xem cấu hình chung.",
             "ERROR_FORM_INVALID": "Có trường chưa hợp lệ, kiểm tra lại trước khi lưu.",
-            "FIELD_REFERRAL_CODE_PREFIX_HINT": "Tiền tố mã giới thiệu, ví dụ CTV.",
+            "FIELD_REFERRAL_CODE_PREFIX_HINT": "Tiền tố mã chia sẻ, ví dụ KND. Mã sinh ra chỉ gồm chữ và số, không có dấu phân cách.",
           "SECTION_SELECT": "Nhóm cài đặt",
           "SECTION_LEGAL": "Nội dung pháp lý",
           "SECTION_LEGAL_DESC": "Chính sách bảo mật và Điều khoản dịch vụ hiển thị ở chân trang.",
@@ -1422,6 +1455,66 @@
         
         
         
+        },
+        "BUSINESS_FIELDS": {
+            "TITLE": "Lĩnh vực hoạt động",
+            "SUBTITLE": "Danh mục lĩnh vực dùng chung cho công ty và hồ sơ cộng tác viên/đối tác.",
+            "SEARCH_PLACEHOLDER": "Tìm theo tên, mã lĩnh vực hoặc tên gọi khác",
+            "SEARCH": "Tìm kiếm",
+            "RESET": "Đặt lại",
+            "TOTAL": "Tổng",
+            "ADD": "Thêm lĩnh vực",
+            "COL_CODE": "Mã lĩnh vực",
+            "COL_NAME": "Tên lĩnh vực",
+            "COL_ALIASES": "Tên gọi khác",
+            "COL_COMPANY": "Công ty",
+            "COL_USER": "Tài khoản",
+            "COL_STATUS": "Trạng thái",
+            "COL_ACTION": "Thao tác",
+            "ACTIVE": "Đang dùng",
+            "INACTIVE": "Đã tắt",
+            "EMPTY": "Chưa có lĩnh vực nào",
+            "VIEW": "Xem công ty và tài khoản thuộc lĩnh vực",
+            "EDIT": "Sửa",
+            "DELETE": "Xoá",
+            "FORM_CREATE_TITLE": "Thêm lĩnh vực hoạt động",
+            "FORM_EDIT_TITLE": "Sửa lĩnh vực hoạt động",
+            "FORM_NAME": "Tên lĩnh vực",
+            "FORM_NAME_PLACEHOLDER": "Ví dụ: Công nghệ thông tin",
+            "FORM_ALIASES": "Tên gọi khác",
+            "FORM_ALIASES_HINT": "Cách nhau dấu phẩy, ví dụ: CNTT, IT",
+            "FORM_ACTIVE": "Đang sử dụng",
+            "SAVE": "Lưu",
+            "CANCEL": "Huỷ",
+            "DELETE_TITLE": "Xoá lĩnh vực",
+            "DELETE_CONFIRM": "Bạn chắc chắn muốn xoá lĩnh vực {{name}}?",
+            "DETAIL_TITLE": "Công ty và tài khoản thuộc lĩnh vực",
+            "DETAIL_COMPANIES": "Công ty thuộc lĩnh vực",
+            "DETAIL_USERS": "Tài khoản thuộc lĩnh vực",
+            "NO_COMPANIES": "Chưa có công ty nào thuộc lĩnh vực này",
+            "NO_USERS": "Chưa có tài khoản nào thuộc lĩnh vực này",
+            "COMPANY_CODE": "Mã công ty",
+            "COMPANY_NAME": "Công ty",
+            "COMPANY_TAX": "Mã số thuế",
+            "USER_NAME": "Họ tên",
+            "USER_PHONE": "Điện thoại",
+            "USER_ROLE": "Loại hồ sơ",
+            "ROLE_COLLABORATOR": "CTV",
+            "ROLE_PARTNER": "Đối tác",
+            "TAB_COMPANIES": "Công ty",
+            "TAB_ACCOUNTS": "Tài khoản",
+            "COMPANY_SEARCH_PLACEHOLDER": "Tìm theo mã công ty, tên hoặc mã số thuế",
+            "USER_SEARCH_PLACEHOLDER": "Tìm theo mã tài khoản, họ tên, SĐT, công ty hoặc loại hồ sơ",
+            "COMPANY_SEARCH_EMPTY": "Không có công ty nào khớp từ khoá",
+            "USER_SEARCH_EMPTY": "Không có tài khoản nào khớp từ khoá",
+            "COMPANY_COLLABORATOR_COUNT": "Hồ sơ CTV",
+            "COMPANY_PARTNER_COUNT": "Hồ sơ đối tác",
+            "SAVED": "Đã lưu lĩnh vực",
+            "DELETED": "Đã xoá lĩnh vực",
+            "NAME_REQUIRED": "Vui lòng nhập tên lĩnh vực",
+            "LOAD_ERROR": "Không tải được danh sách lĩnh vực",
+            "SAVE_ERROR": "Không lưu được lĩnh vực",
+            "DELETE_ERROR": "Không xoá được lĩnh vực"
         },
         "BANK_ACCOUNTS":
         {
@@ -1660,7 +1753,7 @@
             "NOTE": "Ghi chú",
             "ZALO": "Zalo",
             "EMAIL": "Email",
-            "REFERRAL": "Người giới thiệu bản ghi",
+            "REFERRAL": "NGT bản ghi",
             "APPROVE": "Duyệt",
             "REJECT": "Từ chối",
             "EXPIRE": "Đánh dấu hết hạn",
@@ -1673,7 +1766,7 @@
             "DELETE_CONFIRM": "Bạn có chắc chắn muốn xóa yêu cầu \"{{name}}\"?",
             "DELETED_SUCCESS": "Đã xóa yêu cầu offer thành công",
             "RESTORED_SUCCESS": "Khôi phục yêu cầu offer thành công",
-            "REFERRED_BY": "Người giới thiệu tài khoản"
+            "REFERRED_BY": "NGT tài khoản"
         },
         "PURCHASE_REQUESTS": {
             "TITLE": "Quản lý yêu cầu tìm nhà cung cấp",
@@ -1695,7 +1788,7 @@
             "NOTE": "Ghi chú",
             "ZALO": "Zalo",
             "EMAIL": "Email",
-            "REFERRAL": "Người giới thiệu bản ghi",
+            "REFERRAL": "NGT bản ghi",
             "CONTACT": "Đã liên hệ",
             "CONTACT_CONFIRM": "Bạn có chắc chắn đánh dấu đã liên hệ với yêu cầu này không?",
             "CONTACTED_SUCCESS": "Đã đánh dấu đã liên hệ thành công",
@@ -1705,7 +1798,7 @@
             "DELETE_CONFIRM": "Bạn có chắc chắn muốn xóa yêu cầu \"{{name}}\"?",
             "DELETED_SUCCESS": "Đã xóa yêu cầu tìm nhà cung cấp thành công",
             "RESTORED_SUCCESS": "Khôi phục yêu cầu tìm nhà cung cấp thành công",
-            "REFERRED_BY": "Người giới thiệu tài khoản"
+            "REFERRED_BY": "NGT tài khoản"
         },
         "SETTINGS_PAGE": {
             "TAB_COMMISSION": "Hoa hồng",
@@ -1826,7 +1919,7 @@
             "DELETED_SUCCESS": "Xóa cộng tác viên thành công",
             "EDIT_TITLE": "Sửa cộng tác viên",
             "UPDATED_SUCCESS": "Cập nhật cộng tác viên thành công",
-            "REFERRED_BY": "Người giới thiệu tài khoản"
+            "REFERRED_BY": "NGT tài khoản"
         },
         "BUSINESS_INFO": {
             "TITLE": "Thông tin doanh nghiệp",
@@ -1903,7 +1996,7 @@
             "NO_FILTER_RESULT": "Không có sản phẩm nào khớp bộ lọc",
             "NO_PRODUCTS": "Chưa có sản phẩm",
             "SPECIAL_CONDITIONS": "Điều kiện đặc biệt",
-            "REFERRED_BY": "Người giới thiệu tài khoản"
+            "REFERRED_BY": "NGT tài khoản"
         },
         "GROUP_BUYING": {
             "TITLE": "Quản lý yêu cầu mua chung",
@@ -1933,7 +2026,7 @@
             "JOINED_AT": "Tham gia lúc",
             "OWNER": "Người mở",
             "GUEST_ACCOUNT": "Tài khoản tự tạo",
-            "REFERRAL": "Người giới thiệu bản ghi",
+            "REFERRAL": "NGT bản ghi",
             "APPROVE": "Duyệt yêu cầu",
             "APPROVE_CONFIRM": "Duyệt yêu cầu này để hiển thị công khai trên tab Mua chung?",
             "APPROVE_SUCCESS": "Duyệt yêu cầu mua chung thành công",
@@ -1954,7 +2047,7 @@
             "DELETE_CONFIRM": "Bạn có chắc chắn muốn xóa yêu cầu mua chung \"{{name}}\"?",
             "DELETED_SUCCESS": "Đã xóa yêu cầu mua chung thành công",
             "RESTORED_SUCCESS": "Khôi phục yêu cầu mua chung thành công",
-            "REFERRED_BY": "Người giới thiệu tài khoản"
+            "REFERRED_BY": "NGT tài khoản"
         },
         "REVENUE": {
             "TITLE": "Doanh thu",
@@ -1993,6 +2086,7 @@
             "TYPE": "Loại giao dịch",
             "TYPE_PURCHASE_REQUEST": "Yêu cầu tìm nhà cung cấp",
             "TYPE_GROUP_BUYING": "Yêu cầu mua chung",
+"TYPE_OFFER_REQUEST": "Offer",
             "STATUS": "Trạng thái",
             "CREATED_AT": "Ngày tạo",
             "EMPTY": "Chưa có bản khai nào",
@@ -2072,7 +2166,7 @@
             "MEMBER_NAME": "Thành viên",
             "MEMBER_CONTACT": "Liên hệ",
             "MEMBER_JOINED": "Ngày tham gia",
-            "REFERRAL": "Người giới thiệu bản ghi",
+            "REFERRAL": "NGT bản ghi",
             "MEMBER_STATUS_SUCCESS": "Cập nhật trạng thái thành viên thành công",
             "MEMBER_REMOVED": "Đã xoá thành viên khỏi nhóm",
             "NO_MEMBERS": "Chưa có thành viên",
@@ -2098,7 +2192,7 @@
             "PRIVATE_HINT": "Yêu cầu kín do thành viên gửi riêng cho admin, các thành viên khác không đọc được.",
             "NO_PRIVATE": "Chưa có yêu cầu kín",
             "NO_POSTS": "Chưa có bài nào",
-            "REFERRED_BY": "Người giới thiệu tài khoản"
+            "REFERRED_BY": "NGT tài khoản"
         },
         "LOGOUT_TITLE": "Đăng xuất khỏi trang quản trị?",
         "LOGOUT_MESSAGE": "Bạn sẽ cần đăng nhập lại để tiếp tục quản trị.",
@@ -2397,6 +2491,7 @@
             "ACTION": "Thao tác"
         },
         "SCREEN": {
+            "BUSINESS_FIELDS": "Lĩnh vực hoạt động",
             "DASHBOARD": "Bảng điều khiển",
             "CRM_DASHBOARD": "Dashboard CRM",
             "REPORTS": "Báo cáo",

@@ -105,7 +105,7 @@
 .author-name {
     font-weight: 600;
     font-size: 15px;
-    color: #1a1a2e;
+    color: var(--text-ink);
 }
 
 .verified {
@@ -368,7 +368,7 @@
 .post-title {
     font-size: 18px;
     font-weight: 700;
-    color: #1a1a2e;
+    color: var(--text-ink);
     margin: 0 0 8px 0;
 }
 

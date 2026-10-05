@@ -161,10 +161,16 @@ export interface BusinessGroupQuery {
     page?: number;
     pageSize?: number;
     search?: string;
+    /** Cột tìm kiếm (khớp searchField API); bỏ trống = tìm mọi trường mặc định */
+    searchField?: string;
     businessFieldId?: string | null;
     mineOnly?: boolean;
     /** Danh sách "nhóm của tôi": nhóm mình tạo hay nhóm mình đã tham gia (bỏ trống = cả hai) */
     mineRole?: GroupMineRole | null;
+    /** Lọc theo ngày tạo (từ ngày) — định dạng YYYY-MM-DD. */
+    fromDate?: string;
+    /** Lọc theo ngày tạo (đến ngày) — định dạng YYYY-MM-DD. */
+    toDate?: string;
 }
 
 export interface AdminBusinessGroupQuery extends BusinessGroupQuery {
