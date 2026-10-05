@@ -71,6 +71,12 @@ type NodeState = 'all' | 'some' | 'none';
                         <span class="text-xs text-gray-500">
                             {{ selectedNames() }}
                         </span>
+                        <!-- Ô lọc cây quyền dùng state riêng (treeSearch); ô tìm tài khoản ở cột trái chỉ query tài khoản. -->
+                        <div class="w-full sm:w-64">
+                            <app-input [(ngModel)]="treeSearch" icon="fa-solid fa-magnifying-glass"
+                                [placeholder]="'PERMISSION.SEARCH_PLACEHOLDER' | translate">
+                            </app-input>
+                        </div>
                         <app-button variant="primary" [loading]="isSaving" class="ml-auto" (onClick)="save()">
                             <i class="fa-solid fa-floppy-disk mr-1"></i>{{ 'PERMISSION.SAVE' | translate }}
                         </app-button>
@@ -149,7 +155,14 @@ export class AdminUserPermissionComponent implements OnInit {
     candidates: UserPermissionCandidate[] = [];
     selected: UserPermissionCandidate[] = [];
     tree: PermissionTreeNode[] = [];
+    /** Từ khoá tìm tài khoản (ô bên trái) — CHỈ dùng để query danh sách tài khoản. */
     search = '';
+    /**
+     * Từ khoá lọc CÂY QUYỀN — state RIÊNG, không dùng chung với ô tìm tài khoản.
+     * Trước đây cây quyền lọc theo chính `search` nên gõ tên tài khoản là cây trống,
+     * còn gõ mã quyền để lọc cây lại thành từ khoá tìm tài khoản (không ra tài khoản nào).
+     */
+    treeSearch = '';
     isLoadingCandidates = false;
     isLoadingDetail = false;
     isSaving = false;
@@ -233,7 +246,7 @@ export class AdminUserPermissionComponent implements OnInit {
     //#region Cây quyền (Nhóm → Màn hình → hành động)
 
     get visibleTree(): PermissionTreeNode[] {
-        const keyword = this.search.trim().toLowerCase();
+        const keyword = this.treeSearch.trim().toLowerCase();
         if (!keyword) return this.tree;
 
         return this.tree
