@@ -94,7 +94,7 @@
                             <td class="px-4 py-3 text-sm font-medium text-gray-900 w-40">
                                 {{ collaborator.fullName }}
                                 <div class="text-xs font-normal text-gray-400">{{ 'ADMIN.CTV.REFERRED_BY' | translate }}:
-                                    {{ collaborator.referredByCode | appCodeName: collaborator.referredByName }}</div>
+                                    {{ collaborator.accountReferrerCode | appCodeName: collaborator.accountReferrerName }}</div>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ collaborator.email || '--' }}

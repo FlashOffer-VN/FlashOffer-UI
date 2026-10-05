@@ -188,7 +188,7 @@ export class GroupBuyingComponent {
             email: contact?.email ?? '',
             note: formValue.note?.trim() || undefined,
             // Đơn tạo từ link được chia sẻ: ghi nhận mã chia sẻ của người đã gửi link
-            referralCode: this._referralCode ?? ''
+            recordReferrerCode: this._referralCode ?? ''
         };
 
         this._appService.groupBuyingRequest.create(requestData)

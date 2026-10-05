@@ -167,18 +167,18 @@ export class GroupBuyingDetailModalComponent implements OnInit, OnChanges {
         const value = this.joinForm.value;
         // Mã chia sẻ trên link người dùng mở: ghi nhận cho người đã chia sẻ link này.
         // Đọc lại ngay lúc gửi để không phụ thuộc thời điểm modal được tạo.
-        const referralCode = this.incomingReferralCode
+        const recordReferrerCode = this.incomingReferralCode
             ?? resolveReferralCode()
             ?? undefined;
         const payload = this.isAuthenticated
-            ? { note: value.note?.trim() || undefined, referralCode }
+            ? { note: value.note?.trim() || undefined, recordReferrerCode }
             : {
                 fullName: value.fullName?.trim(),
                 phone: value.phone?.trim(),
                 zalo: value.zalo?.trim() || undefined,
                 email: value.email?.trim() || undefined,
                 note: value.note?.trim() || undefined,
-                referralCode
+                recordReferrerCode
             };
 
         this.isSubmitting = true;

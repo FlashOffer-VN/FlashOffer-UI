@@ -62,7 +62,7 @@ export class RegisterComponent implements OnInit {
             businessSize: [null, [Validators.required]],
             address: [null, [Validators.required]],
             //  Mã chia sẻ trên link (?ref=) — lấy sẵn khi khách mở link của CTV, gửi kèm khi đăng ký.
-            referredByCode: [resolveReferralCode() ?? ''],
+            accountReferrerCode: [resolveReferralCode() ?? ''],
             agreeTerms: [false, [Validators.requiredTrue]]
         });
     }

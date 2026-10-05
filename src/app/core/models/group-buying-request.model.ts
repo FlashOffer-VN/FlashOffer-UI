@@ -69,8 +69,8 @@ export interface CreateGroupBuyingRequest {
     zalo?: string;
     email: string;
     note?: string;
-    /** Mã chia sẻ riêng của người tạo — có khi người tạo mở form từ link chia sẻ */
-    referralCode?: string;
+    /** Mã người giới thiệu gửi kèm khi tạo đơn, lấy từ link chia sẻ (?ref=) — khớp API recordReferrerCode */
+    recordReferrerCode?: string;
 }
 
 // ===== Tab "Mua chung" trên trang social =====
@@ -165,8 +165,8 @@ export interface JoinGroupBuyingPayload {
     zalo?: string;
     email?: string;
     note?: string;
-    /** Mã chia sẻ riêng trên link người dùng mở (?ref=) — ghi nhận cho người đã chia sẻ */
-    referralCode?: string;
+    /** Mã người giới thiệu gửi kèm khi tham gia, lấy từ link chia sẻ (?ref=) — khớp API recordReferrerCode */
+    recordReferrerCode?: string;
 }
 
 export interface JoinGroupBuyingResult {
