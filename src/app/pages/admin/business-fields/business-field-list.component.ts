@@ -78,7 +78,7 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
                     <table class="w-full text-left">
                         <thead class="bg-gray-50 text-xs uppercase text-gray-500">
                             <tr>
-                                <th class="px-4 py-3">{{ 'ADMIN.BUSINESS_FIELDS.COL_CODE' | translate }}</th>
+                                <th class="px-4 py-3 whitespace-nowrap">{{ 'ADMIN.BUSINESS_FIELDS.COL_CODE' | translate }}</th>
                                 <th class="px-4 py-3">{{ 'ADMIN.BUSINESS_FIELDS.COL_NAME' | translate }}</th>
                                 <th class="px-4 py-3">{{ 'ADMIN.BUSINESS_FIELDS.COL_ALIASES' | translate }}</th>
                                 <th class="px-4 py-3 text-center">{{ 'ADMIN.BUSINESS_FIELDS.COL_COMPANY' | translate }}</th>
@@ -90,7 +90,7 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
                         <tbody class="divide-y divide-gray-100">
                             @for (field of filtered; track field.id) {
                             <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-3 text-sm font-medium text-gray-700">{{ field.businessFieldCode || '--' }}</td>
+                                <td class="px-4 py-3 text-sm font-medium text-gray-700 whitespace-nowrap">{{ field.businessFieldCode || '--' }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900">{{ field.name }}</td>
                                 <td class="px-4 py-3 text-xs text-gray-500">{{ aliasesText(field.aliases) }}</td>
                                 <td class="px-4 py-3 text-sm text-center">
@@ -101,7 +101,7 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
                                     <button type="button" class="text-primary hover:underline"
                                         (click)="openDetail(field)">{{ field.userCount }}</button>
                                 </td>
-                                <td class="px-4 py-3 text-sm">
+                                <td class="px-4 py-3 text-sm whitespace-nowrap">
                                     @if (field.isActive) {
                                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-green-50 text-green-700">
                                         {{ 'ADMIN.BUSINESS_FIELDS.ACTIVE' | translate }}
@@ -140,7 +140,7 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
         <!-- Thêm / sửa lĩnh vực -->
         <app-modal [(visible)]="isFormVisible" [title]="(editingId
                 ? 'ADMIN.BUSINESS_FIELDS.FORM_EDIT_TITLE'
-                : 'ADMIN.BUSINESS_FIELDS.FORM_CREATE_TITLE') | translate" size="md" (closed)="closeForm()">
+                : 'ADMIN.BUSINESS_FIELDS.FORM_CREATE_TITLE') | translate" size="md" [showFooter]="false" (closed)="closeForm()">
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">
@@ -172,7 +172,7 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
 
         <!-- Xoá lĩnh vực -->
         <app-modal [(visible)]="isDeleteVisible" [title]="'ADMIN.BUSINESS_FIELDS.DELETE_TITLE' | translate" size="sm"
-            (closed)="cancelDelete()">
+            [showFooter]="false" (closed)="cancelDelete()">
             <p class="text-sm text-gray-600">
                 {{ 'ADMIN.BUSINESS_FIELDS.DELETE_CONFIRM' | translate: { name: deleting?.name || '' } }}
             </p>
@@ -186,7 +186,7 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
 
         <!-- Công ty và tài khoản thuộc lĩnh vực -->
         <app-modal [(visible)]="isDetailVisible" [title]="'ADMIN.BUSINESS_FIELDS.DETAIL_TITLE' | translate" size="lg"
-            (closed)="closeDetail()">
+            [showFooter]="false" (closed)="closeDetail()">
             @if (isLoadingDetail) {
             <app-loading></app-loading>
             } @else if (detail) {
