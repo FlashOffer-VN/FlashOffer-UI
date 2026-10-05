@@ -48,6 +48,8 @@ export interface PayoutStatement {
     userId?: string;
     username?: string | null;
     fullName?: string | null;
+    /** Mã tài khoản (USR-…) */
+    userCode?: string | null;
     type: PayoutType;
     /** Hoa hồng ghi nhận trong kỳ (hoặc số tiền yêu cầu khi rút sớm). */
     accruedAmount: number;
@@ -118,6 +120,8 @@ export interface BankAccount {
     userId?: string;
     username?: string | null;
     fullName?: string | null;
+    /** Mã tài khoản (USR-…) */
+    userCode?: string | null;
     bankName: string;
     branch?: string | null;
     accountNumber: string;

@@ -98,6 +98,7 @@
                                     {{ request.recordReferrerCode | appCodeName: request.recordReferrerName }}</div>
                                 <div class="text-xs text-gray-400">{{ 'ADMIN.PURCHASE_REQUESTS.REFERRED_BY' | translate }}:
                                     {{ request.accountReferrerCode | appCodeName: request.accountReferrerName }}</div>
+                                <div class="text-xs text-gray-400">{{'COMMON.CODE.ACCOUNT' | translate }}: {{ request.userCode || '--' }}</div>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ request.phone }}

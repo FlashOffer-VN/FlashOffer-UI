@@ -110,6 +110,9 @@ import { buildAccountQr } from '@core/constants/bank-catalog';
                                             @if (item.username) {
                                                 <div class="text-xs text-gray-500">{{ item.username }}</div>
                                             }
+                                            @if (item.userCode) {
+                                                <div class="text-xs text-gray-400">{{ 'COMMON.CODE.ACCOUNT' | translate }}: {{ item.userCode }}</div>
+                                            }
                                         </td>
                                         <td class="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">
                                             {{ getPayoutTypeLabel(item.type) | translate }}

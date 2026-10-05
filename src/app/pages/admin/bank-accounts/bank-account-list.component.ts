@@ -99,6 +99,9 @@ import { copyToClipboard } from '@core/utils/share-link';
                                             @if (item.username) {
                                                 <div class="text-xs text-gray-500">{{ item.username }}</div>
                                             }
+                                            @if (item.userCode) {
+                                                <div class="text-xs text-gray-400">{{ 'COMMON.CODE.ACCOUNT' | translate }}: {{ item.userCode }}</div>
+                                            }
                                         </td>
                                         <td class="px-4 py-3 text-sm text-gray-700">
                                             <div class="font-medium text-gray-800">{{ item.bankName || '—' }}</div>

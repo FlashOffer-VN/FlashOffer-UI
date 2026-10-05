@@ -103,6 +103,8 @@
                                 {{ partner.fullName }}
                                 <div class="text-xs font-normal text-gray-400">{{ 'ADMIN.PARTNER.REFERRED_BY' | translate }}:
                                     {{ partner.referredByCode | appCodeName: partner.referredByName }}</div>
+                                <div class="text-xs font-normal text-gray-400">{{ 'COMMON.CODE.ACCOUNT' | translate }}:
+                                    {{ partner.userCode || '--' }}</div>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ partner.companyName }}

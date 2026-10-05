@@ -1196,6 +1196,10 @@
         }
     },
     "COMMON": {
+        "CODE": {
+            "ACCOUNT": "Mã tài khoản",
+            "COMPANY": "Mã công ty"
+        },
         "USER_PICKER": {
         "SEARCH_PLACEHOLDER": "Tìm theo tên đăng nhập hoặc họ tên...",
         "EMPTY": "Không tìm thấy tài khoản nào"

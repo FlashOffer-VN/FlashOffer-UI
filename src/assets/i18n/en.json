@@ -1240,6 +1240,10 @@
         }
     },
     "COMMON": {
+        "CODE": {
+            "ACCOUNT": "Account code",
+            "COMPANY": "Company code"
+        },
         "USER_PICKER": {
         "SEARCH_PLACEHOLDER": "Search by username or full name...",
         "EMPTY": "No account found"

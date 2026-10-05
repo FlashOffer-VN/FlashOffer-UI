@@ -104,6 +104,7 @@
                                     {{ offer.recordReferrerCode | appCodeName: offer.recordReferrerName }}</div>
                                 <div class="text-xs text-gray-400">{{ 'ADMIN.OFFERS.REFERRED_BY' | translate }}:
                                     {{ offer.accountReferrerCode | appCodeName: offer.accountReferrerName }}</div>
+                                <div class="text-xs text-gray-400">{{'COMMON.CODE.ACCOUNT' | translate }}: {{ offer.userCode || '--' }}</div>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ offer.phone }}

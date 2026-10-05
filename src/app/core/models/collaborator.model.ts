@@ -59,6 +59,8 @@ export interface Collaborator {
     referredByCode?: string | null;
     /** Tên chủ mã chia sẻ của người tạo bản ghi */
     referredByName?: string | null;
+    /** Mã tài khoản (USR-…) của CTV */
+    userCode?: string | null;
 }
 
 export enum CollaboratorStatus {

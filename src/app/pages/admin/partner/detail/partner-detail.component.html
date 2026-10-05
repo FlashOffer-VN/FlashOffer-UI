@@ -28,6 +28,10 @@
                         <span><i class="fa-solid fa-envelope w-4"></i> {{ partner.email }}</span>
                         <span><i class="fa-solid fa-phone w-4"></i> {{ partner.phone }}</span>
                         <span><i class="fa-regular fa-building w-4"></i> {{ getCompanyName() }}</span>
+                        @if (partner.companyInfo?.companyCode || partner.businessInfo?.companyCode) {
+                        <span><i class="fa-solid fa-hashtag w-4"></i> {{ 'COMMON.CODE.COMPANY' | translate }}:
+                            {{ partner.companyInfo?.companyCode || partner.businessInfo?.companyCode }}</span>
+                        }
                         <span><i class="fa-regular fa-calendar w-4"></i> {{ partner.createdAt | appDate }}</span>
                     </div>
                 </div>

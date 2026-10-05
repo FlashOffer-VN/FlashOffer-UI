@@ -34,6 +34,8 @@ export interface GroupBuyingRequest {
     isDeleted?: boolean;
     /** Thời điểm xoá mềm. */
     deletedAt?: string | null;
+    /** Mã tài khoản người tạo đơn */
+    userCode?: string | null;
 }
 
 export enum GroupBuyingStatus {

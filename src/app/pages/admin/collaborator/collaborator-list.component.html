@@ -95,6 +95,10 @@
                                 {{ collaborator.fullName }}
                                 <div class="text-xs font-normal text-gray-400">{{ 'ADMIN.CTV.REFERRED_BY' | translate }}:
                                     {{ collaborator.referredByCode | appCodeName: collaborator.referredByName }}</div>
+                                <div class="text-xs font-normal text-gray-400">{{ 'ADMIN.CTV.CODE' | translate }}:
+                                    {{ collaborator.collaboratorCode || '--' }}</div>
+                                <div class="text-xs font-normal text-gray-400">{{ 'COMMON.CODE.ACCOUNT' | translate }}:
+                                    {{ collaborator.userCode || '--' }}</div>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ collaborator.email || '--' }}

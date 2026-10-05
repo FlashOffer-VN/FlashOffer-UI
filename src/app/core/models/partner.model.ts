@@ -195,6 +195,8 @@ export interface Partner {
     businessFieldId?: string | null;
     businessFieldName?: string | null;
     referralCode?: string;
+    /** Mã tài khoản (USR-…) của đối tác */
+    userCode?: string | null;
     note?: string;
     status: PartnerStatus;
     approvedAt?: string;
