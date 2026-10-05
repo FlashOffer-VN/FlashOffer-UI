@@ -3,7 +3,7 @@
     right: 1.25rem;
     bottom: 5rem;
     /* ⭐ Đồng nhất khoảng cách cho tất cả nút */
-    z-index: 50;
+    z-index: var(--z-floating);
     display: flex;
     flex-direction: column;
     gap: 0.75rem;

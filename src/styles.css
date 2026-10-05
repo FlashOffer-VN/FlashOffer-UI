@@ -107,6 +107,24 @@
         /* Scrollbar — mảnh, trung tính, hợp cả nền sáng */
         --scrollbar-thumb: rgba(148, 163, 184, 0.45);
         --scrollbar-thumb-hover: rgba(100, 116, 139, 0.7);
+
+        /* ===== Thang z-index dùng chung (xếp lớp các thành phần NỔI) =====
+           Thứ tự thấp → cao: nội dung app < nút nổi < sidebar/ngăn kéo < header
+           < dialog cha < backdrop dialog con < dialog con < dropdown/menu nổi
+           < toast < loading. Dialog lồng nhau: mỗi tầng cộng thêm --z-modal-step
+           (xem core/utils/z-index.ts). Không đặt z-index lẻ (9999…) ngoài thang này. */
+        --z-app: 0;
+        --z-sticky: 10;           /* header bảng / thanh lọc dính trong trang */
+        --z-sidebar-backdrop: 30; /* lớp mờ khi mở sidebar/ngăn kéo mobile */
+        --z-sidebar: 40;          /* sidebar / ngăn kéo dọc */
+        --z-floating: 50;         /* nút liên hệ nổi (FAB) */
+        --z-header: 50;           /* header dính của layout */
+        --z-header-muted: 48;     /* header khi bị ngăn kéo menu che */
+        --z-modal: 60;            /* dialog + backdrop (tầng 0) */
+        --z-modal-step: 10;       /* mỗi tầng dialog lồng nhau cộng thêm */
+        --z-dropdown: 300;        /* dropdown/menu nổi, panel ng-select */
+        --z-toast: 400;           /* toast / thông báo nổi */
+        --z-loading: 500;         /* overlay loading toàn màn hình */
     }
 
 }
@@ -346,6 +364,7 @@ body {
    ========================================================================== */
 
 .ng-dropdown-panel {
+    z-index: var(--z-dropdown) !important;
     border: 1px solid var(--border) !important;
     border-radius: 14px !important;
     box-shadow: 0 14px 34px rgba(15, 23, 42, 0.14) !important;

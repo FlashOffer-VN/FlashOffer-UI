@@ -9,7 +9,7 @@ export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | '
   imports: [CommonModule],
   template: `
     <!-- Fullscreen với Community Icon -->
-    <div *ngIf="fullScreen" class="fixed inset-0 bg-white/70 backdrop-blur-sm z-[9999] flex items-center justify-center">
+    <div *ngIf="fullScreen" class="loading-fullscreen fixed inset-0 bg-white/70 backdrop-blur-sm flex items-center justify-center">
       <div class="text-center space-y-6 p-8 bg-white/90 rounded-2xl shadow-xl max-w-sm w-full mx-4">
         <!-- Community Icon -->
         <div class="community-icon inline-block">
@@ -105,6 +105,11 @@ export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | '
     </ng-container>
   `,
   styles: [`
+    /* Overlay loading toàn màn hình — trên mọi lớp nổi (xem thang --z-* ở styles.css) */
+    .loading-fullscreen {
+      z-index: var(--z-loading);
+    }
+
     /* ===== DOTS ===== */
     .dot {
       border-radius: 50%;

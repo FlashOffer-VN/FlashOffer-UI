@@ -1,5 +1,5 @@
 ﻿// components/group-buying-detail-modal/group-buying-detail-modal.component.ts
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { buildGroupBuyingShareUrl, copyToClipboard, resolveReferralCode } from '
 import { GroupBuyingDetail, GroupBuyingStatus, JoinGroupBuyingResult } from '@core/models/group-buying-request.model';
 import { AccountCreatedNoticeComponent } from '@shared/components/account-created-notice/account-created-notice.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
+import { acquireModalLevel, releaseModalLevel } from '@core/utils/z-index';
 
 @Component({
     selector: 'app-group-buying-detail-modal',
@@ -19,7 +20,11 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
     templateUrl: './group-buying-detail-modal.component.html',
     styleUrls: ['./group-buying-detail-modal.component.css']
 })
-export class GroupBuyingDetailModalComponent implements OnInit, OnChanges {
+export class GroupBuyingDetailModalComponent implements OnInit, OnChanges, OnDestroy {
+    /** Tầng xếp lớp: modal mở sau luôn nằm trên modal mở trước (xem core/utils/z-index.ts) */
+    modalLevel = 0;
+    private _level: number | null = null;
+
     /** Mở/đóng modal */
     @Input() visible = false;
     /** Id yêu cầu mua chung cần xem chi tiết */
@@ -82,13 +87,34 @@ export class GroupBuyingDetailModalComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['visible']) {
             if (this.visible) {
+                this._acquireLevel();
                 this.resetState();
                 this.applyGuestValidators();
                 this.resolveReferralCodes();
                 this.loadDetail();
             } else {
+                this._releaseLevel();
                 this.resetState();
             }
+        }
+    }
+
+    ngOnDestroy(): void {
+        this._releaseLevel();
+    }
+
+    /** Cấp/trả tầng xếp lớp để modal mở sau luôn nằm trên modal mở trước */
+    private _acquireLevel(): void {
+        if (this._level === null) {
+            this._level = acquireModalLevel();
+            this.modalLevel = this._level;
+        }
+    }
+
+    private _releaseLevel(): void {
+        if (this._level !== null) {
+            releaseModalLevel(this._level);
+            this._level = null;
         }
     }
 

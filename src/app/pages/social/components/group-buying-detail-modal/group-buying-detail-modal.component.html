@@ -1,4 +1,4 @@
-﻿<div class="gb-modal-overlay" [class.embedded]="embedded" *ngIf="visible" (click)="close()">
+﻿<div class="gb-modal-overlay" [class.embedded]="embedded" [style.--modal-level]="modalLevel" *ngIf="visible" (click)="close()">
     <div class="gb-modal" [class.gb-modal--embedded]="embedded" (click)="stopPropagation($event)">
         <!-- Header -->
         <div class="gb-modal-head">
