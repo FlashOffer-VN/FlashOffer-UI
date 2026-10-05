@@ -125,7 +125,8 @@ export function referralEventSearchFields(t: (key: string) => string): SearchFie
 
 /**
  * Các cột tìm kiếm của LỊCH SỬ CHI TRẢ HOA HỒNG (my-commission).
- * `value` khớp tên trường của `PayoutStatement`; lọc ngay trên dữ liệu ví đã tải (Lịch sử chi trả).
+ * `value` là cột tìm kiếm gửi kèm tham số `searchField` cho GET /api/v1/Payouts/my
+ * (máy chủ lọc + phân trang).
  */
 export function payoutSearchFields(t: (key: string) => string): SearchFieldOption[] {
     return [

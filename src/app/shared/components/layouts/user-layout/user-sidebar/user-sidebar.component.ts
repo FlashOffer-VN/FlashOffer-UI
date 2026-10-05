@@ -19,8 +19,8 @@ export class UserSidebarComponent {
 
     menuItems: MenuItem[] = [
         { path: '/user/account', icon: 'fa-solid fa-id-card', label: 'USER.SIDEBAR.ACCOUNT_INFO' },
-        { path: '/user/my-group-buying', icon: 'fa-solid fa-people-group', label: 'USER.SIDEBAR.MY_GROUP_BUYING', permission: Permission.ViewMyGroupBuying },
         { path: '/user/my-referral', icon: 'fa-solid fa-share-nodes', label: 'USER.SIDEBAR.MY_REFERRAL', permission: Permission.ViewMyReferralStats },
+        { path: '/user/my-group-buying', icon: 'fa-solid fa-people-group', label: 'USER.SIDEBAR.MY_GROUP_BUYING', permission: Permission.ViewMyGroupBuying },
         { path: '/user/my-requests', icon: 'fa-solid fa-file-lines', label: 'USER.SIDEBAR.MY_REQUESTS', permission: Permission.ViewMyRequests },
         { path: '/user/my-posts', icon: 'fa-solid fa-newspaper', label: 'USER.SIDEBAR.MY_POSTS', permission: Permission.ViewMyPosts },
         { path: '/user/my-groups', icon: 'fa-solid fa-people-roof', label: 'USER.SIDEBAR.MY_GROUPS', permission: Permission.ViewMyGroups },

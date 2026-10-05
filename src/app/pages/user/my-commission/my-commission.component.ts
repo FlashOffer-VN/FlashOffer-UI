@@ -13,6 +13,7 @@ import { CommissionConfig } from '@core/models/commission.model';
 import {
     BankAccount,
     BankAccountVerificationCode,
+    MyPayoutQuery,
     MyWallet,
     PayoutPeriodStatus,
     PayoutStatement,
@@ -38,6 +39,7 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
+import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { payoutSearchFields, SearchFieldOption } from '@core/constants/search-fields';
 
 /**
@@ -63,7 +65,8 @@ import { payoutSearchFields, SearchFieldOption } from '@core/constants/search-fi
         FormsModule,
         StatusTabsComponent,
         SearchByComponent,
-        NgxFilterDaterangeComponent
+        NgxFilterDaterangeComponent,
+        PaginationComponent
     ],
     template: `
         <div class="space-y-5">
@@ -340,7 +343,7 @@ import { payoutSearchFields, SearchFieldOption } from '@core/constants/search-fi
                     <h2 class="text-base font-semibold text-gray-900">{{ 'USER.COMMISSION.HISTORY_TITLE' | translate }}</h2>
                     <p class="text-sm text-gray-500 mt-1">{{ 'USER.COMMISSION.HISTORY_SUBTITLE' | translate }}</p>
 
-                    <!-- Bộ lọc lịch sử chi trả: áp ngay trên dữ liệu ví đã tải (API chưa có endpoint lọc chi trả của tôi) -->
+                    <!-- Bộ lọc lịch sử chi trả: máy chủ lọc + phân trang (GET /Payouts/my); đổi bộ lọc/tab/trang là tải lại -->
                     <div class="mt-4 flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
                         <app-search-by [options]="historySearchFieldOptions" [(value)]="historySearchField"></app-search-by>
                         <div class="w-full sm:flex-1 sm:min-w-0">
@@ -348,7 +351,7 @@ import { payoutSearchFields, SearchFieldOption } from '@core/constants/search-fi
                                 [placeholder]="'USER.COMMISSION.HISTORY_SEARCH_PLACEHOLDER' | translate"
                                 (keyup.enter)="onHistorySearch()"></app-input>
                         </div>
-                        <app-button variant="primary" (onClick)="onHistorySearch()">
+                        <app-button variant="primary" [loading]="isLoadingHistory" (onClick)="onHistorySearch()">
                             <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
                         </app-button>
                         <app-button variant="outline" (onClick)="onHistoryReset()">
@@ -363,41 +366,45 @@ import { payoutSearchFields, SearchFieldOption } from '@core/constants/search-fi
                             (change)="onStatusTabChange($event)"></app-status-tabs>
                     </div>
 
-                    @if (filteredPayouts.length) {
+                    @if (isLoadingHistory) {
+                        <div class="mt-3">
+                            <app-loading></app-loading>
+                        </div>
+                    } @else if (payouts.length) {
                         <div class="overflow-x-auto mt-3">
                             <table class="w-full text-sm">
                                 <thead>
                                     <tr class="text-left text-gray-500">
-                                        <th class="py-2">{{ 'USER.COMMISSION.COL_PERIOD' | translate }}</th>
-                                        <th class="py-2">{{ 'USER.COMMISSION.COL_TYPE' | translate }}</th>
-                                        <th class="py-2 text-right">{{ 'USER.COMMISSION.COL_ACCRUED' | translate }}</th>
-                                        <th class="py-2 text-right">{{ 'USER.COMMISSION.COL_FEE' | translate }}</th>
-                                        <th class="py-2 text-right">{{ 'USER.COMMISSION.COL_NET' | translate }}</th>
-                                        <th class="py-2">{{ 'USER.COMMISSION.COL_STATUS' | translate }}</th>
-                                        <th class="py-2">{{ 'USER.COMMISSION.COL_TIME' | translate }}</th>
-                                        <th class="py-2">{{ 'USER.COMMISSION.COL_ACTION' | translate }}</th>
+                                        <th class="py-2 whitespace-nowrap">{{ 'USER.COMMISSION.COL_PERIOD' | translate }}</th>
+                                        <th class="py-2 whitespace-nowrap">{{ 'USER.COMMISSION.COL_TYPE' | translate }}</th>
+                                        <th class="py-2 text-right whitespace-nowrap">{{ 'USER.COMMISSION.COL_ACCRUED' | translate }}</th>
+                                        <th class="py-2 text-right whitespace-nowrap">{{ 'USER.COMMISSION.COL_FEE' | translate }}</th>
+                                        <th class="py-2 text-right whitespace-nowrap">{{ 'USER.COMMISSION.COL_NET' | translate }}</th>
+                                        <th class="py-2 whitespace-nowrap">{{ 'USER.COMMISSION.COL_STATUS' | translate }}</th>
+                                        <th class="py-2 whitespace-nowrap">{{ 'USER.COMMISSION.COL_TIME' | translate }}</th>
+                                        <th class="py-2 whitespace-nowrap">{{ 'USER.COMMISSION.COL_ACTION' | translate }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @for (item of filteredPayouts; track item.id) {
+                                    @for (item of payouts; track item.id) {
                                         <tr class="border-t border-gray-100 text-gray-700">
-                                            <td class="py-2 font-medium">{{ item.periodLabel || '—' }}</td>
-                                            <td class="py-2">{{ getPayoutTypeLabel(item.type) | translate }}</td>
-                                            <td class="py-2 text-right">{{ item.accruedAmount | appPrice }}</td>
-                                            <td class="py-2 text-right">
+                                            <td class="py-2 font-medium whitespace-nowrap">{{ item.periodLabel || '—' }}</td>
+                                            <td class="py-2 whitespace-nowrap">{{ getPayoutTypeLabel(item.type) | translate }}</td>
+                                            <td class="py-2 text-right whitespace-nowrap">{{ item.accruedAmount | appPrice }}</td>
+                                            <td class="py-2 text-right whitespace-nowrap">
                                                 {{ item.feeAmount | appPrice }}
                                                 @if (item.feeRate) {
                                                     <span class="text-xs text-gray-500">({{ item.feeRate }}%)</span>
                                                 }
                                             </td>
-                                            <td class="py-2 text-right font-semibold">{{ item.netAmount | appPrice }}</td>
-                                            <td class="py-2">
+                                            <td class="py-2 text-right font-semibold whitespace-nowrap">{{ item.netAmount | appPrice }}</td>
+                                            <td class="py-2 whitespace-nowrap">
                                                 <span class="px-2 py-0.5 rounded text-xs" [class]="statusClass(item.status)">
                                                     {{ getPayoutStatusLabel(item.status) | translate }}
                                                 </span>
                                             </td>
-                                            <td class="py-2 text-xs text-gray-500">{{ (item.requestedAt || item.createdAt) | appDate }}</td>
-                                            <td class="py-2">
+                                            <td class="py-2 text-xs text-gray-500 whitespace-nowrap">{{ (item.requestedAt || item.createdAt) | appDate }}</td>
+                                            <td class="py-2 whitespace-nowrap">
                                                 @if (canCancel(item)) {
                                                     <app-button size="sm" variant="outline" [loading]="cancellingId === item.id"
                                                         (click)="cancelWithdrawal(item)">
@@ -409,6 +416,14 @@ import { payoutSearchFields, SearchFieldOption } from '@core/constants/search-fi
                                     }
                                 </tbody>
                             </table>
+                        </div>
+
+                        <div class="mt-3">
+                            <app-pagination [pageNumber]="historyPageNumber" [pageSize]="historyPageSize"
+                                [totalCount]="historyTotalCount" [totalPages]="historyTotalPages"
+                                [hasPreviousPage]="historyHasPreviousPage" [hasNextPage]="historyHasNextPage"
+                                (pageChange)="onHistoryPageChange($event)" (pageSizeChange)="onHistoryPageSizeChange($event)">
+                            </app-pagination>
                         </div>
                     } @else {
                         <p class="bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-600 mt-3">{{ 'USER.COMMISSION.HISTORY_EMPTY' | translate }}</p>
@@ -586,16 +601,28 @@ export class MyCommissionPageComponent implements OnInit {
     /** Yêu cầu rút đang huỷ, dùng để hiện trạng thái chờ trên đúng dòng. */
     cancellingId: string | null = null;
 
-    /** Bộ lọc lịch sử chi trả — lọc ngay trên danh sách ví đã tải. */
+    /** Bộ lọc lịch sử chi trả — máy chủ lọc + phân trang qua GET /Payouts/my. */
     historySearchText = '';
     historySearchField: string | null = null;
     historySearchFieldOptions: SearchFieldOption[] = [];
     historyFromDate: string | null = null;
     historyToDate: string | null = null;
 
-    /** Từ khoá/cột đã áp dụng khi bấm Tìm (đổi cột/ô nhập không tự lọc). */
+    /** Từ khoá/cột đã áp dụng khi bấm Tìm (đổi cột/ô nhập không tự tải lại). */
     private appliedHistorySearch = '';
     private appliedHistoryField: string | null = null;
+
+    /** Lịch sử chi trả của trang hiện tại (máy chủ phân trang). */
+    payouts: PayoutStatement[] = [];
+    isLoadingHistory = false;
+
+    /** Phân trang lịch sử chi trả theo phản hồi máy chủ. */
+    historyPageNumber = 1;
+    historyPageSize = 10;
+    historyTotalCount = 0;
+    historyTotalPages = 0;
+    historyHasPreviousPage = false;
+    historyHasNextPage = false;
 
     /** Tab trạng thái chi trả đang chọn ('all' hoặc giá trị PayoutStatus). */
     activeStatusTab = 'all';
@@ -640,6 +667,7 @@ export class MyCommissionPageComponent implements OnInit {
     ngOnInit(): void {
         this.isLoading = true;
         this.buildHistoryFilter();
+        this.loadHistory();
 
         // Ba nguồn dữ liệu độc lập: mức hoa hồng, ví hoa hồng và ngân hàng nhận tiền. Tài khoản chưa
         // được cấp quyền xem ngân hàng vẫn phải xem được phần còn lại nên lỗi từng nguồn bỏ qua riêng.
@@ -935,59 +963,95 @@ export class MyCommissionPageComponent implements OnInit {
         this.historySearchFieldOptions = payoutSearchFields((key: string) => this._appService.trans(key));
     }
 
-    /** Lịch sử chi trả sau khi áp bộ lọc: trạng thái + từ khoá/cột + khoảng ngày. */
-    get filteredPayouts(): PayoutStatement[] {
-        const items = this.wallet?.recentPayouts ?? [];
-        const keyword = this.appliedHistorySearch.trim().toLowerCase();
-        const field = this.appliedHistoryField;
+    /** Nạp lịch sử chi trả từ máy chủ theo bộ lọc và trang hiện tại. */
+    loadHistory(): void {
+        this.isLoadingHistory = true;
 
-        return items.filter(item => {
-            if (this.activeStatusTab !== 'all' && String(item.status) !== this.activeStatusTab) {
-                return false;
+        const query: MyPayoutQuery = {
+            page: this.historyPageNumber,
+            pageSize: this.historyPageSize
+        };
+        if (this.appliedHistorySearch.trim()) query.search = this.appliedHistorySearch.trim();
+        if (this.appliedHistoryField) query.searchField = this.appliedHistoryField;
+
+        const status = this.statusOfTab(this.activeStatusTab);
+        if (status !== null) query.status = status;
+
+        if (this.historyFromDate) query.fromDate = this.historyFromDate;
+        if (this.historyToDate) query.toDate = this.historyToDate;
+
+        this._payoutService.getMyPayouts(query).subscribe({
+            next: response => {
+                this.payouts = response.data ?? [];
+                this.historyPageNumber = response.pageNumber ?? this.historyPageNumber;
+                this.historyPageSize = response.pageSize ?? this.historyPageSize;
+                this.historyTotalCount = response.totalCount ?? 0;
+                this.historyTotalPages = response.totalPages ?? 0;
+                this.historyHasPreviousPage = response.hasPreviousPage ?? false;
+                this.historyHasNextPage = response.hasNextPage ?? false;
+                this.isLoadingHistory = false;
+            },
+            error: () => {
+                this.isLoadingHistory = false;
+                this.payouts = [];
+                this.historyTotalCount = 0;
+                this.historyTotalPages = 0;
+                this.historyHasPreviousPage = false;
+                this.historyHasNextPage = false;
+                this._appService.showError(this._appService.trans('COMMON.ERROR.LOAD_FAILED'));
             }
-
-            const created = (item.requestedAt || item.createdAt || '').slice(0, 10);
-            if (this.historyFromDate && created && created < this.historyFromDate) return false;
-            if (this.historyToDate && created && created > this.historyToDate) return false;
-
-            if (!keyword) return true;
-
-            const values = field
-                ? [this.payoutFieldValue(item, field)]
-                : [item.periodLabel, item.bankAccountNumber, item.note];
-
-            return values.some(value => (value ?? '').toString().toLowerCase().includes(keyword));
         });
     }
 
-    /** Giá trị của một cột tìm kiếm trên dòng chi trả (khớp `payoutSearchFields`). */
-    private payoutFieldValue(item: PayoutStatement, field: string): string {
-        switch (field) {
-            case 'periodLabel': return item.periodLabel ?? '';
-            case 'bankAccountNumber': return item.bankAccountNumber ?? '';
-            case 'note': return item.note ?? '';
-            default: return '';
+    /** Trạng thái tương ứng tab đang chọn; tab "Tất cả" thì không lọc theo trạng thái. */
+    private statusOfTab(tab: string): PayoutStatus | null {
+        switch (tab) {
+            case String(PayoutStatus.Pending): return PayoutStatus.Pending;
+            case String(PayoutStatus.Approved): return PayoutStatus.Approved;
+            case String(PayoutStatus.Rejected): return PayoutStatus.Rejected;
+            case String(PayoutStatus.Paid): return PayoutStatus.Paid;
+            case String(PayoutStatus.Cancelled): return PayoutStatus.Cancelled;
+            default: return null;
         }
     }
 
-    /** Bấm Tìm mới áp từ khoá/cột tìm kiếm vào lịch sử chi trả. */
+    /** Bấm Tìm mới áp từ khoá/cột tìm kiếm rồi tải lại từ trang đầu. */
     onHistorySearch(): void {
         this.appliedHistorySearch = this.historySearchText;
         this.appliedHistoryField = this.historySearchField;
+        this.historyPageNumber = 1;
+        this.loadHistory();
     }
 
-    /** Đổi khoảng ngày chi trả — lọc ngay. */
+    /** Đổi khoảng ngày chi trả — tải lại từ trang đầu. */
     onHistoryRangeChange(range: { from: string | null; to: string | null }): void {
         this.historyFromDate = range.from;
         this.historyToDate = range.to;
+        this.historyPageNumber = 1;
+        this.loadHistory();
     }
 
-    /** Đổi tab trạng thái chi trả — lọc ngay. */
+    /** Đổi tab trạng thái chi trả — tải lại từ trang đầu. */
     onStatusTabChange(tab: string): void {
         this.activeStatusTab = tab;
+        this.historyPageNumber = 1;
+        this.loadHistory();
     }
 
-    /** Đặt lại toàn bộ bộ lọc lịch sử chi trả. */
+    /** Chuyển trang lịch sử chi trả. */
+    onHistoryPageChange(page: number): void {
+        this.historyPageNumber = page;
+        this.loadHistory();
+    }
+
+    /** Đổi số dòng mỗi trang — quay về trang đầu. */
+    onHistoryPageSizeChange(pageSize: number): void {
+        this.historyPageSize = pageSize;
+        this.historyPageNumber = 1;
+        this.loadHistory();
+    }
+
+    /** Đặt lại toàn bộ bộ lọc lịch sử chi trả rồi tải lại từ trang đầu. */
     onHistoryReset(): void {
         this.historySearchText = '';
         this.historySearchField = null;
@@ -996,6 +1060,9 @@ export class MyCommissionPageComponent implements OnInit {
         this.historyFromDate = null;
         this.historyToDate = null;
         this.activeStatusTab = 'all';
+        this.historyPageNumber = 1;
+        this.historyPageSize = 10;
+        this.loadHistory();
     }
 
     /** Đưa người dùng xuống khối ngân hàng nhận tiền để khai hoặc xác minh. */

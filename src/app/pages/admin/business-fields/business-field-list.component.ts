@@ -7,14 +7,17 @@ import { BusinessFieldService } from '@core/services/business-field.service';
 import { ToastService } from '@core/services/toast.service';
 import {
     BusinessFieldAdmin,
+    BusinessFieldCompany,
     BusinessFieldFormValue,
-    BusinessFieldRelated
+    BusinessFieldRelated,
+    BusinessFieldUser
 } from '@core/models/business-field.model';
 
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
+import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-tabs/status-tabs.component';
 
 /**
  * Quản lý lĩnh vực hoạt động: thêm, sửa, bật/tắt, xoá và xem công ty/tài khoản thuộc lĩnh vực.
@@ -30,7 +33,8 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
         LoadingComponent,
         ButtonComponent,
         InputComponent,
-        ModalComponent
+        ModalComponent,
+        StatusTabsComponent
     ],
     styles: [`
         @media (max-width: 640px) {
@@ -184,13 +188,13 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
             </div>
         </app-modal>
 
-        <!-- Công ty và tài khoản thuộc lĩnh vực -->
+        <!-- Công ty và tài khoản thuộc lĩnh vực: tách thành 2 tab, mỗi phần có tìm kiếm + đếm riêng -->
         <app-modal [(visible)]="isDetailVisible" [title]="'ADMIN.BUSINESS_FIELDS.DETAIL_TITLE' | translate" size="lg"
             [showFooter]="false" (closed)="closeDetail()">
             @if (isLoadingDetail) {
             <app-loading></app-loading>
             } @else if (detail) {
-            <div class="space-y-5">
+            <div class="space-y-4">
                 <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600">
                     <span class="font-medium text-gray-900">{{ detail.name }}</span>
                     @if (detail.businessFieldCode) {
@@ -198,30 +202,42 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
                     }
                 </div>
 
-                <div>
-                    <h3 class="text-sm font-semibold text-gray-900 mb-2">
-                        {{ 'ADMIN.BUSINESS_FIELDS.DETAIL_COMPANIES' | translate }} ({{ detail.companies.length }})
+                <app-status-tabs [items]="detailTabs" [active]="detailTab"
+                    (change)="onDetailTabChange($event)"></app-status-tabs>
+
+                @if (detailTab === 'companies') {
+                <section>
+                    <h3 class="text-sm font-semibold text-gray-900">
+                        {{ 'ADMIN.BUSINESS_FIELDS.DETAIL_COMPANIES' | translate }} ({{ filteredCompanies.length }})
                     </h3>
-                    @if (detail.companies.length === 0) {
-                    <p class="text-sm text-gray-500">{{ 'ADMIN.BUSINESS_FIELDS.NO_COMPANIES' | translate }}</p>
+                    <div class="mt-2">
+                        <app-input [(ngModel)]="companyKeyword" [id]="'bf_detail_company_search'"
+                            [placeholder]="'ADMIN.BUSINESS_FIELDS.COMPANY_SEARCH_PLACEHOLDER' | translate">
+                        </app-input>
+                    </div>
+
+                    @if (filteredCompanies.length === 0) {
+                    <p class="text-sm text-gray-500 mt-3">
+                        {{ (detail.companies.length === 0 ? 'ADMIN.BUSINESS_FIELDS.NO_COMPANIES' : 'ADMIN.BUSINESS_FIELDS.COMPANY_SEARCH_EMPTY') | translate }}
+                    </p>
                     } @else {
-                    <div class="border border-gray-200 rounded-lg overflow-x-auto">
+                    <div class="mt-3 border border-gray-200 rounded-lg overflow-x-auto overflow-y-auto max-h-[55vh]">
                         <table class="w-full text-left text-sm">
-                            <thead class="bg-gray-50 text-xs uppercase text-gray-500">
+                            <thead class="bg-gray-50 text-xs uppercase text-gray-500 sticky top-0">
                                 <tr>
-                                    <th class="px-3 py-2">{{ 'ADMIN.BUSINESS_FIELDS.COMPANY_CODE' | translate }}</th>
-                                    <th class="px-3 py-2">{{ 'ADMIN.BUSINESS_FIELDS.COMPANY_NAME' | translate }}</th>
-                                    <th class="px-3 py-2">{{ 'ADMIN.BUSINESS_FIELDS.COMPANY_TAX' | translate }}</th>
-                                    <th class="px-3 py-2 text-center">{{ 'ADMIN.BUSINESS_FIELDS.ROLE_COLLABORATOR' | translate }}</th>
-                                    <th class="px-3 py-2 text-center">{{ 'ADMIN.BUSINESS_FIELDS.ROLE_PARTNER' | translate }}</th>
+                                    <th class="px-3 py-2 whitespace-nowrap">{{ 'ADMIN.BUSINESS_FIELDS.COMPANY_CODE' | translate }}</th>
+                                    <th class="px-3 py-2 whitespace-nowrap">{{ 'ADMIN.BUSINESS_FIELDS.COMPANY_NAME' | translate }}</th>
+                                    <th class="px-3 py-2 whitespace-nowrap">{{ 'ADMIN.BUSINESS_FIELDS.COMPANY_TAX' | translate }}</th>
+                                    <th class="px-3 py-2 text-center whitespace-nowrap">{{ 'ADMIN.BUSINESS_FIELDS.COMPANY_COLLABORATOR_COUNT' | translate }}</th>
+                                    <th class="px-3 py-2 text-center whitespace-nowrap">{{ 'ADMIN.BUSINESS_FIELDS.COMPANY_PARTNER_COUNT' | translate }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
-                                @for (company of detail.companies; track company.id) {
+                                @for (company of filteredCompanies; track company.id) {
                                 <tr>
-                                    <td class="px-3 py-2 text-gray-700">{{ company.companyCode || '--' }}</td>
+                                    <td class="px-3 py-2 text-gray-700 whitespace-nowrap">{{ company.companyCode || '--' }}</td>
                                     <td class="px-3 py-2 text-gray-900">{{ company.name }}</td>
-                                    <td class="px-3 py-2 text-gray-600">{{ company.taxCode || '--' }}</td>
+                                    <td class="px-3 py-2 text-gray-600 whitespace-nowrap">{{ company.taxCode || '--' }}</td>
                                     <td class="px-3 py-2 text-center text-gray-700">{{ company.collaboratorCount }}</td>
                                     <td class="px-3 py-2 text-center text-gray-700">{{ company.partnerCount }}</td>
                                 </tr>
@@ -230,37 +246,41 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
                         </table>
                     </div>
                     }
-                </div>
-
-                <div>
-                    <h3 class="text-sm font-semibold text-gray-900 mb-2">
-                        {{ 'ADMIN.BUSINESS_FIELDS.DETAIL_USERS' | translate }} ({{ detail.users.length }})
+                </section>
+                } @else {
+                <section>
+                    <h3 class="text-sm font-semibold text-gray-900">
+                        {{ 'ADMIN.BUSINESS_FIELDS.DETAIL_USERS' | translate }} ({{ filteredUsers.length }})
                     </h3>
-                    @if (detail.users.length === 0) {
-                    <p class="text-sm text-gray-500">{{ 'ADMIN.BUSINESS_FIELDS.NO_USERS' | translate }}</p>
+                    <div class="mt-2">
+                        <app-input [(ngModel)]="userKeyword" [id]="'bf_detail_user_search'"
+                            [placeholder]="'ADMIN.BUSINESS_FIELDS.USER_SEARCH_PLACEHOLDER' | translate">
+                        </app-input>
+                    </div>
+
+                    @if (filteredUsers.length === 0) {
+                    <p class="text-sm text-gray-500 mt-3">
+                        {{ (detail.users.length === 0 ? 'ADMIN.BUSINESS_FIELDS.NO_USERS' : 'ADMIN.BUSINESS_FIELDS.USER_SEARCH_EMPTY') | translate }}
+                    </p>
                     } @else {
-                    <div class="border border-gray-200 rounded-lg overflow-x-auto">
+                    <div class="mt-3 border border-gray-200 rounded-lg overflow-x-auto overflow-y-auto max-h-[55vh]">
                         <table class="w-full text-left text-sm">
-                            <thead class="bg-gray-50 text-xs uppercase text-gray-500">
+                            <thead class="bg-gray-50 text-xs uppercase text-gray-500 sticky top-0">
                                 <tr>
-                                    <th class="px-3 py-2">{{ 'COMMON.CODE.ACCOUNT' | translate }}</th>
-                                    <th class="px-3 py-2">{{ 'ADMIN.BUSINESS_FIELDS.USER_NAME' | translate }}</th>
-                                    <th class="px-3 py-2">{{ 'ADMIN.BUSINESS_FIELDS.USER_PHONE' | translate }}</th>
-                                    <th class="px-3 py-2">{{ 'ADMIN.BUSINESS_FIELDS.USER_ROLE' | translate }}</th>
-                                    <th class="px-3 py-2">{{ 'ADMIN.BUSINESS_FIELDS.COMPANY_NAME' | translate }}</th>
+                                    <th class="px-3 py-2 whitespace-nowrap">{{ 'COMMON.CODE.ACCOUNT' | translate }}</th>
+                                    <th class="px-3 py-2 whitespace-nowrap">{{ 'ADMIN.BUSINESS_FIELDS.USER_NAME' | translate }}</th>
+                                    <th class="px-3 py-2 whitespace-nowrap">{{ 'ADMIN.BUSINESS_FIELDS.USER_PHONE' | translate }}</th>
+                                    <th class="px-3 py-2 whitespace-nowrap">{{ 'ADMIN.BUSINESS_FIELDS.USER_ROLE' | translate }}</th>
+                                    <th class="px-3 py-2 whitespace-nowrap">{{ 'ADMIN.BUSINESS_FIELDS.COMPANY_NAME' | translate }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
-                                @for (user of detail.users; track $index) {
+                                @for (user of filteredUsers; track user.userId) {
                                 <tr>
-                                    <td class="px-3 py-2 text-gray-700">{{ user.userCode || '--' }}</td>
-                                    <td class="px-3 py-2 text-gray-900">{{ user.fullName || '--' }}</td>
-                                    <td class="px-3 py-2 text-gray-600">{{ user.phone || '--' }}</td>
-                                    <td class="px-3 py-2 text-gray-600">
-                                        {{ (user.role === 'Partner'
-                                            ? 'ADMIN.BUSINESS_FIELDS.ROLE_PARTNER'
-                                            : 'ADMIN.BUSINESS_FIELDS.ROLE_COLLABORATOR') | translate }}
-                                    </td>
+                                    <td class="px-3 py-2 text-gray-700 whitespace-nowrap">{{ user.userCode || '--' }}</td>
+                                    <td class="px-3 py-2 text-gray-900 whitespace-nowrap">{{ user.fullName || '--' }}</td>
+                                    <td class="px-3 py-2 text-gray-600 whitespace-nowrap">{{ user.phone || '--' }}</td>
+                                    <td class="px-3 py-2 text-gray-600 whitespace-nowrap">{{ userRoleLabel(user.role) | translate }}</td>
                                     <td class="px-3 py-2 text-gray-600">{{ user.companyName || '--' }}</td>
                                 </tr>
                                 }
@@ -268,7 +288,8 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
                         </table>
                     </div>
                     }
-                </div>
+                </section>
+                }
             </div>
             }
         </app-modal>
@@ -296,6 +317,14 @@ export class AdminBusinessFieldListComponent implements OnInit {
     isDetailVisible = false;
     isLoadingDetail = false;
     detail: BusinessFieldRelated | null = null;
+
+    /** Tab đang xem trong khối chi tiết: 'companies' | 'accounts'. */
+    detailTab = 'companies';
+    detailTabs: StatusTabItem[] = [];
+
+    /** Từ khoá tìm riêng cho bảng công ty và bảng tài khoản trong khối chi tiết. */
+    companyKeyword = '';
+    userKeyword = '';
 
     ngOnInit(): void {
         this.load();
@@ -428,12 +457,17 @@ export class AdminBusinessFieldListComponent implements OnInit {
 
     openDetail(field: BusinessFieldAdmin): void {
         this.detail = null;
+        this.detailTab = 'companies';
+        this.companyKeyword = '';
+        this.userKeyword = '';
+        this.detailTabs = this.buildDetailTabs(0, 0);
         this.isDetailVisible = true;
         this.isLoadingDetail = true;
 
         this.service.getRelated(field.id).subscribe({
             next: related => {
                 this.detail = related;
+                this.detailTabs = this.buildDetailTabs(related?.companies?.length ?? 0, related?.users?.length ?? 0);
                 this.isLoadingDetail = false;
             },
             error: () => {
@@ -443,9 +477,64 @@ export class AdminBusinessFieldListComponent implements OnInit {
         });
     }
 
+    /** Hai tab của khối chi tiết kèm số lượng để thấy ngay mỗi phần có bao nhiêu. */
+    private buildDetailTabs(companyCount: number, userCount: number): StatusTabItem[] {
+        return [
+            { key: 'companies', label: this.translate.instant('ADMIN.BUSINESS_FIELDS.TAB_COMPANIES'), count: companyCount },
+            { key: 'accounts', label: this.translate.instant('ADMIN.BUSINESS_FIELDS.TAB_ACCOUNTS'), count: userCount }
+        ];
+    }
+
+    /** Đổi tab giữa công ty và tài khoản trong khối chi tiết. */
+    onDetailTabChange(tab: string): void {
+        this.detailTab = tab;
+    }
+
+    /**
+     * Công ty khớp từ khoá (mã công ty / tên / mã số thuế). Dữ liệu đã tải sẵn theo
+     * endpoint related nên lọc ngay trên client, không cần API mới.
+     */
+    get filteredCompanies(): BusinessFieldCompany[] {
+        const items = this.detail?.companies ?? [];
+        const keyword = this.companyKeyword.trim().toLowerCase();
+        if (!keyword) return items;
+
+        return items.filter(company =>
+            (company.companyCode || '').toLowerCase().includes(keyword) ||
+            (company.name || '').toLowerCase().includes(keyword) ||
+            (company.taxCode || '').toLowerCase().includes(keyword)
+        );
+    }
+
+    /** Tài khoản khớp từ khoá (mã tài khoản / họ tên / SĐT / công ty / loại hồ sơ). */
+    get filteredUsers(): BusinessFieldUser[] {
+        const items = this.detail?.users ?? [];
+        const keyword = this.userKeyword.trim().toLowerCase();
+        if (!keyword) return items;
+
+        return items.filter(user =>
+            (user.userCode || '').toLowerCase().includes(keyword) ||
+            (user.fullName || '').toLowerCase().includes(keyword) ||
+            (user.phone || '').toLowerCase().includes(keyword) ||
+            (user.companyName || '').toLowerCase().includes(keyword) ||
+            (user.role || '').toLowerCase().includes(keyword) ||
+            this.userRoleLabel(user.role).toLowerCase().includes(keyword)
+        );
+    }
+
+    /** Nhãn loại hồ sơ (khoá i18n) — dùng cho cột và cho ô tìm kiếm tài khoản. */
+    userRoleLabel(role: string): string {
+        return role === 'Partner'
+            ? 'ADMIN.BUSINESS_FIELDS.ROLE_PARTNER'
+            : 'ADMIN.BUSINESS_FIELDS.ROLE_COLLABORATOR';
+    }
+
     closeDetail(): void {
         this.isDetailVisible = false;
         this.detail = null;
         this.isLoadingDetail = false;
+        this.companyKeyword = '';
+        this.userKeyword = '';
+        this.detailTab = 'companies';
     }
 }

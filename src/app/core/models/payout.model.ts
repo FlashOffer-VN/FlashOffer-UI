@@ -114,6 +114,24 @@ export interface PayoutQuery {
     search?: string | null;
 }
 
+/**
+ * Điều kiện lọc + phân trang lịch sử chi trả của CHÍNH người gọi.
+ * GET /api/v1/Payouts/my — máy chủ tự ép tài khoản hiện tại nên không có userId.
+ */
+export interface MyPayoutQuery {
+    page?: number;
+    pageSize?: number;
+    search?: string | null;
+    /** Cột tìm kiếm (khớp `searchField` API; bỏ trống = tìm mọi trường). */
+    searchField?: string | null;
+    status?: PayoutStatus | null;
+    type?: PayoutType | null;
+    /** Chỉ lấy chi trả tạo từ ngày này (YYYY-MM-DD). */
+    fromDate?: string | null;
+    /** Chỉ lấy chi trả tạo đến hết ngày này (YYYY-MM-DD). */
+    toDate?: string | null;
+}
+
 export interface BankAccount {
     id: string;
     /** Tài khoản sở hữu (màn xác thực cần để đối chiếu và gọi API). */

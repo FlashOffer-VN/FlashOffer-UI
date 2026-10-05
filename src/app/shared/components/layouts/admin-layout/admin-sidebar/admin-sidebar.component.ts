@@ -30,7 +30,6 @@ export class AdminSidebarComponent {
         { path: '/admin/users', icon: 'fa-solid fa-user-gear', label: 'ADMIN.SIDEBAR.USERS', permission: Permission.ViewUsers },
         { path: '/admin/collaborator', icon: 'fa-solid fa-users', label: 'ADMIN.SIDEBAR.COLLABORATOR', permission: Permission.ViewCollaborators },
         { path: '/admin/partner', icon: 'fa-solid fa-building', label: 'ADMIN.SIDEBAR.PARTNER', permission: Permission.ViewPartners },
-        { path: '/admin/business-fields', icon: 'fa-solid fa-layer-group', label: 'ADMIN.BUSINESS_FIELDS.TITLE', permission: Permission.ViewCompanies },
         { path: '/admin/social-posts', icon: 'fa-solid fa-clipboard-check', label: 'ADMIN.SIDEBAR.SOCIAL_POSTS', permission: Permission.ViewSocialPosts },
         { path: '/admin/revenue', icon: 'fa-solid fa-chart-line', label: 'ADMIN.SIDEBAR.REVENUE', permission: Permission.ViewTransactionRevenue },
         { path: '/admin/revenue/settings', icon: 'fa-solid fa-percent', label: 'ADMIN.SIDEBAR.REVENUE_SETTINGS', permission: Permission.ManageRevenueConfig },
@@ -50,6 +49,8 @@ export class AdminSidebarComponent {
                 Permission.ViewAuthAuditLogs
             ]
         },
+        // Danh mục/cấu hình dùng chung (lĩnh vực hoạt động) — đặt cùng nhóm cấu hình với Settings.
+        { path: '/admin/business-fields', icon: 'fa-solid fa-layer-group', label: 'ADMIN.BUSINESS_FIELDS.TITLE', permission: Permission.ViewCompanies },
         { path: '/', icon: 'fa-solid fa-arrow-right-from-bracket', label: 'ADMIN.SIDEBAR.BACK_TO_SITE', permission: null },
     ];
 
@@ -62,7 +63,7 @@ export class AdminSidebarComponent {
         { key: 'ADMIN.SIDEBAR.GROUP_SALES', paths: ['/admin/offers', '/admin/purchase-requests', '/admin/group-buying', '/admin/groups'] },
         { key: 'ADMIN.SIDEBAR.GROUP_USERS', paths: ['/admin/users', '/admin/collaborator', '/admin/partner', '/admin/social-posts'] },
         { key: 'ADMIN.SIDEBAR.GROUP_FINANCE', paths: ['/admin/revenue', '/admin/revenue/settings', '/admin/payouts', '/admin/bank-accounts'] },
-        { key: 'ADMIN.SIDEBAR.GROUP_SYSTEM', paths: ['/admin/settings'] }
+        { key: 'ADMIN.SIDEBAR.GROUP_SYSTEM', paths: ['/admin/settings', '/admin/business-fields'] }
     ];
 
     /** Nhóm người dùng bấm mở; nhóm đang chứa trang hiện tại luôn mở. */
