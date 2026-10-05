@@ -193,6 +193,30 @@ export function isContainerNode(node: PermissionTreeNode): boolean {
 }
 
 /**
+ * Mã toàn bộ chuỗi tổ tiên (màn hình → nhóm) của một nút, từ gần tới xa.
+ * Quyền chỉ có hiệu lực khi bản thân VÀ MỌI tổ tiên đều được cấp, nên khi bật một hành động phải gửi
+ * kèm chuỗi này — gửi thiếu là hành động vừa bật bị kế thừa vô hiệu ngay (đã gặp với màn hoa hồng).
+ */
+export function ancestorCodes(node: PermissionTreeNode): string[] {
+    const codes: string[] = [];
+    let parent = node.parent ?? null;
+    while (parent) {
+        codes.push(parent.code);
+        parent = parent.parent ?? null;
+    }
+    return codes;
+}
+
+/**
+ * Mã cần cấp kèm khi bật một nút: chính nút nếu là nhóm/màn hình, cộng toàn bộ chuỗi tổ tiên.
+ * Nút lá chỉ cần tổ tiên (mã của chính nó do nơi tick thêm vào).
+ */
+export function grantChainCodes(node: PermissionTreeNode): string[] {
+    const own = isContainerNode(node) ? [node.code] : [];
+    return [...own, ...ancestorCodes(node)];
+}
+
+/**
  * Khoá dịch của một nút cây quyền, suy từ `nameKey` API trả về.
  * API trả `Permission_<P###>` (hành động), `PermissionScreen_<MÃ>` (màn hình),
  * `PermissionGroup_<MÃ>` (nhóm) — các khoá này được quy về khoá i18n của UI

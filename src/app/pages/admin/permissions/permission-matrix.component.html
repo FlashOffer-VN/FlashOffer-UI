@@ -98,6 +98,12 @@
                 @if (node.kind === 'group' || node.kind === 'screen') {
                 <span class="text-xs text-gray-400">{{ kindKey(node) | translate }}</span>
                 }
+
+                @if (isGrantedNotEffective(node)) {
+                <span class="text-xs text-amber-600" [title]="'PERMISSION.NOT_EFFECTIVE_HINT' | translate">
+                    · {{ 'PERMISSION.NOT_EFFECTIVE' | translate }}
+                </span>
+                }
             </div>
         </td>
 
@@ -113,9 +119,14 @@
                 (change)="toggleNode(column.role, node, $any($event.target).checked)" />
             } @else {
             <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer"
-                [checked]="isChecked(column.role, node.code) && !isNodeDisabled(column.role, node)"
+                [checked]="isChecked(column.role, node.code)"
                 [disabled]="isNodeDisabled(column.role, node) || !canEdit"
-                (change)="onToggle(column.role, node.code, $any($event.target).checked)" />
+                (change)="onToggle(column.role, node, $any($event.target).checked)" />
+            @if (isTickedButBlocked(column.role, node)) {
+            <span class="mt-0.5 block text-[10px] leading-tight text-amber-600">
+                {{ 'PERMISSION.NOT_EFFECTIVE' | translate }}
+            </span>
+            }
             }
         </td>
         }

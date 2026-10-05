@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
-import { buildPermissionTree, collectActionCodes, isContainerNode, permissionLabelKey } from '@core/services/permission.service';
+import { ancestorCodes, buildPermissionTree, collectActionCodes, grantChainCodes, isContainerNode, permissionLabelKey } from '@core/services/permission.service';
 import { UserRole } from '@core/models/auth.model';
 import { Permission, PermissionGroupItem, PermissionMatrix, PermissionTreeNode, RolePermission } from '@core/models/permission.model';
 
@@ -250,7 +250,12 @@ export class AdminPermissionMatrixComponent implements OnInit {
         return false;
     }
 
-    /** Tick / bỏ tick một nhánh cho vai trò: áp cho toàn bộ hành động con (đệ quy theo cây). */
+    /**
+     * Tick / bỏ tick một nhánh cho vai trò: áp cho toàn bộ hành động con (đệ quy theo cây).
+     * Khi BẬT phải cấp kèm toàn bộ chuỗi tổ tiên (nút này nếu là nhóm/màn hình + màn hình + nhóm của nó),
+     * vì quyền chỉ có hiệu lực khi chính nó VÀ mọi tổ tiên đều được cấp — gửi thiếu là vừa lưu xong đã bị
+     * kế thừa vô hiệu (isGranted=true nhưng isEffective=false).
+     */
     toggleNode(role: UserRole, node: PermissionTreeNode, checked: boolean): void {
         const set = this.selected[role];
         if (!set) return;
@@ -263,6 +268,7 @@ export class AdminPermissionMatrixComponent implements OnInit {
             const restore = this.snapshots[key];
             const toAdd = restore && restore.length ? restore : codes;
             for (const code of toAdd) set.add(code);
+            for (const code of grantChainCodes(node)) set.add(code);
             delete this.snapshots[key];
             return;
         }
@@ -290,14 +296,35 @@ export class AdminPermissionMatrixComponent implements OnInit {
         return this.selected[role]?.has(code) ?? false;
     }
 
-    onToggle(role: UserRole, code: string, checked: boolean): void {
+    /**
+     * Quyền đã được tick nhưng CHƯA HIỆU LỰC theo dữ liệu máy chủ cho vai trò đang xem
+     * (thiếu mã màn hình/nhóm cha nên bị kế thừa vô hiệu) — hiện rõ để không tưởng đã ăn quyền.
+     */
+    isGrantedNotEffective(node: PermissionTreeNode): boolean {
+        return node.isGranted === true && node.isEffective === false;
+    }
+
+    /**
+     * Hành động đang tick trên màn hình nhưng một tổ tiên (màn hình/nhóm bất kỳ trong chuỗi) đang tắt
+     * ⇒ chưa hiệu lực. Kiểm CẢ chuỗi tổ tiên chứ không chỉ cha trực tiếp.
+     */
+    isTickedButBlocked(role: UserRole, node: PermissionTreeNode): boolean {
+        return !this.isContainer(node) && this.isChecked(role, node.code) && this.isNodeDisabled(role, node);
+    }
+
+    /**
+     * Tick/bỏ tick một hành động lá. Khi BẬT phải cấp kèm toàn bộ chuỗi tổ tiên (màn hình, nhóm) để quyền
+     * có hiệu lực ngay sau khi lưu.
+     */
+    onToggle(role: UserRole, node: PermissionTreeNode, checked: boolean): void {
         const set = this.selected[role];
         if (!set) return;
 
         if (checked) {
-            set.add(code);
+            set.add(node.code);
+            for (const code of ancestorCodes(node)) set.add(code);
         } else {
-            set.delete(code);
+            set.delete(node.code);
         }
     }
 
