@@ -2524,6 +2524,7 @@
             "ACTION": "Action"
         },
         "SCREEN": {
+            "BUSINESS_FIELDS": "Business fields",
             "DASHBOARD": "Dashboard",
             "CRM_DASHBOARD": "CRM dashboard",
             "REPORTS": "Reports",

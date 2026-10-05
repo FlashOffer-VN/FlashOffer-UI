@@ -2487,6 +2487,7 @@
             "ACTION": "Thao tác"
         },
         "SCREEN": {
+            "BUSINESS_FIELDS": "Lĩnh vực hoạt động",
             "DASHBOARD": "Bảng điều khiển",
             "CRM_DASHBOARD": "Dashboard CRM",
             "REPORTS": "Báo cáo",

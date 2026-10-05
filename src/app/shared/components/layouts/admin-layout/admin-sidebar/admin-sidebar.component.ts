@@ -50,7 +50,7 @@ export class AdminSidebarComponent {
             ]
         },
         // Danh mục/cấu hình dùng chung (lĩnh vực hoạt động) — đặt cùng nhóm cấu hình với Settings.
-        { path: '/admin/business-fields', icon: 'fa-solid fa-layer-group', label: 'ADMIN.BUSINESS_FIELDS.TITLE', permission: Permission.ViewCompanies },
+        { path: '/admin/business-fields', icon: 'fa-solid fa-layer-group', label: 'ADMIN.BUSINESS_FIELDS.TITLE', permission: Permission.ViewBusinessFields },
         { path: '/', icon: 'fa-solid fa-arrow-right-from-bracket', label: 'ADMIN.SIDEBAR.BACK_TO_SITE', permission: null },
     ];
 

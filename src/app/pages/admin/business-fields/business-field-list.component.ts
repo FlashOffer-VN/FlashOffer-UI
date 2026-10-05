@@ -5,6 +5,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { BusinessFieldService } from '@core/services/business-field.service';
 import { ToastService } from '@core/services/toast.service';
+import { AppService } from '@core/services/app.service';
+import { Permission } from '@core/models/permission.model';
 import {
     BusinessFieldAdmin,
     BusinessFieldCompany,
@@ -66,9 +68,11 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
                 <span class="ml-auto h-10 flex items-center text-sm text-gray-500">
                     {{ 'ADMIN.BUSINESS_FIELDS.TOTAL' | translate }}: <strong class="ml-1">{{ filtered.length }}</strong>
                 </span>
+                @if (canCreate) {
                 <app-button variant="primary" (click)="openCreate()">
                     <i class="fa-solid fa-plus mr-1"></i>{{ 'ADMIN.BUSINESS_FIELDS.ADD' | translate }}
                 </app-button>
+                }
             </div>
 
             <!-- Danh sách -->
@@ -122,14 +126,18 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
                                             (click)="openDetail(field)">
                                             <i class="fa-solid fa-eye"></i>
                                         </app-button>
+                                        @if (canUpdate) {
                                         <app-button size="sm" variant="outline" [title]="'ADMIN.BUSINESS_FIELDS.EDIT' | translate"
                                             (click)="openEdit(field)">
                                             <i class="fa-solid fa-pen"></i>
                                         </app-button>
+                                        }
+                                        @if (canDelete) {
                                         <app-button size="sm" variant="outline" [title]="'ADMIN.BUSINESS_FIELDS.DELETE' | translate"
                                             (click)="askDelete(field)">
                                             <i class="fa-solid fa-trash text-red-600"></i>
                                         </app-button>
+                                        }
                                     </div>
                                 </td>
                             </tr>
@@ -298,6 +306,7 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
 export class AdminBusinessFieldListComponent implements OnInit {
     private service = inject(BusinessFieldService);
     private toast = inject(ToastService);
+    private appService = inject(AppService);
     private translate = inject(TranslateService);
 
     fields: BusinessFieldAdmin[] = [];
@@ -325,6 +334,21 @@ export class AdminBusinessFieldListComponent implements OnInit {
     /** Từ khoá tìm riêng cho bảng công ty và bảng tài khoản trong khối chi tiết. */
     companyKeyword = '';
     userKeyword = '';
+
+    /** Quyền thêm lĩnh vực. */
+    get canCreate(): boolean {
+        return this.appService.permissionService.has(Permission.CreateBusinessField);
+    }
+
+    /** Quyền sửa lĩnh vực. */
+    get canUpdate(): boolean {
+        return this.appService.permissionService.has(Permission.UpdateBusinessField);
+    }
+
+    /** Quyền xoá lĩnh vực. */
+    get canDelete(): boolean {
+        return this.appService.permissionService.has(Permission.DeleteBusinessField);
+    }
 
     ngOnInit(): void {
         this.load();
