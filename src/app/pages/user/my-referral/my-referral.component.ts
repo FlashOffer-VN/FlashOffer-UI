@@ -167,21 +167,30 @@ interface MyReferralCard {
                             {{ 'USER.MY_REFERRAL.STATS_EVENTS_TITLE' | translate }}
                         </p>
 
-                        <div class="mt-3 flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
-                            <app-search-by [options]="eventSearchFieldOptions" [(value)]="eventSearchField"></app-search-by>
-                            <div class="w-full sm:flex-1 sm:min-w-0">
-                                <app-input [(ngModel)]="eventSearchText"
-                                    [placeholder]="'USER.MY_REFERRAL.STATS_SEARCH_PLACEHOLDER' | translate"
-                                    (keyup.enter)="onEventsSearch()"></app-input>
+                        <div class="mt-3 flex flex-wrap items-end gap-x-4 gap-y-4" style="--control-h: 2.5rem">
+                            <!-- Nhóm tìm kiếm: chọn cột + từ khoá + nút -->
+                            <div class="flex w-full flex-wrap items-end gap-3 lg:flex-1 lg:min-w-0">
+                                <app-search-by [options]="eventSearchFieldOptions" [(value)]="eventSearchField"></app-search-by>
+                                <div class="w-full lg:flex-1 lg:min-w-0">
+                                    <app-input [(ngModel)]="eventSearchText"
+                                        [label]="'COMMON.SEARCH_FIELD.KEYWORD' | translate"
+                                        [placeholder]="'USER.MY_REFERRAL.STATS_SEARCH_PLACEHOLDER' | translate"
+                                        (keyup.enter)="onEventsSearch()"></app-input>
+                                </div>
+                                <app-button variant="primary" (onClick)="onEventsSearch()">
+                                    <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
+                                </app-button>
+                                <app-button variant="outline" (onClick)="onEventsReset()">
+                                    <i class="fas fa-rotate-left mr-2"></i>{{ 'COMMON.BUTTON.RESET' | translate }}
+                                </app-button>
                             </div>
-                            <app-button variant="primary" (onClick)="onEventsSearch()">
-                                <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
-                            </app-button>
-                            <app-button variant="outline" (onClick)="onEventsReset()">
-                                <i class="fas fa-rotate-left mr-2"></i>{{ 'COMMON.BUTTON.RESET' | translate }}
-                            </app-button>
-                            <ngx-filter-daterange [from]="eventFromDate" [to]="eventToDate"
-                                (rangeChange)="onEventsRangeChange($event)"></ngx-filter-daterange>
+
+                            <!-- Nhóm lọc: khoảng ngày -->
+                            <div
+                                class="flex w-full flex-wrap items-end gap-3 border-t border-gray-200 pt-3 lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
+                                <ngx-filter-daterange [from]="eventFromDate" [to]="eventToDate"
+                                    (rangeChange)="onEventsRangeChange($event)"></ngx-filter-daterange>
+                            </div>
                         </div>
 
                         <div class="mt-3 overflow-x-auto rounded-xl ring-1 ring-slate-100">

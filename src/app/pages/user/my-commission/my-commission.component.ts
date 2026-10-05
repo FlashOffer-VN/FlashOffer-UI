@@ -344,24 +344,33 @@ import { payoutSearchFields, SearchFieldOption } from '@core/constants/search-fi
                     <p class="text-sm text-gray-500 mt-1">{{ 'USER.COMMISSION.HISTORY_SUBTITLE' | translate }}</p>
 
                     <!-- Bộ lọc lịch sử chi trả: máy chủ lọc + phân trang (GET /Payouts/my); đổi bộ lọc/tab/trang là tải lại -->
-                    <div class="mt-4 flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
-                        <app-search-by [options]="historySearchFieldOptions" [(value)]="historySearchField"></app-search-by>
-                        <div class="w-full sm:flex-1 sm:min-w-0">
-                            <app-input [(ngModel)]="historySearchText"
-                                [placeholder]="'USER.COMMISSION.HISTORY_SEARCH_PLACEHOLDER' | translate"
-                                (keyup.enter)="onHistorySearch()"></app-input>
+                    <div class="mt-4 flex flex-wrap items-end gap-x-4 gap-y-4" style="--control-h: 2.5rem">
+                        <!-- Nhóm tìm kiếm: chọn cột + từ khoá + nút -->
+                        <div class="flex w-full flex-wrap items-end gap-3 lg:flex-1 lg:min-w-0">
+                            <app-search-by [options]="historySearchFieldOptions" [(value)]="historySearchField"></app-search-by>
+                            <div class="w-full lg:flex-1 lg:min-w-0">
+                                <app-input [(ngModel)]="historySearchText"
+                                    [label]="'COMMON.SEARCH_FIELD.KEYWORD' | translate"
+                                    [placeholder]="'USER.COMMISSION.HISTORY_SEARCH_PLACEHOLDER' | translate"
+                                    (keyup.enter)="onHistorySearch()"></app-input>
+                            </div>
+                            <app-button variant="primary" [loading]="isLoadingHistory" (onClick)="onHistorySearch()">
+                                <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
+                            </app-button>
+                            <app-button variant="outline" (onClick)="onHistoryReset()">
+                                <i class="fas fa-rotate-left mr-2"></i>{{ 'COMMON.BUTTON.RESET' | translate }}
+                            </app-button>
                         </div>
-                        <app-button variant="primary" [loading]="isLoadingHistory" (onClick)="onHistorySearch()">
-                            <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
-                        </app-button>
-                        <app-button variant="outline" (onClick)="onHistoryReset()">
-                            <i class="fas fa-rotate-left mr-2"></i>{{ 'COMMON.BUTTON.RESET' | translate }}
-                        </app-button>
-                        <ngx-filter-daterange [from]="historyFromDate" [to]="historyToDate"
-                            (rangeChange)="onHistoryRangeChange($event)"></ngx-filter-daterange>
+
+                        <!-- Nhóm lọc: khoảng ngày -->
+                        <div
+                            class="flex w-full flex-wrap items-end gap-3 border-t border-gray-200 pt-3 lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
+                            <ngx-filter-daterange [from]="historyFromDate" [to]="historyToDate"
+                                (rangeChange)="onHistoryRangeChange($event)"></ngx-filter-daterange>
+                        </div>
                     </div>
 
-                    <div class="mt-4">
+                    <div class="mt-4 border-t border-gray-200 pt-4">
                         <app-status-tabs [items]="statusTabs" [active]="activeStatusTab"
                             (change)="onStatusTabChange($event)"></app-status-tabs>
                     </div>

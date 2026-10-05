@@ -13,6 +13,7 @@
                 <app-search-by [options]="searchFieldOptions" [(value)]="searchField"></app-search-by>
                 <div class="w-full sm:flex-1 sm:min-w-0">
                     <app-input [(ngModel)]="searchText" name="searchText" icon="fas fa-search"
+                        [label]="'COMMON.SEARCH_FIELD.KEYWORD' | translate"
                         [placeholder]="'GROUPS.SEARCH_PLACEHOLDER' | translate"
                         (keyup.enter)="onSearch()"></app-input>
                 </div>
@@ -21,7 +22,7 @@
                 </app-button>
             </div>
 
-            <div class="mt-4 flex flex-wrap gap-2">
+            <div class="mt-4 flex flex-wrap gap-2 border-t border-gray-200 pt-4">
                 <button type="button" (click)="setFilter(false)"
                     class="rounded-full px-4 py-2 text-sm font-semibold transition"
                     [class]="!mineOnly ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">

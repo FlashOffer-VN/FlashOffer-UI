@@ -53,25 +53,34 @@ import { PostEditModalComponent } from '@pages/social/components/post-edit-modal
 
             <!-- Tìm kiếm + chọn cột tìm kiếm (bỏ trống = tất cả) -->
             <section class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-100">
-                <div class="flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
-                    <app-search-by [options]="searchFieldOptions" [(value)]="searchField"></app-search-by>
+                <div class="flex flex-wrap items-end gap-x-4 gap-y-4" style="--control-h: 2.5rem">
+                    <!-- Nhóm tìm kiếm: chọn cột + từ khoá + nút -->
+                    <div class="flex w-full flex-wrap items-end gap-3 lg:flex-1 lg:min-w-0">
+                        <app-search-by [options]="searchFieldOptions" [(value)]="searchField"></app-search-by>
 
-                    <div class="w-full sm:flex-1 sm:min-w-0">
-                        <app-input [(ngModel)]="searchText" [placeholder]="'USER.MY_POSTS.SEARCH_PLACEHOLDER' | translate"
-                            (keyup.enter)="onSearch()"></app-input>
+                        <div class="w-full lg:flex-1 lg:min-w-0">
+                            <app-input [(ngModel)]="searchText" [label]="'COMMON.SEARCH_FIELD.KEYWORD' | translate"
+                                [placeholder]="'USER.MY_POSTS.SEARCH_PLACEHOLDER' | translate"
+                                (keyup.enter)="onSearch()"></app-input>
+                        </div>
+
+                        <app-button variant="primary" (onClick)="onSearch()">
+                            <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
+                        </app-button>
+                        <app-button variant="outline" (onClick)="onReset()">
+                            <i class="fas fa-rotate-left mr-2"></i>{{ 'COMMON.BUTTON.RESET' | translate }}
+                        </app-button>
                     </div>
 
-                    <app-button variant="primary" (onClick)="onSearch()">
-                        <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
-                    </app-button>
-                    <app-button variant="outline" (onClick)="onReset()">
-                        <i class="fas fa-rotate-left mr-2"></i>{{ 'COMMON.BUTTON.RESET' | translate }}
-                    </app-button>
-                    <ngx-filter-daterange [from]="fromDate" [to]="toDate"
-                        (rangeChange)="onRangeChange($event)"></ngx-filter-daterange>
+                    <!-- Nhóm lọc: khoảng ngày -->
+                    <div
+                        class="flex w-full flex-wrap items-end gap-3 border-t border-gray-200 pt-3 lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
+                        <ngx-filter-daterange [from]="fromDate" [to]="toDate"
+                            (rangeChange)="onRangeChange($event)"></ngx-filter-daterange>
+                    </div>
                 </div>
 
-                <div class="mt-4">
+                <div class="mt-4 border-t border-gray-200 pt-4">
                     <app-status-tabs [items]="tabs" [active]="activeTab" (change)="onTabChange($event)"></app-status-tabs>
                 </div>
             </section>

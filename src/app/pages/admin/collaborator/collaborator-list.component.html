@@ -9,25 +9,33 @@
 
     <!-- Filters -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
-        <div class="flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
-            <!-- Chọn cột tìm kiếm (bỏ trống = tất cả) — component dùng chung <app-search-by> -->
-            <app-search-by [options]="searchFieldOptions" [(value)]="searchField"></app-search-by>
+        <div class="flex flex-wrap items-end gap-x-4 gap-y-4" style="--control-h: 2.5rem">
+            <!-- Nhóm tìm kiếm: chọn cột + từ khoá + nút -->
+            <div class="flex w-full flex-wrap items-end gap-3 lg:flex-1 lg:min-w-0">
+                <!-- Chọn cột tìm kiếm (bỏ trống = tất cả) — component dùng chung <app-search-by> -->
+                <app-search-by [options]="searchFieldOptions" [(value)]="searchField"></app-search-by>
 
-            <!-- Search -->
-            <div class="w-full sm:flex-1 sm:min-w-0">
-                <app-input [(ngModel)]="searchText" [placeholder]="'ADMIN.CTV.SEARCH_PLACEHOLDER' | translate"
-                    (keyup.enter)="onSearch()" class="w-full">
-                </app-input>
+                <!-- Search -->
+                <div class="w-full lg:flex-1 lg:min-w-0">
+                    <app-input [(ngModel)]="searchText" [label]="'COMMON.SEARCH_FIELD.KEYWORD' | translate"
+                        [placeholder]="'ADMIN.CTV.SEARCH_PLACEHOLDER' | translate"
+                        (keyup.enter)="onSearch()" class="w-full">
+                    </app-input>
+                </div>
+
+                <!-- Search Button -->
+                <app-button variant="primary" (click)="onSearch()">
+                    {{ 'COMMON.BUTTON.SEARCH' | translate }}
+                </app-button>
             </div>
 
-            <!-- Date range -->
-            <ngx-filter-daterange [from]="fromDate" [to]="toDate" (rangeChange)="onRangeChange($event)">
-            </ngx-filter-daterange>
-
-            <!-- Search Button -->
-            <app-button variant="primary" (click)="onSearch()">
-                {{ 'COMMON.BUTTON.SEARCH' | translate }}
-            </app-button>
+            <!-- Nhóm lọc — ngăn cách với nhóm tìm kiếm bằng đường kẻ mảnh -->
+            <div
+                class="flex w-full flex-wrap items-end gap-3 border-t border-gray-200 pt-3 lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
+                <!-- Date range -->
+                <ngx-filter-daterange [from]="fromDate" [to]="toDate" (rangeChange)="onRangeChange($event)">
+                </ngx-filter-daterange>
+            </div>
         </div>
     </div>
 
@@ -91,15 +99,13 @@
                             <td class="px-4 py-3 text-sm text-gray-500">
                                 {{ (pageNumber - 1) * pageSize + i + 1 }}
                             </td>
-                            <td class="px-4 py-3 text-sm font-mono text-gray-600">
-                                {{ collaborator.id | shortId }}
+                            <td class="px-4 py-3 text-sm font-mono text-gray-600 whitespace-nowrap">
+                                {{ collaborator.collaboratorCode || '--' }}
                             </td>
                             <td class="px-4 py-3 text-sm font-medium text-gray-900 w-40">
                                 {{ collaborator.fullName }}
                                 <div class="text-xs font-normal text-gray-400">{{ 'ADMIN.CTV.REFERRED_BY' | translate }}:
                                     {{ collaborator.accountReferrerCode | appCodeName: collaborator.accountReferrerName }}</div>
-                                <div class="text-xs font-normal text-gray-400">{{ 'ADMIN.CTV.CODE' | translate }}:
-                                    {{ collaborator.collaboratorCode || '--' }}</div>
                                 <div class="text-xs font-normal text-gray-400">{{ 'COMMON.CODE.ACCOUNT' | translate }}:
                                     {{ collaborator.userCode || '--' }}</div>
                             </td>
