@@ -1,7 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { catchError, map, shareReplay } from 'rxjs/operators';
+import { catchError, map, shareReplay, tap } from 'rxjs/operators';
 import { ApiService } from './api.service';
+import {
+    BusinessFieldAdmin,
+    BusinessFieldFormValue,
+    BusinessFieldRelated
+} from '@core/models/business-field.model';
 
 /** Option cho app-ng-select-wrapper: value = BusinessField.Id, label = tên lĩnh vực. */
 export interface BusinessFieldOption {
@@ -48,5 +53,39 @@ export class BusinessFieldService {
     /** Xoá cache — lần `getActive()` kế tiếp sẽ gọi lại API. */
     refresh(): void {
         this.cache$ = null;
+    }
+
+    // ---------------------------------------------------------------------
+    // Màn quản trị lĩnh vực hoạt động
+    // ---------------------------------------------------------------------
+
+    /** Toàn bộ lĩnh vực (kể cả đang tắt) kèm số công ty/tài khoản. */
+    getAllForAdmin(): Observable<BusinessFieldAdmin[]> {
+        return this.api
+            .get<{ data: BusinessFieldAdmin[] }>('business-fields')
+            .pipe(map(res => res?.data ?? []));
+    }
+
+    /** Công ty và tài khoản thuộc một lĩnh vực. */
+    getRelated(id: string): Observable<BusinessFieldRelated | null> {
+        return this.api
+            .get<{ data: BusinessFieldRelated }>(`business-fields/${id}/related`)
+            .pipe(map(res => res?.data ?? null));
+    }
+
+    create(payload: BusinessFieldFormValue): Observable<BusinessFieldAdmin | null> {
+        return this.api
+            .post<{ data: BusinessFieldAdmin }>('business-fields', payload)
+            .pipe(map(res => res?.data ?? null), tap(() => this.refresh()));
+    }
+
+    update(id: string, payload: BusinessFieldFormValue): Observable<BusinessFieldAdmin | null> {
+        return this.api
+            .put<{ data: BusinessFieldAdmin }>(`business-fields/${id}`, payload)
+            .pipe(map(res => res?.data ?? null), tap(() => this.refresh()));
+    }
+
+    remove(id: string): Observable<unknown> {
+        return this.api.delete(`business-fields/${id}`).pipe(tap(() => this.refresh()));
     }
 }

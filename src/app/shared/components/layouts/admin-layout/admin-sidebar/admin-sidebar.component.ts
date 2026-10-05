@@ -30,6 +30,7 @@ export class AdminSidebarComponent {
         { path: '/admin/users', icon: 'fa-solid fa-user-gear', label: 'ADMIN.SIDEBAR.USERS', permission: Permission.ViewUsers },
         { path: '/admin/collaborator', icon: 'fa-solid fa-users', label: 'ADMIN.SIDEBAR.COLLABORATOR', permission: Permission.ViewCollaborators },
         { path: '/admin/partner', icon: 'fa-solid fa-building', label: 'ADMIN.SIDEBAR.PARTNER', permission: Permission.ViewPartners },
+        { path: '/admin/business-fields', icon: 'fa-solid fa-layer-group', label: 'ADMIN.BUSINESS_FIELDS.TITLE', permission: Permission.ViewCompanies },
         { path: '/admin/social-posts', icon: 'fa-solid fa-clipboard-check', label: 'ADMIN.SIDEBAR.SOCIAL_POSTS', permission: Permission.ViewSocialPosts },
         { path: '/admin/revenue', icon: 'fa-solid fa-chart-line', label: 'ADMIN.SIDEBAR.REVENUE', permission: Permission.ViewTransactionRevenue },
         { path: '/admin/revenue/settings', icon: 'fa-solid fa-percent', label: 'ADMIN.SIDEBAR.REVENUE_SETTINGS', permission: Permission.ManageRevenueConfig },
