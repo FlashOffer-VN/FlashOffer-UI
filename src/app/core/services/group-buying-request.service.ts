@@ -52,6 +52,9 @@ export class GroupBuyingRequestService {
         if (query.status) params['status'] = query.status;
         // Cột tìm kiếm do người dùng chọn; bỏ trống = tìm mọi trường (hành vi cũ)
         if (query.searchField) params['searchField'] = query.searchField;
+        // Lọc theo khoảng ngày tạo (khu vực thành viên)
+        if (query.fromDate) params['fromDate'] = query.fromDate;
+        if (query.toDate) params['toDate'] = query.toDate;
 
         return this.apiService.get<GroupBuyingFeedResponse>(`${this.endpoint}/public`, params);
     }

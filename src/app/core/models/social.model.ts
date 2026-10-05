@@ -157,4 +157,8 @@ export interface GetPostsQuery {
     search?: string;
     /** Cột tìm kiếm (khớp SocialPostSearchField của API); bỏ trống = tìm mọi trường */
     searchField?: string;
+    /** Lọc theo ngày tạo (từ ngày) — định dạng YYYY-MM-DD. */
+    fromDate?: string;
+    /** Lọc theo ngày tạo (đến ngày) — định dạng YYYY-MM-DD. */
+    toDate?: string;
 }

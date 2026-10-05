@@ -816,6 +816,7 @@
         "COL_ACTION": "Thao tác",
         "HISTORY_TITLE": "Lịch sử chi trả",
         "HISTORY_SUBTITLE": "Các lần chi trả gần đây, gồm cả yêu cầu rút sớm.",
+        "HISTORY_SEARCH_PLACEHOLDER": "Tìm theo kỳ, số tài khoản, ghi chú...",
         "HISTORY_EMPTY": "Chưa có lần chi trả nào. Hoa hồng sẽ xuất hiện sau khi kỳ chốt sổ được duyệt chi.",
         "COL_PERIOD": "Kỳ",
         "COL_TYPE": "Loại",
@@ -917,6 +918,7 @@
             "STATS_DESCRIPTION": "Số liệu phát sinh từ mã chia sẻ của bạn — phát sinh đã hủy được trừ ra khỏi số liệu.",
             "STATS_CHART_TITLE": "Phát sinh theo ngày",
             "STATS_EVENTS_TITLE": "Phát sinh gần đây",
+            "STATS_SEARCH_PLACEHOLDER": "Tìm theo mã chia sẻ, mã đối tượng...",
             "STATS_EVENTS_EMPTY": "Chưa có phát sinh nào từ mã của bạn",
             "STATS_COL_TIME": "Thời gian",
             "STATS_COL_TYPE": "Loại phát sinh",
@@ -1208,6 +1210,7 @@
         },
         "BUTTON": {
             "SEARCH": "Tìm kiếm",
+            "RESET": "Đặt lại",
 "RETRY": "Thử lại",
             "ACTION": "Thao tác",
             "VIEW_DETAIL": "Xem chi tiết",
@@ -1266,7 +1269,12 @@
             "COMPANY_TAX_CODE": "Mã số thuế",
             "CONTENT": "Nội dung",
             "AUTHOR_FULL_NAME": "Tên tác giả",
-            "AUTHOR_USER_CODE": "Mã tài khoản tác giả"
+            "AUTHOR_USER_CODE": "Mã tài khoản tác giả",
+            "REFERRAL_TARGET": "Mã đối tượng",
+            "STATUS": "Trạng thái",
+            "PAYOUT_PERIOD": "Kỳ chi trả",
+            "BANK_ACCOUNT": "Số tài khoản",
+            "NOTE": "Ghi chú"
         },
         "ALL": "Tất cả",
         "PROVINCE": "Tỉnh/Thành phố",

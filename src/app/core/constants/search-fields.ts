@@ -109,3 +109,29 @@ export function socialPostSearchFields(t: (key: string) => string): SearchFieldO
         { value: 'AuthorUserCode', label: t('COMMON.SEARCH_FIELD.AUTHOR_USER_CODE') }
     ];
 }
+
+/**
+ * Các cột tìm kiếm của DANH SÁCH PHÁT SINH GIỚI THIỆU (my-referral).
+ * `value` khớp tên trường của `ReferralEventItem`.
+ */
+export function referralEventSearchFields(t: (key: string) => string): SearchFieldOption[] {
+    return [
+        { value: '', label: t('COMMON.SEARCH_FIELD.ALL') },
+        { value: 'referralCode', label: t('COMMON.SEARCH_FIELD.REFERRAL_CODE') },
+        { value: 'refEntityCode', label: t('COMMON.SEARCH_FIELD.REFERRAL_TARGET') },
+        { value: 'status', label: t('COMMON.SEARCH_FIELD.STATUS') }
+    ];
+}
+
+/**
+ * Các cột tìm kiếm của LỊCH SỬ CHI TRẢ HOA HỒNG (my-commission).
+ * `value` khớp tên trường của `PayoutStatement`; lọc ngay trên dữ liệu ví đã tải (Lịch sử chi trả).
+ */
+export function payoutSearchFields(t: (key: string) => string): SearchFieldOption[] {
+    return [
+        { value: '', label: t('COMMON.SEARCH_FIELD.ALL') },
+        { value: 'periodLabel', label: t('COMMON.SEARCH_FIELD.PAYOUT_PERIOD') },
+        { value: 'bankAccountNumber', label: t('COMMON.SEARCH_FIELD.BANK_ACCOUNT') },
+        { value: 'note', label: t('COMMON.SEARCH_FIELD.NOTE') }
+    ];
+}

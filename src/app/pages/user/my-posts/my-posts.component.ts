@@ -21,6 +21,7 @@ import { PaginationComponent } from '@shared/components/pagination/pagination.co
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
+import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 
 import { PostCardComponent } from '@pages/social/components/post-card/post-card.component';
 import { PostDetailModalComponent } from '@pages/social/components/post-detail-modal/post-detail-modal.component';
@@ -34,7 +35,7 @@ import { PostEditModalComponent } from '@pages/social/components/post-edit-modal
         CommonModule, FormsModule, TranslateModule, AppDatePipe,
         BadgeComponent, ButtonComponent, LoadingComponent,
         PaginationComponent, StatusTabsComponent, PostCardComponent, PostEditModalComponent,
-        InputComponent, SearchByComponent
+        InputComponent, SearchByComponent, NgxFilterDaterangeComponent
     ],
     template: `
         <div class="space-y-6">
@@ -48,8 +49,6 @@ import { PostEditModalComponent } from '@pages/social/components/post-edit-modal
                         <i class="fa-solid fa-plus mr-2"></i>{{ 'USER.MY_POSTS.CREATE_NEW' | translate }}
                     </app-button>
                 </div>
-
-                <app-status-tabs [items]="tabs" [active]="activeTab" (change)="onTabChange($event)"></app-status-tabs>
             </section>
 
             <!-- Tìm kiếm + chọn cột tìm kiếm (bỏ trống = tất cả) -->
@@ -65,6 +64,15 @@ import { PostEditModalComponent } from '@pages/social/components/post-edit-modal
                     <app-button variant="primary" (onClick)="onSearch()">
                         <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
                     </app-button>
+                    <app-button variant="outline" (onClick)="onReset()">
+                        <i class="fas fa-rotate-left mr-2"></i>{{ 'COMMON.BUTTON.RESET' | translate }}
+                    </app-button>
+                    <ngx-filter-daterange [from]="fromDate" [to]="toDate"
+                        (rangeChange)="onRangeChange($event)"></ngx-filter-daterange>
+                </div>
+
+                <div class="mt-4">
+                    <app-status-tabs [items]="tabs" [active]="activeTab" (change)="onTabChange($event)"></app-status-tabs>
                 </div>
             </section>
 
@@ -125,6 +133,10 @@ export class MyPostsPageComponent implements OnInit {
     searchField: string | null = null;
     searchFieldOptions: { value: string; label: string }[] = [];
 
+    /** Khoảng ngày đăng bài (YYYY-MM-DD) */
+    fromDate: string | null = null;
+    toDate: string | null = null;
+
     activeTab = 'all';
     tabs: { key: string; label: string }[] = [];
 
@@ -154,6 +166,24 @@ export class MyPostsPageComponent implements OnInit {
 
     /** Enter/nút Tìm mới gọi lại API (đổi cột không tự tải) */
     onSearch(): void {
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    /** Đổi khoảng ngày thì tải lại (bỏ trống = không lọc ngày). */
+    onRangeChange(range: { from: string | null; to: string | null }): void {
+        this.fromDate = range.from;
+        this.toDate = range.to;
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    /** Đặt lại toàn bộ bộ lọc: từ khoá, cột tìm kiếm và khoảng ngày. */
+    onReset(): void {
+        this.searchText = '';
+        this.searchField = null;
+        this.fromDate = null;
+        this.toDate = null;
         this.pageNumber = 1;
         this.loadData();
     }
@@ -274,7 +304,9 @@ export class MyPostsPageComponent implements OnInit {
             pageSize: this.pageSize,
             mineOnly: true,
             search: this.searchText,
-            searchField: this.searchField ?? undefined
+            searchField: this.searchField ?? undefined,
+            fromDate: this.fromDate ?? undefined,
+            toDate: this.toDate ?? undefined
         };
 
         if (this.activeTab !== 'all') {

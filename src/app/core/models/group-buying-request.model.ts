@@ -196,6 +196,10 @@ export interface GetPublicGroupBuyingQuery {
     status?: GroupBuyingStatus;
     /** Cột tìm kiếm (khớp RequestSearchField của API); bỏ trống = tìm mọi trường. */
     searchField?: string;
+    /** Lọc theo ngày tạo (từ ngày) — định dạng YYYY-MM-DD. */
+    fromDate?: string;
+    /** Lọc theo ngày tạo (đến ngày) — định dạng YYYY-MM-DD. */
+    toDate?: string;
 }
 
 export interface GetAdminGroupBuyingQuery {

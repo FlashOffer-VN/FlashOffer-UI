@@ -90,6 +90,9 @@ export class BusinessGroupService {
         if (query.search?.trim()) params['search'] = query.search.trim();
         if (query.searchField) params['searchField'] = query.searchField;
         if (query.mineRole) params['mineRole'] = query.mineRole;
+        // Lọc theo khoảng ngày tạo (khu vực thành viên)
+        if (query.fromDate) params['fromDate'] = query.fromDate;
+        if (query.toDate) params['toDate'] = query.toDate;
 
         params['sortBy'] = 'CreatedAt';
         params['sortOrder'] = 'desc';

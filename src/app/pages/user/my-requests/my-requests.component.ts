@@ -21,6 +21,7 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
+import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 
 /** Loại yêu cầu xem trong khu vực thành viên */
 type MyRequestType = 'purchase' | 'offer';
@@ -40,7 +41,7 @@ interface MyRequestStatusView {
         CommonModule, FormsModule, TranslateModule,
         AppDatePipe, AppPricePipe, ShortIdPipe,
         BadgeComponent, ButtonComponent, InputComponent, LoadingComponent,
-        ModalComponent, PaginationComponent, StatusTabsComponent, SearchByComponent
+        ModalComponent, PaginationComponent, StatusTabsComponent, SearchByComponent, NgxFilterDaterangeComponent
     ],
     template: `
         <div class="space-y-6">
@@ -74,6 +75,11 @@ interface MyRequestStatusView {
                     <app-button variant="primary" (onClick)="onSearch()">
                         <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
                     </app-button>
+                    <app-button variant="outline" (onClick)="onReset()">
+                        <i class="fas fa-rotate-left mr-2"></i>{{ 'COMMON.BUTTON.RESET' | translate }}
+                    </app-button>
+                    <ngx-filter-daterange [from]="fromDate" [to]="toDate"
+                        (rangeChange)="onRangeChange($event)"></ngx-filter-daterange>
                 </div>
             </section>
 
@@ -363,6 +369,10 @@ export class MyRequestsPageComponent implements OnInit {
     searchField: string | null = null;
     searchFieldOptions: SearchFieldOption[] = [];
 
+    /** Khoảng ngày gửi yêu cầu (YYYY-MM-DD) */
+    fromDate: string | null = null;
+    toDate: string | null = null;
+
     activeTab = 'all';
     tabs: { key: string; label: string }[] = [];
 
@@ -431,6 +441,24 @@ export class MyRequestsPageComponent implements OnInit {
         this.loadData();
     }
 
+    /** Đổi khoảng ngày thì tải lại (bỏ trống = không lọc ngày). */
+    onRangeChange(range: { from: string | null; to: string | null }): void {
+        this.fromDate = range.from;
+        this.toDate = range.to;
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    /** Đặt lại toàn bộ bộ lọc: từ khoá, cột tìm kiếm và khoảng ngày. */
+    onReset(): void {
+        this.searchText = '';
+        this.searchField = null;
+        this.fromDate = null;
+        this.toDate = null;
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
     onPageChange(page: number): void {
         this.pageNumber = page;
         this.loadData();
@@ -474,7 +502,7 @@ export class MyRequestsPageComponent implements OnInit {
     /** Chỉ lấy yêu cầu của chính mình (API cũng giới hạn như vậy với người dùng không phải admin) */
     private loadPurchaseRequests(): void {
         this._appService.purchaseRequest
-            .getData(this.pageNumber, this.pageSize, this.searchText, this.currentStatus<PurchaseRequestStatus>(), undefined, undefined, true, this.searchField ?? undefined)
+            .getData(this.pageNumber, this.pageSize, this.searchText, this.currentStatus<PurchaseRequestStatus>(), this.fromDate ?? undefined, this.toDate ?? undefined, true, this.searchField ?? undefined)
             .subscribe({
                 next: (response: PagedResponse<PurchaseRequest>) => {
                     this.purchaseItems = response?.data ?? [];
@@ -490,7 +518,7 @@ export class MyRequestsPageComponent implements OnInit {
 
     private loadOfferRequests(): void {
         this._appService.offerRequest
-            .getData(this.pageNumber, this.pageSize, this.searchText, this.currentStatus<OfferStatus>(), undefined, undefined, undefined, undefined, true, this.searchField ?? undefined)
+            .getData(this.pageNumber, this.pageSize, this.searchText, this.currentStatus<OfferStatus>(), undefined, undefined, this.fromDate ?? undefined, this.toDate ?? undefined, true, this.searchField ?? undefined)
             .subscribe({
                 next: (response: PagedResponse<OfferRequest>) => {
                     this.offerItems = response?.data ?? [];

@@ -26,6 +26,7 @@ import { PaginationComponent } from '@shared/components/pagination/pagination.co
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { GroupBuyingDetailModalComponent } from '@pages/social/components/group-buying-detail-modal/group-buying-detail-modal.component';
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
+import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 
 @Component({
     selector: 'app-my-group-buying',
@@ -35,7 +36,7 @@ import { SearchByComponent } from '@shared/components/search-by/search-by.compon
         AppDatePipe, AppPricePipe,
         BadgeComponent, ButtonComponent, InputComponent, LoadingComponent,
         PaginationComponent, StatusTabsComponent,
-        SearchByComponent,
+        SearchByComponent, NgxFilterDaterangeComponent,
         GroupBuyingDetailModalComponent
     ],
     template: `
@@ -64,6 +65,11 @@ import { SearchByComponent } from '@shared/components/search-by/search-by.compon
                     <app-button variant="primary" (onClick)="onSearch()">
                         <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
                     </app-button>
+                    <app-button variant="outline" (onClick)="onReset()">
+                        <i class="fas fa-rotate-left mr-2"></i>{{ 'COMMON.BUTTON.RESET' | translate }}
+                    </app-button>
+                    <ngx-filter-daterange [from]="fromDate" [to]="toDate"
+                        (rangeChange)="onRangeChange($event)"></ngx-filter-daterange>
                 </div>
             </section>
 
@@ -162,6 +168,10 @@ export class MyGroupBuyingPageComponent implements OnInit {
     searchField: string | null = null;
     searchFieldOptions: { value: string; label: string }[] = [];
 
+    /** Khoảng ngày mở đơn (YYYY-MM-DD) */
+    fromDate: string | null = null;
+    toDate: string | null = null;
+
     activeTab = 'all';
     tabs: { key: string; label: string }[] = [];
 
@@ -217,7 +227,9 @@ export class MyGroupBuyingPageComponent implements OnInit {
             // Chỉ lấy đơn do chính mình mở, mọi trạng thái (kể cả đã hoàn thành / đã hủy)
             mineOnly: true,
             status: this.activeTab === 'all' ? undefined : Number(this.activeTab) as GroupBuyingStatus,
-            searchField: this.searchField ?? undefined
+            searchField: this.searchField ?? undefined,
+            fromDate: this.fromDate ?? undefined,
+            toDate: this.toDate ?? undefined
         };
 
         this._appService.groupBuyingRequest.getPublic(query).subscribe({
@@ -240,6 +252,24 @@ export class MyGroupBuyingPageComponent implements OnInit {
     }
 
     onSearch(): void {
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    /** Đổi khoảng ngày thì tải lại (bỏ trống = không lọc ngày). */
+    onRangeChange(range: { from: string | null; to: string | null }): void {
+        this.fromDate = range.from;
+        this.toDate = range.to;
+        this.pageNumber = 1;
+        this.loadData();
+    }
+
+    /** Đặt lại toàn bộ bộ lọc: từ khoá, cột tìm kiếm và khoảng ngày. */
+    onReset(): void {
+        this.searchText = '';
+        this.searchField = null;
+        this.fromDate = null;
+        this.toDate = null;
         this.pageNumber = 1;
         this.loadData();
     }

@@ -40,6 +40,8 @@ export class SocialService {
         if (query.isApproved !== undefined && query.isApproved !== null) params.isApproved = query.isApproved;
         if (query.search?.trim()) params.search = query.search.trim();
         if (query.searchField) params.searchField = query.searchField;
+        if (query.fromDate) params.fromDate = query.fromDate;
+        if (query.toDate) params.toDate = query.toDate;
 
         return this._apiService.get<PagedResponse<SocialPost>>(
             `${this._baseSocialUrl}/posts`,

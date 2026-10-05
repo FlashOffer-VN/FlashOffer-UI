@@ -860,6 +860,7 @@
         "COL_ACTION": "Action",
         "HISTORY_TITLE": "Payout history",
         "HISTORY_SUBTITLE": "Recent payouts, including early withdrawal requests.",
+        "HISTORY_SEARCH_PLACEHOLDER": "Search by period, account number, note...",
         "HISTORY_EMPTY": "No payout yet. Commission appears once a payout period is approved.",
         "COL_PERIOD": "Period",
         "COL_TYPE": "Type",
@@ -961,6 +962,7 @@
             "STATS_DESCRIPTION": "Activity generated from your referral code — cancelled activity is excluded from the totals.",
             "STATS_CHART_TITLE": "Activity by day",
             "STATS_EVENTS_TITLE": "Recent activity",
+            "STATS_SEARCH_PLACEHOLDER": "Search by referral code, target code...",
             "STATS_EVENTS_EMPTY": "No activity from your code yet",
             "STATS_COL_TIME": "Time",
             "STATS_COL_TYPE": "Activity type",
@@ -1252,6 +1254,7 @@
         },
         "BUTTON": {
             "SEARCH": "Search",
+            "RESET": "Reset",
 "RETRY": "Retry",
             "ACTION": "Action",
             "VIEW_DETAIL": "View Detail",
@@ -1310,7 +1313,12 @@
             "COMPANY_TAX_CODE": "Tax code",
             "CONTENT": "Content",
             "AUTHOR_FULL_NAME": "Author name",
-            "AUTHOR_USER_CODE": "Author user code"
+            "AUTHOR_USER_CODE": "Author user code",
+            "REFERRAL_TARGET": "Target code",
+            "STATUS": "Status",
+            "PAYOUT_PERIOD": "Payout period",
+            "BANK_ACCOUNT": "Account number",
+            "NOTE": "Note"
         },
         "ALL": "All",
         "PROVINCE": "Province/City",

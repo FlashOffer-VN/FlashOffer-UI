@@ -28,6 +28,10 @@ export interface ReferralEventQuery {
     from?: string | null;
     to?: string | null;
     eventType?: number | null;
+    /** Từ khoá tìm kiếm phát sinh (mã chia sẻ, mã đối tượng…). */
+    search?: string | null;
+    /** Cột tìm kiếm tương ứng với `search`; bỏ trống = tìm mọi trường. */
+    searchField?: string | null;
     page?: number;
     pageSize?: number;
 }

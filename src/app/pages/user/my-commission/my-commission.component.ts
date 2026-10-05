@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -35,6 +35,10 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
+import { SearchByComponent } from '@shared/components/search-by/search-by.component';
+import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
+import { payoutSearchFields, SearchFieldOption } from '@core/constants/search-fields';
 
 /**
  * Trang hoa hồng của tôi: mức hoa hồng đang áp dụng, ví hoa hồng (khả dụng, chờ duyệt, đã nhận),
@@ -55,7 +59,11 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
         InputComponent,
         ButtonComponent,
         NgSelectWrapperComponent,
-        PaymentQrComponent
+        PaymentQrComponent,
+        FormsModule,
+        StatusTabsComponent,
+        SearchByComponent,
+        NgxFilterDaterangeComponent
     ],
     template: `
         <div class="space-y-5">
@@ -332,7 +340,30 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
                     <h2 class="text-base font-semibold text-gray-900">{{ 'USER.COMMISSION.HISTORY_TITLE' | translate }}</h2>
                     <p class="text-sm text-gray-500 mt-1">{{ 'USER.COMMISSION.HISTORY_SUBTITLE' | translate }}</p>
 
-                    @if (wallet?.recentPayouts?.length) {
+                    <!-- Bộ lọc lịch sử chi trả: áp ngay trên dữ liệu ví đã tải (API chưa có endpoint lọc chi trả của tôi) -->
+                    <div class="mt-4 flex flex-wrap items-end gap-3" style="--control-h: 2.5rem">
+                        <app-search-by [options]="historySearchFieldOptions" [(value)]="historySearchField"></app-search-by>
+                        <div class="w-full sm:flex-1 sm:min-w-0">
+                            <app-input [(ngModel)]="historySearchText"
+                                [placeholder]="'USER.COMMISSION.HISTORY_SEARCH_PLACEHOLDER' | translate"
+                                (keyup.enter)="onHistorySearch()"></app-input>
+                        </div>
+                        <app-button variant="primary" (onClick)="onHistorySearch()">
+                            <i class="fas fa-search mr-2"></i>{{ 'COMMON.BUTTON.SEARCH' | translate }}
+                        </app-button>
+                        <app-button variant="outline" (onClick)="onHistoryReset()">
+                            <i class="fas fa-rotate-left mr-2"></i>{{ 'COMMON.BUTTON.RESET' | translate }}
+                        </app-button>
+                        <ngx-filter-daterange [from]="historyFromDate" [to]="historyToDate"
+                            (rangeChange)="onHistoryRangeChange($event)"></ngx-filter-daterange>
+                    </div>
+
+                    <div class="mt-4">
+                        <app-status-tabs [items]="statusTabs" [active]="activeStatusTab"
+                            (change)="onStatusTabChange($event)"></app-status-tabs>
+                    </div>
+
+                    @if (filteredPayouts.length) {
                         <div class="overflow-x-auto mt-3">
                             <table class="w-full text-sm">
                                 <thead>
@@ -348,7 +379,7 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @for (item of wallet?.recentPayouts; track item.id) {
+                                    @for (item of filteredPayouts; track item.id) {
                                         <tr class="border-t border-gray-100 text-gray-700">
                                             <td class="py-2 font-medium">{{ item.periodLabel || '—' }}</td>
                                             <td class="py-2">{{ getPayoutTypeLabel(item.type) | translate }}</td>
@@ -555,6 +586,21 @@ export class MyCommissionPageComponent implements OnInit {
     /** Yêu cầu rút đang huỷ, dùng để hiện trạng thái chờ trên đúng dòng. */
     cancellingId: string | null = null;
 
+    /** Bộ lọc lịch sử chi trả — lọc ngay trên danh sách ví đã tải. */
+    historySearchText = '';
+    historySearchField: string | null = null;
+    historySearchFieldOptions: SearchFieldOption[] = [];
+    historyFromDate: string | null = null;
+    historyToDate: string | null = null;
+
+    /** Từ khoá/cột đã áp dụng khi bấm Tìm (đổi cột/ô nhập không tự lọc). */
+    private appliedHistorySearch = '';
+    private appliedHistoryField: string | null = null;
+
+    /** Tab trạng thái chi trả đang chọn ('all' hoặc giá trị PayoutStatus). */
+    activeStatusTab = 'all';
+    statusTabs: { key: string; label: string }[] = [];
+
     /** Danh mục ngân hàng cho ô chọn (kèm mã BIN để dựng QR chuyển khoản). */
     readonly bankOptions = bankSelectOptions();
 
@@ -593,6 +639,7 @@ export class MyCommissionPageComponent implements OnInit {
 
     ngOnInit(): void {
         this.isLoading = true;
+        this.buildHistoryFilter();
 
         // Ba nguồn dữ liệu độc lập: mức hoa hồng, ví hoa hồng và ngân hàng nhận tiền. Tài khoản chưa
         // được cấp quyền xem ngân hàng vẫn phải xem được phần còn lại nên lỗi từng nguồn bỏ qua riêng.
@@ -873,6 +920,82 @@ export class MyCommissionPageComponent implements OnInit {
     /** Yêu cầu rút sớm còn chờ duyệt thì còn huỷ được. */
     canCancel(item: PayoutStatement): boolean {
         return item.type === PayoutType.Early && item.status === PayoutStatus.Pending;
+    }
+
+    /** Dựng tab trạng thái và cột tìm kiếm cho lịch sử chi trả. */
+    private buildHistoryFilter(): void {
+        this.statusTabs = [
+            { key: 'all', label: this._appService.trans('COMMON.ALL') },
+            { key: String(PayoutStatus.Pending), label: this._appService.trans('USER.COMMISSION.STATUS_PENDING') },
+            { key: String(PayoutStatus.Approved), label: this._appService.trans('USER.COMMISSION.STATUS_APPROVED') },
+            { key: String(PayoutStatus.Rejected), label: this._appService.trans('USER.COMMISSION.STATUS_REJECTED') },
+            { key: String(PayoutStatus.Paid), label: this._appService.trans('USER.COMMISSION.STATUS_PAID') },
+            { key: String(PayoutStatus.Cancelled), label: this._appService.trans('USER.COMMISSION.STATUS_CANCELLED') }
+        ];
+        this.historySearchFieldOptions = payoutSearchFields((key: string) => this._appService.trans(key));
+    }
+
+    /** Lịch sử chi trả sau khi áp bộ lọc: trạng thái + từ khoá/cột + khoảng ngày. */
+    get filteredPayouts(): PayoutStatement[] {
+        const items = this.wallet?.recentPayouts ?? [];
+        const keyword = this.appliedHistorySearch.trim().toLowerCase();
+        const field = this.appliedHistoryField;
+
+        return items.filter(item => {
+            if (this.activeStatusTab !== 'all' && String(item.status) !== this.activeStatusTab) {
+                return false;
+            }
+
+            const created = (item.requestedAt || item.createdAt || '').slice(0, 10);
+            if (this.historyFromDate && created && created < this.historyFromDate) return false;
+            if (this.historyToDate && created && created > this.historyToDate) return false;
+
+            if (!keyword) return true;
+
+            const values = field
+                ? [this.payoutFieldValue(item, field)]
+                : [item.periodLabel, item.bankAccountNumber, item.note];
+
+            return values.some(value => (value ?? '').toString().toLowerCase().includes(keyword));
+        });
+    }
+
+    /** Giá trị của một cột tìm kiếm trên dòng chi trả (khớp `payoutSearchFields`). */
+    private payoutFieldValue(item: PayoutStatement, field: string): string {
+        switch (field) {
+            case 'periodLabel': return item.periodLabel ?? '';
+            case 'bankAccountNumber': return item.bankAccountNumber ?? '';
+            case 'note': return item.note ?? '';
+            default: return '';
+        }
+    }
+
+    /** Bấm Tìm mới áp từ khoá/cột tìm kiếm vào lịch sử chi trả. */
+    onHistorySearch(): void {
+        this.appliedHistorySearch = this.historySearchText;
+        this.appliedHistoryField = this.historySearchField;
+    }
+
+    /** Đổi khoảng ngày chi trả — lọc ngay. */
+    onHistoryRangeChange(range: { from: string | null; to: string | null }): void {
+        this.historyFromDate = range.from;
+        this.historyToDate = range.to;
+    }
+
+    /** Đổi tab trạng thái chi trả — lọc ngay. */
+    onStatusTabChange(tab: string): void {
+        this.activeStatusTab = tab;
+    }
+
+    /** Đặt lại toàn bộ bộ lọc lịch sử chi trả. */
+    onHistoryReset(): void {
+        this.historySearchText = '';
+        this.historySearchField = null;
+        this.appliedHistorySearch = '';
+        this.appliedHistoryField = null;
+        this.historyFromDate = null;
+        this.historyToDate = null;
+        this.activeStatusTab = 'all';
     }
 
     /** Đưa người dùng xuống khối ngân hàng nhận tiền để khai hoặc xác minh. */
