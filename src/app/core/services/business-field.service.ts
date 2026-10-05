@@ -2,10 +2,13 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, map, shareReplay, tap } from 'rxjs/operators';
 import { ApiService } from './api.service';
+import { PagedResponse } from '@core/models/paged-response.model';
 import {
     BusinessFieldAdmin,
+    BusinessFieldCompany,
     BusinessFieldFormValue,
-    BusinessFieldRelated
+    BusinessFieldRelated,
+    BusinessFieldUser
 } from '@core/models/business-field.model';
 
 /** Option cho app-ng-select-wrapper: value = BusinessField.Id, label = tên lĩnh vực. */
@@ -71,6 +74,41 @@ export class BusinessFieldService {
         return this.api
             .get<{ data: BusinessFieldRelated }>(`business-fields/${id}/related`)
             .pipe(map(res => res?.data ?? null));
+    }
+
+    /**
+     * Công ty thuộc một lĩnh vực — phân trang phía server (màn chi tiết lĩnh vực).
+     * GET /api/v1/business-fields/{id}/companies?page=&pageSize=&search=
+     * search khớp mã công ty / tên / mã số thuế.
+     */
+    getFieldCompanies(
+        id: string,
+        page = 1,
+        pageSize = 10,
+        search?: string
+    ): Observable<PagedResponse<BusinessFieldCompany>> {
+        // `any` như các list khác trong repo: tham số tùy chọn thêm dần, tránh lỗi index-signature.
+        const params: any = { page, pageSize };
+        if (search) params.search = search;
+        return this.api.get<PagedResponse<BusinessFieldCompany>>(`business-fields/${id}/companies`, params);
+    }
+
+    /**
+     * Tài khoản (CTV + đối tác) thuộc một lĩnh vực — phân trang phía server (màn chi tiết lĩnh vực).
+     * GET /api/v1/business-fields/{id}/users?page=&pageSize=&search=&role=
+     * search khớp mã tài khoản / họ tên / SĐT / tên công ty; role = 'Collaborator' | 'Partner'.
+     */
+    getFieldUsers(
+        id: string,
+        page = 1,
+        pageSize = 10,
+        search?: string,
+        role?: string
+    ): Observable<PagedResponse<BusinessFieldUser>> {
+        const params: any = { page, pageSize };
+        if (search) params.search = search;
+        if (role) params.role = role;
+        return this.api.get<PagedResponse<BusinessFieldUser>>(`business-fields/${id}/users`, params);
     }
 
     create(payload: BusinessFieldFormValue): Observable<BusinessFieldAdmin | null> {

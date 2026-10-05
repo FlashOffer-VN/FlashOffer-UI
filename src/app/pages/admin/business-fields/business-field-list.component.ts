@@ -11,7 +11,6 @@ import {
     BusinessFieldAdmin,
     BusinessFieldCompany,
     BusinessFieldFormValue,
-    BusinessFieldRelated,
     BusinessFieldUser
 } from '@core/models/business-field.model';
 
@@ -20,6 +19,7 @@ import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-tabs/status-tabs.component';
+import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 
 /**
  * Quản lý lĩnh vực hoạt động: thêm, sửa, bật/tắt, xoá và xem công ty/tài khoản thuộc lĩnh vực.
@@ -36,7 +36,8 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
         ButtonComponent,
         InputComponent,
         ModalComponent,
-        StatusTabsComponent
+        StatusTabsComponent,
+        PaginationComponent
     ],
     styles: [`
         @media (max-width: 640px) {
@@ -196,17 +197,15 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
             </div>
         </app-modal>
 
-        <!-- Công ty và tài khoản thuộc lĩnh vực: tách thành 2 tab, mỗi phần có tìm kiếm + đếm riêng -->
+        <!-- Công ty và tài khoản thuộc lĩnh vực: tách thành 2 tab, mỗi tab phân trang + tìm kiếm phía server -->
         <app-modal [(visible)]="isDetailVisible" [title]="'ADMIN.BUSINESS_FIELDS.DETAIL_TITLE' | translate" size="lg"
             [showFooter]="false" (closed)="closeDetail()">
-            @if (isLoadingDetail) {
-            <app-loading></app-loading>
-            } @else if (detail) {
+            @if (detailField) {
             <div class="space-y-4">
                 <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600">
-                    <span class="font-medium text-gray-900">{{ detail.name }}</span>
-                    @if (detail.businessFieldCode) {
-                    <span class="text-xs text-gray-500">{{ detail.businessFieldCode }}</span>
+                    <span class="font-medium text-gray-900">{{ detailField.name }}</span>
+                    @if (detailField.businessFieldCode) {
+                    <span class="text-xs text-gray-500">{{ detailField.businessFieldCode }}</span>
                     }
                 </div>
 
@@ -216,17 +215,26 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
                 @if (detailTab === 'companies') {
                 <section>
                     <h3 class="text-sm font-semibold text-gray-900">
-                        {{ 'ADMIN.BUSINESS_FIELDS.DETAIL_COMPANIES' | translate }} ({{ filteredCompanies.length }})
+                        {{ 'ADMIN.BUSINESS_FIELDS.DETAIL_COMPANIES' | translate }} ({{ companyTotalCount }})
                     </h3>
-                    <div class="mt-2">
-                        <app-input [(ngModel)]="companyKeyword" [id]="'bf_detail_company_search'"
-                            [placeholder]="'ADMIN.BUSINESS_FIELDS.COMPANY_SEARCH_PLACEHOLDER' | translate">
-                        </app-input>
+                    <div class="mt-2 flex items-end gap-2">
+                        <div class="flex-1">
+                            <app-input [(ngModel)]="companyKeyword" (keyup.enter)="searchCompanies()"
+                                [id]="'bf_detail_company_search'"
+                                [placeholder]="'ADMIN.BUSINESS_FIELDS.COMPANY_SEARCH_PLACEHOLDER' | translate">
+                            </app-input>
+                        </div>
+                        <app-button size="sm" variant="primary" [title]="'ADMIN.BUSINESS_FIELDS.SEARCH' | translate"
+                            (click)="searchCompanies()">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </app-button>
                     </div>
 
-                    @if (filteredCompanies.length === 0) {
+                    @if (isLoadingCompanies) {
+                    <app-loading></app-loading>
+                    } @else if (companies.length === 0) {
                     <p class="text-sm text-gray-500 mt-3">
-                        {{ (detail.companies.length === 0 ? 'ADMIN.BUSINESS_FIELDS.NO_COMPANIES' : 'ADMIN.BUSINESS_FIELDS.COMPANY_SEARCH_EMPTY') | translate }}
+                        {{ (companySearch ? 'ADMIN.BUSINESS_FIELDS.COMPANY_SEARCH_EMPTY' : 'ADMIN.BUSINESS_FIELDS.NO_COMPANIES') | translate }}
                     </p>
                     } @else {
                     <div class="mt-3 border border-gray-200 rounded-lg overflow-x-auto overflow-y-auto max-h-[55vh]">
@@ -241,7 +249,7 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
-                                @for (company of filteredCompanies; track company.id) {
+                                @for (company of companies; track company.id) {
                                 <tr>
                                     <td class="px-3 py-2 text-gray-700 whitespace-nowrap">{{ company.companyCode || '--' }}</td>
                                     <td class="px-3 py-2 text-gray-900">{{ company.name }}</td>
@@ -253,22 +261,49 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
                             </tbody>
                         </table>
                     </div>
+                    <div class="mt-3">
+                        <app-pagination [pageNumber]="companyPage" [pageSize]="companyPageSize"
+                            [totalCount]="companyTotalCount" [totalPages]="companyTotalPages"
+                            [hasPreviousPage]="companyHasPreviousPage" [hasNextPage]="companyHasNextPage"
+                            (pageChange)="onCompanyPageChange($event)" (pageSizeChange)="onCompanyPageSizeChange($event)">
+                        </app-pagination>
+                    </div>
                     }
                 </section>
                 } @else {
                 <section>
                     <h3 class="text-sm font-semibold text-gray-900">
-                        {{ 'ADMIN.BUSINESS_FIELDS.DETAIL_USERS' | translate }} ({{ filteredUsers.length }})
+                        {{ 'ADMIN.BUSINESS_FIELDS.DETAIL_USERS' | translate }} ({{ userTotalCount }})
                     </h3>
-                    <div class="mt-2">
-                        <app-input [(ngModel)]="userKeyword" [id]="'bf_detail_user_search'"
-                            [placeholder]="'ADMIN.BUSINESS_FIELDS.USER_SEARCH_PLACEHOLDER' | translate">
-                        </app-input>
+                    <div class="mt-2 flex flex-wrap items-end gap-2">
+                        <div class="flex-1 min-w-[180px]">
+                            <app-input [(ngModel)]="userKeyword" (keyup.enter)="searchUsers()"
+                                [id]="'bf_detail_user_search'"
+                                [placeholder]="'ADMIN.BUSINESS_FIELDS.USER_SEARCH_PLACEHOLDER' | translate">
+                            </app-input>
+                        </div>
+                        <div class="w-40">
+                            <label class="block text-xs font-medium text-gray-500 mb-1">
+                                {{ 'ADMIN.BUSINESS_FIELDS.USER_ROLE' | translate }}
+                            </label>
+                            <select [(ngModel)]="userRoleFilter" (ngModelChange)="onUserRoleChange($event)"
+                                class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+                                <option value="">{{ 'COMMON.ALL' | translate }}</option>
+                                <option value="Collaborator">{{ 'ADMIN.BUSINESS_FIELDS.ROLE_COLLABORATOR' | translate }}</option>
+                                <option value="Partner">{{ 'ADMIN.BUSINESS_FIELDS.ROLE_PARTNER' | translate }}</option>
+                            </select>
+                        </div>
+                        <app-button size="sm" variant="primary" [title]="'ADMIN.BUSINESS_FIELDS.SEARCH' | translate"
+                            (click)="searchUsers()">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </app-button>
                     </div>
 
-                    @if (filteredUsers.length === 0) {
+                    @if (isLoadingUsers) {
+                    <app-loading></app-loading>
+                    } @else if (users.length === 0) {
                     <p class="text-sm text-gray-500 mt-3">
-                        {{ (detail.users.length === 0 ? 'ADMIN.BUSINESS_FIELDS.NO_USERS' : 'ADMIN.BUSINESS_FIELDS.USER_SEARCH_EMPTY') | translate }}
+                        {{ (userSearch ? 'ADMIN.BUSINESS_FIELDS.USER_SEARCH_EMPTY' : 'ADMIN.BUSINESS_FIELDS.NO_USERS') | translate }}
                     </p>
                     } @else {
                     <div class="mt-3 border border-gray-200 rounded-lg overflow-x-auto overflow-y-auto max-h-[55vh]">
@@ -283,7 +318,7 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
-                                @for (user of filteredUsers; track user.userId) {
+                                @for (user of users; track user.userId + '-' + user.role) {
                                 <tr>
                                     <td class="px-3 py-2 text-gray-700 whitespace-nowrap">{{ user.userCode || '--' }}</td>
                                     <td class="px-3 py-2 text-gray-900 whitespace-nowrap">{{ user.fullName || '--' }}</td>
@@ -294,6 +329,13 @@ import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-ta
                                 }
                             </tbody>
                         </table>
+                    </div>
+                    <div class="mt-3">
+                        <app-pagination [pageNumber]="userPage" [pageSize]="userPageSize"
+                            [totalCount]="userTotalCount" [totalPages]="userTotalPages"
+                            [hasPreviousPage]="userHasPreviousPage" [hasNextPage]="userHasNextPage"
+                            (pageChange)="onUserPageChange($event)" (pageSizeChange)="onUserPageSizeChange($event)">
+                        </app-pagination>
                     </div>
                     }
                 </section>
@@ -324,16 +366,41 @@ export class AdminBusinessFieldListComponent implements OnInit {
     deleting: BusinessFieldAdmin | null = null;
 
     isDetailVisible = false;
-    isLoadingDetail = false;
-    detail: BusinessFieldRelated | null = null;
+    /** Lĩnh vực đang xem chi tiết — dùng cho tiêu đề modal (API phân trang không trả lại tên lĩnh vực). */
+    detailField: BusinessFieldAdmin | null = null;
 
     /** Tab đang xem trong khối chi tiết: 'companies' | 'accounts'. */
     detailTab = 'companies';
     detailTabs: StatusTabItem[] = [];
 
-    /** Từ khoá tìm riêng cho bảng công ty và bảng tài khoản trong khối chi tiết. */
+    // --- Tab Công ty: phân trang + tìm kiếm phía server ---
+    companies: BusinessFieldCompany[] = [];
+    isLoadingCompanies = false;
+    companyLoaded = false;
+    /** Ô nhập hiện tại và từ khoá đã áp dụng (phân biệt đang gõ với lần tìm gần nhất). */
     companyKeyword = '';
+    companySearch = '';
+    companyPage = 1;
+    companyPageSize = 10;
+    companyTotalCount = 0;
+    companyTotalPages = 0;
+    companyHasPreviousPage = false;
+    companyHasNextPage = false;
+
+    // --- Tab Tài khoản: phân trang + tìm kiếm + lọc loại hồ sơ phía server ---
+    users: BusinessFieldUser[] = [];
+    isLoadingUsers = false;
+    userLoaded = false;
     userKeyword = '';
+    userSearch = '';
+    /** '' = tất cả, 'Collaborator' | 'Partner' — gửi thẳng làm tham số role. */
+    userRoleFilter = '';
+    userPage = 1;
+    userPageSize = 10;
+    userTotalCount = 0;
+    userTotalPages = 0;
+    userHasPreviousPage = false;
+    userHasNextPage = false;
 
     /** Quyền thêm lĩnh vực. */
     get canCreate(): boolean {
@@ -480,28 +547,21 @@ export class AdminBusinessFieldListComponent implements OnInit {
     }
 
     openDetail(field: BusinessFieldAdmin): void {
-        this.detail = null;
+        this.detailField = field;
         this.detailTab = 'companies';
-        this.companyKeyword = '';
-        this.userKeyword = '';
-        this.detailTabs = this.buildDetailTabs(0, 0);
         this.isDetailVisible = true;
-        this.isLoadingDetail = true;
 
-        this.service.getRelated(field.id).subscribe({
-            next: related => {
-                this.detail = related;
-                this.detailTabs = this.buildDetailTabs(related?.companies?.length ?? 0, related?.users?.length ?? 0);
-                this.isLoadingDetail = false;
-            },
-            error: () => {
-                this.isLoadingDetail = false;
-                this.toast.error(this.translate.instant('ADMIN.BUSINESS_FIELDS.LOAD_ERROR'));
-            }
-        });
+        // Mỗi tab tự tải dữ liệu của mình; số trên tab lấy từ totalCount của API nên nạp cả hai
+        // ngay khi mở để hai tab đều hiện đúng số lượng (không đếm trên client).
+        this.resetCompanyTab();
+        this.resetUserTab();
+        this.detailTabs = this.buildDetailTabs(field.companyCount ?? 0, field.userCount ?? 0);
+
+        this.loadCompanies();
+        this.loadUsers();
     }
 
-    /** Hai tab của khối chi tiết kèm số lượng để thấy ngay mỗi phần có bao nhiêu. */
+    /** Hai tab của khối chi tiết kèm số lượng — khởi tạo từ danh sách, cập nhật lại theo totalCount API. */
     private buildDetailTabs(companyCount: number, userCount: number): StatusTabItem[] {
         return [
             { key: 'companies', label: this.translate.instant('ADMIN.BUSINESS_FIELDS.TAB_COMPANIES'), count: companyCount },
@@ -509,41 +569,150 @@ export class AdminBusinessFieldListComponent implements OnInit {
         ];
     }
 
-    /** Đổi tab giữa công ty và tài khoản trong khối chi tiết. */
+    /** Cập nhật số trên tab theo totalCount API trả về (không đếm trên client). */
+    private setTabCount(key: string, count: number): void {
+        this.detailTabs = this.detailTabs.map(tab => (tab.key === key ? { ...tab, count } : tab));
+    }
+
+    /** Đổi tab trong khối chi tiết — tab chưa từng tải thì tải khi mở tới. */
     onDetailTabChange(tab: string): void {
         this.detailTab = tab;
+        if (tab === 'companies' && !this.companyLoaded) this.loadCompanies();
+        if (tab === 'accounts' && !this.userLoaded) this.loadUsers();
     }
 
-    /**
-     * Công ty khớp từ khoá (mã công ty / tên / mã số thuế). Dữ liệu đã tải sẵn theo
-     * endpoint related nên lọc ngay trên client, không cần API mới.
-     */
-    get filteredCompanies(): BusinessFieldCompany[] {
-        const items = this.detail?.companies ?? [];
-        const keyword = this.companyKeyword.trim().toLowerCase();
-        if (!keyword) return items;
+    // --- Tab Công ty ---
 
-        return items.filter(company =>
-            (company.companyCode || '').toLowerCase().includes(keyword) ||
-            (company.name || '').toLowerCase().includes(keyword) ||
-            (company.taxCode || '').toLowerCase().includes(keyword)
-        );
+    private resetCompanyTab(): void {
+        this.companies = [];
+        this.companyLoaded = false;
+        this.isLoadingCompanies = false;
+        this.companyKeyword = '';
+        this.companySearch = '';
+        this.companyPage = 1;
+        this.companyPageSize = 10;
+        this.companyTotalCount = 0;
+        this.companyTotalPages = 0;
+        this.companyHasPreviousPage = false;
+        this.companyHasNextPage = false;
     }
 
-    /** Tài khoản khớp từ khoá (mã tài khoản / họ tên / SĐT / công ty / loại hồ sơ). */
-    get filteredUsers(): BusinessFieldUser[] {
-        const items = this.detail?.users ?? [];
-        const keyword = this.userKeyword.trim().toLowerCase();
-        if (!keyword) return items;
+    /** Tải công ty của lĩnh vực theo trang/từ khoá hiện tại (phân trang phía server). */
+    loadCompanies(): void {
+        if (!this.detailField) return;
+        this.isLoadingCompanies = true;
+        this.service
+            .getFieldCompanies(this.detailField.id, this.companyPage, this.companyPageSize, this.companySearch || undefined)
+            .subscribe({
+                next: res => {
+                    this.companies = res?.data ?? [];
+                    this.companyPage = res?.pageNumber ?? this.companyPage;
+                    this.companyPageSize = res?.pageSize ?? this.companyPageSize;
+                    this.companyTotalCount = res?.totalCount ?? 0;
+                    this.companyTotalPages = res?.totalPages ?? 0;
+                    this.companyHasPreviousPage = res?.hasPreviousPage ?? false;
+                    this.companyHasNextPage = res?.hasNextPage ?? false;
+                    this.companyLoaded = true;
+                    this.setTabCount('companies', this.companyTotalCount);
+                    this.isLoadingCompanies = false;
+                },
+                error: () => {
+                    this.isLoadingCompanies = false;
+                    this.toast.error(this.translate.instant('ADMIN.BUSINESS_FIELDS.LOAD_ERROR'));
+                }
+            });
+    }
 
-        return items.filter(user =>
-            (user.userCode || '').toLowerCase().includes(keyword) ||
-            (user.fullName || '').toLowerCase().includes(keyword) ||
-            (user.phone || '').toLowerCase().includes(keyword) ||
-            (user.companyName || '').toLowerCase().includes(keyword) ||
-            (user.role || '').toLowerCase().includes(keyword) ||
-            this.userRoleLabel(user.role).toLowerCase().includes(keyword)
-        );
+    /** Tìm công ty phía server: về trang 1 rồi tải lại. */
+    searchCompanies(): void {
+        this.companySearch = (this.companyKeyword || '').trim();
+        this.companyPage = 1;
+        this.loadCompanies();
+    }
+
+    onCompanyPageChange(page: number): void {
+        this.companyPage = page;
+        this.loadCompanies();
+    }
+
+    onCompanyPageSizeChange(size: number): void {
+        this.companyPageSize = size;
+        this.companyPage = 1;
+        this.loadCompanies();
+    }
+
+    // --- Tab Tài khoản ---
+
+    private resetUserTab(): void {
+        this.users = [];
+        this.userLoaded = false;
+        this.isLoadingUsers = false;
+        this.userKeyword = '';
+        this.userSearch = '';
+        this.userRoleFilter = '';
+        this.userPage = 1;
+        this.userPageSize = 10;
+        this.userTotalCount = 0;
+        this.userTotalPages = 0;
+        this.userHasPreviousPage = false;
+        this.userHasNextPage = false;
+    }
+
+    /** Tải tài khoản (CTV + đối tác) của lĩnh vực theo trang/từ khoá/loại hồ sơ hiện tại. */
+    loadUsers(): void {
+        if (!this.detailField) return;
+        this.isLoadingUsers = true;
+        this.service
+            .getFieldUsers(
+                this.detailField.id,
+                this.userPage,
+                this.userPageSize,
+                this.userSearch || undefined,
+                this.userRoleFilter || undefined
+            )
+            .subscribe({
+                next: res => {
+                    this.users = res?.data ?? [];
+                    this.userPage = res?.pageNumber ?? this.userPage;
+                    this.userPageSize = res?.pageSize ?? this.userPageSize;
+                    this.userTotalCount = res?.totalCount ?? 0;
+                    this.userTotalPages = res?.totalPages ?? 0;
+                    this.userHasPreviousPage = res?.hasPreviousPage ?? false;
+                    this.userHasNextPage = res?.hasNextPage ?? false;
+                    this.userLoaded = true;
+                    this.setTabCount('accounts', this.userTotalCount);
+                    this.isLoadingUsers = false;
+                },
+                error: () => {
+                    this.isLoadingUsers = false;
+                    this.toast.error(this.translate.instant('ADMIN.BUSINESS_FIELDS.LOAD_ERROR'));
+                }
+            });
+    }
+
+    /** Tìm tài khoản phía server: về trang 1 rồi tải lại. */
+    searchUsers(): void {
+        this.userSearch = (this.userKeyword || '').trim();
+        this.userPage = 1;
+        this.loadUsers();
+    }
+
+    /** Đổi loại hồ sơ (CTV/đối tác): lọc ngay phía server, về trang 1. */
+    onUserRoleChange(role: string): void {
+        this.userRoleFilter = role || '';
+        this.userPage = 1;
+        this.loadUsers();
+    }
+
+    onUserPageChange(page: number): void {
+        this.userPage = page;
+        this.loadUsers();
+    }
+
+    onUserPageSizeChange(size: number): void {
+        this.userPageSize = size;
+        this.userPage = 1;
+        this.loadUsers();
     }
 
     /** Nhãn loại hồ sơ (khoá i18n) — dùng cho cột và cho ô tìm kiếm tài khoản. */
@@ -555,10 +724,9 @@ export class AdminBusinessFieldListComponent implements OnInit {
 
     closeDetail(): void {
         this.isDetailVisible = false;
-        this.detail = null;
-        this.isLoadingDetail = false;
-        this.companyKeyword = '';
-        this.userKeyword = '';
+        this.detailField = null;
+        this.resetCompanyTab();
+        this.resetUserTab();
         this.detailTab = 'companies';
     }
 }
