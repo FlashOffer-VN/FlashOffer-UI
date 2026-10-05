@@ -2659,7 +2659,11 @@
             "P144": "Restore revenue/expense config",
             "P145": "Delete purchase request",
             "P146": "View deleted purchase requests",
-            "P147": "Restore purchase request"
+            "P147": "Restore purchase request",
+            "P148": "View business fields",
+            "P149": "Add business field",
+            "P150": "Edit business field",
+            "P151": "Delete business field"
         }
     },
     "CONTACT_FLOATING": {

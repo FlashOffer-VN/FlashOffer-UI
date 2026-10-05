@@ -2622,7 +2622,11 @@
             "P144": "Khôi phục cấu hình loại thu/chi",
             "P145": "Xoá yêu cầu mua hàng",
             "P146": "Xem yêu cầu mua hàng đã xoá",
-            "P147": "Khôi phục yêu cầu mua hàng"
+            "P147": "Khôi phục yêu cầu mua hàng",
+            "P148": "Xem danh mục lĩnh vực hoạt động",
+            "P149": "Thêm lĩnh vực hoạt động",
+            "P150": "Sửa lĩnh vực hoạt động",
+            "P151": "Xoá lĩnh vực hoạt động"
         }
     },
     "CONTACT_FLOATING": {
