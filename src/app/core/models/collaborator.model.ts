@@ -8,6 +8,10 @@ export interface MyReferralCode {
 }
 
 export interface Collaborator {
+    /** Mã chia sẻ của tài khoản đã mang hồ sơ này vào hệ thống (API: AccountReferrerCode). */
+    accountReferrerCode?: string | null;
+    /** Tên người giới thiệu của tài khoản (API: AccountReferrerName). */
+    accountReferrerName?: string | null;
     id: string;
     userId: string;
     fullName: string;
