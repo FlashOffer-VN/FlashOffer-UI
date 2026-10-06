@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output, inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild, inject } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import {
@@ -12,6 +12,7 @@ import {
     addMonths,
     buildMonthGrid,
     buildPresetRange,
+    computePopupPosition,
     formatDisplayDate,
     isWithinRange,
     parseIsoDate,
@@ -58,6 +59,13 @@ export class NgxFilterDaterangeComponent {
     /** Ngày bắt đầu đang chờ chọn ngày kết thúc (chỉ dùng khi lịch đang mở). */
     pendingFrom: string | null = null;
     pendingTo: string | null = null;
+
+    /** Toạ độ màn hình của bảng lịch (position: fixed) — tính lại mỗi lần mở/đổi kích thước/ cuộn. */
+    popupTop: number | null = null;
+    popupLeft: number | null = null;
+
+    /** Bảng lịch (để đo kích thước thật khi tính vị trí). */
+    @ViewChild('pop') private _pop?: ElementRef<HTMLElement>;
 
     private readonly _elementRef = inject(ElementRef<HTMLElement>);
     private readonly _translate = inject(TranslateService);
@@ -111,12 +119,42 @@ export class NgxFilterDaterangeComponent {
         this.viewMonth = startOfMonth(anchor);
         this.pendingFrom = this.from;
         this.pendingTo = this.to;
+
+        // Đo kích thước bảng lịch sau khi nó vào DOM rồi mới đặt vị trí (mở xuống dưới, hết chỗ thì mở lên trên).
+        setTimeout(() => this.positionPopup());
+    }
+
+    /**
+     * Đặt bảng lịch theo toạ độ màn hình (position: fixed) để không bị khung cuộn/ô chứa cắt mất nội dung,
+     * đồng thời lật lên trên khi bên dưới không đủ chỗ và kẹp ngang trong màn hình.
+     */
+    positionPopup(): void {
+        const panel = this._pop?.nativeElement;
+        if (!this.isOpen || !panel) return;
+
+        const trigger = this._elementRef.nativeElement.getBoundingClientRect();
+        const position = computePopupPosition(
+            { top: trigger.top, bottom: trigger.bottom, left: trigger.left },
+            { width: panel.offsetWidth, height: panel.offsetHeight },
+            { width: window.innerWidth, height: window.innerHeight });
+
+        this.popupTop = position.top;
+        this.popupLeft = position.left;
+    }
+
+    /** Đổi kích thước cửa sổ hoặc cuộn trang thì đặt lại vị trí bảng lịch. */
+    @HostListener('window:resize')
+    @HostListener('window:scroll')
+    onViewportChange(): void {
+        if (this.isOpen) this.positionPopup();
     }
 
     close(): void {
         this.isOpen = false;
         this.pendingFrom = null;
         this.pendingTo = null;
+        this.popupTop = null;
+        this.popupLeft = null;
     }
 
     /** Bấm ra ngoài component thì đóng lịch. */

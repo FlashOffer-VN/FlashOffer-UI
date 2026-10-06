@@ -1,8 +1,11 @@
 import {
     DATE_RANGE_PRESETS,
+    POPUP_GAP,
+    POPUP_MARGIN,
     addDays,
     buildMonthGrid,
     buildPresetRange,
+    computePopupPosition,
     endOfMonth,
     formatDisplayDate,
     isWithinRange,
@@ -149,6 +152,51 @@ describe('date-range.util', () => {
         it('cộng ngày qua mốc tháng vẫn đúng', () => {
             expect(toIsoDate(addDays(new Date(2026, 9, 31), 1))).toBe('2026-11-01');
             expect(toIsoDate(addDays(new Date(2026, 10, 1), -1))).toBe('2026-10-31');
+        });
+    });
+
+    describe('computePopupPosition (đặt bảng lịch kiểu popup nổi)', () => {
+        const panel = { width: 470, height: 320 };
+        const viewport = { width: 1280, height: 800 };
+
+        it('mặc định mở xuống dưới ô chọn', () => {
+            const position = computePopupPosition({ top: 100, bottom: 140, left: 300 }, panel, viewport);
+
+            expect(position.top).toBe(140 + POPUP_GAP);
+            expect(position.left).toBe(300);
+            expect(position.flippedUp).toBeFalse();
+        });
+
+        it('hết chỗ bên dưới thì mở lên trên', () => {
+            const position = computePopupPosition({ top: 700, bottom: 740, left: 300 }, panel, viewport);
+
+            expect(position.flippedUp).toBeTrue();
+            expect(position.top).toBe(700 - POPUP_GAP - panel.height);
+        });
+
+        it('vẫn mở xuống dưới khi bên trên còn ít chỗ hơn', () => {
+            const position = computePopupPosition({ top: 30, bottom: 70, left: 300 }, panel, viewport);
+
+            expect(position.flippedUp).toBeFalse();
+            expect(position.top).toBe(70 + POPUP_GAP);
+        });
+
+        it('sát mép phải thì kẹp lại, không tràn khỏi màn hình', () => {
+            const position = computePopupPosition({ top: 100, bottom: 140, left: 1200 }, panel, viewport);
+
+            expect(position.left).toBe(viewport.width - panel.width - POPUP_MARGIN);
+        });
+
+        it('sát mép trái thì giữ lề tối thiểu', () => {
+            const position = computePopupPosition({ top: 100, bottom: 140, left: -20 }, panel, viewport);
+
+            expect(position.left).toBe(POPUP_MARGIN);
+        });
+
+        it('bảng rộng hơn màn hình thì vẫn giữ lề trái', () => {
+            const narrow = computePopupPosition({ top: 100, bottom: 140, left: 40 }, panel, { width: 400, height: 800 });
+
+            expect(narrow.left).toBe(POPUP_MARGIN);
         });
     });
 });

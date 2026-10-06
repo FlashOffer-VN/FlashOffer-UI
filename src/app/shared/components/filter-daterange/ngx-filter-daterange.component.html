@@ -11,7 +11,7 @@
         <i class="fa-solid fa-xmark"></i>
     </button>
 
-    <div class="dr__pop" *ngIf="isOpen" role="dialog">
+    <div class="dr__pop" #pop *ngIf="isOpen" role="dialog" [style.top.px]="popupTop" [style.left.px]="popupLeft">
         <!-- Cột dọc chọn nhanh -->
         <div class="dr__presets">
             <button type="button" class="dr__preset" *ngFor="let preset of presets"
