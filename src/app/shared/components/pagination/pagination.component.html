@@ -58,7 +58,7 @@
 
             @if (sizeOpen) {
             <ul #sizeMenu class="pg-size__menu" role="listbox" [style.top.px]="menuTop"
-                [style.right.px]="menuRight" [style.minWidth.px]="menuWidth">
+                [style.right.px]="menuRight" [style.width.px]="menuWidth">
                 @for (size of pageSizes; track size) {
                 <li>
                     <button type="button" class="pg-size__item" [class.is-active]="size === pageSize" role="option"

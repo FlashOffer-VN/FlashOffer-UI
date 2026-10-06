@@ -70,7 +70,7 @@
 
 .pg-size__menu {
     /* Chỉ khi đã được nhấc ra body (.is-portal) mới dùng position fixed + tầng select để nổi trên bảng. */
-    min-width: 3.5rem;   /* fallback; khi mở sẽ được đặt đúng bằng nút */
+    box-sizing: border-box;
     margin: 0;
     padding: 0.25rem;
     list-style: none;

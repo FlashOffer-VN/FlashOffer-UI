@@ -130,9 +130,10 @@ export class PaginationComponent implements OnDestroy {
         document.body.appendChild(menu);
 
         const rect = btn.getBoundingClientRect();
-        // Ưu tiên xổ LÊN trên nút; nếu không đủ chỗ thì mở xuống dưới.
-        const above = rect.top - menu.offsetHeight - 6;
-        this.menuTop = above >= 8 ? above : rect.bottom + 6;
+        // Mặc định xổ XUỐNG dưới nút; chỉ khi dưới không đủ chỗ mới lật lên trên.
+        const below = rect.bottom + 6;
+        const fitsBelow = below + menu.offsetHeight <= window.innerHeight - 8;
+        this.menuTop = fitsBelow ? below : Math.max(8, rect.top - menu.offsetHeight - 6);
         this.menuRight = Math.max(8, window.innerWidth - rect.right);
         this.menuWidth = rect.width;   // menu rộng bằng nút, canh phải trùng nhau
 
