@@ -2,6 +2,7 @@ import { Component, OnInit, afterNextRender } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { BrandLogoComponent } from '@shared/components/brand-logo/brand-logo.component';
 
 import { SystemSettingService } from '@core/services/system-setting.service';
 import { PublicSystemSetting } from '@core/models/system-setting.model';
@@ -16,7 +17,7 @@ interface FooterSocial {
 @Component({
     selector: 'app-guest-footer',
     standalone: true,
-    imports: [CommonModule, RouterLink, TranslateModule, ],
+    imports: [CommonModule, RouterLink, TranslateModule, BrandLogoComponent],
     templateUrl: './guest-footer.component.html',
     styleUrls: ['./guest-footer.component.css']
 })

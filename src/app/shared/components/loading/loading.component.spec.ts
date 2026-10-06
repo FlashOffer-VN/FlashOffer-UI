@@ -22,13 +22,13 @@ describe('LoadingComponent', () => {
         return fixture.nativeElement.querySelector('.app-loading');
     }
 
-    it('mặc định là spinner và là khối tải trang có chiều cao tối thiểu', () => {
+    it('mặc định là dots và là khối tải trang có chiều cao tối thiểu', () => {
         const fixture = create();
 
-        expect(fixture.componentInstance.type).toBe('spinner');
+        expect(fixture.componentInstance.type).toBe('dots');
         expect(block(fixture)).toBeTruthy();
         expect(block(fixture)!.getAttribute('style')).toContain('min-height: 40vh');
-        expect(fixture.nativeElement.querySelector('.spinner')).toBeTruthy();
+        expect(fixture.nativeElement.querySelectorAll('.dot').length).toBe(6);
     });
 
     it('inline thì không chiếm chiều cao (dùng trong ô bảng/khối nhỏ)', () => {
@@ -56,10 +56,19 @@ describe('LoadingComponent', () => {
         expect(fixture.nativeElement.querySelectorAll('.dot').length).toBe(6);
     });
 
-    it('fullScreen là overlay phủ toàn màn hình, không dùng khối tải trang', () => {
+    it('fullScreen là overlay phủ toàn màn hình, dùng logo + chấm động', () => {
         const fixture = create({ fullScreen: true });
 
         expect(fixture.nativeElement.querySelector('.fixed.inset-0')).toBeTruthy();
+        expect(fixture.nativeElement.querySelector('.logo-icon')).toBeTruthy();
+        expect(fixture.nativeElement.querySelectorAll('.dot-loading').length).toBe(3);
         expect(block(fixture)).toBeNull();
+    });
+
+    it('kiểu logo hiện tia chớp thương hiệu (dùng cho tải cả trang)', () => {
+        const fixture = create({ type: 'logo' as LoadingType });
+
+        expect(fixture.nativeElement.querySelector('.logo-icon i')).toBeTruthy();
+        expect(fixture.nativeElement.querySelectorAll('.dot').length).toBe(0);
     });
 });

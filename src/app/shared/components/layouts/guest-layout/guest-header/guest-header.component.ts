@@ -8,6 +8,7 @@ import { AppService } from '../../../../../core/services/app.service';
 import { isAdminRole } from '../../../../../core/models/auth.model';
 import { isBrowser } from '../../../../../core/utils/platform';
 import { LanguageSwitcherComponent } from '../../../language-switcher/language-switcher.component';
+import { BrandLogoComponent } from '@shared/components/brand-logo/brand-logo.component';
 
 @Component({
     selector: 'app-guest-header',
@@ -17,7 +18,8 @@ import { LanguageSwitcherComponent } from '../../../language-switcher/language-s
         RouterLink,
         RouterLinkActive,
         TranslateModule,
-        LanguageSwitcherComponent
+        LanguageSwitcherComponent,
+        BrandLogoComponent
     ],
     templateUrl: './guest-header.component.html',
     styleUrls: ['./guest-header.component.css', './guest-header.component.mobile.css']
