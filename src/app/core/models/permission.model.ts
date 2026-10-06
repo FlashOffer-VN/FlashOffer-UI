@@ -215,6 +215,12 @@ export enum Permission {
     ViewRestorePurchaseRequest = 'P146',
     /** P147 — khôi phục yêu cầu mua hàng */
     RestorePurchaseRequest = 'P147',
+    /** P154 — xem chi tiết người dùng (kèm hồ sơ CTV/đối tác liên kết) */
+    ViewUserDetail = 'P154',
+    /** P155 — sửa thông tin người dùng */
+    UpdateUserInfo = 'P155',
+    /** P156 — tạo tài khoản quản trị */
+    CreateAdminAccount = 'P156',
 }
 
 /** Nhóm quyền (bảng PermissionGroups): mã, tên hiển thị và thứ tự. */
