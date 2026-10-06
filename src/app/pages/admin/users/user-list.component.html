@@ -5,7 +5,16 @@
             <h1 class="text-2xl font-bold text-gray-900">{{ 'ADMIN.USERS.TITLE' | translate }}</h1>
             <p class="text-gray-500 text-sm">{{ 'ADMIN.USERS.LIST_TITLE' | translate }}</p>
         </div>
+
+        <!-- Tạo tài khoản quản trị (quyền riêng P156) -->
+        <app-button *ngIf="canCreateAdmin()" variant="primary" (click)="openCreate()">
+            <i class="fa-solid fa-user-shield mr-1"></i>{{ 'ADMIN.USERS.CREATE_ADMIN' | translate }}
+        </app-button>
     </div>
+
+    <!-- Tab tài khoản thường / tài khoản quản trị -->
+    <app-status-tabs class="block mb-4" [items]="tabs" [active]="activeScope" (change)="onTabChange($event)">
+    </app-status-tabs>
 
     <!-- Filters -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
@@ -99,12 +108,21 @@
                                 {{ user.lastLoginAt ? (user.lastLoginAt | appDate) : '--' }}
                             </td>
                             <td class="px-4 py-3">
-                                <app-button *ngIf="canResetPassword(user)" variant="primary" [size]="'sm'"
-                                    [loading]="resettingId === user.id" (click)="onResetPassword(user)"
-                                    [title]="'ADMIN.USERS.RESET_PASSWORD' | translate">
-                                    <i class="fa-solid fa-key"></i>
-                                </app-button>
-                                <span *ngIf="!canResetPassword(user)" class="text-sm text-gray-400">--</span>
+                                <div class="flex items-center gap-2">
+                                    <!-- Sửa thông tin tập trung (quyền riêng P155) -->
+                                    <app-button *ngIf="canEdit()" variant="outline" [size]="'sm'" (click)="openEdit(user)"
+                                        [title]="'ADMIN.USERS.EDIT_TITLE' | translate">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </app-button>
+
+                                    <app-button *ngIf="canResetPassword(user)" variant="primary" [size]="'sm'"
+                                        [loading]="resettingId === user.id" (click)="onResetPassword(user)"
+                                        [title]="'ADMIN.USERS.RESET_PASSWORD' | translate">
+                                        <i class="fa-solid fa-key"></i>
+                                    </app-button>
+
+                                    <span *ngIf="!canEdit() && !canResetPassword(user)" class="text-sm text-gray-400">--</span>
+                                </div>
                             </td>
                         </tr>
                     </ng-container>
@@ -120,4 +138,9 @@
             </app-pagination>
         </div>
     </div>
+
+    <!-- Form tạo tài khoản quản trị / sửa thông tin tập trung (chỉ tạo khi mở để nạp đúng dữ liệu) -->
+    <app-admin-user-form *ngIf="formVisible" [visible]="true" [userId]="formUserId"
+        (visibleChange)="onFormVisibilityChange($event)" (saved)="onSaved()">
+    </app-admin-user-form>
 </div>
