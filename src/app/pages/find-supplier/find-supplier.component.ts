@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { resolveReferralCode } from '@core/utils/share-link';
 import { focusFirstInvalid } from '@core/utils/form-invalid';
+import { TextareaComponent } from '@shared/components/textarea/textarea.component';
 import {
     UNIT_OPTIONS,
     PRODUCT_CATEGORY_OPTIONS,
@@ -19,7 +20,8 @@ import {
         CommonModule,
         ReactiveFormsModule,
         TranslateModule,
-        RouterLink
+        RouterLink,
+        TextareaComponent
     ],
     templateUrl: './find-supplier.component.html',
     styleUrls: ['./find-supplier.component.css']

@@ -157,8 +157,7 @@
                     <label>{{ 'GROUP_BUYING.NOTE' | translate }}</label>
                     <div class="input-wrapper">
                         <i class="fas fa-pen input-icon textarea-icon"></i>
-                        <textarea formControlName="note" rows="3"
-                            placeholder="{{ 'GROUP_BUYING.NOTE_PLACEHOLDER' | translate }}"></textarea>
+                        <app-textarea formControlName="note" [rows]="3" placeholder="{{ 'GROUP_BUYING.NOTE_PLACEHOLDER' | translate }}" />
                     </div>
                 </div>
 

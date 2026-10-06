@@ -22,6 +22,7 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.component';
 import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
+import { TextareaComponent } from '@shared/components/textarea/textarea.component';
 
 /**
  * Cấu hình mức hoa hồng cho người giới thiệu và đối tác: một bản dùng chung cho mọi tài khoản
@@ -46,7 +47,8 @@ import { CheckboxComponent } from '@shared/components/checkbox/checkbox.componen
         BadgeComponent,
         NgSelectWrapperComponent,
         HasPermissionDirective,
-        CheckboxComponent
+        CheckboxComponent,
+        TextareaComponent
     ],
     template: `
         <div class="grid gap-4 lg:grid-cols-[1fr_380px]">
@@ -130,9 +132,7 @@ import { CheckboxComponent } from '@shared/components/checkbox/checkbox.componen
 
                     <label class="flex flex-col text-sm text-gray-700">
                         {{ 'COMMISSION.NOTE' | translate }}
-                        <textarea rows="2" [(ngModel)]="note"
-                            [placeholder]="'COMMISSION.NOTE_PLACEHOLDER' | translate"
-                            class="mt-auto w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"></textarea>
+                        <app-textarea [rows]="2" />
                     </label>
 
                     <label class="flex items-center gap-2 text-sm text-gray-700">

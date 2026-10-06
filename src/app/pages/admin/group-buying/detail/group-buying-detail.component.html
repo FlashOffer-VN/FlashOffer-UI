@@ -259,8 +259,7 @@
     [confirmVariant]="'danger'" [loading]="isActionLoading" (confirm)="confirmCancel()"
     (cancel)="showCancelModal = false">
     <p class="text-gray-600 mb-3">{{ 'ADMIN.GROUP_BUYING.CANCEL_CONFIRM' | translate }}</p>
-    <textarea [(ngModel)]="cancelReason" rows="3" class="w-full border border-gray-300 rounded-lg p-3 text-sm"
-        placeholder="{{ 'ADMIN.GROUP_BUYING.CANCEL_REASON_PLACEHOLDER' | translate }}"></textarea>
+    <app-textarea [rows]="3" placeholder="{{ 'ADMIN.GROUP_BUYING.CANCEL_REASON_PLACEHOLDER' | translate }}" />
 </app-modal>
 
 <!-- Xóa người khỏi nhóm -->
@@ -299,7 +298,7 @@
         </div>
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'GROUP_BUYING.NOTE' | translate }}</label>
-            <textarea rows="3" [(ngModel)]="editData.note" class="w-full border border-gray-300 rounded-lg p-2 text-sm"></textarea>
+            <app-textarea [rows]="3" />
         </div>
     </div>
 </app-modal>

@@ -28,6 +28,7 @@ import { RevenueTransactionType } from '@core/models/revenue.model';
 import { RevenueEntryComponent } from '@pages/admin/revenue/revenue-entry.component';
 import { MoneyInputDirective } from '@shared/directives/money-input.directive';
 import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
+import { TextareaComponent } from '@shared/components/textarea/textarea.component';
 
 @Component({
     selector: 'app-admin-group-buying-detail',
@@ -46,7 +47,8 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
         AppPricePipe,
         MoneyInputDirective,
         RevenueEntryComponent,
-        CodeNamePipe
+        CodeNamePipe,
+        TextareaComponent
     ],
     templateUrl: './group-buying-detail.component.html',
     styleUrls: ['./group-buying-detail.component.css']

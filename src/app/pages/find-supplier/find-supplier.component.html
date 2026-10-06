@@ -179,8 +179,7 @@
                     <label>{{ 'FIND_SUPPLIER.NOTE' | translate }}</label>
                     <div class="input-wrapper">
                         <i class="fas fa-pen input-icon textarea-icon"></i>
-                        <textarea formControlName="note" rows="3"
-                            placeholder="{{ 'FIND_SUPPLIER.NOTE_PLACEHOLDER' | translate }}"></textarea>
+                        <app-textarea formControlName="note" [rows]="3" placeholder="{{ 'FIND_SUPPLIER.NOTE_PLACEHOLDER' | translate }}" />
                     </div>
                 </div>
 

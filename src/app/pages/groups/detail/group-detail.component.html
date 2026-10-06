@@ -273,8 +273,7 @@
 
             <div>
                 <label class="mb-1 block text-sm font-semibold text-slate-700">{{ 'CLUBS.REJECT_REASON_LABEL' | translate }}</label>
-                <textarea formControlName="reason" rows="3"
-                    class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-primary focus:outline-none"></textarea>
+                <app-textarea formControlName="reason" [rows]="3" />
             </div>
 
             <div class="flex justify-end gap-2">

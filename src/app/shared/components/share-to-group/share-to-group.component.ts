@@ -12,6 +12,7 @@ import { ButtonComponent, ButtonSize } from '@shared/components/button/button.co
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
+import { TextareaComponent } from '@shared/components/textarea/textarea.component';
 
 /**
  * Nút "Chuyển tiếp vào nhóm ngành": gửi 1 yêu cầu của hệ thống (mua chung / tìm nhà cung cấp)
@@ -22,7 +23,8 @@ import { CheckboxComponent } from '@shared/components/checkbox/checkbox.componen
     selector: 'app-share-to-group',
     standalone: true,
     imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink, TranslateModule, ButtonComponent, LoadingComponent, ModalComponent,
-        CheckboxComponent
+        CheckboxComponent,
+        TextareaComponent
     ],
     templateUrl: './share-to-group.component.html',
     host: {

@@ -30,6 +30,7 @@ import { SearchByComponent } from '@shared/components/search-by/search-by.compon
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TextareaComponent } from '@shared/components/textarea/textarea.component';
 
 @Component({
     selector: 'app-social',
@@ -44,6 +45,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
         RouterLink,
         ModalComponent,
         SearchByComponent,
+        TextareaComponent
     ],
     templateUrl: './social.component.html',
     styleUrls: ['./social.component.css']

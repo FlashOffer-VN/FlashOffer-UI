@@ -202,8 +202,7 @@
 
                         <div class="form-group">
                             <label>{{ 'GROUP_BUYING.NOTE' | translate }}</label>
-                            <textarea rows="2" formControlName="note"
-                                placeholder="{{ 'GROUP_BUYING.DETAIL.NOTE_PLACEHOLDER' | translate }}"></textarea>
+                            <app-textarea [rows]="2" formControlName="note" placeholder="{{ 'GROUP_BUYING.DETAIL.NOTE_PLACEHOLDER' | translate }}" />
                         </div>
 
                         <div class="actions">

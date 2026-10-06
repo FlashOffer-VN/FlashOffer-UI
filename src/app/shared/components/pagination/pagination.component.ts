@@ -1,13 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, HostListener, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 
 @Component({
     selector: 'app-pagination',
     standalone: true,
-    imports: [CommonModule, FormsModule, TranslateModule, NgSelectWrapperComponent],
+    imports: [CommonModule, TranslateModule],
     templateUrl: './pagination.component.html',
     styleUrls: ['./pagination.component.css']
 })
@@ -77,13 +75,24 @@ export class PaginationComponent {
         }
     }
 
-    /** Danh sách cỡ trang cho app-ng-select-wrapper (nhãn là chính con số). */
-    get pageSizeItems(): { value: number; label: string }[] {
-        return this.pageSizes.map((size) => ({ value: size, label: `${size}` }));
+    /** Cỡ trang đang mở menu hay không (menu tự vẽ cho khớp cụm paging, không dùng select chung của app). */
+    sizeOpen = false;
+
+    /** Mở/đóng menu cỡ trang — chặn nổi bọt để không bị listener đóng menu của tài liệu. */
+    toggleSizeMenu(event: Event): void {
+        event.stopPropagation();
+        this.sizeOpen = !this.sizeOpen;
     }
 
-    /** Đổi số dòng mỗi trang — wrapper trả về giá trị đã chọn. */
-    onPageSizeChange(size: number): void {
+    /** Chọn cỡ trang rồi đóng menu. */
+    onPageSizePick(size: number): void {
+        this.sizeOpen = false;
         this.pageSizeChange.emit(Number(size));
+    }
+
+    /** Bấm ra ngoài thì đóng menu. */
+    @HostListener('document:click')
+    onDocumentClick(): void {
+        this.sizeOpen = false;
     }
 }

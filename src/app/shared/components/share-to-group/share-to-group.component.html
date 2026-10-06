@@ -122,8 +122,7 @@
 
         <div>
             <label class="mb-1 block text-sm font-semibold text-slate-700">{{ 'SHARE_TO_GROUP.NOTE_LABEL' | translate }}</label>
-            <textarea formControlName="note" rows="3" [placeholder]="'SHARE_TO_GROUP.NOTE_PLACEHOLDER' | translate"
-                class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-primary focus:outline-none"></textarea>
+            <app-textarea formControlName="note" [rows]="3" />
         </div>
 
         <div class="flex justify-end gap-2">

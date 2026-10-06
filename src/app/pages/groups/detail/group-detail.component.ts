@@ -25,6 +25,7 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
+import { TextareaComponent } from '@shared/components/textarea/textarea.component';
 
 /** Chi tiết nhóm: thông tin nhóm, xin vào nhóm và trao đổi trong nhóm */
 @Component({
@@ -34,7 +35,8 @@ import { CheckboxComponent } from '@shared/components/checkbox/checkbox.componen
         ButtonComponent, InputComponent, LoadingComponent, ModalComponent,
         QuillModule,
         SanitizeHtmlPipe,
-        CheckboxComponent
+        CheckboxComponent,
+        TextareaComponent
     ],
     templateUrl: './group-detail.component.html',
 })

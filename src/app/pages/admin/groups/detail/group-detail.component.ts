@@ -23,6 +23,7 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { StatusTabItem, StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
+import { TextareaComponent } from '@shared/components/textarea/textarea.component';
 
 /** Chi tiết nhóm (admin): thành viên, bài trong nhóm, yêu cầu kín */
 @Component({
@@ -42,7 +43,8 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
         StatusTabsComponent,
         QuillModule,
         SanitizeHtmlPipe,
-        CodeNamePipe
+        CodeNamePipe,
+        TextareaComponent
     ],
     templateUrl: './group-detail.component.html',
 })
