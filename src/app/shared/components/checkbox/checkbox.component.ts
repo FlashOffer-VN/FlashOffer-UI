@@ -47,6 +47,9 @@ export class CheckboxComponent implements ControlValueAccessor {
     /** Khoá ô tick (kết hợp với trạng thái khoá do form đặt). */
     @Input() disabled = false;
 
+    /** Nhãn cho trình đọc màn hình khi ô không có nhãn nhìn thấy được (ví dụ checkbox chọn dòng trong bảng). */
+    @Input() ariaLabel = '';
+
     /** Id của input ẩn — cố định theo thứ tự tạo để test/`for=` ổn định. */
     @Input() inputId = `app-checkbox-${CheckboxComponent.nextId++}`;
 

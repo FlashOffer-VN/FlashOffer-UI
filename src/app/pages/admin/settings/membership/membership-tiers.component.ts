@@ -14,6 +14,7 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-tabs/status-tabs.component';
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.component';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
 
 /**
  * Cấu hình điểm hạng thành viên: mốc doanh số tích luỹ để đạt hạng, phí rút sớm riêng,
@@ -31,7 +32,8 @@ import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.compon
         InputComponent,
         LoadingComponent,
         StatusTabsComponent,
-        AppPricePipe
+        AppPricePipe,
+        CheckboxComponent
     ],
     template: `
         <div class="space-y-4">
@@ -129,8 +131,7 @@ import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.compon
                     </div>
 
                     <label class="inline-flex items-center gap-2 text-sm text-gray-700">
-                        <input type="checkbox" formControlName="isActive"
-                            class="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500">
+                        <app-checkbox formControlName="isActive" />
                         <span>{{ 'ADMIN.MEMBERSHIP.FIELD_ACTIVE' | translate }}</span>
                     </label>
 

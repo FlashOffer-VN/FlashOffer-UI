@@ -165,6 +165,59 @@ def scan_dtos():
     return out
 
 
+def scan_ui_enums():
+    """Enum va union type dung chung phia UI (src/app/core)."""
+    out = []
+    roots = [os.path.join(UI_ROOT, "src", "app", "core", "models"),
+             os.path.join(UI_ROOT, "src", "app", "core", "constants")]
+    for d in roots:
+        if not os.path.isdir(d):
+            continue
+        for f in sorted(os.listdir(d)):
+            if not f.endswith(".ts") or f.endswith(".spec.ts"):
+                continue
+            p = os.path.join(d, f)
+            src = read(p)
+            for m in re.finditer(r"export enum (\w+)\s*\{([^}]*)\}", src, re.S):
+                members = []
+                for line in re.split(r",|\r?\n", m.group(2)):
+                    mm = re.match(r"\s*([A-Za-z_]\w*)\s*(?:=\s*([^,]+))?$", line.strip())
+                    if mm:
+                        members.append({"name": mm.group(1), "value": one_line(mm.group(2))})
+                out.append({"kind": "enum", "name": m.group(1), "path": os.path.relpath(p, UI_ROOT).replace("\\", "/"),
+                            "doc": xml_doc(src, m.start()), "members": members})
+            for m in re.finditer(r"export type (\w+)\s*=\s*([^;]+);", src):
+                raw = one_line(m.group(2))
+                if "|" not in raw:
+                    continue
+                members = [{"name": v.strip().strip("'\"") or v.strip(), "value": v.strip()} for v in raw.split("|")]
+                out.append({"kind": "union", "name": m.group(1), "path": os.path.relpath(p, UI_ROOT).replace("\\", "/"),
+                            "doc": xml_doc(src, m.start()), "members": members})
+    return sorted(out, key=lambda x: x["name"])
+
+
+def scan_api_enums():
+    """Enum phia API (Domain/Enums)."""
+    d = os.path.join(API_ROOT, "src", "Kindi.API.Domain", "Enums")
+    out = []
+    if not os.path.isdir(d):
+        return out
+    for f in sorted(os.listdir(d)):
+        if not f.endswith(".cs"):
+            continue
+        p = os.path.join(d, f)
+        src = read(p)
+        for m in re.finditer(r"public enum (\w+)\s*\{([^}]*)\}", src, re.S):
+            members = []
+            for line in re.split(r",|\r?\n", m.group(2)):
+                mm = re.match(r"\s*([A-Za-z_]\w*)\s*(?:=\s*([^,]+))?$", line.strip())
+                if mm:
+                    members.append({"name": mm.group(1), "value": one_line(mm.group(2))})
+            out.append({"kind": "enum", "name": m.group(1), "path": os.path.relpath(p, API_ROOT).replace("\\", "/"),
+                        "doc": xml_doc(src, m.start()), "members": members})
+    return sorted(out, key=lambda x: x["name"])
+
+
 def scan_ui_helpers():
     """Ham tien ich dung chung phia UI (src/app/core/utils)."""
     d = os.path.join(UI_ROOT, "src", "app", "core", "utils")
@@ -312,6 +365,8 @@ def main():
     ui = scan_ui()
     api = scan_api()
     ui["helpers"] = scan_ui_helpers()
+    ui["enums"] = scan_ui_enums()
+    api["enums"] = scan_api_enums()
     payload = {"generatedFrom": "kindi-ui src/app/shared + src/app/core/utils + kindi-api Controllers/Extensions",
                "ui": ui, "api": api}
     with io.open(os.path.join(UI_ROOT, "catalog-raw.json"), "w", encoding="utf-8") as fh:
@@ -376,14 +431,18 @@ def main():
               "export interface UiHelperFn { name: string; generics: string; params: string[]; returnType: string; doc: string; }\n"
               "export interface UiHelper { file: string; path: string; doc: string; functions: UiHelperFn[]; consts: string[]; }\n\n"
               "export interface DtoField { name: string; type: string; }\n\n"
+              "export interface EnumMember { name: string; value: string; }\n"
+              "export interface CatalogEnum { kind: 'enum' | 'union'; name: string; path: string; doc: string; members: EnumMember[]; }\n\n"
               "export const UI_COMPONENTS: CatalogItem[] = ")
     body = (ts(ui["components"]) + ";\n\nexport const UI_PIPES: CatalogItem[] = " + ts(ui["pipes"])
             + ";\n\nexport const UI_DIRECTIVES: CatalogItem[] = " + ts(ui["directives"])
             + ";\n\nexport const UI_HELPERS: UiHelper[] = " + ts(ui["helpers"])
+            + ";\n\nexport const UI_ENUMS: CatalogEnum[] = " + ts(ui["enums"])
             + ";\n\nexport const API_CONTROLLERS: ApiController[] = " + ts(api["controllers"])
             + ";\n\nexport const API_EXTENSIONS: ApiExtension[] = " + ts(api["extensions"])
             + ";\n\nexport const API_MIDDLEWARES: { class: string; path: string; doc: string }[] = " + ts(api["middlewares"])
             + ";\n\nexport const API_DTOS: { [name: string]: DtoField[] } = " + ts(api["dtos"])
+            + ";\n\nexport const API_ENUMS: CatalogEnum[] = " + ts(api["enums"])
             + ";\n\nexport const API_PERMISSION_CODES: { [name: string]: string } = " + ts(api["permissionCodes"])
             + ";\n")
     os.makedirs(os.path.dirname(OUT), exist_ok=True)

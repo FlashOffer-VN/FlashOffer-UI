@@ -22,13 +22,16 @@ import { ToastComponent } from '@shared/components/toast/toast.component';
 import {
     API_CONTROLLERS,
     API_DTOS,
+    API_ENUMS,
     API_EXTENSIONS,
     API_MIDDLEWARES,
     API_PERMISSION_CODES,
+    CatalogEnum,
     CatalogItem,
     DtoField,
     UI_COMPONENTS,
     UI_DIRECTIVES,
+    UI_ENUMS,
     UI_HELPERS,
     UI_PIPES
 } from './catalog.data';
@@ -90,6 +93,8 @@ export class UiGalleryComponent {
     readonly controllers = API_CONTROLLERS;
     readonly extensions = API_EXTENSIONS;
     readonly middlewares = API_MIDDLEWARES;
+    readonly uiEnums = UI_ENUMS;
+    readonly apiEnums = API_ENUMS;
 
     readonly groups: { key: UiGroupKey; label: string; icon: string }[] = [
         { key: 'form', label: 'ADMIN.UI_GALLERY.GROUP_FORM', icon: 'fa-solid fa-keyboard' },
@@ -107,7 +112,8 @@ export class UiGalleryComponent {
         controllers: API_CONTROLLERS.length,
         endpoints: API_CONTROLLERS.reduce((sum, c) => sum + c.actions.length, 0),
         extensions: API_EXTENSIONS.length,
-        middlewares: API_MIDDLEWARES.length
+        middlewares: API_MIDDLEWARES.length,
+        enums: UI_ENUMS.length + API_ENUMS.length
     };
 
     // ===== Trạng thái cho các demo trực tiếp =====
@@ -195,6 +201,14 @@ export class UiGalleryComponent {
 
     get filteredMiddlewares() {
         return this.filter(this.middlewares, (m) => `${m.class} ${m.doc}`);
+    }
+
+    get filteredUiEnums(): CatalogEnum[] {
+        return this.filter(this.uiEnums, (e) => `${e.name} ${e.doc} ${e.members.map((m) => `${m.name} ${m.value}`).join(' ')}`);
+    }
+
+    get filteredApiEnums(): CatalogEnum[] {
+        return this.filter(this.apiEnums, (e) => `${e.name} ${e.doc} ${e.members.map((m) => `${m.name} ${m.value}`).join(' ')}`);
     }
 
     private filter<T>(items: T[], text?: (item: T) => string): T[] {

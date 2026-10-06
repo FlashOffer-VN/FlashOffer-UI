@@ -22,6 +22,7 @@ import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wr
 import { SelectOption } from '@core/constants/format-options';
 import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-tabs/status-tabs.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
 
 /**
  * Quản lý lĩnh vực hoạt động: thêm, sửa, bật/tắt, xoá và xem công ty/tài khoản thuộc lĩnh vực.
@@ -40,7 +41,8 @@ import { PaginationComponent } from '@shared/components/pagination/pagination.co
         ModalComponent,
         NgSelectWrapperComponent,
         StatusTabsComponent,
-        PaginationComponent
+        PaginationComponent,
+        CheckboxComponent
     ],
     styles: [`
         @media (max-width: 640px) {
@@ -175,7 +177,7 @@ import { PaginationComponent } from '@shared/components/pagination/pagination.co
                     </app-input>
                 </div>
                 <label class="flex items-center gap-2 text-sm text-gray-700">
-                    <input type="checkbox" [(ngModel)]="form.isActive" class="rounded border-gray-300">
+                    <app-checkbox [(ngModel)]="form.isActive" />
                     {{ 'ADMIN.BUSINESS_FIELDS.FORM_ACTIVE' | translate }}
                 </label>
             </div>

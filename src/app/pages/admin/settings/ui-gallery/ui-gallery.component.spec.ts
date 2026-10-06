@@ -5,9 +5,11 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import {
     API_CONTROLLERS,
+    API_ENUMS,
     API_EXTENSIONS,
     UI_COMPONENTS,
     UI_DIRECTIVES,
+    UI_ENUMS,
     UI_PIPES
 } from './catalog.data';
 import { UiGalleryComponent } from './ui-gallery.component';
@@ -41,12 +43,29 @@ describe('UiGalleryComponent', () => {
     it('hiển thị đủ số liệu tổng hợp từ catalog', () => {
         const stats = (fixture.nativeElement as HTMLElement).querySelectorAll('.gallery__stats .stat');
 
-        expect(stats.length).toBe(7);
+        expect(stats.length).toBe(8);
         expect(component.stats.components).toBe(UI_COMPONENTS.length);
         expect(component.stats.pipes).toBe(UI_PIPES.length);
         expect(component.stats.directives).toBe(UI_DIRECTIVES.length);
         expect(component.stats.extensions).toBe(API_EXTENSIONS.length);
         expect(component.stats.endpoints).toBeGreaterThan(100);
+        expect(component.stats.enums).toBe(UI_ENUMS.length + API_ENUMS.length);
+    });
+
+    it('tab Helper có enum của cả API và UI, tra được giá trị thành viên', () => {
+        component.tab = 'helper';
+        refresh();
+
+        const host = fixture.nativeElement as HTMLElement;
+        expect(component.filteredApiEnums.length).toBe(API_ENUMS.length);
+        expect(component.filteredUiEnums.length).toBe(UI_ENUMS.length);
+        expect(host.querySelectorAll('.enum-member').length).toBeGreaterThan(100);
+
+        component.keyword = 'TrashEntity';
+        refresh();
+        const ui = component.filteredUiEnums;
+        expect(ui.some((item) => item.name === 'TrashEntity')).toBeTrue();
+        expect(ui.find((item) => item.name === 'TrashEntity')!.members.length).toBeGreaterThan(3);
     });
 
     it('tab Giao diện liệt kê component theo nhóm và có bảng input', () => {

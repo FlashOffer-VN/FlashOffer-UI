@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
+import { RadioGroupComponent, RadioOption } from '@shared/components/radio-group/radio-group.component';
 import { CommissionService } from '@core/services/commission.service';
 import { CommissionBeneficiary, CommissionConfig, CommissionTier } from '@core/models/commission.model';
 import { CommissionType, getCommissionTypeLabel } from '@core/models/partner.model';
@@ -20,6 +21,7 @@ import { BadgeComponent } from '@shared/components/badge/badge.component';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.component';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
 
 /**
  * Cấu hình mức hoa hồng cho người giới thiệu và đối tác: một bản dùng chung cho mọi tài khoản
@@ -32,6 +34,7 @@ import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.compon
         PurgeBarComponent,
         CommonModule,
         FormsModule,
+        RadioGroupComponent,
         TranslateModule,
         AppDatePipe,
         AppPricePipe,
@@ -42,7 +45,8 @@ import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.compon
         InputComponent,
         BadgeComponent,
         NgSelectWrapperComponent,
-        HasPermissionDirective
+        HasPermissionDirective,
+        CheckboxComponent
     ],
     template: `
         <div class="grid gap-4 lg:grid-cols-[1fr_380px]">
@@ -51,14 +55,8 @@ import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.compon
                 <div class="bg-white rounded-lg border border-gray-200 p-4">
                     <p class="text-sm font-semibold text-gray-700 mb-3">{{ 'COMMISSION.SCOPE_TITLE' | translate }}</p>
                     <div class="flex flex-wrap gap-4">
-                        <label class="flex items-center gap-2 text-sm text-gray-700">
-                            <input type="radio" name="scope" [checked]="scope === 'global'" (change)="setScope('global')" />
-                            {{ 'COMMISSION.SCOPE_GLOBAL' | translate }}
-                        </label>
-                        <label class="flex items-center gap-2 text-sm text-gray-700">
-                            <input type="radio" name="scope" [checked]="scope === 'users'" (change)="setScope('users')" />
-                            {{ 'COMMISSION.SCOPE_USERS' | translate }}
-                        </label>
+                        <app-radio-group orientation="horizontal" [options]="scopeOptions" [ngModel]="scope"
+                            (ngModelChange)="setScope($event)" />
                     </div>
 
                     @if (scope === 'users') {
@@ -138,7 +136,7 @@ import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.compon
                     </label>
 
                     <label class="flex items-center gap-2 text-sm text-gray-700">
-                        <input type="checkbox" [(ngModel)]="isActive" /> {{ 'COMMISSION.ACTIVE' | translate }}
+                        <app-checkbox [(ngModel)]="isActive" /> {{ 'COMMISSION.ACTIVE' | translate }}
                     </label>
 
                     <div class="flex items-center gap-2 pt-1">
@@ -230,9 +228,16 @@ import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.compon
 export class AdminCommissionConfigComponent implements OnInit {
     /** Mã quyền dùng trong template (`*appHasPermission`). */
     readonly Permission = Permission;
-
     /** Phạm vi đang cấu hình: chung cho mọi tài khoản hay riêng cho tài khoản được chọn. */
     scope: 'global' | 'users' = 'global';
+
+    /** Lựa chọn phạm vi áp dụng (nhãn lấy từ i18n). */
+    get scopeOptions(): RadioOption[] {
+        return [
+            { value: 'global', label: this._appService.trans('COMMISSION.SCOPE_GLOBAL') },
+            { value: 'users', label: this._appService.trans('COMMISSION.SCOPE_USERS') }
+        ];
+    }
 
     /** Bên nhận hoa hồng đang xem. */
     beneficiary = CommissionBeneficiary.Referrer;

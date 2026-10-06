@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
 
 /** Một tài khoản hiển thị trong danh sách chọn. */
 export interface UserPickerItem {
@@ -22,7 +23,9 @@ export interface UserPickerItem {
 @Component({
     selector: 'app-user-picker',
     standalone: true,
-    imports: [CommonModule, FormsModule, TranslateModule, LoadingComponent, ButtonComponent, InputComponent],
+    imports: [CommonModule, FormsModule, TranslateModule, LoadingComponent, ButtonComponent, InputComponent,
+        CheckboxComponent
+    ],
     template: `
         <div class="flex gap-2">
             <app-input [(ngModel)]="search" (keyup.enter)="emitSearch()" [id]="'user_picker_search'"
@@ -41,7 +44,7 @@ export interface UserPickerItem {
             } @else {
                 @for (user of users; track user.id) {
                     <label class="flex items-start gap-2 py-2 border-b border-gray-100 last:border-b-0 cursor-pointer">
-                        <input type="checkbox" class="mt-1" [checked]="isSelected(user.id)" (change)="toggle(user)" />
+                        <app-checkbox [ngModel]="isSelected(user.id)" (ngModelChange)="toggle(user)" />
                         <span class="text-sm">
                             <span class="block text-gray-900">{{ user.fullName }}</span>
                             <span class="block text-xs text-gray-500">

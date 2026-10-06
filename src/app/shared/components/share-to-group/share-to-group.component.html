@@ -100,7 +100,7 @@
         <!-- Chuyển tiếp kèm link chia sẻ mời tham gia (bài mua chung có mã đơn công khai) -->
         <div *ngIf="canAttachShareLink" class="space-y-2 rounded-xl bg-slate-50 px-4 py-3">
             <label class="flex items-start gap-3 text-sm text-slate-700">
-                <input type="checkbox" formControlName="withShareLink" class="mt-0.5 h-4 w-4">
+                <app-checkbox formControlName="withShareLink" />
                 <span>
                     <span class="font-semibold">{{ 'SHARE_TO_GROUP.WITH_SHARE_LINK' | translate }}</span>
                     <span class="mt-0.5 block text-xs text-slate-500">

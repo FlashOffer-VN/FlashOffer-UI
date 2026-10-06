@@ -1873,7 +1873,7 @@
             "TAB_COMMISSION_DESC": "Mức hoa hồng chung hoặc riêng cho từng tài khoản",
             "TAB_AUDIT_LOG_DESC": "Lịch sử thao tác dữ liệu và đăng nhập",
             "TAB_UI_GALLERY": "Thư viện nội bộ",
-            "TAB_UI_GALLERY_DESC": "Component, pipe, helper UI và route API cho dev",
+            "TAB_UI_GALLERY_DESC": "Component, pipe, helper, enum UI và route API cho dev",
             "SECTIONS": "mục cài đặt",
             "COMING_SOON": "Sắp có",
             "TAB_MEMBERSHIP": "Hạng thành viên",

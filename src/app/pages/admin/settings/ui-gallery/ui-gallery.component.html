@@ -21,6 +21,7 @@
             <span class="stat"><b>{{ stats.controllers }}</b>controller</span>
             <span class="stat"><b>{{ stats.endpoints }}</b>endpoint</span>
             <span class="stat"><b>{{ stats.extensions }}</b>helper API</span>
+            <span class="stat"><b>{{ stats.enums }}</b>enum</span>
         </div>
     </header>
 
@@ -138,7 +139,7 @@
                         (click)="demoLoading = t">{{ t }}</button>
                     }
                 </div>
-                <div class="demo__preview">
+                <div class="demo__preview demo__preview--loading">
                     <app-loading [type]="demoLoading" size="md" [inline]="true" text="Đang tải dữ liệu..." />
                 </div>
             </div>
@@ -539,6 +540,65 @@
         <div class="perm-grid">
             @for (entry of permissionCodes | keyvalue; track entry.key) {
             <span class="perm__item"><b>{{ entry.value }}</b>{{ entry.key }}</span>
+            }
+        </div>
+    </section>
+
+    <section class="gallery__section">
+        <h3 class="section__title">
+            <i class="fa-solid fa-list-ol"></i>Enum — API
+            <span class="section__count">{{ filteredApiEnums.length }}/{{ apiEnums.length }}</span>
+        </h3>
+        <div class="cards">
+            @for (item of filteredApiEnums; track item.name) {
+            <article class="card">
+                <header class="card__head">
+                    <code class="chip">{{ item.name }}</code>
+                </header>
+                @if (item.doc) {
+                <p class="card__doc">{{ item.doc }}</p>
+                }
+                <p class="card__path">{{ item.path }}</p>
+                <div class="enum-members">
+                    @for (member of item.members; track member.name) {
+                    <span class="enum-member" [title]="member.name">
+                        <b>{{ member.value || member.name }}</b>{{ member.name }}
+                    </span>
+                    }
+                </div>
+            </article>
+            } @empty {
+            <p class="empty">{{ 'ADMIN.UI_GALLERY.EMPTY' | translate }}</p>
+            }
+        </div>
+    </section>
+
+    <section class="gallery__section">
+        <h3 class="section__title">
+            <i class="fa-solid fa-list-ol"></i>Enum — UI
+            <span class="section__count">{{ filteredUiEnums.length }}/{{ uiEnums.length }}</span>
+        </h3>
+        <div class="cards">
+            @for (item of filteredUiEnums; track item.name) {
+            <article class="card">
+                <header class="card__head">
+                    <code class="chip">{{ item.name }}</code>
+                    <span class="card__meta">{{ item.kind }}</span>
+                </header>
+                @if (item.doc) {
+                <p class="card__doc">{{ item.doc }}</p>
+                }
+                <p class="card__path">{{ item.path }}</p>
+                <div class="enum-members">
+                    @for (member of item.members; track member.name) {
+                    <span class="enum-member" [title]="member.name">
+                        <b>{{ member.value || member.name }}</b>{{ member.name }}
+                    </span>
+                    }
+                </div>
+            </article>
+            } @empty {
+            <p class="empty">{{ 'ADMIN.UI_GALLERY.EMPTY' | translate }}</p>
             }
         </div>
     </section>

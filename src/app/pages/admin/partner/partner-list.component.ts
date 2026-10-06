@@ -22,6 +22,7 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 import { CodeListComponent } from '@shared/components/code-list/code-list.component';
 import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.component';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
 
 @Component({
     selector: 'app-admin-partner-list',
@@ -42,7 +43,8 @@ import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.compon
         NgxFilterDaterangeComponent,
         AppDatePipe,
         HasPermissionDirective,
-        SearchByComponent
+        SearchByComponent,
+        CheckboxComponent
     ],
     templateUrl: './partner-list.component.html',
     styleUrls: ['./partner-list.component.css']

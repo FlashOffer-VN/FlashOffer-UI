@@ -1,5 +1,6 @@
 <label class="cb" [class.cb--sm]="size === 'sm'" [class.is-disabled]="disabled">
     <input class="cb__input" type="checkbox" [id]="inputId" [checked]="value" [disabled]="disabled"
+        [attr.aria-label]="ariaLabel || null"
         [attr.aria-checked]="indeterminate ? 'mixed' : value" [attr.aria-describedby]="hint ? inputId + '-hint' : null"
         (change)="onToggle($event)" />
 

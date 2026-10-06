@@ -66,7 +66,7 @@
     --danger-soft: #fef2f2;
     --warning: #f59e0b;
     --warning-soft: #fef3c7;
-    --success: #10b981;
+    --success: #0f9d6e;
     --orange: #f97316;
 
     /* Trạng thái — sắc độ đậm/nhạt */
@@ -81,11 +81,11 @@
     --orange-light: #fb923c;
     --orange-dark: #ea580c;
     --orange-soft: #ffedd5;
-    --success-bg: #ecfdf5;
-    --success-bg-soft: #dcfce7;
-    --success-soft: #d1fae5;
-    --success-dark: #059669;
-    --success-strong: #047857;
+    --success-bg: #f0fbf6;
+    --success-bg-soft: #d9f4e6;
+    --success-soft: #c8f0de;
+    --success-dark: #0b7a55;
+    --success-strong: #075c3f;
     --pink-dark: #db2777;
     --pink-soft: #fce7f3;
 
@@ -177,7 +177,7 @@
     /* chữ phụ trên thanh đầu trang khách, nội dung thông báo */
     --text-ink: #1a1a2e;
     /* tiêu đề đậm trên nền sáng */
-    --success-mid: #16a34a;
+    --success-mid: #17b981;
     /* xanh lá cho biểu đồ & icon thống kê */
     --chart-violet: #7c3aed;
     /* tím trong bảng màu biểu đồ */

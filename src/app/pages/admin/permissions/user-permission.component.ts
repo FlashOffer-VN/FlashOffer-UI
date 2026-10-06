@@ -19,6 +19,7 @@ import {
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
 
 type NodeState = 'all' | 'some' | 'none';
 
@@ -30,7 +31,9 @@ type NodeState = 'all' | 'some' | 'none';
 @Component({
     selector: 'app-admin-user-permission',
     standalone: true,
-    imports: [CommonModule, FormsModule, TranslateModule, LoadingComponent, ButtonComponent, InputComponent],
+    imports: [CommonModule, FormsModule, TranslateModule, LoadingComponent, ButtonComponent, InputComponent,
+        CheckboxComponent
+    ],
     template: `
         <div class="grid gap-4 lg:grid-cols-[340px_1fr]">
             <!-- Danh sách tài khoản -->
@@ -47,8 +50,7 @@ type NodeState = 'all' | 'some' | 'none';
                     } @else {
                         @for (user of candidates; track user.id) {
                             <label class="flex items-start gap-2 py-2 border-b border-gray-100 last:border-b-0 cursor-pointer">
-                                <input type="checkbox" class="mt-1" [checked]="isSelected(user.id)"
-                                    (change)="toggleUser(user)" />
+                                <app-checkbox [ngModel]="isSelected(user.id)" (ngModelChange)="toggleUser(user)" />
                                 <span class="text-sm">
                                     <span class="block text-gray-900">{{ user.fullName }}</span>
                                     <span class="block text-xs text-gray-500">{{ user.username }} · {{ user.roleName }}</span>
@@ -105,9 +107,7 @@ type NodeState = 'all' | 'some' | 'none';
                             <i class="fa-solid" [class.fa-chevron-down]="isExpanded(node)"
                                 [class.fa-chevron-right]="!isExpanded(node)"></i>
                         </button>
-                        <input type="checkbox" class="mt-1" [checked]="nodeState(node) === 'all'"
-                            [indeterminate]="nodeState(node) === 'some'"
-                            [disabled]="isNodeDisabled(node)" (change)="toggleNode(node, $any($event.target).checked)" />
+                        <app-checkbox [ngModel]="nodeState(node) === 'all'" [indeterminate]="nodeState(node) === 'some'" [disabled]="isNodeDisabled(node)" (ngModelChange)="toggleNode(node, $event)" />
                         <span class="text-sm"
                             [class.font-semibold]="node.kind === 'group'"
                             [class.font-medium]="node.kind === 'screen'">
@@ -116,8 +116,7 @@ type NodeState = 'all' | 'some' | 'none';
                         <span class="text-xs text-gray-400 mt-0.5">· {{ kindKey(node) | translate }}</span>
                     } @else {
                         <span class="w-4"></span>
-                        <input type="checkbox" class="mt-1" [checked]="isChecked(node.code)"
-                            [disabled]="isNodeDisabled(node)" (change)="toggleCode(node)" />
+                        <app-checkbox [ngModel]="isChecked(node.code)" [disabled]="isNodeDisabled(node)" (ngModelChange)="toggleCode(node)" />
                         <span class="text-sm">
                             <span class="block text-gray-800">{{ nodeLabel(node) }}</span>
                             @if (nodeMeta(node)) {

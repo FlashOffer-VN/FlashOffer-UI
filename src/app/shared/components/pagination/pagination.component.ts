@@ -1,11 +1,13 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 
 @Component({
     selector: 'app-pagination',
     standalone: true,
-    imports: [CommonModule, TranslateModule],
+    imports: [CommonModule, FormsModule, TranslateModule, NgSelectWrapperComponent],
     templateUrl: './pagination.component.html',
     styleUrls: ['./pagination.component.css']
 })
@@ -75,9 +77,13 @@ export class PaginationComponent {
         }
     }
 
-    onPageSizeChange(event: Event): void {
-        const select = event.target as HTMLSelectElement;
-        const size = parseInt(select.value, 10);
-        this.pageSizeChange.emit(size);
+    /** Danh sách cỡ trang cho app-ng-select-wrapper (nhãn là chính con số). */
+    get pageSizeItems(): { value: number; label: string }[] {
+        return this.pageSizes.map((size) => ({ value: size, label: `${size}` }));
+    }
+
+    /** Đổi số dòng mỗi trang — wrapper trả về giá trị đã chọn. */
+    onPageSizeChange(size: number): void {
+        this.pageSizeChange.emit(Number(size));
     }
 }

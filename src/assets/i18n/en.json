@@ -1915,7 +1915,7 @@
             "TAB_COMMISSION_DESC": "Shared or per-account commission rates",
             "TAB_AUDIT_LOG_DESC": "Data change and sign-in history",
             "TAB_UI_GALLERY": "Internal library",
-            "TAB_UI_GALLERY_DESC": "UI components, pipes, helpers and API routes for developers",
+            "TAB_UI_GALLERY_DESC": "UI components, pipes, helpers, enums and API routes for developers",
             "SECTIONS": "sections",
             "COMING_SOON": "Coming soon",
             "TAB_MEMBERSHIP": "Membership tiers",
