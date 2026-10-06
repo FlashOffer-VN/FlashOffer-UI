@@ -19,6 +19,7 @@ import {
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { StatusTabItem, StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
@@ -37,6 +38,7 @@ import { CodeNamePipe } from '@shared/pipes/code-name.pipe';
         InputComponent,
         LoadingComponent,
         ModalComponent,
+        NgSelectWrapperComponent,
         StatusTabsComponent,
         QuillModule,
         SanitizeHtmlPipe,
@@ -65,6 +67,11 @@ export class AdminGroupDetailComponent implements OnInit {
     postForm: FormGroup;
     posting = false;
     postTypes: { value: GroupPostType; labelKey: string }[] = [];
+
+    /** Tuỳ chọn loại bài đăng cho ô chọn của app (nhãn dịch theo ngôn ngữ đang dùng). */
+    get postTypeOptions(): { value: GroupPostType; label: string }[] {
+        return this.postTypes.map(type => ({ value: type.value, label: this._appService.trans(type.labelKey) }));
+    }
 
     rejectVisible = false;
     rejectingMember: BusinessGroupMember | null = null;

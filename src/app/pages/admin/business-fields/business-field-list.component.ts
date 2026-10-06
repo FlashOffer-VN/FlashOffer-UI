@@ -18,6 +18,8 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
+import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
+import { SelectOption } from '@core/constants/format-options';
 import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-tabs/status-tabs.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 
@@ -36,6 +38,7 @@ import { PaginationComponent } from '@shared/components/pagination/pagination.co
         ButtonComponent,
         InputComponent,
         ModalComponent,
+        NgSelectWrapperComponent,
         StatusTabsComponent,
         PaginationComponent
     ],
@@ -282,16 +285,11 @@ import { PaginationComponent } from '@shared/components/pagination/pagination.co
                                 [placeholder]="'ADMIN.BUSINESS_FIELDS.USER_SEARCH_PLACEHOLDER' | translate">
                             </app-input>
                         </div>
-                        <div class="w-40">
-                            <label class="block text-xs font-medium text-gray-500 mb-1">
-                                {{ 'ADMIN.BUSINESS_FIELDS.USER_ROLE' | translate }}
-                            </label>
-                            <select [(ngModel)]="userRoleFilter" (ngModelChange)="onUserRoleChange($event)"
-                                class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-                                <option value="">{{ 'COMMON.ALL' | translate }}</option>
-                                <option value="Collaborator">{{ 'ADMIN.BUSINESS_FIELDS.ROLE_COLLABORATOR' | translate }}</option>
-                                <option value="Partner">{{ 'ADMIN.BUSINESS_FIELDS.ROLE_PARTNER' | translate }}</option>
-                            </select>
+                        <div class="w-52">
+                            <app-ng-select-wrapper [(ngModel)]="userRoleFilter"
+                                (ngModelChange)="onUserRoleChange($event)" [items]="userRoleOptions"
+                                [label]="'ADMIN.BUSINESS_FIELDS.USER_ROLE' | translate" [id]="'businessFieldUserRole'">
+                            </app-ng-select-wrapper>
                         </div>
                         <app-button size="sm" variant="primary" [title]="'ADMIN.BUSINESS_FIELDS.SEARCH' | translate"
                             (click)="searchUsers()">
@@ -395,6 +393,15 @@ export class AdminBusinessFieldListComponent implements OnInit {
     userSearch = '';
     /** '' = tất cả, 'Collaborator' | 'Partner' — gửi thẳng làm tham số role. */
     userRoleFilter = '';
+
+    /** Tuỳ chọn lọc người dùng theo vai trò cho ô chọn của app. */
+    get userRoleOptions(): SelectOption[] {
+        return [
+            { value: '', label: this.translate.instant('COMMON.ALL') },
+            { value: 'Collaborator', label: this.translate.instant('ADMIN.BUSINESS_FIELDS.ROLE_COLLABORATOR') },
+            { value: 'Partner', label: this.translate.instant('ADMIN.BUSINESS_FIELDS.ROLE_PARTNER') }
+        ];
+    }
     userPage = 1;
     userPageSize = 10;
     userTotalCount = 0;

@@ -169,11 +169,9 @@
 
                     <div class="grid gap-4 sm:grid-cols-2">
                         <div>
-                            <label class="mb-1 block text-sm font-semibold text-slate-700">{{ 'ADMIN.GROUPS.POST_TYPE' | translate }}</label>
-                            <select formControlName="type"
-                                class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-primary focus:outline-none">
-                                <option *ngFor="let type of postTypes" [ngValue]="type.value">{{ type.labelKey | translate }}</option>
-                            </select>
+                            <app-ng-select-wrapper formControlName="type" [items]="postTypeOptions"
+                                [label]="'ADMIN.GROUPS.POST_TYPE' | translate" [id]="'groupPostType'">
+                            </app-ng-select-wrapper>
                         </div>
                         <app-input formControlName="refCode" [label]="'ADMIN.GROUPS.REF_CODE' | translate"
                             [placeholder]="'ADMIN.GROUPS.REF_CODE_PLACEHOLDER' | translate"></app-input>

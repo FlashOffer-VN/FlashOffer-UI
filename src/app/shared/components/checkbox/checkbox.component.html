@@ -1,0 +1,16 @@
+<label class="cb" [class.cb--sm]="size === 'sm'" [class.is-disabled]="disabled">
+    <input class="cb__input" type="checkbox" [id]="inputId" [checked]="value" [disabled]="disabled"
+        [attr.aria-checked]="indeterminate ? 'mixed' : value" [attr.aria-describedby]="hint ? inputId + '-hint' : null"
+        (change)="onToggle($event)" />
+
+    <span class="cb__box" [class.is-indeterminate]="indeterminate" aria-hidden="true"></span>
+
+    @if (label) {
+    <span class="cb__text">
+        <span class="cb__label">{{ label }}</span>
+        @if (hint) {
+        <span class="cb__hint" [id]="inputId + '-hint'">{{ hint }}</span>
+        }
+    </span>
+    }
+</label>

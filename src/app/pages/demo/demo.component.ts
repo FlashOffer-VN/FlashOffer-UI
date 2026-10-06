@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ButtonComponent } from '../../shared/components/button/button.component';
-import { LoadingComponent, LoadingType } from '../../shared/components/loading/loading.component';
-import { ToastComponent } from '../../shared/components/toast/toast.component';
-import { ModalComponent } from '../../shared/components/modal/modal.component';
-import { InputComponent } from '../../shared/components/input/input.component';
+import { ButtonComponent } from '@shared/components/button/button.component';
+import { LoadingComponent, LoadingType } from '@shared/components/loading/loading.component';
+import { ToastComponent } from '@shared/components/toast/toast.component';
+import { ModalComponent } from '@shared/components/modal/modal.component';
+import { InputComponent } from '@shared/components/input/input.component';
 
 @Component({
     selector: 'app-demo',

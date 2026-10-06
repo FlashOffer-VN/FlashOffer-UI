@@ -1,0 +1,28 @@
+<div class="rg" [class.rg--horizontal]="orientation === 'horizontal'">
+    @if (label) {
+    <span class="rg__label">{{ label }}</span>
+    }
+
+    <div class="rg__options" role="radiogroup" [attr.aria-label]="label || null">
+        @for (option of options; track option.value) {
+        <label class="rg__option" [class.is-disabled]="disabled || option.disabled">
+            <input class="rg__input" type="radio" [name]="name" [id]="optionId(option)" [value]="option.value"
+                [checked]="value === option.value" [disabled]="disabled || option.disabled"
+                (change)="onSelect(option)" />
+
+            <span class="rg__dot" aria-hidden="true"></span>
+
+            <span class="rg__text">
+                <span class="rg__option-label">{{ option.label }}</span>
+                @if (option.hint) {
+                <span class="rg__hint">{{ option.hint }}</span>
+                }
+            </span>
+        </label>
+        }
+    </div>
+
+    @if (hint) {
+    <span class="rg__hint rg__hint--group">{{ hint }}</span>
+    }
+</div>
