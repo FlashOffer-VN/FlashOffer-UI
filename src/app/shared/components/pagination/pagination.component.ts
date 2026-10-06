@@ -1,11 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { ConnectionPositionPair, OverlayModule } from '@angular/cdk/overlay';
 
 @Component({
     selector: 'app-pagination',
     standalone: true,
-    imports: [CommonModule, TranslateModule],
+    imports: [CommonModule, TranslateModule, OverlayModule],
     templateUrl: './pagination.component.html',
     styleUrls: ['./pagination.component.css']
 })
@@ -75,8 +76,21 @@ export class PaginationComponent {
         }
     }
 
-    /** Chọn cỡ trang — hiện luôn các lựa chọn trong cụm paging, không dùng popup để khỏi bị che/cắt. */
+    /** Cỡ trang đang mở menu hay không (menu render trong lớp overlay của CDK nên không bị khối cha che). */
+    sizeOpen = false;
+
+    /**
+     * Vị trí menu: ưu tiên xổ LÊN trên nút (như bản đã duyệt), nếu hết chỗ thì tự chuyển xuống dưới.
+     * Menu nằm trong overlay của CDK (cùng cơ chế `appendTo: body` của ng-select) nên luôn nổi trên bảng.
+     */
+    readonly sizeMenuPositions: ConnectionPositionPair[] = [
+        { originX: 'end', originY: 'top', overlayX: 'end', overlayY: 'bottom', offsetY: -6 },
+        { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top', offsetY: 6 }
+    ];
+
+    /** Chọn cỡ trang — đóng menu rồi báo cho trang gọi lại API với cỡ mới. */
     onPageSizePick(size: number): void {
+        this.sizeOpen = false;
         if (size === this.pageSize) {
             return;
         }
