@@ -68,6 +68,7 @@
 }
 
 .pg-size__menu {
+    /* Chỉ khi đã được nhấc ra body (.is-portal) mới dùng position fixed + tầng select để nổi trên bảng. */
     min-width: 4.25rem;
     margin: 0;
     padding: 0.25rem;
@@ -76,6 +77,11 @@
     border-radius: 0.625rem;
     background: var(--card);
     box-shadow: 0 12px 28px -12px rgba(15, 23, 42, 0.28);
+}
+
+.pg-size__menu.is-portal {
+    position: fixed;
+    z-index: var(--z-select);
 }
 
 .pg-size__item {
