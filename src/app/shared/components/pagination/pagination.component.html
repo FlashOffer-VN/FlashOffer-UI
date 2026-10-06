@@ -44,13 +44,16 @@
     <div class="flex items-center gap-2" *ngIf="showPageSize && totalCount > 0">
         <span class="text-sm text-gray-500">{{ 'PAGINATION.SHOW' | translate }}</span>
 
-        <div class="pg-size" role="group">
-            @for (size of pageSizes; track size) {
-            <button type="button" class="pg-size__item" [class.is-active]="size === pageSize"
-                [attr.aria-pressed]="size === pageSize" (click)="onPageSizePick(size)">
-                {{ size }}
-            </button>
-            }
+        <div class="relative">
+            <select
+                class="appearance-none border border-gray-200 rounded-lg px-3 py-1.5 pr-8 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all cursor-pointer"
+                [value]="pageSize" (change)="onPageSizeChange($event)">
+                <option *ngFor="let size of pageSizes" [value]="size">
+                    {{ size }}
+                </option>
+            </select>
+            <i
+                class="fa-solid fa-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
         </div>
 
         <span class="text-sm text-gray-500">{{ 'PAGINATION.ITEMS_PER_PAGE' | translate }}</span>
