@@ -5,7 +5,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Observable, forkJoin, of } from 'rxjs';
 
 import { AppService } from '@core/services/app.service';
-import { PermissionService, ancestorCodes, buildPermissionTree, collectActionCodes, grantChainCodes, isContainerNode, permissionLabelKey } from '@core/services/permission.service';
+import { PermissionService, ancestorCodes, buildPermissionTree, collectActionCodes, grantChainCodes, isContainerNode, permissionLabel, permissionLabelKey } from '@core/services/permission.service';
 import { ApiResponse, UserRole, toUserRole } from '@core/models/auth.model';
 import {
     PermissionGroupItem,
@@ -282,22 +282,20 @@ export class AdminUserPermissionComponent implements OnInit {
         this.expanded[node.code] = !this.isExpanded(node);
     }
 
-    /** Nhãn hiển thị: nhóm lấy tên từ DB, còn lại dịch theo `nameKey` API trả về; chưa có thì dịch theo mã. */
+    /** Nhãn hiển thị: nhóm lấy tên từ DB, còn lại lấy TÊN DO API DỊCH SẴN theo ngôn ngữ trong token. */
     nodeLabel(node: PermissionTreeNode): string {
         if (node.kind === 'group') {
             const fromDb = this._groupNames.get(node.code.toUpperCase());
             if (fromDb) return fromDb;
         }
-        const key = permissionLabelKey(node);
-        if (key) {
-            const translated = this._appService.trans(key);
-            if (translated && translated !== key) return translated;
-        }
-        return node.name || node.code;
+
+        return permissionLabel(node, this._translate);
     }
 
     kindKey(node: PermissionTreeNode): string {
-        return `PERMISSION.KIND.${(node.kind || 'action').toUpperCase()}`;
+        // Loại hành động do API khai báo (view/create/update/delete/restore/action) mới đúng nhãn.
+        const kind = node.kind === 'action' ? (node.actionKind || node.kind) : node.kind;
+        return `PERMISSION.KIND.${(kind || 'action').toUpperCase()}`;
     }
 
     nodeState(node: PermissionTreeNode): NodeState {

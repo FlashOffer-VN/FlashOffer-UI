@@ -225,6 +225,26 @@ export enum Permission {
     UpdateUserInfo = 'P155',
     /** P156 — tạo tài khoản quản trị */
     CreateAdminAccount = 'P156',
+    /** P157 — xoá vĩnh viễn hồ sơ CTV (tab "Đã xoá") */
+    PurgeCollaborator = 'P157',
+    /** P158 — xoá vĩnh viễn đối tác */
+    PurgePartner = 'P158',
+    /** P159 — xoá vĩnh viễn yêu cầu mua hàng */
+    PurgePurchaseRequest = 'P159',
+    /** P160 — xoá vĩnh viễn offer */
+    PurgeOfferRequest = 'P160',
+    /** P161 — xoá vĩnh viễn yêu cầu mua chung */
+    PurgeGroupBuyingRequest = 'P161',
+    /** P162 — xoá vĩnh viễn nhóm */
+    PurgeGroup = 'P162',
+    /** P163 — xoá vĩnh viễn bài đăng */
+    PurgeSocialPost = 'P163',
+    /** P164 — xoá vĩnh viễn cấu hình hoa hồng */
+    PurgeCommissionConfig = 'P164',
+    /** P165 — xoá vĩnh viễn hạng thành viên */
+    PurgeMembershipTier = 'P165',
+    /** P166 — xoá vĩnh viễn cấu hình loại thu/chi */
+    PurgeRevenueConfig = 'P166',
 }
 
 /** Nhóm quyền (bảng PermissionGroups): mã, tên hiển thị và thứ tự. */
@@ -280,8 +300,19 @@ export interface PermissionTreeNode {
     code: string;
     /** Khoá dịch tên nút do API trả về (nhóm/màn hình/hành động). */
     nameKey?: string | null;
-    /** Tên hiển thị dự phòng khi chưa có bản dịch. */
+    /**
+     * Tên hiển thị do API DỊCH SẴN theo ngôn ngữ trong token — UI chỉ việc hiển thị, không phải giữ
+     * bản dịch riêng cho từng mã quyền. Chỉ khi API không trả tên mới rơi về khoá dịch của UI.
+     */
     name?: string | null;
+    /** Loại hành động API khai báo: view | create | update | delete | restore | action (chỉ node hành động). */
+    actionKind?: string | null;
+    /** Module nghiệp vụ của quyền (chỉ node hành động). */
+    module?: string | null;
+    /** Route màn hình mà quyền này mở (chỉ node hành động). */
+    route?: string | null;
+    /** Các endpoint API nằm dưới quyền này (chỉ node hành động). */
+    endpoints?: string | null;
     /** group | screen | view | create | update | delete | restore | action — loại nút. */
     kind: string;
     /** Mã nút cha (màn hình cha của hành động, nhóm cha của màn hình). */

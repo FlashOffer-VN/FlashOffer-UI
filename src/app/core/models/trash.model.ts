@@ -2,6 +2,8 @@
  * Xoá VĨNH VIỄN bản ghi đã xoá mềm (chỉ ở màn "Đã xoá") — khớp hợp đồng API /api/v1/admin/trash/*.
  */
 
+import { Permission } from './permission.model';
+
 /** Nghiệp vụ có màn "Đã xoá" hỗ trợ xoá vĩnh viễn (đúng đoạn route của API). */
 export type TrashEntity =
     | 'collaborators'
@@ -31,15 +33,15 @@ export interface PurgeResult {
 }
 
 /** Quyền xoá vĩnh viễn theo từng nghiệp vụ (khớp PermissionCode của API). */
-export const TRASH_PERMISSION: Record<TrashEntity, string> = {
-    collaborators: 'P157',
-    partners: 'P158',
-    'purchase-requests': 'P159',
-    offers: 'P160',
-    'group-buying': 'P161',
-    groups: 'P162',
-    'social-posts': 'P163',
-    commissions: 'P164',
-    'membership-tiers': 'P165',
-    'revenue-configs': 'P166'
+export const TRASH_PERMISSION: Record<TrashEntity, Permission> = {
+    collaborators: Permission.PurgeCollaborator,
+    partners: Permission.PurgePartner,
+    'purchase-requests': Permission.PurgePurchaseRequest,
+    offers: Permission.PurgeOfferRequest,
+    'group-buying': Permission.PurgeGroupBuyingRequest,
+    groups: Permission.PurgeGroup,
+    'social-posts': Permission.PurgeSocialPost,
+    commissions: Permission.PurgeCommissionConfig,
+    'membership-tiers': Permission.PurgeMembershipTier,
+    'revenue-configs': Permission.PurgeRevenueConfig
 };

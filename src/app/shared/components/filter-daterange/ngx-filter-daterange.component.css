@@ -177,7 +177,7 @@
 
 .dr__grid {
     display: grid;
-    grid-template-columns: repeat(7, 2rem);
+    grid-template-columns: repeat(7, 2.15rem);
     gap: 2px;
 }
 
@@ -189,6 +189,9 @@
     color: var(--text-subtle);
     text-align: center;
     text-transform: uppercase;
+    /* Nhãn thứ phải nằm gọn trong ô: cắt bớt nếu dài, tránh tràn sang ô bên cạnh / đè hàng ngày bên dưới. */
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .dr__day {
@@ -295,6 +298,6 @@
     }
 
     .dr__grid {
-        grid-template-columns: repeat(7, 1.75rem);
+        grid-template-columns: repeat(7, 1.9rem);
     }
 }

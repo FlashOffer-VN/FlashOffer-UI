@@ -18,7 +18,6 @@ import { BadgeComponent, BadgeVariant } from '@shared/components/badge/badge.com
 import { StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { NgxFilterDaterangeComponent } from '@shared/components/filter-daterange/ngx-filter-daterange.component';
 import { AppDatePipe } from '@shared/pipes/app-date.pipe';
-import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 import { CodeListComponent } from '@shared/components/code-list/code-list.component';
@@ -42,7 +41,6 @@ import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.compon
         StatusTabsComponent,
         NgxFilterDaterangeComponent,
         AppDatePipe,
-        ShortIdPipe,
         HasPermissionDirective,
         SearchByComponent
     ],

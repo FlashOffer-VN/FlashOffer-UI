@@ -155,4 +155,93 @@ describe('NgxFilterDaterangeComponent', () => {
     it('ngày đầu của khoảng nhanh "15 ngày qua" cách hôm nay 14 ngày', () => {
         expect(buildPresetRange('last15Days', today).from).toBe(toIsoDate(new Date(2026, 8, 22)));
     });
+
+    it('bấm 2 ngày trên lịch mới phát ra khoảng, lịch vẫn mở sau cú bấm đầu', () => {
+        const fixture = TestBed.createComponent(NgxFilterDaterangeComponent);
+        fixture.detectChanges();
+        const component = fixture.componentInstance;
+        const emitted = captureRanges(component);
+
+        // Mở lịch bằng đúng cú bấm người dùng thao tác (không gọi thẳng open()).
+        (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>('.dr__box')!.click();
+        fixture.detectChanges();
+        expect(component.isOpen).toBeTrue();
+
+        const dayButton = (iso: string) => {
+            const cells = Array.from((fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>('.dr__day'));
+            const index = component.cells.findIndex(cell => cell.iso === iso);
+            if (index < 0) throw new Error(`Không có ô lịch cho ngày ${iso}`);
+            return cells[index];
+        };
+
+        // Cú bấm đầu = ngày bắt đầu: chưa phát ra khoảng, lịch phải còn mở và ô được tô để thấy đã chọn.
+        dayButton('2026-10-05').click();
+        fixture.detectChanges();
+
+        expect(emitted).toEqual([]);
+        expect(component.isOpen).toBeTrue();
+        // Truy vấn lại nút sau khi render (không giữ tham chiếu cũ) rồi mới soi class.
+        expect(dayButton('2026-10-05').classList.contains('is-start')).toBeTrue();
+
+        // Cú bấm thứ hai = ngày kết thúc: phát ra khoảng rồi đóng lịch.
+        dayButton('2026-10-12').click();
+        fixture.detectChanges();
+
+        expect(emitted).toEqual([{ from: '2026-10-05', to: '2026-10-12' }]);
+        expect(component.isOpen).toBeFalse();
+    });
+
+    it('mở lại lịch sau khi đã lọc: cú bấm đầu là ngày BẮT ĐẦU mới và khoảng cũ bị bỏ', () => {
+        const fixture = TestBed.createComponent(NgxFilterDaterangeComponent);
+        const component = fixture.componentInstance;
+        component.from = '2026-10-01';
+        component.to = '2026-10-06';
+        fixture.detectChanges();
+
+        const emitted = captureRanges(component);
+        component.open();
+        fixture.detectChanges();
+
+        // Chưa bấm gì thì vẫn thấy khoảng đang lọc.
+        expect(component.isRangeStart(cellOf(component, '2026-10-01'))).toBeTrue();
+        expect(component.isRangeEnd(cellOf(component, '2026-10-06'))).toBeTrue();
+
+        // Bấm một ngày khác: phải là BẮT ĐẦU của lựa chọn mới (không phát khoảng 01→20 theo đầu cũ).
+        component.pick(cellOf(component, '2026-10-20'));
+        fixture.detectChanges();
+
+        expect(emitted).toEqual([]);
+        expect(component.selectionHintKey).toBe('COMMON.DATE_RANGE.HINT_END');
+        expect(component.isRangeStart(cellOf(component, '2026-10-20'))).toBeTrue();
+        expect(component.isRangeEnd(cellOf(component, '2026-10-06'))).toBeFalse();
+
+        // Bấm ngày thứ hai: phát ra khoảng MỚI.
+        component.pick(cellOf(component, '2026-10-25'));
+
+        expect(emitted).toEqual([{ from: '2026-10-20', to: '2026-10-25' }]);
+    });
+
+    it('nút ngày không bị dựng lại sau mỗi lần render (trackBy theo ngày)', () => {
+        const fixture = TestBed.createComponent(NgxFilterDaterangeComponent);
+        fixture.componentInstance.open();
+        fixture.detectChanges();
+
+        const host = fixture.nativeElement as HTMLElement;
+        const before = host.querySelectorAll('.dr__day')[20];
+
+        // Render thêm vài lần: nếu *ngFor mất trackBy thì toàn bộ nút bị thay mới (bấm vào là mất tham chiếu).
+        fixture.detectChanges();
+        fixture.detectChanges();
+
+        expect(host.querySelectorAll('.dr__day')[20]).toBe(before);
+    });
+
+    it('nhãn thứ ngắn gọn để không tràn ô lịch', () => {
+        const component = createComponent();
+
+        for (const label of component.weekDayLabels()) {
+            // Ô lịch rộng 2.15rem: nhãn dài hơn 3 ký tự ("THỨ 2") là tràn sang ô bên cạnh.
+            expect(label.length).toBeLessThanOrEqual(3);
+        }
+    });
 });

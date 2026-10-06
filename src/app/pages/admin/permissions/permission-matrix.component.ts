@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
-import { ancestorCodes, buildPermissionTree, collectActionCodes, grantChainCodes, isContainerNode, permissionLabelKey } from '@core/services/permission.service';
+import { ancestorCodes, buildPermissionTree, collectActionCodes, grantChainCodes, isContainerNode, permissionLabel, permissionLabelKey, permissionMeta } from '@core/services/permission.service';
 import { UserRole } from '@core/models/auth.model';
 import { Permission, PermissionGroupItem, PermissionMatrix, PermissionTreeNode, RolePermission } from '@core/models/permission.model';
 
@@ -190,9 +190,9 @@ export class AdminPermissionMatrixComponent implements OnInit {
     }
 
     /**
-     * Nhãn hiển thị của nút: nhóm lấy tên từ DB, màn hình và hành động dịch theo `nameKey` API trả về
-     * (`PermissionScreen_*` / `Permission_P###`); API chưa trả `nameKey` thì dịch theo mã nút.
-     * Không in mã thô khi đã có nhãn dịch.
+     * Nhãn hiển thị của nút: nhóm lấy tên sửa được trong DB (màn phân quyền cho đổi tên nhóm), còn lại
+     * lấy TÊN DO API DỊCH SẴN theo ngôn ngữ trong token — UI không phải giữ bản dịch cho từng mã quyền.
+     * Chỉ khi API chưa trả tên mới rơi về khoá dịch của UI, cuối cùng mới in mã nút.
      */
     nodeLabel(node: PermissionTreeNode): string {
         if (node.kind === 'group') {
@@ -203,18 +203,19 @@ export class AdminPermissionMatrixComponent implements OnInit {
             }
         }
 
-        const key = permissionLabelKey(node);
-        if (key) {
-            const translated = this._appService.trans(key);
-            if (translated && translated !== key) return translated;
-        }
+        return permissionLabel(node, this._translate);
+    }
 
-        return node.name || node.code;
+    /** Dòng metadata của quyền: mã quyền · route màn hình · endpoint API (API trả sẵn, UI chỉ hiển thị). */
+    nodeMeta(node: PermissionTreeNode): string {
+        return permissionMeta(node);
     }
 
     /** Nhãn loại nút (nhóm / màn hình / xem / thêm / sửa / xóa / khôi phục / thao tác). */
     kindKey(node: PermissionTreeNode): string {
-        return `PERMISSION.KIND.${(node.kind || 'action').toUpperCase()}`;
+        // Loại hành động do API khai báo (view/create/update/delete/restore/action) mới đúng nhãn.
+        const kind = node.kind === 'action' ? (node.actionKind || node.kind) : node.kind;
+        return `PERMISSION.KIND.${(kind || 'action').toUpperCase()}`;
     }
 
     /** Có đang đóng nhánh hay không (không tính trạng thái mở rộng khi tìm kiếm). */

@@ -69,6 +69,8 @@ export enum UserStatus {
 export interface LoginRequest {
     username: string;
     password: string;
+    /** Ngôn ngữ người dùng đang dùng ở UI — API ghi vào token để dịch mọi nội dung trả về sau đó. */
+    language?: string;
 }
 
 export interface RegisterRequest {
