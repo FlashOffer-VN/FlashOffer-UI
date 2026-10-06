@@ -1,19 +1,21 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { BrandLogoComponent } from '@shared/components/brand-logo/brand-logo.component';
+
 export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | 'community';
 
 /**
  * Khối báo đang tải dùng chung.
  *
- * QUY TẮC CHỌN KIỂU TẢI (theo ngữ cảnh — chọn đúng kiểu để không nhảy layout và không nặng thị giác):
- * - `skeleton`  → danh sách/bảng đã biết bố cục: giữ chỗ như nội dung thật (ưu tiên cho màn danh sách).
- * - `spinner`   → khối nội dung, chi tiết, form đang tải (MẶC ĐỊNH — nhẹ, không giả định bố cục).
- * - `dots`      → tải ngắn, rất nhẹ: trong nút, dòng trạng thái, ô nhỏ.
+ * QUY TẮC CHỌN KIỂU TẢI (theo ngữ cảnh):
+ * - `dots`      → CHỦ ĐẠO và là MẶC ĐỊNH: mọi khối tải (trang, card, ô bảng) — nhẹ, không giả định bố cục.
+ * - `logo`      → tải cả trang / lần vào đầu: giữ thương hiệu (tia chớp + tên app), kèm chấm động.
+ * - `skeleton`  → danh sách/bảng đã biết bố cục: giữ chỗ như nội dung thật, không nhảy layout.
+ * - `spinner`   → khi cần một vòng xoay cho thao tác đang chạy (ví dụ trong khối nhỏ).
  * - `pulse`     → chờ rất ngắn cho một ô/badge (không dùng cho cả trang).
- * - `logo`      → trang đang vào lần đầu nhưng vẫn muốn giữ thương hiệu.
- * - `community` → lần tải ĐẦU của app / trang giới thiệu (logo lớn, chỉ dùng khi cố ý).
- * - `fullScreen` → overlay chặn tương tác (đăng nhập, gửi form quan trọng); không dùng cho tải nền.
+ * - `community` → minh hoạ lớn (chỉ dùng khi cố ý, không dùng làm mặc định).
+ * - `fullScreen` → overlay chặn tương tác (đăng nhập, gửi form quan trọng); dùng kèm logo + chấm.
  *
  * VỊ TRÍ: mặc định là khối tải trang (canh giữa, `minHeight` 40vh, có padding) nên KHÔNG bị dính sát mép
  * trên của vùng nội dung. Đặt trong ô bảng/khối nhỏ thì truyền `[inline]="true"`.
@@ -21,40 +23,22 @@ export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | '
 @Component({
   selector: 'app-loading',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BrandLogoComponent],
   template: `
-    <!-- Fullscreen với Community Icon -->
+    <!-- Fullscreen: logo làm chủ đạo -->
     <div *ngIf="fullScreen" class="fixed inset-0 bg-white/70 backdrop-blur-sm z-[var(--z-loading)] flex items-center justify-center">
       <div class="text-center space-y-6 p-8 bg-white/90 rounded-2xl shadow-xl max-w-sm w-full mx-4">
-        <!-- Community Icon -->
-        <div class="community-icon inline-block">
-          <svg viewBox="0 0 100 100" class="w-24 h-24 md:w-32 md:h-32 mx-auto">
-            <!-- Vòng tròn kết nối -->
-            <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="8 4" class="text-primary/30"/>
-            
-            <!-- Người 1 -->
-            <circle cx="30" cy="35" r="9" fill="currentColor" class="text-primary/70"/>
-            <path d="M18 62 Q30 45 42 62" fill="currentColor" class="text-primary/70"/>
-            
-            <!-- Người 2 (trung tâm - nổi bật) -->
-            <circle cx="50" cy="28" r="11" fill="currentColor" class="text-primary"/>
-            <path d="M35 58 Q50 38 65 58" fill="currentColor" class="text-primary"/>
-            
-            <!-- Người 3 -->
-            <circle cx="70" cy="35" r="9" fill="currentColor" class="text-primary/70"/>
-            <path d="M58 62 Q70 45 82 62" fill="currentColor" class="text-primary/70"/>
-            
-            <!-- Tia chớp nhỏ ở trung tâm -->
-            <path d="M48 16 L40 34 L50 34 L44 48 L58 30 L48 30 Z" fill="currentColor" class="text-accent"/>
-          </svg>
+        <!-- Logo -->
+        <div class="logo-icon">
+          <i class="fa-solid fa-bolt text-6xl md:text-7xl text-primary"></i>
         </div>
-        
-        <!-- Text -->
-        <h1 class="text-2xl md:text-3xl font-bold text-secondary">
-          Kindi
-        </h1>
+
+        <!-- Wordmark thương hiệu -->
+        <div class="flex justify-center">
+          <app-brand-logo size="lg" />
+        </div>
         <p class="text-gray-500 text-sm">{{ text || 'Đang kết nối cộng đồng...' }}</p>
-        
+
         <!-- Loading dots -->
         <div class="flex justify-center gap-2">
           <span class="dot-loading" style="animation-delay: 0s"></span>
@@ -228,8 +212,8 @@ export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | '
   `]
 })
 export class LoadingComponent {
-  /** Kiểu tải — xem quy tắc chọn kiểu ở phần mô tả component. */
-  @Input() type: LoadingType = 'spinner';
+  /** Kiểu tải — mặc định `dots` (chủ đạo); xem quy tắc chọn kiểu ở phần mô tả component. */
+  @Input() type: LoadingType = 'dots';
   @Input() size: 'sm' | 'md' | 'lg' = 'md';
   @Input() color: string = 'primary';
   @Input() text: string = '';

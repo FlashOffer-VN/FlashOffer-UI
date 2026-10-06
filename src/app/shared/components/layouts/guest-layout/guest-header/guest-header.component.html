@@ -2,8 +2,7 @@
 <header class="sme-header">
     <!-- Logo -->
     <a class="sme-logo" routerLink="/home">
-        <span class="logo-text">{{ 'APP_NAME' | translate }}</span>
-        <span class="logo-dot"></span>
+        <app-brand-logo [tagline]="'APP_TAGLINE' | translate" />
     </a>
 
     <!-- Navigation (Desktop) -->
