@@ -1,0 +1,215 @@
+<div class="space-y-4">
+    <app-status-tabs [items]="tabs" [active]="activeTab" (change)="onTabChange($event)">
+    </app-status-tabs>
+
+    <!-- Bộ lọc -->
+    <div class="flex flex-wrap items-end gap-3 bg-white p-3 rounded-lg border border-gray-200" style="--control-h: 2.5rem">
+        <ngx-filter-daterange [from]="fromDate" [to]="toDate" (rangeChange)="onRangeChange($event)">
+        </ngx-filter-daterange>
+
+        <div class="audit-filter">
+            <app-ng-select-wrapper [(ngModel)]="actionFilter" (valueChange)="onFilterChange()" [items]="actionOptions"
+                [id]="'audit_action_filter'" [placeholder]="'ADMIN.AUDIT_LOG.FILTER_ACTION' | translate"
+                [clearable]="true">
+            </app-ng-select-wrapper>
+        </div>
+
+        @if (activeTab === 'entity') {
+            <div class="audit-filter">
+                <app-ng-select-wrapper [(ngModel)]="entityFilter" (valueChange)="onFilterChange()" [items]="entityOptions"
+                    [id]="'audit_entity_filter'" [placeholder]="'ADMIN.AUDIT_LOG.FILTER_ENTITY' | translate"
+                    [clearable]="true" [searchable]="true">
+                </app-ng-select-wrapper>
+            </div>
+        } @else {
+            <div class="audit-filter">
+                <app-ng-select-wrapper [(ngModel)]="resultFilter" (valueChange)="onFilterChange()" [items]="resultOptions"
+                    [id]="'audit_result_filter'" [placeholder]="'ADMIN.AUDIT_LOG.FILTER_RESULT' | translate"
+                    [clearable]="true">
+                </app-ng-select-wrapper>
+            </div>
+        }
+
+        <div class="w-64">
+            <app-input [(ngModel)]="keyword" (keyup.enter)="onSearch()" [id]="'audit_log_keyword'"
+                [placeholder]="(activeTab === 'auth' ? 'ADMIN.AUDIT_LOG.SEARCH_USERNAME' : 'ADMIN.AUDIT_LOG.SEARCH_ENTITY') | translate">
+            </app-input>
+        </div>
+
+        <app-button variant="primary" [loading]="isLoading" (click)="onSearch()">
+            <i class="fa-solid fa-magnifying-glass mr-1"></i>{{ 'ADMIN.AUDIT_LOG.SEARCH' | translate }}
+        </app-button>
+        <app-button variant="outline" (click)="onReset()">
+            <i class="fa-solid fa-rotate-left mr-1"></i>{{ 'ADMIN.AUDIT_LOG.RESET' | translate }}
+        </app-button>
+
+        <span class="ml-auto h-10 flex items-center text-sm text-gray-500">
+            {{ 'ADMIN.AUDIT_LOG.TOTAL' | translate }}: <strong class="ml-1">{{ totalCount }}</strong>
+        </span>
+    </div>
+
+    <!-- Thanh xoá nhật ký: chỉ hiện với tài khoản được cấp quyền xoá của loại nhật ký đang xem -->
+    @if (canDelete()) {
+        <div class="audit-actions">
+            <span class="audit-actions__count">
+                {{ 'ADMIN.AUDIT_LOG.SELECTED' | translate }}: <strong>{{ selectedCount }}</strong>
+            </span>
+
+            <app-button variant="danger" [disabled]="selectedCount === 0 || isDeleting" [loading]="isDeleting"
+                (click)="onDeleteSelected()">
+                <i class="fa-solid fa-trash mr-1"></i>{{ 'ADMIN.AUDIT_LOG.DELETE_SELECTED' | translate }}
+            </app-button>
+
+            <app-button variant="outline" [disabled]="isDeleting" (click)="onDeleteByRange()">
+                <i class="fa-regular fa-calendar-xmark mr-1"></i>{{ 'ADMIN.AUDIT_LOG.DELETE_BY_RANGE' | translate }}
+            </app-button>
+
+            <span class="audit-actions__hint">{{ 'ADMIN.AUDIT_LOG.DELETE_HINT' | translate }}</span>
+        </div>
+    }
+
+    <!-- Bảng nhật ký -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            @if (activeTab === 'entity') {
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            @if (canDelete()) {
+                                <th class="audit-col-check">
+                                    <input type="checkbox" class="audit-check" [checked]="allSelected"
+                                        (change)="toggleSelectAll()"
+                                        [attr.aria-label]="'ADMIN.AUDIT_LOG.SELECT_ALL' | translate">
+                                </th>
+                            }
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.AUDIT_LOG.TIME' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.AUDIT_LOG.ACTOR' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.AUDIT_LOG.ENTITY' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.AUDIT_LOG.ACTION' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.AUDIT_LOG.IP' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.AUDIT_LOG.DEVICE' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @if (isLoading) {
+                            <tr><td [attr.colspan]="canDelete() ? 7 : 6" class="px-4 py-10"><app-loading></app-loading></td></tr>
+                        } @else if (entityLogs.length === 0) {
+                            <tr><td [attr.colspan]="canDelete() ? 7 : 6" class="px-4 py-10 text-center text-sm text-gray-500">{{ 'ADMIN.AUDIT_LOG.EMPTY' | translate }}</td></tr>
+                        } @else {
+                            @for (log of entityLogs; track log.id) {
+                                <tr class="hover:bg-gray-50 cursor-pointer" (click)="toggleDetail(log.id)">
+                                    @if (canDelete()) {
+                                        <td class="audit-col-check">
+                                            <input type="checkbox" class="audit-check" [checked]="isSelected(log.id)"
+                                                (click)="toggleSelection(log.id, $event)"
+                                                [attr.aria-label]="'ADMIN.AUDIT_LOG.SELECT_ROW' | translate">
+                                        </td>
+                                    }
+                                    <td class="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">{{ log.timestamp | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                                    <td class="px-4 py-3 text-sm text-gray-900">{{ log.actorName || log.actorId || '—' }}</td>
+                                    <td class="px-4 py-3 text-sm text-gray-700">{{ log.entityName }}</td>
+                                    <td class="px-4 py-3 text-sm">
+                                        <span class="audit-action-badge" [attr.data-action]="log.action">{{ actionLabel(log.action) }}</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-sm text-gray-500">{{ log.ipAddress || '—' }}</td>
+                                    <td class="px-4 py-3 text-sm text-gray-500">{{ deviceText(log.deviceType, log.operatingSystem, log.browserName) }}</td>
+                                </tr>
+                                @if (expandedId === log.id) {
+                                    <tr class="bg-gray-50">
+                                        <td [attr.colspan]="canDelete() ? 7 : 6" class="px-4 py-4">
+                                            <div class="grid gap-3 md:grid-cols-2">
+                                                <div>
+                                                    <p class="audit-detail-label">{{ 'ADMIN.AUDIT_LOG.CHANGED_PROPERTIES' | translate }}</p>
+                                                    <app-json-viewer [value]="log.changedProperties" [maxHeight]="180"></app-json-viewer>
+                                                </div>
+                                                <div>
+                                                    <p class="audit-detail-label">{{ 'ADMIN.AUDIT_LOG.ENTITY_ID' | translate }}</p>
+                                                    <pre class="audit-detail-plain">{{ log.entityId }}</pre>
+                                                </div>
+                                                <div>
+                                                    <p class="audit-detail-label">{{ 'ADMIN.AUDIT_LOG.OLD_VALUES' | translate }}</p>
+                                                    <app-json-viewer [value]="log.oldValues" [maxHeight]="260"></app-json-viewer>
+                                                </div>
+                                                <div>
+                                                    <p class="audit-detail-label">{{ 'ADMIN.AUDIT_LOG.NEW_VALUES' | translate }}</p>
+                                                    <app-json-viewer [value]="log.newValues" [maxHeight]="260"></app-json-viewer>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            } @else {
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            @if (canDelete()) {
+                                <th class="audit-col-check">
+                                    <input type="checkbox" class="audit-check" [checked]="allSelected"
+                                        (change)="toggleSelectAll()"
+                                        [attr.aria-label]="'ADMIN.AUDIT_LOG.SELECT_ALL' | translate">
+                                </th>
+                            }
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.AUDIT_LOG.TIME' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.AUDIT_LOG.USERNAME' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.AUDIT_LOG.ACTION' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.AUDIT_LOG.RESULT' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.AUDIT_LOG.IP' | translate }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'ADMIN.AUDIT_LOG.DEVICE' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @if (isLoading) {
+                            <tr><td [attr.colspan]="canDelete() ? 7 : 6" class="px-4 py-10"><app-loading></app-loading></td></tr>
+                        } @else if (authLogs.length === 0) {
+                            <tr><td [attr.colspan]="canDelete() ? 7 : 6" class="px-4 py-10 text-center text-sm text-gray-500">{{ 'ADMIN.AUDIT_LOG.EMPTY' | translate }}</td></tr>
+                        } @else {
+                            @for (log of authLogs; track log.id) {
+                                <tr class="hover:bg-gray-50 cursor-pointer" (click)="toggleDetail(log.id)">
+                                    @if (canDelete()) {
+                                        <td class="audit-col-check">
+                                            <input type="checkbox" class="audit-check" [checked]="isSelected(log.id)"
+                                                (click)="toggleSelection(log.id, $event)"
+                                                [attr.aria-label]="'ADMIN.AUDIT_LOG.SELECT_ROW' | translate">
+                                        </td>
+                                    }
+                                    <td class="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">{{ log.timestamp | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                                    <td class="px-4 py-3 text-sm text-gray-900">{{ log.username || '—' }}</td>
+                                    <td class="px-4 py-3 text-sm text-gray-700">{{ actionLabel(log.action) }}</td>
+                                    <td class="px-4 py-3 text-sm">
+                                        @if (log.isSuccess) {
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700">{{ 'ADMIN.AUDIT_LOG.SUCCESS' | translate }}</span>
+                                        } @else {
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700">{{ 'ADMIN.AUDIT_LOG.FAILED' | translate }}</span>
+                                        }
+                                    </td>
+                                    <td class="px-4 py-3 text-sm text-gray-500">{{ log.ipAddress || '—' }}</td>
+                                    <td class="px-4 py-3 text-sm text-gray-500">{{ deviceText(log.deviceType, log.operatingSystem, log.browserName) }}</td>
+                                </tr>
+                                @if (expandedId === log.id) {
+                                    <tr class="bg-gray-50">
+                                        <td [attr.colspan]="canDelete() ? 7 : 6" class="px-4 py-4">
+                                            <p class="audit-detail-label">{{ 'ADMIN.AUDIT_LOG.DETAIL' | translate }}</p>
+                                            <app-json-viewer [value]="log.detail" [maxHeight]="200"></app-json-viewer>
+                                            <p class="text-xs text-gray-500 mt-2">{{ 'ADMIN.AUDIT_LOG.USER_AGENT' | translate }}: {{ log.userAgent || '—' }}</p>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+
+        <div class="border-t border-gray-200 px-4 py-3">
+            <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [totalCount]="totalCount"
+                [totalPages]="totalPages" [hasPreviousPage]="hasPreviousPage" [hasNextPage]="hasNextPage"
+                (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
+            </app-pagination>
+        </div>
+    </div>
+</div>

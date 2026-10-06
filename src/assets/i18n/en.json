@@ -1244,6 +1244,9 @@
         }
     },
     "COMMON": {
+        "JSON": {
+            "LINES": "lines"
+        },
         "DATE_RANGE": {
             "PLACEHOLDER": "Select date range",
             "TODAY": "Today",
@@ -1878,7 +1881,34 @@
         },
         "AUDIT_LOG": {
             "TAB_ENTITY": "Data changes",
-            "TAB_AUTH": "Sign-in",
+            "TAB_AUTH": "Authentication",
+        "ACTION_LABEL": {
+            "CREATE": "Create",
+            "UPDATE": "Update",
+            "DELETE": "Delete",
+            "LOGIN": "Login",
+            "LOGOUT": "Logout",
+            "REGISTER": "Register",
+            "REFRESH_TOKEN": "Refresh token",
+            "CHANGE_PASSWORD": "Change password",
+            "RESET_PASSWORD": "Reset password"
+        },
+        "FILTER_ACTION": "Filter by action",
+        "FILTER_ENTITY": "Filter by entity",
+        "FILTER_RESULT": "Filter by result",
+        "SELECTED": "Selected",
+        "SELECT_ALL": "Select all rows on page",
+        "SELECT_ROW": "Select this row",
+        "DELETE_SELECTED": "Delete selected",
+        "DELETE_BY_RANGE": "Delete by date range",
+        "DELETE_HINT": "Deleted logs are gone permanently.",
+        "DELETE_CONFIRM_TITLE": "Delete audit logs",
+        "DELETE_SELECTED_CONFIRM": "Delete {count} selected log rows? This cannot be undone.",
+        "DELETE_RANGE_CONFIRM": "Delete logs in {range}? This cannot be undone.",
+        "DELETE_SUCCESS": "Deleted {count} log rows.",
+        "DELETE_NEED_CRITERIA": "Select rows to delete, or pick a date range in the filter first.",
+        "DELETE_RANGE_INVALID": "Invalid date range: the from date is after the to date.",
+        "DELETE_TOO_MANY": "You can delete at most 1000 rows at a time.",
             "TIME": "Time",
             "ACTOR": "Actor",
             "ENTITY": "Entity",

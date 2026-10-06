@@ -215,6 +215,10 @@ export enum Permission {
     ViewRestorePurchaseRequest = 'P146',
     /** P147 — khôi phục yêu cầu mua hàng */
     RestorePurchaseRequest = 'P147',
+    /** P152 — xoá nhật ký thao tác dữ liệu */
+    DeleteEntityAuditLogs = 'P152',
+    /** P153 — xoá nhật ký xác thực tài khoản */
+    DeleteAuthAuditLogs = 'P153',
 }
 
 /** Nhóm quyền (bảng PermissionGroups): mã, tên hiển thị và thứ tự. */

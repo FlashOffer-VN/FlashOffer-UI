@@ -1,0 +1,96 @@
+/* Nhật ký hoạt động: bộ lọc, thanh xoá và chi tiết JSON. */
+
+/* Ô select lọc nằm cùng hàng với ô chọn khoảng ngày */
+.audit-filter {
+    width: 12rem;
+}
+
+.audit-col-check {
+    width: 3rem;
+    padding: 0 0.5rem 0 1rem;
+    text-align: left;
+}
+
+.audit-check {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.audit-action-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: var(--blue-bg);
+    color: var(--blue);
+}
+
+.audit-action-badge[data-action='Delete'] {
+    background: var(--danger-soft);
+    color: var(--danger-dark);
+}
+
+.audit-action-badge[data-action='Create'] {
+    background: var(--success-bg);
+    color: var(--success-dark);
+}
+
+.audit-action-badge[data-action='Login'],
+.audit-action-badge[data-action='Register'] {
+    background: var(--accent-bg);
+    color: var(--accent-dark);
+}
+
+/* Thanh thao tác xoá */
+.audit-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 1px dashed var(--warning-light);
+    border-radius: 0.5rem;
+    background: var(--warning-bg);
+}
+
+.audit-actions__count {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.audit-actions__hint {
+    font-size: 0.75rem;
+    color: var(--warning-deep);
+}
+
+.audit-detail-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.25rem;
+}
+
+.audit-detail-plain {
+    margin: 0;
+    padding: 0.5rem 0.625rem;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    font-family: 'JetBrains Mono', Consolas, monospace;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+@media (max-width: 640px) {
+    .audit-filter {
+        width: 100%;
+    }
+}

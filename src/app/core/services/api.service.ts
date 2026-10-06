@@ -44,8 +44,12 @@ export class ApiService {
             .pipe(catchError(this.handleError.bind(this)));
     }
 
-    delete<T>(endpoint: string): Observable<T> {
-        return this.http.delete<T>(`${this.baseUrl}/${endpoint}`)
+    /**
+     * DELETE có body (một số endpoint xoá nhận điều kiện trong body, ví dụ xoá nhật ký theo danh sách
+     * dòng hoặc theo khoảng ngày). Bỏ trống body thì hành vi giữ nguyên như trước.
+     */
+    delete<T>(endpoint: string, body?: any): Observable<T> {
+        return this.http.delete<T>(`${this.baseUrl}/${endpoint}`, body === undefined ? {} : { body })
             .pipe(catchError(this.handleError.bind(this)));
     }
 
