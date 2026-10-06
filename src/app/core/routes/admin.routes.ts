@@ -53,7 +53,8 @@ export const adminRoutes: Routes = [
               loadComponent: () => import('@pages/admin/bank-accounts/bank-account-list.component').then(m => m.BankAccountListComponent) },
             // Đường dẫn cũ của màn hình phân quyền, nay nằm trong tab của mục Cài đặt
             { path: 'permissions', redirectTo: 'settings' },
-            { path: 'demo', loadComponent: () => import('@pages/demo/demo.component').then(m => m.DemoComponent) },
+            // Trang demo cũ đã gộp vào Cài đặt → Thư viện nội bộ (quyền riêng, chỉ SuperAdmin thấy).
+            { path: 'demo', redirectTo: 'settings', pathMatch: 'full' },
             { path: 'social-posts', loadComponent: () => import('@pages/admin/social/social-post-list.component').then(m => m.AdminSocialPostListComponent) },
             // User Management
             { path: 'users', loadComponent: () => import('@pages/admin/users/user-list.component').then(m => m.AdminUserListComponent) },

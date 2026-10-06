@@ -1,0 +1,1608 @@
+{
+ "form": [
+  {
+   "kind": "component",
+   "group": "form",
+   "class": "ButtonComponent",
+   "selector": "app-button",
+   "path": "src/app/shared/components/button/button.component.ts",
+   "inputs": [
+    {
+     "name": "variant",
+     "type": "ButtonVariant",
+     "default": "'primary'",
+     "required": false
+    },
+    {
+     "name": "size",
+     "type": "ButtonSize",
+     "default": "'md'",
+     "required": false
+    },
+    {
+     "name": "type",
+     "type": "'button' | 'submit' | 'reset'",
+     "default": "'button'",
+     "required": false
+    },
+    {
+     "name": "disabled",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "loading",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "fullWidth",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "title",
+     "type": "any",
+     "default": "''",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "onClick",
+     "type": "MouseEvent"
+    }
+   ],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "form",
+   "class": "CheckboxComponent",
+   "selector": "app-checkbox",
+   "path": "src/app/shared/components/checkbox/checkbox.component.ts",
+   "inputs": [
+    {
+     "name": "size",
+     "type": "'sm' | 'md'",
+     "default": "'md'",
+     "required": false
+    },
+    {
+     "name": "indeterminate",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "disabled",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "inputId",
+     "type": "any",
+     "default": "`app-checkbox-${CheckboxComponent.nextId++}`",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "checkedChange",
+     "type": "boolean"
+    }
+   ],
+   "model": true
+  },
+  {
+   "kind": "component",
+   "group": "form",
+   "class": "InputComponent",
+   "selector": "app-input",
+   "path": "src/app/shared/components/input/input.component.ts",
+   "inputs": [
+    {
+     "name": "id",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "label",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "placeholder",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "hint",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "icon",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "required",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "autocomplete",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "readonly",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "isDisabled",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "money",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "errorMessage",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "isInvalid",
+     "type": "any",
+     "default": "false",
+     "required": false
+    }
+   ],
+   "outputs": [],
+   "model": true
+  },
+  {
+   "kind": "component",
+   "group": "form",
+   "class": "ProvinceSelectComponent",
+   "selector": "app-province-select",
+   "path": "src/app/shared/components/province-select/province-select.component.ts",
+   "inputs": [
+    {
+     "name": "label",
+     "type": "any",
+     "default": "'COMMON.PROVINCE'",
+     "required": false
+    },
+    {
+     "name": "placeholder",
+     "type": "any",
+     "default": "'COMMON.PROVINCE_PLACEHOLDER'",
+     "required": false
+    },
+    {
+     "name": "required",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "isInvalid",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "errorMessage",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "disabled",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "searchable",
+     "type": "any",
+     "default": "true",
+     "required": false
+    },
+    {
+     "name": "clearable",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "id",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "appendTo",
+     "type": "string | null",
+     "default": "'body'",
+     "required": false
+    }
+   ],
+   "outputs": [],
+   "model": true
+  },
+  {
+   "kind": "component",
+   "group": "form",
+   "class": "RadioGroupComponent",
+   "selector": "app-radio-group",
+   "path": "src/app/shared/components/radio-group/radio-group.component.ts",
+   "inputs": [
+    {
+     "name": "options",
+     "type": "RadioOption[]",
+     "default": "[]",
+     "required": false
+    },
+    {
+     "name": "orientation",
+     "type": "'vertical' | 'horizontal'",
+     "default": "'vertical'",
+     "required": false
+    },
+    {
+     "name": "appearance",
+     "type": "'plain' | 'card'",
+     "default": "'plain'",
+     "required": false
+    },
+    {
+     "name": "disabled",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "name",
+     "type": "any",
+     "default": "`app-radio-group-${RadioGroupComponent.nextId++}`",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "valueChange",
+     "type": "string"
+    }
+   ],
+   "model": true
+  },
+  {
+   "kind": "component",
+   "group": "form",
+   "class": "SearchByComponent",
+   "selector": "app-search-by",
+   "path": "src/app/shared/components/search-by/search-by.component.ts",
+   "inputs": [
+    {
+     "name": "options",
+     "type": "SearchFieldOption[]",
+     "default": "[]",
+     "required": false
+    },
+    {
+     "name": "value",
+     "type": "string | null",
+     "default": "null",
+     "required": false
+    },
+    {
+     "name": "wrapperClass",
+     "type": "any",
+     "default": "'flex-shrink-0 w-full sm:w-56'",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "valueChange",
+     "type": "string | null"
+    }
+   ],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "form",
+   "class": "NgSelectWrapperComponent",
+   "selector": "app-ng-select-wrapper",
+   "path": "src/app/shared/components/select/ng-select-wrapper.component.ts",
+   "inputs": [
+    {
+     "name": "items",
+     "type": "any[]",
+     "default": "[]",
+     "required": false
+    },
+    {
+     "name": "label",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "placeholder",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "required",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "errorMessage",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "isInvalid",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "disabled",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "appendTo",
+     "type": "string | null",
+     "default": "'body'",
+     "required": false
+    },
+    {
+     "name": "searchable",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "clearable",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "closeOnSelect",
+     "type": "any",
+     "default": "true",
+     "required": false
+    },
+    {
+     "name": "touched",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "id",
+     "type": "any",
+     "default": "''",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "valueChange",
+     "type": "any"
+    }
+   ],
+   "model": true
+  },
+  {
+   "kind": "component",
+   "group": "form",
+   "class": "UserPickerComponent",
+   "selector": "app-user-picker",
+   "path": "src/app/shared/components/user-picker/user-picker.component.ts",
+   "inputs": [
+    {
+     "name": "users",
+     "type": "UserPickerItem[]",
+     "default": "[]",
+     "required": false
+    },
+    {
+     "name": "loading",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "selectedIds",
+     "type": "string[]",
+     "default": "[]",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "selectedIdsChange",
+     "type": "string[]"
+    },
+    {
+     "name": "searchChange",
+     "type": "string"
+    }
+   ],
+   "model": false
+  }
+ ],
+ "display": [
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "AccountCreatedNoticeComponent",
+   "selector": "app-account-created-notice",
+   "path": "src/app/shared/components/account-created-notice/account-created-notice.component.ts",
+   "inputs": [
+    {
+     "name": "isNewAccount",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "accountAlreadyExisted",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "passwordIsPhone",
+     "type": "any",
+     "default": "true",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "loginClick",
+     "type": "void"
+    }
+   ],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "BadgeComponent",
+   "selector": "app-badge",
+   "path": "src/app/shared/components/badge/badge.component.ts",
+   "inputs": [
+    {
+     "name": "status",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "variant",
+     "type": "BadgeVariant",
+     "default": "'secondary'",
+     "required": false
+    },
+    {
+     "name": "label",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "size",
+     "type": "BadgeSize",
+     "default": "'sm'",
+     "required": false
+    },
+    {
+     "name": "rounded",
+     "type": "BadgeRounded",
+     "default": "'full'",
+     "required": false
+    },
+    {
+     "name": "showDot",
+     "type": "any",
+     "default": "true",
+     "required": false
+    }
+   ],
+   "outputs": [],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "BrandLogoComponent",
+   "selector": "app-brand-logo",
+   "path": "src/app/shared/components/brand-logo/brand-logo.component.ts",
+   "inputs": [
+    {
+     "name": "text",
+     "type": "any",
+     "default": "'Kindi'",
+     "required": false
+    },
+    {
+     "name": "tagline",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "size",
+     "type": "BrandLogoSize",
+     "default": "'md'",
+     "required": false
+    },
+    {
+     "name": "variant",
+     "type": "'default' | 'onDark'",
+     "default": "'default'",
+     "required": false
+    },
+    {
+     "name": "echo",
+     "type": "any",
+     "default": "false",
+     "required": false
+    }
+   ],
+   "outputs": [],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "BusinessInfoComponent",
+   "selector": "app-business-info",
+   "path": "src/app/shared/components/business-info/business-info.component.ts",
+   "inputs": [
+    {
+     "name": "data",
+     "type": "BusinessInfo | null",
+     "default": "null",
+     "required": false
+    },
+    {
+     "name": "title",
+     "type": "any",
+     "default": "''",
+     "required": false
+    }
+   ],
+   "outputs": [],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "CodeListComponent",
+   "selector": "app-code-list",
+   "path": "src/app/shared/components/code-list/code-list.component.ts",
+   "inputs": [
+    {
+     "name": "items",
+     "type": "CodeListItem[]",
+     "default": "[]",
+     "required": false
+    }
+   ],
+   "outputs": [],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "ContactFloatingComponent",
+   "selector": "app-contact-floating",
+   "path": "src/app/shared/components/contact-floating/contact-floating.component.ts",
+   "inputs": [],
+   "outputs": [],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "NgxFilterDaterangeComponent",
+   "selector": "ngx-filter-daterange",
+   "path": "src/app/shared/components/filter-daterange/ngx-filter-daterange.component.ts",
+   "inputs": [
+    {
+     "name": "from",
+     "type": "string | null",
+     "default": "null",
+     "required": false
+    },
+    {
+     "name": "to",
+     "type": "string | null",
+     "default": "null",
+     "required": false
+    },
+    {
+     "name": "placeholderKey",
+     "type": "any",
+     "default": "'COMMON.DATE_RANGE.PLACEHOLDER'",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "rangeChange",
+     "type": "DateRangeValue"
+    }
+   ],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "JsonViewerComponent",
+   "selector": "app-json-viewer",
+   "path": "src/app/shared/components/json-viewer/json-viewer.component.ts",
+   "inputs": [
+    {
+     "name": "value",
+     "type": "string | null | undefined",
+     "default": "null",
+     "required": false
+    },
+    {
+     "name": "maxHeight",
+     "type": "any",
+     "default": "224",
+     "required": false
+    }
+   ],
+   "outputs": [],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "LanguageSwitcherComponent",
+   "selector": "app-language-switcher",
+   "path": "src/app/shared/components/language-switcher/language-switcher.component.ts",
+   "inputs": [],
+   "outputs": [],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "GuestLayoutComponent",
+   "selector": "app-guest-layout",
+   "path": "src/app/shared/components/layouts/guest-layout/guest-layout.component.ts",
+   "inputs": [],
+   "outputs": [],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "GuestFooterComponent",
+   "selector": "app-guest-footer",
+   "path": "src/app/shared/components/layouts/guest-layout/guest-footer/guest-footer.component.ts",
+   "inputs": [],
+   "outputs": [],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "GuestHeaderComponent",
+   "selector": "app-guest-header",
+   "path": "src/app/shared/components/layouts/guest-layout/guest-header/guest-header.component.ts",
+   "inputs": [],
+   "outputs": [],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "UserLayoutComponent",
+   "selector": "app-user-layout",
+   "path": "src/app/shared/components/layouts/user-layout/user-layout.component.ts",
+   "inputs": [],
+   "outputs": [],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "UserHeaderComponent",
+   "selector": "app-user-header",
+   "path": "src/app/shared/components/layouts/user-layout/user-header/user-header.component.ts",
+   "inputs": [
+    {
+     "name": "logoPath",
+     "type": "any",
+     "default": "'logo-full-vn.svg'",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "toggleSidebar",
+     "type": "void"
+    }
+   ],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "UserSidebarComponent",
+   "selector": "app-user-sidebar",
+   "path": "src/app/shared/components/layouts/user-layout/user-sidebar/user-sidebar.component.ts",
+   "inputs": [
+    {
+     "name": "isOpen",
+     "type": "any",
+     "default": "true",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "toggle",
+     "type": "void"
+    }
+   ],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "PaginationComponent",
+   "selector": "app-pagination",
+   "path": "src/app/shared/components/pagination/pagination.component.ts",
+   "inputs": [
+    {
+     "name": "pageNumber",
+     "type": "any",
+     "default": "1",
+     "required": false
+    },
+    {
+     "name": "pageSize",
+     "type": "any",
+     "default": "10",
+     "required": false
+    },
+    {
+     "name": "totalCount",
+     "type": "any",
+     "default": "0",
+     "required": false
+    },
+    {
+     "name": "totalPages",
+     "type": "any",
+     "default": "0",
+     "required": false
+    },
+    {
+     "name": "hasPreviousPage",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "hasNextPage",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "showInfo",
+     "type": "any",
+     "default": "true",
+     "required": false
+    },
+    {
+     "name": "showPageSize",
+     "type": "any",
+     "default": "true",
+     "required": false
+    },
+    {
+     "name": "pageSizes",
+     "type": "number[]",
+     "default": "[10, 20, 50]",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "pageChange",
+     "type": "number"
+    },
+    {
+     "name": "pageSizeChange",
+     "type": "number"
+    }
+   ],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "PaymentQrComponent",
+   "selector": "app-payment-qr",
+   "path": "src/app/shared/components/payment-qr/payment-qr.component.ts",
+   "inputs": [
+    {
+     "name": "url",
+     "type": "string | null",
+     "default": "null",
+     "required": false
+    },
+    {
+     "name": "alt",
+     "type": "any",
+     "default": "''",
+     "required": false
+    }
+   ],
+   "outputs": [],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "ProductListComponent",
+   "selector": "app-product-list",
+   "path": "src/app/shared/components/product-list/product-list.component.ts",
+   "inputs": [
+    {
+     "name": "showFilters",
+     "type": "any",
+     "default": "true",
+     "required": false
+    },
+    {
+     "name": "showDescription",
+     "type": "any",
+     "default": "true",
+     "required": false
+    },
+    {
+     "name": "editable",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "isActionLoading",
+     "type": "any",
+     "default": "false",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "edit",
+     "type": "PartnerProduct"
+    },
+    {
+     "name": "delete",
+     "type": "PartnerProduct"
+    }
+   ],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "ShareToGroupComponent",
+   "selector": "app-share-to-group",
+   "path": "src/app/shared/components/share-to-group/share-to-group.component.ts",
+   "inputs": [
+    {
+     "name": "refCode",
+     "type": "string | null | undefined",
+     "default": "null",
+     "required": false
+    },
+    {
+     "name": "postType",
+     "type": "GroupPostType",
+     "default": "GroupPostType.Discussion",
+     "required": true
+    },
+    {
+     "name": "targetTitle",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "refLabelKey",
+     "type": "any",
+     "default": "'SHARE_TO_GROUP.FROM_REQUEST'",
+     "required": false
+    },
+    {
+     "name": "variant",
+     "type": "'primary' | 'secondary'",
+     "default": "'secondary'",
+     "required": false
+    },
+    {
+     "name": "iconOnly",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "labelKey",
+     "type": "any",
+     "default": "'SHARE_TO_GROUP.BUTTON'",
+     "required": false
+    },
+    {
+     "name": "size",
+     "type": "ButtonSize",
+     "default": "'sm'",
+     "required": false
+    },
+    {
+     "name": "multi",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "allGroups",
+     "type": "any",
+     "default": "false",
+     "required": false
+    }
+   ],
+   "outputs": [],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "display",
+   "class": "StatusTabsComponent",
+   "selector": "app-status-tabs",
+   "path": "src/app/shared/components/status-tabs/status-tabs.component.ts",
+   "inputs": [
+    {
+     "name": "items",
+     "type": "StatusTabItem[]",
+     "default": "[]",
+     "required": false
+    },
+    {
+     "name": "active",
+     "type": "any",
+     "default": "''",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "change",
+     "type": "string"
+    }
+   ],
+   "model": false
+  }
+ ],
+ "feedback": [
+  {
+   "kind": "component",
+   "group": "feedback",
+   "class": "ChangeCredentialsFormComponent",
+   "selector": "app-change-credentials-form",
+   "path": "src/app/shared/components/change-credentials-form/change-credentials-form.component.ts",
+   "inputs": [
+    {
+     "name": "firstLogin",
+     "type": "any",
+     "default": "false",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "changed",
+     "type": "void"
+    }
+   ],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "feedback",
+   "class": "LoadingComponent",
+   "selector": "app-loading",
+   "path": "src/app/shared/components/loading/loading.component.ts",
+   "inputs": [
+    {
+     "name": "type",
+     "type": "LoadingType",
+     "default": "'dots'",
+     "required": false
+    },
+    {
+     "name": "size",
+     "type": "'sm' | 'md' | 'lg'",
+     "default": "'md'",
+     "required": false
+    },
+    {
+     "name": "color",
+     "type": "string",
+     "default": "'primary'",
+     "required": false
+    },
+    {
+     "name": "text",
+     "type": "string",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "fullScreen",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "inline",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "minHeight",
+     "type": "any",
+     "default": "'40vh'",
+     "required": false
+    }
+   ],
+   "outputs": [],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "feedback",
+   "class": "ModalComponent",
+   "selector": "app-modal",
+   "path": "src/app/shared/components/modal/modal.component.ts",
+   "inputs": [
+    {
+     "name": "title",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "message",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "confirmText",
+     "type": "any",
+     "default": "'Xác nhận'",
+     "required": false
+    },
+    {
+     "name": "cancelText",
+     "type": "any",
+     "default": "'Hủy bỏ'",
+     "required": false
+    },
+    {
+     "name": "confirmVariant",
+     "type": "'primary' | 'danger' | 'success' | 'warning'",
+     "default": "'primary'",
+     "required": false
+    },
+    {
+     "name": "showFooter",
+     "type": "any",
+     "default": "true",
+     "required": false
+    },
+    {
+     "name": "showCancel",
+     "type": "any",
+     "default": "true",
+     "required": false
+    },
+    {
+     "name": "loading",
+     "type": "any",
+     "default": "false",
+     "required": false
+    },
+    {
+     "name": "size",
+     "type": "'sm' | 'md' | 'lg'",
+     "default": "'md'",
+     "required": false
+    },
+    {
+     "name": "customWidth",
+     "type": "string",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "showHeader",
+     "type": "boolean",
+     "default": "true",
+     "required": false
+    },
+    {
+     "name": "showCloseButton",
+     "type": "boolean",
+     "default": "true",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "confirm",
+     "type": "void"
+    },
+    {
+     "name": "cancel",
+     "type": "void"
+    },
+    {
+     "name": "closed",
+     "type": "void"
+    },
+    {
+     "name": "visibleChange",
+     "type": "boolean"
+    }
+   ],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "feedback",
+   "class": "PurgeBarComponent",
+   "selector": "app-purge-bar",
+   "path": "src/app/shared/components/purge-bar/purge-bar.component.ts",
+   "inputs": [
+    {
+     "name": "selectedIds",
+     "type": "string[]",
+     "default": "[]",
+     "required": false
+    },
+    {
+     "name": "entityLabel",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "showSelection",
+     "type": "any",
+     "default": "false",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "purged",
+     "type": "number"
+    }
+   ],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "feedback",
+   "class": "ToastComponent",
+   "selector": "app-toast",
+   "path": "src/app/shared/components/toast/toast.component.ts",
+   "inputs": [
+    {
+     "name": "type",
+     "type": "ToastType",
+     "default": "'success'",
+     "required": false
+    },
+    {
+     "name": "message",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "title",
+     "type": "any",
+     "default": "''",
+     "required": false
+    },
+    {
+     "name": "duration",
+     "type": "any",
+     "default": "3000",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "closed",
+     "type": "void"
+    }
+   ],
+   "model": false
+  }
+ ],
+ "layout": [
+  {
+   "kind": "component",
+   "group": "layout",
+   "class": "AdminLayoutComponent",
+   "selector": "app-admin-layout",
+   "path": "src/app/shared/components/layouts/admin-layout/admin-layout.component.ts",
+   "inputs": [],
+   "outputs": [],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "layout",
+   "class": "AdminFooterComponent",
+   "selector": "app-admin-footer",
+   "path": "src/app/shared/components/layouts/admin-layout/admin-footer/admin-footer.component.ts",
+   "inputs": [],
+   "outputs": [],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "layout",
+   "class": "AdminHeaderComponent",
+   "selector": "app-admin-header",
+   "path": "src/app/shared/components/layouts/admin-layout/admin-header/admin-header.component.ts",
+   "inputs": [
+    {
+     "name": "logoPath",
+     "type": "any",
+     "default": "'logo-full-vn.svg'",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "toggleSidebar",
+     "type": "void"
+    }
+   ],
+   "model": false
+  },
+  {
+   "kind": "component",
+   "group": "layout",
+   "class": "AdminSidebarComponent",
+   "selector": "app-admin-sidebar",
+   "path": "src/app/shared/components/layouts/admin-layout/admin-sidebar/admin-sidebar.component.ts",
+   "inputs": [
+    {
+     "name": "isOpen",
+     "type": "any",
+     "default": "true",
+     "required": false
+    }
+   ],
+   "outputs": [
+    {
+     "name": "toggle",
+     "type": "void"
+    }
+   ],
+   "model": false
+  }
+ ],
+ "pipes": [
+  {
+   "kind": "pipe",
+   "group": "pipe",
+   "class": "AppDatePipe",
+   "selector": "appDate",
+   "path": "src/app/shared/pipes/app-date.pipe.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [
+    "value: string | Date | null | undefined",
+    "mode: DateDisplayMode = 'datetime'"
+   ],
+   "safeCall": false,
+   "model": false
+  },
+  {
+   "kind": "pipe",
+   "group": "pipe",
+   "class": "AppPricePipe",
+   "selector": "appPrice",
+   "path": "src/app/shared/pipes/app-price.pipe.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [
+    "value: number | null | undefined"
+   ],
+   "safeCall": false,
+   "model": false
+  },
+  {
+   "kind": "pipe",
+   "group": "pipe",
+   "class": "AvatarPipe",
+   "selector": "avatar",
+   "path": "src/app/shared/pipes/avatar.pipe.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [
+    "avatar?: string"
+   ],
+   "safeCall": true,
+   "model": false
+  },
+  {
+   "kind": "pipe",
+   "group": "pipe",
+   "class": "CodeNamePipe",
+   "selector": "appCodeName",
+   "path": "src/app/shared/pipes/code-name.pipe.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [
+    "code: string | null | undefined",
+    "name: string | null | undefined"
+   ],
+   "safeCall": false,
+   "model": false
+  },
+  {
+   "kind": "pipe",
+   "group": "pipe",
+   "class": "DisplayCodePipe",
+   "selector": "displayCode",
+   "path": "src/app/shared/pipes/display-code.pipe.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [
+    "value: string | null | undefined"
+   ],
+   "safeCall": false,
+   "model": false
+  },
+  {
+   "kind": "pipe",
+   "group": "pipe",
+   "class": "FormatHtmlPipe",
+   "selector": "formatHtml",
+   "path": "src/app/shared/pipes/format-html.pipe.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [
+    "value: string | SafeHtml | null | undefined",
+    "options?: FormatOptions"
+   ],
+   "safeCall": false,
+   "model": false
+  },
+  {
+   "kind": "pipe",
+   "group": "pipe",
+   "class": "HasPermissionPipe",
+   "selector": "hasPermission",
+   "path": "src/app/shared/pipes/has-permission.pipe.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [],
+   "safeCall": true,
+   "model": false
+  },
+  {
+   "kind": "pipe",
+   "group": "pipe",
+   "class": "MaskPhonePipe",
+   "selector": "maskPhone",
+   "path": "src/app/shared/pipes/mask.pipe.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [
+    "value: string | null | undefined"
+   ],
+   "safeCall": false,
+   "model": false
+  },
+  {
+   "kind": "pipe",
+   "group": "pipe",
+   "class": "MediaUrlPipe",
+   "selector": "mediaUrl",
+   "path": "src/app/shared/pipes/media-url.pipe.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [
+    "url: string | null | undefined"
+   ],
+   "safeCall": false,
+   "model": false
+  },
+  {
+   "kind": "pipe",
+   "group": "pipe",
+   "class": "ReadMorePipe",
+   "selector": "readMore",
+   "path": "src/app/shared/pipes/read-more.pipe.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [
+    "value: string | null | undefined",
+    "isExpanded: boolean = false",
+    "limit: number = 200",
+    "ellipsis: string = '...'"
+   ],
+   "safeCall": false,
+   "model": false
+  },
+  {
+   "kind": "pipe",
+   "group": "pipe",
+   "class": "SafeHtmlPipe",
+   "selector": "safeHtml",
+   "path": "src/app/shared/pipes/safe-html.pipe.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [
+    "value: string"
+   ],
+   "safeCall": false,
+   "model": false
+  },
+  {
+   "kind": "pipe",
+   "group": "pipe",
+   "class": "SanitizeHtmlPipe",
+   "selector": "sanitizeHtml",
+   "path": "src/app/shared/pipes/sanitize-html.pipe.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [
+    "value: string | SafeHtml | null | undefined"
+   ],
+   "safeCall": false,
+   "model": false
+  },
+  {
+   "kind": "pipe",
+   "group": "pipe",
+   "class": "ShortIdPipe",
+   "selector": "shortId",
+   "path": "src/app/shared/pipes/short-id.pipe.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [
+    "value: string | null | undefined"
+   ],
+   "safeCall": false,
+   "model": false
+  },
+  {
+   "kind": "pipe",
+   "group": "pipe",
+   "class": "TimeAgoPipe",
+   "selector": "timeAgo",
+   "path": "src/app/shared/pipes/time-ago.pipe.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [
+    "value: string | Date | null | undefined"
+   ],
+   "safeCall": false,
+   "model": false
+  },
+  {
+   "kind": "pipe",
+   "group": "pipe",
+   "class": "TruncatePipe",
+   "selector": "truncate",
+   "path": "src/app/shared/pipes/truncate.pipe.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [
+    "value: string | null | undefined",
+    "limit: number = 200",
+    "ellipsis: string = '...'"
+   ],
+   "safeCall": false,
+   "model": false
+  },
+  {
+   "kind": "pipe",
+   "group": "pipe",
+   "class": "UserRoleLabelPipe",
+   "selector": "userRoleLabel",
+   "path": "src/app/shared/pipes/user-role-label.pipe.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [
+    "role: unknown"
+   ],
+   "safeCall": false,
+   "model": false
+  }
+ ],
+ "directives": [
+  {
+   "kind": "directive",
+   "group": "directive",
+   "class": "HasPermissionDirective",
+   "selector": "",
+   "path": "src/app/shared/directives/has-permission.directive.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [],
+   "safeCall": true,
+   "model": false
+  },
+  {
+   "kind": "directive",
+   "group": "directive",
+   "class": "MoneyInputDirective",
+   "selector": "",
+   "path": "src/app/shared/directives/money-input.directive.ts",
+   "inputs": [],
+   "outputs": [],
+   "params": [],
+   "safeCall": true,
+   "model": false
+  }
+ ]
+}

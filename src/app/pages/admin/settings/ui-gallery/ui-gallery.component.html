@@ -1,0 +1,557 @@
+<div class="gallery">
+    <!-- ===== Đầu trang ===== -->
+    <header class="gallery__head">
+        <div class="gallery__intro">
+            <h2 class="gallery__title">
+                <i class="fa-solid fa-book-open"></i>
+                {{ 'ADMIN.UI_GALLERY.TITLE' | translate }}
+            </h2>
+            <p class="gallery__desc">{{ 'ADMIN.UI_GALLERY.DESC' | translate }}</p>
+            <p class="gallery__note">
+                <i class="fa-solid fa-rotate"></i>
+                {{ 'ADMIN.UI_GALLERY.GENERATED' | translate }} <code>scripts/gen-catalog.py</code>
+            </p>
+        </div>
+
+        <div class="gallery__stats">
+            <span class="stat"><b>{{ stats.components }}</b>component</span>
+            <span class="stat"><b>{{ stats.pipes }}</b>pipe</span>
+            <span class="stat"><b>{{ stats.directives }}</b>directive</span>
+            <span class="stat"><b>{{ stats.helpers }}</b>helper UI</span>
+            <span class="stat"><b>{{ stats.controllers }}</b>controller</span>
+            <span class="stat"><b>{{ stats.endpoints }}</b>endpoint</span>
+            <span class="stat"><b>{{ stats.extensions }}</b>helper API</span>
+        </div>
+    </header>
+
+    <!-- ===== Thanh công cụ ===== -->
+    <div class="gallery__bar">
+        <div class="gallery__tabs">
+            <button type="button" class="gtab" [class.is-active]="tab === 'ui'" (click)="tab = 'ui'">
+                <i class="fa-solid fa-puzzle-piece"></i>{{ 'ADMIN.UI_GALLERY.TAB_UI' | translate }}
+            </button>
+            <button type="button" class="gtab" [class.is-active]="tab === 'api'" (click)="tab = 'api'">
+                <i class="fa-solid fa-plug"></i>{{ 'ADMIN.UI_GALLERY.TAB_API' | translate }}
+            </button>
+            <button type="button" class="gtab" [class.is-active]="tab === 'helper'" (click)="tab = 'helper'">
+                <i class="fa-solid fa-screwdriver-wrench"></i>{{ 'ADMIN.UI_GALLERY.TAB_HELPER' | translate }}
+            </button>
+        </div>
+
+        <app-input class="gallery__search" icon="fa-solid fa-magnifying-glass"
+            [placeholder]="'ADMIN.UI_GALLERY.SEARCH' | translate" [(ngModel)]="keyword" />
+    </div>
+
+    <!-- ================= TAB: GIAO DIỆN ================= -->
+    @if (tab === 'ui') {
+    <section class="gallery__section">
+        <h3 class="section__title">
+            <i class="fa-solid fa-eye"></i>{{ 'ADMIN.UI_GALLERY.DEMO' | translate }}
+        </h3>
+
+        <div class="demos">
+            <!-- Button -->
+            <div class="demo">
+                <span class="demo__label">app-button</span>
+                <div class="demo__body demo__body--wrap">
+                    @for (v of buttonVariants; track v) {
+                    <app-button [variant]="v" size="sm">{{ v }}</app-button>
+                    }
+                    <app-button size="sm" [loading]="demoButtonLoading" (onClick)="demoButtonLoading = !demoButtonLoading">
+                        loading
+                    </app-button>
+                    <app-button size="sm" [disabled]="true">disabled</app-button>
+                </div>
+            </div>
+
+            <!-- Input + select -->
+            <div class="demo">
+                <span class="demo__label">app-input · app-ng-select-wrapper</span>
+                <div class="demo__body">
+                    <app-input label="Tên đối tác" placeholder="Nhập tên" hint="Gợi ý hiển thị dưới ô"
+                        icon="fa-regular fa-building" [(ngModel)]="demoInput" />
+                    <app-input label="Có lỗi" [isInvalid]="true" errorMessage="Trường này bắt buộc"
+                        [(ngModel)]="demoInput" />
+                    <app-ng-select-wrapper label="Vai trò" [items]="selectItems" [searchable]="true" [clearable]="true"
+                        placeholder="Chọn vai trò" [(ngModel)]="demoSelect" />
+                </div>
+            </div>
+
+            <!-- Checkbox + radio -->
+            <div class="demo">
+                <span class="demo__label">app-checkbox</span>
+                <div class="demo__body demo__body--wrap">
+                    <app-checkbox label="Đang hoạt động" hint="Tài khoản còn dùng được" [(ngModel)]="demoCheckbox" />
+                    <app-checkbox label="Cỡ nhỏ" size="sm" [(ngModel)]="demoCheckboxSmall" />
+                    <app-checkbox label="Chọn tất cả (nửa vời)" [indeterminate]="true" />
+                    <app-checkbox label="Bị khoá" [disabled]="true" />
+                </div>
+            </div>
+
+            <div class="demo">
+                <span class="demo__label">app-radio-group</span>
+                <div class="demo__body demo__body--wide">
+                    <app-radio-group label="Dọc" [options]="radioOptions" [(ngModel)]="demoRadio" />
+                    <app-radio-group label="Ngang" orientation="horizontal" [options]="radioOptions"
+                        [(ngModel)]="demoRadio" />
+                    <app-radio-group label="Kiểu thẻ" appearance="card" orientation="horizontal"
+                        [options]="radioOptions" [(ngModel)]="demoRadio" />
+                </div>
+            </div>
+
+            <!-- Badge -->
+            <div class="demo">
+                <span class="demo__label">app-badge</span>
+                <div class="demo__body demo__body--wrap">
+                    @for (v of badgeVariants; track v) {
+                    <app-badge [variant]="v" [label]="v" />
+                    }
+                    <app-badge variant="success" label="Không chấm" [showDot]="false" />
+                </div>
+            </div>
+
+            <!-- Search-by + status tabs + pagination -->
+            <div class="demo">
+                <span class="demo__label">app-search-by · app-status-tabs</span>
+                <div class="demo__body demo__body--wide">
+                    <app-search-by [options]="searchFields" [value]="demoSearchValue"
+                        (valueChange)="demoSearchValue = $event || ''" />
+                    <app-status-tabs [items]="statusItems" [active]="demoStatus" (change)="demoStatus = $event" />
+                </div>
+            </div>
+
+            <div class="demo">
+                <span class="demo__label">app-pagination</span>
+                <div class="demo__body">
+                    <app-pagination [pageNumber]="demoPage" [pageSize]="demoPageSize" [totalCount]="128"
+                        [totalPages]="13" [hasPreviousPage]="true" [hasNextPage]="true"
+                        (pageChange)="demoPage = $event" (pageSizeChange)="demoPageSize = $event" />
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div class="demo">
+                <span class="demo__label">app-loading</span>
+                <div class="demo__body demo__body--wrap">
+                    @for (t of loadingTypes; track t) {
+                    <button type="button" class="type-chip" [class.is-active]="demoLoading === t"
+                        (click)="demoLoading = t">{{ t }}</button>
+                    }
+                </div>
+                <div class="demo__preview">
+                    <app-loading [type]="demoLoading" size="md" [inline]="true" text="Đang tải dữ liệu..." />
+                </div>
+            </div>
+
+            <!-- Modal + toast -->
+            <div class="demo">
+                <span class="demo__label">app-modal · app-toast</span>
+                <div class="demo__body demo__body--wrap">
+                    <app-button variant="danger" size="sm" (onClick)="demoModalVisible = true">
+                        Mở modal xác nhận
+                    </app-button>
+                    <app-button variant="success" size="sm" (onClick)="demoToastVisible = true">
+                        Hiện toast
+                    </app-button>
+                </div>
+            </div>
+
+            <!-- Json viewer + code list + purge bar -->
+            <div class="demo">
+                <span class="demo__label">app-json-viewer</span>
+                <div class="demo__body">
+                    <app-json-viewer [value]="demoJson" [maxHeight]="160" />
+                </div>
+            </div>
+
+            <div class="demo">
+                <span class="demo__label">app-code-list · app-purge-bar</span>
+                <div class="demo__body demo__body--wide">
+                    <app-code-list [items]="codeItems" />
+                    <app-purge-bar [entity]="'groups'" [selectedIds]="['1', '2']" entityLabel="bản ghi"
+                        [showSelection]="true" />
+                </div>
+            </div>
+
+            <!-- Brand logo -->
+            <div class="demo">
+                <span class="demo__label">app-brand-logo</span>
+                <div class="demo__body demo__body--wrap">
+                    <app-brand-logo size="sm" />
+                    <app-brand-logo size="md" />
+                    <app-brand-logo size="lg" [echo]="true" />
+                </div>
+                <div class="demo__preview demo__preview--dark">
+                    <app-brand-logo size="md" variant="onDark" tagline="Kết nối cộng đồng" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Danh mục component theo nhóm -->
+    @for (group of groups; track group.key) {
+    <section class="gallery__section">
+        <h3 class="section__title">
+            <i [class]="group.icon"></i>
+            {{ group.label | translate }}
+            <span class="section__count">{{ componentsOf(group.key).length }}</span>
+        </h3>
+
+        <div class="cards">
+            @for (item of componentsOf(group.key); track item.class) {
+            <article class="card">
+                <header class="card__head">
+                    <code class="chip">{{ item.selector }}</code>
+                    <button type="button" class="card__copy" (click)="copy(snippet(item), item.class)"
+                        [title]="'ADMIN.UI_GALLERY.COPY' | translate">
+                        <i class="fa-regular" [class.fa-copy]="copiedKey !== item.class"
+                            [class.fa-circle-check]="copiedKey === item.class"></i>
+                    </button>
+                </header>
+
+                <p class="card__class">{{ item.class }}<span class="card__meta">{{ meta(item) }}</span></p>
+
+                @if (item.doc) {
+                <p class="card__doc">{{ item.doc }}</p>
+                }
+
+                <pre class="card__snippet">{{ snippet(item) }}</pre>
+                <p class="card__path">{{ item.path }}</p>
+
+                @if (item.inputs.length) {
+                <table class="tbl tbl--tight">
+                    <thead>
+                        <tr>
+                            <th>{{ 'ADMIN.UI_GALLERY.INPUTS' | translate }}</th>
+                            <th>Kiểu</th>
+                            <th>Mặc định</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (input of item.inputs; track input.name) {
+                        <tr>
+                            <td><code>{{ input.name }}</code>{{ input.required ? ' *' : '' }}</td>
+                            <td class="muted">{{ input.type }}</td>
+                            <td class="muted">{{ input.default || '—' }}</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+                }
+
+                @if (item.outputs.length) {
+                <p class="card__outputs">
+                    <span>{{ 'ADMIN.UI_GALLERY.OUTPUTS' | translate }}:</span>
+                    @for (output of item.outputs; track output.name) {
+                    <code>{{ output.name }}: {{ output.type }}</code>
+                    }
+                </p>
+                }
+            </article>
+            } @empty {
+            <p class="empty">{{ 'ADMIN.UI_GALLERY.EMPTY' | translate }}</p>
+            }
+        </div>
+    </section>
+    }
+
+    <!-- Pipe -->
+    <section class="gallery__section">
+        <h3 class="section__title">
+            <i class="fa-solid fa-filter"></i>Pipe <span class="section__count">{{ filteredPipes.length }}</span>
+        </h3>
+        <div class="cards">
+            @for (item of filteredPipes; track item.class) {
+            <article class="card">
+                <header class="card__head">
+                    <code class="chip">{{ item.selector }}</code>
+                    <button type="button" class="card__copy" (click)="copy(snippet(item), item.class)">
+                        <i class="fa-regular" [class.fa-copy]="copiedKey !== item.class"
+                            [class.fa-circle-check]="copiedKey === item.class"></i>
+                    </button>
+                </header>
+                <p class="card__class">{{ item.class }}</p>
+                @if (item.doc) {
+                <p class="card__doc">{{ item.doc }}</p>
+                }
+                <pre class="card__snippet">{{ snippet(item) }}</pre>
+                <p class="card__path">{{ item.path }}</p>
+                <p class="card__outputs"><span>Chữ ký:</span><code>{{ meta(item) }}</code></p>
+            </article>
+            } @empty {
+            <p class="empty">{{ 'ADMIN.UI_GALLERY.EMPTY' | translate }}</p>
+            }
+        </div>
+    </section>
+
+    <!-- Directive -->
+    <section class="gallery__section">
+        <h3 class="section__title">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>Directive
+            <span class="section__count">{{ filteredDirectives.length }}</span>
+        </h3>
+        <div class="cards">
+            @for (item of filteredDirectives; track item.class) {
+            <article class="card">
+                <header class="card__head">
+                    <code class="chip">{{ item.selector }}</code>
+                    <button type="button" class="card__copy" (click)="copy(snippet(item), item.class)">
+                        <i class="fa-regular" [class.fa-copy]="copiedKey !== item.class"
+                            [class.fa-circle-check]="copiedKey === item.class"></i>
+                    </button>
+                </header>
+                <p class="card__class">{{ item.class }}</p>
+                @if (item.doc) {
+                <p class="card__doc">{{ item.doc }}</p>
+                }
+                <pre class="card__snippet">{{ snippet(item) }}</pre>
+                <p class="card__path">{{ item.path }}</p>
+            </article>
+            } @empty {
+            <p class="empty">{{ 'ADMIN.UI_GALLERY.EMPTY' | translate }}</p>
+            }
+        </div>
+    </section>
+    }
+
+    <!-- ================= TAB: API ================= -->
+    @if (tab === 'api') {
+    <section class="gallery__section">
+        <h3 class="section__title">
+            <i class="fa-solid fa-plug"></i>Controller
+            <span class="section__count">{{ filteredControllers.length }}/{{ stats.controllers }}</span>
+        </h3>
+
+        @for (controller of filteredControllers; track controller.class) {
+        <article class="api" [class.is-open]="openController === controller.name">
+            <button type="button" class="api__head" (click)="toggleController(controller.name)">
+                <i class="fa-solid"
+                    [class.fa-chevron-right]="openController !== controller.name"
+                    [class.fa-chevron-down]="openController === controller.name"></i>
+                <span class="api__name">{{ controller.class }}</span>
+                <code class="chip chip--path">{{ controller.base }}</code>
+                <span class="api__count">{{ controller.actions.length }} endpoint</span>
+                <span class="api__auth" [class.is-public]="controller.anonymous">
+                    {{ (controller.anonymous ? 'ADMIN.UI_GALLERY.PUBLIC' : 'ADMIN.UI_GALLERY.AUTH') | translate }}
+                </span>
+            </button>
+
+            @if (openController === controller.name) {
+            <div class="api__body">
+                @if (controller.doc) {
+                <p class="api__doc">{{ controller.doc }}</p>
+                }
+                <p class="card__path">{{ controller.path }}</p>
+
+                <table class="tbl tbl--api">
+                    <thead>
+                        <tr>
+                            <th>{{ 'ADMIN.UI_GALLERY.METHOD' | translate }}</th>
+                            <th>{{ 'ADMIN.UI_GALLERY.PATH' | translate }}</th>
+                            <th>{{ 'ADMIN.UI_GALLERY.PERMISSION' | translate }}</th>
+                            <th>{{ 'ADMIN.UI_GALLERY.REQUEST' | translate }}</th>
+                            <th>{{ 'ADMIN.UI_GALLERY.RESPONSE' | translate }}</th>
+                            <th>{{ 'ADMIN.UI_GALLERY.NOTE' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (action of controller.actions; track action.method + action.path) {
+                        <tr>
+                            <td><span class="method" [class]="'method--' + action.verb.toLowerCase()">{{ action.verb }}</span></td>
+                            <td><code class="path">{{ action.path }}</code></td>
+                            <td>
+                                @if (action.permissionCode) {
+                                <span class="perm">{{ action.permissionCode }}</span>
+                                <span class="perm__name">{{ action.permission }}</span>
+                                } @else if (action.anonymous) {
+                                <span class="muted">{{ 'ADMIN.UI_GALLERY.PUBLIC' | translate }}</span>
+                                } @else {
+                                <span class="muted">—</span>
+                                }
+                                @if (action.roles) {
+                                <span class="role">{{ action.roles }}</span>
+                                }
+                            </td>
+                            <td>
+                                @if (action.requestDto) {
+                                <button type="button" class="link" (click)="toggleDto(action.requestDto)">
+                                    {{ action.requestDto }}
+                                </button>
+                                } @else {
+                                <span class="muted">—</span>
+                                }
+                            </td>
+                            <td class="muted">{{ action.response }}</td>
+                            <td class="api__note">{{ action.doc }}</td>
+                        </tr>
+
+                        @if (action.requestDto && openDto === action.requestDto) {
+                        <tr class="dto-row">
+                            <td colspan="6">
+                                <div class="dto">
+                                    <span class="dto__title">{{ action.requestDto }}</span>
+                                    @for (field of fieldsOf(action.requestDto); track field.name) {
+                                    <span class="dto__field"><b>{{ field.name }}</b><i>{{ field.type }}</i></span>
+                                    } @empty {
+                                    <span class="muted">{{ 'ADMIN.UI_GALLERY.NO_FIELDS' | translate }}</span>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            }
+        </article>
+        } @empty {
+        <p class="empty">{{ 'ADMIN.UI_GALLERY.EMPTY' | translate }}</p>
+        }
+    </section>
+    }
+
+    <!-- ================= TAB: HELPER ================= -->
+    @if (tab === 'helper') {
+    <section class="gallery__section">
+        <h3 class="section__title">
+            <i class="fa-solid fa-screwdriver-wrench"></i>API — helper &amp; extension
+            <span class="section__count">{{ filteredExtensions.length }}/{{ stats.extensions }}</span>
+        </h3>
+
+        <div class="cards">
+            @for (ext of filteredExtensions; track ext.class) {
+            <article class="card">
+                <header class="card__head">
+                    <code class="chip">{{ ext.class }}</code>
+                </header>
+                @if (ext.doc) {
+                <p class="card__doc">{{ ext.doc }}</p>
+                }
+                <p class="card__path">{{ ext.path }}</p>
+
+                <table class="tbl tbl--tight">
+                    <thead>
+                        <tr>
+                            <th>Hàm</th>
+                            <th>Tham số</th>
+                            <th>Trả về</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (method of ext.methods; track method.name) {
+                        <tr>
+                            <td>
+                                <code>{{ method.name }}</code>
+                                @if (method.doc) {
+                                <span class="card__doc card__doc--inline">{{ method.doc }}</span>
+                                }
+                            </td>
+                            <td class="muted">{{ method.params.length ? method.params.join(', ') : '—' }}</td>
+                            <td class="muted">{{ method.returnType }}</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </article>
+            } @empty {
+            <p class="empty">{{ 'ADMIN.UI_GALLERY.EMPTY' | translate }}</p>
+            }
+        </div>
+    </section>
+
+    <section class="gallery__section">
+        <h3 class="section__title">
+            <i class="fa-solid fa-layer-group"></i>API — middleware
+            <span class="section__count">{{ filteredMiddlewares.length }}</span>
+        </h3>
+        <div class="cards">
+            @for (mw of filteredMiddlewares; track mw.class) {
+            <article class="card">
+                <header class="card__head"><code class="chip">{{ mw.class }}</code></header>
+                @if (mw.doc) {
+                <p class="card__doc">{{ mw.doc }}</p>
+                }
+                <p class="card__path">{{ mw.path }}</p>
+            </article>
+            }
+        </div>
+    </section>
+
+    <section class="gallery__section">
+        <h3 class="section__title">
+            <i class="fa-solid fa-code"></i>UI — helper
+            <span class="section__count">{{ filteredHelpers.length }}/{{ helpers.length }}</span>
+        </h3>
+        <div class="cards">
+            @for (helper of filteredHelpers; track helper.file) {
+            <article class="card">
+                <header class="card__head"><code class="chip">{{ helper.file }}</code></header>
+                @if (helper.doc) {
+                <p class="card__doc">{{ helper.doc }}</p>
+                }
+                <p class="card__path">{{ helper.path }}</p>
+
+                @if (helper.functions.length) {
+                <table class="tbl tbl--tight">
+                    <thead>
+                        <tr>
+                            <th>Hàm</th>
+                            <th>Tham số</th>
+                            <th>Trả về</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (fn of helper.functions; track fn.name) {
+                        <tr>
+                            <td>
+                                <code>{{ fn.name }}</code>
+                                @if (fn.doc) {
+                                <span class="card__doc card__doc--inline">{{ fn.doc }}</span>
+                                }
+                            </td>
+                            <td class="muted">{{ fn.params.length ? fn.params.join(', ') : '—' }}</td>
+                            <td class="muted">{{ fn.returnType }}</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+                }
+
+                @if (helper.consts.length) {
+                <p class="card__outputs">
+                    <span>Hằng số:</span>
+                    @for (c of helper.consts; track c) {
+                    <code>{{ c }}</code>
+                    }
+                </p>
+                }
+            </article>
+            }
+        </div>
+    </section>
+
+    <section class="gallery__section">
+        <h3 class="section__title">
+            <i class="fa-solid fa-shield-halved"></i>{{ 'ADMIN.UI_GALLERY.PERMISSION_CODES' | translate }}
+            <span class="section__count">{{ permissionCount }}</span>
+        </h3>
+        <div class="perm-grid">
+            @for (entry of permissionCodes | keyvalue; track entry.key) {
+            <span class="perm__item"><b>{{ entry.value }}</b>{{ entry.key }}</span>
+            }
+        </div>
+    </section>
+    }
+</div>
+
+<!-- Toast xem trước -->
+@if (demoToastVisible) {
+<app-toast type="success" title="Thành công" message="Đây là toast xem trước của app-toast."
+    (closed)="demoToastVisible = false" />
+}
+
+<!-- Modal xem trước -->
+<app-modal [title]="'Xác nhận thao tác'" [message]="'Modal dùng chung của app, có sẵn chân nút xác nhận/huỷ.'"
+    confirmVariant="danger" size="sm" [visible]="demoModalVisible" (cancel)="demoModalVisible = false"
+    (confirm)="demoModalVisible = false" (closed)="demoModalVisible = false" />

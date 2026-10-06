@@ -10,6 +10,7 @@ import { AdminAuditLogListComponent } from '@pages/admin/settings/audit-log/audi
 import { AdminCommissionConfigComponent } from '@pages/admin/settings/commission/commission-config.component';
 import { AdminGeneralSettingsComponent } from '@pages/admin/settings/general/general-settings-table.component';
 import { AdminMembershipTiersComponent } from '@pages/admin/settings/membership/membership-tiers.component';
+import { UiGalleryComponent } from '@pages/admin/settings/ui-gallery/ui-gallery.component';
 
 /** Một mục trong danh sách cài đặt (cột dọc bên trái). */
 interface SettingsTab {
@@ -30,7 +31,7 @@ interface SettingsTab {
     selector: 'app-admin-settings',
     standalone: true,
     imports: [CommonModule, TranslateModule, AdminPermissionSettingsComponent, AdminAuditLogListComponent, AdminCommissionConfigComponent, AdminGeneralSettingsComponent,
-        AdminMembershipTiersComponent
+        AdminMembershipTiersComponent, UiGalleryComponent
     ],
     template: `
         <div class="settings">
@@ -66,6 +67,8 @@ interface SettingsTab {
                         <app-admin-commission-config></app-admin-commission-config>
                     } @else if (activeTab === 'membership') {
                     <app-admin-membership-tiers></app-admin-membership-tiers>
+                } @else if (activeTab === 'ui-gallery') {
+                    <app-ui-gallery></app-ui-gallery>
                 } @else if (activeTab === 'audit') {
                         <app-admin-audit-log-list></app-admin-audit-log-list>
                     } @else {
@@ -200,6 +203,14 @@ export class AdminSettingsComponent implements OnInit {
                 description: this._appService.trans('ADMIN.SETTINGS_PAGE.TAB_AUDIT_LOG_DESC'),
                 icon: 'fa-solid fa-clipboard-list',
                 permission: [Permission.ViewFullAuditLogs, Permission.ViewEntityAuditLogs, Permission.ViewAuthAuditLogs]
+            },
+            {
+                key: 'ui-gallery',
+                label: this._appService.trans('ADMIN.SETTINGS_PAGE.TAB_UI_GALLERY'),
+                description: this._appService.trans('ADMIN.SETTINGS_PAGE.TAB_UI_GALLERY_DESC'),
+                icon: 'fa-solid fa-book-open',
+                // Thư viện nội bộ: quyền riêng, chỉ cấp cho SuperAdmin — phục vụ dev tra cứu.
+                permission: Permission.ViewUiGallery
             }
         ].filter(tab => !tab.permission || this._appService.permissionService.has(tab.permission));
 
