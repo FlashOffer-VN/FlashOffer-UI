@@ -352,7 +352,10 @@ select:not([multiple]) option {
     app-loading .community-icon,
     app-loading .community-icon-sm,
     app-loading .dot-loading,
-    app-loading .skeleton-line {
+    app-loading .skeleton-line,
+    app-loading .fs-loading__bar-fill,
+    app-loading .brand__echo,
+    app-loading .brand__name {
         animation: loading-soft-pulse 1.6s ease-in-out infinite !important;
     }
 

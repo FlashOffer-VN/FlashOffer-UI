@@ -56,12 +56,48 @@ describe('LoadingComponent', () => {
         expect(fixture.nativeElement.querySelectorAll('.dot').length).toBe(6);
     });
 
-    it('fullScreen là overlay phủ toàn màn hình, dùng logo + chấm động', () => {
-        const fixture = create({ fullScreen: true });
+    it('spinner giữ class gốc và có cạnh trên khác màu (thấy rõ đang quay)', () => {
+        const fixture = create({ type: 'spinner' as LoadingType });
+        const spinner = fixture.nativeElement.querySelector('.spinner') as HTMLElement;
 
-        expect(fixture.nativeElement.querySelector('.fixed.inset-0')).toBeTruthy();
-        expect(fixture.nativeElement.querySelector('.logo-icon')).toBeTruthy();
-        expect(fixture.nativeElement.querySelectorAll('.dot-loading').length).toBe(3);
+        expect(spinner).toBeTruthy();
+        // Binding phải dùng [ngClass]: dùng [class] sẽ XOÁ class .spinner => mất animation + bo tròn.
+        expect(spinner.classList).toContain('spinner');
+        expect(spinner.classList).toContain('spinner-md');
+
+        // Angular đổi tên keyframes trong style component (thêm tiền tố _ngcontent-...) nên so bằng chứa.
+        const style = getComputedStyle(spinner);
+        expect(style.animationName).toContain('spin');
+        expect(parseFloat(style.borderTopWidth)).toBeGreaterThan(0);
+        expect(style.borderTopStyle).toBe('solid');
+    });
+
+    it('dots giữ class .dot nên vẫn có hiệu ứng nhảy', () => {
+        const fixture = create({ type: 'dots' as LoadingType });
+        const dots = fixture.nativeElement.querySelectorAll('.dot');
+
+        expect(dots.length).toBe(6);
+        expect((dots[0] as HTMLElement).classList).toContain('dot');
+        expect(getComputedStyle(dots[0] as HTMLElement).animationName).toContain('flow');
+    });
+
+    it('kiểu logo giữ class của bộ icon (không bị binding ghi đè)', () => {
+        const fixture = create({ type: 'logo' as LoadingType });
+        const icon = fixture.nativeElement.querySelector('.logo-icon i') as HTMLElement;
+
+        expect(icon.classList).toContain('fa-solid');
+        expect(icon.classList).toContain('text-5xl');
+        expect(icon.classList).toContain('text-primary');
+    });
+
+    it('fullScreen: overlay wordmark 2 lớp (bóng mờ + chữ) và vệt sáng tiến trình', () => {
+        const fixture = create({ fullScreen: true });
+        const host = fixture.nativeElement as HTMLElement;
+
+        expect(host.querySelector('.fs-loading')).toBeTruthy();
+        expect(host.querySelector('app-brand-logo')).toBeTruthy();
+        expect(host.querySelector('.brand__echo')).toBeTruthy();
+        expect(host.querySelector('.fs-loading__bar-fill')).toBeTruthy();
         expect(block(fixture)).toBeNull();
     });
 

@@ -102,13 +102,15 @@
 }
 
 /* ===== Hover / focus / nhấn ===== */
-.cb__input:not(:disabled):hover+.cb__box {
+/* Ô CHƯA chọn: hover thì viền accent + nền nhạt (không áp cho ô đã chọn/nửa vời) */
+.cb:hover:has(.cb__input:not(:disabled):not(:checked)) .cb__box:not(.is-indeterminate) {
     border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
     background: color-mix(in srgb, var(--accent) 6%, var(--white));
 }
 
-.cb__input:not(:disabled):checked:hover+.cb__box,
-.cb__input:not(:disabled)+.cb__box.is-indeterminate:hover {
+/* Ô đã chọn / nửa vời: hover thì đậm hơn nhưng vẫn giữ nền gradient (không bị mất gạch/dấu) */
+.cb:hover:has(.cb__input:not(:disabled):checked) .cb__box,
+.cb:hover:has(.cb__box.is-indeterminate) .cb__box {
     background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 88%, #000) 0%,
             color-mix(in srgb, var(--accent) 55%, #14b8a6) 100%);
 }

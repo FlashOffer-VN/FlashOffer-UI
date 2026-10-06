@@ -49,6 +49,22 @@ describe('BrandLogoComponent', () => {
             .toContain('brand--on-dark');
     });
 
+    it('bật echo thì có lớp bóng mờ phía sau và chữ chính mờ dần', () => {
+        const fixture = create({ echo: true });
+        const host = fixture.nativeElement as HTMLElement;
+
+        expect(host.querySelector('.brand')!.classList).toContain('brand--echo');
+        expect(host.querySelector('.brand__echo')!.textContent).toContain('Kindi');
+        expect(getComputedStyle(host.querySelector('.brand__echo')!).animationName).toContain('brand-echo');
+        expect(getComputedStyle(host.querySelector('.brand__name')!).animationName).toContain('brand-front');
+    });
+
+    it('không bật echo thì không có lớp bóng', () => {
+        const fixture = create();
+
+        expect((fixture.nativeElement as HTMLElement).querySelector('.brand__echo')).toBeNull();
+    });
+
     it('tên thương hiệu đổi được (mặc định là Kindi)', () => {
         const fixture = create({ text: 'Kindi' });
 

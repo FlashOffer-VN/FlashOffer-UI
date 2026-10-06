@@ -21,14 +21,21 @@ export type BrandLogoSize = 'sm' | 'md' | 'lg' | 'xl';
     standalone: true,
     template: `
         <span class="brand" [class.brand--sm]="size === 'sm'" [class.brand--lg]="size === 'lg'"
-            [class.brand--xl]="size === 'xl'" [class.brand--on-dark]="variant === 'onDark'">
+            [class.brand--xl]="size === 'xl'" [class.brand--on-dark]="variant === 'onDark'"
+            [class.brand--echo]="echo">
             <span class="brand__mark" aria-hidden="true">
                 <i class="fa-solid fa-bolt"></i>
             </span>
 
             <span class="brand__text">
-                <span class="brand__name">
-                    {{ text }}<span class="brand__dot" aria-hidden="true"></span>
+                <span class="brand__name-wrap">
+                    @if (echo) {
+                    <span class="brand__echo" aria-hidden="true">{{ text }}</span>
+                    }
+
+                    <span class="brand__name">
+                        {{ text }}<span class="brand__dot" aria-hidden="true"></span>
+                    </span>
                 </span>
 
                 @if (tagline) {
@@ -51,4 +58,10 @@ export class BrandLogoComponent {
 
     /** `onDark` cho nền tối (sidebar/ảnh nền). */
     @Input() variant: 'default' | 'onDark' = 'default';
+
+    /**
+     * Bật hiệu ứng 2 lớp mờ dần: một lớp bóng mờ phía sau và lớp chữ chính phía trước, mờ vào/ra lệch nhịp.
+     * Dùng cho màn tải toàn trang hoặc trang chờ cần điểm nhấn nhẹ.
+     */
+    @Input() echo = false;
 }
