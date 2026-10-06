@@ -1200,6 +1200,19 @@
         }
     },
     "COMMON": {
+        "DATE_RANGE": {
+            "PLACEHOLDER": "Chọn khoảng ngày",
+            "TODAY": "Hôm nay",
+            "LAST_7_DAYS": "7 ngày qua",
+            "LAST_15_DAYS": "15 ngày qua",
+            "THIS_MONTH": "Tháng này",
+            "LAST_MONTH": "Tháng trước",
+            "HINT_START": "Chọn ngày bắt đầu",
+            "HINT_END": "Chọn ngày kết thúc",
+            "PREV_MONTH": "Tháng trước đó",
+            "NEXT_MONTH": "Tháng sau",
+            "GO_TODAY": "Về hôm nay"
+        },
         "CODE": {
             "ACCOUNT": "Mã tài khoản",
             "COMPANY": "Mã công ty",

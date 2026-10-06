@@ -1,54 +1,62 @@
 :host {
-    display: block;
+    display: inline-block;
 }
 
-.daterange {
+.dr {
+    position: relative;
     display: inline-flex;
-    align-items: flex-end;
+    align-items: center;
     gap: 6px;
-    flex-wrap: wrap;
 }
 
-.daterange__field {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.daterange__label {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-
-.daterange__input {
+/* Hộp hiển thị khoảng đang lọc */
+.dr__box {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: var(--control-h);
+    min-width: 220px;
+    padding: 0 0.75rem;
     border: 1px solid var(--border-strong);
     border-radius: 0.5rem;
     background: var(--white);
     color: var(--text-secondary);
-    padding: 0.5rem 0.75rem;
-    font-size: 0.875rem;
     font-family: inherit;
-    outline: none;
-    height: var(--control-h, auto);
-    min-width: 150px;
+    font-size: 0.875rem;
+    cursor: pointer;
     transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
-.daterange__input:focus {
+.dr__box:hover {
+    border-color: var(--accent-border);
+}
+
+.dr__box.is-open {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgb(124 58 237 / 0.12);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
-.daterange__sep {
+.dr__box.is-empty .dr__text {
     color: var(--text-subtle);
-    font-size: 0.875rem;
-    padding-bottom: 0.5rem;
 }
 
-.daterange__clear {
+.dr__icon {
+    color: var(--accent);
+    font-size: 0.875rem;
+}
+
+.dr__text {
+    flex: 1 1 auto;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.dr__caret {
+    color: var(--text-subtle);
+    font-size: 0.6875rem;
+}
+
+.dr__clear {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -61,17 +69,232 @@
     cursor: pointer;
     font-size: 12px;
     transition: all 150ms ease;
-    margin-bottom: 2px;
 }
 
-.daterange__clear:hover {
+.dr__clear:hover {
     background: var(--danger-soft);
     border-color: var(--danger-light);
     color: var(--danger-dark);
 }
 
+/* Bảng lịch: cột dọc chọn nhanh + lịch tháng */
+.dr__pop {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: var(--z-dropdown);
+    display: flex;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    box-shadow: 0 12px 32px color-mix(in srgb, var(--text-strong) 16%, transparent);
+    overflow: hidden;
+}
+
+.dr__presets {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 170px;
+    padding: 0.5rem;
+    background: var(--surface-soft);
+    border-right: 1px solid var(--border);
+}
+
+.dr__preset {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.5rem 0.625rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 0.8125rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background 120ms ease, color 120ms ease;
+}
+
+.dr__preset:hover {
+    background: var(--white);
+}
+
+.dr__preset.is-active {
+    background: var(--accent-soft);
+    color: var(--accent-dark);
+    font-weight: 600;
+}
+
+.dr__preset-dot {
+    font-size: 6px;
+    color: currentColor;
+}
+
+.dr__calendar {
+    padding: 0.75rem;
+}
+
+.dr__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.dr__nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: var(--white);
+    color: var(--text-muted);
+    font-size: 0.6875rem;
+    cursor: pointer;
+    transition: all 150ms ease;
+}
+
+.dr__nav:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.dr__month {
+    border: 0;
+    background: transparent;
+    color: var(--text-strong);
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    cursor: pointer;
+}
+
+.dr__grid {
+    display: grid;
+    grid-template-columns: repeat(7, 2rem);
+    gap: 2px;
+}
+
+.dr__dow {
+    height: 1.5rem;
+    line-height: 1.5rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-subtle);
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.dr__day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: background 120ms ease, color 120ms ease;
+}
+
+.dr__day.is-weekend {
+    color: var(--text-muted);
+}
+
+.dr__day.is-out {
+    color: var(--text-slate-line);
+}
+
+.dr__day:hover {
+    background: var(--accent-bg);
+}
+
+.dr__day.is-today {
+    border-color: var(--accent-border);
+    color: var(--accent-dark);
+    font-weight: 700;
+}
+
+/* Dải ngày nằm trong khoảng: bo góc ở 2 đầu để thành một vệt liền */
+.dr__day.is-in-range {
+    background: var(--accent-soft);
+    border-radius: 0;
+}
+
+.dr__day.is-start {
+    border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.dr__day.is-end {
+    border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.dr__day.is-selected {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--white);
+    font-weight: 600;
+}
+
+.dr__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed var(--border);
+}
+
+.dr__hint {
+    font-size: 0.75rem;
+    color: var(--text-subtle);
+}
+
+.dr__today {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--accent-border);
+    border-radius: 0.5rem;
+    background: var(--accent-bg);
+    color: var(--accent-dark);
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.dr__today:hover {
+    background: var(--accent-soft);
+}
+
 @media (max-width: 640px) {
-    .daterange__input {
-        min-width: 130px;
+    .dr__box {
+        min-width: 170px;
+    }
+
+    .dr__pop {
+        flex-direction: column;
+        max-width: calc(100vw - 2rem);
+    }
+
+    .dr__presets {
+        flex-direction: row;
+        flex-wrap: wrap;
+        min-width: 0;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .dr__grid {
+        grid-template-columns: repeat(7, 1.75rem);
     }
 }

@@ -1,17 +1,63 @@
-<div class="daterange">
-    <label class="daterange__field">
-        <span class="daterange__label">{{ 'COMMON.FROM_DATE' | translate }}</span>
-        <input type="date" class="daterange__input" [ngModel]="from"
-            (ngModelChange)="onFromChange($event)">
-    </label>
-    <span class="daterange__sep">—</span>
-    <label class="daterange__field">
-        <span class="daterange__label">{{ 'COMMON.TO_DATE' | translate }}</span>
-        <input type="date" class="daterange__input" [ngModel]="to"
-            (ngModelChange)="onToChange($event)">
-    </label>
-    <button type="button" class="daterange__clear" *ngIf="from || to"
-        (click)="clear()" [title]="'COMMON.CLEAR' | translate" aria-label="Clear date range">
+<div class="dr">
+    <button type="button" class="dr__box" [class.is-open]="isOpen" [class.is-empty]="!hasValue" (click)="toggle()"
+        [attr.aria-expanded]="isOpen" aria-haspopup="dialog">
+        <i class="fa-regular fa-calendar dr__icon"></i>
+        <span class="dr__text">{{ displayText }}</span>
+        <i class="fa-solid fa-chevron-down dr__caret"></i>
+    </button>
+
+    <button type="button" class="dr__clear" *ngIf="hasValue" (click)="clear($event)"
+        [title]="'COMMON.CLEAR' | translate" [attr.aria-label]="'COMMON.CLEAR' | translate">
         <i class="fa-solid fa-xmark"></i>
     </button>
+
+    <div class="dr__pop" *ngIf="isOpen" role="dialog">
+        <!-- Cột dọc chọn nhanh -->
+        <div class="dr__presets">
+            <button type="button" class="dr__preset" *ngFor="let preset of presets"
+                [class.is-active]="isPresetActive(preset)" (click)="applyPreset(preset)">
+                <i class="fa-regular fa-circle-dot dr__preset-dot"></i>
+                <span>{{ preset.labelKey | translate }}</span>
+            </button>
+        </div>
+
+        <!-- Lịch tháng -->
+        <div class="dr__calendar">
+            <div class="dr__head">
+                <button type="button" class="dr__nav" (click)="previousMonth()"
+                    [attr.aria-label]="'COMMON.DATE_RANGE.PREV_MONTH' | translate">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+
+                <button type="button" class="dr__month" (click)="goToToday()"
+                    [title]="'COMMON.DATE_RANGE.GO_TODAY' | translate">
+                    {{ monthLabel }}
+                </button>
+
+                <button type="button" class="dr__nav" (click)="nextMonth()"
+                    [attr.aria-label]="'COMMON.DATE_RANGE.NEXT_MONTH' | translate">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <div class="dr__grid">
+                <span class="dr__dow" *ngFor="let label of weekDayLabels()">{{ label }}</span>
+
+                <button type="button" class="dr__day" *ngFor="let cell of cells"
+                    [class.is-out]="!cell.inMonth" [class.is-weekend]="cell.isWeekend"
+                    [class.is-today]="cell.isToday" [class.is-selected]="isSelectedDay(cell)"
+                    [class.is-start]="isRangeStart(cell)" [class.is-end]="isRangeEnd(cell)"
+                    [class.is-in-range]="isInRange(cell)" (click)="pick(cell)">
+                    {{ cell.day }}
+                </button>
+            </div>
+
+            <div class="dr__foot">
+                <span class="dr__hint">{{ selectionHintKey | translate }}</span>
+                <button type="button" class="dr__today" (click)="goToToday()">
+                    {{ 'COMMON.DATE_RANGE.GO_TODAY' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
