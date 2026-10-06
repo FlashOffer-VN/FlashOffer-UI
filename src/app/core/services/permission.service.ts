@@ -236,3 +236,32 @@ export function permissionLabelKey(node: PermissionTreeNode): string | null {
     if (/^P\d+$/.test(code)) return `PERMISSION.ACTION.${code}`;
     return null;
 }
+
+/**
+ * Dòng metadata của một quyền để quản trị nhìn là biết quyền dùng ở đâu: mã quyền, route màn hình,
+ * endpoint API — tất cả do API trả sẵn trong cây quyền, UI không phải tự khai lại.
+ */
+export function permissionMeta(node: PermissionTreeNode): string {
+    return [node.code, node.route, node.endpoints]
+        .map(value => (value ?? '').trim())
+        .filter(value => value.length > 0)
+        .join(' · ');
+}
+
+/**
+ * Tên hiển thị của node quyền — ưu tiên TÊN DO API DỊCH SẴN theo ngôn ngữ trong token; chỉ khi API
+ * chưa trả tên mới rơi về khoá dịch của UI (bản cũ/dữ liệu thiếu).
+ */
+export function permissionLabel(node: PermissionTreeNode, translate: { instant: (key: string) => string }): string {
+    const fromApi = (node.name ?? '').trim();
+    if (fromApi) return fromApi;
+
+    const key = permissionLabelKey(node);
+    if (key) {
+        const translated = translate.instant(key);
+        if (translated && translated !== key) return translated;
+    }
+
+    return node.code ?? '';
+}
+

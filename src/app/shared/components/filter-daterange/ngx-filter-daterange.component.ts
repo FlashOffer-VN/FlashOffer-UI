@@ -93,8 +93,28 @@ export class NgxFilterDaterangeComponent {
         return this._translate.instant(this.placeholderKey);
     }
 
+    private _cellsKey = '';
+    private _cells: DateCell[] = [];
+
+    /**
+     * Lưới ngày của tháng đang xem. Nhớ kết quả theo (tháng, hôm nay) vì template gọi getter này ở mỗi lần
+     * change detection: trả về CÙNG mảng nên *ngFor + trackBy không phải dựng lại nút trong DOM.
+     */
     get cells(): DateCell[] {
-        return buildMonthGrid(this.viewMonth.getFullYear(), this.viewMonth.getMonth(), this.today());
+        const today = this.today();
+        const key = `${this.viewMonth.getFullYear()}-${this.viewMonth.getMonth()}-${today.getTime()}`;
+
+        if (key !== this._cellsKey) {
+            this._cellsKey = key;
+            this._cells = buildMonthGrid(this.viewMonth.getFullYear(), this.viewMonth.getMonth(), today);
+        }
+
+        return this._cells;
+    }
+
+    /** Khoá theo ngày để Angular giữ nguyên nút DOM của từng ô giữa các lần render. */
+    trackCell(_index: number, cell: DateCell): string {
+        return cell.iso;
     }
 
     get monthLabel(): string {
@@ -256,12 +276,15 @@ export class NgxFilterDaterangeComponent {
         return (this._translate.currentLang || 'vi').startsWith('en') ? 'en-US' : 'vi-VN';
     }
 
-    /** Nhãn thứ trong tuần theo ngôn ngữ đang dùng — gọi lúc render vì ngôn ngữ có thể đổi. */
+    /**
+     * Nhãn thứ trên lưới lịch — bản NGẮN theo ngôn ngữ.
+     * Intl "short" của tiếng Việt là "THỨ 2" (rộng hơn ô 2rem) nên chữ tràn sang ô bên cạnh và đè lên hàng
+     * ngày bên dưới → dùng "T2..T7, CN" (thói quen lịch Việt) cho gọn trong ô.
+     */
     weekDayLabels(): string[] {
-        const formatter = new Intl.DateTimeFormat(this.locale, { weekday: 'short' });
-        const monday = new Date(2024, 0, 1);
-
-        return Array.from({ length: 7 }, (_, index) => formatter.format(addDays(monday, index)));
+        return this.locale.startsWith('vi')
+            ? ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']
+            : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     }
 }
 

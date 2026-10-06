@@ -43,7 +43,7 @@
             <div class="dr__grid">
                 <span class="dr__dow" *ngFor="let label of weekDayLabels()">{{ label }}</span>
 
-                <button type="button" class="dr__day" *ngFor="let cell of cells"
+                <button type="button" class="dr__day" *ngFor="let cell of cells; trackBy: trackCell"
                     [class.is-out]="!cell.inMonth" [class.is-weekend]="cell.isWeekend"
                     [class.is-today]="cell.isToday" [class.is-selected]="isSelectedDay(cell)"
                     [class.is-start]="isRangeStart(cell)" [class.is-end]="isRangeEnd(cell)"

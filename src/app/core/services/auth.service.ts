@@ -39,7 +39,13 @@ export class AuthService {
      * @param data - LoginRequest có thể chứa isAdmin flag
      */
     login(data: LoginRequest & { isAdmin?: boolean }): Observable<AuthResponse> {
-        return this.api.post<AuthResponse>('auth/login', data).pipe(
+        // Gửi kèm ngôn ngữ đang dùng: API ghi vào token, từ đó mọi nội dung trả về đã đúng ngôn ngữ này.
+        const payload: LoginRequest & { isAdmin?: boolean } = {
+            ...data,
+            language: this.translate.currentLang || 'vi'
+        };
+
+        return this.api.post<AuthResponse>('auth/login', payload).pipe(
             tap(response => this.handleAuthResponse(response, data.isAdmin))
         );
     }
