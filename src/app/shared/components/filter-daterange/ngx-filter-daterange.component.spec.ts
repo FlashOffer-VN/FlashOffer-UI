@@ -191,6 +191,36 @@ describe('NgxFilterDaterangeComponent', () => {
         expect(component.isOpen).toBeFalse();
     });
 
+    it('mở lại lịch sau khi đã lọc: cú bấm đầu là ngày BẮT ĐẦU mới và khoảng cũ bị bỏ', () => {
+        const fixture = TestBed.createComponent(NgxFilterDaterangeComponent);
+        const component = fixture.componentInstance;
+        component.from = '2026-10-01';
+        component.to = '2026-10-06';
+        fixture.detectChanges();
+
+        const emitted = captureRanges(component);
+        component.open();
+        fixture.detectChanges();
+
+        // Chưa bấm gì thì vẫn thấy khoảng đang lọc.
+        expect(component.isRangeStart(cellOf(component, '2026-10-01'))).toBeTrue();
+        expect(component.isRangeEnd(cellOf(component, '2026-10-06'))).toBeTrue();
+
+        // Bấm một ngày khác: phải là BẮT ĐẦU của lựa chọn mới (không phát khoảng 01→20 theo đầu cũ).
+        component.pick(cellOf(component, '2026-10-20'));
+        fixture.detectChanges();
+
+        expect(emitted).toEqual([]);
+        expect(component.selectionHintKey).toBe('COMMON.DATE_RANGE.HINT_END');
+        expect(component.isRangeStart(cellOf(component, '2026-10-20'))).toBeTrue();
+        expect(component.isRangeEnd(cellOf(component, '2026-10-06'))).toBeFalse();
+
+        // Bấm ngày thứ hai: phát ra khoảng MỚI.
+        component.pick(cellOf(component, '2026-10-25'));
+
+        expect(emitted).toEqual([{ from: '2026-10-20', to: '2026-10-25' }]);
+    });
+
     it('nút ngày không bị dựng lại sau mỗi lần render (trackBy theo ngày)', () => {
         const fixture = TestBed.createComponent(NgxFilterDaterangeComponent);
         fixture.componentInstance.open();

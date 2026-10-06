@@ -139,11 +139,24 @@ export class NgxFilterDaterangeComponent {
         // Mở lịch ở tháng của ngày kết thúc (khoảng đang lọc) để thấy ngay lựa chọn hiện tại.
         const anchor = parseIsoDate(this.to) ?? parseIsoDate(this.from) ?? this.today();
         this.viewMonth = startOfMonth(anchor);
-        this.pendingFrom = this.from;
-        this.pendingTo = this.to;
+
+        // Mỗi lần mở là bắt đầu chọn MỚI: không nạp lại khoảng cũ làm điểm bắt đầu, nếu không cú bấm đầu
+        // tiên sẽ bị hiểu là chọn ngày kết thúc cho khoảng cũ (chọn lại không xoá được lựa chọn trước).
+        this.pendingFrom = null;
+        this.pendingTo = null;
 
         // Đo kích thước bảng lịch sau khi nó vào DOM rồi mới đặt vị trí (mở xuống dưới, hết chỗ thì mở lên trên).
         setTimeout(() => this.positionPopup());
+    }
+
+    /** Ngày bắt đầu đang hiển thị: ưu tiên lựa chọn mới, chưa bấm gì thì hiện khoảng đang lọc. */
+    private get activeFrom(): string | null {
+        return this.pendingFrom ?? this.from ?? null;
+    }
+
+    /** Ngày kết thúc đang hiển thị: đang chọn dở thì KHÔNG hiện ngày kết thúc cũ nữa. */
+    private get activeTo(): string | null {
+        return this.pendingTo ?? (this.pendingFrom ? null : this.to ?? null);
     }
 
     /**
@@ -240,16 +253,16 @@ export class NgxFilterDaterangeComponent {
 
     /** Trạng thái của một ô lịch: đang là đầu/cuối khoảng, nằm trong khoảng, hay đang chờ chọn. */
     isRangeStart(cell: DateCell): boolean {
-        return cell.iso === (this.pendingFrom ?? this.from);
+        return cell.iso === this.activeFrom;
     }
 
     isRangeEnd(cell: DateCell): boolean {
-        return cell.iso === (this.pendingTo ?? this.to);
+        return cell.iso === this.activeTo;
     }
 
     isInRange(cell: DateCell): boolean {
-        const from = this.pendingFrom ?? this.from;
-        const to = this.pendingTo ?? this.to;
+        const from = this.activeFrom;
+        const to = this.activeTo;
 
         if (!from || !to || from === to) return false;
         return cell.iso > from && cell.iso < to;
