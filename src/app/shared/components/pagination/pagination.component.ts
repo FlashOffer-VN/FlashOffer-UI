@@ -75,15 +75,9 @@ export class PaginationComponent {
         }
     }
 
-    /** Mở/đóng menu cỡ trang — menu dính theo component nên chỉ cần bật/tắt. */
-    sizeOpen = false;
-
-    /** Chọn cỡ trang — đóng menu rồi báo cho trang gọi lại API với cỡ mới. */
-    onPageSizePick(size: number): void {
-        this.sizeOpen = false;
-        if (size === this.pageSize) {
-            return;
-        }
-        this.pageSizeChange.emit(Number(size));
+    /** Đổi số dòng mỗi trang — select thường nên chỉ cần đọc giá trị đã chọn. */
+    onPageSizeChange(event: Event): void {
+        const select = event.target as HTMLSelectElement;
+        this.pageSizeChange.emit(Number(select.value));
     }
 }
