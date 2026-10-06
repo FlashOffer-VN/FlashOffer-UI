@@ -75,11 +75,9 @@ export class PaginationComponent {
         }
     }
 
-    /** Chọn số dòng mỗi trang — hiện luôn lựa chọn trong cụm paging, không dùng popup để khỏi bị che/cắt. */
-    onPageSizePick(size: number): void {
-        if (size === this.pageSize) {
-            return;
-        }
-        this.pageSizeChange.emit(Number(size));
+    onPageSizeChange(event: Event): void {
+        const select = event.target as HTMLSelectElement;
+        const size = parseInt(select.value, 10);
+        this.pageSizeChange.emit(size);
     }
 }
