@@ -25,11 +25,13 @@ import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 import { CodeListComponent } from '@shared/components/code-list/code-list.component';
+import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.component';
 
 @Component({
     selector: 'app-admin-purchase-request-list',
     standalone: true,
     imports: [
+        PurgeBarComponent,
         CommonModule,
         RouterModule,
         FormsModule,
@@ -52,6 +54,9 @@ import { CodeListComponent } from '@shared/components/code-list/code-list.compon
     styleUrls: ['./purchase-request-list.component.css']
 })
 export class AdminPurchaseRequestListComponent implements OnInit {
+    /** Các dòng đang tick ở tab "Đã xoá" — dùng cho xoá vĩnh viễn theo lựa chọn. */
+    selectedIds: string[] = [];
+
     /** Loại bài khi chuyển tiếp vào nhóm ngành */
     readonly groupPostType = GroupPostType;
 
@@ -248,5 +253,29 @@ export class AdminPurchaseRequestListComponent implements OnInit {
 
     navigateToDetail(id: string): void {
         this._router.navigate(['/admin/purchase-requests', id]);
+    }
+
+    /** Dòng đang tick ở tab "Đã xoá" — chỉ dùng cho xoá vĩnh viễn theo lựa chọn. */
+    isSelected(id: string): boolean {
+        return this.selectedIds.includes(id);
+    }
+
+    isAllSelected(): boolean {
+        return this.requests.length > 0 && this.selectedIds.length === this.requests.length;
+    }
+
+    toggleSelect(id: string, event: Event): void {
+        const checked = (event.target as HTMLInputElement).checked;
+        this.selectedIds = checked ? [...this.selectedIds, id] : this.selectedIds.filter(item => item !== id);
+    }
+
+    toggleAll(event: Event): void {
+        this.selectedIds = (event.target as HTMLInputElement).checked ? this.requests.map(item => item.id) : [];
+    }
+
+    /** Sau khi xoá vĩnh viễn: bỏ lựa chọn cũ và nạp lại danh sách của tab 'Đã xoá'. */
+    onPurged(): void {
+        this.selectedIds = [];
+        this.loadData();
     }
 }

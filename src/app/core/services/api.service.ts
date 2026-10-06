@@ -44,8 +44,8 @@ export class ApiService {
             .pipe(catchError(this.handleError.bind(this)));
     }
 
-    delete<T>(endpoint: string): Observable<T> {
-        return this.http.delete<T>(`${this.baseUrl}/${endpoint}`)
+    delete<T>(endpoint: string, body?: unknown): Observable<T> {
+        return this.http.delete<T>(`${this.baseUrl}/${endpoint}`, body ? { body } : {})
             .pipe(catchError(this.handleError.bind(this)));
     }
 

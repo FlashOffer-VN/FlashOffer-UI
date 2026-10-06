@@ -14,6 +14,7 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-tabs/status-tabs.component';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
+import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.component';
 
 /**
  * Cấu hình doanh thu dùng chung cho mọi giao dịch: tỷ lệ thuế và cách hiểu số doanh thu nhập vào,
@@ -23,7 +24,8 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
 @Component({
     selector: 'app-admin-revenue-settings',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, TranslateModule, ButtonComponent, InputComponent, LoadingComponent, StatusTabsComponent, HasPermissionDirective],
+    imports: [CommonModule, ReactiveFormsModule, TranslateModule, ButtonComponent, InputComponent, LoadingComponent,
+        StatusTabsComponent, HasPermissionDirective, PurgeBarComponent],
     template: `
         <div class="space-y-4">
             <div>
@@ -68,6 +70,10 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
 
                 <!-- Tab danh mục: đang dùng / đã xoá mềm (tab "Đã xóa") -->
                 <app-status-tabs [items]="expenseTabs" [active]="expenseTab" (change)="onExpenseTabChange($event)"></app-status-tabs>
+
+    <!-- Xoá vĩnh viễn: chỉ có ở tab "Đã xoá" (các tab khác chỉ xoá mềm) -->
+    <app-purge-bar *ngIf="expenseTab === 'deleted'" entity="revenue-configs" [selectedIds]="selectedIds"
+        [showSelection]="false" (purged)="onPurged()"></app-purge-bar>
 
                 <div *ngIf="!isLoadingExpenses" class="overflow-x-auto">
                     <table class="min-w-full text-sm">
@@ -176,6 +182,9 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
     `
 })
 export class AdminRevenueSettingsComponent implements OnInit {
+    /** Các dòng đang tick ở tab "Đã xoá" — dùng cho xoá vĩnh viễn theo lựa chọn. */
+    selectedIds: string[] = [];
+
     /** Mã quyền dùng trong template (`*appHasPermission`). */
     readonly Permission = Permission;
 
@@ -477,6 +486,11 @@ export class AdminRevenueSettingsComponent implements OnInit {
                 this._appService.showError(this._appService.extractErrorMessage(error));
             }
         });
+    }
+
+    /** Sau khi xoá vĩnh viễn ở tab "Đã xoá": nạp lại danh sách. */
+    onPurged(): void {
+        this.load();
     }
 }
 

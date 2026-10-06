@@ -13,6 +13,7 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-tabs/status-tabs.component';
 import { AppPricePipe } from '@shared/pipes/app-price.pipe';
+import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.component';
 
 /**
  * Cấu hình điểm hạng thành viên: mốc doanh số tích luỹ để đạt hạng, phí rút sớm riêng,
@@ -22,6 +23,7 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
     selector: 'app-admin-membership-tiers',
     standalone: true,
     imports: [
+        PurgeBarComponent,
         CommonModule,
         ReactiveFormsModule,
         TranslateModule,
@@ -51,6 +53,10 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
 
             <!-- Tab danh sách: đang áp dụng / đã xoá mềm (tab "Đã xóa") -->
             <app-status-tabs [items]="tabs" [active]="activeTab" (change)="onTabChange($event)"></app-status-tabs>
+
+    <!-- Xoá vĩnh viễn: chỉ có ở tab "Đã xoá" (các tab khác chỉ xoá mềm) -->
+    <app-purge-bar *ngIf="activeTab === 'deleted'" entity="membership-tiers" [selectedIds]="selectedIds"
+        [showSelection]="false" (purged)="onPurged()"></app-purge-bar>
 
             <!-- Biểu mẫu thêm / sửa hạng -->
             @if (isEditing) {
@@ -231,6 +237,9 @@ import { AppPricePipe } from '@shared/pipes/app-price.pipe';
     `
 })
 export class AdminMembershipTiersComponent implements OnInit {
+    /** Các dòng đang tick ở tab "Đã xoá" — dùng cho xoá vĩnh viễn theo lựa chọn. */
+    selectedIds: string[] = [];
+
     readonly levels = MEMBERSHIP_LEVELS;
 
     tiers: MembershipTier[] = [];
@@ -443,5 +452,10 @@ export class AdminMembershipTiersComponent implements OnInit {
         if (value === null || value === undefined || value === '') return null;
         const parsed = Number(value);
         return Number.isNaN(parsed) ? null : parsed;
+    }
+
+    /** Sau khi xoá vĩnh viễn: nạp lại danh sách của tab 'Đã xoá'. */
+    onPurged(): void {
+        this.load();
     }
 }

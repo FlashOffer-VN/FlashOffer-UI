@@ -41,12 +41,21 @@
 
     <app-status-tabs [items]="tabs" [active]="activeTab" (change)="onTabChange($event)"></app-status-tabs>
 
+    <!-- Xoá vĩnh viễn: chỉ có ở tab "Đã xoá" (các tab khác chỉ xoá mềm) -->
+    <app-purge-bar *ngIf="activeTab === 'deleted'" entity="purchase-requests" [selectedIds]="selectedIds"
+        [showSelection]="true" (purged)="onPurged()"></app-purge-bar>
+
     <!-- Table -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full">
                 <thead class="bg-gray-50 border-b border-gray-200">
                     <tr>
+                        <!-- Chọn dòng để xoá vĩnh viễn — chỉ ở tab "Đã xoá" -->
+                        <th *ngIf="activeTab === 'deleted'" class="px-4 py-3 w-10">
+                            <input type="checkbox" class="h-4 w-4 rounded border-gray-300" [checked]="isAllSelected()"
+                                (change)="toggleAll($event)">
+                        </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             #
                         </th>
@@ -89,6 +98,10 @@
                     <ng-container *ngIf="!isLoading">
     <tr *ngFor="let request of requests; let i = index"
                             class="hover:bg-gray-50 transition-colors">
+                            <td *ngIf="activeTab === 'deleted'" class="px-4 py-3">
+                                <input type="checkbox" class="h-4 w-4 rounded border-gray-300" [checked]="isSelected(request.id)"
+                                    (change)="toggleSelect(request.id, $event)">
+                            </td>
                             <td class="px-4 py-3 text-sm text-gray-500">
                                 {{ (pageNumber - 1) * pageSize + i + 1 }}
                             </td>

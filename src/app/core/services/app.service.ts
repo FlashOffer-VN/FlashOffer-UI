@@ -16,6 +16,7 @@ import { storageSet } from '../utils/storage';
 import { ModalService } from './modal.service';
 import { CollaboratorService } from './collaborator.service';
 import { UserService } from './user.service';
+import { TrashService } from './trash.service';
 import { DashboardService } from './dashboard.service';
 import { CrmService } from './crm.service';
 import { BusinessGroupService } from './business-group.service';
@@ -48,7 +49,8 @@ export class AppService {
         public referralService: ReferralService,
         public permissionService: PermissionService,
         public commissionService: CommissionService,
-        public membershipService: MembershipService
+        public membershipService: MembershipService,
+        public trashService: TrashService
     ) { }
 
     // ========== Auth ==========
