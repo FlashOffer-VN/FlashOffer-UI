@@ -1216,6 +1216,16 @@
             "NEXT_MONTH": "Tháng sau",
             "GO_TODAY": "Về hôm nay"
         },
+        "PURGE": {
+            "WARNING": "Thao tác xoá vĩnh viễn KHÔNG thể hoàn tác.",
+            "BY_RANGE": "Xoá vĩnh viễn theo khoảng ngày",
+            "SELECTED": "Xoá vĩnh viễn dòng đã chọn ({{count}})",
+            "CONFIRM_TITLE": "Xác nhận xoá vĩnh viễn",
+            "CONFIRM_RANGE": "Xoá vĩnh viễn các bản ghi đã xoá trong khoảng {{range}}? Hành động này không hoàn tác được.",
+            "CONFIRM_SELECTED": "Xoá vĩnh viễn {{count}} bản ghi đã chọn? Hành động này không hoàn tác được.",
+            "CONFIRM_BUTTON": "Xoá vĩnh viễn",
+            "SUCCESS": "Đã xoá vĩnh viễn {{count}} bản ghi."
+        },
         "CODE": {
             "ACCOUNT": "Mã tài khoản",
             "COMPANY": "Mã công ty",

@@ -26,11 +26,13 @@ import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 import { CodeListComponent } from '@shared/components/code-list/code-list.component';
+import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.component';
 
 @Component({
     selector: 'app-admin-group-buying-list',
     standalone: true,
     imports: [
+        PurgeBarComponent,
         CommonModule,
         RouterModule,
         FormsModule,
@@ -53,6 +55,9 @@ import { CodeListComponent } from '@shared/components/code-list/code-list.compon
     styleUrls: ['./group-buying-list.component.css']
 })
 export class AdminGroupBuyingListComponent implements OnInit {
+    /** Các dòng đang tick ở tab "Đã xoá" — dùng cho xoá vĩnh viễn theo lựa chọn. */
+    selectedIds: string[] = [];
+
     /** Loại bài khi chuyển tiếp vào nhóm ngành */
     readonly groupPostType = GroupPostType;
 
@@ -228,5 +233,10 @@ export class AdminGroupBuyingListComponent implements OnInit {
 
     navigateToDetail(id: string): void {
         this._router.navigate(['/admin/group-buying', id]);
+    }
+
+    /** Sau khi xoá vĩnh viễn: nạp lại danh sách của tab 'Đã xoá'. */
+    onPurged(): void {
+        this.loadData();
     }
 }

@@ -15,6 +15,7 @@ import { PaginationComponent } from '@shared/components/pagination/pagination.co
 import { StatusTabItem, StatusTabsComponent } from '@shared/components/status-tabs/status-tabs.component';
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
+import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.component';
 
 /** Quản lý nhóm theo lĩnh vực kinh doanh (admin) */
 @Component({
@@ -22,10 +23,13 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
     standalone: true,
     imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule, ButtonComponent,
         InputComponent, LoadingComponent, ModalComponent, PaginationComponent, StatusTabsComponent,
-        SearchByComponent, HasPermissionDirective],
+        SearchByComponent, HasPermissionDirective, PurgeBarComponent],
     templateUrl: './group-list.component.html',
 })
 export class AdminGroupListComponent implements OnInit {
+    /** Các dòng đang tick ở tab "Đã xoá" — dùng cho xoá vĩnh viễn theo lựa chọn. */
+    selectedIds: string[] = [];
+
     /** Mã quyền dùng trong template (`*appHasPermission`). */
     readonly Permission = Permission;
 
@@ -272,5 +276,10 @@ export class AdminGroupListComponent implements OnInit {
 
     viewDetail(group: BusinessGroup): void {
         this.router.navigate(['/admin/groups', group.id]);
+    }
+
+    /** Sau khi xoá vĩnh viễn: nạp lại danh sách của tab 'Đã xoá'. */
+    onPurged(): void {
+        this.load();
     }
 }

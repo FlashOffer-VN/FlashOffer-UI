@@ -6,6 +6,10 @@
 
     <app-status-tabs [items]="tabs" [active]="activeStatus" (change)="onTabChange($event)"></app-status-tabs>
 
+    <!-- Xoá vĩnh viễn: chỉ có ở tab "Đã xoá" (các tab khác chỉ xoá mềm) -->
+    <app-purge-bar *ngIf="activeStatus === 'deleted'" entity="social-posts" [selectedIds]="selectedIds"
+        [showSelection]="false" (purged)="onPurged()"></app-purge-bar>
+
     <!-- Filters -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
         <div class="flex flex-wrap items-end gap-x-4 gap-y-4" style="--control-h: 2.5rem">

@@ -26,6 +26,10 @@
         <div class="mt-4 flex flex-wrap items-center gap-3 border-t border-gray-200 pt-4">
             <app-status-tabs [items]="statusTabs" [active]="activeTab" (change)="onTabChange($event)"></app-status-tabs>
 
+    <!-- Xoá vĩnh viễn: chỉ có ở tab "Đã xoá" (các tab khác chỉ xoá mềm) -->
+    <app-purge-bar *ngIf="activeTab === 'deleted'" entity="groups" [selectedIds]="selectedIds"
+        [showSelection]="false" (purged)="onPurged()"></app-purge-bar>
+
             <button type="button" (click)="togglePending()"
                 class="rounded-full px-4 py-2 text-sm font-semibold transition"
                 [class]="onlyPending ? 'bg-amber-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">

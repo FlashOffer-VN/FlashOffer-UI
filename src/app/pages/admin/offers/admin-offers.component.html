@@ -41,6 +41,10 @@
 
     <app-status-tabs [items]="tabs" [active]="activeTab" (change)="onTabChange($event)"></app-status-tabs>
 
+    <!-- Xoá vĩnh viễn: chỉ có ở tab "Đã xoá" (các tab khác chỉ xoá mềm) -->
+    <app-purge-bar *ngIf="activeTab === 'deleted'" entity="offers" [selectedIds]="selectedIds"
+        [showSelection]="false" (purged)="onPurged()"></app-purge-bar>
+
     <!-- Table -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <div class="overflow-x-auto">

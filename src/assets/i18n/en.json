@@ -1260,6 +1260,16 @@
             "NEXT_MONTH": "Next month",
             "GO_TODAY": "Today"
         },
+        "PURGE": {
+            "WARNING": "Permanent deletion CANNOT be undone.",
+            "BY_RANGE": "Permanently delete by date range",
+            "SELECTED": "Permanently delete selected ({{count}})",
+            "CONFIRM_TITLE": "Confirm permanent deletion",
+            "CONFIRM_RANGE": "Permanently delete records removed within {{range}}? This cannot be undone.",
+            "CONFIRM_SELECTED": "Permanently delete the {{count}} selected records? This cannot be undone.",
+            "CONFIRM_BUTTON": "Delete permanently",
+            "SUCCESS": "Permanently deleted {{count}} records."
+        },
         "CODE": {
             "ACCOUNT": "Account code",
             "COMPANY": "Company code",

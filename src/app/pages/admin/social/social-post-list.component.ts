@@ -19,11 +19,13 @@ import { ModalComponent } from '@shared/components/modal/modal.component';
 import { BadgeComponent } from '@shared/components/badge/badge.component';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
+import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.component';
 
 @Component({
     selector: 'app-admin-social-post-list',
     standalone: true,
     imports: [
+        PurgeBarComponent,
         CommonModule,
         RouterModule,
         FormsModule,
@@ -44,6 +46,9 @@ import { SearchByComponent } from '@shared/components/search-by/search-by.compon
     styleUrls: ['./social-post-list.component.css']
 })
 export class AdminSocialPostListComponent implements OnInit {
+    /** Các dòng đang tick ở tab "Đã xoá" — dùng cho xoá vĩnh viễn theo lựa chọn. */
+    selectedIds: string[] = [];
+
     /** Mã quyền dùng trong template (`*appHasPermission`). */
     readonly Permission = Permission;
 
@@ -246,6 +251,11 @@ export class AdminSocialPostListComponent implements OnInit {
     onPageSizeChange(size: number): void {
         this.pageSize = size;
         this.pageNumber = 1;
+        this.loadPosts();
+    }
+
+    /** Sau khi xoá vĩnh viễn: nạp lại danh sách của tab 'Đã xoá'. */
+    onPurged(): void {
         this.loadPosts();
     }
 }
