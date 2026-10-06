@@ -154,6 +154,32 @@
 <app-toast *ngIf="toastVisible" [type]="toastType" [message]="toastMessage" [title]="toastTitle"
     (closed)="toastVisible = false"></app-toast>
 
+<!-- ===== Checkbox & Radio (xem trước component dùng chung) ===== -->
+<div class="mt-10 space-y-8">
+    <section class="space-y-3">
+        <h2 class="text-lg font-semibold text-gray-800">Checkbox</h2>
+
+        <div class="flex flex-wrap items-center gap-6">
+            <app-checkbox label="Đang hoạt động" hint="Tài khoản còn dùng được" [(ngModel)]="demoCheckbox" />
+            <app-checkbox label="Cỡ nhỏ" size="sm" [(ngModel)]="demoCheckboxSmall" />
+            <app-checkbox label="Chọn tất cả (nửa vời)" [indeterminate]="true" />
+            <app-checkbox label="Bị khoá" [disabled]="true" />
+        </div>
+    </section>
+
+    <section class="space-y-4 max-w-xl">
+        <h2 class="text-lg font-semibold text-gray-800">Radio</h2>
+
+        <app-radio-group label="Vai trò (mặc định)" [options]="demoRoleOptions" [(ngModel)]="demoRole" />
+
+        <app-radio-group label="Xếp ngang" orientation="horizontal" [options]="demoQuickOptions"
+            [(ngModel)]="demoQuick" />
+
+        <app-radio-group label="Kiểu thẻ" appearance="card" orientation="horizontal" [options]="demoRoleOptions"
+            [(ngModel)]="demoRoleCard" />
+    </section>
+</div>
+
 <!-- Modal -->
 <app-modal [(visible)]="modalVisible" title="Xác nhận" confirmText="Đồng ý" cancelText="Hủy bỏ"
     (confirm)="onModalConfirm()">
