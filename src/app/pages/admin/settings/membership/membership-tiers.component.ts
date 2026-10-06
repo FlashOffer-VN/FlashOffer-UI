@@ -164,7 +164,7 @@ import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.compon
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             @if (isLoading) {
-                                <tr><td colspan="9" class="px-4 py-10"><app-loading></app-loading></td></tr>
+                                <tr><td colspan="9" class="px-4 py-10"><app-loading [inline]="true"></app-loading></td></tr>
                             } @else if (tiers.length === 0) {
                                 <tr><td colspan="9" class="px-4 py-10 text-center text-gray-500">{{ 'ADMIN.MEMBERSHIP.EMPTY' | translate }}</td></tr>
                             } @else {

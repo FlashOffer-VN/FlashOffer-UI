@@ -92,7 +92,7 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @if (isLoading) {
-                            <tr><td [attr.colspan]="canDelete() ? 7 : 6" class="px-4 py-10"><app-loading></app-loading></td></tr>
+                            <tr><td [attr.colspan]="canDelete() ? 7 : 6" class="px-4 py-10"><app-loading [inline]="true"></app-loading></td></tr>
                         } @else if (entityLogs.length === 0) {
                             <tr><td [attr.colspan]="canDelete() ? 7 : 6" class="px-4 py-10 text-center text-sm text-gray-500">{{ 'ADMIN.AUDIT_LOG.EMPTY' | translate }}</td></tr>
                         } @else {
@@ -163,7 +163,7 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @if (isLoading) {
-                            <tr><td [attr.colspan]="canDelete() ? 7 : 6" class="px-4 py-10"><app-loading></app-loading></td></tr>
+                            <tr><td [attr.colspan]="canDelete() ? 7 : 6" class="px-4 py-10"><app-loading [inline]="true"></app-loading></td></tr>
                         } @else if (authLogs.length === 0) {
                             <tr><td [attr.colspan]="canDelete() ? 7 : 6" class="px-4 py-10 text-center text-sm text-gray-500">{{ 'ADMIN.AUDIT_LOG.EMPTY' | translate }}</td></tr>
                         } @else {
