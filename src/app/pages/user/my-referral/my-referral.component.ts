@@ -213,7 +213,7 @@ interface MyReferralCard {
                                 </thead>
                                 <tbody class="divide-y divide-slate-100">
                                     <tr *ngIf="eventsLoading">
-                                        <td colspan="4" class="px-4 py-6 text-center"><app-loading></app-loading></td>
+                                        <td colspan="4" class="px-4 py-6 text-center"><app-loading [inline]="true"></app-loading></td>
                                     </tr>
                                     <tr *ngIf="!eventsLoading && events.length === 0">
                                         <td colspan="4" class="px-4 py-6 text-center text-slate-500">

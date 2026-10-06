@@ -3,6 +3,21 @@ import { CommonModule } from '@angular/common';
 
 export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | 'community';
 
+/**
+ * Khối báo đang tải dùng chung.
+ *
+ * QUY TẮC CHỌN KIỂU TẢI (theo ngữ cảnh — chọn đúng kiểu để không nhảy layout và không nặng thị giác):
+ * - `skeleton`  → danh sách/bảng đã biết bố cục: giữ chỗ như nội dung thật (ưu tiên cho màn danh sách).
+ * - `spinner`   → khối nội dung, chi tiết, form đang tải (MẶC ĐỊNH — nhẹ, không giả định bố cục).
+ * - `dots`      → tải ngắn, rất nhẹ: trong nút, dòng trạng thái, ô nhỏ.
+ * - `pulse`     → chờ rất ngắn cho một ô/badge (không dùng cho cả trang).
+ * - `logo`      → trang đang vào lần đầu nhưng vẫn muốn giữ thương hiệu.
+ * - `community` → lần tải ĐẦU của app / trang giới thiệu (logo lớn, chỉ dùng khi cố ý).
+ * - `fullScreen` → overlay chặn tương tác (đăng nhập, gửi form quan trọng); không dùng cho tải nền.
+ *
+ * VỊ TRÍ: mặc định là khối tải trang (canh giữa, `minHeight` 40vh, có padding) nên KHÔNG bị dính sát mép
+ * trên của vùng nội dung. Đặt trong ô bảng/khối nhỏ thì truyền `[inline]="true"`.
+ */
 @Component({
   selector: 'app-loading',
   standalone: true,
@@ -50,7 +65,8 @@ export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | '
     </div>
 
     <!-- Normal loading -->
-    <ng-container *ngIf="!fullScreen">
+    <div *ngIf="!fullScreen" class="app-loading" [class.app-loading--inline]="inline"
+      [style.min-height]="inline ? null : minHeight">
       <!-- Dots -->
       <div *ngIf="type === 'dots'" class="flex items-center justify-center">
         <div class="flex gap-2">
@@ -102,9 +118,28 @@ export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | '
         </div>
         <span *ngIf="text" class="text-gray-500 text-sm">{{ text }}</span>
       </div>
-    </ng-container>
+    </div>
   `,
   styles: [`
+    /* ===== KHỐI TẢI TRANG ===== */
+    /* Canh giữa và chừa chiều cao tối thiểu để khối tải không dính sát mép trên của vùng nội dung. */
+    .app-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      width: 100%;
+      padding: 2rem 1rem;
+      box-sizing: border-box;
+    }
+
+    /* Dùng trong ô bảng / khối nhỏ: không chiếm chiều cao, không thêm padding. */
+    .app-loading--inline {
+      padding: 0;
+      gap: 0.5rem;
+    }
+
     /* ===== DOTS ===== */
     .dot {
       border-radius: 50%;
@@ -193,11 +228,18 @@ export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | '
   `]
 })
 export class LoadingComponent {
-  @Input() type: LoadingType = 'community';
+  /** Kiểu tải — xem quy tắc chọn kiểu ở phần mô tả component. */
+  @Input() type: LoadingType = 'spinner';
   @Input() size: 'sm' | 'md' | 'lg' = 'md';
   @Input() color: string = 'primary';
   @Input() text: string = '';
   @Input() fullScreen = false;
+
+  /** Đặt trong ô bảng/khối nhỏ: không chiếm `minHeight`, không thêm padding. */
+  @Input() inline = false;
+
+  /** Chiều cao tối thiểu của khối tải trang (bỏ qua khi `inline`). */
+  @Input() minHeight = '40vh';
 
   private sizeClasses = {
     sm: 'w-2 h-2',

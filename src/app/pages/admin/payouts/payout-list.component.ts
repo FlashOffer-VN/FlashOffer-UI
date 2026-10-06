@@ -98,7 +98,7 @@ import { CodeListComponent } from '@shared/components/code-list/code-list.compon
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             @if (isLoading) {
-                                <tr><td colspan="9" class="px-4 py-10"><app-loading></app-loading></td></tr>
+                                <tr><td colspan="9" class="px-4 py-10"><app-loading [inline]="true"></app-loading></td></tr>
                             } @else if (items.length === 0) {
                                 <tr><td colspan="9" class="px-4 py-10 text-center text-sm text-gray-500">{{ 'ADMIN.PAYOUTS.EMPTY' | translate }}</td></tr>
                             } @else {
