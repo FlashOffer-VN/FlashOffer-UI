@@ -82,6 +82,9 @@ export class PaginationComponent implements OnDestroy {
     menuTop = 0;
     menuRight = 0;
 
+    /** Bề rộng menu — lấy đúng bằng nút để menu cân bằng với ô chính. */
+    menuWidth = 0;
+
     @ViewChild('sizeBtn') private _sizeBtn?: ElementRef<HTMLButtonElement>;
     @ViewChild('sizeMenu') private _sizeMenu?: ElementRef<HTMLElement>;
 
@@ -131,6 +134,7 @@ export class PaginationComponent implements OnDestroy {
         const above = rect.top - menu.offsetHeight - 6;
         this.menuTop = above >= 8 ? above : rect.bottom + 6;
         this.menuRight = Math.max(8, window.innerWidth - rect.right);
+        this.menuWidth = rect.width;   // menu rộng bằng nút, canh phải trùng nhau
 
         this._onDocClick = (event: MouseEvent) => {
             const target = event.target as Node;
