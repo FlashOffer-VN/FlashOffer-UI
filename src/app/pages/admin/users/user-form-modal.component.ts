@@ -8,7 +8,6 @@ import { AdminUserDetail, CreateAdminUserRequest, UpdateUserInfoRequest } from '
 
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { InputComponent } from '@shared/components/input/input.component';
-import { ButtonComponent } from '@shared/components/button/button.component';
 
 /**
  * Form tài khoản ở màn quản lý người dùng, dùng cho 2 việc:
@@ -19,7 +18,7 @@ import { ButtonComponent } from '@shared/components/button/button.component';
 @Component({
     selector: 'app-admin-user-form',
     standalone: true,
-    imports: [CommonModule, FormsModule, TranslateModule, ModalComponent, InputComponent, ButtonComponent],
+    imports: [CommonModule, FormsModule, TranslateModule, ModalComponent, InputComponent],
     template: `
         <app-modal [(visible)]="visible" [title]="(userId ? 'ADMIN.USERS.EDIT_TITLE' : 'ADMIN.USERS.CREATE_ADMIN_TITLE') | translate"
             size="lg" [customWidth]="'720px'" [loading]="isSaving" [confirmText]="'COMMON.BUTTON.SAVE' | translate"
