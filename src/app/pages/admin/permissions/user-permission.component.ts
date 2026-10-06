@@ -120,7 +120,10 @@ type NodeState = 'all' | 'some' | 'none';
                             [disabled]="isNodeDisabled(node)" (change)="toggleCode(node)" />
                         <span class="text-sm">
                             <span class="block text-gray-800">{{ nodeLabel(node) }}</span>
-                            @if (isMixed(node.code) || isGrantedExtra(node.code) || isDeniedOverride(node.code) || isTickedButBlocked(node) || isGrantedNotEffective(node.code)) {
+                            @if (nodeMeta(node)) {
+                            <!-- Metadata của quyền do API trả sẵn: mã quyền · route màn hình · endpoint API. -->
+                            <span class="block text-xs text-gray-400 font-mono" [title]="nodeMeta(node)">{{ nodeMeta(node) }}</span>
+                            }
                             <span class="block text-xs text-gray-500">
                                 @if (isMixed(node.code)) {
                                     <em>{{ 'PERMISSION.USER.MIXED' | translate }}</em>

@@ -99,6 +99,11 @@
                 <span class="text-xs text-gray-400">{{ kindKey(node) | translate }}</span>
                 }
 
+                @if (node.kind === 'action' && nodeMeta(node)) {
+                <!-- Metadata của quyền do API trả sẵn: mã quyền · route màn hình · endpoint API. -->
+                <span class="text-xs text-gray-400 font-mono" [title]="nodeMeta(node)">{{ nodeMeta(node) }}</span>
+                }
+
                 @if (isGrantedNotEffective(node)) {
                 <span class="text-xs text-amber-600" [title]="'PERMISSION.NOT_EFFECTIVE_HINT' | translate">
                     · {{ 'PERMISSION.NOT_EFFECTIVE' | translate }}
