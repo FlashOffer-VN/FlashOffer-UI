@@ -3,7 +3,7 @@ import { QuillModule } from 'ngx-quill';
 import { SanitizeHtmlPipe } from '@shared/pipes/sanitize-html.pipe';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
@@ -24,15 +24,20 @@ import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { ModalComponent } from '@shared/components/modal/modal.component';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
+import { TextareaComponent } from '@shared/components/textarea/textarea.component';
 
 /** Chi tiết nhóm: thông tin nhóm, xin vào nhóm và trao đổi trong nhóm */
 @Component({
     selector: 'app-group-detail',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, RouterLink, TranslateModule, AccountCreatedNoticeComponent,
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink, TranslateModule, AccountCreatedNoticeComponent,
         ButtonComponent, InputComponent, LoadingComponent, ModalComponent,
         QuillModule,
-        SanitizeHtmlPipe,],
+        SanitizeHtmlPipe,
+        CheckboxComponent,
+        TextareaComponent
+    ],
     templateUrl: './group-detail.component.html',
 })
 export class GroupDetailComponent implements OnInit {

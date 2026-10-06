@@ -127,16 +127,6 @@ import { CheckboxComponent } from '@shared/components/checkbox/checkbox.componen
             min-width: 0;
         }
 
-        .uf__check {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            height: var(--control-h);
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            cursor: pointer;
-        }
-
         /* Nhãn hàng trên, khớp nhãn của app-input (font 0.875rem/600 + cách control 0.375rem) */
         .uf__label {
             display: block;

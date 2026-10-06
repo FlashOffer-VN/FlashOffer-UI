@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { PartnerSummaryComponent } from '../partner-summary/partner-summary.component';
 import { AppService } from '@core/services/app.service';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
 
 @Component({
   selector: 'app-step-confirmation',
@@ -17,8 +18,9 @@ import { AppService } from '@core/services/app.service';
     ReactiveFormsModule,
     RouterLink,
     TranslateModule,
-    PartnerSummaryComponent
-  ],
+    PartnerSummaryComponent,
+        CheckboxComponent
+    ],
   templateUrl: './step-confirmation.component.html',
   styleUrls: ['./step-confirmation.component.css']
 })

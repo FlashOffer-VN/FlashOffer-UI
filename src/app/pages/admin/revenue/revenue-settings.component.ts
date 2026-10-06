@@ -1,7 +1,7 @@
 // pages/admin/revenue/revenue-settings.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppService } from '@core/services/app.service';
@@ -15,6 +15,7 @@ import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { StatusTabsComponent, StatusTabItem } from '@shared/components/status-tabs/status-tabs.component';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.component';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
 
 /**
  * Cấu hình doanh thu dùng chung cho mọi giao dịch: tỷ lệ thuế và cách hiểu số doanh thu nhập vào,
@@ -24,8 +25,10 @@ import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.compon
 @Component({
     selector: 'app-admin-revenue-settings',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, TranslateModule, ButtonComponent, InputComponent, LoadingComponent,
-        StatusTabsComponent, HasPermissionDirective, PurgeBarComponent],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule, ButtonComponent, InputComponent, LoadingComponent,
+        StatusTabsComponent, HasPermissionDirective, PurgeBarComponent,
+        CheckboxComponent
+    ],
     template: `
         <div class="space-y-4">
             <div>
@@ -42,7 +45,7 @@ import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.compon
                     [hint]="'ADMIN.SETTINGS.FIELD_REVENUE_TAX_PERCENT_HINT' | translate"></app-input>
 
                 <label class="flex items-start gap-2 text-sm text-gray-700">
-                    <input type="checkbox" formControlName="revenueTaxIncluded" class="mt-1 h-4 w-4 rounded border-gray-300">
+                    <app-checkbox formControlName="revenueTaxIncluded" />
                     <span>
                         {{ 'ADMIN.SETTINGS.FIELD_REVENUE_TAX_INCLUDED' | translate }}
                         <span class="block text-xs text-gray-500">{{ 'ADMIN.SETTINGS.FIELD_REVENUE_TAX_INCLUDED_HINT' | translate }}</span>
@@ -88,8 +91,9 @@ import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.compon
                         <tbody>
                             <tr *ngFor="let item of expenseTypes" class="border-b border-gray-50">
                                 <td class="px-3 py-2">
-                                    <input *ngIf="expenseTab !== 'deleted'" type="checkbox" class="h-4 w-4 rounded border-gray-300"
-                                        [checked]="isExpenseSelected(item.id)" (change)="toggleExpenseSelection(item.id)">
+                                    <app-checkbox *ngIf="expenseTab !== 'deleted'"
+                                        [ngModel]="isExpenseSelected(item.id)"
+                                        (ngModelChange)="toggleExpenseSelection(item.id)" />
                                 </td>
                                 <td class="px-3 py-2 text-gray-800">{{ item.name }}</td>
                                 <td class="px-3 py-2 text-gray-500">{{ transactionTypesText(item.transactionTypes) }}</td>
@@ -133,8 +137,7 @@ import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.compon
                     <p class="text-xs text-gray-500">{{ 'ADMIN.REVENUE.EXPENSE_ASSIGN_HINT' | translate }}</p>
                     <div class="flex flex-wrap items-center gap-4">
                         <label *ngFor="let t of transactionTypes" class="flex items-center gap-2 text-sm text-gray-700">
-                            <input type="checkbox" class="h-4 w-4 rounded border-gray-300"
-                                [checked]="isAssignTypeSelected(t)" (change)="toggleAssignType(t)">
+                            <app-checkbox [ngModel]="isAssignTypeSelected(t)" (ngModelChange)="toggleAssignType(t)" />
                             {{ transactionTypeLabel(t) }}
                         </label>
                         <app-button variant="primary" size="sm" [loading]="isAssigning" (onClick)="applyAssign()">
@@ -159,8 +162,7 @@ import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.compon
                             <span class="mb-1 block text-sm font-medium text-gray-700">{{ 'ADMIN.REVENUE.EXPENSE_FIELD_TYPES' | translate }}</span>
                             <div class="flex flex-wrap items-center gap-4">
                                 <label *ngFor="let t of transactionTypes" class="flex items-center gap-2 text-sm text-gray-700">
-                                    <input type="checkbox" class="h-4 w-4 rounded border-gray-300"
-                                        [checked]="isFormTypeSelected(t)" (change)="toggleFormType(t)">
+                                    <app-checkbox [ngModel]="isFormTypeSelected(t)" (ngModelChange)="toggleFormType(t)" />
                                     {{ transactionTypeLabel(t) }}
                                 </label>
                             </div>

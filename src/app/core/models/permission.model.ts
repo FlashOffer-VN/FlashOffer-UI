@@ -245,6 +245,8 @@ export enum Permission {
     PurgeMembershipTier = 'P165',
     /** P166 — xoá vĩnh viễn cấu hình loại thu/chi */
     PurgeRevenueConfig = 'P166',
+    /** P167 — xem thư viện giao diện nội bộ (dev) */
+    ViewUiGallery = 'P167',
 }
 
 /** Nhóm quyền (bảng PermissionGroups): mã, tên hiển thị và thứ tự. */

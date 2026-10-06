@@ -33,9 +33,7 @@
                 {{ (multi ? 'SHARE_TO_GROUP.PICK_GROUPS' : 'SHARE_TO_GROUP.PICK_GROUP') | translate }}
             </label>
 
-            <input type="text" [(ngModel)]="searchText" [ngModelOptions]="{ standalone: true }"
-                [placeholder]="'SHARE_TO_GROUP.SEARCH_GROUP_PLACEHOLDER' | translate"
-                class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:border-primary focus:outline-none">
+            <app-input  />
 
             <!-- Gửi nhiều nhóm: số nhóm đã chọn + chọn tất cả -->
             <div *ngIf="multi" class="flex items-center justify-between text-xs">
@@ -78,10 +76,7 @@
                     [class.opacity-60]="isAlreadySent(group.id)"
                     [class.cursor-pointer]="!isAlreadySent(group.id)"
                     [class.cursor-not-allowed]="isAlreadySent(group.id)">
-                    <input [type]="multi ? 'checkbox' : 'radio'" name="shareGroup" class="h-4 w-4"
-                        [checked]="multi ? isSelected(group.id) : isChosen(group.id)"
-                        [disabled]="isAlreadySent(group.id)"
-                        (change)="multi ? toggleGroup(group.id) : selectGroup(group.id)">
+                    <app-input name="shareGroup" />
                     <span class="text-sm" [class.font-semibold]="!multi && isChosen(group.id)"
                         [class.text-primary]="!multi && isChosen(group.id)" [class.text-slate-700]="multi || !isChosen(group.id)">
                         {{ group.name }}
@@ -100,7 +95,7 @@
         <!-- Chuyển tiếp kèm link chia sẻ mời tham gia (bài mua chung có mã đơn công khai) -->
         <div *ngIf="canAttachShareLink" class="space-y-2 rounded-xl bg-slate-50 px-4 py-3">
             <label class="flex items-start gap-3 text-sm text-slate-700">
-                <input type="checkbox" formControlName="withShareLink" class="mt-0.5 h-4 w-4">
+                <app-checkbox formControlName="withShareLink" />
                 <span>
                     <span class="font-semibold">{{ 'SHARE_TO_GROUP.WITH_SHARE_LINK' | translate }}</span>
                     <span class="mt-0.5 block text-xs text-slate-500">
@@ -122,8 +117,7 @@
 
         <div>
             <label class="mb-1 block text-sm font-semibold text-slate-700">{{ 'SHARE_TO_GROUP.NOTE_LABEL' | translate }}</label>
-            <textarea formControlName="note" rows="3" [placeholder]="'SHARE_TO_GROUP.NOTE_PLACEHOLDER' | translate"
-                class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-primary focus:outline-none"></textarea>
+            <app-textarea formControlName="note" [rows]="3" />
         </div>
 
         <div class="flex justify-end gap-2">

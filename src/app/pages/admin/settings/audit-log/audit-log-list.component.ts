@@ -27,6 +27,7 @@ import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 
 import { DeleteScopeFailure, buildDeleteScope } from './audit-log-delete.util';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
 
 /**
  * Nhật ký hoạt động: nhật ký thao tác dữ liệu và nhật ký xác thực tài khoản (đăng nhập / đăng ký /
@@ -47,7 +48,8 @@ import { DeleteScopeFailure, buildDeleteScope } from './audit-log-delete.util';
         JsonViewerComponent,
         NgSelectWrapperComponent,
         ButtonComponent,
-        InputComponent
+        InputComponent,
+        CheckboxComponent
     ],
     templateUrl: './audit-log-list.component.html',
     styleUrls: ['./audit-log-list.component.css']

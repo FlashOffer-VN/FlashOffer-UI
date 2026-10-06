@@ -102,3 +102,47 @@
 .brand--on-dark .brand__tagline {
     color: rgba(255, 255, 255, 0.72);
 }
+
+/* ===== Hiệu ứng 2 lớp mờ dần (màn tải toàn trang) ===== */
+.brand__name-wrap {
+    position: relative;
+    display: inline-flex;
+}
+
+/* Lớp bóng phía sau: mờ, to hơn một chút, mờ vào/ra theo nhịp */
+.brand__echo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: inline-block;
+    font-size: var(--brand-name);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--accent);
+    opacity: 0;
+    filter: blur(10px);
+    transform: scale(1.06);
+    transform-origin: left center;
+    pointer-events: none;
+    user-select: none;
+    animation: brand-echo 2.8s ease-in-out infinite;
+}
+
+.brand--on-dark .brand__echo {
+    color: #fff;
+}
+
+/* Lớp chữ chính: mờ nhẹ lệch nhịp với lớp bóng */
+.brand--echo .brand__name {
+    animation: brand-front 2.8s ease-in-out infinite;
+}
+
+@keyframes brand-echo {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.3; }
+}
+
+@keyframes brand-front {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}

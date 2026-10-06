@@ -30,6 +30,8 @@ import {
     registerQuillHorizontalRule
 } from '@core/configs/quill.config';
 import { isBrowser } from '@core/utils/platform';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
+import { RadioGroupComponent, RadioOption } from '@shared/components/radio-group/radio-group.component';
 
 /** Kiểu điều khiển của một trường cài đặt. */
 type SettingFieldType = 'text' | 'number' | 'email' | 'phone' | 'url' | 'bool' | 'language' | 'select' | 'html';
@@ -70,7 +72,9 @@ interface SettingSection {
         LoadingComponent,
         AppDatePipe,
         NgSelectWrapperComponent,
-        QuillModule
+        QuillModule,
+        CheckboxComponent,
+        RadioGroupComponent
     ],
     template: `
         <div class="space-y-4">
@@ -158,24 +162,13 @@ interface SettingSection {
                                                     @switch (field.type) {
                                                         @case ('bool') {
                                                             <label class="inline-flex items-center gap-2 text-sm text-gray-700">
-                                                                <input type="checkbox" [formControlName]="field.key"
-                                                                    class="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500">
+                                                                <app-checkbox [formControlName]="field.key" />
                                                                 <span>{{ (form.get(field.key)?.value ? 'ADMIN.SETTINGS.YES' : 'ADMIN.SETTINGS.NO') | translate }}</span>
                                                             </label>
                                                         }
                                                         @case ('language') {
-                                                            <div class="flex items-center gap-4">
-                                                                <label class="inline-flex items-center gap-2 text-sm text-gray-700">
-                                                                    <input type="radio" value="vi" [formControlName]="field.key"
-                                                                        class="h-4 w-4 border-gray-300 text-teal-600 focus:ring-teal-500">
-                                                                    <span>Tiếng Việt</span>
-                                                                </label>
-                                                                <label class="inline-flex items-center gap-2 text-sm text-gray-700">
-                                                                    <input type="radio" value="en" [formControlName]="field.key"
-                                                                        class="h-4 w-4 border-gray-300 text-teal-600 focus:ring-teal-500">
-                                                                    <span>English</span>
-                                                                </label>
-                                                            </div>
+                                                            <app-radio-group orientation="horizontal"
+                                                                [options]="languageOptions" [formControlName]="field.key" />
                                                         }
                                                         @case ('select') {
                                                             <app-ng-select-wrapper [formControlName]="field.key"
@@ -286,6 +279,12 @@ interface SettingSection {
     `
 })
 export class AdminGeneralSettingsComponent implements OnInit {
+    /** Lựa chọn ngôn ngữ cho cài đặt dạng `language` (nhãn hiển thị thẳng, không cần dịch). */
+    readonly languageOptions: RadioOption[] = [
+        { value: 'vi', label: 'Tiếng Việt' },
+        { value: 'en', label: 'English' }
+    ];
+
     /** Các nhóm cài đặt, khai báo một chỗ để màn hình và bảng hiển thị luôn khớp nhau. */
     readonly sections: SettingSection[] = [
         {

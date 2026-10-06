@@ -9,11 +9,14 @@ import { firstValueFrom } from 'rxjs';
 import { isBrowser } from '../../../../core/utils/platform';
 import { AppService } from '../../../../core/services/app.service';
 import { PostType, PrivacyType, CreatePostRequest, SocialPost } from '../../../../core/models/social.model';
+import { InputComponent } from '@shared/components/input/input.component';
 
 @Component({
     selector: 'app-create-post',
     standalone: true,
-    imports: [CommonModule, FormsModule, TranslateModule, QuillModule],
+    imports: [CommonModule, FormsModule, TranslateModule, QuillModule,
+        InputComponent
+    ],
     templateUrl: './create-post.component.html',
     styleUrls: ['./create-post.component.css']
 })

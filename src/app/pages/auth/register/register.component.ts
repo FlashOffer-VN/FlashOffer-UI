@@ -15,6 +15,7 @@ import { isBrowser } from '@core/utils/platform';
 import { focusFirstInvalid } from '@core/utils/form-invalid';
 import { resolveReferralCode } from '@core/utils/share-link';
 import { COMPANY_SIZES } from '@core/models/partner.model';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
 
 @Component({
     selector: 'app-register',
@@ -28,7 +29,8 @@ import { COMPANY_SIZES } from '@core/models/partner.model';
         ButtonComponent,
         NgSelectWrapperComponent,
         ProvinceSelectComponent,
-        AccountCreatedNoticeComponent
+        AccountCreatedNoticeComponent,
+        CheckboxComponent
     ],
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.css']

@@ -12,11 +12,16 @@ import { GroupBuyingDetail, GroupBuyingStatus, JoinGroupBuyingResult } from '@co
 import { AccountCreatedNoticeComponent } from '@shared/components/account-created-notice/account-created-notice.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { acquireModalLevel, releaseModalLevel } from '@core/utils/z-index';
+import { TextareaComponent } from '@shared/components/textarea/textarea.component';
+import { InputComponent } from '@shared/components/input/input.component';
 
 @Component({
     selector: 'app-group-buying-detail-modal',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, TranslateModule, LoadingComponent, AccountCreatedNoticeComponent],
+    imports: [CommonModule, ReactiveFormsModule, TranslateModule, LoadingComponent, AccountCreatedNoticeComponent,
+        TextareaComponent,
+        InputComponent
+    ],
     templateUrl: './group-buying-detail-modal.component.html',
     styleUrls: ['./group-buying-detail-modal.component.css']
 })

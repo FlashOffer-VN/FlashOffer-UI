@@ -53,8 +53,7 @@
                     <tr>
                         <!-- Chọn dòng để xoá vĩnh viễn — chỉ ở tab "Đã xoá" -->
                         <th *ngIf="activeTab === 'deleted'" class="px-4 py-3 w-10">
-                            <input type="checkbox" class="h-4 w-4 rounded border-gray-300" [checked]="isAllSelected()"
-                                (change)="toggleAll($event)">
+                            <app-checkbox [ngModel]="isAllSelected()" (ngModelChange)="toggleAll($event)" />
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             #
@@ -114,8 +113,7 @@
                             class="hover:bg-gray-50 transition-colors cursor-pointer"
 >
                             <td *ngIf="activeTab === 'deleted'" class="px-4 py-3" (click)="$event.stopPropagation()">
-                                <input type="checkbox" class="h-4 w-4 rounded border-gray-300" [checked]="isSelected(partner.id)"
-                                    (change)="toggleSelect(partner.id, $event)">
+                                <app-checkbox [ngModel]="isSelected(partner.id)" (ngModelChange)="toggleSelect(partner.id, $event)" />
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-500">
                                 {{ (pageNumber - 1) * pageSize + i + 1 }}

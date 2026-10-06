@@ -31,8 +31,7 @@
                     <label>{{ 'GET_OFFER.PRODUCT_NAME' | translate }} <span class="required">*</span></label>
                     <div class="input-wrapper">
                         <i class="fas fa-box input-icon"></i>
-                        <input type="text" formControlName="productName"
-                            placeholder="{{ 'GET_OFFER.PRODUCT_NAME_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="productName" placeholder="{{ 'GET_OFFER.PRODUCT_NAME_PLACEHOLDER' | translate }}" />
                     </div>
                     <div class="error-message" *ngIf="isFieldInvalid('productName')">
                         <i class="fas fa-exclamation-circle"></i>
@@ -45,8 +44,7 @@
                     <label>{{ 'GET_OFFER.PRODUCT_LINK' | translate }}</label>
                     <div class="input-wrapper">
                         <i class="fas fa-link input-icon"></i>
-                        <input type="url" formControlName="productLink"
-                            placeholder="{{ 'GET_OFFER.PRODUCT_LINK_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="productLink" placeholder="{{ 'GET_OFFER.PRODUCT_LINK_PLACEHOLDER' | translate }}" />
                     </div>
                     <small class="hint-text">
                         <i class="fas fa-info-circle"></i>
@@ -59,8 +57,7 @@
                     <label>{{ 'GET_OFFER.CURRENT_PRICE' | translate }} <span class="required">*</span></label>
                     <div class="input-wrapper">
                         <i class="fas fa-money-bill-wave input-icon"></i>
-                        <input type="text" formControlName="currentPrice"
-                            placeholder="{{ 'GET_OFFER.CURRENT_PRICE_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="currentPrice" placeholder="{{ 'GET_OFFER.CURRENT_PRICE_PLACEHOLDER' | translate }}" />
                     </div>
                     <div class="error-message" *ngIf="isFieldInvalid('currentPrice')">
                         <i class="fas fa-exclamation-circle"></i>
@@ -73,8 +70,7 @@
                     <label>{{ 'GET_OFFER.EXPECTED_PRICE' | translate }}</label>
                     <div class="input-wrapper">
                         <i class="fas fa-tag input-icon"></i>
-                        <input type="text" formControlName="expectedPrice"
-                            placeholder="{{ 'GET_OFFER.EXPECTED_PRICE_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="expectedPrice" placeholder="{{ 'GET_OFFER.EXPECTED_PRICE_PLACEHOLDER' | translate }}" />
                     </div>
                     <small class="hint-text">
                         <i class="fas fa-info-circle"></i>
@@ -101,8 +97,7 @@
                     <label>{{ 'GET_OFFER.UNIT' | translate }} <span class="required">*</span></label>
                     <div class="input-wrapper">
                         <i class="fas fa-weight-scale input-icon"></i>
-                        <input type="text" formControlName="unit"
-                            placeholder="{{ 'GET_OFFER.UNIT_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="unit" placeholder="{{ 'GET_OFFER.UNIT_PLACEHOLDER' | translate }}" />
                     </div>
                     <div class="error-message" *ngIf="isFieldInvalid('unit')">
                         <i class="fas fa-exclamation-circle"></i>
@@ -124,8 +119,7 @@
                     <label>{{ 'GET_OFFER.FULL_NAME' | translate }} <span class="required">*</span></label>
                     <div class="input-wrapper">
                         <i class="fas fa-user input-icon"></i>
-                        <input type="text" formControlName="fullName"
-                            placeholder="{{ 'GET_OFFER.FULL_NAME_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="fullName" placeholder="{{ 'GET_OFFER.FULL_NAME_PLACEHOLDER' | translate }}" />
                     </div>
                     <div class="error-message" *ngIf="isFieldInvalid('fullName')">
                         <i class="fas fa-exclamation-circle"></i>
@@ -138,8 +132,7 @@
                     <label>{{ 'GET_OFFER.PHONE' | translate }} <span class="required">*</span></label>
                     <div class="input-wrapper">
                         <i class="fas fa-phone input-icon"></i>
-                        <input type="text" formControlName="phone"
-                            placeholder="{{ 'GET_OFFER.PHONE_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="phone" placeholder="{{ 'GET_OFFER.PHONE_PLACEHOLDER' | translate }}" />
                     </div>
                     <div class="error-message" *ngIf="isFieldInvalid('phone')">
                         <i class="fas fa-exclamation-circle"></i>
@@ -152,8 +145,7 @@
                     <label>{{ 'GET_OFFER.ZALO' | translate }}</label>
                     <div class="input-wrapper">
                         <i class="fab fa-zalo input-icon"></i>
-                        <input type="text" formControlName="zalo"
-                            placeholder="{{ 'GET_OFFER.ZALO_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="zalo" placeholder="{{ 'GET_OFFER.ZALO_PLACEHOLDER' | translate }}" />
                     </div>
                 </div>
 
@@ -177,15 +169,14 @@
                     <label>{{ 'GET_OFFER.NOTE' | translate }}</label>
                     <div class="input-wrapper">
                         <i class="fas fa-pen input-icon textarea-icon"></i>
-                        <textarea formControlName="note" rows="3"
-                            placeholder="{{ 'GET_OFFER.NOTE_PLACEHOLDER' | translate }}"></textarea>
+                        <app-textarea formControlName="note" [rows]="3" placeholder="{{ 'GET_OFFER.NOTE_PLACEHOLDER' | translate }}" />
                     </div>
                 </div>
 
                 <!-- Terms -->
                 <div class="form-group full-width terms-group">
                     <label class="checkbox-label">
-                        <input type="checkbox" formControlName="agreeTerms" />
+                        <app-checkbox input="" formControlName="agreeTerms" />
                         <span class="checkmark"></span>
                         {{ 'GET_OFFER.AGREE_TERMS' | translate }}
                         <a class="ml-1" routerLink="/terms" target="_blank">{{ 'GET_OFFER.TERMS_LINK' | translate }}</a>

@@ -12,6 +12,7 @@ import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
 
 /** Cột vai trò được cấu hình quyền trên màn hình. */
 interface RoleColumn {
@@ -38,7 +39,8 @@ type NodeState = 'all' | 'some' | 'none';
         ButtonComponent,
         InputComponent,
         NgSelectWrapperComponent,
-        LoadingComponent
+        LoadingComponent,
+        CheckboxComponent
     ],
     templateUrl: './permission-matrix.component.html',
     styleUrls: ['./permission-matrix.component.css']

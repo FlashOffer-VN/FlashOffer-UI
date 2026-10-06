@@ -16,6 +16,8 @@ import { StatusTabItem, StatusTabsComponent } from '@shared/components/status-ta
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.component';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
+import { TextareaComponent } from '@shared/components/textarea/textarea.component';
 
 /** Quản lý nhóm theo lĩnh vực kinh doanh (admin) */
 @Component({
@@ -23,7 +25,10 @@ import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.compon
     standalone: true,
     imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule, ButtonComponent,
         InputComponent, LoadingComponent, ModalComponent, PaginationComponent, StatusTabsComponent,
-        SearchByComponent, HasPermissionDirective, PurgeBarComponent],
+        SearchByComponent, HasPermissionDirective, PurgeBarComponent,
+        CheckboxComponent,
+        TextareaComponent
+    ],
     templateUrl: './group-list.component.html',
 })
 export class AdminGroupListComponent implements OnInit {

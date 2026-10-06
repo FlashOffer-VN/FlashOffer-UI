@@ -146,17 +146,16 @@
 
             <div>
                 <label class="mb-1 block text-sm font-semibold text-slate-700">{{ 'ADMIN.GROUPS.DESCRIPTION' | translate }}</label>
-                <textarea formControlName="description" rows="3"
-                    class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-primary focus:outline-none"></textarea>
+                <app-textarea formControlName="description" [rows]="3" />
             </div>
 
             <label class="flex items-center gap-2 text-sm text-slate-600">
-                <input type="checkbox" formControlName="requiresApproval" class="h-4 w-4 rounded border-slate-300 text-primary">
+                <app-checkbox formControlName="requiresApproval" />
                 {{ 'ADMIN.GROUPS.REQUIRES_APPROVAL' | translate }}
             </label>
 
             <label class="flex items-center gap-2 text-sm text-slate-600">
-                <input type="checkbox" formControlName="isActive" class="h-4 w-4 rounded border-slate-300 text-primary">
+                <app-checkbox formControlName="isActive" />
                 {{ 'ADMIN.GROUPS.ACTIVE' | translate }}
             </label>
 

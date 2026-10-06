@@ -25,26 +25,16 @@ export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | '
   standalone: true,
   imports: [CommonModule, BrandLogoComponent],
   template: `
-    <!-- Fullscreen: logo làm chủ đạo -->
-    <div *ngIf="fullScreen" class="fixed inset-0 bg-white/70 backdrop-blur-sm z-[var(--z-loading)] flex items-center justify-center">
-      <div class="text-center space-y-6 p-8 bg-white/90 rounded-2xl shadow-xl max-w-sm w-full mx-4">
-        <!-- Logo -->
-        <div class="logo-icon">
-          <i class="fa-solid fa-bolt text-6xl md:text-7xl text-primary"></i>
-        </div>
+    <!-- Fullscreen: wordmark 2 lớp mờ dần -->
+    <div *ngIf="fullScreen" class="fs-loading">
+      <div class="fs-loading__card">
+        <app-brand-logo size="xl" [echo]="true" />
 
-        <!-- Wordmark thương hiệu -->
-        <div class="flex justify-center">
-          <app-brand-logo size="lg" />
-        </div>
-        <p class="text-gray-500 text-sm">{{ text || 'Đang kết nối cộng đồng...' }}</p>
+        <p class="fs-loading__text">{{ text || 'Đang kết nối cộng đồng...' }}</p>
 
-        <!-- Loading dots -->
-        <div class="flex justify-center gap-2">
-          <span class="dot-loading" style="animation-delay: 0s"></span>
-          <span class="dot-loading" style="animation-delay: 0.2s"></span>
-          <span class="dot-loading" style="animation-delay: 0.4s"></span>
-        </div>
+        <span class="fs-loading__bar" aria-hidden="true">
+          <span class="fs-loading__bar-fill"></span>
+        </span>
       </div>
     </div>
 
@@ -54,14 +44,14 @@ export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | '
       <!-- Dots -->
       <div *ngIf="type === 'dots'" class="flex items-center justify-center">
         <div class="flex gap-2">
-          <div *ngFor="let dot of [0,1,2,3,4,5]" class="dot" [style.animation-delay]="dot * 0.1 + 's'" [class]="getDotClasses()"></div>
+          <div *ngFor="let dot of [0,1,2,3,4,5]" class="dot" [style.animation-delay]="dot * 0.1 + 's'" [ngClass]="getDotClasses()"></div>
         </div>
         <span *ngIf="text" class="ml-3 text-gray-500 text-sm">{{ text }}</span>
       </div>
 
       <!-- Spinner -->
       <div *ngIf="type === 'spinner'" class="flex items-center justify-center">
-        <div class="spinner" [class]="getSpinnerClasses()"></div>
+        <div class="spinner" [ngClass]="getSpinnerClasses()"></div>
         <span *ngIf="text" class="ml-3 text-gray-500 text-sm">{{ text }}</span>
       </div>
 
@@ -74,14 +64,14 @@ export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | '
 
       <!-- Pulse -->
       <div *ngIf="type === 'pulse'" class="flex items-center justify-center">
-        <div class="pulse-dot" [class]="getPulseClasses()"></div>
+        <div class="pulse-dot" [ngClass]="getPulseClasses()"></div>
         <span *ngIf="text" class="ml-3 text-gray-500 text-sm">{{ text }}</span>
       </div>
 
       <!-- Logo -->
       <div *ngIf="type === 'logo'" class="flex items-center justify-center flex-col gap-3">
         <div class="logo-icon">
-          <i class="fa-solid fa-bolt text-5xl" [class]="getColorText()"></i>
+          <i class="fa-solid fa-bolt text-5xl" [ngClass]="getColorText()"></i>
         </div>
         <span *ngIf="text" class="text-gray-500 text-sm">{{ text }}</span>
       </div>
@@ -105,6 +95,53 @@ export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | '
     </div>
   `,
   styles: [`
+    /* ===== MÀN TẢI TOÀN TRANG: wordmark 2 lớp mờ dần ===== */
+    .fs-loading {
+      position: fixed;
+      inset: 0;
+      z-index: var(--z-loading);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: color-mix(in srgb, var(--white) 84%, transparent);
+      backdrop-filter: blur(6px);
+    }
+
+    .fs-loading__card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .fs-loading__text {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .fs-loading__bar {
+      width: 12rem;
+      height: 3px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+    }
+
+    /* Vệt sáng chạy qua lại cho biết hệ thống đang làm việc */
+    .fs-loading__bar-fill {
+      display: block;
+      width: 40%;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      animation: fs-slide 1.4s ease-in-out infinite;
+    }
+
+    @keyframes fs-slide {
+      0% { transform: translateX(-120%); }
+      100% { transform: translateX(320%); }
+    }
+
     /* ===== KHỐI TẢI TRANG ===== */
     /* Canh giữa và chừa chiều cao tối thiểu để khối tải không dính sát mép trên của vùng nội dung. */
     .app-loading {
@@ -140,6 +177,9 @@ export type LoadingType = 'dots' | 'spinner' | 'skeleton' | 'pulse' | 'logo' | '
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
       border-style: solid;
+      /* 3 cạnh nhạt + 1 cạnh màu => thấy rõ vòng đang quay (không phụ thuộc class màu động) */
+      border-color: color-mix(in srgb, var(--accent) 20%, transparent);
+      border-top-color: var(--accent);
     }
     @keyframes spin {
       from { transform: rotate(0deg); }

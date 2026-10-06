@@ -8,6 +8,7 @@ import { AppService } from '@core/services/app.service';
 import { isAdminRole } from '@core/models/auth.model';
 import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
 
 @Component({
     selector: 'app-login',
@@ -18,7 +19,8 @@ import { ButtonComponent } from '@shared/components/button/button.component';
         TranslateModule,
         RouterLink,
         InputComponent,
-        ButtonComponent
+        ButtonComponent,
+        CheckboxComponent
     ],
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css']

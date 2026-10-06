@@ -1,9 +1,16 @@
 <label class="cb" [class.cb--sm]="size === 'sm'" [class.is-disabled]="disabled">
     <input class="cb__input" type="checkbox" [id]="inputId" [checked]="value" [disabled]="disabled"
+        [attr.aria-label]="ariaLabel || null"
         [attr.aria-checked]="indeterminate ? 'mixed' : value" [attr.aria-describedby]="hint ? inputId + '-hint' : null"
         (change)="onToggle($event)" />
 
-    <span class="cb__box" [class.is-indeterminate]="indeterminate" aria-hidden="true"></span>
+    <span class="cb__box" [class.is-indeterminate]="indeterminate" aria-hidden="true">
+        <svg class="cb__tick" viewBox="0 0 24 24" fill="none">
+            <path d="M20 6.5 9.5 17 4.5 12" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+        </svg>
+        <span class="cb__dash"></span>
+    </span>
 
     @if (label) {
     <span class="cb__text">

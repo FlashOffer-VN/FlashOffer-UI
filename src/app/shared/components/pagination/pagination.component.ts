@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -75,9 +75,9 @@ export class PaginationComponent {
         }
     }
 
+    /** Đổi số dòng mỗi trang — select thường nên chỉ cần đọc giá trị đã chọn. */
     onPageSizeChange(event: Event): void {
         const select = event.target as HTMLSelectElement;
-        const size = parseInt(select.value, 10);
-        this.pageSizeChange.emit(size);
+        this.pageSizeChange.emit(Number(select.value));
     }
 }

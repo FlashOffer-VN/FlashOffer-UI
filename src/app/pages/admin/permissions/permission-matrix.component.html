@@ -117,16 +117,9 @@
             @if (column.isSuperAdmin) {
             <i class="fa-solid fa-infinity text-primary" [title]="'PERMISSION.SUPER_ADMIN_ALL' | translate"></i>
             } @else if (isContainer(node)) {
-            <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer"
-                [checked]="nodeState(column.role, node) === 'all'"
-                [indeterminate]="nodeState(column.role, node) === 'some'"
-                [disabled]="isNodeDisabled(column.role, node) || !canEdit"
-                (change)="toggleNode(column.role, node, $any($event.target).checked)" />
+            <app-checkbox [ngModel]="nodeState(column.role, node) === 'all'" [indeterminate]="nodeState(column.role, node) === 'some'" [disabled]="isNodeDisabled(column.role, node) || !canEdit" (ngModelChange)="toggleNode(column.role, node, $event)" />
             } @else {
-            <input type="checkbox" class="w-4 h-4 accent-primary cursor-pointer"
-                [checked]="isChecked(column.role, node.code)"
-                [disabled]="isNodeDisabled(column.role, node) || !canEdit"
-                (change)="onToggle(column.role, node, $any($event.target).checked)" />
+            <app-checkbox [ngModel]="isChecked(column.role, node.code)" [disabled]="isNodeDisabled(column.role, node) || !canEdit" (ngModelChange)="onToggle(column.role, node, $event)" />
             @if (isTickedButBlocked(column.role, node)) {
             <span class="mt-0.5 block text-[10px] leading-tight text-amber-600">
                 {{ 'PERMISSION.NOT_EFFECTIVE' | translate }}

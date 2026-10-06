@@ -291,8 +291,7 @@
         <form [formGroup]="clubRejectForm" (ngSubmit)="onRejectClub()" class="space-y-4">
             <div>
                 <label class="mb-1 block text-sm font-semibold text-slate-700">{{ 'ADMIN.CLUBS.REJECT_REASON' | translate }}</label>
-                <textarea formControlName="reason" rows="3"
-                    class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-primary focus:outline-none"></textarea>
+                <app-textarea formControlName="reason" [rows]="3" />
             </div>
             <div class="flex justify-end gap-2">
                 <app-button variant="secondary" type="button" (onClick)="clubRejectVisible = false">
@@ -310,8 +309,7 @@
             <p class="text-sm text-slate-500">{{ rejectingMember?.fullName }}</p>
             <div>
                 <label class="mb-1 block text-sm font-semibold text-slate-700">{{ 'ADMIN.GROUPS.REJECT_REASON' | translate }}</label>
-                <textarea [(ngModel)]="rejectReason" name="rejectReason" rows="3"
-                    class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-primary focus:outline-none"></textarea>
+                <app-textarea name="rejectReason" [rows]="3" />
             </div>
             <div class="flex justify-end gap-2">
                 <app-button variant="secondary" (onClick)="rejectVisible = false">{{ 'COMMON.BUTTON.CANCEL' | translate }}</app-button>

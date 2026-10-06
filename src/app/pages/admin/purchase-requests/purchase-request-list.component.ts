@@ -26,6 +26,7 @@ import { SearchByComponent } from '@shared/components/search-by/search-by.compon
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 import { CodeListComponent } from '@shared/components/code-list/code-list.component';
 import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.component';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
 
 @Component({
     selector: 'app-admin-purchase-request-list',
@@ -48,7 +49,8 @@ import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.compon
         AppDatePipe,
         ShortIdPipe,
         SearchByComponent,
-        HasPermissionDirective
+        HasPermissionDirective,
+        CheckboxComponent
     ],
     templateUrl: './purchase-request-list.component.html',
     styleUrls: ['./purchase-request-list.component.css']

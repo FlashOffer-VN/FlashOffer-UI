@@ -165,8 +165,7 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>{{ 'GROUP_BUYING.FULL_NAME' | translate }} <span class="req">*</span></label>
-                                    <input type="text" formControlName="fullName"
-                                        placeholder="{{ 'GROUP_BUYING.FULL_NAME_PLACEHOLDER' | translate }}">
+                                    <app-input formControlName="fullName" placeholder="{{ 'GROUP_BUYING.FULL_NAME_PLACEHOLDER' | translate }}" />
                                     <span class="error"
                                         *ngIf="f['fullName']?.invalid && (f['fullName']?.dirty || f['fullName']?.touched)">
                                         {{ 'GROUP_BUYING.ERROR.FULL_NAME_REQUIRED' | translate }}
@@ -185,8 +184,7 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>{{ 'GROUP_BUYING.ZALO' | translate }}</label>
-                                    <input type="text" formControlName="zalo"
-                                        placeholder="{{ 'GROUP_BUYING.ZALO_PLACEHOLDER' | translate }}">
+                                    <app-input formControlName="zalo" placeholder="{{ 'GROUP_BUYING.ZALO_PLACEHOLDER' | translate }}" />
                                 </div>
                                 <div class="form-group">
                                     <label>{{ 'GROUP_BUYING.EMAIL' | translate }}</label>
@@ -202,8 +200,7 @@
 
                         <div class="form-group">
                             <label>{{ 'GROUP_BUYING.NOTE' | translate }}</label>
-                            <textarea rows="2" formControlName="note"
-                                placeholder="{{ 'GROUP_BUYING.DETAIL.NOTE_PLACEHOLDER' | translate }}"></textarea>
+                            <app-textarea [rows]="2" formControlName="note" placeholder="{{ 'GROUP_BUYING.DETAIL.NOTE_PLACEHOLDER' | translate }}" />
                         </div>
 
                         <div class="actions">

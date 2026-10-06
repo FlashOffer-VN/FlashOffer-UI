@@ -1,4 +1,6 @@
-<div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="pg">
+    <!-- Thẻ 1: thông tin đang xem -->
+    <div class="pg__card pg__card--info">
     <!-- Info -->
     <div class="text-sm text-gray-500" *ngIf="showInfo && totalCount > 0">
         <span class="font-medium text-gray-700">{{ getStartIndex() }}</span>
@@ -13,6 +15,10 @@
         {{ 'PAGINATION.NO_ITEMS' | translate }}
     </div>
 
+    </div>
+
+    <!-- Thẻ 2: điều hướng trang + số dòng mỗi trang -->
+    <div class="pg__card pg__card--nav">
     <!-- Page buttons -->
     <div class="flex items-center gap-1" *ngIf="totalPages > 0">
         <button
@@ -46,16 +52,16 @@
 
         <div class="relative">
             <select
-                class="appearance-none border border-gray-200 rounded-lg px-3 py-1.5 pr-8 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all cursor-pointer"
+                class="appearance-none border border-gray-200 rounded-lg pl-3 pr-8 py-1.5 text-sm font-medium text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all cursor-pointer"
                 [value]="pageSize" (change)="onPageSizeChange($event)">
                 <option *ngFor="let size of pageSizes" [value]="size">
                     {{ size }}
                 </option>
             </select>
-            <i
-                class="fa-solid fa-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+            <i class="fa-solid fa-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
         </div>
 
         <span class="text-sm text-gray-500">{{ 'PAGINATION.ITEMS_PER_PAGE' | translate }}</span>
+    </div>
     </div>
 </div>

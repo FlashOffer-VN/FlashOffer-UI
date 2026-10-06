@@ -11,12 +11,15 @@ import { PostType, PrivacyType, SocialPost, UpdatePostRequest } from '@core/mode
 import { QUILL_MODULES, quillPlainText } from '@core/configs/quill.config';
 import { isBrowser } from '@core/utils/platform';
 import { apiOrigin } from '@shared/pipes/media-url.pipe';
+import { InputComponent } from '@shared/components/input/input.component';
 
 /** Modal sửa bài viết — dùng chung cho bảng tin và trang Bài viết của tôi */
 @Component({
     selector: 'app-post-edit-modal',
     standalone: true,
-    imports: [CommonModule, FormsModule, TranslateModule, QuillModule],
+    imports: [CommonModule, FormsModule, TranslateModule, QuillModule,
+        InputComponent
+    ],
     templateUrl: './post-edit-modal.component.html',
     styleUrls: ['./post-edit-modal.component.css']
 })

@@ -47,8 +47,7 @@
                     <label>{{ 'FIND_SUPPLIER.PRODUCT_NAME' | translate }} <span class="required">*</span></label>
                     <div class="input-wrapper">
                         <i class="fas fa-box input-icon"></i>
-                        <input type="text" formControlName="productName"
-                            placeholder="{{ 'FIND_SUPPLIER.PRODUCT_NAME_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="productName" placeholder="{{ 'FIND_SUPPLIER.PRODUCT_NAME_PLACEHOLDER' | translate }}" />
                     </div>
                     <div class="error-message" *ngIf="isFieldInvalid('productName')">
                         <i class="fas fa-exclamation-circle"></i>
@@ -61,8 +60,7 @@
                     <label>{{ 'FIND_SUPPLIER.PRODUCT_CATEGORY' | translate }}</label>
                     <div class="input-wrapper">
                         <i class="fas fa-tags input-icon"></i>
-                        <input type="text" formControlName="productCategory"
-                            placeholder="{{ 'FIND_SUPPLIER.PRODUCT_CATEGORY_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="productCategory" placeholder="{{ 'FIND_SUPPLIER.PRODUCT_CATEGORY_PLACEHOLDER' | translate }}" />
                     </div>
                     <small class="hint-text">
                         <i class="fas fa-info-circle"></i>
@@ -89,8 +87,7 @@
                     <label>{{ 'FIND_SUPPLIER.UNIT' | translate }} <span class="required">*</span></label>
                     <div class="input-wrapper">
                         <i class="fas fa-weight-scale input-icon"></i>
-                        <input type="text" formControlName="unit"
-                            placeholder="{{ 'FIND_SUPPLIER.UNIT_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="unit" placeholder="{{ 'FIND_SUPPLIER.UNIT_PLACEHOLDER' | translate }}" />
                     </div>
                     <div class="error-message" *ngIf="isFieldInvalid('unit')">
                         <i class="fas fa-exclamation-circle"></i>
@@ -103,8 +100,7 @@
                     <label>{{ 'FIND_SUPPLIER.EXPECTED_PRICE' | translate }}</label>
                     <div class="input-wrapper">
                         <i class="fas fa-tag input-icon"></i>
-                        <input type="text" formControlName="expectedPrice"
-                            placeholder="{{ 'FIND_SUPPLIER.EXPECTED_PRICE_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="expectedPrice" placeholder="{{ 'FIND_SUPPLIER.EXPECTED_PRICE_PLACEHOLDER' | translate }}" />
                     </div>
                     <small class="hint-text">
                         <i class="fas fa-info-circle"></i>
@@ -126,8 +122,7 @@
                     <label>{{ 'FIND_SUPPLIER.FULL_NAME' | translate }} <span class="required">*</span></label>
                     <div class="input-wrapper">
                         <i class="fas fa-user input-icon"></i>
-                        <input type="text" formControlName="fullName"
-                            placeholder="{{ 'FIND_SUPPLIER.FULL_NAME_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="fullName" placeholder="{{ 'FIND_SUPPLIER.FULL_NAME_PLACEHOLDER' | translate }}" />
                     </div>
                     <div class="error-message" *ngIf="isFieldInvalid('fullName')">
                         <i class="fas fa-exclamation-circle"></i>
@@ -140,8 +135,7 @@
                     <label>{{ 'FIND_SUPPLIER.PHONE' | translate }} <span class="required">*</span></label>
                     <div class="input-wrapper">
                         <i class="fas fa-phone input-icon"></i>
-                        <input type="text" formControlName="phone"
-                            placeholder="{{ 'FIND_SUPPLIER.PHONE_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="phone" placeholder="{{ 'FIND_SUPPLIER.PHONE_PLACEHOLDER' | translate }}" />
                     </div>
                     <div class="error-message" *ngIf="isFieldInvalid('phone')">
                         <i class="fas fa-exclamation-circle"></i>
@@ -154,8 +148,7 @@
                     <label>{{ 'FIND_SUPPLIER.ZALO' | translate }}</label>
                     <div class="input-wrapper">
                         <i class="fab fa-zalo input-icon"></i>
-                        <input type="text" formControlName="zalo"
-                            placeholder="{{ 'FIND_SUPPLIER.ZALO_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="zalo" placeholder="{{ 'FIND_SUPPLIER.ZALO_PLACEHOLDER' | translate }}" />
                     </div>
                 </div>
 
@@ -179,15 +172,14 @@
                     <label>{{ 'FIND_SUPPLIER.NOTE' | translate }}</label>
                     <div class="input-wrapper">
                         <i class="fas fa-pen input-icon textarea-icon"></i>
-                        <textarea formControlName="note" rows="3"
-                            placeholder="{{ 'FIND_SUPPLIER.NOTE_PLACEHOLDER' | translate }}"></textarea>
+                        <app-textarea formControlName="note" [rows]="3" placeholder="{{ 'FIND_SUPPLIER.NOTE_PLACEHOLDER' | translate }}" />
                     </div>
                 </div>
 
                 <!-- Terms -->
                 <div class="form-group full-width terms-group">
                     <label class="checkbox-label">
-                        <input type="checkbox" formControlName="agreeTerms" />
+                        <app-checkbox input="" formControlName="agreeTerms" />
                         <span class="checkmark"></span>
                         {{ 'FIND_SUPPLIER.AGREE_TERMS' | translate }}
                         <a class="ml-1" routerLink="/terms" target="_blank">{{ 'FIND_SUPPLIER.TERMS_LINK' | translate }}</a>
