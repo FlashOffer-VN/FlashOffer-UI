@@ -9,3 +9,38 @@
 .text-white {
     color: white;
 }
+
+/* Cụm chọn số dòng mỗi trang — hiện luôn lựa chọn trong cụm paging, không dùng popup/select
+   để khỏi bị bảng che hoặc cắt mất. */
+.pg-size {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.125rem;
+    padding: 0.125rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: var(--surface-muted);
+}
+
+.pg-size__item {
+    min-width: 2rem;
+    padding: 0.1875rem 0.375rem;
+    border: 0;
+    border-radius: 0.375rem;
+    background: transparent;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease;
+}
+
+.pg-size__item:hover {
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.pg-size__item.is-active {
+    color: var(--white);
+    background: var(--accent);
+}
