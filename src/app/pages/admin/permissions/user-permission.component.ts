@@ -5,7 +5,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Observable, forkJoin, of } from 'rxjs';
 
 import { AppService } from '@core/services/app.service';
-import { PermissionService, ancestorCodes, buildPermissionTree, collectActionCodes, grantChainCodes, isContainerNode, permissionLabel, permissionLabelKey } from '@core/services/permission.service';
+import { PermissionService, ancestorCodes, buildPermissionTree, collectActionCodes, grantChainCodes, isContainerNode, permissionLabel, permissionLabelKey, permissionMeta } from '@core/services/permission.service';
 import { ApiResponse, UserRole, toUserRole } from '@core/models/auth.model';
 import {
     PermissionGroupItem,
@@ -124,6 +124,7 @@ type NodeState = 'all' | 'some' | 'none';
                             <!-- Metadata của quyền do API trả sẵn: mã quyền · route màn hình · endpoint API. -->
                             <span class="block text-xs text-gray-400 font-mono" [title]="nodeMeta(node)">{{ nodeMeta(node) }}</span>
                             }
+                            @if (isMixed(node.code) || isGrantedExtra(node.code) || isDeniedOverride(node.code) || isTickedButBlocked(node) || isGrantedNotEffective(node.code)) {
                             <span class="block text-xs text-gray-500">
                                 @if (isMixed(node.code)) {
                                     <em>{{ 'PERMISSION.USER.MIXED' | translate }}</em>
@@ -293,6 +294,11 @@ export class AdminUserPermissionComponent implements OnInit {
         }
 
         return permissionLabel(node, this._translate);
+    }
+
+    /** Dòng metadata của quyền: mã quyền · route màn hình · endpoint API (API trả sẵn, UI chỉ hiển thị). */
+    nodeMeta(node: PermissionTreeNode): string {
+        return permissionMeta(node);
     }
 
     kindKey(node: PermissionTreeNode): string {
