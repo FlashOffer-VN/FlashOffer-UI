@@ -339,4 +339,25 @@ select:not([multiple]) option {
         transition-duration: 0.001ms !important;
         scroll-behavior: auto !important;
     }
+
+    /*
+     * Ngoại lệ cho khối báo ĐANG TẢI: nếu tắt hết animation thì người dùng không còn dấu hiệu nào
+     * để biết hệ thống đang chạy. Cho phép duy nhất hiệu ứng ĐỔI ĐỘ MỜ (không xoay, không nhảy,
+     * không đổi vị trí) nên vẫn tôn trọng "giảm chuyển động" mà trạng thái tải vẫn thấy được.
+     */
+    app-loading .dot,
+    app-loading .spinner,
+    app-loading .pulse-dot,
+    app-loading .logo-icon,
+    app-loading .community-icon,
+    app-loading .community-icon-sm,
+    app-loading .dot-loading,
+    app-loading .skeleton-line {
+        animation: loading-soft-pulse 1.6s ease-in-out infinite !important;
+    }
+
+    @keyframes loading-soft-pulse {
+        0%, 100% { opacity: 0.35; }
+        50% { opacity: 1; }
+    }
 }
