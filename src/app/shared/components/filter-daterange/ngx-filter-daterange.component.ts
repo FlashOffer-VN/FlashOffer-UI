@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild, inject } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
+import { isBrowser } from '@core/utils/platform';
+
 import {
     DATE_RANGE_PRESETS,
     DateCell,
@@ -130,7 +132,8 @@ export class NgxFilterDaterangeComponent {
      */
     positionPopup(): void {
         const panel = this._pop?.nativeElement;
-        if (!this.isOpen || !panel) return;
+        // isBrowser(): lúc prerender (SSR) không có window — bỏ qua, bảng lịch chỉ có ý nghĩa trong trình duyệt.
+        if (!this.isOpen || !panel || !isBrowser()) return;
 
         const trigger = this._elementRef.nativeElement.getBoundingClientRect();
         const position = computePopupPosition(
