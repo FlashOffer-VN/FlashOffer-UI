@@ -64,10 +64,13 @@ import { ButtonComponent } from '@shared/components/button/button.component';
                             </app-input>
                         </div>
 
-                        <label class="uf__check">
-                            <input type="checkbox" [(ngModel)]="form.isActive">
-                            <span>{{ 'ADMIN.USERS.IS_ACTIVE' | translate }}</span>
-                        </label>
+                        <div class="uf__field">
+                            <span class="uf__label">{{ 'ADMIN.USERS.STATUS' | translate }}</span>
+                            <label class="uf__check">
+                                <input type="checkbox" class="uf__checkbox" [(ngModel)]="form.isActive">
+                                <span>{{ 'ADMIN.USERS.IS_ACTIVE' | translate }}</span>
+                            </label>
+                        </div>
                     }
                 </div>
 
@@ -131,8 +134,25 @@ import { ButtonComponent } from '@shared/components/button/button.component';
             display: flex;
             align-items: center;
             gap: 8px;
+            height: var(--control-h);
             font-size: 0.875rem;
             color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        /* Nhãn hàng trên, khớp nhãn của app-input (font 0.875rem/600 + cách control 0.375rem) */
+        .uf__label {
+            display: block;
+            margin-bottom: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .uf__checkbox {
+            width: 1rem;
+            height: 1rem;
+            accent-color: var(--accent);
             cursor: pointer;
         }
 
