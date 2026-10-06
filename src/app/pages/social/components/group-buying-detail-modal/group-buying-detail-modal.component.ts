@@ -13,12 +13,14 @@ import { AccountCreatedNoticeComponent } from '@shared/components/account-create
 import { LoadingComponent } from '@shared/components/loading/loading.component';
 import { acquireModalLevel, releaseModalLevel } from '@core/utils/z-index';
 import { TextareaComponent } from '@shared/components/textarea/textarea.component';
+import { InputComponent } from '@shared/components/input/input.component';
 
 @Component({
     selector: 'app-group-buying-detail-modal',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, TranslateModule, LoadingComponent, AccountCreatedNoticeComponent,
-        TextareaComponent
+        TextareaComponent,
+        InputComponent
     ],
     templateUrl: './group-buying-detail-modal.component.html',
     styleUrls: ['./group-buying-detail-modal.component.css']

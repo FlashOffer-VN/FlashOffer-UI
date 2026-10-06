@@ -31,8 +31,7 @@
                     <label>{{ 'GROUP_BUYING.PRODUCT_NAME' | translate }} <span class="required">*</span></label>
                     <div class="input-wrapper">
                         <i class="fas fa-box input-icon"></i>
-                        <input type="text" formControlName="productName"
-                            placeholder="{{ 'GROUP_BUYING.PRODUCT_NAME_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="productName" placeholder="{{ 'GROUP_BUYING.PRODUCT_NAME_PLACEHOLDER' | translate }}" />
                     </div>
                     <div class="error-message" *ngIf="isFieldInvalid('productName')">
                         <i class="fas fa-exclamation-circle"></i>
@@ -45,8 +44,7 @@
                     <label>{{ 'GROUP_BUYING.PRODUCT_LINK' | translate }}</label>
                     <div class="input-wrapper">
                         <i class="fas fa-link input-icon"></i>
-                        <input type="url" formControlName="productLink"
-                            placeholder="{{ 'GROUP_BUYING.PRODUCT_LINK_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="productLink" placeholder="{{ 'GROUP_BUYING.PRODUCT_LINK_PLACEHOLDER' | translate }}" />
                     </div>
                     <small class="hint-text">
                         <i class="fas fa-info-circle"></i>
@@ -104,8 +102,7 @@
                     <label>{{ 'GROUP_BUYING.FULL_NAME' | translate }} <span class="required">*</span></label>
                     <div class="input-wrapper">
                         <i class="fas fa-user input-icon"></i>
-                        <input type="text" formControlName="fullName"
-                            placeholder="{{ 'GROUP_BUYING.FULL_NAME_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="fullName" placeholder="{{ 'GROUP_BUYING.FULL_NAME_PLACEHOLDER' | translate }}" />
                     </div>
                     <div class="error-message" *ngIf="isFieldInvalid('fullName')">
                         <i class="fas fa-exclamation-circle"></i>
@@ -118,8 +115,7 @@
                     <label>{{ 'GROUP_BUYING.PHONE' | translate }} <span class="required">*</span></label>
                     <div class="input-wrapper">
                         <i class="fas fa-phone input-icon"></i>
-                        <input type="text" formControlName="phone"
-                            placeholder="{{ 'GROUP_BUYING.PHONE_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="phone" placeholder="{{ 'GROUP_BUYING.PHONE_PLACEHOLDER' | translate }}" />
                     </div>
                     <div class="error-message" *ngIf="isFieldInvalid('phone')">
                         <i class="fas fa-exclamation-circle"></i>
@@ -132,8 +128,7 @@
                     <label>{{ 'GROUP_BUYING.ZALO' | translate }}</label>
                     <div class="input-wrapper">
                         <i class="fab fa-zalo input-icon"></i>
-                        <input type="text" formControlName="zalo"
-                            placeholder="{{ 'GROUP_BUYING.ZALO_PLACEHOLDER' | translate }}" />
+                        <app-input formControlName="zalo" placeholder="{{ 'GROUP_BUYING.ZALO_PLACEHOLDER' | translate }}" />
                     </div>
                 </div>
 
@@ -164,7 +159,7 @@
                 <!-- Terms -->
                 <div class="form-group full-width terms-group">
                     <label class="checkbox-label">
-                        <input type="checkbox" formControlName="agreeTerms" />
+                        <app-checkbox input="" formControlName="agreeTerms" />
                         <span class="checkmark"></span>
                         {{ 'GROUP_BUYING.AGREE_TERMS' | translate }}
                         <a class="ml-1" routerLink="/terms" target="_blank">{{ 'GROUP_BUYING.TERMS_LINK' | translate }}</a>

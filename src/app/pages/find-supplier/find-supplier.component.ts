@@ -7,6 +7,8 @@ import { AppService } from '@core/services/app.service';
 import { resolveReferralCode } from '@core/utils/share-link';
 import { focusFirstInvalid } from '@core/utils/form-invalid';
 import { TextareaComponent } from '@shared/components/textarea/textarea.component';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
+import { InputComponent } from '@shared/components/input/input.component';
 import {
     UNIT_OPTIONS,
     PRODUCT_CATEGORY_OPTIONS,
@@ -21,7 +23,9 @@ import {
         ReactiveFormsModule,
         TranslateModule,
         RouterLink,
-        TextareaComponent
+        TextareaComponent,
+        CheckboxComponent,
+        InputComponent
     ],
     templateUrl: './find-supplier.component.html',
     styleUrls: ['./find-supplier.component.css']

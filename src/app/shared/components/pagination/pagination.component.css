@@ -71,10 +71,10 @@
 }
 
 .pg-size__menu {
-    position: absolute;
-    right: 0;
-    bottom: calc(100% + 0.375rem);
-    z-index: var(--z-dropdown);
+    /* Bảng danh sách có thể nằm trong khối overflow:hidden hoặc tầng thấp hơn, nên menu dùng
+       position: fixed (toạ độ tính từ nút khi mở) để không bị cắt và luôn nổi trên bảng. */
+    position: fixed;
+    z-index: var(--z-select);
     min-width: 100%;
     margin: 0;
     padding: 0.25rem;

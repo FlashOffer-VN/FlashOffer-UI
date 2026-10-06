@@ -10,12 +10,16 @@ import { resolveReferralCode } from '@core/utils/share-link';
 import { CreateGroupBuyingRequest } from '@core/models/group-buying-request.model';
 import { finalize } from 'rxjs/operators';
 import { TextareaComponent } from '@shared/components/textarea/textarea.component';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
+import { InputComponent } from '@shared/components/input/input.component';
 
 @Component({
     selector: 'app-group-buying',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, TranslateModule, RouterLink, MoneyInputDirective,
-        TextareaComponent
+        TextareaComponent,
+        CheckboxComponent,
+        InputComponent
     ],
     templateUrl: './group-buying.component.html',
     styleUrls: ['./group-buying.component.css']

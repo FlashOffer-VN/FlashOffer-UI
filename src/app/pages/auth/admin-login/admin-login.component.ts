@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '@core/services/app.service';
 import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
 
 @Component({
     selector: 'app-admin-login',
@@ -16,7 +17,8 @@ import { ButtonComponent } from '@shared/components/button/button.component';
         TranslateModule,
         RouterLink,
         InputComponent,
-        ButtonComponent
+        ButtonComponent,
+        CheckboxComponent
     ],
     templateUrl: './admin-login.component.html',
     styleUrls: ['./admin-login.component.css']

@@ -9,12 +9,16 @@ import { resolveReferralCode } from '@core/utils/share-link';
 import { focusFirstInvalid } from '@core/utils/form-invalid';
 import { finalize } from 'rxjs/operators';
 import { TextareaComponent } from '@shared/components/textarea/textarea.component';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
+import { InputComponent } from '@shared/components/input/input.component';
 
 @Component({
     selector: 'app-get-offer',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, TranslateModule, RouterLink,
-        TextareaComponent
+        TextareaComponent,
+        CheckboxComponent,
+        InputComponent
     ],
     templateUrl: './get-offer.component.html',
     styleUrls: ['./get-offer.component.css']

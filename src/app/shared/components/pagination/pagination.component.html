@@ -57,7 +57,7 @@
             </button>
 
             @if (sizeOpen) {
-            <ul class="pg-size__menu" role="listbox">
+            <ul class="pg-size__menu" role="listbox" [style.top.px]="menuTop" [style.right.px]="menuRight">
                 @for (size of pageSizes; track size) {
                 <li>
                     <button type="button" class="pg-size__item" [class.is-active]="size === pageSize" role="option"
