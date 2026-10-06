@@ -50,23 +50,12 @@
     <div class="flex items-center gap-2" *ngIf="showPageSize && totalCount > 0">
         <span class="text-sm text-gray-500">{{ 'PAGINATION.SHOW' | translate }}</span>
 
-        <div class="pg-size" [class.is-open]="sizeOpen">
-            <button type="button" class="pg-size__btn" [attr.aria-expanded]="sizeOpen"
-                (click)="toggleSizeMenu($event)">
-                {{ pageSize }}<i class="fa-solid fa-chevron-down"></i>
+        <div class="pg-size" role="group">
+            @for (size of pageSizes; track size) {
+            <button type="button" class="pg-size__item" [class.is-active]="size === pageSize"
+                [attr.aria-pressed]="size === pageSize" (click)="onPageSizePick(size)">
+                {{ size }}
             </button>
-
-            @if (sizeOpen) {
-            <ul class="pg-size__menu" role="listbox" [style.top.px]="menuTop" [style.right.px]="menuRight">
-                @for (size of pageSizes; track size) {
-                <li>
-                    <button type="button" class="pg-size__item" [class.is-active]="size === pageSize" role="option"
-                        [attr.aria-selected]="size === pageSize" (click)="onPageSizePick(size)">
-                        {{ size }}
-                    </button>
-                </li>
-                }
-            </ul>
             }
         </div>
 

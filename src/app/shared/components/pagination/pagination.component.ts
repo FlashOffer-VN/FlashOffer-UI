@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -75,33 +75,11 @@ export class PaginationComponent {
         }
     }
 
-    /** Cỡ trang đang mở menu hay không (menu tự vẽ cho khớp cụm paging, không dùng select chung của app). */
-    sizeOpen = false;
-
-    /** Toạ độ menu khi mở: tính từ nút để menu không bị khối cha cắt (dùng position: fixed). */
-    menuTop = 0;
-    menuRight = 0;
-
-    /** Mở/đóng menu cỡ trang — chặn nổi bọt để không bị listener đóng menu của tài liệu. */
-    toggleSizeMenu(event: Event): void {
-        event.stopPropagation();
-        this.sizeOpen = !this.sizeOpen;
-        if (this.sizeOpen) {
-            const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-            this.menuTop = rect.bottom + 6;
-            this.menuRight = Math.max(8, window.innerWidth - rect.right);
-        }
-    }
-
-    /** Chọn cỡ trang rồi đóng menu. */
+    /** Chọn cỡ trang — hiện luôn các lựa chọn trong cụm paging, không dùng popup để khỏi bị che/cắt. */
     onPageSizePick(size: number): void {
-        this.sizeOpen = false;
+        if (size === this.pageSize) {
+            return;
+        }
         this.pageSizeChange.emit(Number(size));
-    }
-
-    /** Bấm ra ngoài thì đóng menu. */
-    @HostListener('document:click')
-    onDocumentClick(): void {
-        this.sizeOpen = false;
     }
 }
