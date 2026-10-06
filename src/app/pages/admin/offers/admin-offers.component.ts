@@ -22,11 +22,13 @@ import { ShortIdPipe } from '@shared/pipes/short-id.pipe';
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 import { CodeListComponent } from '@shared/components/code-list/code-list.component';
+import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.component';
 
 @Component({
     selector: 'app-admin-offers',
     standalone: true,
     imports: [
+        PurgeBarComponent,
         CommonModule,
         RouterModule,
         FormsModule,
@@ -48,6 +50,9 @@ import { CodeListComponent } from '@shared/components/code-list/code-list.compon
     styleUrls: ['./admin-offers.component.css']
 })
 export class AdminOffersComponent implements OnInit {
+    /** Các dòng đang tick ở tab "Đã xoá" — dùng cho xoá vĩnh viễn theo lựa chọn. */
+    selectedIds: string[] = [];
+
     /** Mã quyền dùng trong template (`*appHasPermission`). */
     readonly Permission = Permission;
 
@@ -241,5 +246,10 @@ export class AdminOffersComponent implements OnInit {
 
     navigateToDetail(id: string): void {
         this._router.navigate(['/admin/offers', id]);
+    }
+
+    /** Sau khi xoá vĩnh viễn: nạp lại danh sách của tab 'Đã xoá'. */
+    onPurged(): void {
+        this.loadData();
     }
 }

@@ -21,11 +21,13 @@ import { AppDatePipe } from '@shared/pipes/app-date.pipe';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 import { SearchByComponent } from '@shared/components/search-by/search-by.component';
 import { CodeListComponent } from '@shared/components/code-list/code-list.component';
+import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.component';
 
 @Component({
     selector: 'app-admin-partner-list',
     standalone: true,
     imports: [
+        PurgeBarComponent,
         CommonModule,
         RouterModule,
         FormsModule,
@@ -46,6 +48,9 @@ import { CodeListComponent } from '@shared/components/code-list/code-list.compon
     styleUrls: ['./partner-list.component.css']
 })
 export class AdminPartnerListComponent implements OnInit {
+    /** Các dòng đang tick ở tab "Đã xoá" — dùng cho xoá vĩnh viễn theo lựa chọn. */
+    selectedIds: string[] = [];
+
     /** Mã quyền dùng trong template (`*appHasPermission`). */
     readonly Permission = Permission;
 
@@ -269,5 +274,29 @@ export class AdminPartnerListComponent implements OnInit {
                 this._appService.showError(this._appService.trans('COMMON.ERROR.UPDATE_FAILED'));
             }
         });
+    }
+
+    /** Dòng đang tick ở tab "Đã xoá" — chỉ dùng cho xoá vĩnh viễn theo lựa chọn. */
+    isSelected(id: string): boolean {
+        return this.selectedIds.includes(id);
+    }
+
+    isAllSelected(): boolean {
+        return this.partners.length > 0 && this.selectedIds.length === this.partners.length;
+    }
+
+    toggleSelect(id: string, event: Event): void {
+        const checked = (event.target as HTMLInputElement).checked;
+        this.selectedIds = checked ? [...this.selectedIds, id] : this.selectedIds.filter(item => item !== id);
+    }
+
+    toggleAll(event: Event): void {
+        this.selectedIds = (event.target as HTMLInputElement).checked ? this.partners.map(item => item.id) : [];
+    }
+
+    /** Sau khi xoá vĩnh viễn: bỏ lựa chọn cũ và nạp lại danh sách của tab 'Đã xoá'. */
+    onPurged(): void {
+        this.selectedIds = [];
+        this.loadData();
     }
 }

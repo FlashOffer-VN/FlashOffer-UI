@@ -19,6 +19,7 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { BadgeComponent } from '@shared/components/badge/badge.component';
 import { NgSelectWrapperComponent } from '@shared/components/select/ng-select-wrapper.component';
 import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
+import { PurgeBarComponent } from '@shared/components/purge-bar/purge-bar.component';
 
 /**
  * Cấu hình mức hoa hồng cho người giới thiệu và đối tác: một bản dùng chung cho mọi tài khoản
@@ -28,6 +29,7 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
     selector: 'app-admin-commission-config',
     standalone: true,
     imports: [
+        PurgeBarComponent,
         CommonModule,
         FormsModule,
         TranslateModule,
@@ -156,6 +158,9 @@ import { HasPermissionDirective } from '@shared/directives/has-permission.direct
             <aside class="bg-white rounded-lg border border-gray-200 p-4">
                 <app-status-tabs [items]="beneficiaryTabs" [active]="beneficiaryKey" (change)="onBeneficiaryChange($event)">
                 </app-status-tabs>
+
+    <!-- Xoá vĩnh viễn: chỉ có ở tab "Đã xoá" (các tab khác chỉ xoá mềm) -->
+    <app-purge-bar *ngIf="beneficiaryKey === 'deleted'" entity="commissions" (purged)="onPurged()"></app-purge-bar>
 
                 @if (isLoading) {
                     <app-loading></app-loading>
@@ -479,5 +484,10 @@ export class AdminCommissionConfigComponent implements OnInit {
                 this._appService.showError(this._appService.trans('COMMISSION.RESTORE_FAILED'));
             }
         });
+    }
+
+    /** Sau khi xoá vĩnh viễn: nạp lại danh sách của tab 'Đã xoá'. */
+    onPurged(): void {
+        this.loadConfigs();
     }
 }

@@ -59,3 +59,22 @@ export interface AuthAuditLogQuery {
     fromDate?: string;
     toDate?: string;
 }
+
+/** Điều kiện xoá nhật ký: chọn nhiều dòng HOẶC khoảng ngày (khớp AuditLogDeleteRequest của API). */
+export interface AuditLogDeleteRequest {
+    ids?: string[];
+    fromDate?: string;
+    toDate?: string;
+}
+
+/** Kết quả xoá nhật ký. */
+export interface AuditLogDeleteResult {
+    deletedCount: number;
+}
+
+/** Danh mục chọn nhanh cho bộ lọc nhật ký (droplist hành động + tên bảng). */
+export interface AuditLogFilterOptions {
+    entityNames: string[];
+    entityActions: string[];
+    authActions: string[];
+}

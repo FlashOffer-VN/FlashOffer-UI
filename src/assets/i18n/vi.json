@@ -1200,6 +1200,9 @@
         }
     },
     "COMMON": {
+        "JSON": {
+            "LINES": "dòng"
+        },
         "DATE_RANGE": {
             "PLACEHOLDER": "Chọn khoảng ngày",
             "TODAY": "Hôm nay",
@@ -1212,6 +1215,16 @@
             "PREV_MONTH": "Tháng trước đó",
             "NEXT_MONTH": "Tháng sau",
             "GO_TODAY": "Về hôm nay"
+        },
+        "PURGE": {
+            "WARNING": "Thao tác xoá vĩnh viễn KHÔNG thể hoàn tác.",
+            "BY_RANGE": "Xoá vĩnh viễn theo khoảng ngày",
+            "SELECTED": "Xoá vĩnh viễn dòng đã chọn ({{count}})",
+            "CONFIRM_TITLE": "Xác nhận xoá vĩnh viễn",
+            "CONFIRM_RANGE": "Xoá vĩnh viễn các bản ghi đã xoá trong khoảng {{range}}? Hành động này không hoàn tác được.",
+            "CONFIRM_SELECTED": "Xoá vĩnh viễn {{count}} bản ghi đã chọn? Hành động này không hoàn tác được.",
+            "CONFIRM_BUTTON": "Xoá vĩnh viễn",
+            "SUCCESS": "Đã xoá vĩnh viễn {{count}} bản ghi."
         },
         "CODE": {
             "ACCOUNT": "Mã tài khoản",
@@ -1852,7 +1865,34 @@
         },
         "AUDIT_LOG": {
             "TAB_ENTITY": "Thao tác dữ liệu",
-            "TAB_AUTH": "Đăng nhập",
+            "TAB_AUTH": "Xác thực",
+        "ACTION_LABEL": {
+            "CREATE": "Thêm mới",
+            "UPDATE": "Cập nhật",
+            "DELETE": "Xoá",
+            "LOGIN": "Đăng nhập",
+            "LOGOUT": "Đăng xuất",
+            "REGISTER": "Đăng ký",
+            "REFRESH_TOKEN": "Làm mới token",
+            "CHANGE_PASSWORD": "Đổi mật khẩu",
+            "RESET_PASSWORD": "Cấp lại mật khẩu"
+        },
+        "FILTER_ACTION": "Lọc theo hành động",
+        "FILTER_ENTITY": "Lọc theo đối tượng",
+        "FILTER_RESULT": "Lọc theo kết quả",
+        "SELECTED": "Đã chọn",
+        "SELECT_ALL": "Chọn tất cả dòng trên trang",
+        "SELECT_ROW": "Chọn dòng này",
+        "DELETE_SELECTED": "Xoá dòng đã chọn",
+        "DELETE_BY_RANGE": "Xoá theo khoảng ngày",
+        "DELETE_HINT": "Nhật ký xoá là mất hẳn, không khôi phục được.",
+        "DELETE_CONFIRM_TITLE": "Xoá nhật ký",
+        "DELETE_SELECTED_CONFIRM": "Xoá {count} dòng nhật ký đã chọn? Không khôi phục được.",
+        "DELETE_RANGE_CONFIRM": "Xoá nhật ký trong khoảng {range}? Không khôi phục được.",
+        "DELETE_SUCCESS": "Đã xoá {count} dòng nhật ký.",
+        "DELETE_NEED_CRITERIA": "Chọn dòng cần xoá, hoặc chọn khoảng ngày ở bộ lọc trước.",
+        "DELETE_RANGE_INVALID": "Khoảng ngày không hợp lệ: từ ngày lớn hơn đến ngày.",
+        "DELETE_TOO_MANY": "Mỗi lần chỉ xoá được tối đa 1000 dòng.",
             "TIME": "Thời gian",
             "ACTOR": "Người thao tác",
             "ENTITY": "Đối tượng",
