@@ -166,6 +166,11 @@
     background: var(--card);
 }
 
+/* Thẻ demo cần chiều ngang rộng (paging, loading) thì chiếm trọn hàng của lưới. */
+.demo--wide {
+    grid-column: 1 / -1;
+}
+
 .demo__label {
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.75rem;

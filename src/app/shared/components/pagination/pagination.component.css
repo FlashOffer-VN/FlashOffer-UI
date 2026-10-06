@@ -27,10 +27,13 @@
     border: 1px solid var(--border);
     border-radius: 0.75rem;
     background: var(--card);
+    /* Không cho chữ trong thẻ bị rớt dòng từng ký tự khi vùng chứa hẹp. */
+    white-space: nowrap;
 }
 
 .pg__card--nav {
     margin-left: auto;
+    flex-wrap: wrap;
 }
 
 /* Cụm chọn số dòng/trang: menu tự vẽ, không dùng select chung nên không phá bố cục paging khi xổ ra */
