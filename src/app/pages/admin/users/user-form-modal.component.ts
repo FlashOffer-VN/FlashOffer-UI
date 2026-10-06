@@ -8,6 +8,7 @@ import { AdminUserDetail, CreateAdminUserRequest, UpdateUserInfoRequest } from '
 
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { InputComponent } from '@shared/components/input/input.component';
+import { CheckboxComponent } from '@shared/components/checkbox/checkbox.component';
 
 /**
  * Form tài khoản ở màn quản lý người dùng, dùng cho 2 việc:
@@ -18,7 +19,7 @@ import { InputComponent } from '@shared/components/input/input.component';
 @Component({
     selector: 'app-admin-user-form',
     standalone: true,
-    imports: [CommonModule, FormsModule, TranslateModule, ModalComponent, InputComponent],
+    imports: [CommonModule, FormsModule, TranslateModule, ModalComponent, InputComponent, CheckboxComponent],
     template: `
         <app-modal [(visible)]="visible" [title]="(userId ? 'ADMIN.USERS.EDIT_TITLE' : 'ADMIN.USERS.CREATE_ADMIN_TITLE') | translate"
             size="lg" [customWidth]="'720px'" [loading]="isSaving" [confirmText]="'COMMON.BUTTON.SAVE' | translate"
@@ -65,10 +66,7 @@ import { InputComponent } from '@shared/components/input/input.component';
 
                         <div class="uf__field">
                             <span class="uf__label">{{ 'ADMIN.USERS.STATUS' | translate }}</span>
-                            <label class="uf__check">
-                                <input type="checkbox" class="uf__checkbox" [(ngModel)]="form.isActive">
-                                <span>{{ 'ADMIN.USERS.IS_ACTIVE' | translate }}</span>
-                            </label>
+                            <app-checkbox [label]="'ADMIN.USERS.IS_ACTIVE' | translate" [(ngModel)]="form.isActive" />
                         </div>
                     }
                 </div>
@@ -146,13 +144,6 @@ import { InputComponent } from '@shared/components/input/input.component';
             font-size: 0.875rem;
             font-weight: 600;
             color: var(--text-secondary);
-        }
-
-        .uf__checkbox {
-            width: 1rem;
-            height: 1rem;
-            accent-color: var(--accent);
-            cursor: pointer;
         }
 
         .uf__linked {

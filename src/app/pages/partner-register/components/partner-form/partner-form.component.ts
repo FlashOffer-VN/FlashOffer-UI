@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { ButtonComponent } from '../../../../shared/components/button/button.component';
+import { ButtonComponent } from '@shared/components/button/button.component';
 import { isBrowser } from '../../../../core/utils/platform';
 import { focusFirstInvalid } from '../../../../core/utils/form-invalid';
 import { StepPersonalComponent } from '../step-personal/step-personal.component';

@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { InputComponent } from '../../../../shared/components/input/input.component';
+import { InputComponent } from '@shared/components/input/input.component';
 import { AppService } from '@core/services/app.service';  // ✅ Import AppService
 
 @Component({

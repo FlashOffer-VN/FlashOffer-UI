@@ -1,6 +1,6 @@
 // core/services/toast.service.ts
 import { Injectable, ApplicationRef, ComponentRef, createComponent, EnvironmentInjector } from '@angular/core';
-import { ToastComponent } from '../../shared/components/toast/toast.component';
+import { ToastComponent } from '@shared/components/toast/toast.component';
 import { TranslateService } from '@ngx-translate/core';
 import { isBrowser } from '../utils/platform';
 
