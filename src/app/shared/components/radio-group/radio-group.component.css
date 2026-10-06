@@ -56,45 +56,71 @@
 }
 
 .rg__dot {
-    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex: none;
     width: 1.125rem;
     height: 1.125rem;
     margin-top: 0.0625rem;
-    border: 2px solid var(--border);
+    border: 1.5px solid var(--border);
     border-radius: 50%;
     background: var(--white);
-    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 
-/* Chấm tròn bên trong khi được chọn */
-.rg__dot::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
+/* Chấm tròn bên trong vẽ bằng span để nét gradient mượt như checkbox */
+.rg__dot-inner {
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 50%;
-    background: var(--accent);
-    transform: translate(-50%, -50%) scale(0);
-    transition: transform 0.16s ease;
+    background: linear-gradient(135deg, var(--accent) 0%, color-mix(in srgb, var(--accent) 60%, #14b8a6) 100%);
+    transform: scale(0);
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .rg__input:checked+.rg__dot {
     border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 6%, var(--white));
 }
 
-.rg__input:checked+.rg__dot::after {
-    transform: translate(-50%, -50%) scale(1);
+.rg__input:checked+.rg__dot .rg__dot-inner {
+    transform: scale(1);
 }
 
 .rg__input:focus-visible+.rg__dot {
-    box-shadow: 0 0 0 4px rgba(0, 127, 148, 0.1);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
 .rg__input:not(:disabled):hover+.rg__dot {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    background: color-mix(in srgb, var(--accent) 6%, var(--white));
+}
+
+/* ===== Kiểu thẻ (chọn vai trò/loại cần nhìn rõ) ===== */
+.rg--card .rg__option {
+    flex: 1;
+    border: 1.5px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 0.625rem 0.75rem;
+    background: var(--white);
+    transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+
+.rg--card .rg__option:hover:not(.is-disabled) {
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    background: color-mix(in srgb, var(--accent) 4%, var(--white));
+}
+
+.rg--card .rg__option:has(.rg__input:checked) {
     border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 7%, var(--white));
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.rg--card .rg__option-label {
+    font-weight: 600;
 }
 
 .rg__text {

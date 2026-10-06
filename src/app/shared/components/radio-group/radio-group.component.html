@@ -1,4 +1,4 @@
-<div class="rg" [class.rg--horizontal]="orientation === 'horizontal'">
+<div class="rg" [class.rg--horizontal]="orientation === 'horizontal'" [class.rg--card]="appearance === 'card'">
     @if (label) {
     <span class="rg__label">{{ label }}</span>
     }
@@ -8,9 +8,11 @@
         <label class="rg__option" [class.is-disabled]="disabled || option.disabled">
             <input class="rg__input" type="radio" [name]="name" [id]="optionId(option)" [value]="option.value"
                 [checked]="value === option.value" [disabled]="disabled || option.disabled"
-                (change)="onSelect(option)" />
+                (change)="select(option)" />
 
-            <span class="rg__dot" aria-hidden="true"></span>
+            <span class="rg__dot" aria-hidden="true">
+                <span class="rg__dot-inner"></span>
+            </span>
 
             <span class="rg__text">
                 <span class="rg__option-label">{{ option.label }}</span>

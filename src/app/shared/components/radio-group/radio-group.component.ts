@@ -57,6 +57,11 @@ export class RadioGroupComponent implements ControlValueAccessor {
     /** Xếp dọc (mặc định) hay ngang. */
     @Input() orientation: 'vertical' | 'horizontal' = 'vertical';
 
+    /**
+     * Kiểu trình bày: `plain` (mặc định, chỉ chấm + chữ) hoặc `card` (mỗi lựa chọn là một thẻ có viền,
+     * hợp cho việc chọn vai trò/loại cần nhìn rõ). */
+    @Input() appearance: 'plain' | 'card' = 'plain';
+
     /** Khoá cả nhóm (kết hợp với trạng thái khoá do form đặt). */
     @Input() disabled = false;
 
@@ -76,8 +81,8 @@ export class RadioGroupComponent implements ControlValueAccessor {
         return `${this.name}-${option.value}`;
     }
 
-    /** Người dùng chọn một lựa chọn. */
-    onSelect(option: RadioOption): void {
+    /** Chọn một lựa chọn. */
+    select(option: RadioOption): void {
         if (this.disabled || option.disabled) return;
 
         this.value = option.value;

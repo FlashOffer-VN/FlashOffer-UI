@@ -84,11 +84,36 @@ describe('RadioGroupComponent', () => {
     it('lựa chọn bị khoá riêng thì bỏ qua', () => {
         const { fixture, group, inputs } = create();
 
-        group.onSelect(group.options[2]);
+        group.select(group.options[2]);
         fixture.detectChanges();
 
         expect(fixture.componentInstance.control.value).toBeNull();
         expect(inputs[2].disabled).toBeTrue();
+    });
+
+    it('kiểu card: mỗi lựa chọn là một thẻ, chọn thì thẻ được tô', () => {
+        const fixture = TestBed.createComponent(HostComponent);
+        fixture.componentInstance.orientation = 'vertical';
+        fixture.detectChanges();
+
+        const group = fixture.debugElement.query(By.directive(RadioGroupComponent)).componentInstance as RadioGroupComponent;
+        group.appearance = 'card';
+        fixture.detectChanges();
+
+        const host = fixture.nativeElement as HTMLElement;
+        expect(host.querySelector('.rg')!.classList).toContain('rg--card');
+
+        (host.querySelectorAll('input[type="radio"]')[1] as HTMLInputElement).click();
+        fixture.detectChanges();
+
+        expect(host.querySelectorAll('.rg__option')[1].classList).not.toContain('is-disabled');
+        expect((host.querySelectorAll('input[type="radio"]')[1] as HTMLInputElement).checked).toBeTrue();
+    });
+
+    it('chấm chọn nằm trong span riêng để vẽ gradient', () => {
+        const { fixture } = create();
+
+        expect((fixture.nativeElement as HTMLElement).querySelector('.rg__dot-inner')).toBeTruthy();
     });
 
     it('xếp ngang khi orientation là horizontal', () => {
