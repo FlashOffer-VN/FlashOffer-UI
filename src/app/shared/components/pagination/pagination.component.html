@@ -51,18 +51,17 @@
         <span class="text-sm text-gray-500">{{ 'PAGINATION.SHOW' | translate }}</span>
 
         <div class="pg-size">
-            <button #sizeBtn type="button" class="pg-size__btn" [attr.aria-expanded]="sizeOpen"
-                (click)="toggleSizeMenu()">
+            <button type="button" class="pg-size__btn" [attr.aria-expanded]="sizeOpen"
+                (click)="sizeOpen = !sizeOpen">
                 {{ pageSize }}<i class="fa-solid fa-chevron-down"></i>
             </button>
 
             @if (sizeOpen) {
-            <ul #sizeMenu class="pg-size__menu" role="listbox" [style.top.px]="menuTop"
-                [style.right.px]="menuRight" [style.width.px]="menuWidth">
+            <ul class="pg-size__menu" role="listbox">
                 @for (size of pageSizes; track size) {
                 <li>
-                    <button type="button" class="pg-size__item" [class.is-active]="size === pageSize" role="option"
-                        [attr.aria-selected]="size === pageSize" (click)="onPageSizePick(size)">
+                    <button type="button" class="pg-size__item" [class.is-active]="size === pageSize"
+                        role="option" [attr.aria-selected]="size === pageSize" (click)="onPageSizePick(size)">
                         {{ size }}
                     </button>
                 </li>
