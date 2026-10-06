@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { isBrowser } from '@core/utils/platform';
+
 import { JsonFormatResult, JsonTokenKind, countLines, formatJson, prettyJson } from './json-format.util';
 
 /**
@@ -146,7 +148,8 @@ export class JsonViewerComponent implements OnChanges {
     /** Sao chép bản in đẹp để dán ra ngoài (log thô không phải JSON thì sao chép nguyên văn). */
     copy(): void {
         const text = prettyJson(this.value);
-        if (!text) return;
+        // isBrowser(): navigator chỉ có trong trình duyệt (lúc prerender không có) — không có thì bỏ qua.
+        if (!text || !isBrowser()) return;
 
         navigator.clipboard?.writeText(text).then(
             () => {

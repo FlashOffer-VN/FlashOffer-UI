@@ -157,3 +157,48 @@ export function isWithinRange(iso: string, from: string | null, to: string | nul
     if (to && iso > to) return false;
     return true;
 }
+
+/** Kích thước/khung cần cho việc đặt bảng lịch. */
+export interface PopupRect {
+    top: number;
+    bottom: number;
+    left: number;
+}
+
+export interface PopupSize {
+    width: number;
+    height: number;
+}
+
+/** Vị trí bảng lịch sau khi tính (toạ độ màn hình, dùng với position: fixed). */
+export interface PopupPosition {
+    top: number;
+    left: number;
+    /** true = phải mở LÊN TRÊN ô chọn vì bên dưới không đủ chỗ. */
+    flippedUp: boolean;
+}
+
+/** Khoảng cách giữa ô chọn và bảng lịch (px) — khớp với CSS. */
+export const POPUP_GAP = 6;
+
+/** Lề tối thiểu so với mép màn hình (px). */
+export const POPUP_MARGIN = 8;
+
+/**
+ * Tính vị trí bảng lịch kiểu "popup nổi": ưu tiên mở xuống dưới, không đủ chỗ thì mở lên trên, và luôn
+ * kẹp ngang trong màn hình — tránh bị cắt mất nội dung khi ô chọn nằm sát mép phải hoặc đáy màn hình.
+ */
+export function computePopupPosition(trigger: PopupRect, panel: PopupSize, viewport: PopupSize): PopupPosition {
+    const spaceBelow = viewport.height - trigger.bottom - POPUP_GAP - POPUP_MARGIN;
+    const spaceAbove = trigger.top - POPUP_GAP - POPUP_MARGIN;
+    const flippedUp = spaceBelow < panel.height && spaceAbove > spaceBelow;
+
+    const top = flippedUp
+        ? Math.max(POPUP_MARGIN, trigger.top - POPUP_GAP - panel.height)
+        : trigger.bottom + POPUP_GAP;
+
+    const maxLeft = Math.max(POPUP_MARGIN, viewport.width - panel.width - POPUP_MARGIN);
+    const left = Math.min(Math.max(trigger.left, POPUP_MARGIN), maxLeft);
+
+    return { top, left, flippedUp };
+}

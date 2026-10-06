@@ -1,0 +1,46 @@
+# Cấu hình Dependabot: gộp nhiều gói vào 1 PR, chạy theo tuần, giới hạn số PR mở cùng lúc.
+# Mục đích: tránh mỗi lần kiểm tra lại thấy 4-11 PR lẻ tẻ (mỗi lần merge lại tốn 1 lượt deploy Vercel).
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "08:00"
+      timezone: Asia/Ho_Chi_Minh
+    open-pull-requests-limit: 3
+    versioning-strategy: increase
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+    labels:
+      - dependencies
+    groups:
+      # Cả họ @angular phải lên cùng bản (peer yêu cầu trùng phiên bản) → gộp chung 1 PR.
+      angular:
+        patterns:
+          - "@angular/*"
+          - "@angular-devkit/*"
+          - "zone.js"
+          - "rxjs"
+        update-types:
+          - minor
+          - patch
+      # Gói chỉ dùng khi build/test → rủi ro thấp, gộp chung.
+      dev-tooling:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+      # Gói chạy thật: chỉ gộp bản vá nhỏ.
+      production-minor-patch:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+    ignore:
+      # Tailwind 4 là bản major đổi cấu hình/plugin → làm riêng, không để Dependabot mở PR liên tục.
+      - dependency-name: "tailwindcss"
+        update-types:
+          - version-update:semver-major

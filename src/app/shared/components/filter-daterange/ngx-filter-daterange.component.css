@@ -77,12 +77,12 @@
     color: var(--danger-dark);
 }
 
-/* Bảng lịch: cột dọc chọn nhanh + lịch tháng */
+/* Bảng lịch: cột dọc chọn nhanh + lịch tháng.
+   Đặt theo toạ độ màn hình (position: fixed) để không bị khung cuộn/ô chứa cắt mất nội dung; lớp nổi
+   dùng chung --z-select với panel chọn của app nên không bị nội dung khác đè lên. */
 .dr__pop {
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    z-index: var(--z-dropdown);
+    position: fixed;
+    z-index: var(--z-select);
     display: flex;
     background: var(--white);
     border: 1px solid var(--border);
