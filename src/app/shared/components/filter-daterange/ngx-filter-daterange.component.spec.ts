@@ -1,0 +1,158 @@
+import { TestBed } from '@angular/core/testing';
+import { TranslateModule } from '@ngx-translate/core';
+
+import { NgxFilterDaterangeComponent } from './ngx-filter-daterange.component';
+import { DateRangeValue, buildPresetRange, toIsoDate } from './date-range.util';
+
+/**
+ * Chốt hành vi của bộ chọn khoảng ngày dùng chung: khoảng nhanh, chọn 2 ngày trên lịch,
+ * bỏ lọc và chữ hiển thị trên hộp.
+ */
+describe('NgxFilterDaterangeComponent', () => {
+    // Ngày cố định để mọi phép tính khoảng nhanh có kết quả xác định (06/10/2026).
+    const today = new Date(2026, 9, 6);
+
+    beforeEach(async () => {
+        jasmine.clock().install();
+        jasmine.clock().mockDate(today);
+
+        await TestBed.configureTestingModule({
+            imports: [NgxFilterDaterangeComponent, TranslateModule.forRoot()]
+        }).compileComponents();
+    });
+
+    afterEach(() => jasmine.clock().uninstall());
+
+    function createComponent(): NgxFilterDaterangeComponent {
+        const fixture = TestBed.createComponent(NgxFilterDaterangeComponent);
+        fixture.detectChanges();
+        return fixture.componentInstance;
+    }
+
+    function captureRanges(component: NgxFilterDaterangeComponent): DateRangeValue[] {
+        const emitted: DateRangeValue[] = [];
+        component.rangeChange.subscribe(range => emitted.push(range));
+        return emitted;
+    }
+
+    function cellOf(component: NgxFilterDaterangeComponent, iso: string) {
+        const cell = component.cells.find(item => item.iso === iso);
+        if (!cell) throw new Error(`Không có ô lịch cho ngày ${iso}`);
+        return cell;
+    }
+
+    it('hiện nhãn gợi ý khi chưa lọc ngày nào', () => {
+        const component = createComponent();
+
+        expect(component.hasValue).toBeFalse();
+        expect(component.displayText).toBe('COMMON.DATE_RANGE.PLACEHOLDER');
+    });
+
+    it('chọn khoảng nhanh "tháng này" thì phát ra đúng khoảng và đóng lịch', () => {
+        const component = createComponent();
+        const emitted = captureRanges(component);
+        component.open();
+
+        const thisMonth = component.presets.find(preset => preset.key === 'thisMonth')!;
+        component.applyPreset(thisMonth);
+
+        expect(emitted).toEqual([{ from: '2026-10-01', to: '2026-10-06' }]);
+        expect(component.isOpen).toBeFalse();
+    });
+
+    it('chọn ngày kết thúc trước ngày bắt đầu thì tự đảo lại cho đúng thứ tự', () => {
+        const component = createComponent();
+        const emitted = captureRanges(component);
+        component.open();
+
+        component.pick(cellOf(component, '2026-10-06'));
+        expect(emitted).toEqual([]);
+
+        component.pick(cellOf(component, '2026-10-02'));
+
+        expect(emitted).toEqual([{ from: '2026-10-02', to: '2026-10-06' }]);
+        expect(component.isOpen).toBeFalse();
+    });
+
+    it('chọn cùng một ngày hai lần thì lọc đúng ngày đó', () => {
+        const component = createComponent();
+        const emitted = captureRanges(component);
+        component.open();
+
+        component.pick(cellOf(component, '2026-10-03'));
+        component.pick(cellOf(component, '2026-10-03'));
+
+        expect(emitted).toEqual([{ from: '2026-10-03', to: '2026-10-03' }]);
+    });
+
+    it('khoảng đang lọc khớp khoảng nhanh thì hiện tên khoảng nhanh', () => {
+        const component = createComponent();
+        component.from = '2026-09-01';
+        component.to = '2026-09-30';
+
+        expect(component.activePresetKey()).toBe('lastMonth');
+        expect(component.displayText).toBe('COMMON.DATE_RANGE.LAST_MONTH');
+    });
+
+    it('khoảng tự chọn thì hiện 2 ngày dạng dd/MM/yyyy', () => {
+        const component = createComponent();
+        component.from = '2026-01-02';
+        component.to = '2026-03-15';
+
+        expect(component.activePresetKey()).toBeNull();
+        expect(component.displayText).toBe('02/01/2026 → 15/03/2026');
+    });
+
+    it('bỏ lọc thì phát ra khoảng rỗng', () => {
+        const component = createComponent();
+        const emitted = captureRanges(component);
+        component.from = '2026-10-01';
+        component.to = '2026-10-06';
+
+        component.clear();
+
+        expect(emitted).toEqual([{ from: null, to: null }]);
+        expect(component.hasValue).toBeFalse();
+    });
+
+    it('mở lịch thì đứng ở tháng của ngày kết thúc đang lọc', () => {
+        const component = createComponent();
+        component.from = '2026-08-01';
+        component.to = '2026-09-15';
+
+        component.open();
+
+        expect(component.viewMonth.getMonth()).toBe(8);
+        expect(component.viewMonth.getFullYear()).toBe(2026);
+    });
+
+    it('đánh dấu đúng các ô giữa khoảng đang lọc', () => {
+        const component = createComponent();
+        component.from = '2026-10-01';
+        component.to = '2026-10-06';
+        component.open();
+
+        expect(component.isRangeStart(cellOf(component, '2026-10-01'))).toBeTrue();
+        expect(component.isRangeEnd(cellOf(component, '2026-10-06'))).toBeTrue();
+        expect(component.isInRange(cellOf(component, '2026-10-03'))).toBeTrue();
+        expect(component.isInRange(cellOf(component, '2026-10-07'))).toBeFalse();
+        expect(component.isSelectedDay(cellOf(component, '2026-10-04'))).toBeTrue();
+    });
+
+    it('render bảng lịch gồm 5 khoảng nhanh và đủ ô của tháng đang xem', () => {
+        const fixture = TestBed.createComponent(NgxFilterDaterangeComponent);
+        fixture.componentInstance.open();
+        fixture.detectChanges();
+
+        const element = fixture.nativeElement as HTMLElement;
+
+        expect(element.querySelectorAll('.dr__preset').length).toBe(5);
+        // 42 ô của lưới 6 tuần, trong đó 31 ngày thuộc tháng 10/2026.
+        expect(element.querySelectorAll('.dr__day').length).toBe(42);
+        expect(element.querySelectorAll('.dr__day:not(.is-out)').length).toBe(31);
+    });
+
+    it('ngày đầu của khoảng nhanh "15 ngày qua" cách hôm nay 14 ngày', () => {
+        expect(buildPresetRange('last15Days', today).from).toBe(toIsoDate(new Date(2026, 8, 22)));
+    });
+});

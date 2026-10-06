@@ -1244,6 +1244,19 @@
         }
     },
     "COMMON": {
+        "DATE_RANGE": {
+            "PLACEHOLDER": "Select date range",
+            "TODAY": "Today",
+            "LAST_7_DAYS": "Last 7 days",
+            "LAST_15_DAYS": "Last 15 days",
+            "THIS_MONTH": "This month",
+            "LAST_MONTH": "Last month",
+            "HINT_START": "Pick a start date",
+            "HINT_END": "Pick an end date",
+            "PREV_MONTH": "Previous month",
+            "NEXT_MONTH": "Next month",
+            "GO_TODAY": "Today"
+        },
         "CODE": {
             "ACCOUNT": "Account code",
             "COMPANY": "Company code",
