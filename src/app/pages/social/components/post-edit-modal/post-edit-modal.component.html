@@ -13,7 +13,7 @@
             <!-- Title -->
             <div class="form-group">
                 <label>{{ 'SOCIAL.POST_TITLE' | translate }}</label>
-                <app-input placeholder="{{ 'SOCIAL.POST_TITLE' | translate }}" />
+                <app-input [(ngModel)]="formData.title" placeholder="{{ 'SOCIAL.POST_TITLE' | translate }}" />
             </div>
 
             <!-- Content - Dùng Quill Editor với ngIf để force re-render -->

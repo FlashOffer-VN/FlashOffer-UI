@@ -5,7 +5,8 @@
 
     <div class="create-post__form">
         <div class="create-post__input-wrapper" (click)="showOptions = true">
-            <app-input autocomplete="off" />
+            <app-input [(ngModel)]="title" [placeholder]="'SOCIAL.POST_TITLE' | translate"
+                [isDisabled]="isLoading" autocomplete="off" />
 
             <quill-editor *ngIf="showEditor" #quillEditor [(ngModel)]="content" [modules]="editorConfig"
                 [readOnly]="isLoading" (onFocus)="showOptions = true" (onEditorCreated)="onEditorCreated($event)" class="create-post__editor"
