@@ -309,7 +309,7 @@
             <p class="text-sm text-slate-500">{{ rejectingMember?.fullName }}</p>
             <div>
                 <label class="mb-1 block text-sm font-semibold text-slate-700">{{ 'ADMIN.GROUPS.REJECT_REASON' | translate }}</label>
-                <app-textarea name="rejectReason" [rows]="3" />
+                <app-textarea [(ngModel)]="rejectReason" name="rejectReason" [rows]="3" />
             </div>
             <div class="flex justify-end gap-2">
                 <app-button variant="secondary" (onClick)="rejectVisible = false">{{ 'COMMON.BUTTON.CANCEL' | translate }}</app-button>

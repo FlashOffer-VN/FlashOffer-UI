@@ -33,7 +33,8 @@
                 {{ (multi ? 'SHARE_TO_GROUP.PICK_GROUPS' : 'SHARE_TO_GROUP.PICK_GROUP') | translate }}
             </label>
 
-            <app-input  />
+            <app-input [(ngModel)]="searchText" [ngModelOptions]="{ standalone: true }"
+                [placeholder]="'SHARE_TO_GROUP.SEARCH_GROUP_PLACEHOLDER' | translate" />
 
             <!-- Gửi nhiều nhóm: số nhóm đã chọn + chọn tất cả -->
             <div *ngIf="multi" class="flex items-center justify-between text-xs">
@@ -76,7 +77,12 @@
                     [class.opacity-60]="isAlreadySent(group.id)"
                     [class.cursor-pointer]="!isAlreadySent(group.id)"
                     [class.cursor-not-allowed]="isAlreadySent(group.id)">
-                    <app-input name="shareGroup" />
+                    <app-checkbox *ngIf="multi" [ngModel]="isSelected(group.id)"
+                        [ngModelOptions]="{ standalone: true }" (ngModelChange)="toggleGroup(group.id)"
+                        [disabled]="isAlreadySent(group.id)" [ariaLabel]="group.name" />
+                    <app-checkbox *ngIf="!multi" [ngModel]="isChosen(group.id)"
+                        [ngModelOptions]="{ standalone: true }" (ngModelChange)="selectGroup(group.id)"
+                        [disabled]="isAlreadySent(group.id)" [ariaLabel]="group.name" />
                     <span class="text-sm" [class.font-semibold]="!multi && isChosen(group.id)"
                         [class.text-primary]="!multi && isChosen(group.id)" [class.text-slate-700]="multi || !isChosen(group.id)">
                         {{ group.name }}
